@@ -10,9 +10,24 @@
 	<classpathentry kind="src" path="test/integration"/>
 	<classpathentry kind="src" path="test/unit"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="con" path="com.springsource.sts.grails.core.CLASSPATH_CONTAINER"/>
+	<classpathentry exported="true" kind="con" path="com.springsource.sts.grails.core.CLASSPATH_CONTAINER"/>
 	<classpathentry exported="true" kind="con" path="GROOVY_DSL_SUPPORT"/>
 	<classpathentry exported="true" kind="con" path="GROOVY_SUPPORT"/>
+	<classpathentry kind="src" path=".plugin-src-shiro-1.1.4-grails-app-conf"/>
+	<classpathentry kind="src" path=".plugin-src-shiro-1.1.4-grails-app-i18n"/>
+	<classpathentry kind="src" path=".plugin-src-shiro-1.1.4-grails-app-services"/>
+	<classpathentry kind="src" path=".plugin-src-shiro-1.1.4-grails-app-taglib"/>
+	<classpathentry kind="src" path=".plugin-src-shiro-1.1.4-src-java"/>
+	<classpathentry kind="src" path=".plugin-src-shiro-1.1.4-src-groovy"/>
+	<classpathentry kind="src" path=".plugin-src-quartz-1.0-RC2-grails-app-conf"/>
+	<classpathentry kind="src" path=".plugin-src-quartz-1.0-RC2-grails-app-services"/>
+	<classpathentry kind="src" path=".plugin-src-quartz-1.0-RC2-src-java"/>
+	<classpathentry kind="src" path=".plugin-src-quartz-1.0-RC2-src-groovy"/>
+	<classpathentry exported="true" kind="var" path="GRAILS_IVYCACHE/org.hibernate.javax.persistence/hibernate-jpa-2.0-api/jars/hibernate-jpa-2.0-api-1.0.1.Final.jar"/>
+	<classpathentry exported="true" kind="var" path="GRAILS_IVYCACHE/org.spockframework/spock-grails-support/jars/spock-grails-support-0.6-groovy-1.8.jar"/>
+	<classpathentry exported="true" kind="var" path="GRAILS_IVYCACHE/org.spockframework/spock-core/jars/spock-core-0.6-groovy-1.8.jar"/>
+	<classpathentry exported="true" kind="var" path="GRAILS_IVYCACHE/junit/junit-dep/jars/junit-dep-4.9.jar"/>
+	<classpathentry exported="true" kind="var" path="GRAILS_IVYCACHE/org.codehaus.groovy/groovy-all/jars/groovy-all-1.8.5.jar"/>
+	<classpathentry exported="true" kind="var" path="GRAILS_IVYCACHE/commons-lang/commons-lang/jars/commons-lang-2.6.jar"/>
 	<classpathentry kind="output" path="web-app/WEB-INF/classes"/>
-	<classpathentry kind="var" path="GRAILS_IVYCACHE/commons-lang/commons-lang/jars/commons-lang-2.6.jar"/>
 </classpath>

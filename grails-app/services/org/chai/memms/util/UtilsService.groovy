@@ -27,7 +27,7 @@ class UtilsService {
 		for (String string : new ArrayList<String>(result)) {
 			if (string.isEmpty()) result.remove(string);
 		}
-		
-		return StringUtils.join(result, delimiter);
+		return ""
+		//return StringUtils.join(result, delimiter);
 	}
 }

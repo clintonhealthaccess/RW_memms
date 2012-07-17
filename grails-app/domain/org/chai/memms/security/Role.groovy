@@ -1,8 +1,11 @@
 package org.chai.memms.security
 
+import org.chai.memms.util.UtilsService
+//import org.chai.memms.security.User
+
 class Role {
 
-	def utils
+	def utilsService
     String name
 	String permissionString
 	
@@ -10,17 +13,17 @@ class Role {
     static belongsTo = User
 
 	def getPermissions() {
-		return Utils.split(permissionString, User.PERMISSION_DELIMITER)
+		return utilsService.split(permissionString, User.PERMISSION_DELIMITER)
 	}
 	
 	def setPermissions(def permissions) {
-		this.permissionString = Utils.unsplit(permissions, User.PERMISSION_DELIMITER)
+		this.permissionString = utilsService.unsplit(permissions, User.PERMISSION_DELIMITER)
 	}
 	
 	def addToPermissions(def permission) {
 		def permissions = getPermissions()
 		permissions << permission
-		this.permissionString = Utils.unsplit(permissions, User.PERMISSION_DELIMITER)
+		this.permissionString = utilsService.unsplit(permissions, User.PERMISSION_DELIMITER)
 	}
 	
     static constraints = {

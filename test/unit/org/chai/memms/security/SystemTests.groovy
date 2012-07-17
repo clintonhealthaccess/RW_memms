@@ -1,17 +1,10 @@
 package org.chai.memms.security
 
+import org.chai.memms.UnitTests;
 
 
-import grails.test.mixin.*
-import org.junit.*
 
-/**
- * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
- */
-@TestFor(System)
-class SystemTests {
+class SystemTests  extends UnitTests {
 
-    void testSomething() {
-       fail "Implement me"
-    }
+
 }

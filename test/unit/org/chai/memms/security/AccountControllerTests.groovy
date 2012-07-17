@@ -1,17 +1,10 @@
 package org.chai.memms.security
 
+import org.chai.memms.UnitTests;
 
 
-import grails.test.mixin.*
-import org.junit.*
 
-/**
- * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
- */
-@TestFor(AccountController)
-class AccountControllerTests {
+class AccountControllerTests  extends UnitTests {
 
-    void testSomething() {
-       fail "Implement me"
-    }
+    
 }
