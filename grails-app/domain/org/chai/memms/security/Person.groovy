@@ -1,6 +1,6 @@
 package org.chai.memms.security
 
-class User {
+class Person {
 
     static constraints = {
     }
