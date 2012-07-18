@@ -29,5 +29,5 @@
 	<classpathentry exported="true" kind="var" path="GRAILS_IVYCACHE/junit/junit-dep/jars/junit-dep-4.9.jar"/>
 	<classpathentry exported="true" kind="var" path="GRAILS_IVYCACHE/org.codehaus.groovy/groovy-all/jars/groovy-all-1.8.5.jar"/>
 	<classpathentry exported="true" kind="var" path="GRAILS_IVYCACHE/commons-lang/commons-lang/jars/commons-lang-2.6.jar"/>
-	<classpathentry kind="output" path="web-app/WEB-INF/classes"/>
+	<classpathentry kind="output" path="target-eclipse/classes"/>
 </classpath>

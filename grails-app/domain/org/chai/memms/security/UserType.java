@@ -6,9 +6,9 @@ import java.util.Set;
 
 public enum UserType {
 	
-	SURVEY("report-all-readonly", "editSurvey:view","editSurvey:*:<id>","menu:survey","home:*"), 
-	PLANNING("report-all-readonly", "editPlanning:view","editPlanning:*:<id>","menu:planning","home:*"), 
-	OTHER("report-all-readonly", "home:*");
+	PERSON("user_person", ""), 
+	SYSTEM("user_system", ""), 
+	OTHER("user_other", "");
 	
 	protected Set<String> defaultPermissions;
 	protected Set<String> defaultRoles;

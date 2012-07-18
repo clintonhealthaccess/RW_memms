@@ -1,11 +1,11 @@
 package org.chai.memms.security
 
 import org.chai.memms.util.UtilsService
-//import org.chai.memms.security.User
 
 class Role {
-
+	
 	def utilsService
+	
     String name
 	String permissionString
 	
