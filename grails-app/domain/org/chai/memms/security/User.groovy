@@ -1,27 +1,24 @@
 package org.chai.memms.security
 
+
 import org.chai.memms.util.UtilsService
-import org.chai.memms.security.UserType
-//import org.chai.memms.security.Role
 
 class User {
-	static String PERMISSION_DELIMITER = ";"
-	
-	def utilsService
-	// TODO get rid of this, it is the uuid
-	String code
+    static String PERMISSION_DELIMITER = ";"
 	
 	String email
-	String username
+    String username
 	String uuid
-	String passwordHash = ''
+    String passwordHash = ''
 	String permissionString = ''
 	Boolean confirmed = false
 	Boolean active = false
-	String defaultLanguage
+	String defaultLanguage	
 	String firstname, lastname, organisation, phoneNumber
 	Long locationId
 	UserType userType
+	
+	def utilsService
 	
 	static hasMany = [ roles: Role ]
 	
@@ -30,7 +27,7 @@ class User {
 	}
 	
 //	def getLocation () {
-//		def location = Location.get(locationId)
+//		def location = Location.get(locationId) 
 //		if (location == null) location = DataLocation.get(locationId)
 //		return location
 //	}
@@ -95,39 +92,36 @@ class User {
 			def roleToRemove = Role.findByName(roleNameToRemove)
 			if (roleToRemove != null) roles.remove(roleToRemove)
 		}
-	}
+	}	
 	
 	def canActivate() {
 		return confirmed == true && active == false
 	}
 	
-	static constraints = {
-		// TODO get rid of this, it is the uuid
-		code(nullable: false, blank: false, unique: true)
-		
+    static constraints = {
 		email(email:true, unique: true, nullable: true)
-		username(nullable: false, blank: false, unique: true)
+        username(nullable: false, blank: false, unique: true)
 		uuid(nullable: false, blank: false, unique: true)
-		firstname(nullable: false, blank: true)
-		lastname(nullable: false, blank: true)
-		phoneNumber(phoneNumber: true, nullable: false, blank: true)
-		organisation(nullable: false, blank: true)
+		firstname(nullable: false, blank: false)
+		lastname(nullable: false, blank: false)
+		phoneNumber(phoneNumber: true, nullable: false, blank: false)
+		organisation(nullable: false, blank: false)
 		defaultLanguage(nullable: true)
 		
 		userType(nullable: false, blank: false)
-//		locationId(nullable: true,
-//			validator: {val, obj ->
-//				if (obj.userType != UserType.OTHER) {
-//					if (val == null) return false
-//					else {
-//						def location = DataLocation.get(val)
-//						if (location == null || (!(location instanceof DataLocation))) return false
-//					}
-//				}
-//				return true
-//			}
-//		)
-	}
+		locationId(nullable: true, 
+			validator: {val, obj -> 
+				if (obj.userType != UserType.OTHER) {
+					if (val == null) return false
+					else {
+						//def location = DataLocation.get(val)
+						//if (location == null || (!(location instanceof DataLocation))) return false
+					}
+				}
+				return true
+			}
+		)
+    }
 	
 	static mapping = {
 		cache true

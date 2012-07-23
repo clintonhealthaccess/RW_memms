@@ -3,11 +3,10 @@ package org.chai.memms.security
 import org.chai.memms.util.UtilsService
 
 class Role {
-	
-	def utilsService
-	
     String name
 	String permissionString
+	
+	def utilsService
 	
     static hasMany = [ users: User ]
     static belongsTo = User
