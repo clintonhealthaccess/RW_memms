@@ -1,26 +1,7 @@
 package org.chai.memms.security
 
-import static org.junit.Assert.*
+import org.chai.memms.UnitTests;
 
-import grails.test.mixin.*
-import grails.test.mixin.support.*
-import org.junit.*
+class PasswordTokenSpec   extends UnitTests {
 
-/**
- * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
- */
-@TestMixin(GrailsUnitTestMixin)
-class PasswordTokenSpec {
-
-    void setUp() {
-        // Setup logic here
-    }
-
-    void tearDown() {
-        // Tear down logic here
-    }
-
-    void testSomething() {
-        fail "Implement me"
-    }
 }

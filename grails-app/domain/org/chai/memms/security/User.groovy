@@ -70,7 +70,7 @@ class User {
 	}
 	
 	private def removeAllDefaultPermissions() {
-		UserType.getAllPermissions().each { permissionToRemove ->
+		userType.getAllPermissions().each { permissionToRemove ->
 			def regexToCheck = permissionToRemove.replaceAll('\\*','\\\\*').replaceAll('<id>', "\\\\d*")
 			permissions.each { permission ->
 				if (permission.matches(regexToCheck)) {

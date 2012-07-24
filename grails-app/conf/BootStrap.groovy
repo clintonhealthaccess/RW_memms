@@ -41,10 +41,14 @@ import org.chai.memms.Initializer;
 class BootStrap {
 
     def init = { servletContext ->
+		//log.debug("At the beginning")
 		switch (GrailsUtil.environment) {
 			case "development":
 			Initializer.createUsers();
-			
+			//Get a user object
+			//User user = User.findByUsername('admin')
+			//log.debug("User name " + user.username + " permission string " + user.permissionString)
+			//log.debug("permisions in roles " + user.roles.each{it.permissionString})
 			break;
 		}
     }

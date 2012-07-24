@@ -55,7 +55,7 @@ grails.project.dependency.resolution = {
         runtime ":resources:1.1.5"
 
         build ":tomcat:$grailsVersion"
-		
+
 		compile ":shiro:1.1.4"
 		
 		test (":spock:0.6") {changing = false}

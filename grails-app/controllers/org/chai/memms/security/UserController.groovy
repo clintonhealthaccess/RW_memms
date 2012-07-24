@@ -6,6 +6,9 @@ import org.apache.shiro.crypto.hash.Sha256Hash;
 class UserController  extends  AbstractController{
 	def userService
 	
+	def index(){
+		render("You are here")
+	}
 	def getEntity(def id) {
 		return User.get(id)
 	}
@@ -68,16 +71,10 @@ class UserController  extends  AbstractController{
 	}
 	
 	def list = {
-		adaptParamsForList()
 		
-		List<User> users = User.list(params);
+		List<User> users = User.list();
 
-		render (view: '/entity/list', model:[
-			template:"user/userList",
-			entities: users,
-			entityCount: User.count(),
-			code: getLabel(),
-		])
+		render (view: '/entity/list', model:[users:users])
 	}
 
 	def search = {
