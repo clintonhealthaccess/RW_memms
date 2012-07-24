@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 
 class UtilsService {
@@ -28,5 +29,19 @@ class UtilsService {
 			if (string.isEmpty()) result.remove(string);
 		}
 		return StringUtils.join(result, delimiter);
+	}
+	
+	public static String stripHtml(String htmlString) {
+		String noHtmlString;
+	
+		if (htmlString != null) {
+			noHtmlString = htmlString.replace("&nbsp;", " ");
+			noHtmlString = noHtmlString.replaceAll("<.*?>", " ");
+			noHtmlString = StringEscapeUtils.unescapeHtml(noHtmlString);
+			noHtmlString = noHtmlString.trim();
+		}
+		else noHtmlString = htmlString;
+	
+		return noHtmlString;
 	}
 }

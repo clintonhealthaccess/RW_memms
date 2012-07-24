@@ -1,14 +1,14 @@
 <html>
 	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="layout" content="main" />
+		<g:set var="entityName" value="${message(code: code)}" />
+		<g:set var="entityClass" value="${entityClass}" />
+		<title><g:message code="default.list.label" args="[entityName]" /></title>
+		
+		<r:require modules="list"/>
 	</head>
 	<body>
-	<h2>A list of users</h2>
-	<p>There are <%= users.count%> users</p>
-	<ul>
-		<g:each var="user" in="${users}">
-		    <li>Username: ${user.username}</li>
-		    <li>Persmissions: ${user.permissionString}</li>
-		</g:each>
-		</ul>
+		<g:render template="/templates/genericList" model="[entityName: entityName, entityClass: entityClass, template: '/entity/'+template]"/>
 	</body>
 </html>

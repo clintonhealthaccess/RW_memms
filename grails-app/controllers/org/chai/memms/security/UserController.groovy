@@ -1,9 +1,9 @@
 package org.chai.memms.security
 
-import org.chai.memms.AbstractController
+import org.chai.memms.AbstractEntityController
 import org.apache.shiro.crypto.hash.Sha256Hash;
 
-class UserController  extends  AbstractController{
+class UserController  extends  AbstractEntityController{
 	def userService
 	
 	def index(){
@@ -71,10 +71,17 @@ class UserController  extends  AbstractController{
 	}
 	
 	def list = {
-		
-		List<User> users = User.list();
+		adaptParamsForList()
+		log.debug(params.each{})
+		List<User> users = User.list(params);
 
-		render (view: '/entity/list', model:[users:users])
+		render (view: '/entity/list', model:[
+			template:"user/userList",
+			entities: users,
+			entityCount: User.count(),
+			code: "user", //getLabel(),
+		])
+		
 	}
 
 	def search = {
