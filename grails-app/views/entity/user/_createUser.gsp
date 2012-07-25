@@ -1,4 +1,4 @@
-<%@ page import="org.chai.kevin.security.UserType" %>
+<%@ page import="org.chai.memms.security.UserType" %>
 
 <div class="entity-form-container">
 	
@@ -11,7 +11,7 @@
 	<div class="data-field-column">
 		<g:form url="[controller:'user', action:'save', params: [targetURI: targetURI]]" useToken="true">			
 			<g:input name="username" label="${message(code:'user.username.label')}" bean="${user}" field="username"/>
-			<g:input name="code" label="${message(code:'user.code.label')}" bean="${user}" field="code"/>
+			
 			<g:input name="firstname" label="${message(code:'user.firstname.label')}" bean="${user}" field="firstname"/>
 			<g:input name="lastname" label="${message(code:'user.lastname.label')}" bean="${user}" field="lastname"/>
 			<g:input name="organisation" label="${message(code:'user.organisation.label')}" bean="${user}" field="organisation"/>
@@ -23,9 +23,9 @@
 			
 			<g:selectFromEnum name="userType" bean="${user}" values="${UserType.values()}" field="userType" label="${message(code:'user.usertype.label')}"/>
 			
-			<g:selectFromList name="locationId" label="${message(code:'datauser.datalocation.label')}" bean="${user}" field="locationId" optionKey="id" multiple="false"
+			<%-- <g:selectFromList name="locationId" label="${message(code:'datauser.datalocation.label')}" bean="${user}" field="locationId" optionKey="id" multiple="false"
 				ajaxLink="${createLink(controller:'location', action:'getAjaxData', params:[class: 'CalculationLocation'])}"
-				from="${dataLocations}" value="${user.location?.id}" values="${dataLocations.collect{i18n(field:it.names)}}" />
+				from="${dataLocations}" value="${user.location?.id}" values="${dataLocations.collect{i18n(field:it.names)}}" /> --%>
 						
 			<div class="row">
 				<label><g:message code="user.confirmed.label"/></label>

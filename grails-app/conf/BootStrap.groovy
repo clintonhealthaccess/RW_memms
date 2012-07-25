@@ -44,9 +44,9 @@ class BootStrap {
 		
 		switch (GrailsUtil.environment) {
 			case "development":
-			log.debug("\n\nCreating users and their roles\n\n")
+			//log.debug("\n\nCreating users and their roles\n\n")
 			Initializer.createUsers();
-			log.debug("\n\nDone\n\n")
+			//log.debug("\n\nDone\n\n")
 			//Get a user object
 			//User user = User.findByUsername('admin')
 			//log.debug("User name " + user.username + " permission string " + user.permissionString)

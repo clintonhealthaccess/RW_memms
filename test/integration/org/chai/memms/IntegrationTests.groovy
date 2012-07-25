@@ -45,5 +45,38 @@ import org.chai.memms.security.User;
 import org.chai.memms.security.UserType;
 
 abstract class IntegrationTests extends IntegrationSpec {
-
+	static def newUser(def username, def uuid) {
+		return new User(userType: UserType.OTHER, code: username, username: username, permissionString: '', passwordHash:'', uuid: uuid, firstname: 'first', lastname: 'last', organisation: 'org', phoneNumber: '+250 11 111 11 11').save(failOnError: true)
+	}
+	
+	static def newUser(def username, def active, def confirmed) {
+		return new User(userType: UserType.OTHER, code: 'not_important', username: username, email: username,
+			passwordHash: '', active: active, confirmed: confirmed, uuid: 'uuid', firstname: 'first', lastname: 'last',
+			organisation: 'org', phoneNumber: '+250 11 111 11 11').save(failOnError: true)
+	}
+	
+	static def newUser(def username, def passwordHash, def active, def confirmed) {
+		return new User(userType: UserType.OTHER, code: 'not_important', username: username, email: username,
+			passwordHash: passwordHash, active: active, confirmed: confirmed, uuid: 'uuid', firstname: 'first', lastname: 'last',
+			organisation: 'org', phoneNumber: '+250 11 111 11 11').save(failOnError: true)
+	}
+	
+	static def setupLocationTree() {
+//		// for the test environment, the location level is set to 4
+//		// so we create a tree accordingly
+//		def hc = newDataLocationType(j(["en":HEALTH_CENTER_GROUP]), HEALTH_CENTER_GROUP);
+//		def dh = newDataLocationType(j(["en":DISTRICT_HOSPITAL_GROUP]), DISTRICT_HOSPITAL_GROUP);
+//		
+//		def country = newLocationLevel(NATIONAL, 1)
+//		def province = newLocationLevel(PROVINCE, 2)
+//		def district = newLocationLevel(DISTRICT, 3)
+//		def sector = newLocationLevel(SECTOR, 4)
+//		
+//		def rwanda = newLocation(j(["en":RWANDA]), RWANDA, country)
+//		def north = newLocation(j(["en":NORTH]), NORTH, rwanda, province)
+//		def burera = newLocation(j(["en":BURERA]), BURERA, north, district)
+//		
+//		newDataLocation(j(["en":BUTARO]), BUTARO, burera, dh)
+//		newDataLocation(j(["en":KIVUYE]), KIVUYE, burera, hc)
+	}
 }

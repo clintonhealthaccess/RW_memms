@@ -23,7 +23,7 @@ class UserController  extends  AbstractEntityController{
 	
 	def getModel(def entity) {
 		def dataLocations = []
-		if (entity.location != null) dataLocations << entity.location
+		//if (entity.location != null) dataLocations << entity.location
 		[
 			user:entity,
 			roles: Role.list(),
@@ -87,7 +87,11 @@ class UserController  extends  AbstractEntityController{
 	def search = {
 		adaptParamsForList()
 		
+		//log.debug("\r\n\r\n Number of users " + userService.countUser(params['q']) +" \r\n\r\n")
+		
 		List<User> users = userService.searchUser(params['q'], params);
+		
+		log.debug("\r\n\r\n params : "+ users.each{it.username} +"\r\n\r\n")
 
 		render (view: '/entity/list', model:[
 			template:"user/userList",

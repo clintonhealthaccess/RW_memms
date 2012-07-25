@@ -31,6 +31,11 @@ class UtilsService {
 		return StringUtils.join(result, delimiter);
 	}
 	
+	public static boolean matches(String text, String value) {
+		if (value == null) return false;
+		return value.matches("(?i).*"+text+".*");
+	}
+	
 	public static String stripHtml(String htmlString) {
 		String noHtmlString;
 	
