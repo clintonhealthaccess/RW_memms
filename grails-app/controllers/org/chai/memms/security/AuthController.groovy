@@ -15,6 +15,12 @@ class AuthController {
     def login = {
         return [ username: params.username, rememberMe: (params.rememberMe != null), targetUri: params.targetUri ]
     }
+	
+	def register = {
+		//TODO change this once the location plugin is in
+		//render (view:'register', model:[register: null, languages: languageService.availableLocales])
+		render (view:'register', model:[register: null, languages: null])
+	}
 
     def signIn = {
         def authToken = new UsernamePasswordToken(params.username, params.password as String)
