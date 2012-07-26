@@ -1,7 +1,7 @@
 package org.chai.memms
 
 /*
-* Copyright (c) 2011, Clinton Health Access Initiative.
+* Copyright (c) 2012, Clinton Health Access Initiative.
 *
 * All rights reserved.
 *
@@ -88,6 +88,7 @@ abstract class AbstractEntityController extends AbstractController {
 		def model = getModel(entity)
 		model << [template: getTemplate()]
 		model << [targetURI: getTargetURI()]
+		log.debug("abstract entity model : " + model.each{it})
 		render(view: '/entity/edit', model: model)
 	}
 	

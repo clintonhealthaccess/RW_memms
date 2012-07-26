@@ -70,6 +70,7 @@ class DbRealm {
         //
         // First find all the permissions that the user has that match
         // the required permission's type and project code.
+		//log.info "Principla is : " + principal
         def user = User.findByUsername(principal)
         def permissions = user.permissions
 
