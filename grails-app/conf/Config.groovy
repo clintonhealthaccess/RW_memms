@@ -91,3 +91,27 @@ log4j = {
            'org.hibernate',
            'net.sf.ehcache.hibernate'
 }
+
+
+/**
+* Application specific config
+*/
+
+site.fallback.language="en"
+site.contact.email="contact@memms.org"
+
+i18nFields{
+	locales = ["en","fr","rw"]
+	extraLocales = ["rw"]
+}
+
+/**
+* Configuration file override
+*/
+def locations = ["file:${userHome}/.grails/${appName}-config.groovy"]
+if (System.properties['config']) locations.add("file:"+System.properties['config'])
+environments {
+   production {
+	   grails.config.locations = locations
+   }
+}

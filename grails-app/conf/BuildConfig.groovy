@@ -44,15 +44,25 @@ grails.project.dependency.resolution = {
     }
     dependencies {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
-
-        // runtime 'mysql:mysql-connector-java:5.1.16'
+		// because of GRAILS-6147, this dependency is in lib instead of here
+		//compile group: "net.sf.json-lib", name: "json-lib", version: "2.4", classifier: "jdk15"
+		
+		compile 'net.sf.ezmorph:ezmorph:1.0.6'
+		runtime 'mysql:mysql-connector-java:5.1.5'
+		compile 'commons-lang:commons-lang:2.6'
     }
 
     plugins {
         runtime ":hibernate:$grailsVersion"
+		runtime ":mail:1.0"
         runtime ":jquery:1.7.1"
         runtime ":resources:1.2-RC1"
+		compile ":jquery:1.7.1"
+		compile ":resources:1.2-RC1"
+		compile ":shiro:1.1.5"
+		compile ":mail:1.0"
 
         build ":tomcat:$grailsVersion"
+		test (":spock:0.6") {changing = true}
     }
 }

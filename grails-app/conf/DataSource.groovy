@@ -25,8 +25,10 @@ environments {
     }
     production {
         dataSource {
-            dbCreate = "update"
-            url = "jdbc:h2:prodDb;MVCC=TRUE"
+			dbCreate = "update"
+			driverClassName = "com.mysql.jdbc.Driver"
+			//dialect = "org.hibernate.dialect.MySQLMyISAMDialect"
+            //url = "jdbc:h2:prodDb;MVCC=TRUE"
             pooled = true
             properties {
                maxActive = -1
