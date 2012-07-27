@@ -1,26 +1,28 @@
 package org.chai.memms.security
 
-class Role {
+import org.chai.memms.util.UtilsService
 
-	def utils
+class Role {
     String name
 	String permissionString
+	
+	def utilsService
 	
     static hasMany = [ users: User ]
     static belongsTo = User
 
 	def getPermissions() {
-		return Utils.split(permissionString, User.PERMISSION_DELIMITER)
+		return utilsService.split(permissionString, User.PERMISSION_DELIMITER)
 	}
 	
 	def setPermissions(def permissions) {
-		this.permissionString = Utils.unsplit(permissions, User.PERMISSION_DELIMITER)
+		this.permissionString = utilsService.unsplit(permissions, User.PERMISSION_DELIMITER)
 	}
 	
 	def addToPermissions(def permission) {
 		def permissions = getPermissions()
 		permissions << permission
-		this.permissionString = Utils.unsplit(permissions, User.PERMISSION_DELIMITER)
+		this.permissionString = utilsService.unsplit(permissions, User.PERMISSION_DELIMITER)
 	}
 	
     static constraints = {
@@ -41,7 +43,7 @@ class Role {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this.is(obj))
 			return true;
 		if (obj == null)
 			return false;

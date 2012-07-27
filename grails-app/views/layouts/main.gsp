@@ -1,28 +1,83 @@
-<!doctype html>
-<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
-<!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]-->
-<!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]-->
-<!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"><!--<![endif]-->
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<title><g:layoutTitle default="Grails"/></title>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<link rel="shortcut icon" href="${resource(dir: 'images', file: 'favicon.ico')}" type="image/x-icon">
-		<link rel="apple-touch-icon" href="${resource(dir: 'images', file: 'apple-touch-icon.png')}">
-		<link rel="apple-touch-icon" sizes="114x114" href="${resource(dir: 'images', file: 'apple-touch-icon-retina.png')}">
-		<link rel="stylesheet" href="${resource(dir: 'css', file: 'main.css')}" type="text/css">
-		<link rel="stylesheet" href="${resource(dir: 'css', file: 'mobile.css')}" type="text/css">
-		<g:layoutHead/>
-        <r:layoutResources />
-	</head>
-	<body>
-		<div id="grailsLogo" role="banner"><a href="http://grails.org"><img src="${resource(dir: 'images', file: 'grails_logo.png')}" alt="Grails"/></a></div>
-		<g:layoutBody/>
-		<div class="footer" role="contentinfo"></div>
-		<div id="spinner" class="spinner" style="display:none;"><g:message code="spinner.alt" default="Loading&hellip;"/></div>
-		<g:javascript library="application"/>
-        <r:layoutResources />
-	</body>
+<%@ page import="org.apache.shiro.SecurityUtils" %>
+<%@ page import="org.chai.memms.security.User" %>
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title><g:layoutTitle /></title>
+
+	<g:layoutHead />
+</head>
+<body>
+	<div id="header">
+		<div class="wrapper">
+		    <h1 id="logo">
+		    	<a href="${createLink(controller:'home', action:'index')}"><g:message code="title.dhsst"/></a>
+		    </h1>
+
+			<ul class="locales" id="switcher">
+				<%-- <% def languageService = grailsApplication.mainContext.getBean('languageService') %>
+				<g:each in="${languageService.availableLanguages}" var="language" status="i">
+					<% params['lang'] = language %>
+					<li><a class="${languageService.currentLanguage==language?'no-link':''}" href="${createLink(controller: controllerName, action: actionName, params: params)}">${language}</a></li>
+				</g:each> --%>
+			</ul>
+			
+			<ul class="locales" id="top_nav">
+				<shiro:user>
+					<%
+						def user = User.findByUuid(SecurityUtils.subject.principal, [cache: true])
+					%>
+					<li>
+						<a class="${controllerName=='auth'?'active':''}" href="${createLinkWithTargetURI(controller: 'account', action:'editAccount')}">
+							<g:message code="header.navigation.myaccount"/> : ${user.firstname} ${user.lastname}
+						</a>
+					</li>
+				</shiro:user>
+				<shiro:user>
+					<li>
+						<a class="no-link" href="${createLink(controller: 'auth', action: 'signOut')}"><g:message code="header.labels.logout"/></a>
+					</li>
+				</shiro:user>
+				<shiro:notUser>
+					<g:if test="${controllerName != 'auth' || actionName != 'login'}">
+						<li>
+							<a class="no-link" href="${createLink(controller: 'auth', action: 'login')}"><g:message code="header.labels.login"/></a>
+						</li>
+					</g:if>
+					<g:if test="${controllerName != 'auth' || actionName != 'register'}">
+						<li>
+							<a class="no-link" href="${createLink(controller: 'auth', action: 'register')}"><g:message code="header.labels.register"/></a>
+						</li>
+					</g:if>
+				</shiro:notUser>
+			</ul>
+			
+			<h2>
+				<span class="right">
+					<img src="${resource(dir:'images',file:'rwanda.png')}" alt="Rwanda coat of arms" width="33" />
+				</span>
+				<span><g:message code="header.labels.moh"/></span>
+				<g:message code="header.labels.memms"/>
+			</h2>
+			
+			<ul id="logout">
+				<shiro:hasPermission permission="admin">
+					<li>
+						<a class="redmine follow" target="_blank" href="http://districthealth.moh.gov.rw/redmine">
+						<g:message code="header.labels.redmine"/></a>
+	   				</li>
+				</shiro:hasPermission>
+				<li>
+					<a class="redmine follow" href="${createLink(uri:'/helpdesk')}">
+					<g:message code="header.labels.helpdesk"/></a>
+				</li>
+			</ul>
+		</div>
+
+	<div id="content">
+			<g:layoutBody />
+	</div>
+
+</body>
 </html>

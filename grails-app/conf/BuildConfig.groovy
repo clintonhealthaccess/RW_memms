@@ -41,6 +41,7 @@ grails.project.dependency.resolution = {
 //		libResolver.name = "github"
 ////		libResolver.settings = ivySettings
 //		resolver libResolver
+		
     }
     dependencies {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
@@ -61,8 +62,7 @@ grails.project.dependency.resolution = {
 		compile ":resources:1.2-RC1"
 		compile ":shiro:1.1.5"
 		compile ":mail:1.0"
-
         build ":tomcat:$grailsVersion"
-		test (":spock:0.6") {changing = true}
+		test (":spock:0.6") {changing = false}
     }
 }

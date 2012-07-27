@@ -1,7 +1,10 @@
 package org.chai.memms.security
 
-class Person {
-
+class PasswordToken {
+	
+	User user
+	String token
+	
     static constraints = {
     }
 }

@@ -84,6 +84,26 @@
 			<location>/Users/jeankahigiso/.grails/2.0.0/projects/memms/plugins/mail-1.0/src/groovy</location>
 		</link>
 		<link>
+			<name>.plugin-src-quartz-1.0-RC2-grails-app-conf</name>
+			<type>2</type>
+			<location>/Users/jeankahigiso/.grails/2.0.0/projects/memms/plugins/quartz-1.0-RC2/grails-app/conf</location>
+		</link>
+		<link>
+			<name>.plugin-src-quartz-1.0-RC2-grails-app-services</name>
+			<type>2</type>
+			<location>/Users/jeankahigiso/.grails/2.0.0/projects/memms/plugins/quartz-1.0-RC2/grails-app/services</location>
+		</link>
+		<link>
+			<name>.plugin-src-quartz-1.0-RC2-src-groovy</name>
+			<type>2</type>
+			<location>/Users/jeankahigiso/.grails/2.0.0/projects/memms/plugins/quartz-1.0-RC2/src/groovy</location>
+		</link>
+		<link>
+			<name>.plugin-src-quartz-1.0-RC2-src-java</name>
+			<type>2</type>
+			<location>/Users/jeankahigiso/.grails/2.0.0/projects/memms/plugins/quartz-1.0-RC2/src/java</location>
+		</link>
+		<link>
 			<name>.plugin-src-resources-1.2-RC1-grails-app-conf</name>
 			<type>2</type>
 			<location>/Users/jeankahigiso/.grails/2.0.0/projects/memms/plugins/resources-1.2-RC1/grails-app/conf</location>
@@ -152,16 +172,6 @@
 			<name>.plugin-src-webxml-1.4.1-src-groovy</name>
 			<type>2</type>
 			<location>/Users/jeankahigiso/.grails/2.0.0/projects/memms/plugins/webxml-1.4.1/src/groovy</location>
-		</link>
-		<link>
-			<name>.plugin-src-yammer-metrics-2.1.2-1-grails-app-i18n</name>
-			<type>2</type>
-			<location>/Users/jeankahigiso/.grails/2.0.0/projects/memms/plugins/yammer-metrics-2.1.2-1/grails-app/i18n</location>
-		</link>
-		<link>
-			<name>.plugin-src-yammer-metrics-2.1.2-1-src-groovy</name>
-			<type>2</type>
-			<location>/Users/jeankahigiso/.grails/2.0.0/projects/memms/plugins/yammer-metrics-2.1.2-1/src/groovy</location>
 		</link>
 	</linkedResources>
 </projectDescription>

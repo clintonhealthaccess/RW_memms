@@ -90,6 +90,9 @@ log4j = {
            'org.springframework',
            'org.hibernate',
            'net.sf.ehcache.hibernate'
+		   
+	debug  'grails.app',
+		   'org.chai.memms'
 }
 
 
@@ -99,6 +102,7 @@ log4j = {
 
 site.fallback.language="en"
 site.contact.email="contact@memms.org"
+site.entity.list.max=40
 
 i18nFields{
 	locales = ["en","fr","rw"]

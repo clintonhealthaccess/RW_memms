@@ -27,8 +27,16 @@ package org.chai.memms
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-
 import grails.plugin.spock.IntegrationSpec;
+import java.util.Date
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.subject.Subject;
+import org.apache.shiro.util.ThreadContext;
+import org.apache.shiro.web.util.WebUtils;
+import javax.servlet.ServletRequest;
+import org.chai.memms.security.User;
+import org.chai.memms.security.UserType;
 
 import org.apache.commons.logging.Log;
 import org.chai.memms.location.DataLocation;
@@ -166,6 +174,31 @@ abstract class IntegrationTests extends IntegrationSpec {
 		return result;
 	}
 	
+	static def newUser(def username, def uuid) {
+		return new User(userType: UserType.OTHER, code: username, username: username, permissionString: '', passwordHash:'', uuid: uuid, firstname: 'first', lastname: 'last', organisation: 'org', phoneNumber: '+250 11 111 11 11').save(failOnError: true)
+	}
+	
+	static def newUser(def username, def active, def confirmed) {
+		return new User(userType: UserType.OTHER, code: 'not_important', username: username, email: username,
+			passwordHash: '', active: active, confirmed: confirmed, uuid: 'uuid', firstname: 'first', lastname: 'last',
+			organisation: 'org', phoneNumber: '+250 11 111 11 11').save(failOnError: true)
+	}
+	
+	static def newUser(def username, def passwordHash, def active, def confirmed) {
+		return new User(userType: UserType.OTHER, code: 'not_important', username: username, email: username,
+			passwordHash: passwordHash, active: active, confirmed: confirmed, uuid: 'uuid', firstname: 'first', lastname: 'last',
+			organisation: 'org', phoneNumber: '+250 11 111 11 11').save(failOnError: true)
+	}
+	
+	def setupSecurityManager(def user) {
+		def subject = [getPrincipal: { user?.uuid }, isAuthenticated: { user==null?false:true }, login: { token -> null }] as Subject
+		ThreadContext.put( ThreadContext.SECURITY_MANAGER_KEY, [ getSubject: { subject } ] as SecurityManager )
+		SecurityUtils.metaClass.static.getSubject = { subject }
+		WebUtils.metaClass.static.getSavedRequest = { ServletRequest request -> null }
+	}
+	
+	
+	
 	/**
 	 * fieldName has to start with capital letter as 
 	 * it is used to create setter of the object field
@@ -183,5 +216,4 @@ abstract class IntegrationTests extends IntegrationSpec {
 				object."$methodName"("",new Locale(loc))	
 		}
 	}
-	
 }
