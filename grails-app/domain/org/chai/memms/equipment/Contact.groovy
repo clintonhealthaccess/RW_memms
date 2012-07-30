@@ -40,6 +40,8 @@ public class Contact {
 	String phone
 	String address
 	
+	static belongsTo = [equipment:Equipment]
+	
 	static i18nFields =["addressDescriptions"]
 	
 	static constraints ={
@@ -49,6 +51,7 @@ public class Contact {
 		address blank: true, nullable: true 
 		contactName blank: true, nullable: true 
 		addressDescriptions blank: true, nullable: true 
+		equipment: nullable: false
 		
 	}
 	static mapping = {

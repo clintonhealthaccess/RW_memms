@@ -24,14 +24,9 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>.plugin-src-i18n-fields-0.7.2-SNAPSHOT-grails-app-domain</name>
+			<name>.plugin-src-i18n-fields-0.6.1-src-groovy</name>
 			<type>2</type>
-			<location>/Users/jeankahigiso/.grails/2.0.0/projects/memms/plugins/i18n-fields-0.7.2-SNAPSHOT/grails-app/domain</location>
-		</link>
-		<link>
-			<name>.plugin-src-i18n-fields-0.7.2-SNAPSHOT-src-groovy</name>
-			<type>2</type>
-			<location>/Users/jeankahigiso/.grails/2.0.0/projects/memms/plugins/i18n-fields-0.7.2-SNAPSHOT/src/groovy</location>
+			<location>/Users/jeankahigiso/.grails/2.0.0/projects/memms/plugins/i18n-fields-0.6.1/src/groovy</location>
 		</link>
 		<link>
 			<name>.plugin-src-jquery-1.7.1-grails-app-conf</name>
@@ -172,6 +167,16 @@
 			<name>.plugin-src-webxml-1.4.1-src-groovy</name>
 			<type>2</type>
 			<location>/Users/jeankahigiso/.grails/2.0.0/projects/memms/plugins/webxml-1.4.1/src/groovy</location>
+		</link>
+		<link>
+			<name>.plugin-src-yammer-metrics-2.1.2-1-grails-app-i18n</name>
+			<type>2</type>
+			<location>/Users/jeankahigiso/.grails/2.0.0/projects/memms/plugins/yammer-metrics-2.1.2-1/grails-app/i18n</location>
+		</link>
+		<link>
+			<name>.plugin-src-yammer-metrics-2.1.2-1-src-groovy</name>
+			<type>2</type>
+			<location>/Users/jeankahigiso/.grails/2.0.0/projects/memms/plugins/yammer-metrics-2.1.2-1/src/groovy</location>
 		</link>
 	</linkedResources>
 </projectDescription>

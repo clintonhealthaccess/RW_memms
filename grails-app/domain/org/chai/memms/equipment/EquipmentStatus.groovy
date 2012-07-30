@@ -27,6 +27,7 @@
  */
 package org.chai.memms.equipment
 
+import org.aspectj.bridge.Version;
 import org.chai.memms.security.User
 import i18nfields.I18nFields
 /**
@@ -49,16 +50,20 @@ class EquipmentStatus {
 	
 	Date statusChangeDate;
 	User changedBy
+	Status value
 	
 	static belongsTo = [equipment:Equipment]
 	
 	
 	static constraints = {
-		statusChangeDate(nullable:false, validator:{it <= new Date()})
-		changedBy(nullable:false)
+		statusChangeDate nullable:false, validator:{it <= new Date()} 
+		changedBy nullable:false 
+		value nullable: false, blank:false
 	}
 	static mapping = {
 		table "memms_equipment_status"
+		version false
+		value column: "status_value"
 	}
 	
 	

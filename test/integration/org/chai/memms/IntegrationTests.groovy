@@ -79,64 +79,22 @@ abstract class IntegrationTests extends IntegrationSpec {
 		// for the test environment, the location level is set to 4
 		// so we create a tree accordingly
 		
-		def hc = newDataLocationType(['en':HEALTH_CENTER_GROUP], HEALTH_CENTER_GROUP);
-		def dh = newDataLocationType(['en':DISTRICT_HOSPITAL_GROUP], DISTRICT_HOSPITAL_GROUP);
+		def hc = Initializer.newDataLocationType(['en':HEALTH_CENTER_GROUP], HEALTH_CENTER_GROUP);
+		def dh = Initializer.newDataLocationType(['en':DISTRICT_HOSPITAL_GROUP], DISTRICT_HOSPITAL_GROUP);
 		
-		def country = newLocationLevel(['en':NATIONAL], NATIONAL)
-		def province = newLocationLevel(['en':PROVINCE], PROVINCE)
-		def district = newLocationLevel(['en':DISTRICT], DISTRICT)
-		def sector = newLocationLevel(['en':SECTOR], SECTOR)
+		def country = Initializer.newLocationLevel(['en':NATIONAL], NATIONAL)
+		def province = Initializer.newLocationLevel(['en':PROVINCE], PROVINCE)
+		def district = Initializer.newLocationLevel(['en':DISTRICT], DISTRICT)
+		def sector = Initializer.newLocationLevel(['en':SECTOR], SECTOR)
 			
-		def rwanda = newLocation(['en':RWANDA], RWANDA,null,country)
-		def north = newLocation(['en':NORTH], NORTH, rwanda, province)
-		def burera = newLocation(['en':BURERA], BURERA, north, district)
+		def rwanda = Initializer.newLocation(['en':RWANDA], RWANDA,null,country)
+		def north = Initializer.newLocation(['en':NORTH], NORTH, rwanda, province)
+		def burera = Initializer.newLocation(['en':BURERA], BURERA, north, district)
 
 		
-		newDataLocation(['en':BUTARO], BUTARO, burera, dh)
-		newDataLocation(['en':KIVUYE], KIVUYE, burera, hc)
+		def butaro = Initializer.newDataLocation(['en':BUTARO], BUTARO, burera, dh)
+		def kivuye = Initializer.newDataLocation(['en':KIVUYE], KIVUYE, burera, hc)
 	}
-	
-	static def newLocation(def names, def code, def parent, def level) {
-		def location = new Location(code: code, parent: parent, level: level)
-		setLocaleValueInMap(location,names,"Names")
-		location.save(failOnError: true)
-		level.addToLocations(location)
-		level.save(failOnError: true)
-		if (parent != null) {
-			parent.addToChildren(location)
-			parent.save(failOnError: true)
-		}
-		return location
-	}
-	
-	
-	static def newDataLocation(def names, def code, def location, def type) {
-		def dataLocation = new DataLocation(code: code, location: location, type: type)
-		setLocaleValueInMap(dataLocation,names,"Names")
-		dataLocation.save(failOnError: true)
-		if (location != null) {
-			location.addToDataLocations(dataLocation)
-			location.save(failOnError: true)
-		}
-		if (type != null) {
-			type.addToDataLocations(dataLocation)
-			type.save(failOnError: true)
-	   }
-		return dataLocation
-	}
-	
-	static def newDataLocationType(def names, def code) {
-		def dataLocationType = new DataLocationType(code: code)
-		setLocaleValueInMap(dataLocationType,names,"Names")
-		return dataLocationType.save(failOnError: true)
-	}
-		
-	static def newLocationLevel(def names, def code) {
-		def locationLevel = new LocationLevel(code: code)
-		setLocaleValueInMap(locationLevel,names,"Names")
-		return locationLevel.save(failOnError: true)
-	}
-	
 	
 	static def getLocationLevels(def levels) {
 		def result = []
@@ -179,13 +137,13 @@ abstract class IntegrationTests extends IntegrationSpec {
 	}
 	
 	static def newUser(def username, def active, def confirmed) {
-		return new User(userType: UserType.OTHER, code: 'not_important', username: username, email: username,
+		return new User(userType: UserType.OTHER, username: username, email: username,
 			passwordHash: '', active: active, confirmed: confirmed, uuid: 'uuid', firstname: 'first', lastname: 'last',
 			organisation: 'org', phoneNumber: '+250 11 111 11 11').save(failOnError: true)
 	}
 	
 	static def newUser(def username, def passwordHash, def active, def confirmed) {
-		return new User(userType: UserType.OTHER, code: 'not_important', username: username, email: username,
+		return new User(userType: UserType.OTHER, username: username, email: username,
 			passwordHash: passwordHash, active: active, confirmed: confirmed, uuid: 'uuid', firstname: 'first', lastname: 'last',
 			organisation: 'org', phoneNumber: '+250 11 111 11 11').save(failOnError: true)
 	}
@@ -197,23 +155,4 @@ abstract class IntegrationTests extends IntegrationSpec {
 		WebUtils.metaClass.static.getSavedRequest = { ServletRequest request -> null }
 	}
 	
-	
-	
-	/**
-	 * fieldName has to start with capital letter as 
-	 * it is used to create setter of the object field
-	 * @param object
-	 * @param map
-	 * @param fieldName
-	 * @return
-	 */
-	static def setLocaleValueInMap(def object, def map, def fieldName){
-		def methodName = 'set'+fieldName
-		CONF.config.i18nFields.locales.each{ loc ->
-			if(map.get(loc) != null)
-				object."$methodName"(map.get(loc),new Locale(loc))
-			else
-				object."$methodName"("",new Locale(loc))	
-		}
-	}
 }

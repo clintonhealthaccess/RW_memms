@@ -39,10 +39,9 @@ class EquipmentModel{
 	String names
 	String descriptions
 	
-	static hasMany =  [equipment:Equipment]
+	static hasMany =  [equipments:Equipment]
 	
 	static i18nFields = ["names","descriptions"]
-	static embedded = ["names","descriptions"]
 	
 	static constraints = {
 		code nullable: false, blank: false

@@ -37,6 +37,7 @@ import org.apache.commons.lang.time.DateUtils;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 
 import org.chai.memms.Initializer;
+import org.omg.CORBA.INITIALIZE;
 
 class BootStrap {
 
@@ -44,13 +45,14 @@ class BootStrap {
 		
 		switch (GrailsUtil.environment) {
 			case "development":
-			//log.debug("\n\nCreating users and their roles\n\n")
+			Initializer.createDummyStructure();
 			Initializer.createUsers();
-			//log.debug("\n\nDone\n\n")
-			//Get a user object
-			//User user = User.findByUsername('admin')
-			//log.debug("User name " + user.username + " permission string " + user.permissionString)
-			//log.debug("permisions in roles " + user.roles.each{it.permissionString})
+			Initializer.createInventoryStructure()
+			break;
+			case "production":
+			Initializer.createDummyStructure();
+			Initializer.createUsers();
+			Initializer.createInventoryStructure()
 			break;
 		}
     }

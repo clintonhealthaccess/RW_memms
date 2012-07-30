@@ -35,50 +35,57 @@ import i18nfields.I18nFields
  *
  */
 @i18nfields.I18nFields
-public abstract class Equipment {
+public class Equipment {
 	
 	String code
 	String serialNumber
 	String purchaseCost
+	String descriptions
 	String observations
 	
-	Contact manufacture
-	Contact supplier
-	EquipmentWarranty warranty
+	//Contact manufacture
+	//Contact supplier
+	Warranty warranty
 	
 	Date manufactureDate
 	Date purchaseDate
+	Date registeredOn
 	
 	
 	static belongsTo = [model: EquipmentModel, dataLocation: DataLocation, department: Department]
 	
-	static i18nFields = ["observations"]
-	static embedded=["manufacture","supplier","observations"]
+	
+	static i18nFields = ["observations","descriptions"]
+	//static embedded=["manufacture","supplier"]
 	
 	
 	static constraints = {
 		
-		supplier nullable: false
-		warranty nullable: false
-		manufacture nullable: false
+		//supplier nullable: true
+		warranty nullable: true
+		//manufacture nullable: true
 		
-		code blank: false, nullable: false, unique: true
-		serialNumber blank: false, nullable: false
-		purchaseCost blank: false, nullable: false
+		code  nullable: false, blank: false, unique: true
+		serialNumber nullable: false, blank: false,  unique: true
+		purchaseCost nullable: false, blank: false
 		
-		manufactureDate blank: false, nullable: false, validator:{it <= new Date()}
-		purchaseDate blank: false, nullable: false, validator:{it <= new Date()}
+		manufactureDate nullable: false, blank: false, validator:{it <= new Date()}
+		purchaseDate nullable: false, blank: false, validator:{it <= new Date()}
 		
 		observations nullable: true, blank: true
+		descriptions nullable: true, blank: true
 		
 	}
 	
 	static mapping = {
 		table "memms_equipment"
-		dataLocation column: "data_location_id"
 		version false
 		tablePerSubclass true
 		
+	}
+	
+	String toString() {
+		return "MedicalEquipment[Id=" + id + ", Code=" + code + "]";
 	}
 	
 	@Override

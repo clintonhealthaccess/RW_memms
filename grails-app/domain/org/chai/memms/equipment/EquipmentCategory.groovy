@@ -37,10 +37,11 @@ class EquipmentCategory{
 	String code
 	String names
 	String descriptions
-	EquipmentCategory parent
+	
+	static hasMany = [children: EquipmentCategory]
+	static belongsTo = [parent: EquipmentCategory, level: EquipmentCategoryLevel]
 	
 	static i18nFields = ["names","descriptions"]
-	static embedded = ["names","descriptions"]
 
 	static constraints = {
 		code nullable: false, blank: false, unique:true

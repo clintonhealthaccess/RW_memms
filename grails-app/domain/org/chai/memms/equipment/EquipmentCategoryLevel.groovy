@@ -40,7 +40,7 @@ class EquipmentCategoryLevel {
 	String descriptions
 	
 	static i18nFields = ["names","descriptions"]
-	static embedded = ["names","descriptions"]
+	static hasMany = [categories: EquipmentCategory]
 	
 	static constraints = {
 		code nullable: false, blank: false
@@ -50,7 +50,7 @@ class EquipmentCategoryLevel {
 		 
 	static mapping = {
 		table "memms_equipment_category_level"
-		version false
+		version false		
 	}
 
 	

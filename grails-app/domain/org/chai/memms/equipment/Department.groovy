@@ -39,7 +39,6 @@ class Department {
 	String names
 	String descriptions
 	
-	static embedded = ["names","descriptions"]
 	static i18nFields = ["names","descriptions"]
 	
 	

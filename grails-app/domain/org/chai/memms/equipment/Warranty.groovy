@@ -34,17 +34,14 @@ import i18nfields.I18nFields
  *
  */
 @i18nfields.I18nFields
-class EquipmentWarranty extends Contact {
+class Warranty extends Contact {
 	
 	Date startDate
 	Date endDate
 	String code
 	String descriptions
 	
-	static belongsTo = ["equipment"]
-	
 	static i18nFields =["descriptions"]
-	static embedded = ["descriptions"]
 	
 	static constraints = {
 		importFrom Contact
@@ -77,7 +74,7 @@ class EquipmentWarranty extends Contact {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		EquipmentWarranty other = (EquipmentWarranty) obj;
+		Warranty other = (Warranty) obj;
 		if (code == null) {
 			if (other.code != null)
 				return false;

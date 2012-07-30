@@ -120,7 +120,6 @@ public class LocationService {
 	}
 	
 	public <T extends CalculationLocation> List<T> searchLocation(Class<T> clazz, String text, Map<String, String> params) {
-		def fieldName = 'names_'+languageService.getCurrentLanguagePrefix();
 		def criteria = getSearchCriteria(clazz, text)
 		
 		if (params['offset'] != null) criteria.setFirstResult(params['offset'])
@@ -129,7 +128,7 @@ public class LocationService {
 		
 		StringUtils.split(text).each { chunk ->
 			locations.retainAll { location ->
-				Utils.matches(chunk, location."$fieldName") ||
+				Utils.matches(chunk, location.getNames(languageService.getCurrentLanguage())) ||
 				Utils.matches(chunk, location.code)
 			}
 		}

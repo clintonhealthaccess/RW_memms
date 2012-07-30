@@ -28,6 +28,10 @@ class Role {
     static constraints = {
         name(nullable: false, blank: false, unique: true)
     }
+	static mapping = {
+		table "memms_user_role"
+		cache true
+	}
 	
 	String toString() {
 		return name;

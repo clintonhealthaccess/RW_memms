@@ -1,6 +1,9 @@
 package org.chai.memms.security
 
 
+import org.chai.memms.location.CalculationLocation;
+import org.chai.memms.location.DataLocation;
+import org.chai.memms.location.Location;
 import org.chai.memms.util.UtilsService
 
 class User {
@@ -15,7 +18,7 @@ class User {
 	Boolean active = false
 	String defaultLanguage	
 	String firstname, lastname, organisation, phoneNumber
-	Long locationId
+	CalculationLocation location
 	UserType userType
 	
 	def utilsService
@@ -25,13 +28,7 @@ class User {
 	User() {
 		roles = []
 	}
-	
-//	def getLocation () {
-//		def location = Location.get(locationId) 
-//		if (location == null) location = DataLocation.get(locationId)
-//		return location
-//	}
-	
+		
 	def getPermissions() {
 		return utilsService.split(permissionString, User.PERMISSION_DELIMITER)
 	}
@@ -107,23 +104,12 @@ class User {
 		phoneNumber(phoneNumber: true, nullable: false, blank: false)
 		organisation(nullable: false, blank: false)
 		defaultLanguage(nullable: true)
-		
 		userType(nullable: false, blank: false)
-		locationId(nullable: true, 
-			validator: {val, obj -> 
-				if (obj.userType != UserType.OTHER) {
-					if (val == null) return false
-					else {
-						//def location = DataLocation.get(val)
-						//if (location == null || (!(location instanceof DataLocation))) return false
-					}
-				}
-				return true
-			}
-		)
+		location(nullable: true)
     }
 	
 	static mapping = {
+		table "memms_user"
 		cache true
 	}
 }
