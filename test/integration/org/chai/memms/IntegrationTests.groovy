@@ -43,6 +43,7 @@ import org.chai.memms.location.DataLocation;
 import org.chai.memms.location.DataLocationType;
 import org.chai.memms.location.Location;
 import org.chai.memms.location.LocationLevel;
+import org.chai.memms.location.CalculationLocation;
 
 import org.codehaus.groovy.grails.commons.ConfigurationHolder as CONF
 
@@ -148,6 +149,13 @@ abstract class IntegrationTests extends IntegrationSpec {
 			organisation: 'org', phoneNumber: '+250 11 111 11 11').save(failOnError: true)
 	}
 	
+	static def newPersonUser(def username, def uuid, def locationId) {
+		return new User(userType: UserType.PERSON, code: username, username: username, permissionString: '', passwordHash:'', uuid: uuid, locationId: locationId, firstname: 'first', lastname: 'last', organisation: 'org', phoneNumber: '+250 11 111 11 11').save(failOnError: true)
+	}
+	
+	static def newSystemUser(def username, def uuid, def locationId) {
+		return new User(userType: UserType.SYSTEM, code: username, username: username, permissionString: '', passwordHash:'', uuid: uuid, locationId: locationId, firstname: 'first', lastname: 'last', organisation: 'org', phoneNumber: '+250 11 111 11 11').save(failOnError: true)
+	}
 	def setupSecurityManager(def user) {
 		def subject = [getPrincipal: { user?.uuid }, isAuthenticated: { user==null?false:true }, login: { token -> null }] as Subject
 		ThreadContext.put( ThreadContext.SECURITY_MANAGER_KEY, [ getSubject: { subject } ] as SecurityManager )

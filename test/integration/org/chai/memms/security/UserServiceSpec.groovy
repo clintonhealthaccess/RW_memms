@@ -37,44 +37,50 @@ import org.chai.memms.location.DataLocation;
 class UserServiceSpec extends IntegrationTests{
   def userService;
   
-//  def "search user test"(){
-//	  setup:
-//	  setupLocationTree()
-//	  def dataLocation = DataLocation.findByCode(KIVUYE);
-//	  def userOne = newUser("userOne",UUID.randomUUID().toString());
-//	  def userTwo = newUser("userTwo",UUID.randomUUID().toString());
-//	  def surveyUserOne = newSurveyUser("surveyUserOne",UUID.randomUUID().toString(),dataLocation.id);
-//	  def surveyUserTwo = newSurveyUser("surveyUserTwo",UUID.randomUUID().toString(),dataLocation.id);
-//	  
-//	  when:
-//	  def users = userService.searchUser("user",[:]);
-//	  def sortUsersByFirstname = userService.searchUser("one",["sort":"firstname"]);
-//	  def sortUsersByUsername = userService.searchUser("two",["sort":"username"]);
-//	  then:
-//	  users.equals([userOne,userTwo,surveyUserOne,surveyUserTwo])
-//	  sortUsersByFirstname.equals([userOne,surveyUserOne])
-//	  //test if the sorting params is taken in consideration
-//	  sortUsersByUsername.equals([surveyUserTwo,userTwo])
-//	  
-//  }
+  def "search user test"(){
+	  setup:
+	  setupLocationTree()
+	  def dataLocation = DataLocation.findByCode(KIVUYE);
+	  def userOne = newUser("userOne",UUID.randomUUID().toString());
+	  def userTwo = newUser("userTwo",UUID.randomUUID().toString());
+	  def personUserOne = newPersonUser("personUserOne",UUID.randomUUID().toString(),dataLocation.id);
+	  def personUserTwo = newPersonUser("personUserTwo",UUID.randomUUID().toString(),dataLocation.id);
+	  def systemUserOne = newSystemUser("systemUserOne",UUID.randomUUID().toString(),dataLocation.id);
+	  def systemUserTwo = newSystemUser("systemUserTwo",UUID.randomUUID().toString(),dataLocation.id);
+	  
+	  
+	  
+	  when:
+	  def users = userService.searchUser("user",[:]);
+	  def sortUsersByFirstname = userService.searchUser("one",["sort":"firstname"]);
+	  def sortUsersByUsername = userService.searchUser("two",["sort":"username"]);
+	  then:
+	  users.equals([userOne,userTwo,personUserOne,personUserTwo,systemUserOne,systemUserTwo])
+	  sortUsersByFirstname.equals([userOne,personUserOne,systemUserOne])
+	  //test if the sorting params is taken in consideration
+	  sortUsersByUsername.equals([personUserTwo,systemUserTwo,userTwo,])
+	  
+  }
   
-//  def "count searched user test"(){
-//	  setup:
-//	  setupLocationTree()
-//	  def dataLocation = DataLocation.findByCode(KIVUYE);
-//	  def userOne = newUser("userOne",UUID.randomUUID().toString());
-//	  def userTwo = newUser("userTwo",UUID.randomUUID().toString());
-//	  def surveyUserOne = newSurveyUser("surveyUserOne",UUID.randomUUID().toString(),dataLocation.id);
-//	  def surveyUserTwo = newSurveyUser("surveyUserTwo",UUID.randomUUID().toString(),dataLocation.id);
-//	  
-//	  when:
-//	  def users = userService.searchUser("user",[:]);
-//	  def sortUsersByFirstname = userService.searchUser("one",["sort":"firstname"]);
-//	  then:
-//	  users.size()==4
-//	  sortUsersByFirstname.size()==2
-//	 
-//	  
-//  }
+  def "count searched user test"(){
+	  setup:
+	  setupLocationTree()
+	  def dataLocation = DataLocation.findByCode(KIVUYE);
+	  def userOne = newUser("userOne",UUID.randomUUID().toString());
+	  def userTwo = newUser("userTwo",UUID.randomUUID().toString());
+	  def systemUserOne = newSystemUser("systemUserOne",UUID.randomUUID().toString(),dataLocation.id);
+	  def systemUserTwo = newSystemUser("systemUserTwo",UUID.randomUUID().toString(),dataLocation.id);
+	  def personUserOne = newPersonUser("personUserOne",UUID.randomUUID().toString(),dataLocation.id);
+	  def personUserTwo = newPersonUser("personUserTwo",UUID.randomUUID().toString(),dataLocation.id);
+	  
+	  when:
+	  def users = userService.searchUser("user",[:]);
+	  def sortUsersByFirstname = userService.searchUser("one",["sort":"firstname"]);
+	  then:
+	  users.size()==6
+	  sortUsersByFirstname.size()==3
+	 
+	  
+  }
 	
 }

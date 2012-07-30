@@ -14,7 +14,7 @@ class AccountControllerSpec extends IntegrationTests {
 //		accountController.editAccount()
 //		
 //		then:
-//		accountController.response.redirectedUrl == null
+//		accountController.response.redirectedUrl == "/"
 //		accountController.modelAndView == null
 //	}
 //	
