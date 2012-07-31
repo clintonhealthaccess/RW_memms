@@ -1,7 +1,7 @@
-<div class="entity-form-container togglable">
+<div>
 
-	<div class="entity-form-header">
-		<h3 class="title">
+	<div>
+		<h3>
 			<g:message code="default.new.label" args="[message(code:'datalocationtype.label')]"/>
 		</h3>
 		<g:locales/>
@@ -15,8 +15,8 @@
 		<g:if test="${dataLocationType.id != null}">
 			<input type="hidden" name="id" value="${dataLocationType.id}"></input>
 		</g:if>
-		<div class="row">
-			<button type="submit" class="rich-textarea-form"><g:message code="default.button.save.label"/></button>
+		<div>
+			<button type="submit"><g:message code="default.button.save.label"/></button>
 			<a href="${createLink(uri: targetURI)}"><g:message code="default.link.cancel.label"/></a>
 		</div>
 	</g:form>

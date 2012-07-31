@@ -10,10 +10,10 @@ class SecurityFilters {
             before = {
 				log.debug("filtering params: "+params+", controller: "+controllerName+", action: "+actionName)
                 // Ignore direct views (e.g. the default main index page).
-                if (!controllerName) return true
+                if (!controllerName) return false
 				
                 // Access control by convention.
-                accessControl()
+              //  accessControl()
             }
         }
     }

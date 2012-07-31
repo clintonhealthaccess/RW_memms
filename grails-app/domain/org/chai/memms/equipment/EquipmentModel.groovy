@@ -28,20 +28,20 @@
 package org.chai.memms.equipment
 
 import i18nfields.I18nFields
+
 /**
  * @author Jean Kahigiso M.
  *
  */
 @i18nfields.I18nFields
-class EquipmentModel{ 
+class EquipmentModel {
 	
 	String code
 	String names
 	String descriptions
 	
-	static hasMany =  [equipments:Equipment]
-	
 	static i18nFields = ["names","descriptions"]
+	static hasMany =  [equipments:Equipment]
 	
 	static constraints = {
 		code nullable: false, blank: false
@@ -53,6 +53,12 @@ class EquipmentModel{
 	static mapping = {
 		table "memms_equipment_model"
 		version false
+		names_en type: "text"
+		names_fr type: "text"
+		names_rw type: "text"
+		descriptions_en type: "text"
+		descriptions_fr type: "text"
+		descriptions_rw type: "text"
 	}
 
 

@@ -46,7 +46,7 @@ class LanguageService {
 	}
 	
 	List<String> getAvailableLanguages() {
-		List<String> languages = CONF.config.i18nFields.locales.
+		List<String> languages = CONF.config.i18nFields.locales
 		return languages;
 	}
 	

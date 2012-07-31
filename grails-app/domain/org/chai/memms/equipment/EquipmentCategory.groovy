@@ -51,6 +51,12 @@ class EquipmentCategory{
 		table "memms_equipment_category"
 		version false
 		parent column: "parent_id"
+		names_en type: "text"
+		names_fr type: "text"
+		names_rw type: "text"
+		descriptions_en type: "text"
+		descriptions_fr type: "text"
+		descriptions_rw type: "text"
 		
 	}
 

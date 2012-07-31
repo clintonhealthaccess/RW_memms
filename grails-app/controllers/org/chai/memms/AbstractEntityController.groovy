@@ -1,6 +1,4 @@
-package org.chai.memms
-
-/*
+/**
 * Copyright (c) 2012, Clinton Health Access Initiative.
 *
 * All rights reserved.
@@ -27,18 +25,19 @@ package org.chai.memms
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+package org.chai.memms
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.Log;
-//import org.codehaus.groovy.grails.commons.ConfigurationHolder;
-
-
-abstract class AbstractEntityController extends AbstractController {		
-	
+/**
+* @author Jean Kahigiso M
+*
+*/
+abstract class AbstractEntityController extends AbstractController {	
 	def entityExportService
-	
+	def languges = grailsApplication.config.i18nFields.locales
 	def index = {
         redirect(action: "list", params: params)
     }
@@ -163,26 +162,6 @@ abstract class AbstractEntityController extends AbstractController {
 		entity.delete()
 	}
 	
-	/**
-	 * This binds a list of i18n fields passed in the params to the map <String, Translation>
-	 * passed as parameter.
-	 * The format for the field name is the following:
-	 * - paramName: holds the <map_key> list
-	 * - paramName[<map_key>].<language>: holds the value for that particular language
-	 * 
-	 * @param paramName the name of the param in the form
-	 * @param map the map to fill
-	 */
-//	def bindTranslationMap(def paramName, def map) {
-//		params.list(paramName).each { prefix ->
-//			Translation translation = new Translation()
-//			languageService.availableLanguages.each { language ->
-//				translation[language] = params[paramName+'['+prefix+'].'+language]
-//			}
-//			map.put(prefix, translation)
-//		}
-//	}
-	
 	protected abstract def bindParams(def entity);
 	
 	protected abstract def getModel(def entity);
@@ -194,39 +173,7 @@ abstract class AbstractEntityController extends AbstractController {
 	protected abstract def getTemplate();
 	
 	protected abstract def getLabel();
-	
-	def exporter = {
-		def entityClazz = getEntityClass();
-		if (entityClazz instanceof Class) entityClazz = [entityClazz]
 		
-		List<String> filenames = new ArrayList<String>();
-		List<File> csvFiles = new ArrayList<File>();
-		
-		for (Class clazz : entityClazz){
-			String filename = entityExportService.getExportFilename(clazz);
-			filenames.add(filename);
-			csvFiles.add(entityExportService.getExportFile(filename, clazz));
-		}
-		
-		String zipFilename = StringUtils.join(filenames, "_")
-		def zipFile = Utils.getZipFile(csvFiles, zipFilename)
-		
-		if(zipFile.exists()){
-			response.setHeader("Content-disposition", "attachment; filename=" + zipFile.getName());
-			response.setContentType("application/zip");
-			response.setHeader("Content-length", zipFile.length().toString());
-			response.outputStream << zipFile.newInputStream()
-		}
-	}
-	
-	def importer = {
-		def clazz = getEntityClass();
-		
-		if(clazz instanceof Class){
-			redirect (controller: 'entityImporter', action: 'importer', params: [entityClass: clazz.name]);
-		}
-	}
-	
 	protected abstract def getEntityClass();
 	
 }

@@ -25,63 +25,37 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.equipment
+package org.chai.memms
 
-import i18nfields.I18nFields
+
 /**
  * @author Jean Kahigiso M.
  *
  */
 @i18nfields.I18nFields
-class Department {
+public class Contact {
+	String addressDescriptions
+	String contactName
+	String email
+	String phone
+	String address
+		
+	static i18nFields =["addressDescriptions"]
 	
-	String code
-	String names
-	String descriptions
-	
-	static i18nFields = ["names","descriptions"]
-	
-	
-	static constraints = {
-		code nullable:false, blank:false, unique:true
-		names nullable: true, blank: true
-		descriptions nullable: true, blank: true
+	static constraints ={
+		
+		email blank: true, nullable: true, email:true 
+		phone blank: true, nullable: true 
+		address blank: true, nullable: true 
+		contactName blank: true, nullable: true 
+		addressDescriptions blank: true, nullable: true 
+		
 	}
-	
 	static mapping = {
-		table "memms_department"
 		version false
-		names_en type: "text"
-		names_fr type: "text"
-		names_rw type: "text"
-		descriptions_en type: "text"
-		descriptions_fr type: "text"
-		descriptions_rw type: "text"
+		addressDescriptions_en type: "text"
+		addressDescriptions_fr type: "text"
+		addressDescriptions_rw type: "text"
 	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((code == null) ? 0 : code.hashCode());
-		return result;
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this.is(obj))
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Department other = (Department) obj;
-		if (code == null) {
-			if (other.code != null)
-				return false;
-		} else if (!code.equals(other.code))
-			return false;
-		return true;
-	}	
 	
-
 }
