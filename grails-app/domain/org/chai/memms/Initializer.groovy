@@ -2,7 +2,7 @@ package org.chai.memms
 
 import java.util.Date;
 import org.apache.shiro.crypto.hash.Sha256Hash
-import org.chai.memms.equipment.Contact;
+import org.chai.memms.Contact;
 import org.chai.memms.equipment.Department;
 import org.chai.memms.equipment.Equipment;
 import org.chai.memms.equipment.EquipmentCategory;
@@ -20,6 +20,8 @@ import org.chai.memms.security.UserType
 import org.codehaus.groovy.grails.commons.ConfigurationHolder as CONF
 
 public class Initializer {
+	
+	
 	static final String HEALTH_CENTER_GROUP = "Health Center"
 	static final String DISTRICT_HOSPITAL_GROUP = "District Hospital"
 	
@@ -38,7 +40,6 @@ public class Initializer {
 	static final String BUTARO = "Butaro DH"
 	static final String KIVUYE = "Kivuye HC"
 	static final String BUNGWE = "Bungwe HC"
-
 	static def createUsers() {
 		if(!User.count()){
 			def adminRole = new Role(name: "Admin")
@@ -49,7 +50,7 @@ public class Initializer {
 			dataClerkRole.addToPermissions("*")
 			dataClerkRole.save(failOnError: true, flush:true)
 	
-			def userAdmin = new User(userType: UserType.PERSON,code:"admin", location: CalculationLocation.findByCode(RWANDA), username: "admin", firstname: "memms", lastname: "memms", email:'memms@memms.org', passwordHash: new Sha256Hash("admin").toHex(), active: true, confirmed: true, uuid:'admin', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org',permissionString:"user:*")
+			def userAdmin = new User(userType: UserType.PERSON,code:"admin", location: CalculationLocation.findByCode(RWANDA), username: "admin", firstname: "memms", lastname: "memms", email:'memms@memms.org', passwordHash: new Sha256Hash("admin").toHex(), active: true, confirmed: true, uuid:'admin', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org',permissionString:"user:*,equipmentModel:*")
 			userAdmin.addToRoles(adminRole)
 			userAdmin.save(failOnError: true, flush:true)
 			
@@ -88,8 +89,6 @@ public class Initializer {
 	static def createInventoryStructure(){
 		if(!Department.count()){
 			//Add Department
-//			def test = new Department(code:'testCode',names:['en':'Surgery'],descriptions:['en':'Surgery Dep']).save(failOnError:true)
-//			def test = new Department(code:'testCode',names_en:'Surgery',descriptions_fr:'Surgery Dep').save(failOnError:true)
 			def surgery = newDepartment(['en':'Surgery'],'SURGERY',['en':'Surgery Dep'])
 			def pediatry = newDepartment(['en':'Pediatry'],'PEDIATRY',[:])
 			def emeregency = newDepartment(['en':'Emeregency'],'EMERGENCY',['en':'Emeregency Dep'])
@@ -116,65 +115,53 @@ public class Initializer {
 			def modelTwo= newEquipmentModel(['fr':'Model Two'],'MODEL2',['en':'Model Two'])
 			def modelThree = newEquipmentModel([:],'MODEL3',['en':'Model Three'])
 		}
-//		if(!Equipment.count()){
-//			def equipmentOne = newEquipment(
-//				"CODE1",
-//				"SERIAL10"
-//				,"2900.23",
-//				['en':'Equipment Descriptions'],
-//				['en':'Equipment Observation'],
-//				getDate(22,07,2010),
-//				getDate(10,10,2010),
-//				new Date(),
-//				EquipmentModel.findByCode('MODEL1'),
-//				DataLocation.findByCode(BUTARO),
-//				Department.findByCode('SURGERY')
-//				)
-//			//def manufacture = newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154",equipmentOne)
-//			def supplier = newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654",equipmentOne)
-//			def warranty = newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154",getDate(10, 12, 2010),getDate(12, 12, 2012),[:],equipmentOne)
-//		}
-//		
+		if(!Equipment.count()){
+			def equipmentOne = newEquipment(
+				"SERIAL10"
+				,"2900.23",
+				['en':'Equipment Descriptions'],
+				['en':'Equipment Observation'],
+				getDate(22,07,2010),
+				getDate(10,10,2010),
+				new Date(),
+				EquipmentModel.findByCode('MODEL1'),
+				DataLocation.findByCode(BUTARO),
+				Department.findByCode('SURGERY')
+				)
+			def manufacture = newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154")
+			def supplier = newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654")
+			def contact = newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654")
+			def warranty = newWarranty("Code",['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154",getDate(10, 12, 2010),getDate(12, 12, 2012),[:],equipmentOne)
+			
+			warranty.contact=contact
+			equipmentOne.manufacture=manufacture
+			equipmentOne.supplier=supplier
+			equipmentOne.warranty=warranty
+			
+			equipmentOne.save(failOnError:true)
+		}
+		
 		
 	}
 	
 	
 	
 	//Models definition
-	
-	public static def newEquipment(def code,def serialNumber,def purchaseCost,def descriptions,def observations,def manufactureDate, def purchaseDate,def registeredOn,def model,def dataLocation,def department){
-		def equipment = new Equipment(code:code,serialNumber:serialNumber,purchaseCost:purchaseCost,manufactureDate:manufactureDate,purchaseDate:purchaseDate);
+	public static def newEquipment(def serialNumber,def purchaseCost,def descriptions,def observations,def manufactureDate, def purchaseDate,def registeredOn,def model,def dataLocation,def department){
+		def equipment = new Equipment(serialNumber:serialNumber,purchaseCost:purchaseCost,manufactureDate:manufactureDate,purchaseDate:purchaseDate,registeredOn:registeredOn,model:model,dataLocation:dataLocation,department:department);
 		setLocaleValueInMap(equipment,descriptions,"Descriptions")
-		setLocaleValueInMap(equipment,observations,"Observations")
-//		equipment.save(failOnError: true)
-//		manufacture.equipment=equipment
-//		supplier.equipment=equipment
-//		warranty.equipment=equipment
-//		
-//		manufacture.save(failOnError: true)
-//		supplier.save(failOnError: true)
-//		warranty.save(failOnError: true)
-//		
-//		equipment.manufacture=manufacture;
-//		equipment.supplier=supplier
-//		equipment.warranty=warranty
-		
+		setLocaleValueInMap(equipment,observations,"Observations")	
 		return equipment.save(failOnError: true)
 	}
 
-	public static def newContact(def addressDescriptions,def contactName,def email, def phone, def address,def equipment){
-		def contact = new Contact(contactName:contactName,email:email,phone:phone,address:address,equipment:equipment)
+	public static def newContact(def addressDescriptions,def contactName,def email, def phone, def address){
+		def contact = new Contact(contactName:contactName,email:email,phone:phone,address:address)
 		setLocaleValueInMap(contact,addressDescriptions,"AddressDescriptions")
-//		if(equipment!=null)
-//			equipment.contact=contact
-		return contact.save(failOnError: true);
+		return contact;
 	}
-	public static def newWarranty(def addressDescriptions,def contactName,def email, def phone, def address,def startDate,def endDate,def descriptions,def equipment){
-		def warranty = new Warranty(contactName:contactName,email:email,phone:phone,address:address,startDate:startDate,endDate:endDate,equipment:equipment)
-		setLocaleValueInMap(warranty,addressDescriptions,"AddressDescriptions")
+	public static def newWarranty(def code,def addressDescriptions,def contactName,def email, def phone, def address,def startDate,def endDate,def descriptions,def equipment){
+		def warranty = new Warranty(code:code,contactName:contactName,email:email,phone:phone,address:address,startDate:startDate,endDate:endDate,equipment:equipment)
 		setLocaleValueInMap(warranty,descriptions,"Descriptions")
-//		if(equipment!=null)
-//			equipment.warranty=warranty
 		return warranty.save(failOnError: true);
 	}
 	public static def newEquipmentModel(def names,def code,def descriptions){

@@ -28,32 +28,41 @@
 package org.chai.memms.equipment
 
 
+import org.chai.memms.Contact;
+
 import i18nfields.I18nFields
 /**
  * @author Jean Kahigiso M.
  *
  */
 @i18nfields.I18nFields
-class Warranty extends Contact {
+class Warranty{
 	
 	Date startDate
 	Date endDate
 	String code
 	String descriptions
+	Contact contact
 	
+	static belongsTo = [equipment:Equipment]
 	static i18nFields =["descriptions"]
+	static embedded = ["contact"]
 	
 	static constraints = {
-		importFrom Contact
+		code nullable: false
 		startDate nullable:false, validator:{it <= new Date()} 
 		endDate nullable:false, validator: { val, obj -> 
-			return (it >= startDate)
+			return (val >= obj.startDate)
 			} 
 		descriptions nullable: true, blank: true
+		contact nullable: true
 	}
 	
 	static mapping = {
 		table "memms_equipment_warranty"
+		descriptions_en type: "text"
+		descriptions_fr type: "text"
+		descriptions_rw type: "text"
 	}
 	
 	String toString() {

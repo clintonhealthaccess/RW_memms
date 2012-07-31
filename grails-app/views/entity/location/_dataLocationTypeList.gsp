@@ -1,4 +1,4 @@
-<table class="listing">
+<table>
 	<thead>
 		<tr>
 			<th/>
@@ -10,21 +10,21 @@
 		<g:each in="${entities}" status="i" var="dataLocationType">
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 				<td>
-					<ul class="horizontal">
+					<ul>
 						<li>
-							<a class="edit-link" href="${createLinkWithTargetURI(controller:'dataLocationType', action:'edit', params:[id: dataLocationType.id])}">
+							<a href="${createLinkWithTargetURI(controller:'dataLocationType', action:'edit', params:[id: dataLocationType.id])}">
 								<g:message code="default.link.edit.label" />
 							</a>
 						</li>
 						<li>
-							<a class="delete-link" href="${createLinkWithTargetURI(controller:'dataLocationType', action:'delete', params:[id: dataLocationType.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');"><g:message code="default.link.delete.label" /></a>
+							<a href="${createLinkWithTargetURI(controller:'dataLocationType', action:'delete', params:[id: dataLocationType.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');"><g:message code="default.link.delete.label" /></a>
 						</li>
 						
 					</ul>
 				</td>
 				<td>${dataLocationType.code}</td>
 				<td>
-					<g:i18n field="${dataLocationType.names}"/>
+					${dataLocationType.names}
 				</td>
 			</tr>
 		</g:each>

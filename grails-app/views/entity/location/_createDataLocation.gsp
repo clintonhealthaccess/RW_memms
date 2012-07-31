@@ -1,7 +1,7 @@
-<div class="entity-form-container togglable">
+<div>
 
-	<div class="entity-form-header">
-		<h3 class="title">
+	<div>
+		<h3>
 			<g:message code="default.new.label" args="[message(code:'datalocation.label')]"/>
 		</h3>
 		<g:locales/>
@@ -13,17 +13,17 @@
 		<g:input name="code" label="${message(code:'entity.code.label')}" bean="${location}" field="code"/>
 		
 		<g:selectFromList name="type.id" label="${message(code:'datalocation.type.label')}" bean="${location}" field="type" 
-			from="${types}" value="${location.type?.id}" values="${types.collect{i18n(field:it.names)}}" optionKey="id"/>
+			from="${types}" value="${location.type?.id}" values="${types.collect{it.names}}" optionKey="id"/>
 
 		<g:selectFromList name="location.id" label="${message(code:'datalocation.location.label')}" bean="${location}" field="location" optionKey="id" multiple="false"
 			ajaxLink="${createLink(controller:'location', action:'getAjaxData', params: [class: 'Location'])}"
-			from="${locations}" value="${location.location?.id}" values="${locations.collect{i18n(field:it.names)}}" />
+			from="${locations}" value="${location.location?.id}" values="${locations.collect{it.names}}" />
 
 		<g:if test="${location.id != null}">
 			<input type="hidden" name="id" value="${location.id}"></input>
 		</g:if>
-		<div class="row">
-			<button type="submit" class="rich-textarea-form"><g:message code="default.button.save.label"/></button>
+		<div>
+			<button type="submit"><g:message code="default.button.save.label"/></button>
 			<a href="${createLink(uri: targetURI)}"><g:message code="default.link.cancel.label"/></a>
 		</div>
 	</g:form>

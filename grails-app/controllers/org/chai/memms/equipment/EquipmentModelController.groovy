@@ -27,61 +27,61 @@
  */
 package org.chai.memms.equipment
 
-import i18nfields.I18nFields
+import org.chai.memms.AbstractEntityController;
+
 /**
- * @author Jean Kahigiso M.
+ * @author Jean Kahigiso M
  *
  */
-@i18nfields.I18nFields
-class Department {
+class EquipmentModelController extends AbstractEntityController{
 	
-	String code
-	String names
-	String descriptions
+	def languges = grailsApplication.config.i18nFields.locales
 	
-	static i18nFields = ["names","descriptions"]
-	
-	
-	static constraints = {
-		code nullable:false, blank:false, unique:true
-		names nullable: true, blank: true
-		descriptions nullable: true, blank: true
-	}
-	
-	static mapping = {
-		table "memms_department"
-		version false
-		names_en type: "text"
-		names_fr type: "text"
-		names_rw type: "text"
-		descriptions_en type: "text"
-		descriptions_fr type: "text"
-		descriptions_rw type: "text"
+	def getEntity(def id) {
+		return EquipmentModel.get(id);
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((code == null) ? 0 : code.hashCode());
-		return result;
+	def createEntity() {
+		return new EquipmentModel();
 	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this.is(obj))
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Department other = (Department) obj;
-		if (code == null) {
-			if (other.code != null)
-				return false;
-		} else if (!code.equals(other.code))
-			return false;
-		return true;
-	}	
+
+	def getTemplate() {
+		return "/entity/model/createModel";
+	}
+
+	def getLabel() {
+		return "equipment.model.label";
+	}
+
+	def getEntityClass() {
+		return EquipmentModel.class;
+	}
+	def deleteEntity(def entity) {
+		if(Equipment.findByModel(entity)!=null)
+			flash.message = message(code: 'model.hasequipment', args: [message(code: getLabel(), default: 'entity'), params.id], default: 'Model {0} still has associated equipment.')
+
+	}
+	
+	def bindParams(def entity) {
+		entity.properties = params		
+	}
+
+	def getModel(def entity) {
+		[
+			model: entity 
+			]
+	}
+	def list = {
+		adaptParamsForList()
+		def models = EquipmentModel.list(params);
+		render(view:"/entity/list",model:[
+			template: "model/modelList",
+			entities: models,
+			entityCount: EquipmentModel.count(),
+			code: getLabel(),
+			entityClass: getEntityClass()
+			])
+	}
 	
 
 }

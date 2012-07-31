@@ -27,6 +27,7 @@
  */
 package org.chai.memms.equipment
 
+import org.chai.memms.Contact
 import org.chai.memms.location.DataLocation;
 
 import i18nfields.I18nFields
@@ -37,14 +38,13 @@ import i18nfields.I18nFields
 @i18nfields.I18nFields
 public class Equipment {
 	
-	String code
 	String serialNumber
 	String purchaseCost
 	String descriptions
 	String observations
 	
-	//Contact manufacture
-	//Contact supplier
+	Contact manufacture
+	Contact supplier
 	Warranty warranty
 	
 	Date manufactureDate
@@ -56,16 +56,15 @@ public class Equipment {
 	
 	
 	static i18nFields = ["observations","descriptions"]
-	//static embedded=["manufacture","supplier"]
+	static embedded=["manufacture","supplier"]
 	
 	
 	static constraints = {
 		
-		//supplier nullable: true
+		supplier nullable: true
 		warranty nullable: true
-		//manufacture nullable: true
+		manufacture nullable: true
 		
-		code  nullable: false, blank: false, unique: true
 		serialNumber nullable: false, blank: false,  unique: true
 		purchaseCost nullable: false, blank: false
 		
@@ -81,6 +80,12 @@ public class Equipment {
 		table "memms_equipment"
 		version false
 		tablePerSubclass true
+		observations_en type: 'text'
+		observations_fr type: 'text'
+		observations_rw type: 'text'
+		descriptions_en type: 'text'
+		descriptions_fr type: 'text'
+		descriptions_rw type: 'text'
 		
 	}
 	

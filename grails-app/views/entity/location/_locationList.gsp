@@ -1,4 +1,4 @@
-<table class="listing">
+<table>
 	<thead>
 		<tr>
 			<th/>
@@ -12,27 +12,27 @@
 		<g:each in="${entities}" status="i" var="location">
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 				<td>
-					<ul class="horizontal">
+					<ul>
 						<li>
-							<a class="edit-link" href="${createLinkWithTargetURI(controller:'location', action:'edit', params:[id: location.id])}">
+							<a href="${createLinkWithTargetURI(controller:'location', action:'edit', params:[id: location.id])}">
 								<g:message code="default.link.edit.label" />
 							</a>
 						</li>
 						<li>
-							<a class="delete-link" href="${createLinkWithTargetURI(controller:'location', action:'delete', params:[id: location.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');"><g:message code="default.link.delete.label" /></a>
+							<a href="${createLinkWithTargetURI(controller:'location', action:'delete', params:[id: location.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');"><g:message code="default.link.delete.label" /></a>
 						</li>
 						
 					</ul>
 				</td>
 				<td>${location.code}</td>
 				<td>
-					<g:i18n field="${location.names}"/>
+					${location.names}
 				</td>
 				<td>
-					<g:i18n field="${location.level.names}"/>
+					${location.level.names}
 				</td>
 				<td>
-					<g:i18n field="${location.parent?.names}"/>
+					${location.parent?.names}
 				</td>
 			</tr>
 		</g:each>

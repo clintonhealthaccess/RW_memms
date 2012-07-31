@@ -12,10 +12,10 @@
 	<div id="header">
 		<div class="wrapper">
 		    <h1 id="logo">
-		    	<a href="${createLink(controller:'home', action:'index')}"><g:message code="title.dhsst"/></a>
+		    	<a href="${createLink(controller:'home', action:'index')}"><g:message code="title.memms"/></a>
 		    </h1>
 
-			<ul class="locales" id="switcher">
+			<ul id="switcher">
 				<%-- <% def languageService = grailsApplication.mainContext.getBean('languageService') %>
 				<g:each in="${languageService.availableLanguages}" var="language" status="i">
 					<% params['lang'] = language %>
@@ -23,7 +23,7 @@
 				</g:each> --%>
 			</ul>
 			
-			<ul class="locales" id="top_nav">
+			<ul id="top_nav">
 				<shiro:user>
 					<%
 						def user = User.findByUuid(SecurityUtils.subject.principal, [cache: true])
