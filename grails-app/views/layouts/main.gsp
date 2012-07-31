@@ -12,7 +12,7 @@
 	<div id="header">
 		<div class="wrapper">
 		    <h1 id="logo">
-		    	<a href="${createLink(controller:'home', action:'index')}"><g:message code="title.dhsst"/></a>
+		    	<a href="${createLink(controller:'home', action:'index')}"><g:message code="title.memms"/></a>
 		    </h1>
 
 			<ul class="locales" id="switcher">

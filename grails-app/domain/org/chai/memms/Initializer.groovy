@@ -17,9 +17,12 @@ import org.chai.memms.location.LocationLevel;
 import org.chai.memms.security.Role
 import org.chai.memms.security.User
 import org.chai.memms.security.UserType
-import org.codehaus.groovy.grails.commons.ConfigurationHolder as CONF
+//import org.codehaus.groovy.grails.commons.ConfigurationHolder as CONF
 
 public class Initializer {
+	
+	def grailsApplication
+	
 	static final String HEALTH_CENTER_GROUP = "Health Center"
 	static final String DISTRICT_HOSPITAL_GROUP = "District Hospital"
 	
@@ -271,7 +274,9 @@ public class Initializer {
 	*/
    public static def setLocaleValueInMap(def object, def map, def fieldName){
 	   def methodName = 'set'+fieldName
-	   CONF.config.i18nFields.locales.each{ loc ->
+	   //TODO replace with CONF variable if this fails
+	   def grailsApplication = new Initializer().domainClass.grailsApplication
+	   grailsApplication.config.i18nFields.locales.each{ loc ->
 		   if(map.get(loc) != null)
 			   object."$methodName"(map.get(loc),new Locale(loc))
 		   else

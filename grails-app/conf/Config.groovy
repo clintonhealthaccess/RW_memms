@@ -103,6 +103,7 @@ log4j = {
 site.fallback.language="en"
 site.contact.email="contact@memms.org"
 site.entity.list.max=40
+site.from.email="no-reply@memms.org"
 
 i18nFields{
 	locales = ["en","fr","rw"]

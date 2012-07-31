@@ -45,13 +45,14 @@ import org.chai.memms.location.Location;
 import org.chai.memms.location.LocationLevel;
 import org.chai.memms.location.CalculationLocation;
 
-import org.codehaus.groovy.grails.commons.ConfigurationHolder as CONF
+//import org.codehaus.groovy.grails.commons.ConfigurationHolder as CONF
 
 abstract class IntegrationTests extends IntegrationSpec {
 	
 	def refreshValueService
 	def springcacheService
 	def sessionFactory
+	def grailsApplication
 	
 	static final String CODE (def number) { return "CODE"+number }
 	static final String HEALTH_CENTER_GROUP = "Health Center"
@@ -105,9 +106,12 @@ abstract class IntegrationTests extends IntegrationSpec {
 		return result;
 	}
 	
-	static def getCalculationLocation(def code) {
+	static def getCalculationLocation(def code, def log = null) {
+		//if(log != null) log.debug("getCalculationLocation : code : " + code)
 		def location = Location.findByCode(code)
-		if (location == null) location = DataLocation.findByCode(code)
+		//if(log != null) log.debug("getCalculationLocation : location : " + location)
+		//if (location == null) location = DataLocation.findByCode(code)
+		//if(log != null) log.debug("getCalculationLocation : location : " + location)
 		return location
 	}
 	

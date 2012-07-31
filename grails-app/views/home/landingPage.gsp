@@ -10,7 +10,7 @@
 </head>
 <body>
 	<h3 class="heading2-bar text-center"><g:message code="landingpage.welcome.label"/></h3>
-	<div class="main">
+	<%--<div class="main">
 		<%
 			if (SecurityUtils.subject.isPermitted('menu:reports') 
 				&& SecurityUtils.subject.isPermitted('menu:survey')
@@ -45,6 +45,9 @@
 					class: size, link: createLink(controller: 'admin', action: 'view')]"/>
 			</shiro:hasPermission>
 		</g:if>
-	</div>
+	</div> --%>
+	<ul>
+		<li><g:link controller="User">Users Home</g:link></li>
+	</ul>
 </body>
 </html>
