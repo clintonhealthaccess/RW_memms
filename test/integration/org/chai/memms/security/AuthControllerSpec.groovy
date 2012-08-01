@@ -348,6 +348,36 @@ class AuthControllerSpec extends IntegrationTests {
 		authController.response.redirectedUrl == '/auth/login'
 	}
 	
+	def "create password token with known user - valid email"() {
+		setup:
+		authController = new AuthController()
+		def user = newUser('test@test.com', false, false)
+		
+		when:
+		authController.params.email = 'test@test.com'
+		authController.retrievePassword()
+		
+		then:
+		PasswordToken.findByToken(user.passwordToken.token).count() == 1
+		authController.response.redirectedUrl == '/auth/login'
+	}
+	
+	
+	def "create password token with known user deletes old token - valid email"() {
+		setup:
+		authController = new AuthController()
+		def user = newUser('test@test.com', false, false)
+		new PasswordToken(token:"456", user:user).save()
+		when:
+		authController.params.email = 'test@test.com'
+		authController.retrievePassword()
+		
+		then:
+		PasswordToken.findByToken("456") == null
+		PasswordToken.findByToken(user.passwordToken.token).count() == 1
+		authController.response.redirectedUrl == '/auth/login'
+	}
+	
 	def "new password without token 404"() {
 		setup:
 		setupSecurityManager(null)
@@ -390,6 +420,7 @@ class AuthControllerSpec extends IntegrationTests {
 		then:
 		authController.response.redirectedUrl == null
 	}
+	
 	
 	def "set password with valid token - invalid password"() {
 		setup:

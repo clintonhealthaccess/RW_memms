@@ -227,6 +227,14 @@ class AuthController {
 		else {
 			// create token
 			def user = User.findByEmail(cmd.email)
+			//if user has an already existing token, delete it
+			if(user.passwordToken != null){
+				//This assumes that a user has only one password token
+				PasswordToken passwordTokenToDelete = user.passwordToken
+				user.passwordToken = null
+				passwordTokenToDelete.delete()
+			}
+			
 			PasswordToken token = new PasswordToken(token: RandomStringUtils.randomAlphabetic(20), user: user).save()
 			
 			def url = createLink(absolute: true, controller:'auth', action:'newPassword', params:[token:token.token])
