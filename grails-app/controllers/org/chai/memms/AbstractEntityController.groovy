@@ -45,7 +45,7 @@ abstract class AbstractEntityController extends AbstractController {
 	def delete = {		
 		def entity = getEntity(params.int('id'));
 		if (log.isInfoEnabled()) log.info("deleting entity: "+entity)
-		
+		log.debug("deleting entity: "+entity)
 		if (entity != null) {
 			try {
 				deleteEntity(entity)

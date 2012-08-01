@@ -1,5 +1,6 @@
 package org.chai.memms.security
 
+import org.apache.commons.lang.RandomStringUtils
 import org.apache.shiro.SecurityUtils
 import org.apache.shiro.authc.AuthenticationException
 import org.apache.shiro.authc.UsernamePasswordToken
@@ -12,7 +13,7 @@ import org.grails.datastore.mapping.config.utils.ConfigUtils;
 class AuthController {
     def shiroSecurityManager
 	def languageService
-
+	def grailsApplication
 	def getTargetURI() {
 		// this is because shiro automatically adds the parameter 'targetUri'
 		// and there is no way to change it so we expect it here as well
@@ -21,7 +22,7 @@ class AuthController {
 	}
 	
 	def getFromEmail() {
-		def fromEmail = ConfigurationHolder.config.site.from.email;
+		def fromEmail = grailsApplication.config.site.from.email;
 		return fromEmail
 	}
 	
@@ -45,14 +46,16 @@ class AuthController {
 			render(view:'register', model:[register: cmd, languages: languageService.availableLocales])
 		}
 		else {
-			def user = new User(userType: UserType.OTHER, code: cmd.email, username: cmd.email, email: cmd.email, passwordHash: new Sha256Hash(cmd.password).toHex(), permissionString:'',
+			RegistrationToken token = new RegistrationToken(token: RandomStringUtils.randomAlphabetic(20), used: false)
+			
+			def user = new User(userType: UserType.OTHER, username: cmd.email, email: cmd.email, passwordHash: new Sha256Hash(cmd.password).toHex(), permissionString:'',
 				firstname: cmd.firstname, lastname: cmd.lastname, organisation: cmd.organisation,
-				phoneNumber: cmd.phoneNumber, defaultLanguage: cmd.defaultLanguage, uuid: UUID.randomUUID().toString()).save(failOnError: true)
+				phoneNumber: cmd.phoneNumber, defaultLanguage: cmd.defaultLanguage, uuid: UUID.randomUUID().toString(),registrationToken:token).save(failOnError: true)
 				
-			RegistrationToken token = new RegistrationToken(token: RandomStringUtils.randomAlphabetic(20), user: user, used: false).save()
+			
 			def url = createLink(absolute: true, controller:'auth', action:'confirmRegistration', params:[token:token.token])
 			
-			def contactEmail = ConfigurationHolder.config.site.contact.email;
+			def contactEmail = grailsApplication.config.site.contact.email;
 			sendMail {
 				to contactEmail
 				from getFromEmail()
@@ -86,7 +89,7 @@ class AuthController {
 				token.used = true
 				token.save()
 				
-				def contactEmail = ConfigurationHolder.config.site.contact.email;
+				def contactEmail = grailsApplication.config.site.contact.email;
 				sendMail {
 					to contactEmail
 					from getFromEmail()
@@ -123,8 +126,13 @@ class AuthController {
 				user.active = true
 				user.save()
 				
-				RegistrationToken token = RegistrationToken.findByUser(user)
-				if (token != null) token.delete()
+				if(user.registrationToken != null){
+					//This assumes that a user has only one regitration token
+					RegistrationToken registrationTokenToDelete = user.registrationToken
+					user.registrationToken = null
+					registrationTokenToDelete.delete()
+				}
+				
 				
 				def url = createLink(absolute: true, controller:'auth', action:'login', params:[username:user.username])
 				
@@ -268,6 +276,8 @@ class AuthController {
 			if (token != null) {
 				// retrieve user from token
 				user = token.user
+				//Disassociate token from user
+				user.passwordToken = null
 				// delete the token
 				token.delete()
 			}

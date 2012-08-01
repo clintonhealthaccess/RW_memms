@@ -75,6 +75,7 @@ abstract class IntegrationTests extends IntegrationSpec {
 		// using cache.use_second_level_cache = false in test mode doesn't work so
 		// we flush the cache after each test
 		//springcacheService.flushAll()
+		//new org.apache.shiro.grails.ShiroSecurityService()
 	}
 	
 	static def setupLocationTree() {
@@ -138,7 +139,7 @@ abstract class IntegrationTests extends IntegrationSpec {
 	}
 	
 	static def newUser(def username, def uuid) {
-		return new User(userType: UserType.OTHER, code: username, username: username, permissionString: '', passwordHash:'', uuid: uuid, firstname: 'first', lastname: 'last', organisation: 'org', phoneNumber: '+250 11 111 11 11').save(failOnError: true)
+		return new User(userType: UserType.OTHER, username: username, permissionString: '', passwordHash:'', uuid: uuid, firstname: 'first', lastname: 'last', organisation: 'org', phoneNumber: '+250 11 111 11 11').save(failOnError: true)
 	}
 	
 	static def newUser(def username, def active, def confirmed) {

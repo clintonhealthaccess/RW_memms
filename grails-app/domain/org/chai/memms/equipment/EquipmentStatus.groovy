@@ -60,13 +60,10 @@ class EquipmentStatus {
 		changedBy nullable:false 
 		value nullable: false, blank:false
 	}
+	
 	static mapping = {
 		table "memms_equipment_status"
 		version false
 		value column: "status_value"
 	}
-	
-	
-	
-
 }
