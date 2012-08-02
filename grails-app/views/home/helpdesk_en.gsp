@@ -5,10 +5,10 @@
         <title><g:message code="helpdesk.page.title" /></title>
     </head>
     <body>
-    	<div class="heading1-bar">
+    	<div>
     	
     	</div>
-		<div class="main">
+		<div>
 			Having issues? Call the helpdesk (free call): 114
 		</div>
     </body>

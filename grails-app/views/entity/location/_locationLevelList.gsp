@@ -13,7 +13,7 @@
 				<td>
 					<ul>
 						<li>
-							<a class="edit-link" href="${createLinkWithTargetURI(controller:'locationLevel', action:'edit', params:[id: locationLevel.id])}">
+							<a href="${createLinkWithTargetURI(controller:'locationLevel', action:'edit', params:[id: locationLevel.id])}">
 								<g:message code="default.link.edit.label" />
 							</a>
 						</li>

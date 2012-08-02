@@ -1,14 +1,14 @@
 <%@ page import="org.chai.memms.security.UserType" %>
 
-<div class="entity-form-container">
+<div >
 	
-	<div class="entity-form-header">
-		<h3 class="title">
+	<div >
+		<h3 >
 			<g:message code="default.new.label" args="[message(code:'user.label')]"/>
 		</h3>
 		<g:locales/>
 	</div>
-	<div class="data-field-column">
+	<div >
 		<g:form url="[controller:'user', action:'save', params: [targetURI: targetURI]]" useToken="true">			
 			<g:input name="username" label="${message(code:'user.username.label')}" bean="${user}" field="username"/>
 			
@@ -23,16 +23,16 @@
 			
 			<g:selectFromEnum name="userType" bean="${user}" values="${UserType.values()}" field="userType" label="${message(code:'user.usertype.label')}"/>
 			
-			<%-- <g:selectFromList name="locationId" label="${message(code:'datauser.datalocation.label')}" bean="${user}" field="locationId" optionKey="id" multiple="false"
+			<g:selectFromList name="locationId" label="${message(code:'datauser.datalocation.label')}" bean="${user}" field="locationId" optionKey="id" multiple="false"
 				ajaxLink="${createLink(controller:'location', action:'getAjaxData', params:[class: 'CalculationLocation'])}"
-				from="${dataLocations}" value="${user.location?.id}" values="${dataLocations.collect{i18n(field:it.names)}}" /> --%>
+				from="${dataLocations}" value="${user.location?.id}" values="${dataLocations.collect{i18n(field:it.names)}}" />
 						
-			<div class="row">
+			<div>
 				<label><g:message code="user.confirmed.label"/></label>
 				<g:checkBox name="confirmed" value="${user.confirmed}" />
 			</div>
 			
-			<div class="row">
+			<div>
 				<label><g:message code="user.active.label"/></label>
 				<g:checkBox name="active" value="${user.active}" />
 			</div>
@@ -44,7 +44,7 @@
 				<input type="hidden" name="id" value="${user.id}"/>
 			</g:if>
 			
-			<div class="row">
+			<div>
 				<button type="submit"><g:message code="default.button.save.label"/></button>
 				<a href="${createLink(uri: targetURI)}"><g:message code="default.link.cancel.label"/></a>
 			</div>
