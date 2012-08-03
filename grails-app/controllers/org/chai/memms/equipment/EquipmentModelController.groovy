@@ -46,7 +46,7 @@ class EquipmentModelController extends AbstractEntityController{
 	}
 
 	def getTemplate() {
-		return "/entity/model/createModel";
+		return "/entity/model/createEquipmentModel";
 	}
 
 	def getLabel() {
@@ -68,8 +68,8 @@ class EquipmentModelController extends AbstractEntityController{
 
 	def getModel(def entity) {
 		[
-			model: entity 
-			]
+			model: entity
+		]
 	}
 	def list = {
 		adaptParamsForList()

@@ -41,8 +41,8 @@ class DepartmentController extends AbstractEntityController{
 	
 	def getModel(def entity) {
 		[
-			department:entity
-			]
+			model:entity
+		]
 	}
 	
 	def list={
@@ -56,7 +56,4 @@ class DepartmentController extends AbstractEntityController{
 			entityClass: getEntityClass()
 			])
 	}
-
-	
-
 }

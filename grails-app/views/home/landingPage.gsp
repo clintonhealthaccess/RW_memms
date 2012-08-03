@@ -13,6 +13,12 @@
 	
 	<ul>
 		<li><g:link controller="User">Users Home</g:link></li>
+		<li><g:link controller="Equipment">Equipment Home</g:link></li>
+		<li><g:link controller="Department">Department Home</g:link></li>
+		<li><g:link controller="EquipmentCategory">Equipment Category Home</g:link></li>
+		<li><g:link controller="EquipmentModel">Equipment Model Home</g:link></li>
+		<li><g:link controller="EquipmentStatus">Equipment Status Home</g:link></li>
+		<li><g:link controller="Warranty">Warranty Home</g:link></li>
 	</ul>
 </body>
 </html>
