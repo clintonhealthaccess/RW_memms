@@ -3,8 +3,10 @@
 		<tr>
 			<th/>
 			<th><g:message code="entity.code.label"/></th>
-			<th><g:message code="entity.names.label"/></th>
-			<th><g:message code="entity.descriptions.label"/></th>
+			<th><g:message code="equipment.serial.number.label"/></th>
+			<th><g:message code="model.label"/></th>
+			<th><g:message code="warranty.date.start.label"/></th>
+			<th><g:message code="warranty.date.end.label"/></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -27,10 +29,16 @@
 					${model.code}
 				</td>
 				<td>
-					${model.names}
+					${model.equipment.serialNumber}
 				</td>
 				<td>
-					${model.descriptions}
+					${model.equipment.model.names}
+				</td>
+				<td>
+					${model.startDate}
+				</td>
+				<td>
+					${model.endDate}
 				</td>
 			</tr>
 		</g:each>

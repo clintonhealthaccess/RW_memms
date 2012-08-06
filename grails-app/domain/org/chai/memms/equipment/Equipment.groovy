@@ -1,5 +1,5 @@
 /** 
- * Copyright (c) 2011, Clinton Health Access Initiative.
+ * Copyright (c) 2012, Clinton Health Access Initiative.
  *
  * All rights reserved.
  *
@@ -52,7 +52,7 @@ public class Equipment {
 	Date registeredOn
 	
 	
-	static belongsTo = [model: EquipmentModel, dataLocation: DataLocation, department: Department]
+	static belongsTo = [model: EquipmentModel, dataLocation: DataLocation, department: Department, type:EquipmentType]
 	
 	
 	static i18nFields = ["observations","descriptions"]

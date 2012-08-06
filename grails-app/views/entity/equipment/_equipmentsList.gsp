@@ -2,6 +2,7 @@
 	<thead>
 		<tr>
 			<th/>
+			<th><g:message code="model.name.label"/></th>
 			<th><g:message code="equipment.serial.number.label"/></th>
 			<th><g:message code="equipment.manufacture.label"/></th>
 			<th><g:message code="datalocation.label"/></th>
@@ -23,6 +24,9 @@
 						</li>
 						
 					</ul>
+				</td>
+				<td>
+					${model.model.names}
 				</td>
 				<td>
 					${model.serialNumber}

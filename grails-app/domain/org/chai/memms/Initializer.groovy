@@ -8,6 +8,7 @@ import org.chai.memms.equipment.Equipment;
 import org.chai.memms.equipment.EquipmentCategory;
 import org.chai.memms.equipment.EquipmentCategoryLevel;
 import org.chai.memms.equipment.EquipmentModel;
+import org.chai.memms.equipment.EquipmentType
 import org.chai.memms.equipment.Warranty;
 import org.chai.memms.location.CalculationLocation;
 import org.chai.memms.location.DataLocation;
@@ -39,6 +40,7 @@ public class Initializer {
 	static final String BUTARO = "Butaro DH"
 	static final String KIVUYE = "Kivuye HC"
 	static final String BUNGWE = "Bungwe HC"
+	
 	static def createUsers() {
 		if(!User.count()){
 			def adminRole = new Role(name: "Admin")
@@ -98,27 +100,22 @@ public class Initializer {
 			def emeregency = newDepartment(['en':'Emeregency'],'EMERGENCY',['en':'Emeregency Dep'])
 			def consultation = newDepartment(['en':'Consultation'],'CONSULTATION',['fr':'Consultation Dep'])
 		}
-		if(!EquipmentCategoryLevel.count()){
-			//Add Equipment Category Level
-			def firstLevel = newEquipmentCategoryLevel(['en':'First Level'],'firstLevel',['en':'First Level'])
-			def secondLevel = newEquipmentCategoryLevel(['en':'Second Level'],'secondLevel',['en':'Second Level'])
-			def thridLevel = newEquipmentCategoryLevel(['en':'Thrid Level'],'thridLevel',['rw':'Thrid Level'])
-			def fourthLevel = newEquipmentCategoryLevel(['en':'Fourth Level'],'fourthLevel',[:])
-		}	
-		if(!EquipmentCategory.count()){
-			//Add Equipment Category
-			def equipmentCatOne = newEquipmentCategory(['en':'Category One'],'equipmentCatOne',['rw':'Category One'],null, EquipmentCategoryLevel.findByCode('firstLevel'))
-			def equipmentCatTwo = newEquipmentCategory(['en':'Category Two'],'equipmentCatTwo',['en':'Category Two'],equipmentCatOne, EquipmentCategoryLevel.findByCode('secondLevel'))
-			def equipmentCatThree = newEquipmentCategory(['en':'Category Three'],'equipmentCatThree',[:],equipmentCatOne, EquipmentCategoryLevel.findByCode('secondLevel'))
-			def equipmentCatFour = newEquipmentCategory(['en':'Category Four'],'equipmentCatFour',['en':'Category Four'],equipmentCatTwo, EquipmentCategoryLevel.findByCode('fourthLevel'))
-			
-		}
+		
 		if(!EquipmentModel.count()){
 			//Add Equipment Model
 			def modelOne = newEquipmentModel(['en':'Model One'],'MODEL1',['en':'Model One'])
 			def modelTwo= newEquipmentModel(['fr':'Model Two'],'MODEL2',['en':'Model Two'])
 			def modelThree = newEquipmentModel([:],'MODEL3',['en':'Model Three'])
 		}
+		
+		if(!EquipmentType.count()){
+			//Add equipment types as defined in ecri
+			def typeOne = newEquipmentType("15810", ["en":"Accelerometers"], true,["en":"used in memms"])
+			def typeTwo = newEquipmentType("15819", ["en":"X-Ray Film Cutter"], true,["en":"used in memms"])
+			def typeThree = newEquipmentType("15966", ["en":"Video Systems"], true,["en":"used in memms"])
+			def typeFour = newEquipmentType("10035", ["en":"Adhesives, Aerosol"], false,["en":"not used in memms"])
+		}
+		
 		if(!Equipment.count()){
 			def equipmentOne = newEquipment(
 				"SERIAL10"
@@ -130,7 +127,8 @@ public class Initializer {
 				new Date(),
 				EquipmentModel.findByCode('MODEL1'),
 				DataLocation.findByCode(BUTARO),
-				Department.findByCode('SURGERY')
+				Department.findByCode('SURGERY'),
+				EquipmentType.findByCode("15819")
 				)
 			def manufacture = newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154")
 			def supplier = newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654")
@@ -151,8 +149,8 @@ public class Initializer {
 	
 	
 	//Models definition
-	public static def newEquipment(def serialNumber,def purchaseCost,def descriptions,def observations,def manufactureDate, def purchaseDate,def registeredOn,def model,def dataLocation,def department){
-		def equipment = new Equipment(serialNumber:serialNumber,purchaseCost:purchaseCost,manufactureDate:manufactureDate,purchaseDate:purchaseDate,registeredOn:registeredOn,model:model,dataLocation:dataLocation,department:department);
+	public static def newEquipment(def serialNumber,def purchaseCost,def descriptions,def observations,def manufactureDate, def purchaseDate,def registeredOn,def model,def dataLocation,def department, def type){
+		def equipment = new Equipment(serialNumber:serialNumber,purchaseCost:purchaseCost,manufactureDate:manufactureDate,purchaseDate:purchaseDate,registeredOn:registeredOn,model:model,dataLocation:dataLocation,department:department,type:type);
 		setLocaleValueInMap(equipment,descriptions,"Descriptions")
 		setLocaleValueInMap(equipment,observations,"Observations")	
 		return equipment.save(failOnError: true)
@@ -174,26 +172,12 @@ public class Initializer {
 		setLocaleValueInMap(model,descriptions,"Descriptions")
 		return model.save(failOnError: true)
 	}
-	public static def newEquipmentCategory(def names,def code, def descriptions,def parent, def level){
-		def category = new EquipmentCategory(code: code,parent: parent,level: level)
-		setLocaleValueInMap(category,names,"Names")
-		setLocaleValueInMap(category,descriptions,"Descriptions")
-		if(parent!=null){
-			parent.addToChildren(category)
-			parent.save(failOnError: true)
-		}
-		if(level!=null){
-			level.addToCategories(category)
-			level.save(failOnError: true)
-		}
-		return category.save(failOnError: true)
-	}
 	
-	public static def newEquipmentCategoryLevel(def names,def code, def descriptions){
-		def level = new EquipmentCategoryLevel(code:code)
-		setLocaleValueInMap(level,names,"Names") 
-		setLocaleValueInMap(level,descriptions,"Descriptions")
-		return level.save(failOnError: true)
+	public static def newEquipmentType(def code, def names,def usedInMemms, def observations){
+		def type = new EquipmentType(code:code,usedInMemms:usedInMemms)
+		setLocaleValueInMap(type,names,"Names")
+		setLocaleValueInMap(type,observations,"Observations")
+		return type.save(failOnError: true)
 	}
 	
 	public static def newDepartment(def names,def code, def descriptions){

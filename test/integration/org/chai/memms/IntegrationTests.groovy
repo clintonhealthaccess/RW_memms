@@ -44,6 +44,7 @@ import org.chai.memms.equipment.Equipment
 import org.chai.memms.equipment.EquipmentCategory
 import org.chai.memms.equipment.EquipmentCategoryLevel
 import org.chai.memms.equipment.EquipmentModel
+import org.chai.memms.equipment.EquipmentType
 import org.chai.memms.equipment.Warranty
 import org.chai.memms.location.DataLocation;
 import org.chai.memms.location.DataLocationType;
@@ -265,6 +266,13 @@ abstract class IntegrationTests extends IntegrationSpec {
 		def dataLocationType = new DataLocationType(code: code)
 		setLocaleValueInMap(dataLocationType,names,"Names")
 		return dataLocationType.save(failOnError: true)
+	}
+	
+	public static def newEquipmentType(def code, def names,def usedInMemms, def observations){
+		def type = new EquipmentType(code:code,usedInMemms:usedInMemms)
+		setLocaleValueInMap(type,names,"Names")
+		setLocaleValueInMap(type,observations,"Observations")
+		return type.save(failOnError: true)
 	}
 	
 	static def newLocationLevel(def names, def code) {

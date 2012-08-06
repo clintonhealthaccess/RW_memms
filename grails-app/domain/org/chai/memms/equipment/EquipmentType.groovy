@@ -1,5 +1,5 @@
 /** 
- * Copyright (c) 2011, Clinton Health Access Initiative.
+ * Copyright (c) 2012, Clinton Health Access Initiative.
  *
  * All rights reserved.
  *
@@ -25,46 +25,64 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.equipment
+
+ package org.chai.memms.equipment
+
+import java.util.Date;
+
 import i18nfields.I18nFields
 /**
- * @author Jean Kahigiso M.
+ * @author Eugene Munyaneza
  *
  */
+
 @i18nfields.I18nFields
-class EquipmentCategory{
-	
+class EquipmentType {
+
+	Long id
 	String code
 	String names
-	String descriptions
+	Boolean usedInMemms
+	String observations
 	
-	static hasMany = [children: EquipmentCategory]
-	static belongsTo = [parent: EquipmentCategory, level: EquipmentCategoryLevel]
+	Date addedOn = new Date()
+	Date lastModifiedOn = new Date()
 	
-	static i18nFields = ["names","descriptions"]
-
-	static constraints = {
-		code nullable: false, blank: false, unique:true
-		parent nullable: true, blank: true
-	}	
+	
+	static i18nFields = ["observations","names"]
+	
+    static constraints = {
+		
+		code nullable: false, blank: false,  unique: true
+		names nullable: true, blank: true
+		
+		addedOn nullable: false, blank: false, validator:{it <= new Date()}
+		lastModifiedOn nullable: false, blank: false, validator:{it <= new Date()}
+		
+		observations nullable: true, blank: true
+    }
+	
 	static mapping = {
-		table "memms_equipment_category"
+		table "memms_equipment_type"
 		version false
-		parent column: "parent_id"
-		names_en type: "text"
-		names_fr type: "text"
-		names_rw type: "text"
-		descriptions_en type: "text"
-		descriptions_fr type: "text"
-		descriptions_rw type: "text"
+		tablePerSubclass true
+		observations_en type: 'text'
+		observations_fr type: 'text'
+		observations_rw type: 'text'
+		names_en type: 'text'
+		names_fr type: 'text'
+		names_rw type: 'text'
 		
 	}
-
+	
+	String toString() {
+		return "MedicalEquipmentType[Id=" + id + "]";
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((code == null) ? 0 : code.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
 	@Override
@@ -75,11 +93,11 @@ class EquipmentCategory{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		EquipmentCategory other = (EquipmentCategory) obj;
-		if (code == null) {
-			if (other.code != null)
+		Equipment other = (Equipment) obj;
+		if (id == null) {
+			if (other.id != null)
 				return false;
-		} else if (!code.equals(other.code))
+		} else if (!id.equals(other.id))
 			return false;
 		return true;
 	}
