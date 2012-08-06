@@ -5,8 +5,6 @@ import org.apache.shiro.crypto.hash.Sha256Hash
 import org.chai.memms.Contact;
 import org.chai.memms.equipment.Department;
 import org.chai.memms.equipment.Equipment;
-import org.chai.memms.equipment.EquipmentCategory;
-import org.chai.memms.equipment.EquipmentCategoryLevel;
 import org.chai.memms.equipment.EquipmentModel;
 import org.chai.memms.equipment.EquipmentType
 import org.chai.memms.equipment.Warranty;

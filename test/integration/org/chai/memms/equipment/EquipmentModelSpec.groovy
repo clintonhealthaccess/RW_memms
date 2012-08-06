@@ -16,12 +16,13 @@ class EquipmentModelSpec extends IntegrationTests {
 		
 		def department = newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentModelSetUp = newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
+		def equipmentType = newEquipmentType("15810", ["en":"Accelerometers"], true,["en":"used in memms"])
 		
 		def equipmentOne = newEquipment("test123","3,600",['en':"testDescription"],['en':'Equipment Observation'],getDate(22,07,2010), getDate(22,07,2010),
-			getDate(22,07,2010),equipmentModelSetUp,DataLocation.list().first(),department)
+			getDate(22,07,2010),equipmentModelSetUp,DataLocation.list().first(),department,equipmentType)
 		
 		def equipmentTwo = newEquipment("test345","3,600",['en':"testDescription"],['en':'Equipment Observation'],getDate(22,07,2010), getDate(22,07,2010),
-			getDate(22,07,2010),equipmentModelSetUp,DataLocation.list().first(),department)
+			getDate(22,07,2010),equipmentModelSetUp,DataLocation.list().first(),department,equipmentType)
 		when:
 		def equipmentModel = new EquipmentModel(code:CODE(123),descriptions:['en':"testDescription"],names:['en':"testNames"])
 		equipmentModel.equipments = [equipmentOne,equipmentTwo]
@@ -35,14 +36,15 @@ class EquipmentModelSpec extends IntegrationTests {
 		setup:
 		setupLocationTree()
 		
+		def equipmentType = newEquipmentType("15810", ["en":"Accelerometers"], true,["en":"used in memms"])
 		def department = newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentModelSetUp = newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
 		
 		def equipmentOne = newEquipment("test123","3,600",['en':"testDescription"],['en':'Equipment Observation'],getDate(22,07,2010), getDate(22,07,2010),
-			getDate(22,07,2010),equipmentModelSetUp,DataLocation.list().first(),department)
+			getDate(22,07,2010),equipmentModelSetUp,DataLocation.list().first(),department,equipmentType)
 		
 		def equipmentTwo = newEquipment("test345","3,600",['en':"testDescription"],['en':'Equipment Observation'],getDate(22,07,2010), getDate(22,07,2010),
-			getDate(22,07,2010),equipmentModelSetUp,DataLocation.list().first(),department)
+			getDate(22,07,2010),equipmentModelSetUp,DataLocation.list().first(),department,equipmentType)
 		
 		when:
 		def equipmentModel = new EquipmentModel(descriptions:['en':"testDescription"],names:['en':"testNames"])

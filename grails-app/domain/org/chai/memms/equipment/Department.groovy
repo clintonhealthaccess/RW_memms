@@ -39,6 +39,7 @@ class Department {
 	String names
 	String descriptions
 	
+	static hasMany = [equipments: Equipment]
 	static i18nFields = ["names","descriptions"]
 	
 	

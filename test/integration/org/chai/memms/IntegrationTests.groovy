@@ -41,8 +41,6 @@ import org.chai.memms.security.UserType;
 import org.apache.commons.logging.Log;
 import org.chai.memms.equipment.Department
 import org.chai.memms.equipment.Equipment
-import org.chai.memms.equipment.EquipmentCategory
-import org.chai.memms.equipment.EquipmentCategoryLevel
 import org.chai.memms.equipment.EquipmentModel
 import org.chai.memms.equipment.EquipmentType
 import org.chai.memms.equipment.Warranty
@@ -207,8 +205,8 @@ abstract class IntegrationTests extends IntegrationSpec {
 	}
 	
 	//Models definition
-	static def newEquipment(def serialNumber,def purchaseCost,def descriptions,def observations,def manufactureDate, def purchaseDate,def registeredOn,def model,def dataLocation,def department){
-		def equipment = new Equipment(serialNumber:serialNumber,purchaseCost:purchaseCost,manufactureDate:manufactureDate,purchaseDate:purchaseDate,registeredOn:registeredOn,model:model,dataLocation:dataLocation,department:department);
+	static def newEquipment(def serialNumber,def purchaseCost,def descriptions,def observations,def manufactureDate, def purchaseDate,def registeredOn,def model,def dataLocation,def department, def type){
+		def equipment = new Equipment(serialNumber:serialNumber,purchaseCost:purchaseCost,manufactureDate:manufactureDate,purchaseDate:purchaseDate,registeredOn:registeredOn,model:model,dataLocation:dataLocation,department:department,type:type);
 		setLocaleValueInMap(equipment,descriptions,"Descriptions")
 		setLocaleValueInMap(equipment,observations,"Observations")
 		return equipment.save(failOnError: true)
@@ -231,28 +229,6 @@ abstract class IntegrationTests extends IntegrationSpec {
 		setLocaleValueInMap(model,names,"Names")
 		setLocaleValueInMap(model,descriptions,"Descriptions")
 		return model.save(failOnError: true)
-	}
-	
-	static def newEquipmentCategory(def names,def code, def descriptions,def parent, def level){
-		def category = new EquipmentCategory(code: code,parent: parent,level: level)
-		setLocaleValueInMap(category,names,"Names")
-		setLocaleValueInMap(category,descriptions,"Descriptions")
-		if(parent!=null){
-			parent.addToChildren(category)
-			parent.save(failOnError: true)
-		}
-		if(level!=null){
-			level.addToCategories(category)
-			level.save(failOnError: true)
-		}
-		return category.save(failOnError: true)
-	}
-	
-	static def newEquipmentCategoryLevel(def names,def code, def descriptions){
-		def level = new EquipmentCategoryLevel(code:code)
-		setLocaleValueInMap(level,names,"Names")
-		setLocaleValueInMap(level,descriptions,"Descriptions")
-		return level.save(failOnError: true)
 	}
 	
 	static def newDepartment(def names,def code, def descriptions){
