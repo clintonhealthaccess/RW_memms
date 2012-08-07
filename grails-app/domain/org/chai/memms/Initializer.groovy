@@ -8,7 +8,9 @@ import org.chai.memms.equipment.Equipment;
 import org.chai.memms.equipment.EquipmentCategory;
 import org.chai.memms.equipment.EquipmentCategoryLevel;
 import org.chai.memms.equipment.EquipmentModel;
+import org.chai.memms.equipment.EquipmentStatus;
 import org.chai.memms.equipment.Warranty;
+import org.chai.memms.equipment.EquipmentStatus.Status;
 import org.chai.memms.location.CalculationLocation;
 import org.chai.memms.location.DataLocation;
 import org.chai.memms.location.DataLocationType;
@@ -132,11 +134,13 @@ public class Initializer {
 			def supplier = newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654")
 			def contact = newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654")
 			def warranty = newWarranty("Code",['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154",getDate(10, 12, 2010),getDate(12, 12, 2012),[:],equipmentOne)
+			def status= newEquipmentStatus(new Date(),User.findByUsername("admin"),Status.INSTOCK,equipmentOne,true)
 			
 			warranty.contact=contact
 			equipmentOne.manufacture=manufacture
 			equipmentOne.supplier=supplier
 			equipmentOne.warranty=warranty
+			equipmentOne.addToStatus(status)
 			
 			equipmentOne.save(failOnError:true)
 		}
@@ -153,6 +157,11 @@ public class Initializer {
 		setLocaleValueInMap(equipment,observations,"Observations")	
 		return equipment.save(failOnError: true)
 	}
+	
+	
+	public static def newEquipmentStatus(def statusChangeDate,def changedBy,def value, def equipment,def current){
+		return new EquipmentStatus(statusChangeDate:statusChangeDate,changedBy:changedBy,value:value,equipment:equipment,current:current).save(failOnError: true)
+	}
 
 	public static def newContact(def addressDescriptions,def contactName,def email, def phone, def address){
 		def contact = new Contact(contactName:contactName,email:email,phone:phone,address:address)
@@ -162,7 +171,7 @@ public class Initializer {
 	public static def newWarranty(def code,def addressDescriptions,def contactName,def email, def phone, def address,def startDate,def endDate,def descriptions,def equipment){
 		def warranty = new Warranty(code:code,contactName:contactName,email:email,phone:phone,address:address,startDate:startDate,endDate:endDate,equipment:equipment)
 		setLocaleValueInMap(warranty,descriptions,"Descriptions")
-		return warranty.save(failOnError: true);
+		return warranty.save(failOnError: true)
 	}
 	public static def newEquipmentModel(def names,def code,def descriptions){
 		def model = new EquipmentModel(code:code)

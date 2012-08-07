@@ -46,24 +46,33 @@ class EquipmentStatus {
 		DISPOSED("disposed")
 		
 		String messageCode = "equipment.status"
+		String name
+		Status(String name){
+			this.name=name
+		}
+
 	}
 	
 	Date statusChangeDate;
 	User changedBy
 	Status value
+	boolean current = false
 	
 	static belongsTo = [equipment:Equipment]
 	
+	boolean isCurrent(){
+		return current
+	}
 	
 	static constraints = {
 		statusChangeDate nullable:false, validator:{it <= new Date()} 
 		changedBy nullable:false 
 		value nullable: false, blank:false
+		current nullable: false
 	}
 	static mapping = {
 		table "memms_equipment_status"
 		version false
-		value column: "status_value"
 	}
 	
 	
