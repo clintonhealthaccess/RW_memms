@@ -32,6 +32,7 @@ grails.project.dependency.resolution = {
         //mavenRepo "http://download.java.net/maven/2/"
         //mavenRepo "http://repository.jboss.com/maven2/"
 		
+
 		/**
  Ê Ê Ê Ê * Configure our resolver.
  Ê Ê Ê Ê */
@@ -61,14 +62,17 @@ grails.project.dependency.resolution = {
     }
 
     plugins {
-        runtime ":hibernate:$grailsVersion"
-		runtime ":mail:1.0"
-        runtime ":jquery:1.7.1"
-        runtime ":resources:1.2-RC1"
-		compile ":jquery:1.7.1"
-		compile ":resources:1.2-RC1"
-		compile ":shiro:1.1.5"
+        compile ":hibernate:$grailsVersion"
 		compile ":mail:1.0"
+        compile ":jquery:1.7.1"
+        compile ":resources:1.2-RC1"
+		compile ":cached-resources:1.0"
+		compile ":cache-headers:1.1.5"
+		compile ":shiro:1.1.5"
+		compile ":springcache:1.3.1"
+		compile ":compass-sass:0.7"
+		compile ":mail:1.0"
+		compile ":yui-minify-resources:0.1.5"
         build ":tomcat:$grailsVersion"
 		
 		test ":geb:0.7.1"

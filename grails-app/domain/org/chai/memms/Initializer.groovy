@@ -1,3 +1,30 @@
+/**
+ * Copyright (c) 2012, Clinton Health Access Initiative.
+ *
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the <organization> nor the
+ *       names of its contributors may be used to endorse or promote products
+ *       derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package org.chai.memms
 
 import java.util.Date;
@@ -6,8 +33,11 @@ import org.chai.memms.Contact;
 import org.chai.memms.equipment.Department;
 import org.chai.memms.equipment.Equipment;
 import org.chai.memms.equipment.EquipmentModel;
+import org.chai.memms.equipment.EquipmentStatus;
 import org.chai.memms.equipment.EquipmentType
+import org.chai.memms.equipment.EquipmentType.Observation;
 import org.chai.memms.equipment.Warranty;
+import org.chai.memms.equipment.EquipmentStatus.Status;
 import org.chai.memms.location.CalculationLocation;
 import org.chai.memms.location.DataLocation;
 import org.chai.memms.location.DataLocationType;
@@ -108,11 +138,13 @@ public class Initializer {
 		
 		if(!EquipmentType.count()){
 			//Add equipment types as defined in ecri
-			def typeOne = newEquipmentType("15810", ["en":"Accelerometers"], true,["en":"used in memms"])
-			def typeTwo = newEquipmentType("15819", ["en":"X-Ray Film Cutter"], true,["en":"used in memms"])
-			def typeThree = newEquipmentType("15966", ["en":"Video Systems"], true,["en":"used in memms"])
-			def typeFour = newEquipmentType("10035", ["en":"Adhesives, Aerosol"], false,["en":"not used in memms"])
+			def typeOne = newEquipmentType("15810", ["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now())
+			def typeTwo = newEquipmentType("15819", ["en":"X-Ray Film Cutter"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now())
+			def typeThree = newEquipmentType("15966", ["en":"Video Systems"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now())
+			def typeFour = newEquipmentType("10035", ["en":"Adhesives, Aerosol"],["en":"not used in memms"],Observation.RETIRED,now(),now())
 		}
+		
+		//newEquipmentType(def code, def names,def descriptions, def observation, def addedOn, def lastModifiedOn)
 		
 		if(!Equipment.count()){
 			def equipmentOne = newEquipment(
@@ -122,7 +154,7 @@ public class Initializer {
 				['en':'Equipment Observation'],
 				getDate(22,07,2010),
 				getDate(10,10,2010),
-				new Date(),
+				now(),
 				EquipmentModel.findByCode('MODEL1'),
 				DataLocation.findByCode(BUTARO),
 				Department.findByCode('SURGERY'),
@@ -132,11 +164,13 @@ public class Initializer {
 			def supplier = newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654")
 			def contact = newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654")
 			def warranty = newWarranty("Code",['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154",getDate(10, 12, 2010),getDate(12, 12, 2012),[:],equipmentOne)
+			def status= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentOne,true)
 			
 			warranty.contact=contact
 			equipmentOne.manufacture=manufacture
 			equipmentOne.supplier=supplier
 			equipmentOne.warranty=warranty
+			equipmentOne.addToStatus(status)
 			
 			equipmentOne.save(failOnError:true)
 		}
@@ -153,16 +187,26 @@ public class Initializer {
 		setLocaleValueInMap(equipment,observations,"Observations")	
 		return equipment.save(failOnError: true)
 	}
+	
+	
+	public static def newEquipmentStatus(def statusChangeDate,def changedBy,def value, def equipment,def current){
+		return new EquipmentStatus(statusChangeDate:statusChangeDate,changedBy:changedBy,value:value,equipment:equipment,current:current).save(failOnError: true)
+	}
 
 	public static def newContact(def addressDescriptions,def contactName,def email, def phone, def address){
 		def contact = new Contact(contactName:contactName,email:email,phone:phone,address:address)
 		setLocaleValueInMap(contact,addressDescriptions,"AddressDescriptions")
 		return contact;
 	}
+	public static def newWarranty(def code,def contact, def startDate,def endDate,def descriptions,def equipment){
+		def warranty = new Warranty(code:code,contact:contact,startDate:startDate,endDate:endDate,equipment:equipment)
+		setLocaleValueInMap(warranty,descriptions,"Descriptions")
+		return warranty.save(failOnError: true)
+	}
 	public static def newWarranty(def code,def addressDescriptions,def contactName,def email, def phone, def address,def startDate,def endDate,def descriptions,def equipment){
 		def warranty = new Warranty(code:code,contactName:contactName,email:email,phone:phone,address:address,startDate:startDate,endDate:endDate,equipment:equipment)
 		setLocaleValueInMap(warranty,descriptions,"Descriptions")
-		return warranty.save(failOnError: true);
+		return warranty.save(failOnError: true)
 	}
 	public static def newEquipmentModel(def names,def code,def descriptions){
 		def model = new EquipmentModel(code:code)
@@ -171,10 +215,10 @@ public class Initializer {
 		return model.save(failOnError: true)
 	}
 	
-	public static def newEquipmentType(def code, def names,def usedInMemms, def observations){
-		def type = new EquipmentType(code:code,usedInMemms:usedInMemms)
+	public static def newEquipmentType(def code, def names,def descriptions, def observation, def addedOn, def lastModifiedOn){
+		def type = new EquipmentType(code:code,observation:observation,addedOn:addedOn,lastModifiedOn:lastModifiedOn)
 		setLocaleValueInMap(type,names,"Names")
-		setLocaleValueInMap(type,observations,"Observations")
+		setLocaleValueInMap(type,descriptions,"Descriptions")
 		return type.save(failOnError: true)
 	}
 	
@@ -249,7 +293,9 @@ public class Initializer {
 			   object."$methodName"("",new Locale(loc))
 	   }
    }
-   
+   public static def now(){
+	   return new Date()
+   }
    public static Date getDate( int day, int month, int year) {
 	   final Calendar calendar = Calendar.getInstance();
 

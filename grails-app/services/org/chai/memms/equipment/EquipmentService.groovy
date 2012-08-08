@@ -1,5 +1,5 @@
 /** 
- * Copyright (c) 2011, Clinton Health Access Initiative.
+ * Copyright (c) 2012, Clinton Health Access Initiative.
  *
  * All rights reserved.
  *
@@ -27,70 +27,17 @@
  */
 package org.chai.memms.equipment
 
-
-import org.chai.memms.Contact;
-
-import i18nfields.I18nFields
 /**
  * @author Jean Kahigiso M.
  *
  */
-@i18nfields.I18nFields
-class Warranty{
+class EquipmentService {
 	
-	Date startDate
-	Date endDate
-	String code
-	String descriptions
-	Contact contact
+	static transactional = true
 	
-	static belongsTo = [equipment:Equipment]
-	static i18nFields =["descriptions"]
-	static embedded = ["contact"]
+	def languageService;
+	def sessionFactory;
 	
-	static constraints = {
-		code nullable: false, blank:false, unique: true
-		startDate nullable:false, validator:{it <= new Date()} 
-		endDate nullable:false, validator: { val, obj -> 
-			return (val >= obj.startDate)
-			} 
-		descriptions nullable: true, blank: true
-		contact nullable: true
-	}
 	
-	static mapping = {
-		table "memms_equipment_warranty"
-		descriptions_en type: "text"
-		descriptions_fr type: "text"
-		descriptions_rw type: "text"
-	}
-	
-	String toString() {
-		return "EquipmentWarranty[Id=" + id + ", Code=" + code + "]";
-	}
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((code == null) ? 0 : code.hashCode());
-		return result;
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this.is(obj))
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Warranty other = (Warranty) obj;
-		if (code == null) {
-			if (other.code != null)
-				return false;
-		} else if (!code.equals(other.code))
-			return false;
-		return true;
-	}
 
-	
 }

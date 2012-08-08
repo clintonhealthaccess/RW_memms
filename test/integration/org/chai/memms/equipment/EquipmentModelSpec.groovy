@@ -4,54 +4,40 @@ import java.util.Date;
 
 import org.apache.commons.el.parser.Token;
 import org.chai.memms.Contact;
+import org.chai.memms.Initializer;
 import org.chai.memms.IntegrationTests
 
+import org.chai.memms.equipment.EquipmentType.Observation;
 import org.chai.memms.location.DataLocation;
 
 class EquipmentModelSpec extends IntegrationTests {
 	
     def "can create and save an equipment model"() {
-		setup:
-		setupLocationTree()
-		
-		def department = newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
-		def equipmentModelSetUp = newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
-		def equipmentType = newEquipmentType("15810", ["en":"Accelerometers"], true,["en":"used in memms"])
-		
-		def equipmentOne = newEquipment("test123","3,600",['en':"testDescription"],['en':'Equipment Observation'],getDate(22,07,2010), getDate(22,07,2010),
-			getDate(22,07,2010),equipmentModelSetUp,DataLocation.list().first(),department,equipmentType)
-		
-		def equipmentTwo = newEquipment("test345","3,600",['en':"testDescription"],['en':'Equipment Observation'],getDate(22,07,2010), getDate(22,07,2010),
-			getDate(22,07,2010),equipmentModelSetUp,DataLocation.list().first(),department,equipmentType)
 		when:
-		def equipmentModel = new EquipmentModel(code:CODE(123),descriptions:['en':"testDescription"],names:['en':"testNames"])
-		equipmentModel.equipments = [equipmentOne,equipmentTwo]
-		equipmentModel.save(failOnError: true)
+		def equipmentModelOne = Initializer.newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
+		def equipmentModelTwo = new EquipmentModel(code:CODE(12),descriptions:['en':"testDescription"],names:['en':"testNames"])
+		equipmentModelTwo.save(failOnError: true)
 		then:
 		EquipmentModel.count() == 2
-		equipmentModel.equipments.size() == 2
 	}
 	
-	def "can create and save an equipment model without the code"() {
-		setup:
-		setupLocationTree()
-		
-		def equipmentType = newEquipmentType("15810", ["en":"Accelerometers"], true,["en":"used in memms"])
-		def department = newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
-		def equipmentModelSetUp = newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
-		
-		def equipmentOne = newEquipment("test123","3,600",['en':"testDescription"],['en':'Equipment Observation'],getDate(22,07,2010), getDate(22,07,2010),
-			getDate(22,07,2010),equipmentModelSetUp,DataLocation.list().first(),department,equipmentType)
-		
-		def equipmentTwo = newEquipment("test345","3,600",['en':"testDescription"],['en':'Equipment Observation'],getDate(22,07,2010), getDate(22,07,2010),
-			getDate(22,07,2010),equipmentModelSetUp,DataLocation.list().first(),department,equipmentType)
-		
+	def "can't create and save an equipment model without the code"() {
 		when:
-		def equipmentModel = new EquipmentModel(descriptions:['en':"testDescription"],names:['en':"testNames"])
-		equipmentModel.equipments = [equipmentOne,equipmentTwo]
-		equipmentModel.save()
+		def equipmentModelOne= Initializer.newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
+		def equipmentModelTwo = new EquipmentModel(descriptions:['en':"testDescription"],names:['en':"testNames"])
+		equipmentModelTwo.save()
 		then:
 		EquipmentModel.count() == 1
-		equipmentModel.errors.hasFieldErrors('code') == true
+		equipmentModelTwo.errors.hasFieldErrors('code') == true
+	}
+	
+	def "can't create and save an equipment model without duplicated code"() {
+		when:
+		def equipmentModelOne= Initializer.newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
+		def equipmentModelTwo = new EquipmentModel(code:CODE(123),descriptions:['en':"testDescription"],names:['en':"testNames"])
+		equipmentModelTwo.save()
+		then:
+		EquipmentModel.count() == 1
+		equipmentModelTwo.errors.hasFieldErrors('code') == true
 	}
 }

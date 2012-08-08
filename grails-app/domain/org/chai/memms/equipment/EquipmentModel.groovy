@@ -44,7 +44,7 @@ class EquipmentModel {
 	static hasMany =  [equipments:Equipment]
 	
 	static constraints = {
-		code nullable: false, blank: false
+		code nullable: false, blank: false, unique: true
 		names  nullable: true, blank: true
 		descriptions  nullable: true, blank: true
 	}

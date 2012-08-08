@@ -39,36 +39,53 @@ import i18nfields.I18nFields
 @i18nfields.I18nFields
 class EquipmentType {
 
-	Long id
+	
+	enum Observation{
+		USEDINMEMMS("useInMemms"),
+		RETIRED("retired"),
+		TODETAILED("toDetailed"),
+		NOTINSCOPE("notInScope")
+		
+		String messageCode = "equipment.type"	
+
+		String name
+		Observation(String name){
+			this.name=name
+		}
+		String getKey() { return name(); }
+	}
+	
 	String code
 	String names
-	Boolean usedInMemms
-	String observations
+	String descriptions
+	Observation observation
 	
-	Date addedOn = new Date()
-	Date lastModifiedOn = new Date()
+	Date addedOn
+	Date lastModifiedOn
 	
 	
-	static i18nFields = ["observations","names"]
+	static i18nFields = ["descriptions","names"]
+	static hasMany = [equipments: Equipment]
 	
     static constraints = {
 		
 		code nullable: false, blank: false,  unique: true
 		names nullable: true, blank: true
+		descriptions nullable: true, blank: true
 		
 		addedOn nullable: false, blank: false, validator:{it <= new Date()}
 		lastModifiedOn nullable: false, blank: false, validator:{it <= new Date()}
 		
-		observations nullable: true, blank: true
+		observation nullable: false
     }
 	
 	static mapping = {
 		table "memms_equipment_type"
 		version false
 		tablePerSubclass true
-		observations_en type: 'text'
-		observations_fr type: 'text'
-		observations_rw type: 'text'
+		descriptions_en type: 'text'
+		descriptions_fr type: 'text'
+		descriptions_rw type: 'text'
 		names_en type: 'text'
 		names_fr type: 'text'
 		names_rw type: 'text'
@@ -76,13 +93,13 @@ class EquipmentType {
 	}
 	
 	String toString() {
-		return "MedicalEquipmentType[Id=" + id + "]";
+		return "MedicalEquipmentType[Id=" + id + "code="+code+"]";
 	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((code == null) ? 0 : code.hashCode());
 		return result;
 	}
 	@Override
@@ -93,12 +110,13 @@ class EquipmentType {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Equipment other = (Equipment) obj;
-		if (id == null) {
-			if (other.id != null)
+		EquipmentType other = (EquipmentType) obj;
+		if (code == null) {
+			if (other.code != null)
 				return false;
-		} else if (!id.equals(other.id))
+		} else if (!code.equals(other.code))
 			return false;
 		return true;
 	}
+	
 }

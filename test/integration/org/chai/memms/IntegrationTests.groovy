@@ -113,11 +113,7 @@ abstract class IntegrationTests extends IntegrationSpec {
 	}
 	
 	static def getCalculationLocation(def code, def log = null) {
-		//if(log != null) log.debug("getCalculationLocation : code : " + code)
 		def location = Location.findByCode(code)
-		//if(log != null) log.debug("getCalculationLocation : location : " + location)
-		//if (location == null) location = DataLocation.findByCode(code)
-		//if(log != null) log.debug("getCalculationLocation : location : " + location)
 		return location
 	}
 	
@@ -172,117 +168,5 @@ abstract class IntegrationTests extends IntegrationSpec {
 		SecurityUtils.metaClass.static.getSubject = { subject }
 		WebUtils.metaClass.static.getSavedRequest = { ServletRequest request -> null }
 	}
-	
-	/**
-	 * fieldName has to start with capital letter as
-	 * it is used to create setter of the object field
-	 * @param object
-	 * @param map
-	 * @param fieldName
-	 * @return
-	 */
-	static def setLocaleValueInMap(def object, def map, def fieldName){
-		def methodName = 'set'+fieldName
-		//TODO replace with CONF variable if this fails
-		def grailsApplication = new Initializer().domainClass.grailsApplication
-		grailsApplication.config.i18nFields.locales.each{ loc ->
-			if(map.get(loc) != null)
-				object."$methodName"(map.get(loc),new Locale(loc))
-			else
-				object."$methodName"("",new Locale(loc))
-		}
-	}
-	
-	static Date getDate( int day, int month, int year) {
-		final Calendar calendar = Calendar.getInstance();
- 
-		calendar.clear();
-		calendar.set( Calendar.YEAR, year );
-		calendar.set( Calendar.MONTH, month - 1 );
-		calendar.set( Calendar.DAY_OF_MONTH, day );
- 
-		return calendar.getTime();
-	}
-	
-	//Models definition
-	static def newEquipment(def serialNumber,def purchaseCost,def descriptions,def observations,def manufactureDate, def purchaseDate,def registeredOn,def model,def dataLocation,def department, def type){
-		def equipment = new Equipment(serialNumber:serialNumber,purchaseCost:purchaseCost,manufactureDate:manufactureDate,purchaseDate:purchaseDate,registeredOn:registeredOn,model:model,dataLocation:dataLocation,department:department,type:type);
-		setLocaleValueInMap(equipment,descriptions,"Descriptions")
-		setLocaleValueInMap(equipment,observations,"Observations")
-		return equipment.save(failOnError: true)
-	}
-
-	static def newContact(def addressDescriptions,def contactName,def email, def phone, def address){
-		def contact = new Contact(contactName:contactName,email:email,phone:phone,address:address)
-		setLocaleValueInMap(contact,addressDescriptions,"AddressDescriptions")
-		return contact;
-	}
-	
-	static def newWarranty(def code,def addressDescriptions,def contactName,def email, def phone, def address,def startDate,def endDate,def descriptions,def equipment){
-		def warranty = new Warranty(code:code,contactName:contactName,email:email,phone:phone,address:address,startDate:startDate,endDate:endDate,equipment:equipment)
-		setLocaleValueInMap(warranty,descriptions,"Descriptions")
-		return warranty.save(failOnError: true);
-	}
-	
-	static def newEquipmentModel(def names,def code,def descriptions){
-		def model = new EquipmentModel(code:code)
-		setLocaleValueInMap(model,names,"Names")
-		setLocaleValueInMap(model,descriptions,"Descriptions")
-		return model.save(failOnError: true)
-	}
-	
-	static def newDepartment(def names,def code, def descriptions){
-		def department = new Department(code:code)
-		setLocaleValueInMap(department,names,"Names")
-		setLocaleValueInMap(department,descriptions,"Descriptions")
-		return department.save(failOnError: true)
-	}
-	
-	static def newDataLocationType(def names, def code) {
-		def dataLocationType = new DataLocationType(code: code)
-		setLocaleValueInMap(dataLocationType,names,"Names")
-		return dataLocationType.save(failOnError: true)
-	}
-	
-	public static def newEquipmentType(def code, def names,def usedInMemms, def observations){
-		def type = new EquipmentType(code:code,usedInMemms:usedInMemms)
-		setLocaleValueInMap(type,names,"Names")
-		setLocaleValueInMap(type,observations,"Observations")
-		return type.save(failOnError: true)
-	}
-	
-	static def newLocationLevel(def names, def code) {
-		def locationLevel = new LocationLevel(code: code)
-		setLocaleValueInMap(locationLevel,names,"Names")
-		return locationLevel.save(failOnError: true)
-	}
-	
-	static def newLocation(def names, def code, def parent, def level) {
-		def location = new Location(code: code, parent: parent, level: level)
-		setLocaleValueInMap(location,names,"Names")
-		location.save(failOnError: true)
-		level.addToLocations(location)
-		level.save(failOnError: true)
-		if (parent != null) {
-			parent.addToChildren(location)
-			parent.save(failOnError: true)
-		}
-		return location
-	}
-	
-	static def newDataLocation(def names, def code, def location, def type) {
-		def dataLocation = new DataLocation(code: code, location: location, type: type)
-		setLocaleValueInMap(dataLocation,names,"Names")
-		dataLocation.save(failOnError: true)
-		if (location != null) {
-			location.addToDataLocations(dataLocation)
-			location.save(failOnError: true)
-		}
-		if (type != null) {
-			type.addToDataLocations(dataLocation)
-			type.save(failOnError: true)
-	   }
-		return dataLocation
-	}
-	
+		
 }

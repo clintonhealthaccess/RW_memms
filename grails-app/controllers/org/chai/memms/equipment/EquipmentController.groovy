@@ -32,7 +32,8 @@ class EquipmentController extends AbstractEntityController{
 	
 	def getModel(def entity) {
 		[
-			model:entity
+			equipment:entity,
+			departments:Department.list()
 		]
 	}
 	
