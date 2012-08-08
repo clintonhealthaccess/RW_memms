@@ -1,5 +1,5 @@
 /** 
- * Copyright (c) 2011, Clinton Health Access Initiative.
+ * Copyright (c) 2012, Clinton Health Access Initiative.
  *
  * All rights reserved.
  *
@@ -25,41 +25,76 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.equipment
+
+ package org.chai.memms.equipment
+
+import java.util.Date;
+
 import i18nfields.I18nFields
 /**
- * @author Jean Kahigiso M.
+ * @author Eugene Munyaneza
  *
  */
+
 @i18nfields.I18nFields
-class EquipmentCategory{
+class EquipmentType {
+
+	
+	enum Observation{
+		USEDINMEMMS("useInMemms"),
+		RETIRED("retired"),
+		TODETAILED("toDetailed"),
+		NOTINSCOPE("notInScope")
+		
+		String messageCode = "equipment.type"	
+
+		String name
+		Observation(String name){
+			this.name=name
+		}
+		String getKey() { return name(); }
+	}
 	
 	String code
 	String names
 	String descriptions
+	Observation observation
 	
-	static hasMany = [children: EquipmentCategory]
-	static belongsTo = [parent: EquipmentCategory, level: EquipmentCategoryLevel]
+	Date addedOn
+	Date lastModifiedOn
 	
-	static i18nFields = ["names","descriptions"]
-
-	static constraints = {
-		code nullable: false, blank: false, unique:true
-		parent nullable: true, blank: true
-	}	
+	
+	static i18nFields = ["descriptions","names"]
+	static hasMany = [equipments: Equipment]
+	
+    static constraints = {
+		
+		code nullable: false, blank: false,  unique: true
+		names nullable: true, blank: true
+		descriptions nullable: true, blank: true
+		
+		addedOn nullable: false, blank: false, validator:{it <= new Date()}
+		lastModifiedOn nullable: false, blank: false, validator:{it <= new Date()}
+		
+		observation nullable: false
+    }
+	
 	static mapping = {
-		table "memms_equipment_category"
+		table "memms_equipment_type"
 		version false
-		parent column: "parent_id"
-		names_en type: "text"
-		names_fr type: "text"
-		names_rw type: "text"
-		descriptions_en type: "text"
-		descriptions_fr type: "text"
-		descriptions_rw type: "text"
+		tablePerSubclass true
+		descriptions_en type: 'text'
+		descriptions_fr type: 'text'
+		descriptions_rw type: 'text'
+		names_en type: 'text'
+		names_fr type: 'text'
+		names_rw type: 'text'
 		
 	}
-
+	
+	String toString() {
+		return "MedicalEquipmentType[Id=" + id + "code="+code+"]";
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -75,7 +110,7 @@ class EquipmentCategory{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		EquipmentCategory other = (EquipmentCategory) obj;
+		EquipmentType other = (EquipmentType) obj;
 		if (code == null) {
 			if (other.code != null)
 				return false;
@@ -83,4 +118,5 @@ class EquipmentCategory{
 			return false;
 		return true;
 	}
+	
 }

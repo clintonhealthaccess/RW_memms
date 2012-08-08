@@ -1,5 +1,5 @@
 /** 
- * Copyright (c) 2011, Clinton Health Access Initiative.
+ * Copyright (c) 2012, Clinton Health Access Initiative.
  *
  * All rights reserved.
  *
@@ -50,6 +50,8 @@ class EquipmentStatus {
 		Status(String name){
 			this.name=name
 		}
+		
+		String getKey() { return name(); }
 
 	}
 	
@@ -70,12 +72,9 @@ class EquipmentStatus {
 		value nullable: false, blank:false
 		current nullable: false
 	}
+	
 	static mapping = {
 		table "memms_equipment_status"
 		version false
 	}
-	
-	
-	
-
 }

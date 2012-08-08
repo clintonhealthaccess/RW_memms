@@ -9,6 +9,12 @@ import org.chai.memms.util.UtilsService
 class User {
     static String PERMISSION_DELIMITER = ";"
 	
+	//Needed to enable cascading deletes, these fields should not be collections since
+	//some code has been writen assuming its a one to many relationship
+	RegistrationToken registrationToken
+	PasswordToken passwordToken
+	
+	
 	String email
     String username
 	String uuid
@@ -106,6 +112,8 @@ class User {
 		defaultLanguage(nullable: true)
 		userType(nullable: false, blank: false)
 		location(nullable: true)
+		registrationToken(nullable: true)
+		passwordToken(nullable: true)
     }
 	
 	static mapping = {

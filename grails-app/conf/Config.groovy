@@ -100,9 +100,33 @@ log4j = {
 * Application specific config
 */
 
+//MAIL
+environments {
+	production {
+		grails.mail.host = "smtp.gmail.com"
+		grails.mail.port = 465
+		// configuration defined in ${home}/.grails/kevin-config.groovy
+//		grails.mail.username = "youracount@gmail.com"
+//		grails.mail.password = "yourpassword"
+		grails.mail.props = [
+			"mail.smtp.auth":"true",
+			"mail.smtp.socketFactory.port":"465",
+			"mail.smtp.socketFactory.class":"javax.net.ssl.SSLSocketFactory",
+			"mail.smtp.socketFactory.fallback":"false"
+		]
+	}
+	development {
+		grails.mail.disabled = true
+	}
+	test {
+		grails.mail.disabled = true
+	}
+}
+
 site.fallback.language="en"
 site.contact.email="contact@memms.org"
 site.entity.list.max=40
+site.from.email="no-reply@memms.org"
 
 i18nFields{
 	locales = ["en","fr","rw"]

@@ -24,6 +24,56 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>.plugin-src-cache-headers-1.1.5-grails-app-i18n</name>
+			<type>2</type>
+			<location>/Users/jeankahigiso/.grails/2.0.0/projects/memms/plugins/cache-headers-1.1.5/grails-app/i18n</location>
+		</link>
+		<link>
+			<name>.plugin-src-cache-headers-1.1.5-grails-app-services</name>
+			<type>2</type>
+			<location>/Users/jeankahigiso/.grails/2.0.0/projects/memms/plugins/cache-headers-1.1.5/grails-app/services</location>
+		</link>
+		<link>
+			<name>.plugin-src-cached-resources-1.0-grails-app-i18n</name>
+			<type>2</type>
+			<location>/Users/jeankahigiso/.grails/2.0.0/projects/memms/plugins/cached-resources-1.0/grails-app/i18n</location>
+		</link>
+		<link>
+			<name>.plugin-src-cached-resources-1.0-grails-app-resourceMappers</name>
+			<type>2</type>
+			<location>/Users/jeankahigiso/.grails/2.0.0/projects/memms/plugins/cached-resources-1.0/grails-app/resourceMappers</location>
+		</link>
+		<link>
+			<name>.plugin-src-cached-resources-1.0-grails-app-views</name>
+			<type>2</type>
+			<location>/Users/jeankahigiso/.grails/2.0.0/projects/memms/plugins/cached-resources-1.0/grails-app/views</location>
+		</link>
+		<link>
+			<name>.plugin-src-cached-resources-1.0-src-groovy</name>
+			<type>2</type>
+			<location>/Users/jeankahigiso/.grails/2.0.0/projects/memms/plugins/cached-resources-1.0/src/groovy</location>
+		</link>
+		<link>
+			<name>.plugin-src-compass-sass-0.7-grails-app-conf</name>
+			<type>2</type>
+			<location>/Users/jeankahigiso/.grails/2.0.0/projects/memms/plugins/compass-sass-0.7/grails-app/conf</location>
+		</link>
+		<link>
+			<name>.plugin-src-compass-sass-0.7-grails-app-i18n</name>
+			<type>2</type>
+			<location>/Users/jeankahigiso/.grails/2.0.0/projects/memms/plugins/compass-sass-0.7/grails-app/i18n</location>
+		</link>
+		<link>
+			<name>.plugin-src-compass-sass-0.7-grails-app-resourceMappers</name>
+			<type>2</type>
+			<location>/Users/jeankahigiso/.grails/2.0.0/projects/memms/plugins/compass-sass-0.7/grails-app/resourceMappers</location>
+		</link>
+		<link>
+			<name>.plugin-src-compass-sass-0.7-src-groovy</name>
+			<type>2</type>
+			<location>/Users/jeankahigiso/.grails/2.0.0/projects/memms/plugins/compass-sass-0.7/src/groovy</location>
+		</link>
+		<link>
 			<name>.plugin-src-i18n-fields-0.6.1-src-groovy</name>
 			<type>2</type>
 			<location>/Users/jeankahigiso/.grails/2.0.0/projects/memms/plugins/i18n-fields-0.6.1/src/groovy</location>
@@ -159,24 +209,24 @@
 			<location>/Users/jeankahigiso/.grails/2.0.0/projects/memms/plugins/shiro-1.1.5/src/java</location>
 		</link>
 		<link>
-			<name>.plugin-src-webxml-1.4.1-grails-app-conf</name>
+			<name>.plugin-src-springcache-1.3.1-grails-app-services</name>
 			<type>2</type>
-			<location>/Users/jeankahigiso/.grails/2.0.0/projects/memms/plugins/webxml-1.4.1/grails-app/conf</location>
+			<location>/Users/jeankahigiso/.grails/2.0.0/projects/memms/plugins/springcache-1.3.1/grails-app/services</location>
 		</link>
 		<link>
-			<name>.plugin-src-webxml-1.4.1-src-groovy</name>
+			<name>.plugin-src-springcache-1.3.1-src-groovy</name>
 			<type>2</type>
-			<location>/Users/jeankahigiso/.grails/2.0.0/projects/memms/plugins/webxml-1.4.1/src/groovy</location>
+			<location>/Users/jeankahigiso/.grails/2.0.0/projects/memms/plugins/springcache-1.3.1/src/groovy</location>
 		</link>
 		<link>
-			<name>.plugin-src-yammer-metrics-2.1.2-1-grails-app-i18n</name>
+			<name>.plugin-src-yui-minify-resources-0.1.5-grails-app-resourceMappers</name>
 			<type>2</type>
-			<location>/Users/jeankahigiso/.grails/2.0.0/projects/memms/plugins/yammer-metrics-2.1.2-1/grails-app/i18n</location>
+			<location>/Users/jeankahigiso/.grails/2.0.0/projects/memms/plugins/yui-minify-resources-0.1.5/grails-app/resourceMappers</location>
 		</link>
 		<link>
-			<name>.plugin-src-yammer-metrics-2.1.2-1-src-groovy</name>
+			<name>.plugin-src-yui-minify-resources-0.1.5-src-groovy</name>
 			<type>2</type>
-			<location>/Users/jeankahigiso/.grails/2.0.0/projects/memms/plugins/yammer-metrics-2.1.2-1/src/groovy</location>
+			<location>/Users/jeankahigiso/.grails/2.0.0/projects/memms/plugins/yui-minify-resources-0.1.5/src/groovy</location>
 		</link>
 	</linkedResources>
 </projectDescription>

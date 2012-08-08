@@ -5,10 +5,10 @@
         <title><g:message code="upgrade.page.title" /></title>
     </head>
     <body>
-    	<div class="heading1-bar">
+    	<div>
     	
     	</div>
-		<div class="main">
+		<div>
 			You are running an older version of Internet Explorer. For the best experience on this site, please download <a href="http://www.google.com/chrome">Google Chrome</a>.
 		</div>
     </body>

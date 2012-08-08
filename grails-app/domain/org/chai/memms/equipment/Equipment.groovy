@@ -1,5 +1,5 @@
 /** 
- * Copyright (c) 2011, Clinton Health Access Initiative.
+ * Copyright (c) 2012, Clinton Health Access Initiative.
  *
  * All rights reserved.
  *
@@ -31,13 +31,14 @@ import org.chai.memms.Contact
 import org.chai.memms.location.DataLocation;
 
 import i18nfields.I18nFields
+
 /**
  * @author Jean Kahigiso M.
  *
  */
 @i18nfields.I18nFields
 public class Equipment {
-
+	
 	String serialNumber
 	String purchaseCost
 	String descriptions
@@ -54,7 +55,7 @@ public class Equipment {
 	static hasMany = [status: EquipmentStatus]
 	
 	
-	static belongsTo = [model: EquipmentModel, dataLocation: DataLocation, department: Department]
+	static belongsTo = [model: EquipmentModel, dataLocation: DataLocation, department: Department, type: EquipmentType]
 	
 	
 	static i18nFields = ["observations","descriptions"]
@@ -116,8 +117,5 @@ public class Equipment {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
-	}
-	
-	
-	
+	}	
 }

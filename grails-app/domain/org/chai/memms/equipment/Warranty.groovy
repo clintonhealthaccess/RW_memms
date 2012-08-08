@@ -49,7 +49,7 @@ class Warranty{
 	static embedded = ["contact"]
 	
 	static constraints = {
-		code nullable: false
+		code nullable: false, blank:false, unique: true
 		startDate nullable:false, validator:{it <= new Date()} 
 		endDate nullable:false, validator: { val, obj -> 
 			return (val >= obj.startDate)

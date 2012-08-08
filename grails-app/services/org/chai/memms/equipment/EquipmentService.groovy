@@ -1,5 +1,5 @@
 /** 
- * Copyright (c) 2011, Clinton Health Access Initiative.
+ * Copyright (c) 2012, Clinton Health Access Initiative.
  *
  * All rights reserved.
  *
@@ -27,62 +27,17 @@
  */
 package org.chai.memms.equipment
 
-import i18nfields.I18nFields
 /**
  * @author Jean Kahigiso M.
  *
  */
-@i18nfields.I18nFields
-class EquipmentCategoryLevel { 
+class EquipmentService {
 	
-	String code
-	String names
-	String descriptions
+	static transactional = true
 	
-	static i18nFields = ["names","descriptions"]
-	static hasMany = [categories: EquipmentCategory]
+	def languageService;
+	def sessionFactory;
 	
-	static constraints = {
-		code nullable: false, blank: false
-		names  nullable: true, blank: true
-		descriptions  nullable: true, blank: true
-	}
-		 
-	static mapping = {
-		table "memms_equipment_category_level"
-		version false	
-		names_en type: "text"
-		names_fr type: "text"
-		names_rw type: "text"
-		descriptions_en type: "text"
-		descriptions_fr type: "text"
-		descriptions_rw type: "text"
-	}
+	
 
-	
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((code == null) ? 0 : code.hashCode());
-		return result;
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this.is(obj))
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		EquipmentCategoryLevel other = (EquipmentCategoryLevel) obj;
-		if (code == null) {
-			if (other.code != null)
-				return false;
-		} else if (!code.equals(other.code))
-			return false;
-		return true;
-	}	
-	
-	
 }

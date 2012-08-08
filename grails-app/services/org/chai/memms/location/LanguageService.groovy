@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.lang.LocaleUtils;
-import org.codehaus.groovy.grails.commons.ConfigurationHolder as CONF;
+//import org.codehaus.groovy.grails.commons.ConfigurationHolder as CONF;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
@@ -41,12 +41,14 @@ import org.springframework.web.servlet.support.RequestContextUtils;
  */
 class LanguageService {
 	
+	def grailsApplication
+	
 	List<Locale> getAvailableLocales() {
 		return getAvailableLanguages().collect {LocaleUtils.toLocale(it)}
 	}
 	
 	List<String> getAvailableLanguages() {
-		List<String> languages = CONF.config.i18nFields.locales
+		List<String> languages = grailsApplication.config.i18nFields.locales
 		return languages;
 	}
 	
@@ -57,7 +59,7 @@ class LanguageService {
 		return RequestContextUtils.getLocale(RequestContextHolder.currentRequestAttributes().getRequest());;
 	}
 	String getFallbackLanguage() {
-		return CONF.config.site.fallback.language;
+		return grailsApplication.config.site.fallback.language;
 	}
 
 }

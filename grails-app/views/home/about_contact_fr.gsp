@@ -5,11 +5,11 @@
         <title><g:message code="about.page.title" /></title>
     </head>
     <body>
-    	<div class="heading1-bar">
+    	<div>
     	
     	</div>
 		<div class="main">
-			<p class="push-20">
+			<p>
 				DHSST a été développé par <a href="http://www.clintonhealthaccess.org">Clinton Health Access Initiative</a> en partenariat avec
 				le <a href="http://www.moh.gov.rw">Ministère de la Santé du Rwanda</a>.
 			</p>

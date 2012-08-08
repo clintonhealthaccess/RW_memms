@@ -5,51 +5,51 @@
 		<title><g:message code="register.title"/></title>
 	</head>
 	<body>
-		<h3 class="heading2-bar text-center"><g:message code="register.header.label"/></h3>
-			<g:form action="sendRegistration" class="nice-form">
+		<h3><g:message code="register.header.label"/></h3>
+			<g:form action="sendRegistration">
 	    
-			<table class="listing">
+			<table>
 				<tbody>
 					<tr><td>
 						<label><g:message code="register.firstname.label"/></label></td>
 					<td>
 						<input type="text" name="firstname" value="${register?.firstname}" />
-						<div class="error-list"><g:renderErrors bean="${register}" field="firstname" /></div>
+						<g:renderErrors bean="${register}" field="firstname" />
 					</td></tr>
 					
 					<tr><td>
 						<label><g:message code="register.lastname.label"/></label></td>
 					<td>
 						<input type="text" name="lastname" value="${register?.lastname}" />
-						<div class="error-list"><g:renderErrors bean="${register}" field="lastname" /></div>
+						<g:renderErrors bean="${register}" field="lastname" />
 					</td></tr>
 				
 					<tr><td>
 						<label><g:message code="register.organisation.label"/></label></td>
 					<td>
 						<input type="text" name="organisation" value="${register?.organisation}" />
-						<div class="error-list"><g:renderErrors bean="${register}" field="organisation" /></div>
+						<g:renderErrors bean="${register}" field="organisation" />
 					</td></tr>
 					
 					<tr><td>
 						<label><g:message code="register.email.label"/></label></td>
 					<td>
 						<input type="text" name="email" value="${register?.email}" />
-						<div class="error-list"><g:renderErrors bean="${register}" field="email" /></div>
+						<g:renderErrors bean="${register}" field="email" />
 					</td></tr>
 					
 					<tr><td>
 						<label><g:message code="register.phonenumber.label"/></label></td>
 					<td>
 						<input type="text" name="phoneNumber" value="${register?.phoneNumber}" />
-						<div class="error-list"><g:renderErrors bean="${register}" field="phoneNumber" /></div>
+						<g:renderErrors bean="${register}" field="phoneNumber" />
 					</td></tr>
 					
 					<tr>
 						<td><label><g:message code="register.language.label"/></label></td>
 						<td>
 							<g:select name="defaultLanguage" from="${languages}" value="${register?.defaultLanguage}" optionValue="displayLanguage"/>
-							<div class="error-list"><g:renderErrors bean="${register}" field="defaultLanguage" /></div>
+							<g:renderErrors bean="${register}" field="defaultLanguage" />
 						</td>
 					</tr>
 					
@@ -57,13 +57,13 @@
 						<label><g:message code="register.password.label"/></label></td>
 					<td>
 						<input type="password" name="password" value="" />
-						<div class="error-list"><g:renderErrors bean="${register}" field="password" /></div>
+						<g:renderErrors bean="${register}" field="password" />
 					</td></tr>
 					<tr><td>
 						<label><g:message code="register.repeat.label"/></label></td>
 					<td>
 						<input type="password" name="repeat" value="" />
-						<div class="error-list"><g:renderErrors bean="${register}" field="repeat" /></div>
+						<g:renderErrors bean="${register}" field="repeat" />
 					</td></tr>
 					
 					<tr><td></td><td>

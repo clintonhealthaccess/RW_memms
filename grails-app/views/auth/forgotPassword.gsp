@@ -5,9 +5,9 @@
 		<title><g:message code="forgot.password.title"/></title>
 	</head>
 	<body>
-		<h3 class="heading2-bar text-center"><g:message code="forgot.password.header.label"/></h3>
-		<div class="form-box">
-			<g:form action="retrievePassword" class="nice-form login-form">    
+		<h3 ><g:message code="forgot.password.header.label"/></h3>
+		<div >
+			<g:form action="retrievePassword" >    
 				<table class="listing">
 					<tbody>
 						<tr>

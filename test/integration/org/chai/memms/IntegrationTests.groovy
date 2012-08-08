@@ -39,18 +39,25 @@ import org.chai.memms.security.User;
 import org.chai.memms.security.UserType;
 
 import org.apache.commons.logging.Log;
+import org.chai.memms.equipment.Department
+import org.chai.memms.equipment.Equipment
+import org.chai.memms.equipment.EquipmentModel
+import org.chai.memms.equipment.EquipmentType
+import org.chai.memms.equipment.Warranty
 import org.chai.memms.location.DataLocation;
 import org.chai.memms.location.DataLocationType;
 import org.chai.memms.location.Location;
 import org.chai.memms.location.LocationLevel;
+import org.chai.memms.location.CalculationLocation;
 
-import org.codehaus.groovy.grails.commons.ConfigurationHolder as CONF
+//import org.codehaus.groovy.grails.commons.ConfigurationHolder as CONF
 
 abstract class IntegrationTests extends IntegrationSpec {
 	
 	def refreshValueService
 	def springcacheService
 	def sessionFactory
+	def grailsApplication
 	
 	static final String CODE (def number) { return "CODE"+number }
 	static final String HEALTH_CENTER_GROUP = "Health Center"
@@ -73,6 +80,7 @@ abstract class IntegrationTests extends IntegrationSpec {
 		// using cache.use_second_level_cache = false in test mode doesn't work so
 		// we flush the cache after each test
 		//springcacheService.flushAll()
+		//new org.apache.shiro.grails.ShiroSecurityService()
 	}
 	
 	static def setupLocationTree() {
@@ -104,9 +112,8 @@ abstract class IntegrationTests extends IntegrationSpec {
 		return result;
 	}
 	
-	static def getCalculationLocation(def code) {
+	static def getCalculationLocation(def code, def log = null) {
 		def location = Location.findByCode(code)
-		if (location == null) location = DataLocation.findByCode(code)
 		return location
 	}
 	
@@ -133,7 +140,7 @@ abstract class IntegrationTests extends IntegrationSpec {
 	}
 	
 	static def newUser(def username, def uuid) {
-		return new User(userType: UserType.OTHER, code: username, username: username, permissionString: '', passwordHash:'', uuid: uuid, firstname: 'first', lastname: 'last', organisation: 'org', phoneNumber: '+250 11 111 11 11').save(failOnError: true)
+		return new User(userType: UserType.OTHER, username: username, permissionString: '', passwordHash:'', uuid: uuid, firstname: 'first', lastname: 'last', organisation: 'org', phoneNumber: '+250 11 111 11 11').save(failOnError: true)
 	}
 	
 	static def newUser(def username, def active, def confirmed) {
@@ -148,11 +155,18 @@ abstract class IntegrationTests extends IntegrationSpec {
 			organisation: 'org', phoneNumber: '+250 11 111 11 11').save(failOnError: true)
 	}
 	
+	static def newPersonUser(def username, def uuid, def locationId) {
+		return new User(userType: UserType.PERSON, code: username, username: username, permissionString: '', passwordHash:'', uuid: uuid, locationId: locationId, firstname: 'first', lastname: 'last', organisation: 'org', phoneNumber: '+250 11 111 11 11').save(failOnError: true)
+	}
+	
+	static def newSystemUser(def username, def uuid, def locationId) {
+		return new User(userType: UserType.SYSTEM, code: username, username: username, permissionString: '', passwordHash:'', uuid: uuid, locationId: locationId, firstname: 'first', lastname: 'last', organisation: 'org', phoneNumber: '+250 11 111 11 11').save(failOnError: true)
+	}
 	def setupSecurityManager(def user) {
 		def subject = [getPrincipal: { user?.uuid }, isAuthenticated: { user==null?false:true }, login: { token -> null }] as Subject
 		ThreadContext.put( ThreadContext.SECURITY_MANAGER_KEY, [ getSubject: { subject } ] as SecurityManager )
 		SecurityUtils.metaClass.static.getSubject = { subject }
 		WebUtils.metaClass.static.getSavedRequest = { ServletRequest request -> null }
 	}
-	
+		
 }

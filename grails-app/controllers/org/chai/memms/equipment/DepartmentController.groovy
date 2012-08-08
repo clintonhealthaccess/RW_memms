@@ -10,7 +10,8 @@ import org.chai.memms.AbstractEntityController;
  *
  */
 class DepartmentController extends AbstractEntityController{
-
+	def departmentService
+	
 	def getEntity(def id) {
 		return Department.get(id);
 	}
@@ -28,8 +29,12 @@ class DepartmentController extends AbstractEntityController{
 	}
 	
 	def deleteEntity(def entity) {
-		if(Equipment.findByDepartment(entity)==null)
-			flash.message = message(code: 'department.hasequipment', args: [message(code: getLabel(), default: 'entity'), params.id], default: 'Department {0} still has associated equipment.')
+		if (entity.equipments.size() != 0) {
+			flash.message = message(code: 'department.hasequipments', args: [message(code: getLabel(), default: 'entity'), params.id], default: 'Department {0} still has associated equipments.')
+		}
+		else {
+			super.deleteEntity(entity)
+		}
 	}
 	
 	def getEntityClass() {
@@ -41,8 +46,8 @@ class DepartmentController extends AbstractEntityController{
 	
 	def getModel(def entity) {
 		[
-			department:entity
-			]
+			model:entity
+		]
 	}
 	
 	def list={
@@ -56,7 +61,20 @@ class DepartmentController extends AbstractEntityController{
 			entityClass: getEntityClass()
 			])
 	}
-
 	
-
+	def getAjaxData={
+		def clazz = Department.class		
+		def departments = departmentService.searchDepartment(clazz, params['term'], [:])
+		render(contentType:"text/json") {
+			elements = array {
+				departments.each { department ->
+					elem (
+						key: department.id,
+						value: department.names
+					)
+				}
+			}
+		}
+		
+	}
 }
