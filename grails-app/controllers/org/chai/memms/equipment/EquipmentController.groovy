@@ -21,8 +21,6 @@ class EquipmentController extends AbstractEntityController{
 	}
 	
 	def deleteEntity(def entity) {
-//		if(Equipment.findByDepartment(entity)==null)
-//			flash.message = message(code: 'department.hasequipment', args: [message(code: getLabel(), default: 'entity'), params.id], default: 'Department {0} still has associated equipment.')
 	}
 	
 	def getEntityClass() {

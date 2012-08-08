@@ -38,13 +38,13 @@
 	<classpathentry kind="src" path=".plugin-src-jquery-1.7.1-grails-app-taglib"/>
 	<classpathentry kind="src" path=".plugin-src-jquery-1.7.1-src-groovy"/>
 	<classpathentry kind="src" path=".plugin-src-i18n-fields-0.6.1-src-groovy"/>
+	<classpathentry kind="src" path="test/functional"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="var" path="GRAILS_IVYCACHE/commons-beanutils/commons-beanutils/jars/commons-beanutils-1.8.3.jar"/>
 	<classpathentry kind="var" path="GRAILS_IVYCACHE/commons-el/commons-el/jars/commons-el-1.0.jar"/>
 	<classpathentry kind="var" path="GRAILS_IVYCACHE/commons-validator/commons-validator/jars/commons-validator-1.3.1.jar"/>
 	<classpathentry kind="var" path="GRAILS_IVYCACHE/aopalliance/aopalliance/jars/aopalliance-1.0.jar"/>
 	<classpathentry kind="var" path="GRAILS_IVYCACHE/com.googlecode.concurrentlinkedhashmap/concurrentlinkedhashmap-lru/jars/concurrentlinkedhashmap-lru-1.2_jdk5.jar"/>
-	<classpathentry kind="var" path="GRAILS_IVYCACHE/commons-codec/commons-codec/jars/commons-codec-1.5.jar"/>
 	<classpathentry kind="var" path="GRAILS_IVYCACHE/commons-collections/commons-collections/jars/commons-collections-3.2.1.jar"/>
 	<classpathentry kind="var" path="GRAILS_IVYCACHE/commons-io/commons-io/jars/commons-io-2.1.jar"/>
 	<classpathentry kind="var" path="GRAILS_IVYCACHE/commons-lang/commons-lang/jars/commons-lang-2.6.jar"/>
@@ -243,6 +243,34 @@
 			<attribute name="javadoc_location" value="file:/Users/Eugene/Applications/grails/doc/api"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="var" path="GRAILS_IVYCACHE/org.codehaus.geb/geb-spock/jars/geb-spock-0.7.1.jar"/>
+	<classpathentry kind="var" path="GRAILS_IVYCACHE/org.codehaus.geb/geb-core/jars/geb-core-0.7.1.jar"/>
+	<classpathentry kind="var" path="GRAILS_IVYCACHE/org.codehaus.geb/geb-implicit-assertions/jars/geb-implicit-assertions-0.7.1.jar"/>
+	<classpathentry kind="var" path="GRAILS_IVYCACHE/org.seleniumhq.selenium/selenium-firefox-driver/jars/selenium-firefox-driver-2.20.0.jar"/>
+	<classpathentry kind="var" path="GRAILS_IVYCACHE/org.seleniumhq.selenium/selenium-remote-driver/jars/selenium-remote-driver-2.20.0.jar"/>
+	<classpathentry kind="var" path="GRAILS_IVYCACHE/cglib/cglib-nodep/jars/cglib-nodep-2.1_3.jar"/>
+	<classpathentry kind="var" path="GRAILS_IVYCACHE/org.json/json/jars/json-20080701.jar"/>
+	<classpathentry kind="var" path="GRAILS_IVYCACHE/org.seleniumhq.selenium/selenium-api/jars/selenium-api-2.20.0.jar"/>
+	<classpathentry kind="var" path="GRAILS_IVYCACHE/com.google.guava/guava/jars/guava-11.0.1.jar"/>
+	<classpathentry kind="var" path="GRAILS_IVYCACHE/com.google.code.findbugs/jsr305/jars/jsr305-1.3.9.jar"/>
+	<classpathentry kind="var" path="GRAILS_IVYCACHE/org.apache.httpcomponents/httpclient/jars/httpclient-4.1.2.jar"/>
+	<classpathentry kind="var" path="GRAILS_IVYCACHE/org.apache.httpcomponents/httpcore/jars/httpcore-4.1.3.jar"/>
+	<classpathentry kind="var" path="GRAILS_IVYCACHE/commons-logging/commons-logging/jars/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="var" path="GRAILS_IVYCACHE/commons-codec/commons-codec/jars/commons-codec-1.6.jar"/>
+	<classpathentry kind="var" path="GRAILS_IVYCACHE/org.apache.commons/commons-exec/jars/commons-exec-1.1.jar"/>
+	<classpathentry kind="var" path="GRAILS_IVYCACHE/net.java.dev.jna/jna/jars/jna-3.4.0.jar"/>
+	<classpathentry kind="var" path="GRAILS_IVYCACHE/net.java.dev.jna/platform/jars/platform-3.4.0.jar"/>
+	<classpathentry kind="var" path="GRAILS_IVYCACHE/org.seleniumhq.selenium/selenium-chrome-driver/jars/selenium-chrome-driver-2.20.0.jar"/>
+	<classpathentry kind="var" path="GRAILS_IVYCACHE/org.seleniumhq.selenium/selenium-htmlunit-driver/jars/selenium-htmlunit-driver-2.20.0.jar"/>
+	<classpathentry kind="var" path="GRAILS_IVYCACHE/net.sourceforge.htmlunit/htmlunit/jars/htmlunit-2.9.jar"/>
+	<classpathentry kind="var" path="GRAILS_IVYCACHE/xalan/xalan/jars/xalan-2.7.1.jar"/>
+	<classpathentry kind="var" path="GRAILS_IVYCACHE/xalan/serializer/jars/serializer-2.7.1.jar"/>
+	<classpathentry kind="var" path="GRAILS_IVYCACHE/org.apache.httpcomponents/httpmime/jars/httpmime-4.1.2.jar"/>
+	<classpathentry kind="var" path="GRAILS_IVYCACHE/net.sourceforge.htmlunit/htmlunit-core-js/jars/htmlunit-core-js-2.9.jar"/>
+	<classpathentry kind="var" path="GRAILS_IVYCACHE/xerces/xercesImpl/jars/xercesImpl-2.9.1.jar"/>
+	<classpathentry kind="var" path="GRAILS_IVYCACHE/net.sourceforge.nekohtml/nekohtml/jars/nekohtml-1.9.15.jar"/>
+	<classpathentry kind="var" path="GRAILS_IVYCACHE/net.sourceforge.cssparser/cssparser/jars/cssparser-0.9.5.jar"/>
+	<classpathentry kind="var" path="GRAILS_IVYCACHE/org.w3c.css/sac/jars/sac-1.3.jar"/>
 	<classpathentry kind="var" path="GRAILS_IVYCACHE/org.spockframework/spock-grails-support/jars/spock-grails-support-0.6-groovy-1.8.jar"/>
 	<classpathentry kind="var" path="GRAILS_IVYCACHE/org.spockframework/spock-core/jars/spock-core-0.6-groovy-1.8.jar"/>
 	<classpathentry kind="var" path="GRAILS_IVYCACHE/junit/junit-dep/jars/junit-dep-4.9.jar"/>
@@ -251,5 +279,5 @@
 	<classpathentry kind="var" path="GRAILS_IVYCACHE/org.apache.tomcat.embed/tomcat-embed-core/jars/tomcat-embed-core-7.0.16.jar"/>
 	<classpathentry kind="var" path="GRAILS_IVYCACHE/org.apache.tomcat.embed/tomcat-embed-jasper/jars/tomcat-embed-jasper-7.0.16.jar"/>
 	<classpathentry kind="var" path="GRAILS_IVYCACHE/org.apache.tomcat.embed/tomcat-embed-logging-log4j/jars/tomcat-embed-logging-log4j-7.0.16.jar"/>
-	<classpathentry kind="output" path="target-eclipse/classes"/>
+	<classpathentry kind="output" path="web-app/WEB-INF/classes"/>
 </classpath>
