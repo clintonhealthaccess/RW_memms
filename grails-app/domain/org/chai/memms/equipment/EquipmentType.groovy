@@ -26,7 +26,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
- package org.chai.memms.equipment
+package org.chai.memms.equipment
 
 import java.util.Date;
 

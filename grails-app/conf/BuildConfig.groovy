@@ -49,12 +49,12 @@ grails.project.dependency.resolution = {
 		// because of GRAILS-6147, this dependency is in lib instead of here
 		//compile group: "net.sf.json-lib", name: "json-lib", version: "2.4", classifier: "jdk15"
 		
-		test "org.codehaus.geb:geb-spock:0.7.1"
-		test("org.seleniumhq.selenium:selenium-firefox-driver:latest.release")
-		test("org.seleniumhq.selenium:selenium-chrome-driver:latest.release")
-		test("org.seleniumhq.selenium:selenium-htmlunit-driver:latest.release") {
-			excludes "xml-apis"
-		}
+//		test "org.codehaus.geb:geb-spock:0.7.1"
+//		test("org.seleniumhq.selenium:selenium-firefox-driver:latest.release")
+//		test("org.seleniumhq.selenium:selenium-chrome-driver:latest.release")
+//		test("org.seleniumhq.selenium:selenium-htmlunit-driver:latest.release") {
+//			excludes "xml-apis"
+//		}
 		
 		compile 'net.sf.ezmorph:ezmorph:1.0.6'
 		runtime 'mysql:mysql-connector-java:5.1.5'
@@ -75,7 +75,7 @@ grails.project.dependency.resolution = {
 		compile ":yui-minify-resources:0.1.5"
         build ":tomcat:$grailsVersion"
 		
-		test ":geb:0.7.1"
+//		test ":geb:0.7.1"
 		test (":spock:0.6") {changing = false}
     }
 }
