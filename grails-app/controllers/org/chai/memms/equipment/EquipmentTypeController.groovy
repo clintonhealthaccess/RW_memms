@@ -35,7 +35,6 @@ import org.chai.memms.AbstractEntityController;
  */
 class EquipmentTypeController extends AbstractEntityController{
 
-    def languges = grailsApplication.config.i18nFields.locales
 	
 	def getEntity(def id) {
 		return EquipmentType.get(id);
@@ -46,7 +45,7 @@ class EquipmentTypeController extends AbstractEntityController{
 	}
 
 	def getTemplate() {
-		return "/entity/model/createEquipmentType";
+		return "/entity/equipmentType/createEquipmentType";
 	}
 
 	def getLabel() {
@@ -57,18 +56,25 @@ class EquipmentTypeController extends AbstractEntityController{
 		return EquipmentType.class;
 	}
 	def deleteEntity(def entity) {
-//		if(Equipment.findByModel(entity)!=null)
-//			flash.message = message(code: 'model.hasequipment', args: [message(code: getLabel(), default: 'entity'), params.id], default: 'Model {0} still has associated equipment.')
-
+		if(Equipment.findByModel(entity)!=null)
+			flash.message = message(code: 'type.hasequipment', args: [message(code: getLabel(), default: 'entity'), params.id], default: 'Equipment Type {0} still has associated equipment.')
+		else
+			super.deleteEntity(entity);
 	}
 	
-	def bindParams(def entity) {
+	def bindParams(def entity) {		
+		if(!params.id){
+			entity.addedOn= new Date()
+			entity.lastModifiedOn= new Date()
+		}else{
+			entity.lastModifiedOn= new Date()
+		}
 		entity.properties = params		
 	}
 
 	def getModel(def entity) {
 		[
-			model: entity
+			type: entity
 		]
 	}
 	def list = {

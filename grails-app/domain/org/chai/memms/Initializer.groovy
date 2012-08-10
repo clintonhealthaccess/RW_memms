@@ -138,7 +138,7 @@ public class Initializer {
 		
 		if(!EquipmentType.count()){
 			//Add equipment types as defined in ecri
-			def typeOne = newEquipmentType("15810", ["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now())
+			def typeOne = newEquipmentType("15810", ["en":"Accelerometers","fr":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now())
 			def typeTwo = newEquipmentType("15819", ["en":"X-Ray Film Cutter"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now())
 			def typeThree = newEquipmentType("15966", ["en":"Video Systems"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now())
 			def typeFour = newEquipmentType("10035", ["en":"Adhesives, Aerosol"],["en":"not used in memms"],Observation.RETIRED,now(),now())
@@ -160,9 +160,9 @@ public class Initializer {
 				Department.findByCode('SURGERY'),
 				EquipmentType.findByCode("15819")
 				)
-			def manufacture = newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154")
-			def supplier = newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654")
-			def contact = newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654")
+			def manufacture = newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","8988")
+			def supplier = newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","8988")
+			def contact = newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","8988")
 			def warranty = newWarranty("Code",['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154",getDate(10, 12, 2010),getDate(12, 12, 2012),[:],equipmentOne)
 			def status= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentOne,true)
 			
@@ -193,8 +193,8 @@ public class Initializer {
 		return new EquipmentStatus(statusChangeDate:statusChangeDate,changedBy:changedBy,value:value,equipment:equipment,current:current).save(failOnError: true)
 	}
 
-	public static def newContact(def addressDescriptions,def contactName,def email, def phone, def address){
-		def contact = new Contact(contactName:contactName,email:email,phone:phone,address:address)
+	public static def newContact(def addressDescriptions,def contactName,def email, def phone, def street, def poBox){
+		def contact = new Contact(contactName:contactName,email:email,phone:phone,street:street,poBox:poBox)
 		setLocaleValueInMap(contact,addressDescriptions,"AddressDescriptions")
 		return contact;
 	}

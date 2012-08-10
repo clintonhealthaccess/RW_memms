@@ -13,12 +13,7 @@ class LocationController extends AbstractEntityController {
 	def locationService
 	def languageService;
 	def bindParams(def entity) {
-		entity.properties = params
-		
-		//FIXME Required for current version @i18nfields.I18nFields 0.6.x
-		for(String lang: languges){
-			if (params.names."_".lang!=null) entity.names."_".lang = params.names."_".lang
-		}		
+		entity.properties = params		
 	}
 
 	def getModel(def entity) {

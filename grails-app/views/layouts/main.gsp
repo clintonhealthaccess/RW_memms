@@ -6,7 +6,10 @@
 <head>
 	<title><g:layoutTitle /></title>
 
-	<g:layoutHead />
+	<g:layoutHead />	
+	<r:require module="core"/>
+	<r:layoutResources/>
+
 </head>
 <body>
 	<div>
@@ -15,7 +18,7 @@
 		    	<a href="${createLink(controller:'home', action:'index')}"><g:message code="title.memms"/></a>
 		    </h1>
 
-			<ul>
+			<ul class="locales" id="switcher">
 				<% def languageService = grailsApplication.mainContext.getBean('languageService') %>
 				<g:each in="${languageService.availableLanguages}" var="language" status="i">
 					<% params['lang'] = language %>
@@ -64,7 +67,7 @@
 			<ul >
 				<shiro:hasPermission permission="admin">
 					<li>
-						<a class="redmine follow" target="_blank" href="http://districthealth.moh.gov.rw/redmine">
+						<a class="redmine follow" target="_blank" href="http://www.districthealth.moh.gov.rw/redmine/projects/memms">
 						<g:message code="header.labels.redmine"/></a>
 	   				</li>
 				</shiro:hasPermission>

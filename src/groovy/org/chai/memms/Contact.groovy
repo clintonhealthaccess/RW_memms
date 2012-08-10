@@ -38,7 +38,9 @@ public class Contact {
 	String contactName
 	String email
 	String phone
-	String address
+	String street
+	String poBox
+	
 		
 	static i18nFields =["addressDescriptions"]
 	
@@ -46,7 +48,8 @@ public class Contact {
 		
 		email blank: true, nullable: true, email:true 
 		phone blank: true, nullable: true 
-		address blank: true, nullable: true 
+		street blank: true, nullable: true 
+		poBox blank: true, nullable: true
 		contactName blank: true, nullable: true 
 		addressDescriptions blank: true, nullable: true 
 		

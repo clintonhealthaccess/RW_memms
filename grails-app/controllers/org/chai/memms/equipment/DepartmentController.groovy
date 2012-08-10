@@ -63,18 +63,18 @@ class DepartmentController extends AbstractEntityController{
 	}
 	
 	def getAjaxData={
-		def clazz = Department.class		
-		def departments = departmentService.searchDepartment(clazz, params['term'], [:])
-		render(contentType:"text/json") {
-			elements = array {
-				departments.each { department ->
-					elem (
-						key: department.id,
-						value: department.names
-					)
-				}
-			}
-		}
+//		def clazz = Department.class		
+//		def departments = departmentService.searchDepartment(clazz, params['term'], [:])
+//		render(contentType:"text/json") {
+//			elements = array {
+//				departments.each { department ->
+//					elem (
+//						key: department.id,
+//						value: department.names
+//					)
+//				}
+//			}
+//		}
 		
 	}
 }
