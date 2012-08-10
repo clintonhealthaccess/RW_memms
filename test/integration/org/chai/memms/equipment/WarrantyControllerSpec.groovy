@@ -24,7 +24,7 @@ class WarrantyControllerSpec extends IntegrationTests{
 		warrantyController.params.code = CODE(123)
 		warrantyController.params.startDate = Initializer.getDate(10, 12, 2010)
 		warrantyController.params.endDate = Initializer.getDate(12, 12, 2012)
-		warrantyController.params.contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654")
+		warrantyController.params.contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","")
 		warrantyController.params.equipment = equipment
 		
 		grailsApplication.config.i18nFields.locales.each{
