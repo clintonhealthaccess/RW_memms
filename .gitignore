@@ -27,3 +27,5 @@ build.info
 *.sql
 *.gz
 prodDb.h2.db
+.classpath
+.project
