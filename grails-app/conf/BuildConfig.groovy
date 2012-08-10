@@ -22,11 +22,11 @@ grails.project.dependency.resolution = {
         grailsPlugins()
         grailsHome()
         grailsCentral()
-        mavenCentral()
 
         // uncomment these to enable remote dependency resolution from public Maven repositories
-        //mavenCentral()
-        //mavenLocal()
+        mavenCentral()
+        mavenLocal()
+		mavenRepo "http://m2repo.spockframework.org/snapshots"
         //mavenRepo "http://snapshots.repository.codehaus.org"
         //mavenRepo "http://repository.codehaus.org"
         //mavenRepo "http://download.java.net/maven/2/"
@@ -34,8 +34,8 @@ grails.project.dependency.resolution = {
 		
 
 		/**
-		 * Configure our resolver.
-		 */
+ Ê Ê Ê Ê * Configure our resolver.
+ Ê Ê Ê Ê */
 		def libResolver = new GrailsRepoResolver(null, null);
 		libResolver.addArtifactPattern("https://github.com/fterrier/repository/raw/master/[organisation]/[module]/[type]s/[artifact]-[revision].[ext]")
 		libResolver.addIvyPattern("https://github.com/fterrier/repository/raw/master/[organisation]/[module]/ivys/ivy-[revision].xml")
@@ -48,6 +48,13 @@ grails.project.dependency.resolution = {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
 		// because of GRAILS-6147, this dependency is in lib instead of here
 		//compile group: "net.sf.json-lib", name: "json-lib", version: "2.4", classifier: "jdk15"
+		
+//		test "org.codehaus.geb:geb-spock:0.7.1"
+//		test("org.seleniumhq.selenium:selenium-firefox-driver:latest.release")
+//		test("org.seleniumhq.selenium:selenium-chrome-driver:latest.release")
+//		test("org.seleniumhq.selenium:selenium-htmlunit-driver:latest.release") {
+//			excludes "xml-apis"
+//		}
 		
 		compile 'net.sf.ezmorph:ezmorph:1.0.6'
 		runtime 'mysql:mysql-connector-java:5.1.5'
@@ -67,7 +74,8 @@ grails.project.dependency.resolution = {
 		compile ":mail:1.0"
 		compile ":yui-minify-resources:0.1.5"
         build ":tomcat:$grailsVersion"
-				
+		
+//		test ":geb:0.7.1"
 		test (":spock:0.6") {changing = false}
     }
 }

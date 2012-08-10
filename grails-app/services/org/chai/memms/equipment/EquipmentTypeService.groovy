@@ -1,4 +1,6 @@
-/** 
+package org.chai.memms.equipment
+
+/**
  * Copyright (c) 2012, Clinton Health Access Initiative.
  *
  * All rights reserved.
@@ -13,7 +15,7 @@
  *     * Neither the name of the <organization> nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -25,63 +27,57 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.equipment
 
 import java.util.List;
 import java.util.Map;
-import org.chai.memms.equipment.Equipment
 
+import org.apache.commons.lang.StringUtils
+import org.chai.memms.equipment.EquipmentType
 import org.chai.memms.util.Utils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.MatchMode
 import org.hibernate.criterion.Order
 import org.hibernate.criterion.Projections
 import org.hibernate.criterion.Restrictions
-import org.apache.commons.lang.StringUtils
 
-/**
- * @author Jean Kahigiso M.
- *
- */
-class EquipmentService {
-	
+class EquipmentTypeService {
+
 	static transactional = true
 	
 	def languageService;
 	def sessionFactory;
 	
-	public <T extends Equipment> List<Equipment> searchEquipment(Class<T> clazz, String text, Map<String, String> params) {
+    def serviceMethod() {
+    }
+	
+	public <T extends EquipmentType> List<EquipmentType> searchEquipmentType(Class<T> clazz, String text, Map<String, String> params) {
 		def criteria = getSearchCriteria(clazz, text)
 		
 		if (params['offset'] != null) criteria.setFirstResult(params['offset'])
 		if (params['max'] != null) criteria.setMaxResults(params['max'])
-		List<Equipment> equipments = criteria.addOrder(Order.asc("id")).list()
+		List<EquipmentType> equipmentTypes = criteria.addOrder(Order.asc("id")).list()
 		
 		StringUtils.split(text).each { chunk ->
-			equipments.retainAll { equipment ->
-				Utils.matches(chunk, equipment.serialNumber) ||
-				Utils.matches(chunk, equipment.getDescriptions(languageService.getCurrentLanguage())) ||
-				Utils.matches(chunk, equipment.getObservations(languageService.getCurrentLanguage())) 
+			equipmentTypes.retainAll { equipmentType ->
+				Utils.matches(chunk, equipmentType.getNames(languageService.getCurrentLanguage())) ||
+				Utils.matches(chunk, equipmentType.code)
 			}
 		}
-		return equipments
+		return equipmentTypes
 	}
 	
-	private <T extends Equipment> Criteria getSearchCriteria(Class<T> clazz, String text) {
-		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
-		def dbFieldObservations = 'observations_'+languageService.getCurrentLanguagePrefix();
+	private <T extends EquipmentType> Criteria getSearchCriteria(Class<T> clazz, String text) {
+		def dbFieldName = 'names_'+languageService.getCurrentLanguagePrefix();
 		def criteria = sessionFactory.getCurrentSession().createCriteria(clazz)
 		
 		def textRestrictions = Restrictions.conjunction()
 		StringUtils.split(text).each { chunk ->
 			def disjunction = Restrictions.disjunction();
-			disjunction.add(Restrictions.ilike("serialNumber", chunk, MatchMode.ANYWHERE))
-			disjunction.add(Restrictions.ilike(dbFieldDescriptions, chunk, MatchMode.ANYWHERE))
-			disjunction.add(Restrictions.ilike(dbFieldObservations, chunk, MatchMode.ANYWHERE))
+			disjunction.add(Restrictions.ilike("code", chunk, MatchMode.ANYWHERE))
+			disjunction.add(Restrictions.ilike(dbFieldName, chunk, MatchMode.ANYWHERE))
 			textRestrictions.add(disjunction)
 		}
 		criteria.add(textRestrictions)
 		return criteria
 	}
-
 }

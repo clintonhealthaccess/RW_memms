@@ -21,6 +21,9 @@ class EquipmentController extends AbstractEntityController{
 		return "equipment.label";
 	}
 	
+	def deleteEntity(def entity) {
+	}
+	
 	def getEntityClass() {
 		return Equipment.class;
 	}

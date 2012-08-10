@@ -7,10 +7,14 @@ import org.chai.memms.location.DataLocation;
 import org.chai.memms.equipment.EquipmentStatus.Status;
 import org.chai.memms.security.User
 
-class EquipmentStatusSpec extends IntegrationTests{
-
-    def "can create and save an equipment status"(){
+class EquipmentStatusControllerSpec extends IntegrationTests{
+	
+	def equipmentStatusController
+	
+	def "create equipment status with correct required data in fields - for english input"(){
+		
 		setup:
+		equipmentStatusController = new EquipmentStatusController();
 		setupLocationTree()
 		def user  = newUser("admin", "Admin UID")
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
@@ -29,12 +33,16 @@ class EquipmentStatusSpec extends IntegrationTests{
 					department,
 					equipmentType
 					)
-		
 		when:
-		def statusOne = Initializer.newEquipmentStatus(new Date(),User.findByUsername("admin"),Status.INSTOCK,equipment,true)
-		def statusTwo = new EquipmentStatus(statusChangeDate:new Date(),changedBy:User.findByUsername("admin"),value:Status.INSTOCK,
-			equipment:equipment,current:true).save(failOnError: true)
+		equipmentStatusController.params.statusChangeDate = new Date()
+		equipmentStatusController.params.changedBy = User.findByUsername("admin")
+		equipmentStatusController.params.value = Status.INSTOCK
+		equipmentStatusController.params.current = true
+		equipmentStatusController.params.equipment = equipment
+		equipmentStatusController.save(failOnError: true)
+		
 		then:
-		EquipmentStatus.count() == 2
+		EquipmentStatus.count() == 1;
+		EquipmentStatus.findByValue(Status.INSTOCK).value == Status.INSTOCK
 	}
 }
