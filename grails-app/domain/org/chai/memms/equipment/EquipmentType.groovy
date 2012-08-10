@@ -43,7 +43,7 @@ class EquipmentType {
 	enum Observation{
 		USEDINMEMMS("useInMemms"),
 		RETIRED("retired"),
-		TODETAILED("toDetailed"),
+		TOODETAILED("tooDetailed"),
 		NOTINSCOPE("notInScope")
 		
 		String messageCode = "equipment.type"	

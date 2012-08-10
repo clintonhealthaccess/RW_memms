@@ -10,7 +10,7 @@
     	</div>
 		<div class="main">
 			<p>
-				DHSST a été développé par <a href="http://www.clintonhealthaccess.org">Clinton Health Access Initiative</a> en partenariat avec
+				MEMMS a été développé par <a href="http://www.clintonhealthaccess.org">Clinton Health Access Initiative</a> en partenariat avec
 				le <a href="http://www.moh.gov.rw">Ministère de la Santé du Rwanda</a>.
 			</p>
 		

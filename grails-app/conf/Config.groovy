@@ -70,6 +70,30 @@ environments {
     }
 }
 
+//RESOURCES
+environments {
+	production {
+		grails.resources.cdn.enabled = true
+		// grails.resources.cdn.url = "http://static.mydomain.com/"
+		// grails.resources.work.dir="/static/directory/"
+		grails.resources.processing.enabled = true
+	}
+	development {
+		grails.resources.cdn.enabled = false
+		grails.resources.processing.enabled = false
+		grails.resources.mappers.yuicssminify.disable=true
+		grails.resources.mappers.yuijsminify.disable=true
+	}
+	test {
+		grails.resources.cdn.enabled = false
+		grails.resources.processing.enabled = false
+		grails.resources.mappers.yuicssminify.disable=true
+		grails.resources.mappers.yuijsminify.disable=true
+	}
+}
+
+security.shiro.authc.required = false
+
 // log4j configuration
 log4j = {
     // Example of changing the log pattern for the default console

@@ -54,9 +54,9 @@ class EquipmentSpec extends IntegrationTests{
 				registeredOn:Initializer.getDate(22,07,2010), model:equipmentModel, department:department, dataLocation:DataLocation.list().first(),
 				observations:['en':'Equipment Observation'],descriptions:['en':'Equipment Descriptions'], type:equipmentType)
 
-		def manufacture = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154")
-		def supplier = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654")
-		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654")
+		def manufacture = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+		def supplier = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
 		def warranty = Initializer.newWarranty("Code",['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154",Initializer.getDate(10, 12, 2010),Initializer.getDate(12, 12, 2012),[:],equipment)
 
 		warranty.contact=contact
@@ -81,9 +81,9 @@ class EquipmentSpec extends IntegrationTests{
 				registeredOn:Initializer.getDate(22,07,2010), model:equipmentModel, department:department, dataLocation:DataLocation.list().first(),
 				observations:['en':'Equipment Observation'],descriptions:['en':'Equipment Descriptions'], type:equipmentType)
 
-		def manufacture = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154")
-		def supplier = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654")
-		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654")
+		def manufacture = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+		def supplier = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
 		def warranty = Initializer.newWarranty("Code",['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154",Initializer.getDate(10, 12, 2010),Initializer.getDate(12, 12, 2012),[:],equipment)
 
 		warranty.contact=contact
@@ -109,9 +109,9 @@ class EquipmentSpec extends IntegrationTests{
 				registeredOn:Initializer.getDate(22,07,2010), model:equipmentModel, department:department, dataLocation:DataLocation.list().first(),
 				observations:['en':'Equipment Observation'],descriptions:['en':'Equipment Descriptions'],type:equipmentType)
 
-		def manufacture = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154")
-		def supplier = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654")
-		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654")
+		def manufacture = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+		def supplier = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
 		def warranty = Initializer.newWarranty("Code",['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154",Initializer.getDate(10, 12, 2010),Initializer.getDate(12, 12, 2012),[:],equipment)
 
 		warranty.contact=contact
@@ -139,9 +139,9 @@ class EquipmentSpec extends IntegrationTests{
 				registeredOn:Initializer.getDate(22,07,2010), model:equipmentModel, department:department, dataLocation:DataLocation.list().first(),
 				observations:['en':'Equipment Observation'],descriptions:['en':'Equipment Descriptions'],type:equipmentType)
 
-		def manufacture = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154")
-		def supplier = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654")
-		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654")
+		def manufacture = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+		def supplier = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
 		def warranty = Initializer.newWarranty("Code",['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154",Initializer.getDate(10, 12, 2010),Initializer.getDate(12, 12, 2012),[:],equipment)
 
 		warranty.contact=contact
@@ -167,9 +167,9 @@ class EquipmentSpec extends IntegrationTests{
 				registeredOn:Initializer.getDate(22,07,2010), model:equipmentModel, department:department, dataLocation:DataLocation.list().first(),
 				observations:['en':'Equipment Observation'],descriptions:['en':'Equipment Descriptions'],type:equipmentType)
 
-		def manufacture = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154")
-		def supplier = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654")
-		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654")
+		def manufacture = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+		def supplier = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
 		def warranty = Initializer.newWarranty("Code",['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154",Initializer.getDate(10, 12, 2010),Initializer.getDate(12, 12, 2012),[:],equipment)
 
 		warranty.contact=contact
@@ -195,9 +195,9 @@ class EquipmentSpec extends IntegrationTests{
 				registeredOn:Initializer.getDate(22,07,2010), model:equipmentModel, department:department, dataLocation:DataLocation.list().first(),
 				observations:['en':'Equipment Observation'],descriptions:['en':'Equipment Descriptions'],type:equipmentType)
 
-		def manufacture = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154")
-		def supplier = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654")
-		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654")
+		def manufacture = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+		def supplier = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
 		def warranty = Initializer.newWarranty("Code",['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154",Initializer.getDate(10, 12, 2010),Initializer.getDate(12, 12, 2012),[:],equipment)
 
 		warranty.contact=contact

@@ -12,7 +12,6 @@ class FormTagLib {
 		out << render(template:"/tags/form/input", model: attrs)
 	}
 	
-	
 	def i18nInput = { attrs, body ->
 		if (attrs["type"] == null) attrs["type"] = 'text'
 		attrs["locales"] = languageService.getAvailableLanguages();
@@ -32,6 +31,12 @@ class FormTagLib {
 		if (attrs["readonly"] == null) attrs["readonly"] = false
 		attrs["locales"] = languageService.getAvailableLanguages();
 		out << render(template:"/tags/form/i18nTextarea", model: attrs)
+	}
+	
+	def inputDate = { attrs, body ->
+		if (attrs["type"] == null) attrs["type"] = 'text'
+		if (attrs["id"] == null) attrs["id"] = 'date-field-one'
+		out << render(template:"/tags/form/inputDate", model: attrs)
 	}
 		
 	def selectFromEnum = { attrs, body ->

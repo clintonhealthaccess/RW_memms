@@ -1,6 +1,7 @@
 package org.chai.memms.equipment
 
 import org.chai.memms.AbstractEntityController;
+import org.chai.memms.Contact
 
 class EquipmentController extends AbstractEntityController{
 
@@ -25,6 +26,7 @@ class EquipmentController extends AbstractEntityController{
 	}
 	def bindParams(def entity) {
 		entity.properties = params
+		if(log.isDebugEnabled()) log.debug("parameterS:"+params);
 	}
 	
 	def getModel(def entity) {
@@ -45,4 +47,5 @@ class EquipmentController extends AbstractEntityController{
 			entityClass: getEntityClass()
 			])
 	}
+	
 }

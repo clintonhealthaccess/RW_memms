@@ -1,40 +1,49 @@
+<%@ page import="org.chai.memms.util.Utils" %>
 <table>
 	<thead>
 		<tr>
 			<th/>
-			<th><g:message code="equipmentType.code.label"/></th>
-			<th><g:message code="equipmentType.name.label"/></th>
-			<th><g:message code="equipmentType.usedInMemms.label"/></th>
-			<th><g:message code="equipmentType.observations.label"/></th>
+			<th><g:message code="entity.code.label"/></th>
+			<th><g:message code="entity.name.label"/></th>
+			<th><g:message code="entity.description.label"/></th>
+			<th><g:message code="entity.observation.label"/></th>
+			<th><g:message code="type.addon.label"/></th>
+			<th><g:message code="type.lastmodifiedon.label"/></th>
 		</tr>
 	</thead>
 	<tbody>
-		<g:each in="${entities}" status="i" var="model">
+		<g:each in="${entities}" status="i" var="type">
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 				<td>
 					<ul>
 						<li>
-							<a href="${createLinkWithTargetURI(controller:'equipmentType', action:'edit', params:[id: model.id])}">
+							<a href="${createLinkWithTargetURI(controller:'equipmentType', action:'edit', params:[id: type.id])}">
 								<g:message code="default.link.edit.label" />
 							</a>
 						</li>
 						<li>
-							<a href="${createLinkWithTargetURI(controller:'equipmentType', action:'delete', params:[id: model.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');"><g:message code="default.link.delete.label" /></a>
+							<a href="${createLinkWithTargetURI(controller:'equipmentType', action:'delete', params:[id: type.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');"><g:message code="default.link.delete.label" /></a>
 						</li>
 						
 					</ul>
 				</td>
 				<td>
-					${model.code}
+					${type.code}
 				</td>
 				<td>
-					${model.names}
+					${type.names}
 				</td>
 				<td>
-					${model.usedInMemms}
+					${type.descriptions}
 				</td>
 				<td>
-					${model.observations}
+					<g:message code="${type.observation.messageCode}.${type.observation.name}"/>
+				</td>
+				<td>
+					${Utils.formatDateWithTime(type?.addedOn)}
+				</td>
+				<td>
+					${Utils.formatDateWithTime(type?.lastModifiedOn)}
 				</td>
 			</tr>
 		</g:each>

@@ -5,7 +5,7 @@
 		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
 	
 		<g:layoutHead />	
-		<r:require module="print2"/>
+		<r:require module="print"/>
 		<r:layoutResources/>
 	</head>
 	<body class="body-print">

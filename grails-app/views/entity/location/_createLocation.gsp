@@ -1,4 +1,4 @@
-<div>
+<div class="togglable">
 
 	<div>
 		<h3>
