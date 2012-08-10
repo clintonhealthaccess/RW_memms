@@ -46,7 +46,7 @@ class DepartmentController extends AbstractEntityController{
 	
 	def getModel(def entity) {
 		[
-			model:entity
+			department:entity
 		]
 	}
 	

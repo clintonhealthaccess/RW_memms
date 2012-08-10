@@ -41,7 +41,7 @@ class EquipmentType {
 
 	
 	enum Observation{
-		USEDINMEMMS("useInMemms"),
+		USEDINMEMMS("usedInMemms"),
 		RETIRED("retired"),
 		TOODETAILED("tooDetailed"),
 		NOTINSCOPE("notInScope")
