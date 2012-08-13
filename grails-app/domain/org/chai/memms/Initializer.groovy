@@ -72,23 +72,23 @@ public class Initializer {
 	static def createUsers() {
 		if(!User.count()){
 			def adminRole = new Role(name: "Admin")
-			adminRole.addToPermissions("*")
+			adminRole.addToPermissions("*:*")
 			adminRole.save(failOnError: true, flush:true)
 			
 			def dataClerkRole = new Role(name: "Clerk")
-			dataClerkRole.addToPermissions("*")
+			dataClerkRole.addToPermissions("Equipment:*")
 			dataClerkRole.save(failOnError: true, flush:true)
 
 			def userAdmin = new User(userType: UserType.PERSON,code:"admin", location: CalculationLocation.findByCode(RWANDA), username: "admin", 
 				firstname: "memms", lastname: "memms", email:'memms@memms.org', passwordHash: new Sha256Hash("admin").toHex(), active: true, 
-				confirmed: true, uuid:'admin', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org',permissionString:"user:*")
+				confirmed: true, uuid:'admin', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
 
 			userAdmin.addToRoles(adminRole)
 			userAdmin.save(failOnError: true, flush:true)
 			
-			def userClerk= new User(userType: UserType.PERSON,code:"clerk", location: CalculationLocation.findByCode(KIVUYE), username: "user", 
+			def userClerk= new User(userType: UserType.PERSON,code:"user", location: CalculationLocation.findByCode(KIVUYE), username: "user", 
 				firstname: "user", lastname: "user", email:'user@memms.org', passwordHash: new Sha256Hash("user").toHex(), active: true, 
-				confirmed: true, uuid:'user', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org',permissionString:"*")
+				confirmed: true, uuid:'user', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
 			userClerk.addToRoles(dataClerkRole)
 			userClerk.save(failOnError: true, flush:true)
 		}
@@ -127,13 +127,16 @@ public class Initializer {
 			def pediatry = newDepartment(['en':'Pediatry'],'PEDIATRY',[:])
 			def emeregency = newDepartment(['en':'Emeregency'],'EMERGENCY',['en':'Emeregency Dep'])
 			def consultation = newDepartment(['en':'Consultation'],'CONSULTATION',['fr':'Consultation Dep'])
+			def anaesthetics = newDepartment(['en':'Anaesthetics'],'ANAESTHETICS',['en':'Anaesthetics Dep'])
+			def cardiology = newDepartment(['en':'Cardiology'],'CARDIOLOGY',['en':'Cardiology Dep'])
+			def gynaecology = newDepartment(['en':'Gynaecology'],'GYNAECOLOGY',['en':'Anaesthetics Dep'])
 		}
 		
 		if(!EquipmentModel.count()){
 			//Add Equipment Model
 			def modelOne = newEquipmentModel(['en':'Model One'],'MODEL1',['en':'Model One'])
-			def modelTwo= newEquipmentModel(['fr':'Model Two'],'MODEL2',['en':'Model Two'])
-			def modelThree = newEquipmentModel([:],'MODEL3',['en':'Model Three'])
+			def modelTwo= newEquipmentModel(['en':'Model Two'],'MODEL2',['en':'Model Two'])
+			def modelThree = newEquipmentModel(['en':'MODEL3'],'MODEL3',['en':'Model Three'])
 		}
 		
 		if(!EquipmentType.count()){
@@ -142,40 +145,133 @@ public class Initializer {
 			def typeTwo = newEquipmentType("15819", ["en":"X-Ray Film Cutter"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now())
 			def typeThree = newEquipmentType("15966", ["en":"Video Systems"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now())
 			def typeFour = newEquipmentType("10035", ["en":"Adhesives, Aerosol"],["en":"not used in memms"],Observation.RETIRED,now(),now())
+			def typeFive = newEquipmentType("20760", ["en":"Pancreatic Drainage Tubes"],["en":"not used in memms"],Observation.RETIRED,now(),now())
+			def typeSix = newEquipmentType("20729", ["en":"PCR Test Tubes"],["en":"not used in memms"],Observation.RETIRED,now(),now())
+			def typeSeven = newEquipmentType("10026", ["en":"Adhesive Strips"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now())
+			def typeEight = newEquipmentType("10124", ["en":"Anesthesia Kits"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now())
+			def typeNine = newEquipmentType("10155", ["en":"Anklets"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now())
+			def typeTen = newEquipmentType("10426", ["en":"Blood Donor Sets"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now())
 		}
-		
-		//newEquipmentType(def code, def names,def descriptions, def observation, def addedOn, def lastModifiedOn)
 		
 		if(!Equipment.count()){
-			def equipmentOne = newEquipment(
-				"SERIAL10"
-				,"2900.23",
-				['en':'Equipment Descriptions'],
-				['en':'Equipment Observation'],
-				getDate(22,07,2010),
-				getDate(10,10,2010),
-				now(),
-				EquipmentModel.findByCode('MODEL1'),
-				DataLocation.findByCode(BUTARO),
-				Department.findByCode('SURGERY'),
-				EquipmentType.findByCode("15819")
-				)
-			def manufacture = newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","8988")
-			def supplier = newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","8988")
-			def contact = newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","8988")
-			def warranty = newWarranty("Code",['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154",getDate(10, 12, 2010),getDate(12, 12, 2012),[:],equipmentOne)
+			def equipmentOne = newEquipment("SERIAL10","2900.23",['en':'Equipment Descriptions one'],['en':'Equipment Observation one'],
+				getDate(22,04,2011),getDate(10,10,2010),now(),EquipmentModel.findByCode('MODEL1'),
+				DataLocation.findByCode(BUTARO),Department.findByCode('SURGERY'),EquipmentType.findByCode("15819"))
+			def equipmentTwo = newEquipment("SERIAL11","34900.23",['en':'Equipment Descriptions two'],['en':'Equipment Observation two'],
+				getDate(12,01,2009),getDate(10,10,2009),now(),EquipmentModel.findByCode('MODEL2'),
+				DataLocation.findByCode(KIVUYE),Department.findByCode('PEDIATRY'),EquipmentType.findByCode("15810"))
+			def equipmentThree = newEquipment("SERIAL12","98700.23",['en':'Equipment Descriptions three'],['en':'Equipment Observation three'],
+				getDate(14,8,2008),getDate(10,01,2009),now(),EquipmentModel.findByCode('MODEL3'),
+				DataLocation.findByCode(BUNGWE),Department.findByCode('EMERGENCY'),EquipmentType.findByCode("15966"))
+			def equipmentFour = newEquipment("SERIAL13","78900.23",['en':'Equipment Descriptions four'],['en':'Equipment Observation four'],
+				getDate(18,2,2011),getDate(10,10,2011),now(),EquipmentModel.findByCode('MODEL2'),
+				DataLocation.findByCode(KIVUYE),Department.findByCode('CARDIOLOGY'),EquipmentType.findByCode("15819"))
+			def equipmentFive = newEquipment("SERIAL14","287e0.23",['en':'Equipment Descriptions five'],['en':'Equipment Observation five'],
+				getDate(11,8,2008),getDate(11,10,2009),now(),EquipmentModel.findByCode('MODEL1'),
+				DataLocation.findByCode(BUNGWE),Department.findByCode('CONSULTATION'),EquipmentType.findByCode("10026"))
+			def equipmentSix = newEquipment("SERIAL15","290540.23",['en':'Equipment Descriptions six'],['en':'Equipment Observation six'],
+				getDate(1,7,2000),getDate(12,7,2001),now(),EquipmentModel.findByCode('MODEL3'),
+				DataLocation.findByCode(BUTARO),Department.findByCode('ANAESTHETICS'),EquipmentType.findByCode("15819"))
+			def equipmentSeven = newEquipment("SERIAL16","29300.23",['en':'Equipment Descriptions seven'],['en':'Equipment Observation seven'],
+				getDate(9,4,2005),getDate(19,10,2005),now(),EquipmentModel.findByCode('MODEL1'),
+				DataLocation.findByCode(KIVUYE),Department.findByCode('ANAESTHETICS'),EquipmentType.findByCode("10155"))
+			def equipmentEight = newEquipment("SERIAL17","294400.23",['en':'Equipment Descriptions eight'],['en':'Equipment Observation eight'],
+				getDate(15,12,1998),getDate(24,10,1999),now(),EquipmentModel.findByCode('MODEL1'),
+				DataLocation.findByCode(BUNGWE),Department.findByCode('SURGERY'),EquipmentType.findByCode("20729"))
+			def equipmentNine = newEquipment("SERIAL18","293400.23",['en':'Equipment Descriptions nine'],['en':'Equipment Observation nine'],
+				getDate(30,11,2010),getDate(28,12,2010),now(),EquipmentModel.findByCode('MODEL2'),
+				DataLocation.findByCode(BUTARO),Department.findByCode('SURGERY'),EquipmentType.findByCode("20760"))
+			def equipmentTen = newEquipment("SERIAL119","2445900.23",['en':'Equipment Descriptions ten'],['en':'Equipment Observation ten'],
+				getDate(19,01,2010),getDate(23,10,2010),now(),EquipmentModel.findByCode('MODEL3'),
+				DataLocation.findByCode(KIVUYE),Department.findByCode('GYNAECOLOGY'),EquipmentType.findByCode("15819"))
+			
+			def manufactureOne = newContact(['en':'Address Descriptions one'],"Manufacture","jkl1@yahoo.com","0768-889-787","Street 154","8988")
+			def manufactureTwo = newContact(['en':'Address Descriptions two'],"Manufacture","jkl2@yahoo.com","0768-888-787","Street 151","8988")
+			def manufactureThree = newContact(['en':'Address Descriptions three'],"Manufacture","jkl3@yahoo.com","0768-132-787","Street 152","8988")
+			def manufactureFour = newContact(['en':'Address Descriptions four'],"Manufacture","jkl4@yahoo.com","0768-657-787","Street 153","8988")
+			def manufactureFive = newContact(['en':'Address Descriptions five'],"Manufacture","jkl5@yahoo.com","0768-342-787","Street 155","8988")
+			def manufactureSix = newContact(['en':'Address Descriptions six'],"Manufacture","jkl6@yahoo.com","0768-123-787","Street 156","8988")
+			
+			
+			def supplierOne = newContact([:],"Supplier one","jk1@yahoo.com","0768-111-787","Street 16514","8988")
+			def supplierTwo = newContact([:],"Supplier two","jk2@yahoo.com","0768-222-787","Street 16524","8988")
+			def supplierThree = newContact([:],"Supplier three","jk3@yahoo.com","0768-333-787","Street 16534","8988")
+			
+			def contactOne = newContact([:],"Contact one","jk1@yahoo.com","0768-111-787","Street 654","8988")
+			def contactTwo = newContact([:],"Contact two","jk2@yahoo.com","0768-888-787","Street 654","8988")
+			
+			def warrantyOne = newWarranty("Code1",['en':'warranty one'],'warranty name1','email1@gmail.com',"0768-111-787","Street 154",getDate(10, 12, 2010),getDate(12, 12, 2012),[:],equipmentOne)
+			def warrantyTwo = newWarranty("Code2",['en':'warranty two'],'warranty name2','email2@gmail.com',"0768-222-787","Street 154",getDate(10, 12, 2010),getDate(12, 12, 2012),[:],equipmentOne)
+			def warrantyThree = newWarranty("Code3",['en':'warranty three'],'warranty name3','email3@gmail.com',"0768-333-787","Street 154",getDate(10, 12, 2010),getDate(12, 12, 2012),[:],equipmentOne)
+			def warrantyFour = newWarranty("Code4",['en':'warranty four'],'warranty name4','email4@gmail.com',"0768-444-787","Street 154",getDate(10, 12, 2010),getDate(12, 12, 2012),[:],equipmentOne)
+			
 			def status= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentOne,true)
 			
-			warranty.contact=contact
-			equipmentOne.manufacture=manufacture
-			equipmentOne.supplier=supplier
-			equipmentOne.warranty=warranty
-			equipmentOne.addToStatus(status)
+			warrantyOne.contact=contactOne
+			warrantyTwo.contact=contactTwo
+			warrantyThree.contact=contactTwo
+			warrantyFour.contact=contactOne
 			
+			equipmentOne.manufacture=manufactureOne
+			equipmentOne.supplier=supplierOne
+			equipmentOne.warranty=warrantyOne
+			equipmentOne.addToStatus(status)
 			equipmentOne.save(failOnError:true)
+			
+			equipmentTwo.manufacture=manufactureTwo
+			equipmentTwo.supplier=supplierTwo
+			equipmentTwo.warranty=warrantyTwo
+			equipmentTwo.addToStatus(status)
+			equipmentTwo.save(failOnError:true)
+			
+			equipmentThree.manufacture=manufactureThree
+			equipmentThree.supplier=supplierThree
+			equipmentThree.warranty=warrantyThree
+			equipmentThree.addToStatus(status)
+			equipmentThree.save(failOnError:true)
+			
+			equipmentFour.manufacture=manufactureFour
+			equipmentFour.supplier=supplierThree
+			equipmentFour.warranty=warrantyFour
+			equipmentFour.addToStatus(status)
+			equipmentFour.save(failOnError:true)
+			
+			equipmentFive.manufacture=manufactureFive
+			equipmentFive.supplier=supplierThree
+			equipmentFive.warranty=warrantyOne
+			equipmentFive.addToStatus(status)
+			equipmentFive.save(failOnError:true)
+			
+			equipmentSix.manufacture=manufactureSix
+			equipmentSix.supplier=supplierTwo
+			equipmentSix.warranty=warrantyTwo
+			equipmentSix.addToStatus(status)
+			equipmentSix.save(failOnError:true)
+			
+			equipmentSeven.manufacture=manufactureTwo
+			equipmentSeven.supplier=supplierTwo
+			equipmentSeven.warranty=warrantyThree
+			equipmentSeven.addToStatus(status)
+			equipmentSeven.save(failOnError:true)
+			
+			equipmentEight.manufacture=manufactureSix
+			equipmentEight.supplier=supplierOne
+			equipmentEight.warranty=warrantyFour
+			equipmentEight.addToStatus(status)
+			equipmentEight.save(failOnError:true)
+			
+			equipmentNine.manufacture=manufactureFour
+			equipmentNine.supplier=supplierOne
+			equipmentNine.warranty=warrantyOne
+			equipmentNine.addToStatus(status)
+			equipmentNine.save(failOnError:true)
+			
+			equipmentTen.manufacture=manufactureTwo
+			equipmentTen.supplier=supplierOne
+			equipmentTen.warranty=warrantyFour
+			equipmentTen.addToStatus(status)
+			equipmentTen.save(failOnError:true)
 		}
-		
-		
 	}
 	
 	

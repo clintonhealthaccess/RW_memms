@@ -6,9 +6,9 @@ import java.util.Set;
 
 public enum UserType {
 	
-	PERSON("user_person", ""), 
-	SYSTEM("user_system", ""), 
-	OTHER("user_other", "");
+	PERSON("user-person", ""), 
+	SYSTEM("user-system", ""), 
+	OTHER("user-other", "");
 	
 	protected Set<String> defaultPermissions;
 	protected Set<String> defaultRoles;
