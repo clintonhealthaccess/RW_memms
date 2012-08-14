@@ -3,7 +3,7 @@
 	<select name="${name}">
 		<g:each in="${values}" var="enume">
 			<option value="${enume.key}" ${enume.key+''==fieldValue(bean:bean, field:field+'.key')+''?'selected="selected"':''}>
-				${enume}
+				${enume.key} ${enume}
 			</option>
 		</g:each>
 	</select>

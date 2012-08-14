@@ -11,6 +11,7 @@ import org.chai.memms.AbstractEntityController;
  */
 class DepartmentController extends AbstractEntityController{
 	def departmentService
+	def languageService
 	
 	def getEntity(def id) {
 		return Department.get(id);
@@ -46,7 +47,7 @@ class DepartmentController extends AbstractEntityController{
 	
 	def getModel(def entity) {
 		[
-			model:entity
+			department:entity
 		]
 	}
 	
@@ -62,19 +63,18 @@ class DepartmentController extends AbstractEntityController{
 			])
 	}
 	
-	def getAjaxData={
-//		def clazz = Department.class		
-//		def departments = departmentService.searchDepartment(clazz, params['term'], [:])
-//		render(contentType:"text/json") {
-//			elements = array {
-//				departments.each { department ->
-//					elem (
-//						key: department.id,
-//						value: department.names
-//					)
-//				}
-//			}
-//		}
+	def getAjaxData={	
+		List<Department> departments = departmentService.searchDepartment(params['term'], [:])
+		render(contentType:"text/json") {
+			elements = array {
+				departments.each { department ->
+					elem (
+						key: department.id,
+						value: department.getNames(languageService.getCurrentLanguage()) 
+					)
+				}
+			}
+		}
 		
 	}
 }

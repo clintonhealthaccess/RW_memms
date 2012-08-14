@@ -41,6 +41,7 @@ class EquipmentType {
 
 	
 	enum Observation{
+		
 		USEDINMEMMS("useInMemms"),
 		RETIRED("retired"),
 		TOODETAILED("tooDetailed"),
@@ -49,10 +50,8 @@ class EquipmentType {
 		String messageCode = "equipment.type"	
 
 		String name
-		Observation(String name){
-			this.name=name
-		}
-		String getKey() { return name(); }
+		Observation(String name){ this.name=name }
+		String getKey() { return name() }
 	}
 	
 	String code
@@ -82,7 +81,6 @@ class EquipmentType {
 	static mapping = {
 		table "memms_equipment_type"
 		version false
-		tablePerSubclass true
 		descriptions_en type: 'text'
 		descriptions_fr type: 'text'
 		descriptions_rw type: 'text'
@@ -93,7 +91,7 @@ class EquipmentType {
 	}
 	
 	String toString() {
-		return "MedicalEquipmentType[Id=" + id + "code="+code+"]";
+		return "EquipmentType[Id=" + id + "code="+code+"]";
 	}
 	@Override
 	public int hashCode() {

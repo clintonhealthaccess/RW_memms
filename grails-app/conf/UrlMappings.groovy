@@ -9,11 +9,14 @@ class UrlMappings {
 		"/upgrade"(controller:'home', action:"upgrade")
 		
 		
+		
+		
 		"/$controller/$action?/$id?"{
 			constraints {
 				// apply constraints here
 			}
 		}
+		"/warranty/$action/$equipment"(controller:"warranty")
 
 		// homepage in home controller
 		"/"(controller:"home", action:"index")

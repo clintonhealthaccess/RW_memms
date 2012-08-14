@@ -35,9 +35,10 @@ import org.chai.memms.equipment.Equipment;
 import org.chai.memms.equipment.EquipmentModel;
 import org.chai.memms.equipment.EquipmentStatus;
 import org.chai.memms.equipment.EquipmentType
+import org.chai.memms.equipment.Provider
 import org.chai.memms.equipment.EquipmentType.Observation;
-import org.chai.memms.equipment.Warranty;
 import org.chai.memms.equipment.EquipmentStatus.Status;
+import org.chai.memms.equipment.Provider.Type;
 import org.chai.memms.location.CalculationLocation;
 import org.chai.memms.location.DataLocation;
 import org.chai.memms.location.DataLocationType;
@@ -144,31 +145,40 @@ public class Initializer {
 			def typeFour = newEquipmentType("10035", ["en":"Adhesives, Aerosol"],["en":"not used in memms"],Observation.RETIRED,now(),now())
 		}
 		
-		//newEquipmentType(def code, def names,def descriptions, def observation, def addedOn, def lastModifiedOn)
+		if(!Provider.count()){
+			def manufactureContact = newContact(['fr':'Manufacture Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","8988")
+			def manufacture = newProvider("MANCODE",Type.MANUFACTURE,manufactureContact)
+			
+			def supplierContact = newContact(['en':'Supplier Address Descriptions '],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","8988")
+			def supplier = newProvider("SUPCODE",Type.SUPPLIER,supplierContact)
+		}
+		
 		
 		if(!Equipment.count()){
 			def equipmentOne = newEquipment(
-				"SERIAL10"
-				,"2900.23",
+				"SERIAL10",
+				true,
+				false,
+				24,
+				"Room A1",
+				"2900.23",
 				['en':'Equipment Descriptions'],
 				['en':'Equipment Observation'],
 				getDate(22,07,2010),
 				getDate(10,10,2010),
 				now(),
-				EquipmentModel.findByCode('MODEL1'),
+				'MODEL1',
 				DataLocation.findByCode(BUTARO),
 				Department.findByCode('SURGERY'),
-				EquipmentType.findByCode("15819")
+				EquipmentType.findByCode("15819"),
+				Provider.findByCode("MANCODE"),
+				Provider.findByCode("SUPCODE")
 				)
-			def manufacture = newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","8988")
-			def supplier = newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","8988")
-			def contact = newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","8988")
-			def warranty = newWarranty("Code",['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154",getDate(10, 12, 2010),getDate(12, 12, 2012),[:],equipmentOne)
-			def status= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentOne,true)
+						
+			def warrantyContact = newContact(['fr':'Warranty Address Descriptions '],"Warranty","jk@yahoo.com","0768-888-787","Street 654","8988")
+			def warranty = newWarranty(warrantyContact,getDate(10, 12, 2010),getDate(12, 12, 2012),[:])
 			
-			warranty.contact=contact
-			equipmentOne.manufacture=manufacture
-			equipmentOne.supplier=supplier
+			def status= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentOne,true)
 			equipmentOne.warranty=warranty
 			equipmentOne.addToStatus(status)
 			
@@ -181,8 +191,8 @@ public class Initializer {
 	
 	
 	//Models definition
-	public static def newEquipment(def serialNumber,def purchaseCost,def descriptions,def observations,def manufactureDate, def purchaseDate,def registeredOn,def model,def dataLocation,def department, def type){
-		def equipment = new Equipment(serialNumber:serialNumber,purchaseCost:purchaseCost,manufactureDate:manufactureDate,purchaseDate:purchaseDate,registeredOn:registeredOn,model:model,dataLocation:dataLocation,department:department,type:type);
+	public static def newEquipment(def serialNumber,def donation,def obsolete,def expectedLifeTime,def room,def purchaseCost,def descriptions,def observations,def manufactureDate, def purchaseDate,def registeredOn,def model,def dataLocation,def department, def type,def manufacture,def supplier){
+		def equipment = new Equipment(serialNumber:serialNumber,donation:donation,obsolete:obsolete,expectedLifeTime:expectedLifeTime,purchaseCost:purchaseCost,manufactureDate:manufactureDate,purchaseDate:purchaseDate,registeredOn:registeredOn,model:model,dataLocation:dataLocation,department:department,type:type,manufacture:manufacture,supplier:supplier);
 		setLocaleValueInMap(equipment,descriptions,"Descriptions")
 		setLocaleValueInMap(equipment,observations,"Observations")	
 		return equipment.save(failOnError: true)
@@ -198,16 +208,30 @@ public class Initializer {
 		setLocaleValueInMap(contact,addressDescriptions,"AddressDescriptions")
 		return contact;
 	}
-	public static def newWarranty(def code,def contact, def startDate,def endDate,def descriptions,def equipment){
-		def warranty = new Warranty(code:code,contact:contact,startDate:startDate,endDate:endDate,equipment:equipment)
-		setLocaleValueInMap(warranty,descriptions,"Descriptions")
-		return warranty.save(failOnError: true)
+	
+	public static def newProvider(def code, def type, def contact){
+		def provider = new Provider(code:code,type:type,contact:contact)
+		return provider.save(failOnError: true)
 	}
-	public static def newWarranty(def code,def addressDescriptions,def contactName,def email, def phone, def address,def startDate,def endDate,def descriptions,def equipment){
-		def warranty = new Warranty(code:code,contactName:contactName,email:email,phone:phone,address:address,startDate:startDate,endDate:endDate,equipment:equipment)
-		setLocaleValueInMap(warranty,descriptions,"Descriptions")
-		return warranty.save(failOnError: true)
+	
+	public static def newProvider(def code, def type, def addressDescriptions, def contactName,def email, def phone, def street, def poBox){
+		def contact = new Contact(contactName:contactName,email:email,phone:phone,street:street,poBox:poBox)
+		setLocaleValueInMap(contact,addressDescriptions,"AddressDescriptions")
+		return newProvider(code,type,contact)
 	}
+	
+	public static def newWarranty(def contact, def startDate,def endDate,def descriptions){
+		def warranty = new Warranty(contact:contact,startDate:startDate,endDate:endDate)
+		setLocaleValueInMap(warranty,descriptions,"Descriptions")
+		return warranty
+	}
+	
+	public static def newWarranty(def addressDescriptions,def contactName,def email,def phone,def street,def poBox,def startDate,def endDate,def descriptions){
+		def contact = new Contact(contactName:contactName,email:email,phone:phone,street:street,poBox:poBox);
+		setLocaleValueInMap(contact,addressDescriptions,"AddressDescriptions")
+		return newWarranty(contact, startDate,endDate,descriptions)
+	}
+	
 	public static def newEquipmentModel(def names,def code,def descriptions){
 		def model = new EquipmentModel(code:code)
 		setLocaleValueInMap(model,names,"Names")

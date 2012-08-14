@@ -43,7 +43,6 @@ import org.chai.memms.equipment.Department
 import org.chai.memms.equipment.Equipment
 import org.chai.memms.equipment.EquipmentModel
 import org.chai.memms.equipment.EquipmentType
-import org.chai.memms.equipment.Warranty
 import org.chai.memms.location.DataLocation;
 import org.chai.memms.location.DataLocationType;
 import org.chai.memms.location.Location;

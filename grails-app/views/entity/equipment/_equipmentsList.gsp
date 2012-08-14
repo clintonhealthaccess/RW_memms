@@ -1,44 +1,48 @@
 <table>
 	<thead>
 		<tr>
-			<th/>
-			<th><g:message code="model.name.label"/></th>
+			<th></th>
+			<th><g:message code="equipment.model.label"/></th>
 			<th><g:message code="equipment.serial.number.label"/></th>
 			<th><g:message code="equipment.manufacture.label"/></th>
+			<th><g:message code="equipment.supplier.label"/></th>
 			<th><g:message code="datalocation.label"/></th>
 			<th><g:message code="department.label"/></th>
 		</tr>
 	</thead>
 	<tbody>
-		<g:each in="${entities}" status="i" var="model">
+		<g:each in="${entities}" status="i" var="equipment">
 			<tr >
 				<td>
 					<ul>
 						<li>
-							<a href="${createLinkWithTargetURI(controller:'equipment', action:'edit', params:[id: model.id])}">
+							<a href="${createLinkWithTargetURI(controller:'equipment', action:'edit', params:[id: equipment.id])}">
 								<g:message code="default.link.edit.label" />
 							</a>
 						</li>
 						<li>
-							<a href="${createLinkWithTargetURI(controller:'equipment', action:'delete', params:[id: model.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');"><g:message code="default.link.delete.label" /></a>
+							<a href="${createLinkWithTargetURI(controller:'equipment', action:'delete', params:[id: equipment.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');"><g:message code="default.link.delete.label" /></a>
 						</li>
 						
 					</ul>
 				</td>
 				<td>
-					${model.model.names}
+					${equipment.model}
 				</td>
 				<td>
-					${model.serialNumber}
+					${equipment.serialNumber}
 				</td>
 				<td>
-					${model.manufacture.contactName}
+					${equipment.manufacture.contact.contactName}
 				</td>
 				<td>
-					${model.dataLocation.names}
+					${equipment.supplier.contact.contactName}
 				</td>
 				<td>
-					${model.department.names}
+					${equipment.dataLocation.names}
+				</td>
+				<td>
+					${equipment.department.names}
 				</td>
 			</tr>
 		</g:each>

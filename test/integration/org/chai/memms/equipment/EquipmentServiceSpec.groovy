@@ -27,21 +27,21 @@ class EquipmentServiceSpec extends IntegrationTests{
 		
 		when://Searching by serial number
 		
-		equipments = equipmentService.searchEquipment(Equipment.class, "SERIAL11", [:])
+		equipments = equipmentService.searchEquipment("SERIAL11", [:])
 		then:
 		equipments.size() == 1
 		equipments[0].serialNumber.equals("SERIAL11")
 		
 		when://Searching by observation
 		
-		equipments = equipmentService.searchEquipment(Equipment.class, "one", [:])
+		equipments = equipmentService.searchEquipment("one", [:])
 		then:
 		equipments.size() == 1
 		equipments[0].getObservations(new Locale("en")).equals('Equipment Observation one')
 		
 		when://Searching by description
 		
-		equipments = equipmentService.searchEquipment(Equipment.class, "Two", [:])
+		equipments = equipmentService.searchEquipment("Two", [:])
 		then:
 		equipments.size() == 1
 		equipments[0].getObservations(new Locale("en")).equals('Equipment Observation Two')

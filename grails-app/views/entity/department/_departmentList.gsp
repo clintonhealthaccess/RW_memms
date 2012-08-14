@@ -8,29 +8,29 @@
 		</tr>
 	</thead>
 	<tbody>
-		<g:each in="${entities}" status="i" var="model">
+		<g:each in="${entities}" status="i" var="department">
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 				<td>
 					<ul>
 						<li>
-							<a href="${createLinkWithTargetURI(controller:'department', action:'edit', params:[id: model.id])}">
+							<a href="${createLinkWithTargetURI(controller:'department', action:'edit', params:[id: department.id])}">
 								<g:message code="default.link.edit.label" />
 							</a>
 						</li>
 						<li>
-							<a href="${createLinkWithTargetURI(controller:'department', action:'delete', params:[id: model.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');"><g:message code="default.link.delete.label" /></a>
+							<a href="${createLinkWithTargetURI(controller:'department', action:'delete', params:[id: department.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');"><g:message code="default.link.delete.label" /></a>
 						</li>
 						
 					</ul>
 				</td>
 				<td>
-					${model.code}
+					${department.code}
 				</td>
 				<td>
-					${model.names}
+					${department.names}
 				</td>
 				<td>
-					${model.descriptions}
+					${department.descriptions}
 				</td>
 			</tr>
 		</g:each>

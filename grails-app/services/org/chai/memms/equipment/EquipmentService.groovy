@@ -50,12 +50,13 @@ class EquipmentService {
 	def languageService;
 	def sessionFactory;
 	
-	public <T extends Equipment> List<Equipment> searchEquipment(Class<T> clazz, String text, Map<String, String> params) {
-		def criteria = getSearchCriteria(clazz, text)
-		
+	public List<Equipment> searchEquipment(String text, Map<String, String> params) {
+		def criteria = getSearchCriteria(text)
+		List<Equipment> equipments = []
 		if (params['offset'] != null) criteria.setFirstResult(params['offset'])
 		if (params['max'] != null) criteria.setMaxResults(params['max'])
-		List<Equipment> equipments = criteria.addOrder(Order.asc("id")).list()
+		if (params['order'] != null) equipments criteria.addOrder(Order.asc(params['order'])).list()
+		else equipments = criteria.addOrder(Order.asc("id")).list()
 		
 		StringUtils.split(text).each { chunk ->
 			equipments.retainAll { equipment ->
@@ -67,10 +68,10 @@ class EquipmentService {
 		return equipments
 	}
 	
-	private <T extends Equipment> Criteria getSearchCriteria(Class<T> clazz, String text) {
+	private Criteria getSearchCriteria(String text) {
 		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
 		def dbFieldObservations = 'observations_'+languageService.getCurrentLanguagePrefix();
-		def criteria = sessionFactory.getCurrentSession().createCriteria(clazz)
+		def criteria = sessionFactory.getCurrentSession().createCriteria(Equipment.class)
 		
 		def textRestrictions = Restrictions.conjunction()
 		StringUtils.split(text).each { chunk ->

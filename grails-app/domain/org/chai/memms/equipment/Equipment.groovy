@@ -28,6 +28,7 @@
 package org.chai.memms.equipment
 
 import org.chai.memms.Contact
+import org.chai.memms.Warranty;
 import org.chai.memms.location.DataLocation;
 
 import i18nfields.I18nFields
@@ -43,9 +44,15 @@ public class Equipment {
 	String purchaseCost
 	String descriptions
 	String observations
+	String model
+	String room
 	
-	Contact manufacture
-	Contact supplier
+	Integer expectedLifeTime
+	boolean donation
+	boolean obsolete
+	
+	Provider manufacture
+	Provider supplier
 	Warranty warranty
 	
 	Date manufactureDate
@@ -53,36 +60,34 @@ public class Equipment {
 	Date registeredOn
 	
 	static hasMany = [status: EquipmentStatus]
-	
-	
-	static belongsTo = [model: EquipmentModel, dataLocation: DataLocation, department: Department, type: EquipmentType]
-	
-	
+	static belongsTo = [dataLocation: DataLocation, department: Department, type: EquipmentType]
 	static i18nFields = ["observations","descriptions"]
-	static embedded=["manufacture","supplier"]
-	
+	static embedded = ["warranty"]
 	
 	static constraints = {
 		
-		supplier nullable: true
+		supplier nullable: false
+		manufacture nullable: false
 		warranty nullable: true
-		manufacture nullable: true
 		
 		serialNumber nullable: false, blank: false,  unique: true
 		purchaseCost nullable: false, blank: false
+		expectedLifeTime nullable: false, blank: false
+		room nullable: true, blank: true
 		
 		manufactureDate nullable: false, blank: false, validator:{it <= new Date()}
 		purchaseDate nullable: false, blank: false, validator:{it <= new Date()}
 		
 		observations nullable: true, blank: true
 		descriptions nullable: true, blank: true
+		donation nullable: false
+		obsolete nullable: false
 		
 	}
 	
 	static mapping = {
 		table "memms_equipment"
 		version false
-		tablePerSubclass true
 		observations_en type: 'text'
 		observations_fr type: 'text'
 		observations_rw type: 'text'
@@ -92,8 +97,15 @@ public class Equipment {
 		
 	}
 	
+	 def getCurrentStatus = {
+		for(def stat: status)
+		   if(stat.isCurrent())
+		   		return stat;
+	   return null;
+	}
+	
 	String toString() {
-		return "MedicalEquipment[Id=" + id + "]";
+		return "Equipment[id=" + id + "]";
 	}
 	@Override
 	public int hashCode() {

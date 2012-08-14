@@ -39,26 +39,23 @@ class EquipmentStatus {
 	
 	enum Status{
 		
-		INSTOCK("inStock"),
 		OPERATIONAL("operational"),
+		INSTOCK("inStock"),
 		UNDERMAINTENANCE("underMaintenance"),
 		FORDISPOSAL("forDisposal"),
 		DISPOSED("disposed")
 		
 		String messageCode = "equipment.status"
-		String name
-		Status(String name){
-			this.name=name
-		}
 		
-		String getKey() { return name(); }
-
+		final String name
+		Status(String name){ this.name=name }
+		String getKey() { return name() }
 	}
 	
 	Date statusChangeDate;
 	User changedBy
 	Status value
-	boolean current = false
+	boolean current
 	
 	static belongsTo = [equipment:Equipment]
 	

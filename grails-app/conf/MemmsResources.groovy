@@ -62,5 +62,12 @@ modules = {
 		resource url: '/js/jquery/datepicker/glDatePicker.js', bundle: 'core'
 		resource url: '/js/jquery/datepicker/datepicker.css', bundle: 'core'
 	}
+	
+	popup {
+		dependsOn 'jquery'
+
+		resource url: '/js/jquery/popup/popup.js', bundle: 'core'
+		resource url: '/js/jquery/popup/popup.css', bundle: 'core'
+	}
 
 }

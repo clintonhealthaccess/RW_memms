@@ -59,6 +59,11 @@ class Department {
 		descriptions_fr type: "text"
 		descriptions_rw type: "text"
 	}
+	
+	@Override
+	public String toString() {
+		return "Department [id="+id+"code=" + code + "]";
+	}
 
 	@Override
 	public int hashCode() {

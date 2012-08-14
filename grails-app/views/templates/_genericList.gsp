@@ -12,15 +12,19 @@
 		  			<g:else>
 		  				<g:render template="${addTemplate}"/>
 		  			</g:else>
+		  			<g:if test="${grailsApplication.getArtefactByLogicalPropertyName('Controller', controllerName).hasProperty('export')}">
 		  			&nbsp;
-		  			<a href="${createLinkWithTargetURI(controller: controllerName, action:'exporter')+(request.queryString==null?'':'&'+request.queryString)}">
-	  					<g:message code="default.export.label" />
-	  				</a>
-	  				&nbsp;
-	  				<g:if test="${entityClass != null}">
-		  				<a href="${createLinkWithTargetURI(controller: 'entityImporter', action:'importer', params:[entityClass: entityClass.name])+(request.queryString==null?'':'&'+request.queryString)}">
-		  					<g:message code="default.import.label" />
+			  			<a href="${createLinkWithTargetURI(controller: controllerName, action:'exporter')+(request.queryString==null?'':'&'+request.queryString)}">
+		  					<g:message code="default.export.label" />
 		  				</a>
+	  				</g:if>
+	  				<g:if test="${grailsApplication.getArtefactByLogicalPropertyName('Controller', controllerName).hasProperty('import')}">
+	  				&nbsp;
+		  				<g:if test="${entityClass != null}">
+			  				<a href="${createLinkWithTargetURI(controller: 'entityImporter', action:'importer', params:[entityClass: entityClass.name])+(request.queryString==null?'':'&'+request.queryString)}">
+			  					<g:message code="default.import.label" />
+			  				</a>
+		  				</g:if>
 	  				</g:if>
 		     	</span>
 	     	</g:if>

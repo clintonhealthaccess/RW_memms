@@ -25,10 +25,9 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.equipment
+package org.chai.memms
 
 
-import org.chai.memms.Contact;
 
 import i18nfields.I18nFields
 /**
@@ -40,16 +39,13 @@ class Warranty{
 	
 	Date startDate
 	Date endDate
-	String code
 	String descriptions
 	Contact contact
 	
-	static belongsTo = [equipment:Equipment]
-	static i18nFields =["descriptions"]
+	static i18nFields = ["descriptions"]
 	static embedded = ["contact"]
 	
 	static constraints = {
-		code nullable: false, blank:false, unique: true
 		startDate nullable:false, validator:{it <= new Date()} 
 		endDate nullable:false, validator: { val, obj -> 
 			return (val >= obj.startDate)
@@ -59,20 +55,17 @@ class Warranty{
 	}
 	
 	static mapping = {
-		table "memms_equipment_warranty"
+		version false
 		descriptions_en type: "text"
 		descriptions_fr type: "text"
 		descriptions_rw type: "text"
 	}
-	
-	String toString() {
-		return "EquipmentWarranty[Id=" + id + ", Code=" + code + "]";
-	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((code == null) ? 0 : code.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
 	@Override
@@ -84,13 +77,12 @@ class Warranty{
 		if (getClass() != obj.getClass())
 			return false;
 		Warranty other = (Warranty) obj;
-		if (code == null) {
-			if (other.code != null)
+		if (id == null) {
+			if (other.id != null)
 				return false;
-		} else if (!code.equals(other.code))
+		} else if (!id.equals(other.id))
 			return false;
 		return true;
-	}
-
+	}	
 	
 }
