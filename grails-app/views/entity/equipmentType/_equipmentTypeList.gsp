@@ -7,8 +7,8 @@
 			<th><g:message code="entity.name.label"/></th>
 			<th><g:message code="entity.description.label"/></th>
 			<th><g:message code="entity.observation.label"/></th>
-			<th><g:message code="type.addon.label"/></th>
-			<th><g:message code="type.lastmodifiedon.label"/></th>
+			<th><g:message code="equipment.type.addedOn.label"/></th>
+			<th><g:message code="equipment.type.lastModifiedOn.label"/></th>
 		</tr>
 	</thead>
 	<tbody>

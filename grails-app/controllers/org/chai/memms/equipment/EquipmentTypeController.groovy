@@ -49,15 +49,15 @@ class EquipmentTypeController extends AbstractEntityController{
 	}
 
 	def getLabel() {
-		return "equipmentType.label";
+		return "equipment.type.label";
 	}
 
 	def getEntityClass() {
 		return EquipmentType.class;
 	}
 	def deleteEntity(def entity) {
-		if(Equipment.findByModel(entity)!=null)
-			flash.message = message(code: 'type.hasequipment', args: [message(code: getLabel(), default: 'entity'), params.id], default: 'Equipment Type {0} still has associated equipment.')
+		if (entity.equipments.size() != 0)
+			flash.message = message(code: 'equipment.type.hasequipment', args: [message(code: getLabel(), default: 'entity'), params.id], default: 'Equipment Type {0} still has associated equipment.')
 		else
 			super.deleteEntity(entity);
 	}

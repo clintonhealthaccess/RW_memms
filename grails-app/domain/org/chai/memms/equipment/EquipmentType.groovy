@@ -40,8 +40,7 @@ import i18nfields.I18nFields
 class EquipmentType {
 
 	
-	enum Observation{
-		
+	enum Observation{		
 		USEDINMEMMS("useInMemms"),
 		RETIRED("retired"),
 		TOODETAILED("tooDetailed"),

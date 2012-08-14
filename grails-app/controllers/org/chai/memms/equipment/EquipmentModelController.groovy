@@ -46,7 +46,7 @@ class EquipmentModelController extends AbstractEntityController{
 	}
 
 	def getTemplate() {
-		return "/entity/model/createEquipmentModel";
+		return "/entity/model/createModel";
 	}
 
 	def getLabel() {
@@ -57,9 +57,12 @@ class EquipmentModelController extends AbstractEntityController{
 		return EquipmentModel.class;
 	}
 	def deleteEntity(def entity) {
-		if(Equipment.findByModel(entity)!=null)
-			flash.message = message(code: 'model.hasequipment', args: [message(code: getLabel(), default: 'entity'), params.id], default: 'Model {0} still has associated equipment.')
-
+		if (entity.equipments.size() != 0) {
+			flash.message = message(code: 'equipment.model.hasequipments', args: [message(code: getLabel(), default: 'entity'), params.id], default: 'Equipment model {0} still has associated equipments.')
+		}
+		else {
+			super.deleteEntity(entity)
+		}
 	}
 	
 	def bindParams(def entity) {
