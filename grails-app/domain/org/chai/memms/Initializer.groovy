@@ -167,7 +167,7 @@ public class Initializer {
 			
 			def manufactureOne = newProvider("ONE",Type.MANUFACTURE,contactOne)
 			def manufactureTwo = newProvider("TWO",Type.MANUFACTURE,sontactTwo)
-			def manufactureThree = newProvider("TREE",Type.MANUFACTURE,contactThree)
+			def manufactureThree = newProvider("THREE",Type.MANUFACTURE,contactThree)
 			def manufactureFour = newProvider("FOUR",Type.MANUFACTURE,contactFour)
 			
 			
@@ -209,7 +209,7 @@ public class Initializer {
 			equipmentOne.save(failOnError:true)
 
 			
-			def equipmentTwo = newEquipment("SERIAL11",true,false,12,"34900.23",['en':'Equipment Descriptions two'],['fr':'Equipment Observation two'],
+			def equipmentTwo = newEquipment("SERIAL11",true,false,12,"Room A1","34900.23",['en':'Equipment Descriptions two'],['fr':'Equipment Observation two'],
 				getDate(12,01,2009),getDate(10,10,2009),now(),
 				'MODEL2',
 				DataLocation.findByCode(KIVUYE),
@@ -219,13 +219,13 @@ public class Initializer {
 				Provider.findByCode("FIVE")
 				)
 			
-			def warrantyTwo = newWarranty(['en':'warranty one'],'warranty name1','email1@gmail.com',"0768-111-787","Street 154",getDate(10, 12, 2010),getDate(12, 12, 2012),[:],equipmentTwo)
+			def warrantyTwo = newWarranty(['en':'warranty one'],'warranty name1','email1@gmail.com',"0768-111-787","Street 154","898",getDate(10, 12, 2010),getDate(12, 12, 2012),[:])
 			def statusTwo= newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentTwo,true)
 			equipmentTwo.warranty=warrantyTwo
 			equipmentTwo.addToStatus(statusTwo)
 			equipmentTwo.save(failOnError:true)
 			
-			def equipmentThree = newEquipment("SERIAL12",false,true,34,"98700.23",['en':'Equipment Descriptions three'],['en':'Equipment Observation three'],
+			def equipmentThree = newEquipment("SERIAL12",false,true,34,"Room A1","98700.23",['en':'Equipment Descriptions three'],['en':'Equipment Observation three'],
 				getDate(14,8,2008),getDate(10,01,2009),now(),
 				'MODEL3',
 				DataLocation.findByCode(BUNGWE),
@@ -235,14 +235,14 @@ public class Initializer {
 				Provider.findByCode("FIVE")
 				)
 			
-			def warrantyThree = newWarranty(['en':'warranty two'],'warranty name2','email2@gmail.com',"0768-222-787","Street 154",getDate(10, 12, 2010),getDate(12, 12, 2012),[:],equipmentThree)
+			def warrantyThree = newWarranty(['en':'warranty two'],'warranty name2','email2@gmail.com',"0768-222-787","Street 154","88",getDate(10, 12, 2010),getDate(12, 12, 2012),[:])
 			def statusThree= newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentThree,true)
 			equipmentThree.warranty=warrantyTwo
 			equipmentThree.addToStatus(statusTwo)
 			equipmentThree.save(failOnError:true)
 			
 			
-			def equipmentFour = newEquipment("SERIAL13",true,false,12,"78900.23",['en':'Equipment Descriptions four'],['en':'Equipment Observation four'],
+			def equipmentFour = newEquipment("SERIAL13",true,false,12,"Room A1","78900.23",['en':'Equipment Descriptions four'],['en':'Equipment Observation four'],
 				getDate(18,2,2011),getDate(10,10,2011),now(),
 				'MODEL2',
 				DataLocation.findByCode(KIVUYE),
@@ -252,7 +252,7 @@ public class Initializer {
 				Provider.findByCode("SEVEN")
 				)
 			
-			def warrantyFour = newWarranty(['en':'warranty two'],'warranty name2','email2@gmail.com',"0768-222-787","Street 154",getDate(10, 12, 2010),getDate(12, 12, 2012),[:],equipmentFour)
+			def warrantyFour = newWarranty(['en':'warranty two'],'warranty name2','email2@gmail.com',"0768-222-787","Street 154","888",getDate(10, 12, 2010),getDate(12, 12, 2012),[:])
 			def statusFour = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentFour,false)
 			def statusFourOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentFour,true)
 			equipmentFour.warranty=warrantyFour
@@ -260,7 +260,7 @@ public class Initializer {
 			equipmentFour.addToStatus(statusFourOne)
 			equipmentFour.save(failOnError:true)
 			
-			def equipmentFive = newEquipment("SERIAL14",true,true,34,"287e0.23",['en':'Equipment Descriptions five'],['en':'Equipment Observation five'],
+			def equipmentFive = newEquipment("SERIAL14",true,true,34,"Room A1","287e0.23",['en':'Equipment Descriptions five'],['en':'Equipment Observation five'],
 				getDate(11,8,2008),getDate(11,10,2009),now(),
 				'MODEL1',
 				DataLocation.findByCode(BUNGWE),
@@ -270,7 +270,7 @@ public class Initializer {
 				Provider.findByCode("SIX")
 				)
 			
-			def warrantyFive = newWarranty(['en':'warranty Five'],'warranty name3','email3@gmail.com',"0768-333-787","Street 154",getDate(10, 12, 2010),getDate(12, 12, 2012),[:],equipmentFive)
+			def warrantyFive = newWarranty(['en':'warranty Five'],'warranty name3','email3@gmail.com',"0768-333-787","Street 154","988",getDate(10, 12, 2010),getDate(12, 12, 2012),[:])
 			def statusFive= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentFive,false)
 			def statusFiveOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentFive,false)
 			def statusFiveTwo = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentFive,true)
@@ -280,7 +280,7 @@ public class Initializer {
 			equipmentFour.addToStatus(statusFiveTwo)
 			equipmentFour.save(failOnError:true)
 			
-			def equipmentSix = newEquipment("SERIAL15",false,true,4,"290540.23",['en':'Equipment Descriptions six'],['en':'Equipment Observation six'],
+			def equipmentSix = newEquipment("SERIAL15",false,true,4,"Room A1","290540.23",['en':'Equipment Descriptions six'],['en':'Equipment Observation six'],
 				getDate(1,7,2000),getDate(12,7,2001),now(),
 				'MODEL3',
 				DataLocation.findByCode(BUTARO),
@@ -290,7 +290,7 @@ public class Initializer {
 				Provider.findByCode("SIX")
 				)
 			
-			def warrantySix = newWarranty(['en':'warranty four'],'warranty name4','email4@gmail.com',"0768-444-787","Street 154",getDate(10, 12, 2010),getDate(12, 12, 2012),[:],equipmentSix)
+			def warrantySix = newWarranty(['en':'warranty four'],'warranty name4','email4@gmail.com',"0768-444-787","Street 154","8988",getDate(10, 12, 2010),getDate(12, 12, 2012),[:])
 			def statusSix= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentSix,false)
 			def statusSixOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentSix,false)
 			def statusSixTwo = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentSix,true)
