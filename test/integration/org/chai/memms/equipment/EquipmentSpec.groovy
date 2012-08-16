@@ -54,7 +54,7 @@ class EquipmentSpec extends IntegrationTests{
 		def equipment = new Equipment(serialNumber:"test123", purchaseCost:"1,200",manufactureDate:Initializer.getDate(22,07,2010),
 			purchaseDate:Initializer.getDate(22,07,2010),registeredOn:Initializer.getDate(22,07,2010), model:"equipmentModel", department:department,
 			 dataLocation:DataLocation.list().first(),donation:true,obsolete:false,expectedLifeTime:20,
-			 observations:['en':'Equipment Observation'],descriptions:['en':'Equipment Descriptions'], type:equipmentType)
+			 descriptions:['en':'Equipment Descriptions'], type:equipmentType)
 
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
@@ -85,8 +85,7 @@ class EquipmentSpec extends IntegrationTests{
 		when:
 		def equipment = new Equipment(purchaseCost:"1,200",manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),
 				registeredOn:Initializer.getDate(22,07,2010), model:"equipmentModel", department:department,donation:true,obsolete:false,expectedLifeTime:20,
-				dataLocation:DataLocation.list().first(),
-				observations:['en':'Equipment Observation'],descriptions:['en':'Equipment Descriptions'], type:equipmentType)
+				dataLocation:DataLocation.list().first(),descriptions:['en':'Equipment Descriptions'], type:equipmentType)
 
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
@@ -116,8 +115,7 @@ class EquipmentSpec extends IntegrationTests{
 		when:
 		def equipment = new Equipment(serialNumber:"test123",manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),
 				registeredOn:Initializer.getDate(22,07,2010), model:"equipmentModel", department:department,donation:true,obsolete:false,expectedLifeTime:20,
-				dataLocation:DataLocation.list().first(),
-				observations:['en':'Equipment Observation'],descriptions:['en':'Equipment Descriptions'],type:equipmentType)
+				dataLocation:DataLocation.list().first(),descriptions:['en':'Equipment Descriptions'],type:equipmentType)
 
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
@@ -148,17 +146,13 @@ class EquipmentSpec extends IntegrationTests{
 		def equipmentType = Initializer.newEquipmentType(CODE(15810), ["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURE,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
-		Initializer.newEquipment("test123",true,false,30,"ROOM A1","3,600",['en':"testDescription"],['en':'Equipment Observation'],Initializer.getDate(22,07,2010), Initializer.getDate(22,07,2010),
+		Initializer.newEquipment("test123",true,false,30,"ROOM A1","3,600",['en':"testDescription"],Initializer.getDate(22,07,2010), Initializer.getDate(22,07,2010),
 				Initializer.getDate(22,07,2010),"equipmentModel",DataLocation.list().first(),department, equipmentType,manufacture,supplier)
 		when:
 		def equipment = new Equipment(serialNumber:"test123",purchaseCost:"1,200",manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),
 				registeredOn:Initializer.getDate(22,07,2010), model:"equipmentModel", department:department, donation:true,obsolete:false,expectedLifeTime:20,
-				dataLocation:DataLocation.list().first(),
-				observations:['en':'Equipment Observation'],descriptions:['en':'Equipment Descriptions'],type:equipmentType)
+				dataLocation:DataLocation.list().first(),descriptions:['en':'Equipment Descriptions'],type:equipmentType)
 
-		
-		
-		
 		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
 		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),Initializer.getDate(12, 12, 2012),[:])
 
@@ -182,8 +176,7 @@ class EquipmentSpec extends IntegrationTests{
 		when:
 		def equipment = new Equipment(serialNumber:"test123", purchaseCost:"1,200",manufactureDate:Initializer.now().next(),purchaseDate:Initializer.getDate(22,07,2010),
 				registeredOn:Initializer.getDate(22,07,2010), model:"equipmentModel", department:department, donation:true,obsolete:false,expectedLifeTime:20,
-				dataLocation:DataLocation.list().first(),
-				observations:['en':'Equipment Observation'],descriptions:['en':'Equipment Descriptions'],type:equipmentType)
+				dataLocation:DataLocation.list().first(),descriptions:['en':'Equipment Descriptions'],type:equipmentType)
 
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
@@ -213,8 +206,7 @@ class EquipmentSpec extends IntegrationTests{
 		when:
 		def equipment = new Equipment(serialNumber:"test123", purchaseCost:"1,200",manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.now().next(),
 				registeredOn:Initializer.getDate(22,07,2010), model:"equipmentModel", department:department, donation:true,obsolete:false,expectedLifeTime:20,
-				dataLocation:DataLocation.list().first(),
-				observations:['en':'Equipment Observation'],descriptions:['en':'Equipment Descriptions'],type:equipmentType)
+				dataLocation:DataLocation.list().first(),descriptions:['en':'Equipment Descriptions'],type:equipmentType)
 
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")

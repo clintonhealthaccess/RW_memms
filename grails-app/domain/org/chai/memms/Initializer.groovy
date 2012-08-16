@@ -180,18 +180,8 @@ public class Initializer {
 		
 		
 		if(!Equipment.count()){
-			def equipmentOne = newEquipment(
-				"SERIAL01",
-				true,
-				false,
-				24,
-				"Room A1",
-				"2900.23",
-				['en':'Equipment Descriptions'],
-				['en':'Equipment Observation'],
-				getDate(22,07,2010),
-				getDate(10,10,2010),
-				now(),
+			def equipmentOne = newEquipment("SERIAL10",true,false,24,"Room A1","2900.23",['en':'Equipment Descriptions'],
+				getDate(22,07,2010),getDate(10,10,2010),now(),
 				'MODEL1',
 				DataLocation.findByCode(BUTARO),
 				Department.findByCode('SURGERY'),
@@ -208,8 +198,7 @@ public class Initializer {
 			equipmentOne.addToStatus(statusOne)
 			equipmentOne.save(failOnError:true)
 
-			
-			def equipmentTwo = newEquipment("SERIAL02",true,false,12,"Room A1","34900.23",['en':'Equipment Descriptions two'],['fr':'Equipment Observation two'],
+			def equipmentTwo = newEquipment("SERIAL11",true,false,12,"Room A1","34900.23",['en':'Equipment Descriptions two'],
 				getDate(12,01,2009),getDate(10,10,2009),now(),
 				'MODEL2',
 				DataLocation.findByCode(KIVUYE),
@@ -225,7 +214,7 @@ public class Initializer {
 			equipmentTwo.addToStatus(statusTwo)
 			equipmentTwo.save(failOnError:true)
 			
-			def equipmentThree = newEquipment("SERIAL03",false,true,34,"Room A1","98700.23",['en':'Equipment Descriptions three'],['en':'Equipment Observation three'],
+			def equipmentThree = newEquipment("SERIAL12",false,true,34,"Room A1","98700.23",['en':'Equipment Descriptions three'],
 				getDate(14,8,2008),getDate(10,01,2009),now(),
 				'MODEL3',
 				DataLocation.findByCode(BUNGWE),
@@ -241,8 +230,7 @@ public class Initializer {
 			equipmentThree.addToStatus(statusTwo)
 			equipmentThree.save(failOnError:true)
 			
-			
-			def equipmentFour = newEquipment("SERIAL04",true,false,12,"Room A1","78900.23",['en':'Equipment Descriptions four'],['en':'Equipment Observation four'],
+			def equipmentFour = newEquipment("SERIAL13",true,false,12,"Room A1","78900.23",['en':'Equipment Descriptions four'],
 				getDate(18,2,2011),getDate(10,10,2011),now(),
 				'MODEL2',
 				DataLocation.findByCode(KIVUYE),
@@ -260,7 +248,7 @@ public class Initializer {
 			equipmentFour.addToStatus(statusFourOne)
 			equipmentFour.save(failOnError:true)
 			
-			def equipmentFive = newEquipment("SERIAL05",true,true,34,"Room A1","287e0.23",['en':'Equipment Descriptions five'],['en':'Equipment Observation five'],
+			def equipmentFive = newEquipment("SERIAL14",true,true,34,"Room A1","28723",['en':'Equipment Descriptions five'],
 				getDate(11,8,2008),getDate(11,10,2009),now(),
 				'MODEL1',
 				DataLocation.findByCode(BUNGWE),
@@ -280,7 +268,7 @@ public class Initializer {
 			equipmentFour.addToStatus(statusFiveTwo)
 			equipmentFour.save(failOnError:true)
 			
-			def equipmentSix = newEquipment("SERIAL06",false,true,4,"Room A1","290540.23",['en':'Equipment Descriptions six'],['en':'Equipment Observation six'],
+			def equipmentSix = newEquipment("SERIAL15",false,true,4,"Room A1","290540.23",['en':'Equipment Descriptions six'],
 				getDate(1,7,2000),getDate(12,7,2001),now(),
 				'MODEL3',
 				DataLocation.findByCode(BUTARO),
@@ -386,10 +374,9 @@ public class Initializer {
 	
 	
 	//Models definition
-	public static def newEquipment(def serialNumber,def donation,def obsolete,def expectedLifeTime,def room,def purchaseCost,def descriptions,def observations,def manufactureDate, def purchaseDate,def registeredOn,def model,def dataLocation,def department, def type,def manufacture,def supplier){
-		def equipment = new Equipment(serialNumber:serialNumber,donation:donation,obsolete:obsolete,expectedLifeTime:expectedLifeTime,purchaseCost:purchaseCost,manufactureDate:manufactureDate,purchaseDate:purchaseDate,registeredOn:registeredOn,model:model,dataLocation:dataLocation,department:department,type:type,manufacture:manufacture,supplier:supplier);
+	public static def newEquipment(def serialNumber,def donation,def obsolete,def expectedLifeTime,def room,def purchaseCost,def descriptions,def manufactureDate, def purchaseDate,def registeredOn,def model,def dataLocation,def department, def type,def manufacture,def supplier){
+		def equipment = new Equipment(serialNumber:serialNumber,donation:donation,obsolete:obsolete,room:room,expectedLifeTime:expectedLifeTime,purchaseCost:purchaseCost,manufactureDate:manufactureDate,purchaseDate:purchaseDate,registeredOn:registeredOn,model:model,dataLocation:dataLocation,department:department,type:type,manufacture:manufacture,supplier:supplier);
 		setLocaleValueInMap(equipment,descriptions,"Descriptions")
-		setLocaleValueInMap(equipment,observations,"Observations")	
 		return equipment.save(failOnError: true)
 	}
 

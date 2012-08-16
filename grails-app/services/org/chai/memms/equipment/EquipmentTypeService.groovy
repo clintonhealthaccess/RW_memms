@@ -33,6 +33,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils
 import org.chai.memms.equipment.EquipmentType
+import org.chai.memms.equipment.Provider.Type;
 import org.chai.memms.util.Utils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.MatchMode
@@ -47,18 +48,20 @@ class EquipmentTypeService {
 	def languageService;
 	def sessionFactory;
 	
-    def serviceMethod() {
-    }
-	
-	public <T extends EquipmentType> List<EquipmentType> searchEquipmentType(Class<T> clazz, String text, Map<String, String> params) {
-		def criteria = getSearchCriteria(clazz, text)
+	Integer countEquipmentType(String text) {
+		return getSearchCriteria(text).setProjection(Projections.count("id")).uniqueResult()
+	}
+ 
+	public List<EquipmentType> searchEquipmentType(String text, Map<String, String> params) {
+		def criteria = getSearchCriteria(text)
 		
 		if (params['offset'] != null) criteria.setFirstResult(params['offset'])
 		if (params['max'] != null) criteria.setMaxResults(params['max'])
-		List<EquipmentType> equipmentTypes = criteria.addOrder(Order.asc("id")).list()
+		List<EquipmentType> equipmentTypes = criteria.addOrder(Order.desc("id")).list()
 		
 		StringUtils.split(text).each { chunk ->
 			equipmentTypes.retainAll { equipmentType ->
+				Utils.matches(chunk, equipmentType.getDescriptions(languageService.getCurrentLanguage())) ||
 				Utils.matches(chunk, equipmentType.getNames(languageService.getCurrentLanguage())) ||
 				Utils.matches(chunk, equipmentType.code)
 			}
@@ -66,15 +69,17 @@ class EquipmentTypeService {
 		return equipmentTypes
 	}
 	
-	private <T extends EquipmentType> Criteria getSearchCriteria(Class<T> clazz, String text) {
-		def dbFieldName = 'names_'+languageService.getCurrentLanguagePrefix();
-		def criteria = sessionFactory.getCurrentSession().createCriteria(clazz)
+	private Criteria getSearchCriteria(String text) {
+		def dbFieldNames = 'names_'+languageService.getCurrentLanguagePrefix();
+		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
+		def criteria = sessionFactory.getCurrentSession().createCriteria(EquipmentType.class)
 		
 		def textRestrictions = Restrictions.conjunction()
 		StringUtils.split(text).each { chunk ->
 			def disjunction = Restrictions.disjunction();
 			disjunction.add(Restrictions.ilike("code", chunk, MatchMode.ANYWHERE))
-			disjunction.add(Restrictions.ilike(dbFieldName, chunk, MatchMode.ANYWHERE))
+			disjunction.add(Restrictions.ilike(dbFieldNames, chunk, MatchMode.ANYWHERE))
+			disjunction.add(Restrictions.ilike(dbFieldDescriptions, chunk, MatchMode.ANYWHERE))
 			textRestrictions.add(disjunction)
 		}
 		criteria.add(textRestrictions)

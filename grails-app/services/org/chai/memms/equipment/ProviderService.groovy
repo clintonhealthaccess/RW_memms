@@ -29,55 +29,76 @@ package org.chai.memms.equipment
 
 import java.util.List;
 import java.util.Map;
-import org.chai.memms.equipment.Equipment
 
+import org.apache.commons.lang.StringUtils;
+import org.chai.memms.equipment.Provider.Type;
+import org.chai.memms.location.CalculationLocation;
 import org.chai.memms.util.Utils;
 import org.hibernate.Criteria;
-import org.hibernate.criterion.MatchMode
-import org.hibernate.criterion.Order
-import org.hibernate.criterion.Projections
-import org.hibernate.criterion.Restrictions
-import org.apache.commons.lang.StringUtils
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 
 /**
  * @author Jean Kahigiso M.
  *
  */
-class EquipmentService {
-	
+class ProviderService {
 	static transactional = true
 	
 	def languageService;
 	def sessionFactory;
 	
-	public List<Equipment> searchEquipment(String text, Map<String, String> params) {
-		def criteria = getSearchCriteria(text)
-		List<Equipment> equipments = []
-		if (params['offset'] != null) criteria.setFirstResult(params['offset'])
-		if (params['max'] != null) criteria.setMaxResults(params['max'])
-		if (params['order'] != null) equipments criteria.addOrder(Order.asc(params['order'])).list()
-		else equipments = criteria.addOrder(Order.asc("id")).list()
-		
-		StringUtils.split(text).each { chunk ->
-			equipments.retainAll { equipment ->
-				Utils.matches(chunk, equipment.serialNumber) ||
-				Utils.matches(chunk, equipment.getDescriptions(languageService.getCurrentLanguage())) ||
-				Utils.matches(chunk, equipment.getObservations(languageService.getCurrentLanguage())) 
-			}
-		}
-		return equipments
+	
+	public List<Provider> getManufacturesOnly(){
+		return Provider.findAllByType(Type.MANUFACTURE)
+	}
+	public List<Provider> getSuppliersOnly(){
+		return Provider.findAllByType(Type.SUPPLIER)
+	}
+	public List<Provider> getSuppliersAndManufactures(){
+		return Provider.findAllByTypeNotEqual(Type.BOTH)
 	}
 	
-	private Criteria getSearchCriteria(String text) {
-		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
-		def dbFieldObservations = 'observations_'+languageService.getCurrentLanguagePrefix();
-		def criteria = sessionFactory.getCurrentSession().createCriteria(Equipment.class)
+	public List<Provider> getSuppliersAndBoth(){
+		return Provider.findAllByTypeNotEqual(Type.MANUFACTURE)
+	}
+
+	public List<Provider> getManufacturesAndBoth(){
+		return Provider.findAllByTypeNotEqual(Type.SUPPLIER)
+	}
+	
+	Integer countProvider(Type type, String text) {
+		return getSearchCriteria(type, text).setProjection(Projections.count("id")).uniqueResult()
+	}
+	public List<Provider> searchProvider(Type type,String text, Map<String, String> params) {
+		def criteria = getSearchCriteria(type,text)
+		List<Provider> providers = []
+		if (params['offset'] != null) criteria.setFirstResult(params['offset'])
+		if (params['max'] != null) criteria.setMaxResults(params['max'])
+		if (params['order'] != null) providers criteria.addOrder(Order.asc(params['order'])).list()
+		else providers = criteria.addOrder(Order.asc("id")).list()
 		
+		StringUtils.split(text).each { chunk ->
+			providers.retainAll { provider ->
+				Utils.matches(chunk, provider.code) ||
+				Utils.matches(chunk, provider.contact.contactName)
+			}
+		}
+		return providers
+	}
+	
+	private Criteria getSearchCriteria(Type type,String text) {
+		def criteria = sessionFactory.getCurrentSession().createCriteria(Provider.class)
 		def textRestrictions = Restrictions.conjunction()
 		StringUtils.split(text).each { chunk ->
 			def disjunction = Restrictions.disjunction();
-			disjunction.add(Restrictions.ilike("serialNumber", chunk, MatchMode.ANYWHERE))
-			disjunction.add(Restrictions.ilike(dbFieldDescriptions, chunk, MatchMode.ANYWHERE))
+			disjunction.add(Restrictions.ilike("code", chunk, MatchMode.ANYWHERE))
+			disjunction.add(Restrictions.ilike("contactName", chunk, MatchMode.ANYWHERE))
+			//TODO find best way to do this
+			if(type)
+				disjunction.add(Restrictions.allEq(["type":type,"type":Type.BOTH]))
 			textRestrictions.add(disjunction)
 		}
 		criteria.add(textRestrictions)

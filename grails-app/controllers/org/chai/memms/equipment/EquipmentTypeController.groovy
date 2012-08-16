@@ -34,7 +34,8 @@ import org.chai.memms.AbstractEntityController;
  *
  */
 class EquipmentTypeController extends AbstractEntityController{
-
+	def equipmentTypeService
+	def languageService
 	
 	def getEntity(def id) {
 		return EquipmentType.get(id);
@@ -79,13 +80,48 @@ class EquipmentTypeController extends AbstractEntityController{
 	}
 	def list = {
 		adaptParamsForList()
-		def models = EquipmentType.list(params);
+		List<EquipmentType> types = EquipmentType.list(params);
 		render(view:"/entity/list",model:[
 			template: "equipmentType/equipmentTypeList",
-			entities: models,
+			entities: types,
 			entityCount: EquipmentType.count(),
 			code: getLabel(),
 			entityClass: getEntityClass()
 			])
 	}
+	
+	def getAjaxData = {
+		List<EquipmentType> types = equipmentTypeService.searchEquipmentType(params['term'], [:])
+		render(contentType:"text/json") {
+			elements = array {
+				types.each { type ->
+					elem (
+						key: type.id,
+						value: type.getNames(languageService.getCurrentLanguage()) + ' ['+type.code+']'
+					)
+				}
+			}
+		}
+	}
+	
+	def search = {
+		adaptParamsForList()
+		List<EquipmentType> types = equipmentTypeService.searchEquipmentType(params['q'], params)	
+		render (view: '/entity/list', model:[
+			template:"equipmentType/equipmentTypeList",
+			entities: types,
+			entityCount: equipmentTypeService.countEquipmentType(params['q']),
+			code: getLabel()
+		])
+		
+	}
+	
+	def importer ={
+	
+	}
+	
+	def export = {
+	
+	}
+
 }

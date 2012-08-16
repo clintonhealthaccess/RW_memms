@@ -85,6 +85,6 @@
 	<div id="content">
 			<g:layoutBody />
 	</div>
-
+<r:layoutResources/>
 </body>
 </html>

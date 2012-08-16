@@ -26,9 +26,10 @@ class EquipmentServiceSpec extends IntegrationTests{
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentModel = Initializer.newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
-		Initializer.newEquipment("SERIAL10",true,false,32,"ROOM A1","2900.23",['en':'Equipment Descriptions one'],['en':'Equipment Observation one'],Initializer.getDate(22,07,2010)
+		
+		Initializer.newEquipment("SERIAL10",true,false,32,"ROOM A1","2900.23",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
 			,Initializer.getDate(10,10,2010),new Date(),"equipmentModel",DataLocation.list().first(),department,equipmentType,manufacture,supplier)
-		Initializer.newEquipment("SERIAL11",true,false,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],['en':'Equipment Observation Two'],Initializer.getDate(22,07,2010)
+		Initializer.newEquipment("SERIAL11",true,false,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
 			,Initializer.getDate(10,10,2010),new Date(),"equipmentModel",DataLocation.list().first(),department,equipmentType,manufacture,supplier)
 		def List<Equipment> equipments
 		
@@ -44,14 +45,14 @@ class EquipmentServiceSpec extends IntegrationTests{
 		equipments = equipmentService.searchEquipment("one", [:])
 		then:
 		equipments.size() == 1
-		equipments[0].getObservations(new Locale("en")).equals('Equipment Observation one')
+		equipments[0].getDescriptions(new Locale("en")).equals('Equipment Descriptions one')
 		
 		when://Searching by description
 		
 		equipments = equipmentService.searchEquipment("Two", [:])
 		then:
 		equipments.size() == 1
-		equipments[0].getObservations(new Locale("en")).equals('Equipment Observation Two')
+		equipments[0].getDescriptions(new Locale("en")).equals('Equipment Descriptions two')
 		
 	}
 }

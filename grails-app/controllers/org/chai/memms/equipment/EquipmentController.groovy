@@ -6,9 +6,10 @@ import org.chai.memms.Contact
 import org.chai.memms.Initializer;
 import org.chai.memms.equipment.EquipmentStatus.Status;
 import org.chai.memms.security.User;
+import org.chai.memms.equipment.Provider
 
 class EquipmentController extends AbstractEntityController{
-
+	def providerService
     def getEntity(def id) {
 		return Equipment.get(id);
 	}
@@ -32,19 +33,19 @@ class EquipmentController extends AbstractEntityController{
 	def getEntityClass() {
 		return Equipment.class;
 	}
-	def bindParams(def entity) {		
-		bindData(entity,params, [include:['status']])
-		//entity.properties = params
-		if(log.isDebugEnabled()) log.debug("parameter: "+params);
-		
-//		Initializer.newEquipmentStatus(Initializer.now(),User.findByUuid(SecurityUtils.subject.principal, [cache: true]),Status.INSTOCK, entity,true)
+	def bindParams(def entity) {	
+		if(log.isDebugEnabled()) log.debug("parameter before binding: "+params);
+		bindData(entity,params, [exclude:['status']])
+		if(log.isDebugEnabled()) log.debug("data after binding: "+params);
 	}
 	
 	def getModel(def entity) {
 		[
 			equipment:entity,
-			departments:Department.list()
-			
+			departments:Department.list(),
+			manufactures: providerService.getManufacturesAndBoth(),
+			suppliers: providerService.getSuppliersAndBoth(),
+			types: EquipmentType.list()
 		]
 	}
 	
@@ -52,13 +53,14 @@ class EquipmentController extends AbstractEntityController{
 		adaptParamsForList()
 		def equipments = Equipment.list(params)
 		render(view:"/entity/list", model:[
-			template:"equipment/equipmentsList",
+			template:"equipment/equipmentList",
 			entities: equipments,
 			entityCount: Equipment.count(),
 			code: getLabel(),
 			entityClass: getEntityClass()
 			])
 	}
+	
 	def export = {
 		
 	}

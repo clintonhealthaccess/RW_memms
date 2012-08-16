@@ -29,7 +29,6 @@ class EquipmentStatusSpec extends IntegrationTests{
 					"SERIAL10",true,false,32,"ROOM A1"
 					,"2900.23",
 					['en':'Equipment Descriptions'],
-					['en':'Equipment Observation'],
 					Initializer.getDate(22,07,2010),
 					Initializer.getDate(10,10,2010),
 					new Date(),

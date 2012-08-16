@@ -63,7 +63,7 @@ class DepartmentController extends AbstractEntityController{
 			])
 	}
 	
-	def getAjaxData={	
+	def getAjaxData = {
 		List<Department> departments = departmentService.searchDepartment(params['term'], [:])
 		render(contentType:"text/json") {
 			elements = array {
@@ -75,6 +75,24 @@ class DepartmentController extends AbstractEntityController{
 				}
 			}
 		}
+		
+	}
+	def search = {
+		adaptParamsForList()
+		List<Department> departments = departmentService.searchDepartment(params['q'], params)
+				
+		render (view:"/entity/list", model:[
+			template:"department/departmentList",
+			entities: departments,
+			entityCount: departmentService.countDepartment(params['q']),
+			code: getLabel()
+		])
+		
+	}
+	def importer ={
+		
+	}
+	def export = {
 		
 	}
 }
