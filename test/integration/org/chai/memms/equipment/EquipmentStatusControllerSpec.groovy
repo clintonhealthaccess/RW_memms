@@ -6,6 +6,7 @@ import org.chai.memms.equipment.EquipmentType.Observation;
 import org.chai.memms.location.DataLocation;
 import org.chai.memms.equipment.EquipmentStatus.Status;
 import org.chai.memms.security.User
+import org.chai.memms.equipment.Provider.Type;
 
 class EquipmentStatusControllerSpec extends IntegrationTests{
 	
@@ -14,6 +15,13 @@ class EquipmentStatusControllerSpec extends IntegrationTests{
 	def "create equipment status with correct required data in fields - for english input"(){
 		
 		setup:
+		
+		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+		
+		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURE,manufactureContact)
+		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
+		
 		equipmentStatusController = new EquipmentStatusController();
 		setupLocationTree()
 		def user  = newUser("admin", "Admin UID")
@@ -21,17 +29,17 @@ class EquipmentStatusControllerSpec extends IntegrationTests{
 		def equipmentModel = Initializer.newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 		def equipment = Initializer.newEquipment(
-					"SERIAL10"
+					"SERIAL10",true,false,32,"ROOM A1"
 					,"2900.23",
 					['en':'Equipment Descriptions'],
 					['en':'Equipment Observation'],
 					Initializer.getDate(22,07,2010),
 					Initializer.getDate(10,10,2010),
 					new Date(),
-					equipmentModel,
+					"equipmentModel",
 					DataLocation.list().first(),
 					department,
-					equipmentType
+					equipmentType,manufacture,supplier
 					)
 		when:
 		equipmentStatusController.params.statusChangeDate = new Date()

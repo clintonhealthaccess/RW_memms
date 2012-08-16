@@ -21,8 +21,6 @@ class DepartmentService {
 	
 	def languageService;
 	def sessionFactory;
-	def dbFieldNames = 'names_'+languageService.getCurrentLanguagePrefix();
-	def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
 	
 	public List<Department> searchDepartment(String text, Map<String, String> params){
 		def criteria = getSearchCriteria(text)
@@ -44,7 +42,8 @@ class DepartmentService {
 	}
 	
 	public Criteria getSearchCriteria(String text) {
-		
+		def dbFieldNames = 'names_'+languageService.getCurrentLanguagePrefix();
+		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
 		def criteria = sessionFactory.getCurrentSession().createCriteria(Department.class)
 		
 		def textRestrictions = Restrictions.conjunction()
