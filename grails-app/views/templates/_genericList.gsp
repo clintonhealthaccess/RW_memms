@@ -18,7 +18,7 @@
 		  					<g:message code="default.export.label" />
 		  				</a>
 	  				</g:if>
-	  				<g:if test="${grailsApplication.getArtefactByLogicalPropertyName('Controller', controllerName).hasProperty('import')}">
+	  				<g:if test="${grailsApplication.getArtefactByLogicalPropertyName('Controller', controllerName).hasProperty('importer')}">
 	  				&nbsp;
 		  				<g:if test="${entityClass != null}">
 			  				<a href="${createLinkWithTargetURI(controller: 'entityImporter', action:'importer', params:[entityClass: entityClass.name])+(request.queryString==null?'':'&'+request.queryString)}">

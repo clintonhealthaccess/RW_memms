@@ -43,7 +43,6 @@ public class Equipment {
 	String serialNumber
 	String purchaseCost
 	String descriptions
-	String observations
 	String model
 	String room
 	
@@ -78,7 +77,6 @@ public class Equipment {
 		manufactureDate nullable: false, blank: false, validator:{it <= new Date()}
 		purchaseDate nullable: false, blank: false, validator:{it <= new Date()}
 		
-		observations nullable: true, blank: true
 		descriptions nullable: true, blank: true
 		donation nullable: false
 		obsolete nullable: false
@@ -88,9 +86,6 @@ public class Equipment {
 	static mapping = {
 		table "memms_equipment"
 		version false
-		observations_en type: 'text'
-		observations_fr type: 'text'
-		observations_rw type: 'text'
 		descriptions_en type: 'text'
 		descriptions_fr type: 'text'
 		descriptions_rw type: 'text'

@@ -4,7 +4,7 @@
 	<meta name="layout" content="main" />
 	<g:set var="entityName" value="${message(code: code)}" />
 	<title><g:message code="default.edit.label" args="[entityName]" /></title>
-	<r:require modules="chosen,datepicker,popup"/>
+	<r:require modules="chosen,datepicker"/>
 </head>
 <body>
 	<g:render template="${template}"/>

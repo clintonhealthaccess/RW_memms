@@ -1,5 +1,5 @@
 /** 
- * Copyright (c) 2011, Clinton Health Access Initiative.
+ * Copyright (c) 2012, Clinton Health Access Initiative.
  *
  * All rights reserved.
  *
@@ -27,10 +27,12 @@
  */
 package org.chai.memms.equipment
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.chai.memms.equipment.Provider.Type;
+import org.chai.memms.location.CalculationLocation;
 import org.chai.memms.util.Utils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.MatchMode;
@@ -42,54 +44,65 @@ import org.hibernate.criterion.Restrictions;
  * @author Jean Kahigiso M.
  *
  */
-class DepartmentService {
+class ProviderService {
 	static transactional = true
 	
 	def languageService;
 	def sessionFactory;
 	
 	
-	Integer countDepartment(String text) {
-		return getSearchCriteria(text).setProjection(Projections.count("id")).uniqueResult()
+	public List<Provider> getManufacturesOnly(){
+		return Provider.findAllByType(Type.MANUFACTURE)
 	}
-
-	public List<Department> searchDepartment(String text, Map<String, String> params){
-		def criteria = getSearchCriteria(text)
-		def dbFieldNames = 'names_'+languageService.getCurrentLanguagePrefix();
-		List<Department> departments = []
-		
-		if (params['offset'] != null) criteria.setFirstResult(params['offset'])
-		if (params['max'] != null) criteria.setMaxResults(params['max'])
-		if (params['order'] != null) departments = criteria.addOrder(Order.asc(params['order'])).list()
-		else  departments = criteria.addOrder(Order.asc(dbFieldNames)).list()
-		
-		StringUtils.split(text).each { chunk ->
-			departments.retainAll { department ->
-				Utils.matches(chunk, department.code) ||
-				Utils.matches(chunk, department.getNames(languageService.getCurrentLanguage())) ||
-				Utils.matches(chunk, department.getDescriptions(languageService.getCurrentLanguage()))	
-			}
-		}
-		return departments
+	public List<Provider> getSuppliersOnly(){
+		return Provider.findAllByType(Type.SUPPLIER)
+	}
+	public List<Provider> getSuppliersAndManufactures(){
+		return Provider.findAllByTypeNotEqual(Type.BOTH)
 	}
 	
-	public Criteria getSearchCriteria(String text) {
-		def dbFieldNames = 'names_'+languageService.getCurrentLanguagePrefix();
-		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
+	public List<Provider> getSuppliersAndBoth(){
+		return Provider.findAllByTypeNotEqual(Type.MANUFACTURE)
+	}
+
+	public List<Provider> getManufacturesAndBoth(){
+		return Provider.findAllByTypeNotEqual(Type.SUPPLIER)
+	}
+	
+	Integer countProvider(Type type, String text) {
+		return getSearchCriteria(type, text).setProjection(Projections.count("id")).uniqueResult()
+	}
+	public List<Provider> searchProvider(Type type,String text, Map<String, String> params) {
+		def criteria = getSearchCriteria(type,text)
+		List<Provider> providers = []
+		if (params['offset'] != null) criteria.setFirstResult(params['offset'])
+		if (params['max'] != null) criteria.setMaxResults(params['max'])
+		if (params['order'] != null) providers criteria.addOrder(Order.asc(params['order'])).list()
+		else providers = criteria.addOrder(Order.asc("id")).list()
 		
-		def criteria = sessionFactory.getCurrentSession().createCriteria(Department.class)
-		
+		StringUtils.split(text).each { chunk ->
+			providers.retainAll { provider ->
+				Utils.matches(chunk, provider.code) ||
+				Utils.matches(chunk, provider.contact.contactName)
+			}
+		}
+		return providers
+	}
+	
+	private Criteria getSearchCriteria(Type type,String text) {
+		def criteria = sessionFactory.getCurrentSession().createCriteria(Provider.class)
 		def textRestrictions = Restrictions.conjunction()
 		StringUtils.split(text).each { chunk ->
 			def disjunction = Restrictions.disjunction();
 			disjunction.add(Restrictions.ilike("code", chunk, MatchMode.ANYWHERE))
-			disjunction.add(Restrictions.ilike(dbFieldNames, chunk, MatchMode.ANYWHERE))
-			disjunction.add(Restrictions.ilike(dbFieldDescriptions, chunk, MatchMode.ANYWHERE))
-			
+			disjunction.add(Restrictions.ilike("contactName", chunk, MatchMode.ANYWHERE))
+			//TODO find best way to do this
+			if(type)
+				disjunction.add(Restrictions.allEq(["type":type,"type":Type.BOTH]))
 			textRestrictions.add(disjunction)
 		}
 		criteria.add(textRestrictions)
 		return criteria
-		
 	}
+
 }
