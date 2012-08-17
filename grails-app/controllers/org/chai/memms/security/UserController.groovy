@@ -48,8 +48,7 @@ class UserController  extends  AbstractEntityController{
 	
 	def getModel(def entity) {
 		def dataLocations = []
-		//TODO uncomment this once the location plugin is in
-		//if (entity.location != null) dataLocations << entity.location
+		if (entity.location != null) dataLocations << entity.location
 		[
 			user:entity,
 			roles: Role.list(),
