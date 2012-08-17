@@ -9,7 +9,10 @@ import org.chai.memms.security.User;
 import org.chai.memms.equipment.Provider
 
 class EquipmentController extends AbstractEntityController{
+	
 	def providerService
+	def equipmentService
+	
     def getEntity(def id) {
 		return Equipment.get(id);
 	}
@@ -59,6 +62,20 @@ class EquipmentController extends AbstractEntityController{
 			code: getLabel(),
 			entityClass: getEntityClass()
 			])
+	}
+	def search = {
+		adaptParamsForList()
+		List<Equipment> equipments = equipmentService.searchEquipment(params['q'], params)	
+		render (view: '/entity/list', model:[
+			template:"equipment/equipmentList",
+			entities: equipments,
+			entityCount: equipmentService.countEquipment(params['q']),
+			code: getLabel()
+		])
+		
+	}
+	def filter = {
+		
 	}
 	
 	def export = {

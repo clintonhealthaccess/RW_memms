@@ -336,8 +336,7 @@ public class Initializer {
 	}
 	
 	public static def newProvider(def code, def type, def addressDescriptions, def contactName,def email, def phone, def street, def poBox){
-		def contact = new Contact(contactName:contactName,email:email,phone:phone,street:street,poBox:poBox)
-		setLocaleValueInMap(contact,addressDescriptions,"AddressDescriptions")
+		def contact = newContact(addressDescriptions,contactName,email,phone,street,poBox)
 		return newProvider(code,type,contact)
 	}
 	
@@ -348,8 +347,7 @@ public class Initializer {
 	}
 	
 	public static def newWarranty(def addressDescriptions,def contactName,def email,def phone,def street,def poBox,def startDate,def endDate,def descriptions){
-		def contact = new Contact(contactName:contactName,email:email,phone:phone,street:street,poBox:poBox);
-		setLocaleValueInMap(contact,addressDescriptions,"AddressDescriptions")
+		def contact = newContact(addressDescriptions,contactName,email,phone,street,poBox)
 		return newWarranty(contact, startDate,endDate,descriptions)
 	}
 	
