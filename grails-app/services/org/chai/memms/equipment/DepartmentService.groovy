@@ -76,7 +76,7 @@ class DepartmentService {
 	public Criteria getSearchCriteria(String text) {
 		def dbFieldNames = 'names_'+languageService.getCurrentLanguagePrefix();
 		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
-		
+
 		def criteria = sessionFactory.getCurrentSession().createCriteria(Department.class)
 		
 		def textRestrictions = Restrictions.conjunction()

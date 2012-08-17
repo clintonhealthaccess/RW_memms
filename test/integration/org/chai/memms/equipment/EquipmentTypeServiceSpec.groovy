@@ -13,7 +13,7 @@ class EquipmentTypeServiceSpec extends IntegrationTests{
 		def observation = Observation.USEDINMEMMS;
 		Initializer.newEquipmentType(CODE(123),["en":"testName"],["en":"testObservations"],observation,Initializer.now(),Initializer.now())
 		when:
-		List<EquipmentType> equipmentTypes = equipmentTypeService.searchEquipmentType(EquipmentType.class,CODE(123),["":""])
+		List<EquipmentType> equipmentTypes = equipmentTypeService.searchEquipmentType(CODE(123),["":""])
 		then:
 		equipmentTypes.size() == 1
 		equipmentTypes[0].code.equals(CODE(123))
@@ -25,7 +25,7 @@ class EquipmentTypeServiceSpec extends IntegrationTests{
 		def observation = Observation.USEDINMEMMS;
 		Initializer.newEquipmentType(CODE(123),["en":"test Name"],["en":"testObservations"],observation,Initializer.now(),Initializer.now())
 		when:
-		List<EquipmentType> equipmentTypes = equipmentTypeService.searchEquipmentType(EquipmentType.class,"Na",["":""])
+		List<EquipmentType> equipmentTypes = equipmentTypeService.searchEquipmentType("Na",["":""])
 		then:
 		equipmentTypes.size() == 1
 		equipmentTypes[0].code.equals(CODE(123))

@@ -26,7 +26,7 @@ class EquipmentTypeControllerSpec extends IntegrationTests{
 		equipmentTypeController.params.lastModifiedOn = new Date()
 		equipmentTypeController.save()
 		
-		equipmentType = equipmentTypeService.searchEquipmentType(EquipmentType.class,CODE(123),["":""])[0]
+		equipmentType = equipmentTypeService.searchEquipmentType(CODE(123),["":""])[0]
 
 		then:
 
