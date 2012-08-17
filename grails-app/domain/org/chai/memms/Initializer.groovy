@@ -180,7 +180,7 @@ public class Initializer {
 		
 		
 		if(!Equipment.count()){
-			def equipmentOne = newEquipment("SERIAL10",true,false,24,"Room A1","2900.23",['en':'Equipment Descriptions'],
+			def equipmentOne = newEquipment("SERIAL01",true,false,24,"Room A1","2900.23",['en':'Equipment Descriptions'],
 				getDate(22,07,2010),getDate(10,10,2010),now(),
 				'MODEL1',
 				DataLocation.findByCode(BUTARO),
@@ -288,7 +288,7 @@ public class Initializer {
 			equipmentSix.addToStatus(statusSixTwo)
 			equipmentSix.save(failOnError:true)
 			
-			def equipmentSeven = newEquipment("SERIAL07",false,true,4,"Room A1","290540.23",['en':'Equipment Descriptions seven'],['en':'Equipment Observation six'],
+			def equipmentSeven = newEquipment("SERIAL07",false,true,4,"Room A1","290540.23",['en':'Equipment Descriptions seven'],
 				getDate(1,7,2000),getDate(12,7,2001),now(),
 				'MODEL3',
 				DataLocation.findByCode(BUTARO),
@@ -308,7 +308,7 @@ public class Initializer {
 			equipmentSeven.addToStatus(statusSevenTwo)
 			equipmentSeven.save(failOnError:true)
 			
-			def equipmentEight = newEquipment("SERIAL08",false,true,4,"Room A3","290540.23",['en':'Equipment Descriptions eight'],['en':'Equipment Observation eight'],
+			def equipmentEight = newEquipment("SERIAL08",false,true,4,"Room A3","290540.23",['en':'Equipment Descriptions eight'],
 				getDate(1,7,2000),getDate(12,7,2001),now(),
 				'MODEL8',
 				DataLocation.findByCode(BUTARO),
@@ -328,7 +328,7 @@ public class Initializer {
 			equipmentEight.addToStatus(statusEightTwo)
 			equipmentEight.save(failOnError:true)
 			
-			def equipmentNine = newEquipment("SERIAL09",false,true,4,"Room 9A1","290540.23",['en':'Equipment Descriptions Nine'],['en':'Equipment Observation Nine'],
+			def equipmentNine = newEquipment("SERIAL09",false,true,4,"Room 9A1","290540.23",['en':'Equipment Descriptions Nine'],
 				getDate(1,7,2000),getDate(12,7,2001),now(),
 				'MODEL3',
 				DataLocation.findByCode(BUTARO),
@@ -348,7 +348,7 @@ public class Initializer {
 			equipmentNine.addToStatus(statusNineTwo)
 			equipmentNine.save(failOnError:true)
 			
-			def equipmentTen = newEquipment("SERIAL10",false,true,4,"Room 10A1","290540.23",['en':'Equipment Descriptions Ten'],['en':'Equipment Observation Ten'],
+			def equipmentTen = newEquipment("SERIAL10",false,true,4,"Room 10A1","290540.23",['en':'Equipment Descriptions Ten'],
 				getDate(1,7,2000),getDate(12,7,2001),now(),
 				'MODELTen3',
 				DataLocation.findByCode(BUTARO),
