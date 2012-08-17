@@ -23,9 +23,9 @@
 			
 			<g:selectFromEnum name="userType" bean="${user}" values="${UserType.values()}" field="userType" label="${message(code:'user.usertype.label')}"/>
 			
-			<g:selectFromList name="locationId" label="${message(code:'datauser.datalocation.label')}" bean="${user}" field="locationId" optionKey="id" multiple="false"
+			<g:selectFromList name="location.id" label="${message(code:'datauser.datalocation.label')}" bean="${user}" field="location" optionKey="id" multiple="false"
 				ajaxLink="${createLink(controller:'location', action:'getAjaxData', params:[class: 'CalculationLocation'])}"
-				from="${dataLocations}" value="${user.location?.id}" values="${dataLocations.collect{i18n(field:it.names)}}" />
+				from="${dataLocations}" value="${user.location?.id}" values="${dataLocations.collect{it.names}}" />
 						
 			<div>
 				<label><g:message code="user.confirmed.label"/></label>

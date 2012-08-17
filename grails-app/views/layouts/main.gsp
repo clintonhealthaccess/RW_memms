@@ -32,7 +32,7 @@
 						def user = User.findByUuid(SecurityUtils.subject.principal, [cache: true])
 					%>
 					<li>
-						<ahref="${createLinkWithTargetURI(controller: 'account', action:'editAccount')}">
+						<a href="${createLinkWithTargetURI(controller: 'account', action:'editAccount')}">
 							<g:message code="header.navigation.myaccount"/> : ${user.firstname} ${user.lastname}
 						</a>
 					</li>
