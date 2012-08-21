@@ -1,6 +1,7 @@
 package org.chai.memms
 
 import org.apache.shiro.SecurityUtils;
+import org.chai.memms.security.User
 
 public abstract class AbstractController {
 	

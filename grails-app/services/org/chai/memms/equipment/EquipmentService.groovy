@@ -30,6 +30,9 @@ package org.chai.memms.equipment
 import java.util.List;
 import java.util.Map;
 import org.chai.memms.equipment.Equipment
+import org.chai.memms.location.CalculationLocation;
+import org.chai.memms.location.DataLocation
+import org.chai.memms.location.Location
 
 import org.chai.memms.util.Utils;
 import org.hibernate.Criteria;
@@ -82,6 +85,23 @@ class EquipmentService {
 		}
 		criteria.add(textRestrictions)
 		return criteria
+	}
+	
+	public List<Equipment> myEquipments(CalculationLocation location) {
+		
+		List<Equipment> myEquipments = []
+		
+		if(location instanceof DataLocation){
+			myEquipments = Equipment.findAll{
+				dataLocation == location
+			}
+		}else if (location instanceof Location){
+			myEquipments = Equipment.findAll{
+				dataLocation in ((Location)location).dataLocations
+			}
+		}
+		
+		return myEquipments
 	}
 
 }
