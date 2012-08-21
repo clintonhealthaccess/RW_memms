@@ -5,11 +5,11 @@
 			<th><g:message code="equipment.serial.number.label"/></th>
 			<th><g:message code="equipment.type.label"/></th>
 			<th><g:message code="equipment.model.label"/></th>
-			<th><g:message code="equipment.manufacture.label"/></th>
-			<th><g:message code="equipment.supplier.label"/></th>
+			<th><g:message code="provider.manufacture.label"/></th>
+			<th><g:message code="provider.supplier.label"/></th>
 			<th><g:message code="location.label"/></th>
 			<th><g:message code="equipment.status.label"/></th>
-			<th><g:message code="equipment.obsolate.label"/></th>
+			<th><g:message code="equipment.obsolete.label"/></th>
 			<th><g:message code="equipment.donation.label"/></th>
 		</tr>
 	</thead>

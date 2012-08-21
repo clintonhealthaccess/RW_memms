@@ -2,7 +2,7 @@
 
 	<div>
 		<h3>
-			<g:message code="default.new.label" args="[message(code:'datalocationtype.label')]"/>
+			<g:message code="default.new.label" args="[message(code:'datalocation.type.label')]"/>
 		</h3>
 		<g:locales/>
 	</div>

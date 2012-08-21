@@ -6,7 +6,7 @@
 				<th><g:message code="user.username.label"/></th>
 				<th><g:message code="user.email.label"/></th>
 				<th><g:message code="user.permission.label"/></th>
-				<th><g:message code="user.roles.label"/></th>
+				<th><g:message code="roles.label"/></th>
 				<g:sortableColumn property="confirmed" params="[q:q]" title="${message(code: 'user.confirmed.label')}" />
 				<g:sortableColumn property="active" params="[q:q]" title="${message(code: 'user.active.label')}" />
 				<th><g:message code="entity.list.manage.label"/></th>

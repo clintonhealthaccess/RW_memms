@@ -1,7 +1,7 @@
 <div>
 	<div>
 		<h3>
-			<g:message code="default.new.label" args="[message(code:'model.label')]"/>
+			<g:message code="default.new.label" args="[message(code:'equipment.model.label')]"/>
 		</h3>
 		<g:locales/>
 	</div>
