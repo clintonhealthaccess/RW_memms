@@ -78,8 +78,8 @@ public class Initializer {
 			adminRole.save(failOnError: true, flush:true)
 			
 			def dataClerkRole = new Role(name: "Clerk")
-			dataClerkRole.addToPermissions("Equipment:*")
-			dataClerkRole.addToPermissions("Home:*")
+			dataClerkRole.addToPermissions("equipment:*")
+			dataClerkRole.addToPermissions("home:*")
 			dataClerkRole.save(failOnError: true, flush:true)
 
 			def userAdmin = new User(userType: UserType.PERSON,code:"admin", location: CalculationLocation.findByCode(RWANDA), username: "admin", 
@@ -93,7 +93,8 @@ public class Initializer {
 				firstname: "user", lastname: "user", email:'user@memms.org', passwordHash: new Sha256Hash("user").toHex(), active: true, 
 				confirmed: true, uuid:'user', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
 			userClerk.addToRoles(dataClerkRole)
-//			userClerk.addToPermissions("home:*")
+			userClerk.addToPermissions("equipment:*")
+			userClerk.addToPermissions("home:*")
 			userClerk.save(failOnError: true, flush:true)
 			
 			def userClerk1= new User(userType: UserType.PERSON,code:"user1", location: CalculationLocation.findByCode(BURERA), username: "user1",
