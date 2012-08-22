@@ -7,6 +7,8 @@ import org.chai.memms.Initializer;
 import org.chai.memms.equipment.EquipmentStatus.Status;
 import org.chai.memms.security.User;
 import org.chai.memms.equipment.Provider
+import org.chai.memms.location.DataLocation;
+
 
 class EquipmentController extends AbstractEntityController{
 	
@@ -36,19 +38,36 @@ class EquipmentController extends AbstractEntityController{
 	def getEntityClass() {
 		return Equipment.class;
 	}
-	def bindParams(def entity) {	
-		if(log.isDebugEnabled()) log.debug("parameter before binding: "+params);
-		bindData(entity,params, [exclude:['status']])
-		if(log.isDebugEnabled()) log.debug("data after binding: "+params);
+	def bindParams(def entity) {
+		if(!entity.id)
+			entity.registeredOn=new Date()
+		bindData(entity,params, [exclude:['status','dateOfEvent']])
 	}
 	
+	def validateEntity(def entity) {
+		boolean valid = true
+		if(entity.id!=null && params["status"].equals("NONE") && params["dateOfEvent"]){
+			valid = false
+			entity.errors.rejectValue("status","equipment.status.notselected", "You have to select a status.");
+		}
+		return (valid & entity.validate())
+	}
+	
+	def saveEntity(def entity) {
+		entity.save()
+		def status = params['status']
+		status = Status."$status"
+		def currentStatus = newEquipmentStatus(new Date(),getUser(),status,entity,true,params["dateOfEvent"])
+	}
+	 
 	def getModel(def entity) {
 		[
 			equipment:entity,
 			departments:Department.list(),
 			manufactures: providerService.getManufacturesAndBoth(),
 			suppliers: providerService.getSuppliersAndBoth(),
-			types: EquipmentType.list()
+			types: EquipmentType.list(),
+			dataLocations: DataLocation.list()
 		]
 	}
 	
@@ -83,6 +102,9 @@ class EquipmentController extends AbstractEntityController{
 	}
 	def importer = {
 		
+	}
+	static def newEquipmentStatus(def statusChangeDate,def changedBy,def value, def equipment,def current,def dateOfEvent){
+		return new EquipmentStatus(statusChangeDate:statusChangeDate,changedBy:changedBy,value:value,equipment:equipment,current:current,dateOfEvent:dateOfEvent).save(failOneError:true,flush:true)
 	}
 	
 }

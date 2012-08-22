@@ -198,7 +198,7 @@ public class Initializer {
 			equipmentOne.addToStatus(statusOne)
 			equipmentOne.save(failOnError:true)
 
-			def equipmentTwo = newEquipment("SERIAL11",true,false,12,"Room A1","34900.23",['en':'Equipment Descriptions two'],
+			def equipmentTwo = newEquipment("SERIAL11",true,false,12,"Room A34","34900.23",['en':'Equipment Descriptions two'],
 				getDate(12,01,2009),getDate(10,10,2009),now(),
 				'MODEL2',
 				DataLocation.findByCode(KIVUYE),
@@ -227,7 +227,7 @@ public class Initializer {
 			def warrantyThree = newWarranty(['en':'warranty two'],'warranty name2','email2@gmail.com',"0768-222-787","Street 154","88",getDate(10, 12, 2010),getDate(12, 12, 2012),[:])
 			def statusThree= newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentThree,true)
 			equipmentThree.warranty=warrantyTwo
-			equipmentThree.addToStatus(statusTwo)
+			equipmentThree.addToStatus(statusThree)
 			equipmentThree.save(failOnError:true)
 			
 			def equipmentFour = newEquipment("SERIAL13",true,false,12,"Room A1","78900.23",['en':'Equipment Descriptions four'],
@@ -262,11 +262,11 @@ public class Initializer {
 			def statusFive= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentFive,false)
 			def statusFiveOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentFive,false)
 			def statusFiveTwo = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentFive,true)
-			equipmentFour.warranty=warrantyFour
-			equipmentFour.addToStatus(statusFour)
-			equipmentFour.addToStatus(statusFourOne)
-			equipmentFour.addToStatus(statusFiveTwo)
-			equipmentFour.save(failOnError:true)
+			equipmentFive.warranty=warrantyFour
+			equipmentFive.addToStatus(statusFive)
+			equipmentFive.addToStatus(statusFiveOne)
+			equipmentFive.addToStatus(statusFiveTwo)
+			equipmentFive.save(failOnError:true)
 			
 			def equipmentSix = newEquipment("SERIAL15",false,true,4,"Room A1","290540.23",['en':'Equipment Descriptions six'],
 				getDate(1,7,2000),getDate(12,7,2001),now(),
@@ -380,8 +380,9 @@ public class Initializer {
 		return equipment.save(failOnError: true)
 	}
 
-	public static def newEquipmentStatus(def statusChangeDate,def changedBy,def value, def equipment,def current){
-		return new EquipmentStatus(statusChangeDate:statusChangeDate,changedBy:changedBy,value:value,equipment:equipment,current:current).save(failOnError: true)
+	public static def newEquipmentStatus(def dateOfEvent,def changedBy,def value, def equipment,def current){
+		def statusChangeDate = now()
+		return new EquipmentStatus(dateOfEvent:dateOfEvent,changedBy:changedBy,value:value,equipment:equipment,current:current,statusChangeDate:statusChangeDate).save(failOnError: true)
 	}
 
 	public static def newContact(def addressDescriptions,def contactName,def email, def phone, def street, def poBox){
