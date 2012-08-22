@@ -8,13 +8,13 @@ import org.chai.memms.equipment.EquipmentStatus.Status;
 import org.chai.memms.security.User;
 import org.chai.memms.equipment.Provider
 import org.chai.memms.location.DataLocation;
+import org.chai.memms.location.CalculationLocation;
 
 
 class EquipmentController extends AbstractEntityController{
 	
 	def providerService
 	def equipmentService
-	
     def getEntity(def id) {
 		return Equipment.get(id);
 	}
@@ -70,10 +70,18 @@ class EquipmentController extends AbstractEntityController{
 			dataLocations: DataLocation.list()
 		]
 	}
-	
+
 	def list={
 		adaptParamsForList()
-		def equipments = Equipment.list(params)
+		def equipments		
+		if(SecurityUtils.subject.isPermitted("*:*")){
+			equipments = Equipment.list(params)
+		}else if(SecurityUtils.subject.isPermitted("equipment:list")){
+			def user = getUser()
+			if(user != null){
+				equipments = equipmentService.getEquipmentsByDataLocation(user.location)
+			}
+		}
 		render(view:"/entity/list", model:[
 			template:"equipment/equipmentList",
 			entities: equipments,

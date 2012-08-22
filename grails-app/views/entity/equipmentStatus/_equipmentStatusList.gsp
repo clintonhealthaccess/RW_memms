@@ -24,13 +24,13 @@
 					</ul>
 				</td>
 				<td>
-					${model.code}
+					${model.value}
 				</td>
 				<td>
-					${model.names}
+					${model.statusChangeDate}
 				</td>
 				<td>
-					${model.descriptions}
+					${model.current}
 				</td>
 			</tr>
 		</g:each>

@@ -66,6 +66,7 @@ public class Initializer {
 	static final String WEST = "West"
 	static final String EAST = "East"
 	static final String BURERA = "Burera"
+	static final String BURERA1 = "Burera1"
 	static final String BUTARO = "Butaro DH"
 	static final String KIVUYE = "Kivuye HC"
 	static final String BUNGWE = "Bungwe HC"
@@ -78,6 +79,7 @@ public class Initializer {
 			
 			def dataClerkRole = new Role(name: "Clerk")
 			dataClerkRole.addToPermissions("Equipment:*")
+			dataClerkRole.addToPermissions("Home:*")
 			dataClerkRole.save(failOnError: true, flush:true)
 
 			def userAdmin = new User(userType: UserType.PERSON,code:"admin", location: CalculationLocation.findByCode(RWANDA), username: "admin", 
@@ -91,7 +93,14 @@ public class Initializer {
 				firstname: "user", lastname: "user", email:'user@memms.org', passwordHash: new Sha256Hash("user").toHex(), active: true, 
 				confirmed: true, uuid:'user', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
 			userClerk.addToRoles(dataClerkRole)
+//			userClerk.addToPermissions("home:*")
 			userClerk.save(failOnError: true, flush:true)
+			
+			def userClerk1= new User(userType: UserType.PERSON,code:"user1", location: CalculationLocation.findByCode(BURERA), username: "user1",
+				firstname: "user", lastname: "user", email:'user1@memms.org', passwordHash: new Sha256Hash("user1").toHex(), active: true,
+				confirmed: true, uuid:'user1', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
+			userClerk1.addToRoles(dataClerkRole)
+			userClerk1.save(failOnError: true, flush:true)
 		}
 	}
 	
@@ -114,11 +123,12 @@ public class Initializer {
 			def west = newLocation(['en':WEST], WEST,rwanda,province)
 			def east = newLocation(['en':EAST], EAST,rwanda,province)
 			def burera = newLocation(['en':BURERA], BURERA, north, district)
+			def burera1 = newLocation(['en':BURERA1], BURERA1, north, district)
 			
 			//Add DataLocation
 			def butaro = newDataLocation(['en':BUTARO],BUTARO,burera,dh)
 			def kivuye = newDataLocation(['en':KIVUYE],KIVUYE,burera,hc)
-			def bungwe = newDataLocation(['en':BUNGWE],BUNGWE,burera,hc)
+			def bungwe = newDataLocation(['en':BUNGWE],BUNGWE,burera1,hc)
 		}		
 	}
 	static def createInventoryStructure(){

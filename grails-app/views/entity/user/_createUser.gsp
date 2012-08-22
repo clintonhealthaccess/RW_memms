@@ -4,7 +4,12 @@
 	
 	<div >
 		<h3 >
-			<g:message code="default.new.label" args="[message(code:'user.label')]"/>
+		<g:if test="${user.id != null}">
+				<g:message code="default.edit.label" args="[message(code:'user.label')]" />
+			</g:if>
+			<g:else>
+				<g:message code="default.new.label" args="[message(code:'user.label')]" />
+			</g:else>
 		</h3>
 		<g:locales/>
 	</div>
@@ -19,13 +24,13 @@
 			<g:input name="phoneNumber" label="${message(code:'user.phonenumber.label')}" bean="${user}" field="phoneNumber"/>
 			<g:input name="permissionString" label="${message(code:'user.permission.label')}" bean="${user}" field="permissionString"/>
 			<g:input name="password" label="${message(code:'user.password.label')}" type="password" bean="${cmd}" field="password"/>
-			<g:input name="repeat" label="${message(code:'user.repeatpassword.label')}" type="password" bean="${cmd}"  field="repeat"/>
+			<g:input name="repeat" label="${message(code:'user.repeat.password.label')}" type="password" bean="${cmd}"  field="repeat"/>
 			
-			<g:selectFromEnum name="userType" bean="${user}" values="${UserType.values()}" field="userType" label="${message(code:'user.usertype.label')}"/>
+			<g:selectFromEnum name="userType" bean="${user}" values="${UserType.values()}" field="userType" label="${message(code:'user.type.label')}"/>
 			
-			<g:selectFromList name="locationId" label="${message(code:'datauser.datalocation.label')}" bean="${user}" field="locationId" optionKey="id" multiple="false"
+			<g:selectFromList name="location.id" label="${message(code:'datalocation.label')}" bean="${user}" field="location" optionKey="id" multiple="false"
 				ajaxLink="${createLink(controller:'location', action:'getAjaxData', params:[class: 'CalculationLocation'])}"
-				from="${dataLocations}" value="${user.location?.id}" values="${dataLocations.collect{i18n(field:it.names)}}" />
+				from="${dataLocations}" value="${user.location?.id}" values="${dataLocations.collect{it.names}}" />
 						
 			<div>
 				<label><g:message code="user.confirmed.label"/></label>
@@ -37,7 +42,7 @@
 				<g:checkBox name="active" value="${user.active}" />
 			</div>
 			
-			<g:selectFromList name="roles" label="${message(code:'user.roles.label')}" bean="${user}" field="roles" 
+			<g:selectFromList name="roles" label="${message(code:'roles.label')}" bean="${user}" field="roles" 
 				from="${roles}" value="${user.roles*.id}" optionValue="name" optionKey="id" multiple="true"/>
 			
 			<g:if test="${user.id != null}">

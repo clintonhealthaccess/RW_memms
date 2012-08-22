@@ -28,7 +28,7 @@ class DataLocationTypeController extends AbstractEntityController {
 	
 	def deleteEntity(def entity) {
 		if (DataLocation.findAllByType(entity).size() != 0) {
-			flash.message = message(code: 'dataLocationType.hasentities', args: [message(code: getLabel(), default: 'entity'), params.id], default: 'Type {0} still has associated entities.')
+			flash.message = message(code: 'dataLocation.type.hasentities', args: [message(code: getLabel(), default: 'entity'), params.id], default: 'Type {0} still has associated entities.')
 		}
 		else {
 			super.deleteEntity(entity)
@@ -40,7 +40,7 @@ class DataLocationTypeController extends AbstractEntityController {
 	}
 
 	def getLabel() {
-		return 'datalocationtype.label';
+		return 'datalocation.type.label';
 	}
 	
 	def list = {

@@ -30,7 +30,7 @@ class LocationLevelController extends AbstractEntityController {
 
 	def deleteEntity(def entity) {
 		if (entity.locations.size() != 0) {
-			flash.message = message(code: 'locationLevel.haslocations', args: [message(code: getLabel(), default: 'entity'), params.id], default: 'Location level {0} still has associated locations.')
+			flash.message = message(code: 'location.level.haslocations', args: [message(code: getLabel(), default: 'entity'), params.id], default: 'Location level {0} still has associated locations.')
 		}
 		else {
 			super.deleteEntity(entity)
@@ -42,7 +42,7 @@ class LocationLevelController extends AbstractEntityController {
 	}
 
 	def getLabel() {
-		return 'locationlevel.label';
+		return 'location.level.label';
 	}
 
 	def list = {

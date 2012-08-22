@@ -34,7 +34,7 @@ class User {
 	User() {
 		roles = []
 	}
-		
+	
 	def getPermissions() {
 		return utilsService.split(permissionString, User.PERMISSION_DELIMITER)
 	}
