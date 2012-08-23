@@ -78,6 +78,7 @@ abstract class CalculationLocation {
 			version false
 			names_en type: "text"
 			names_en type: "text"
+			coordinates type: "text"
 		}
 
 		@Override

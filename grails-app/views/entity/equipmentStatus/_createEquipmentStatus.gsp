@@ -1,4 +1,4 @@
-<%@ page import="org.chai.memms.equipment.EquipmentType.Status" %>
+<%@ page import="org.chai.memms.equipment.EquipmentStatus.Status" %>
 <div>
 	<div>
 		<h3>

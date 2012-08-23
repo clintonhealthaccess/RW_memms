@@ -58,7 +58,7 @@
 	<fieldset>
     	<legend>Status Information:</legend>
     	<g:if test="${equipment.id == null}">
-   			<g:selectFromEnum name="status" bean="${equipment}" values="${Status.values()}" field="status" label="${message(code:'equipmentstatus.label')}"/>
+   			<g:selectFromEnum name="status" bean="${equipment}" values="${EquipmentStatus.Status.values()}" field="status" label="${message(code:'equipmentstatus.label')}"/>
    			<g:inputDate name="dateOfEvent" precision="day"  value="${equipment.status?.dateOfEvent}" id="date-of-event" label="${message(code:'entity.date.of.event.label')}" bean="${equipment.status}" field="status.dateOfEvent"/>
     	</g:if>
     	<g:if test="${equipment?.status!=null}">
