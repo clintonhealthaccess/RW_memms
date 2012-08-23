@@ -1,11 +1,11 @@
 <div class="entity-list">
 	<div>
 		<div class="heading1-bar">
-	     	<g:message code="default.list.label" args="[entityName]" />
+	     	<h1><g:message code="default.list.label" args="[entityName]" /></h1>
 	     	<g:if test="${!search}">
 		     	<span class="right">
 					<g:if test="${!addTemplate}">
-		  				<a href="${createLinkWithTargetURI(controller: controllerName, action:'create')+(request.queryString==null?'':'&'+request.queryString)}">
+		  				<a href="${createLinkWithTargetURI(controller: controllerName, action:'create')+(request.queryString==null?'':'&'+request.queryString)}" class="next medium">
 		  					<g:message code="default.new.label" args="[entityName]"/>
 		  				</a>
 		  			</g:if>
@@ -14,28 +14,28 @@
 		  			</g:else>
 		  			<g:if test="${grailsApplication.getArtefactByLogicalPropertyName('Controller', controllerName).hasProperty('export')}">
 		  			&nbsp;
-			  			<a href="${createLinkWithTargetURI(controller: controllerName, action:'exporter')+(request.queryString==null?'':'&'+request.queryString)}">
+			  			<a href="${createLinkWithTargetURI(controller: controllerName, action:'exporter')+(request.queryString==null?'':'&'+request.queryString)}" class="next medium gray">
 		  					<g:message code="default.export.label" />
 		  				</a>
 	  				</g:if>
 	  				<g:if test="${grailsApplication.getArtefactByLogicalPropertyName('Controller', controllerName).hasProperty('importer')}">
 	  				&nbsp;
 		  				<g:if test="${entityClass != null}">
-			  				<a href="${createLinkWithTargetURI(controller: 'entityImporter', action:'importer', params:[entityClass: entityClass.name])+(request.queryString==null?'':'&'+request.queryString)}">
+			  				<a href="${createLinkWithTargetURI(controller: 'entityImporter', action:'importer', params:[entityClass: entityClass.name])+(request.queryString==null?'':'&'+request.queryString)}" class="next medium gray">
 			  					<g:message code="default.import.label" />
 			  				</a>
 		  				</g:if>
 	  				</g:if>
+	  				<g:if test="${grailsApplication.getArtefactByLogicalPropertyName('Controller', controllerName).hasProperty('search')}">
+        			<g:searchBox action="search"/>
+        		</g:if>
 		     	</span>
 	     	</g:if>
 		</div>
 		
 		<!-- Template goes here -->
-		<g:if test="${grailsApplication.getArtefactByLogicalPropertyName('Controller', controllerName).hasProperty('search')}">
-			<g:searchBox action="search"/>
-		</g:if>
 		
-		<div class="main">
+		<div class="main table">
 			<g:render template="${template}"/>
 		</div>
 		

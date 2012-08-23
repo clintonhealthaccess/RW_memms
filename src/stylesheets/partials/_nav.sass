@@ -39,28 +39,57 @@
 #main-menu
   float: left
   +pie-clearfix
-  li
+  > li
     display: inline
     float: left
+    height: 42px
     position: relative
     &:last-child
       border-right: 1px solid $primary_dark
+    &:hover, &:focus
+      .submenu
+        display: block
+      > a
+        background: rgba(0, 0, 0, 0.08)
+        +box-shadow($primary - #131313 0 -2px 6px 4px inset)
 
+    > a
+      border-left: 1px solid $primary_dark
+      color: #fff
+      display: inline-block
+      font-size: 12px
+      font-weight: bold
+      padding: 15px 22px
+      text-decoration: none
+      +text-shadow(rgba(0, 0, 0, 0.3) 0 1px 0)
+      &:hover, &:focus, &.active
+        background: rgba(0, 0, 0, 0.08)
+        +box-shadow($primary - #131313 0 -2px 6px 4px inset)
+      &:active
+        +box-shadow($primary - #292929 0 -2px 8px 6px inset)
+      
+// Submenu
+
+.submenu
+  display: none
+  position: absolute
+  top: 42px
+  left: 0
+  width: 100%
+  li
+    display: block
+    float: none
   a
-    border-left: 1px solid $primary_dark
+    background: $primary - #151515
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07)
     color: #fff
-    display: inline-block
-    font-size: 12px
-    font-weight: bold
-    padding: 15px 22px
+    display: block
+    font-size: 11px
+    padding: 7px 15px
     text-decoration: none
-    +text-shadow(rgba(0, 0, 0, 0.3) 0 1px 0)
-    &:hover, &:focus, &.active
-      background: $primary_dark - #020202
-      +box-shadow($primary - #161616 0 -3px 8px 6px inset)
-    &:active
-      +box-shadow($primary - #292929 0 -2px 10px 10px inset)
-
+    +text-shadow(rgba(0, 0, 0, 0.2) 0 1px 0)
+    &:hover, &:focus
+      background: $primary
 
 // Logout navigation
 #logout
@@ -122,3 +151,4 @@
     &.selected
       border-bottom: 1px solid #fff
       margin-bottom: -1px
+      

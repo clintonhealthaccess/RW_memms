@@ -170,6 +170,10 @@
     color: $primary
     font-size: 11px
   
+.buttons
+  border-top: 1px solid #eee
+  padding: 15px 7px
+  
 button, input[type=submit], .next
   background: $yes
   border: 1px solid $yes - #222
@@ -179,20 +183,22 @@ button, input[type=submit], .next
   display: inline-block
   font-size: 14px
   font-weight: bold
+  line-height: 1
   padding: 6px 40px
+  text-decoration: none
   +border-radius(3px)
-  +box-shadow(#ddd, 0px, 3px, 1px)
+  +box-shadow(#ddd 0px 3px 1px)
   +background(linear-gradient($yes + #090909, $yes - #090909))
-  +text-shadow($yes - #333, 0, 1px, 0)
+  +text-shadow($yes - #333 0 1px 0)
   &:hover, &:focus
-    background: $yes - #111
+    background: $yes - #222
     border: 1px solid $yes - #333
+    color: #fff
     +background(linear-gradient($yes, $yes - #111))
   &:active
     position: relative
     top: 2px
-    +box-shadow(#ddd, 0px, 1px, 1px)
-    
+    +box-shadow(#ddd 0px 1px 1px)
   &#cancel-button
     background: none
     border: none
@@ -202,10 +208,24 @@ button, input[type=submit], .next
     text-decoration: underline
     +box-shadow(none)
     +background(linear-gradient(#fff, #fff))
-    +text-shadow(#fff, 0, 0, 0)
+    +text-shadow(#fff 0 0 0)
   &.medium
-    font-size: 12px
-    padding: 4px 20px
+    font-size: 11px
+    padding: 5px 15px
+    +text-shadow(rgba(0, 0, 0, 0.2) 0 1px 0)
+  &.gray
+    background: #eee
+    border: 1px solid #ddd
+    color: #666
+    +box-shadow(#fff 0px 3px 1px)
+    +background(linear-gradient(#eee, #e9e9e9))
+    +text-shadow(#fff 0 1px 0)
+    &:hover, &:focus
+      background: $yes - #222
+      border: 1px solid $yes - #333
+      color: #fff
+      +background(linear-gradient($yes, $yes - #111))
+      +text-shadow($yes - #333 0 1px 0)
   
 select
   background: #f6f6f6
@@ -214,7 +234,7 @@ select
   font: normal 12px Arial, sans-serif
   padding: 2px
   min-width: 140px
-  +box-shadow($filler - #111, 1px, 1px, 3px, 0, inset)
+  +box-shadow($filler - #111 1px 1px 3px 0 inset)
   &:hover, &:focus
     background: $filler + #030303
     border-color: $primary
@@ -332,7 +352,7 @@ select
   background: $filler
   border: 1px solid $filler - #333
   color: #444
-  font: normal 16px 'Lucida Grande', Arial, sans-serif
+  font: normal 18px 'Lucida Grande', Arial, sans-serif
   padding: 4px
   text-align: center
   width: 154px
@@ -429,20 +449,15 @@ ul.element-map
   float: left
   
 form.search-form
-  background: $filler
-  border: 1px solid $filler - #111
   color: $primary
+  display: inline-block
   font-size: 12px
-  margin: 10px 15px 5px
-  padding: 10px
-  text-align: center
-  +border-radius
   input
     background: #f9f9f9
     border: 1px solid $filler - #333
     color: #444
     font: normal 12px Arial, sans-serif
-    padding: 5px
+    padding: 4px
     +box-shadow($filler - #111, 1px, 1px, 3px, 0, inset)
     &:hover, &:focus
       background: $filler + #030303
@@ -470,6 +485,9 @@ form.search-form
 
   a
     font-size: 11px
+  &.wide
+    background: #e8f3fb
+    width: 350px
     
 .nice-form
   padding-top: 10px
@@ -525,3 +543,59 @@ form.search-form
   .error-list
     position: relative
     left: 20px
+    
+.todo
+  padding: 7px
+  a
+    background: rgba(255, 255, 255, 0.8)
+    border: 1px solid rgba(0, 0, 0, 0.12)
+    display: block
+    font-size: 12px
+    margin: 3px
+    padding: 8px 10px
+    text-decoration: none
+    +border-radius(2px)
+    &:hover, &:focus
+      background: url('../images/follow2.png') no-repeat 305px center #fff
+      border: 1px solid rgba(0, 0, 0, 0.35)
+      color: #222
+      +box-shadow(rgba(0, 0, 0, 0.08) 1px 1px 4px inset)
+
+.items
+  width: 100%
+  th, td
+    line-height: 1.3
+    padding: 10px
+  th, td, a
+    font-size: 11px
+  th
+    border-top: 1px solid $primary
+    background: $filler
+    color: $primary
+  td
+    border-top: 1px solid rgba(0, 0, 0, 0.1)
+  tr:first-child td
+    border-top: 1px solid $primary + #444
+    
+.simple-list
+  fieldset
+    display: block
+    padding: 10px 0
+  legend
+    font-size: 14px
+    font-weight: bold
+  label
+    display: inline-block
+    font-size: 11px
+    margin-left: 7px
+    padding-top: 5px
+    vertical-align: top
+    width: 125px
+  .row
+    margin-bottom: 7px
+    vertical-align: middle
+  .date
+    select
+      min-width: 50px
+  input[type=text], textarea
+    width: 290px
