@@ -82,14 +82,14 @@ public class Initializer {
 			dataClerkRole.addToPermissions("home:*")
 			dataClerkRole.save(failOnError: true, flush:true)
 
-			def userAdmin = new User(userType: UserType.PERSON,code:"admin", location: CalculationLocation.findByCode(RWANDA), username: "admin", 
+			def userAdmin = new User(userType: UserType.ADMIN,code:"admin", location: CalculationLocation.findByCode(RWANDA), username: "admin", 
 				firstname: "memms", lastname: "memms", email:'memms@memms.org', passwordHash: new Sha256Hash("admin").toHex(), active: true, 
 				confirmed: true, uuid:'admin', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
 
 			userAdmin.addToRoles(adminRole)
 			userAdmin.save(failOnError: true, flush:true)
 			
-			def userClerk= new User(userType: UserType.PERSON,code:"user", location: CalculationLocation.findByCode(KIVUYE), username: "user", 
+			def userClerk= new User(userType: UserType.OTHER,code:"user", location: CalculationLocation.findByCode(KIVUYE), username: "user", 
 				firstname: "user", lastname: "user", email:'user@memms.org', passwordHash: new Sha256Hash("user").toHex(), active: true, 
 				confirmed: true, uuid:'user', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
 			userClerk.addToRoles(dataClerkRole)
@@ -97,7 +97,7 @@ public class Initializer {
 			userClerk.addToPermissions("home:*")
 			userClerk.save(failOnError: true, flush:true)
 			
-			def userClerk1= new User(userType: UserType.PERSON,code:"user1", location: CalculationLocation.findByCode(BURERA), username: "user1",
+			def userClerk1= new User(userType: UserType.OTHER,code:"user1", location: CalculationLocation.findByCode(BURERA), username: "user1",
 				firstname: "user", lastname: "user", email:'user1@memms.org', passwordHash: new Sha256Hash("user1").toHex(), active: true,
 				confirmed: true, uuid:'user1', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
 			userClerk1.addToRoles(dataClerkRole)

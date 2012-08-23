@@ -9,12 +9,40 @@ import org.chai.memms.security.User;
 import org.chai.memms.equipment.Provider
 import org.chai.memms.location.DataLocation;
 import org.chai.memms.location.CalculationLocation;
+import org.chai.memms.location.DataLocationType;
+import org.chai.memms.location.Location
+import org.chai.memms.location.LocationLevel
 
 
 class EquipmentController extends AbstractEntityController{
 	
 	def providerService
 	def equipmentService
+	
+	def index = {
+		redirect(action: "summaryPage", params: params)
+	}
+	
+	def summaryPage = {
+		Location location = Location.get(params.int('location'))
+		Set<DataLocationType> dataLocationTypes = getLocationTypes()
+		
+		def template = null
+		def locationSkipLevels = null
+		def submitSkipLevels = null
+		
+		if (location != null) {
+			template = '/survey/summary/summarySectionTable'
+		}
+		
+		render (view: '/inventory/summaryPage', model: [
+			currentLocation: location,
+			currentLocationTypes: dataLocationTypes,
+			template: template,
+			locationSkipLevels: locationSkipLevels,
+			submitSkipLevels: submitSkipLevels
+		])
+	}
     def getEntity(def id) {
 		return Equipment.get(id);
 	}

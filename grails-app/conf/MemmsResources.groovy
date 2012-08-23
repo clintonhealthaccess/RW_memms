@@ -67,7 +67,6 @@ modules = {
 		dependsOn 'jquery'
 
 		resource url: '/js/jquery/fieldselection/jquery.fieldselection.js', bundle: 'core'
-//		resource url: '/js/jquery/datepicker/datepicker.css', bundle: 'core'
 	}
 	
 	cluetip {
@@ -77,7 +76,6 @@ modules = {
 		resource url: '/js/jquery/cluetip/lib/jquery.hoverIntent.js', bundle: 'core'
 		resource url: '/js/jquery/cluetip/jquery.cluetip.css', bundle: 'core'
 		resource url: '/js/cluetip_init.js', bundle: 'core'
-		//resource url: '/css/cluetip.css'
 	}
 
 	form {
@@ -86,7 +84,18 @@ modules = {
 		resource url: '/js/jquery/form/jquery.form.js', bundle: 'core'
 		resource url: '/js/form-util.js', bundle: 'core'
 		resource url: '/js/form_init.js', bundle: 'core'
-		//resource url: '/css/form.css'
+	}
+	
+	foldable {
+		dependsOn 'jquery'
+
+		resource url: '/js/foldable_init.js', bundle: 'core'
+	}
+	
+	dropdown {
+		dependsOn 'jquery'
+
+		resource url: '/js/dropdown_init.js', bundle: 'core'
 	}
 	
 }

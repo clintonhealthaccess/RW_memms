@@ -13,7 +13,7 @@
 					<% linkParams = levelLinkParams %>
 					<li>
 						<a href="${createLinkByFilter(controller:controllerName, action:actionName, params:linkParams)}">
-							<span><g:i18n field="${level.names}"/></span> 
+							<span><${level.names}</span> 
 						</a>
 					</li>
 				</g:each>

@@ -6,7 +6,7 @@ import java.util.Set;
 
 public enum UserType {
 	
-	PERSON("user-person", ""), 
+	ADMIN("user-admin", ""), 
 	SYSTEM("user-system", ""), 
 	OTHER("user-other", "");
 	
