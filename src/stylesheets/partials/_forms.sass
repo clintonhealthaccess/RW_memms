@@ -571,12 +571,17 @@ form.search-form
   th, td
     line-height: 1.3
     padding: 10px
+    &:first-child
+      padding-left: 15px
+    &:last-child
+      padding-right: 15px
   th, td, a
     font-size: 11px
   th
     border-top: 1px solid $primary
     background: $filler
     color: $primary
+    font-weight: bold
   td
     border-top: 1px solid rgba(0, 0, 0, 0.08)
   tr
@@ -609,7 +614,7 @@ form.search-form
     width: 290px
     
 .paginateButtons
-  padding: 10px
+  padding: 15px
   +pie-clearfix
   a
     background: $filler
@@ -627,3 +632,46 @@ form.search-form
   span
     background: $primary
     color: #fff
+    
+.filters
+  border: 1px solid rgba(0, 0, 0, 0.1)
+  padding: 0
+  margin-bottom: 15px
+  h2
+    border-bottom: 1px solid #eee
+    font: bold 15px Arial, sans-serif
+    padding: 10px 15px
+    a
+      margin-top: 4px
+      opacity: 0.4
+      &:hover, &:focus
+        opacity: 1
+  ul
+    padding: 10px 15px 0
+    +pie-clearfix
+  li
+    display: inline
+    float: left
+    margin-bottom: 8px
+    width: 25%
+  label
+    display: block
+    font-size: 11px
+    margin-bottom: 2px
+  select
+    background: $filler + #111
+    border: 1px solid $primary + #222
+    color: $primary
+    font-size: 11px
+    font-weight: bold
+    padding: 4px
+    width: 215px
+    +border-radius(2px)
+  button
+    margin: 5px 15px 15px
+    
+.filter-results
+  color: #aaa
+  font: bold 14px Arial, sans-serif
+  padding: 5px 0
+  text-transform: uppercase
