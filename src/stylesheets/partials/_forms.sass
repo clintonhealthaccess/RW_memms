@@ -578,9 +578,12 @@ form.search-form
     background: $filler
     color: $primary
   td
-    border-top: 1px solid rgba(0, 0, 0, 0.1)
-  tr:first-child td
-    border-top: 1px solid $primary + #444
+    border-top: 1px solid rgba(0, 0, 0, 0.08)
+  tr
+    &:first-child th
+      border-bottom: 1px solid rgba(0, 0, 0, 0.15)
+    &:last-child td
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08)
     
 .simple-list
   fieldset
@@ -604,3 +607,23 @@ form.search-form
       min-width: 50px
   input[type=text], textarea
     width: 290px
+    
+.paginateButtons
+  padding: 10px
+  +pie-clearfix
+  a
+    background: $filler
+    color: $primary
+    &:hover, &:focus
+      border: 1px solid $primary + #222
+  a, span
+    border: 1px solid rgba(0, 0, 0, 0.07)
+    display: block
+    float: left
+    margin-right: 3px
+    padding: 7px 10px
+    text-decoration: none
+    
+  span
+    background: $primary
+    color: #fff

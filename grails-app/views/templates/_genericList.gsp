@@ -38,6 +38,11 @@
 		
 		<div class="main table">
 			<g:render template="${template}"/>
+			<div class="paginateButtons">
+  			<g:if test="${entityCount != null}">
+  				<g:paginate total="${entityCount}" params="${params}" action="${actionName}"/>
+  			</g:if>
+  		</div>
 		</div>
 		
 		<g:if test="${entities.empty}">
@@ -45,11 +50,7 @@
 		</g:if>
 		
 		<!-- End of template -->
-		<div class="paginateButtons main">
-			<g:if test="${entityCount != null}">
-				<g:paginate total="${entityCount}" params="${params}" action="${actionName}"/>
-			</g:if>
-		</div>
+		
 		
 	</div>
 </div>

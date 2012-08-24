@@ -668,22 +668,37 @@ form.search-form button { padding: 4px 15px; }
 /* line 576, ../../src/stylesheets/partials/_forms.sass */
 .items th { border-top: 1px solid #258cd5; background: #e9f4fc; color: #258cd5; }
 /* line 580, ../../src/stylesheets/partials/_forms.sass */
-.items td { border-top: 1px solid rgba(0, 0, 0, 0.1); }
-/* line 582, ../../src/stylesheets/partials/_forms.sass */
-.items tr:first-child td { border-top: 1px solid #69d0ff; }
+.items td { border-top: 1px solid rgba(0, 0, 0, 0.08); }
+/* line 583, ../../src/stylesheets/partials/_forms.sass */
+.items tr:first-child th { border-bottom: 1px solid rgba(0, 0, 0, 0.15); }
+/* line 585, ../../src/stylesheets/partials/_forms.sass */
+.items tr:last-child td { border-bottom: 1px solid rgba(0, 0, 0, 0.08); }
 
-/* line 586, ../../src/stylesheets/partials/_forms.sass */
-.simple-list fieldset { display: block; padding: 10px 0; }
 /* line 589, ../../src/stylesheets/partials/_forms.sass */
-.simple-list legend { font-size: 14px; font-weight: bold; }
+.simple-list fieldset { display: block; padding: 10px 0; }
 /* line 592, ../../src/stylesheets/partials/_forms.sass */
+.simple-list legend { font-size: 14px; font-weight: bold; }
+/* line 595, ../../src/stylesheets/partials/_forms.sass */
 .simple-list label { display: inline-block; font-size: 11px; margin-left: 7px; padding-top: 5px; vertical-align: top; width: 125px; }
-/* line 599, ../../src/stylesheets/partials/_forms.sass */
+/* line 602, ../../src/stylesheets/partials/_forms.sass */
 .simple-list .row { margin-bottom: 7px; vertical-align: middle; }
-/* line 603, ../../src/stylesheets/partials/_forms.sass */
+/* line 606, ../../src/stylesheets/partials/_forms.sass */
 .simple-list .date select { min-width: 50px; }
-/* line 605, ../../src/stylesheets/partials/_forms.sass */
+/* line 608, ../../src/stylesheets/partials/_forms.sass */
 .simple-list input[type=text], .simple-list textarea { width: 290px; }
+
+/* line 611, ../../src/stylesheets/partials/_forms.sass */
+.paginateButtons { padding: 10px; *zoom: 1; }
+/* line 38, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
+.paginateButtons:after { content: ""; display: table; clear: both; }
+/* line 614, ../../src/stylesheets/partials/_forms.sass */
+.paginateButtons a { background: #e9f4fc; color: #258cd5; }
+/* line 617, ../../src/stylesheets/partials/_forms.sass */
+.paginateButtons a:hover, .paginateButtons a:focus { border: 1px solid #47aef7; }
+/* line 619, ../../src/stylesheets/partials/_forms.sass */
+.paginateButtons a, .paginateButtons span { border: 1px solid rgba(0, 0, 0, 0.07); display: block; float: left; margin-right: 3px; padding: 7px 10px; text-decoration: none; }
+/* line 627, ../../src/stylesheets/partials/_forms.sass */
+.paginateButtons span { background: #258cd5; color: white; }
 
 /* line 2, ../../src/stylesheets/partials/_flashes.sass */
 .help { background: url("../images/icons/point.png") no-repeat 0 0; padding: 10px 10px 10px 42px; }
