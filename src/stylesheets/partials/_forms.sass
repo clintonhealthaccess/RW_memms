@@ -177,13 +177,10 @@
 button, input[type=submit], .next
   background: $yes
   border: 1px solid $yes - #222
-  clear: both
   color: $filler
   cursor: pointer
   display: inline-block
-  font-size: 14px
-  font-weight: bold
-  line-height: 1
+  font: bold 14px/1 Arial, sans-serif
   padding: 6px 40px
   text-decoration: none
   +border-radius(3px)
@@ -226,6 +223,12 @@ button, input[type=submit], .next
       color: #fff
       +background(linear-gradient($yes, $yes - #111))
       +text-shadow($yes - #333 0 1px 0)
+  &.import
+    +border-right-radius(0)
+    border-right: 1px solid #eee
+    margin-left: 15px
+  &.export
+    +border-left-radius(0)
   
 select
   background: #f6f6f6
@@ -457,11 +460,13 @@ form.search-form
     border: 1px solid $filler - #333
     color: #444
     font: normal 12px Arial, sans-serif
-    padding: 4px
+    padding: 3px 5px 4px
     +box-shadow($filler - #111, 1px, 1px, 3px, 0, inset)
     &:hover, &:focus
       background: $filler + #030303
       border-color: $primary
+  button
+    padding: 4px 15px
 
 .form-box
   border: 1px solid #ddd

@@ -5,5 +5,5 @@
 	</g:each>
   <!-- <label for="q"><g:message code="entity.search.label" args="[entityName]"/>: </label> -->
 	<input name="q" value="${params.q}"></input>
-	<button type="submit" class="next medium"><g:message code="default.button.search.label"/></button>
+	<button type="submit" class="medium"><g:message code="default.button.search.label"/></button>
 </g:form>
