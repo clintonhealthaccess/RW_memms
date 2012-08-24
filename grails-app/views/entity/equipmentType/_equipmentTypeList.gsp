@@ -1,5 +1,5 @@
 <%@ page import="org.chai.memms.util.Utils" %>
-<table>
+<table class="items">
 	<thead>
 		<tr>
 			<th/>
@@ -15,14 +15,14 @@
 		<g:each in="${entities}" status="i" var="type">
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 				<td>
-					<ul>
+					<ul class="horizontal">
 						<li>
-							<a href="${createLinkWithTargetURI(controller:'equipmentType', action:'edit', params:[id: type.id])}">
+							<a href="${createLinkWithTargetURI(controller:'equipmentType', action:'edit', params:[id: type.id])}" class="edit-button">
 								<g:message code="default.link.edit.label" />
 							</a>
 						</li>
 						<li>
-							<a href="${createLinkWithTargetURI(controller:'equipmentType', action:'delete', params:[id: type.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');"><g:message code="default.link.delete.label" /></a>
+							<a href="${createLinkWithTargetURI(controller:'equipmentType', action:'delete', params:[id: type.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');" class="delete-button"><g:message code="default.link.delete.label" /></a>
 						</li>
 						
 					</ul>

@@ -5,7 +5,7 @@
 	     	<g:if test="${!search}">
 		     	<span class="right">
 					<g:if test="${!addTemplate}">
-		  				<a href="${createLinkWithTargetURI(controller: controllerName, action:'create')+(request.queryString==null?'':'&'+request.queryString)}" class="next medium left">
+		  				<a href="${createLinkWithTargetURI(controller: controllerName, action:'create')+(request.queryString==null?'':'&'+request.queryString)}" class="next medium left push-r">
 		  					<g:message code="default.new.label" args="[entityName]"/>
 		  				</a>
 		  			</g:if>

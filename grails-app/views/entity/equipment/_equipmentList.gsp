@@ -1,5 +1,5 @@
 
-<table class="items">
+<table class="items spaced">
 
 	<thead>
 		<tr>
@@ -18,7 +18,19 @@
 
 	<tbody>
 		<g:each in="${entities}" status="i" var="equipment">
-			<tr >
+			<tr>
+			  <td>
+					<ul class="horizontal">
+						<li>
+							<a href="${createLinkWithTargetURI(controller:'equipment', action:'edit', params:[id: equipment.id])}" class="edit-button">
+								<g:message code="default.link.edit.label" />
+							</a>
+						</li>
+						<li>
+							<a href="${createLinkWithTargetURI(controller:'equipment', action:'delete', params:[id: equipment.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');" class="delete-button"><g:message code="default.link.delete.label" /></a>
+						</li>
+					</ul>
+				</td>
 				<td>${equipment.serialNumber}</td>
 				<td>${equipment.type.names}</td>
 				<td>${equipment.model}</td>
@@ -32,18 +44,6 @@
 				<td>${equipment.getCurrentStatus()?.value?.name}</td>
 				<td>${equipment.donation}</td>
 				<td>${equipment.obsolete}</td>
-				<td>
-					<ul>
-						<li>
-							<a href="${createLinkWithTargetURI(controller:'equipment', action:'edit', params:[id: equipment.id])}">
-								<g:message code="default.link.edit.label" />
-							</a>
-						</li>
-						<li>
-							<a href="${createLinkWithTargetURI(controller:'equipment', action:'delete', params:[id: equipment.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');"><g:message code="default.link.delete.label" /></a>
-						</li>
-					</ul>
-				</td>
 			</tr>
 		</g:each>
 	</tbody>
