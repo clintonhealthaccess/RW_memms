@@ -1,131 +1,33 @@
-// ADVANCED FORM STYLES
 
-.adv-form-row
-  border: 1px solid $filler
-  padding: 25px 15px 15px
-  +border-radius(3px)
+.form-section
+  border-bottom: 1px solid #eee
   +pie-clearfix
-  &.minimized
-    background: $filler
-    margin-bottom: -1px
-    padding: 7px 15px
-    +background(linear-gradient($filler + #060606, $filler))
-    +text-shadow(#fff, 0, 1px, 0)
-  
-.adv-form-section
-  +pie-clearfix
-  &.last
-    border: none
-    margin: 0
-    padding: 0
-  &.no-border
-    border: none
-  .adv-form-section
-    padding-bottom: 0
-    margin-bottom: 0
-  
-.adv-form-fields li
-  margin: 12px 5px 6px 0
-  &.adv-form-subsection
-    margin: 0 5px 0 0
-  
-.adv-form
-
-  .element-map-level-2
-    > h6
-      margin-top: 5px
-      
-  .horizontal li
-    margin-bottom: 10px
-  
-  h5
-    border-bottom: 2px dotted $filler - #090909
-    font-weight: bold
-    margin-bottom: 12px
-    margin-top: 15px
-    padding-bottom: 5px
-    +text-shadow(#fff, 0, 1px, 0)
-  
-  label
-    display: block
-    font-size: 10px
-    margin-bottom: 3px
-    
-  input
-    background: #fff
-    border: 1px solid $filler - #333
-    color: #444
-    font: normal 12px Arial, sans-serif
-    margin-right: 5px
-    padding: 3px
-    width: 206px
-    +box-shadow($filler - #111, 1px, 1px, 3px, 0, inset)
-    &:hover, &:focus
-      background: $filler + #030303
-      border-color: $primary
-      
-  select
-    background: #fff
-    margin-right: 14px
-    width: 205px
-    
-.adv-form-mini
-  float: left
-  
-  &.horizontal li
-    margin-bottom: 0
-    
-  .adv-form-subsection
-    background: none
-    border: none
-    cursor: pointer
-    font-weight: bold
-    margin-top: 0
-    margin-bottom: 0 !important
-    padding: 3px 0
-    
-.adv-form-subsection
-  background: #fff
-  border: 1px solid $filler - #090909
-  clear: both
-  margin-top: 5px
-  padding: 3px 7px 0
-  
-  h6
-    background: #fff
-    color: $primary
+  .form-content
     float: left
-    font-size: 9px
-    left: -2px
-    padding: 0 2px
-    position: relative
+    width: 55%
+  .form-aside
+    float: right
+    padding-top: 10px
+    width: 40%
+  h5
+    font-size: 12px
+    margin-bottom: 1em
     text-transform: uppercase
-    top: -7px
-    
-  input, select
-    background: #f9f9f9
-    
-  ul
-    clear: both
-    
   li
-    margin-top: 0
-    margin-bottom: 0
-    
-.adv-form-actions
-  li
-    margin-bottom: 0 !important
-  a
+    +pie-clearfix
+  span
+    display: inline-block
     font-size: 11px
-
-.adv-form-checkbox
-  +pie-clearfix
-  label
-    display: inline
-    float: none
-
-.element-bool
-  float: left
+    line-height: 1.5
+    &.label
+      color: #666
+      float: left
+      width: 25%
+    &.text
+      color: $primary
+      float: right
+      width: 75%
+  
 .question-checkbox
   li
     clear: both
