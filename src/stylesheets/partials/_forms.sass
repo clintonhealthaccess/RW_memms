@@ -256,90 +256,6 @@ select
   &:hover, &:focus
     background: $filler + #030303
     border-color: $primary
-
-.entity-form-container
-  float: left
-  width: 100%
-  
-  .entity-form-header
-
-    .title
-      float: left
-      color: $primary
-       
-    .locales
-      float: right
-      padding: 4px
-    
-      a
-        padding: 2px
-    
-      a.no-link
-        font-weight: bold
-        
-  .forms-container 
-    width: 100%
-        
-  .data-search-column
-    float: right
-    margin-right: 20px
-    width: 460px
-    
-    form
-      border: none
-    
-    input.radio
-      width: auto
-  
-      label
-        font-weight: bold
-        margin-bottom: 2px
-    
-      #data
-        width: 600px
-    
-  .data-field-column
-    float: left
-    width: 460px
-    
-.entity-form-container form
-  background-color: inherit
-  border: 1px solid $filler
-  padding: 15px
-  position: relative
-  
-  .row
-    border-bottom: 1px dotted $filler
-    margin-bottom: 10px
-    padding-bottom: 10px
-    +pie-clearfix
-    
-    //.error-list
-    //  height: 14px
-      
-  .toggle-entry
-    float: left
-    margin-right: 15px
-
-  input, textarea
-    width: 280px
-    
-  input.radio
-    width: auto
-  
-  label
-    color: $primary
-    display: block
-    font-size: 11px
-    margin-bottom: 3px
-    
-  // fterrier start: added span for summary in admin forms
-  span, a
-    font-size: 11px
-    
-  span.bold
-    color: $primary
-  // fterrier end
     
 .focus-field
   border: solid 1px $filler - #222
@@ -639,7 +555,7 @@ form.search-form
     margin-left: 7px
     padding-top: 5px
     vertical-align: top
-    width: 125px
+    width: 130px
   .row
     margin-bottom: 7px
     vertical-align: middle
@@ -710,4 +626,9 @@ form.search-form
   color: #aaa
   font: bold 14px Arial, sans-serif
   padding: 5px 0
+  text-transform: uppercase
+  
+.form-languages a
+  font-size: 10px
+  margin-left: 5px
   text-transform: uppercase

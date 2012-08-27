@@ -1,4 +1,4 @@
-<div class="locales">
+<div class="locales right form-languages">
 	<g:each in="${locales}" var="locale" status="i">
 		<a href="#" class="toggle-link ${i==0?'no-link':''}" data-toggle="${locale}">
 			${locale}

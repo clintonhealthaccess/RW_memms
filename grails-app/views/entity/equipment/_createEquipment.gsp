@@ -1,6 +1,6 @@
 <%@ page import="org.chai.memms.util.Utils" %>
-<<<<<<< Updated upstream
 <%@ page import="org.chai.memms.equipment.EquipmentStatus.Status" %>
+
 <div  class="entity-form-container togglable">
   <div class="heading1-bar">
 		<h1>
@@ -14,7 +14,7 @@
 		<g:locales/>
 	</div>
 	<div class="main">
-  	<g:form url="[controller:'equipment', action:'save', params:[targetURI: targetURI]]" useToken="true">
+  	<g:form url="[controller:'equipment', action:'save', params:[targetURI: targetURI]]" useToken="true" class="simple-list">
   	  <fieldset>
       	<h4 class="section-title">
           <span class="question-default">
@@ -85,7 +85,7 @@
       	</g:if>
       	<g:if test="${equipment?.status!=null}">
   	    	<g:each in="${equipment?.status}" status="i" var="status">
-  		    	<table>
+  		    	<table class="items">
   		    		<tr>
   		    			<td>${status.value}</td>
   		    			<td>${Utils.formatDate(status?.statusChangeDate)}</td>
@@ -94,7 +94,8 @@
   		    		</tr>
   		    	</table>
   	    	</g:each>
-  	    	<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'edit', params:[equipment: equipment?.id])}">
+  	    	<br />
+  	    	<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'edit', params:[equipment: equipment?.id])}" class="next medium gray">
   	    		<g:message code="equipment.change.status.label" default="Change Status"/>
   	    	</a>
      		</g:if>
