@@ -22,17 +22,14 @@ class EquipmentStatusController extends AbstractEntityController{
 		return "equipment.status.label";
 	}
 	
-	def deleteEntity(def entity) {
-		if(Equipment.findByDepartment(entity)==null)
-			flash.message = message(code: 'status.hasequipment', args: [message(code: getLabel(), default: 'entity'), params.id], default: 'Status {0} still has associated equipment.')
-		else entity.delete()
-	}
-	
 	def getEntityClass() {
 		return EquipmentStatus.class;
 	}
+	
 	def bindParams(def entity) {
-		entity.properties = params
+		bindData(entity,params:[excludes:["current"]])
+		if(params["current"])
+			def status = EquipmentStatus.findByCurrentAndEquipment(true,entity.equipment)
 	}
 	
 	def getModel(def entity) {
@@ -43,13 +40,23 @@ class EquipmentStatusController extends AbstractEntityController{
 	
 	def list={
 		adaptParamsForList()
-		def equipmentStatus = EquipmentStatus.list(params)
-		render(view:"/entity/list", model:[
-			template:"equipmentStatus/equipmentStatusList",
-			entities: equipmentStatus,
-			entityCount: EquipmentStatus.count(),
-			code: getLabel(),
-			entityClass: getEntityClass()
-			])
+		def equipment = Equipment.get(params.int("equipment"))
+		
+		if (equipment == null) {
+			response.sendError(404)
+		}else{
+			List<EquipmentStatus> equipmentStatus  = equipment.status.asList()
+			def max = Math.min(params['offset']+params['max'], equipmentStatus.size())
+			equipmentStatus = equipmentStatus.sort{a,b -> (a.current > b.current) ? -1 : 1}
+		
+			render(view:"/entity/list", model:[
+				template: "equipmentStatus/equipmentStatusList",
+				equipment: equipment,
+				entities: equipmentStatus.subList(params['offset'], max),
+				entityCount: equipmentStatus.size(),
+				code: getLabel(),
+				entityClass: getEntityClass()
+				])
+		}
 	}
 }

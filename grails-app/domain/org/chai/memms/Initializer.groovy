@@ -82,7 +82,7 @@ public class Initializer {
 			dataClerkRole.addToPermissions("home:*")
 			dataClerkRole.save(failOnError: true, flush:true)
 
-			def userAdmin = new User(userType: UserType.PERSON,code:"admin", location: CalculationLocation.findByCode(RWANDA), username: "admin", 
+			def userAdmin = new User(userType: UserType.ADMIN,code:"admin", location: CalculationLocation.findByCode(RWANDA), username: "admin", 
 				firstname: "memms", lastname: "memms", email:'memms@memms.org', passwordHash: new Sha256Hash("admin").toHex(), active: true, 
 				confirmed: true, uuid:'admin', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
 

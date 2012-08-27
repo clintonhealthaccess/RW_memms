@@ -6,6 +6,7 @@ import org.chai.memms.Contact
 import org.chai.memms.Initializer;
 import org.chai.memms.equipment.EquipmentStatus.Status;
 import org.chai.memms.security.User;
+import org.chai.memms.security.UserType;
 import org.chai.memms.equipment.Provider
 import org.chai.memms.location.DataLocation;
 import org.chai.memms.location.CalculationLocation;
@@ -20,7 +21,10 @@ class EquipmentController extends AbstractEntityController{
 	}
 
 	def createEntity() {
-		return new Equipment();
+		def entity = new Equipment();
+		def location = DataLocation.get(params.int("location"));
+		if(!params["dataLocation"]) entity.location = location;
+		return entity;
 	}
 
 	def getTemplate() {
@@ -55,9 +59,11 @@ class EquipmentController extends AbstractEntityController{
 	
 	def saveEntity(def entity) {
 		entity.save()
-		def status = params['status']
-		status = Status."$status"
-		def currentStatus = newEquipmentStatus(new Date(),getUser(),status,entity,true,params["dateOfEvent"])
+		if(params['status'] && params["dateOfEvent"]){
+			def status = params['status']
+			status = Status."$status"
+			def currentStatus = newEquipmentStatus(new Date(),getUser(),status,entity,true,params["dateOfEvent"])
+		}
 	}
 	 
 	def getModel(def entity) {
@@ -73,19 +79,13 @@ class EquipmentController extends AbstractEntityController{
 
 	def list={
 		adaptParamsForList()
-		def equipments		
-		if(SecurityUtils.subject.isPermitted("*:*")){
-			equipments = Equipment.list(params)
-		}else if(SecurityUtils.subject.isPermitted("equipment:list")){
-			def user = getUser()
-			if(user != null){
-				equipments = equipmentService.getEquipmentsByDataLocation(user.location)
-			}
-		}
+		def user = getUser()
+		List<Equipment> equipments= (user.userType == UserType.ADMIN)?  equipmentService.getEquipments(params):equipmentService.getEquipmentsByLocation(user.location,params)
+		
 		render(view:"/entity/list", model:[
 			template:"equipment/equipmentList",
 			entities: equipments,
-			entityCount: Equipment.count(),
+			entityCount: equipments.totalCount,
 			code: getLabel(),
 			entityClass: getEntityClass()
 			])
@@ -96,8 +96,9 @@ class EquipmentController extends AbstractEntityController{
 		render (view: '/entity/list', model:[
 			template:"equipment/equipmentList",
 			entities: equipments,
-			entityCount: equipmentService.countEquipment(params['q']),
-			code: getLabel()
+			entityCount: equipments.totalCount,
+			code: getLabel(),
+			q:params['q']
 		])
 		
 	}

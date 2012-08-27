@@ -18,7 +18,11 @@ a
   clear: both
   color: #666
   font-size: 12px
+  padding: 15px
   +pie-clearfix
+  &.table
+    padding: 0
+    
   
 .form-heading
   color: $primary
@@ -26,7 +30,7 @@ a
   margin-bottom: 10px
   padding-left: 10px
 
-.question h4
+.section-title
   background: $filler
   color: $primary
   display: inline-block
@@ -43,10 +47,11 @@ a
   +text-shadow(#fff, 0, 1px, 0)
   
   span
-    background: $yes
+    background: $primary
     color: #fff
     display: block
     font-weight: bold
+    height: 18px
     left: -10px
     padding: 3px
     position: absolute
@@ -126,7 +131,7 @@ ul.horizontal
   
 .login-heading
   color: $primary
-  font-size: 16px
+  font-size: 18px
   font-weight: bold
   padding: 30px 15px 10px
   text-align: center

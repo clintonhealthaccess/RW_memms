@@ -1,4 +1,4 @@
-/*
+/**
 * Copyright (c) 2011, Clinton Health Access Initiative.
 *
 * All rights reserved.
@@ -50,9 +50,9 @@ class BootStrap {
 			Initializer.createInventoryStructure()
 			break;
 			case "production":
-			Initializer.createDummyStructure();
+			//Initializer.createDummyStructure();
 			Initializer.createUsers();
-			Initializer.createInventoryStructure()
+			//Initializer.createInventoryStructure()
 			break;
 		}
     }

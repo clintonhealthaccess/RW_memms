@@ -11,6 +11,9 @@ class FormTagLib {
 		if (attrs["type"] == null) attrs["type"] = 'text'
 		out << render(template:"/tags/form/input", model: attrs)
 	}
+	def inputBox = { attrs, body ->
+		out << render(template:"/tags/form/checkBox", model: attrs)
+	}
 	
 	def i18nInput = { attrs, body ->
 		if (attrs["type"] == null) attrs["type"] = 'text'

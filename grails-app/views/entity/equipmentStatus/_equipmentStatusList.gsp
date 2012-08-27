@@ -1,38 +1,37 @@
+<%@ page import="org.chai.memms.util.Utils" %>
+<%@ page import="org.chai.memms.equipment.EquipmentStatus.Status" %>
 <table>
 	<thead>
 		<tr>
-			<th/>
-			<th><g:message code="entity.code.label"/></th>
-			<th><g:message code="entity.names.label"/></th>
-			<th><g:message code="entity.descriptions.label"/></th>
+			<th></th>
+			<th><g:message code="equipment.status.label"/></th>
+			<th><g:message code="equipment.status.date.of.event.label"/></th>
+			<th><g:message code="equipment.status.recordedon.label"/></th>
+			<th><g:message code="equipment.status.current.label"/></th>
 		</tr>
 	</thead>
-	<tbody>
-		<g:each in="${entities}" status="i" var="model">
-			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-				<td>
-					<ul>
+	<tbody>		
+   		<g:each in="${entities}" status="i" var="status">
+    		<tr  class="${(i % 2) == 0 ? 'odd' : 'even'}">
+    			<td>
+	    			<ul>
 						<li>
-							<a href="${createLinkWithTargetURI(controller:'department', action:'edit', params:[id: model.id])}">
+							<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'edit', params:[id: status.id,equipment: status.equipment?.id])}">
 								<g:message code="default.link.edit.label" />
 							</a>
 						</li>
 						<li>
-							<a href="${createLinkWithTargetURI(controller:'department', action:'delete', params:[id: model.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');"><g:message code="default.link.delete.label" /></a>
+							<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'delete', params:[id: status.id,equipment: status.equipment?.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');">
+								<g:message code="default.link.delete.label" />
+							</a>
 						</li>
-						
 					</ul>
-				</td>
-				<td>
-					${model.value}
-				</td>
-				<td>
-					${model.statusChangeDate}
-				</td>
-				<td>
-					${model.current}
-				</td>
-			</tr>
-		</g:each>
+    			</td>
+    			<td>${status.value}</td>
+    			<td>${Utils.formatDate(status?.dateOfEvent)}</td>
+    			<td>${Utils.formatDate(status?.statusChangeDate)}</td>
+    			<td>${status.current}</td>
+    		</tr>
+   		</g:each>
 	</tbody>
 </table>

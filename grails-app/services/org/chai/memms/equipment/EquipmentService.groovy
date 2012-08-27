@@ -52,63 +52,40 @@ class EquipmentService {
 	
 	def languageService;
 	def sessionFactory;
-	
-	Integer countEquipment(String text) {
-		return getSearchCriteria(text).setProjection(Projections.count("id")).uniqueResult()
+	public List<Equipment> getEquipments(Map<String, String> params){
+		return Equipment.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc")
 	}
-	
 	public List<Equipment> searchEquipment(String text, Map<String, String> params) {
-		def criteria = getSearchCriteria(text)
-		List<Equipment> equipments = []
-		if (params['offset'] != null) criteria.setFirstResult(params['offset'])
-		if (params['max'] != null) criteria.setMaxResults(params['max'])
-		if (params['order'] != null) equipments criteria.addOrder(Order.asc(params['order'])).list()
-		else equipments = criteria.addOrder(Order.asc("id")).list()
-		
-		StringUtils.split(text).each { chunk ->
-			equipments.retainAll { equipment ->
-				Utils.matches(chunk, equipment.serialNumber) ||
-				Utils.matches(chunk, equipment.getDescriptions(languageService.getCurrentLanguage()))
-			}
-		}
-		return equipments
-	}
-	
-	private Criteria getSearchCriteria(String text) {
+		def dbFieldTypeNames = 'names_'+languageService.getCurrentLanguagePrefix();
 		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
-		def criteria = sessionFactory.getCurrentSession().createCriteria(Equipment.class)
+		def criteria = Equipment.createCriteria();
 		
-		def textRestrictions = Restrictions.conjunction()
-		StringUtils.split(text).each { chunk ->
-			def disjunction = Restrictions.disjunction();
-			disjunction.add(Restrictions.ilike("serialNumber", chunk, MatchMode.ANYWHERE))
-			disjunction.add(Restrictions.ilike(dbFieldDescriptions, chunk, MatchMode.ANYWHERE))
-			textRestrictions.add(disjunction)
+		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			    createAlias("type","t")
+				or{
+					ilike("serialNumber","%"+text+"%")
+					ilike(dbFieldDescriptions,"%"+text+"%") 
+					ilike("t."+dbFieldTypeNames,"%"+text+"%")
+			    }
 		}
-		criteria.add(textRestrictions)
-		return criteria
 	}
-	
-
-	public List<Equipment> filterEquipment(){
-		return null
-	}
-	public List<Equipment> getEquipmentsByDataLocation(CalculationLocation location) {
 		
-		List<Equipment> equipments = []
-		
+	public List<Equipment> getEquipmentsByLocation(CalculationLocation location,Map<String, String> params) {
+		def criteria = Equipment.createCriteria();
 		if(location instanceof DataLocation){
-			equipments = Equipment.findAll{
-				dataLocation == location
+			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+				eq('dataLocation',location)
 			}
 		}else if (location instanceof Location){
-			equipments = Equipment.findAll{
-				dataLocation in ((Location)location).dataLocations
+			def dataLocations = location.getDataLocations();
+			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+				'in'('dataLocation',dataLocations)
 			}
 		}
-		
-		return equipments
-
+	}
+	
+	public List<Equipment> filterEquipment(){
+		return null
 	}
 
 }

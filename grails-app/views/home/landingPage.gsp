@@ -7,11 +7,12 @@
 	<title><g:message code="landingpage.title" /></title>
 </head>
 <body>
-	<h3><g:message code="landingpage.welcome.label"/></h3>
-	
-	<ul>
-		<li><a href="${createLink(controller: 'Equipment', action:'list')}">Equipments</a></li>
-		<li><a href="${createLink(controller: 'EquipmentStatus', action:'list')}">Equipment Status</a></li>
-	</ul>
+  <h2 class="login-heading"><g:message code="landingpage.welcome.label"/></h2>
+	<div class="form-box wide">
+  	<ul class="todo">
+  		<li><a href="${createLink(controller: 'Equipment', action:'list')}">Equipments</a></li>
+  		<li><a href="${createLink(controller: 'EquipmentStatus', action:'list')}">Equipment Status</a></li>
+  	</ul>
+  </div>
 </body>
 </html>

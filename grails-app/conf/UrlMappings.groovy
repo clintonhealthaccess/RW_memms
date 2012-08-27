@@ -16,7 +16,8 @@ class UrlMappings {
 				// apply constraints here
 			}
 		}
-		"/warranty/$action/$equipment"(controller:"warranty")
+		"/equipment/$action/$dataLocation?/$id?"(controller:"equipment")
+		"/equipmentStatus/$action/$equipment/$id?"(controller:"equipmentStatus")
 
 		// homepage in home controller
 		"/"(controller:"home", action:"index")
