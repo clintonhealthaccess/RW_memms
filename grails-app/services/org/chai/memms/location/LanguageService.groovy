@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.lang.LocaleUtils;
-//import org.codehaus.groovy.grails.commons.ConfigurationHolder as CONF;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.servlet.support.RequestContextUtils;
 

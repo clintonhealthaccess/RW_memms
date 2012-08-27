@@ -13,19 +13,20 @@
 		</h1>
 		<g:locales/>
 	</div>
+
 	<div class="main">
   	<g:form url="[controller:'equipment', action:'save', params:[targetURI: targetURI]]" useToken="true" class="simple-list">
   	  <fieldset>
       	<h4 class="section-title">
           <span class="question-default">
-            <img src="../images/icons/star_small.png">
+          <img src="${resource(dir:'images',file:'star_small.png')}" alt="Section" width="33" />
           </span>
           Basic Information
         </h4>
       	<g:selectFromList name="dataLocation.id" label="${message(code:'entity.dataLocation.label')}" bean="${equipment}" field="dataLocation" optionKey="id" multiple="false"
   			ajaxLink="${createLink(controller:'location', action:'getAjaxData', params:[class: 'DataLocation'])}"
   			from="${dataLocations}" value="${equipment?.dataLocation?.id}" values="${dataLocations.collect{it.names}}" />
-			
+
       	<g:selectFromList name="type.id" label="${message(code:'entity.equipmentType.label')}" bean="${equipment}" field="type" optionKey="id" multiple="false"
   			ajaxLink="${createLink(controller:'equipmentType', action:'getAjaxData')}"
   			from="${types}" value="${equipment?.type?.id}" values="${types.collect{it.names}}" />

@@ -9,7 +9,7 @@
 	<a class="dropdown-link js_dropdown-link parameter" data-type="location"
 		data-location="${location.id}"
 		href="${createLinkByFilter(controller:controller, action:action, params:linkParams)}">
-		<g:i18n field="${location.names}" />
+		${location.names}
 	</a>
 	<g:if test="${location.children != null && !location.children.empty}">		
 		<g:each in="${location.children}" var="child">
