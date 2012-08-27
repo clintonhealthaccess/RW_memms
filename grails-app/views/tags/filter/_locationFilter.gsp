@@ -2,7 +2,7 @@
 	<span class="js_dropdown dropdown">
 		<a class="location js_dropdown-link nice-button with-highlight" href="#" data-type="location">
 			<g:if test="${currentLocation != null}">
-				<g:i18n field="${currentLocation.names}"/>
+				${currentLocation.names}
 			</g:if>
 			<g:else>
 				<g:message code="filter.location.noselection.label"/>
@@ -13,7 +13,7 @@
 				<ul>
 					<g:render template="/tags/filter/locationTree"
 						model="[
-							controller: controllerName, 
+							controller: controllerName,
 							action: actionName,
 							current: currentLocation,
 							location: locationFilterRoot,

@@ -10,8 +10,10 @@
   <h2 class="login-heading"><g:message code="landingpage.welcome.label"/></h2>
 	<div class="form-box wide">
   	<ul class="todo">
-  		<li><a href="${createLink(controller: 'Equipment', action:'list')}">Equipments</a></li>
-  		<li><a href="${createLink(controller: 'EquipmentStatus', action:'list')}">Equipment Status</a></li>
+  		<li><a href="${createLink(controller: 'Equipment', action:'summaryPage')}">Inventory</a></li>
+  		<li><a href="#">Corrective Maintenance</a></li>
+  		<li><a href="#">Preventive Maintenance</a></li>
+  		<li><a href="#">Reports</a></li>
   	</ul>
   </div>
 </body>

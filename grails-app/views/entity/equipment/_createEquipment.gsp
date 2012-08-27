@@ -24,7 +24,7 @@
       	<g:selectFromList name="dataLocation.id" label="${message(code:'entity.dataLocation.label')}" bean="${equipment}" field="dataLocation" optionKey="id" multiple="false"
   			ajaxLink="${createLink(controller:'location', action:'getAjaxData', params:[class: 'DataLocation'])}"
   			from="${dataLocations}" value="${equipment?.dataLocation?.id}" values="${dataLocations.collect{it.names}}" />
-			
+  						
       	<g:selectFromList name="type.id" label="${message(code:'entity.equipmentType.label')}" bean="${equipment}" field="type" optionKey="id" multiple="false"
   			ajaxLink="${createLink(controller:'equipmentType', action:'getAjaxData')}"
   			from="${types}" value="${equipment?.type?.id}" values="${types.collect{it.names}}" />

@@ -152,7 +152,9 @@ site.fallback.language="en"
 site.contact.email="contact@memms.org"
 site.entity.list.max=40
 site.from.email="no-reply@memms.org"
+site.datalocationtype.checked=["District Hospital","Health Center"]
 
+inventory.skip.levels=["Sector"]
 i18nFields{
 	locales = ["en","fr","rw"]
 	extraLocales = ["rw"]

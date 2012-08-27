@@ -1,10 +1,10 @@
 <div class="left">
 	<%
 		newLinkParams = [:]
-		newLinkParams.putAll linkParams
-		newLinkParams.remove 'dataLocationTypes'
+		newLinkParams.putAll(linkParams)
+		newLinkParams.remove('dataLocationTypes')
 	%>
-	<g:form name="report-filters" method="get" url="[controller:controllerName, action:actionName, params: newLinkParams]">
+	<g:form name="report-filters" method="post" url="[controller:controllerName, action:actionName, params: newLinkParams]">
 			
 		<span class="js_dropdown dropdown">
 			<a class="datalocation js_dropdown-link nice-button with-highlight" href="#">
@@ -20,7 +20,7 @@
 								<li>								
 									<input class="js_data-location-type-checkbox js_dropdown-ignore" name="dataLocationTypes" type="checkbox" value="${type.id}" 
 									${currentLocationTypes != null && !currentLocationTypes.empty && currentLocationTypes.contains(type)?'checked="checked"':''}/>
-									<label for="${type.id}"><g:i18n field="${type.names}"/></label>								
+									<label for="${type.id}">${type.names}</label>								
 								</li>
 							</g:each>	        
 						<li>

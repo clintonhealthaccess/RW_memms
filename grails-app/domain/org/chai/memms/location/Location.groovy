@@ -57,16 +57,16 @@ class Location extends CalculationLocation {
 		
 		def dataLocations = getDataLocations();
 		for (def dataLocation : dataLocations) {
-			if (types == null || types.contains(dataLocation.getType())) 
+			if (types == null || types.contains(dataLocation.getType())){
 				result.add(dataLocation);
-		}
-		
-		for (def child : children) {
-			if (skipLevels != null && skipLevels.contains(child.getLevel())) {
-				result.addAll(child.getDataLocations(skipLevels, types));
 			}
 		}
 		
+		for (def child : children) {
+			if (skipLevels != null && !skipLevels.contains(child.getLevel())) {
+				result.addAll(child.getDataLocations(skipLevels, types));
+			}
+		}
 		return result;				
 	}
 			

@@ -10,12 +10,47 @@ import org.chai.memms.security.UserType;
 import org.chai.memms.equipment.Provider
 import org.chai.memms.location.DataLocation;
 import org.chai.memms.location.CalculationLocation;
+import org.chai.memms.location.DataLocationType;
+import org.chai.memms.location.Location
+import org.chai.memms.location.LocationLevel
+
+import java.util.HashSet;
+import java.util.Set
 
 
 class EquipmentController extends AbstractEntityController{
 	
 	def providerService
 	def equipmentService
+	def inventoryService
+	
+	def index = {
+		redirect(action: "summaryPage", params: params)
+	}
+	
+	def summaryPage = {
+		def location = Location.get(params.int('location'))
+		
+		def dataLocationTypesFilter = getLocationTypes()
+		
+		def template = null
+		def inventories = null
+		
+		def locationSkipLevels = new HashSet<LocationLevel>()
+		
+		if (location != null) {
+			template = '/inventory/sectionTable'
+			inventories = inventoryService.getInventoryByLocation(location,dataLocationTypesFilter)			
+		}
+		
+		render (view: '/inventory/summaryPage', model: [
+			inventories:inventories,
+			currentLocation: location,
+			currentLocationTypes: dataLocationTypesFilter,
+			template: template,
+			locationSkipLevels: locationSkipLevels
+		])
+	}
     def getEntity(def id) {
 		return Equipment.get(id);
 	}
