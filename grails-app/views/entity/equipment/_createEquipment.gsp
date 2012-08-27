@@ -19,7 +19,7 @@
   	  <fieldset>
       	<h4 class="section-title">
           <span class="question-default">
-          <img src="${resource(dir:'images',file:'star_small.png')}" alt="Section" width="33" />
+          <img src="${resource(dir:'images/icons',file:'star_small.png')}" alt="Section"/>
           </span>
           Basic Information
         </h4>
@@ -49,7 +49,7 @@
     	<fieldset>
       	<h4 class="section-title">
           <span class="question-default">
-            <img src="../images/icons/star_small.png">
+            <img src="${resource(dir:'images/icons',file:'star_small.png')}" alt="Section"/>
           </span>
           Manufacture Information
         </h4>
@@ -62,7 +62,7 @@
     	<fieldset>
       	<h4 class="section-title">
           <span class="question-default">
-            <img src="../images/icons/star_small.png">
+            <img src="${resource(dir:'images/icons',file:'star_small.png')}" alt="Section"/>
           </span>
           Supply Information
         </h4>
@@ -76,7 +76,7 @@
     	<fieldset>
       	<h4 class="section-title">
           <span class="question-default">
-            <img src="../images/icons/star_small.png">
+            <img src="${resource(dir:'images/icons',file:'star_small.png')}" alt="Section"/>
           </span>
           Status Information
         </h4>
@@ -104,7 +104,7 @@
   	<fieldset>
       	<h4 class="section-title">
           <span class="question-default">
-            <img src="../images/icons/star_small.png">
+            <img src="${resource(dir:'images/icons',file:'star_small.png')}" alt="Section"/>
           </span>
           Warranty Information
         </h4>

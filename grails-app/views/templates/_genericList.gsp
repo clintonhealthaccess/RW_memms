@@ -19,7 +19,7 @@
 		  			<shiro:hasPermission permission="${controllerName}:export">
 		  			<g:if test="${grailsApplication.getArtefactByLogicalPropertyName('Controller', controllerName).hasProperty('export')}">
 		  			&nbsp;
-			  			<a href="${createLinkWithTargetURI(controller: controllerName, action:'exporter')+(request.queryString==null?'':'&'+request.queryString)}">
+			  			<a href="${createLinkWithTargetURI(controller: controllerName, action:'exporter')+(request.queryString==null?'':'&'+request.queryString)}" class="next medium gray left export">
 		  					<g:message code="default.export.label" />
 		  				</a>
 	  				</g:if>
