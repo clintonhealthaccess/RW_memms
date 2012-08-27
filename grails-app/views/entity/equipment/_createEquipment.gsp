@@ -14,37 +14,66 @@
 	</div>
 	<div class="main">
   	<g:form url="[controller:'equipment', action:'save', params:[targetURI: targetURI]]" useToken="true" class="simple-list">
-  	  <fieldset>
-      	<h4 class="section-title">
-          <span class="question-default">
-          <img src="${resource(dir:'images/icons',file:'star_small.png')}" alt="Section"/>
-          </span>
-          Basic Information
-        </h4>
-      	<g:selectFromList name="dataLocation.id" label="${message(code:'datalocation.label')}" bean="${equipment}" field="dataLocation" optionKey="id" multiple="false"
-  			ajaxLink="${createLink(controller:'location', action:'getAjaxData', params:[class: 'DataLocation'])}"
-  			from="${dataLocations}" value="${equipment?.dataLocation?.id}" values="${dataLocations.collect{it.names}}" />
+    	<div class="form-section">
+    	  <fieldset class="form-content">
+        	<h4 class="section-title">
+            <span class="question-default">
+            <img src="${resource(dir:'images/icons',file:'star_small.png')}" alt="Section"/>
+            </span>
+            Basic Information
+          </h4>
+        	<g:selectFromList name="dataLocation.id" label="${message(code:'datalocation.label')}" bean="${equipment}" field="dataLocation" optionKey="id" multiple="false"
+    			ajaxLink="${createLink(controller:'location', action:'getAjaxData', params:[class: 'DataLocation'])}"
+    			from="${dataLocations}" value="${equipment?.dataLocation?.id}" values="${dataLocations.collect{it.names}}" />
 
-      	<g:selectFromList name="type.id" label="${message(code:'entity.equipmentType.label')}" bean="${equipment}" field="type" optionKey="id" multiple="false"
-  			ajaxLink="${createLink(controller:'equipmentType', action:'getAjaxData')}"
-  			from="${types}" value="${equipment?.type?.id}" values="${types.collect{it.names}}" />
+        	<g:selectFromList name="type.id" label="${message(code:'entity.equipmentType.label')}" bean="${equipment}" field="type" optionKey="id" multiple="false"
+    			ajaxLink="${createLink(controller:'equipmentType', action:'getAjaxData')}"
+    			from="${types}" value="${equipment?.type?.id}" values="${types.collect{it.names}}" />
 			
-    		<g:input name="expectedLifeTime" label="${message(code:'equipment.expected.life.time.label')}" bean="${equipment}" field="expectedLifeTime"/>
+      		<g:input name="expectedLifeTime" label="${message(code:'equipment.expected.life.time.label')}" bean="${equipment}" field="expectedLifeTime"/>
 			
-    		<g:input name="serialNumber" label="${message(code:'equipment.serial.number.label')}" bean="${equipment}" field="serialNumber"/>
-    		<g:input name="model" label="${message(code:'equipment.model.label')}" bean="${equipment}" field="model"/>
-    		<g:i18nTextarea name="descriptions" bean="${equipment}" label="${message(code:'entity.descriptions.label')}" field="descriptions" height="150" width="300" maxHeight="150" />
+      		<g:input name="expectedLifeTime" label="${message(code:'equipment.expected.life.time.label')}" bean="${equipment}" field="expectedLifeTime"/>
+      		<g:input name="serialNumber" label="${message(code:'equipment.serial.number.label')}" bean="${equipment}" field="serialNumber"/>
+      		<g:input name="model" label="${message(code:'equipment.model.label')}" bean="${equipment}" field="model"/>
+      		<g:i18nTextarea name="descriptions" bean="${equipment}" label="${message(code:'entity.descriptions.label')}" field="descriptions" height="150" width="300" maxHeight="150" />
 		
-    		<g:selectFromList name="department.id" label="${message(code:'department.label')}" bean="${equipment}" field="department" optionKey="id" multiple="false"
-  			ajaxLink="${createLink(controller:'department', action:'getAjaxData')}"
-  			from="${departments}" value="${equipment?.department?.id}" values="${departments.collect{it.names}}" />
+      		<g:selectFromList name="department.id" label="${message(code:'department.label')}" bean="${equipment}" field="department" optionKey="id" multiple="false"
+    			ajaxLink="${createLink(controller:'department', action:'getAjaxData')}"
+    			from="${departments}" value="${equipment?.department?.id}" values="${departments.collect{it.names}}" />
 			
-    		<g:input name="room" label="${message(code:'equipment.room.label')}" bean="${equipment}" field="room"/>
+      		<g:input name="room" label="${message(code:'equipment.room.label')}" bean="${equipment}" field="room"/>
 		
     		<g:inputBox name="obsolete"  label="${message(code:'equipment.obsolete.label')}" bean="${equipment}" field="obsolete" value="${equipment.obsolete}" checked="${(equipment.obsolete)? true:false}"/>
     		<g:inputBox name="donation"  label="${message(code:'equipment.donation.label')}" bean="${equipment}" field="donation" value="${equipment.donation}" checked="${(equipment.donation)? true:false}"/>
+
     	</fieldset>	
-    	<fieldset>
+    	<div class="form-aside">
+     	  <h5>Aside title</h5>
+     	  <ul class="half">
+     	    <li>
+     	      <span class="label">Address</span>
+     	      <span class="text">Some Address 6<br />0000 Kigali City<br />Rwanda</span>
+   	      </li>
+     	  </ul>
+     	  <ul class="half">
+     	    <li>
+     	      <span class="label">Name</span>
+     	      <span class="text">Some Person</span>
+     	    </li>
+     	    <li>
+     	      <span class="label">Email</span>
+     	      <span class="text">some@email.com</span>
+     	    </li>
+     	    <li>
+     	      <span class="label">Phone</span>
+     	      <span class="text">23829837592835</span>
+     	    </li>
+     	  </ul>
+     	</div>
+    </div>
+    
+    <div class="form-section">
+    	<fieldset class="form-content">
       	<h4 class="section-title">
           <span class="question-default">
             <img src="${resource(dir:'images/icons',file:'star_small.png')}" alt="Section"/>
@@ -54,10 +83,36 @@
       	<g:selectFromList name="manufacture.id" label="${message(code:'provider.manufacture.label')}" bean="${equipment}" field="manufacture" optionKey="id" multiple="false"
   			ajaxLink="${createLink(controller:'provider', action:'getAjaxData', params: [type:'MANUFACTURE'])}"
   			from="${manufactures}" value="${equipment?.manufacture?.id}" values="${manufactures.collect{it.contact.contactName}}" />
-			
   			<g:inputDate name="manufactureDate" precision="day"  value="${equipment.manufactureDate}" id="manufacture-date" label="${message(code:'equipment.manufacture.date.label')}" bean="${equipment}" field="manufactureDate"/>
      	</fieldset>
-    	<fieldset>
+     	
+    	<div class="form-aside">
+     	  <h5>Aside title</h5>
+     	  <ul class="half">
+     	    <li>
+     	      <span class="label">Address</span>
+     	      <span class="text">Some Address 6<br />0000 Kigali City<br />Rwanda</span>
+   	      </li>
+     	  </ul>
+     	  <ul class="half">
+     	    <li>
+     	      <span class="label">Name</span>
+     	      <span class="text">Some Person</span>
+     	    </li>
+     	    <li>
+     	      <span class="label">Email</span>
+     	      <span class="text">some@email.com</span>
+     	    </li>
+     	    <li>
+     	      <span class="label">Phone</span>
+     	      <span class="text">23829837592835</span>
+     	    </li>
+     	  </ul>
+     	</div>
+    </div>
+    
+    <div class="form-section">
+    	<fieldset class="form-content">
       	<h4 class="section-title">
           <span class="question-default">
             <img src="${resource(dir:'images/icons',file:'star_small.png')}" alt="Section"/>
@@ -69,9 +124,36 @@
   			from="${suppliers}" value="${equipment?.supplier?.id}" values="${suppliers.collect{it.contact.contactName}}" />		
     		<g:inputDate name="purchaseDate" precision="day" id="purchase-date" value="${equipment.purchaseDate}" label="${message(code:'equipment.purchase.date.label')}" bean="${equipment}" field="purchaseDate"/>
     		<g:input name="purchaseCost" label="${message(code:'equipment.purchase.cost.label')}" bean="${equipment}" field="purchaseCost"/>
-    	
-
      	</fieldset>
+     	
+     	<div class="form-aside">
+     	  <h5>Aside title</h5>
+     	  <ul class="half">
+     	    <li>
+     	      <span class="label">Address</span>
+     	      <span class="text">Some Address 6<br />0000 Kigali City<br />Rwanda</span>
+   	      </li>
+     	  </ul>
+     	  <ul class="half">
+     	    <li>
+     	      <span class="label">Name</span>
+     	      <span class="text">Some Person</span>
+     	    </li>
+     	    <li>
+     	      <span class="label">Email</span>
+     	      <span class="text">some@email.com</span>
+     	    </li>
+     	    <li>
+     	      <span class="label">Phone</span>
+     	      <span class="text">23829837592835</span>
+     	    </li>
+     	  </ul>
+     	</div>
+    </div>
+    
+    <div class="form-section">
+    	<fieldset class="form-content">
+      	<h4 class="section-title">
     	<fieldset>
       	<h4 class="section-title">
           <span class="question-default">
@@ -123,7 +205,33 @@
   	    	</a>
      		</g:if>
      	</fieldset>
-  	<fieldset>
+  	  <div class="form-aside">
+     	  <h5>Aside title</h5>
+     	  <ul class="half">
+     	    <li>
+     	      <span class="label">Address</span>
+     	      <span class="text">Some Address 6<br />0000 Kigali City<br />Rwanda</span>
+   	      </li>
+     	  </ul>
+     	  <ul class="half">
+     	    <li>
+     	      <span class="label">Name</span>
+     	      <span class="text">Some Person</span>
+     	    </li>
+     	    <li>
+     	      <span class="label">Email</span>
+     	      <span class="text">some@email.com</span>
+     	    </li>
+     	    <li>
+     	      <span class="label">Phone</span>
+     	      <span class="text">23829837592835</span>
+     	    </li>
+     	  </ul>
+     	</div>
+    </div>
+    
+    <div class="form-section">
+    	<fieldset class="form-content">
       	<h4 class="section-title">
           <span class="question-default">
             <img src="${resource(dir:'images/icons',file:'star_small.png')}" alt="Section"/>
@@ -137,15 +245,43 @@
       	<g:input name="warranty.contact.phone" label="${message(code:'contact.phone.label')}" bean="${equipment?.warranty?.contact}" field="phone"/>
       	<g:input name="warranty.contact.poBox" label="${message(code:'contact.pobox.label')}" bean="${equipment?.warranty?.contact}" field="poBox"/>
   	    <g:i18nTextarea name="warranty.contact.addressDescriptions" bean="${equipment?.warranty?.contact}" label="${message(code:'contact.address.descriptions.label')}" field="addressDescriptions" height="150" width="300" maxHeight="150" />
-     	<g:i18nTextarea name="warranty.descriptions" bean="${equipment.warranty}" label="${message(code:'warranty.descriptions.label')}" field="descriptions" height="150" width="300" maxHeight="150" />	 			
-  	</fieldset>   
+
+     		<g:i18nTextarea name="warranty.descriptions" bean="${equipment.warranty}" label="${message(code:'warranty.descriptions.label')}" field="descriptions" height="150" width="300" maxHeight="150" />	 			
+    	</fieldset>
+  	<div class="form-aside">
+   	  <h5>Aside title</h5>
+   	  <ul class="half">
+   	    <li>
+   	      <span class="label">Address</span>
+   	      <span class="text">Some Address 6<br />0000 Kigali City<br />Rwanda</span>
+ 	      </li>
+   	  </ul>
+   	  <ul class="half">
+   	    <li>
+   	      <span class="label">Name</span>
+   	      <span class="text">Some Person</span>
+   	    </li>
+   	    <li>
+   	      <span class="label">Email</span>
+   	      <span class="text">some@email.com</span>
+   	    </li>
+   	    <li>
+   	      <span class="label">Phone</span>
+   	      <span class="text">23829837592835</span>
+   	    </li>
+   	  </ul>
+   	</div>
+  </div>
+  
   		<g:if test="${equipment.id != null}">
   			<input type="hidden" name="id" value="${equipment.id}"></input>
   		</g:if>
+  		
   		<div class="buttons">
   			<button type="submit"><g:message code="default.button.save.label"/></button>
   			<a href="${createLink(uri: targetURI)}"><g:message code="default.link.cancel.label"/></a>
   		</div>
+  		
   	</g:form>
   </div>
 </div>
