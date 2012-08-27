@@ -94,8 +94,8 @@
     	<shiro:hasPermission permission="home:*">
 			<li><a class="${controllerName=='home'?'active':''}" href="${createLink(controller:'home', action:'index')}">Home</a></li>
 		</shiro:hasPermission>
-		<shiro:hasPermission permission="equipment:*">
-			<li><a class="${controllerName=='equipment'?'active':''}" href="${createLink(controller:'equipment', action:'index')}">Inventory</a></li>
+		<shiro:hasPermission permission="equipment:summaryPage">
+			<li><a class="${controllerName=='equipment'?'active':''}" href="${createLink(controller:'equipment', action:'summaryPage')}">Inventory</a></li>
 		</shiro:hasPermission>
 		<shiro:hasPermission permission="maintenance:corrective:*">
 			<li><a class="${controllerName=='dashboard'?'active':''}" href="${createLink(controller:'equipment', action:'index')}">Corrective Maintenance</a></li>

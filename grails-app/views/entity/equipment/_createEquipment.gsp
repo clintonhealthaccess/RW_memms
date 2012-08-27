@@ -15,7 +15,7 @@
 	<g:form url="[controller:'equipment', action:'save', params:[targetURI: targetURI]]" useToken="true">
 	<fieldset>
     	<legend>Basic Information:</legend>	
-    	<g:selectFromList name="dataLocation.id" label="${message(code:'entity.dataLocation.label')}" bean="${equipment}" field="dataLocation" optionKey="id" multiple="false"
+    	<g:selectFromList name="dataLocation.id" label="${message(code:'inventory.datalocation.label')}" bean="${equipment}" field="dataLocation" optionKey="id" multiple="false"
 			ajaxLink="${createLink(controller:'location', action:'getAjaxData', params:[class: 'DataLocation'])}"
 			from="${dataLocations}" value="${equipment?.dataLocation?.id}" values="${dataLocations.collect{it.names}}" />
 			

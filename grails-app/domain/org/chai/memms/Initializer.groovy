@@ -101,6 +101,10 @@ public class Initializer {
 				firstname: "user", lastname: "user", email:'user1@memms.org', passwordHash: new Sha256Hash("user1").toHex(), active: true,
 				confirmed: true, uuid:'user1', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
 			userClerk1.addToRoles(dataClerkRole)
+			userClerk1.addToPermissions("equipment:index")
+			userClerk1.addToPermissions("equipment:summaryPage")
+			userClerk1.addToPermissions("equipment:list")
+			userClerk1.addToPermissions("home:*")
 			userClerk1.save(failOnError: true, flush:true)
 		}
 	}
@@ -124,7 +128,7 @@ public class Initializer {
 			def west = newLocation(['en':WEST], WEST,rwanda,province)
 			def east = newLocation(['en':EAST], EAST,rwanda,province)
 			def burera = newLocation(['en':BURERA], BURERA, north, district)
-			def burera1 = newLocation(['en':BURERA1], BURERA1, north, district)
+			def burera1 = newLocation(['en':BURERA1], BURERA1, south, district)
 			
 			//Add DataLocation
 			def butaro = newDataLocation(['en':BUTARO],BUTARO,burera,dh)

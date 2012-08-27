@@ -40,74 +40,13 @@ class FilterTagLib {
 	def locationService;
 	def reportService;
 
-//	def topLevelReportTabs = {attrs, body ->
-//		def model = new HashMap(attrs)
-//		if (model.linkParams == null) model << [linkParams: [:]]
-//		else{
-//			def linkParams = model.linkParams
-//			def exclude = attrs['exclude']
-//			if (exclude != null){
-//				def filteredLinkParams = new HashMap(linkParams)
-//				for(def param : linkParams){
-//					if(exclude.contains(param.key))
-//						filteredLinkParams.remove(param.key)
-//				}
-//				model << [linkParams: filteredLinkParams]
-//			}
-//		}		
-//		out << render(template:'/templates/topLevelReportTabs', model:model)
-//	}
-//	
-//	def periodFilter = {attrs, body ->
-//		Period.withTransaction {
-//			def model = new HashMap(attrs)
-//			model << 
-//				[
-//					currentPeriod: attrs['selected'],
-//					periods: Period.list([cache: true])
-//				]
-//			if (model.linkParams == null) model << [linkParams: [:]]
-//			out << render(template:'/tags/filter/periodFilter', model:model)
-//		}
-//	}
-//
-//	def programFilter = {attrs, body ->
-//		ReportProgram.withTransaction {
-//			def model = new HashMap(attrs)			
-//			def program = attrs['selected']
-//			def programRoot = reportService.getRootProgram()
-//			def programTree = reportService.collectReportProgramTree(attrs['selectedTargetClass'], programRoot)
-//			model << 
-//				[
-//					currentProgram: program,
-//					programRoot: programRoot,
-//					programTree: programTree			
-//				]
-//			
-//			if (model.linkParams == null) model << [linkParams: [:]]
-//			else{
-//				def linkParams = model.linkParams
-//				def exclude = attrs['exclude']
-//				if (exclude != null){
-//					def filteredLinkParams = new HashMap(linkParams)
-//					for(def param : linkParams){
-//						if(exclude.contains(param.key))
-//							filteredLinkParams.remove(param.key)
-//					}
-//					model << [linkParams: filteredLinkParams]
-//				}
-//			}	
-//			out << render(template:'/tags/filter/programFilter', model:model)
-//		}
-//	}
 		
 	def locationFilter = {attrs, body ->
 		Location.withTransaction {
 			def model = new HashMap(attrs)
 			def location = attrs['selected']
-			def locationFilterRoot = locationService.getRootLocation()	
+			def locationFilterRoot = locationService.getRootLocation()
 			def locationFilterTree = locationFilterRoot.collectTreeWithDataLocations(attrs['skipLevels'], attrs['selectedTypes'])
-			log.debug("------------=-=-=-=-=-=-=- :" + locationFilterTree.size())
 			model << 
 				[
 					currentLocation: location,
@@ -132,20 +71,6 @@ class FilterTagLib {
 		}
 	}
 	
-////	def levelFilter = {attrs, body ->
-////		LocationLevel.withTransaction {
-////			def model = new HashMap(attrs)
-////			def currentLevel = attrs['selected']
-////			def levels = locationService.listLevels(attrs['skipLevels'])
-////			model << 
-////				[
-////					currentLevel: currentLevel,
-////					levels: levels
-////				]
-////			if (model.linkParams == null) model << [linkParams: [:]]
-////			out << render(template:'/tags/filter/levelFilter', model:model)
-////		}
-////	}
 	
 	// attrs['skipLevels'] is only needed for reports with both top-level locationFilter & levelFilter
 	def createLinkByFilter = {attrs, body ->

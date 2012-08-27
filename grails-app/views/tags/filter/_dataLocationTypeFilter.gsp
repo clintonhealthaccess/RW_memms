@@ -1,4 +1,4 @@
-<div>
+<div class="left">
 	<%
 		newLinkParams = [:]
 		newLinkParams.putAll(linkParams)

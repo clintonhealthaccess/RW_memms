@@ -130,6 +130,7 @@ ul.horizontal li.last { margin-right: 0; }
 /* line 21, ../../src/stylesheets/partials/_layout.sass */
 #content .main { background: white; -moz-border-radius-bottomleft: 5px; -webkit-border-bottom-left-radius: 5px; border-bottom-left-radius: 5px; -moz-border-radius-bottomright: 5px; -webkit-border-bottom-right-radius: 5px; border-bottom-right-radius: 5px; -webkit-box-shadow: #cccccc 0 0 2px; -moz-box-shadow: #cccccc 0 0 2px; box-shadow: #cccccc 0 0 2px; }
 
+
 /* line 26, ../../src/stylesheets/partials/_layout.sass */
 .main { padding: 15px; }
 

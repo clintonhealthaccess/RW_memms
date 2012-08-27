@@ -13,34 +13,41 @@ import org.chai.memms.location.DataLocationType;
 import org.chai.memms.location.Location
 import org.chai.memms.location.LocationLevel
 
+import java.util.HashSet;
+import java.util.Set
+
 
 class EquipmentController extends AbstractEntityController{
 	
 	def providerService
 	def equipmentService
+	def inventoryService
 	
 	def index = {
 		redirect(action: "summaryPage", params: params)
 	}
 	
 	def summaryPage = {
-		Location location = Location.get(params.int('location'))
-		Set<DataLocationType> dataLocationTypes = getLocationTypes()
+		def location = Location.get(params.int('location'))
+		
+		def dataLocationTypesFilter = getLocationTypes()
 		
 		def template = null
-		def locationSkipLevels = null
-		def submitSkipLevels = null
+		def inventories = null
+		
+		def locationSkipLevels = new HashSet<LocationLevel>()
 		
 		if (location != null) {
-			template = '/survey/summary/summarySectionTable'
+			template = '/inventory/sectionTable'
+			inventories = inventoryService.getInventoryByLocation(location,dataLocationTypesFilter)			
 		}
 		
 		render (view: '/inventory/summaryPage', model: [
+			inventories:inventories,
 			currentLocation: location,
-			currentLocationTypes: dataLocationTypes,
+			currentLocationTypes: dataLocationTypesFilter,
 			template: template,
-			locationSkipLevels: locationSkipLevels,
-			submitSkipLevels: submitSkipLevels
+			locationSkipLevels: locationSkipLevels
 		])
 	}
     def getEntity(def id) {

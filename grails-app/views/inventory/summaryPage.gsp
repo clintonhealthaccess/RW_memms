@@ -7,19 +7,19 @@
 	</head>
 	<body>
 		<div>
-			<div>
+			<div class="filter-bar">
 				<g:locationFilter linkParams="${[order:'desc']}" selected="${currentLocation}" selectedTypes="${currentLocationTypes}" skipLevels="${locationSkipLevels}"/>
 				<g:dataLocationTypeFilter linkParams="${params}" selected="${currentLocationTypes}"/>
 			</div>
 						
 			<div class="main">			
-				<g:if test="${summaryPage == null}">
+				<g:if test="${inventories == null}">
 					<p class="nav-help"><g:message code="inventory.summary.selectlocation.text"/></p>
 				</g:if>
 				<g:else>
 					<div>
 						<div>
-							<g:message code="location.label"/>: <g:i18n field="${currentLocation.names}"/>
+							<g:message code="location.label"/>: ${currentLocation.names}
 						</div>
 					</div>
 					<g:render template="${template}"/>				
