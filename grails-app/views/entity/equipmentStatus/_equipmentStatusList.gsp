@@ -1,6 +1,6 @@
 <%@ page import="org.chai.memms.util.Utils" %>
 <%@ page import="org.chai.memms.equipment.EquipmentStatus.Status" %>
-<table>
+<table class="items">
 	<thead>
 		<tr>
 			<th></th>
@@ -14,14 +14,14 @@
    		<g:each in="${entities}" status="i" var="status">
     		<tr  class="${(i % 2) == 0 ? 'odd' : 'even'}">
     			<td>
-	    			<ul>
+	    			<ul class="horizontal">
 						<li>
-							<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'edit', params:[id: status.id,equipment: status.equipment?.id])}">
+							<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'edit', params:[id: status.id,equipment: status.equipment?.id])}" class="edit-button">
 								<g:message code="default.link.edit.label" />
 							</a>
 						</li>
 						<li>
-							<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'delete', params:[id: status.id,equipment: status.equipment?.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');">
+							<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'delete', params:[id: status.id,equipment: status.equipment?.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');" class="delete-button">
 								<g:message code="default.link.delete.label" />
 							</a>
 						</li>

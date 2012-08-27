@@ -5,7 +5,7 @@
 <html>
 <head>
 	<title><g:layoutTitle /></title>
-
+	<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
 	<g:layoutHead />	
 	<r:require module="core"/>
 	<r:layoutResources/>
@@ -98,13 +98,13 @@
 			<li><a class="${controllerName=='equipment'?'active':''}" href="${createLink(controller:'equipment', action:'summaryPage')}">Inventory</a></li>
 		</shiro:hasPermission>
 		<shiro:hasPermission permission="maintenance:corrective:*">
-			<li><a class="${controllerName=='dashboard'?'active':''}" href="${createLink(controller:'equipment', action:'index')}">Corrective Maintenance</a></li>
+			<li><a class="${controllerName=='dashboard'?'active':''}" href="#">Corrective Maintenance</a></li>
 		</shiro:hasPermission>
 		<shiro:hasPermission permission="maintenance:preventive:*">
-			<li><a class="${controllerName=='dashboard'?'active':''}" href="${createLink(controller:'equipment', action:'index')}">Preventive Maintenance</a></li>
+			<li><a class="${controllerName=='dashboard'?'active':''}" href="#">Preventive Maintenance</a></li>
 		</shiro:hasPermission>
 		<shiro:hasPermission permission="report:*">
-			<li><a class="${controllerName=='dashboard'?'active':''}" href="${createLink(controller:'equipment', action:'index')}">Reports</a></li>
+			<li><a class="${controllerName=='dashboard'?'active':''}" href="#">Reports</a></li>
 		</shiro:hasPermission>
 		<shiro:hasPermission permission="admin:*">
 			<li><a href="#">Administration</a>

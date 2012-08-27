@@ -13,23 +13,23 @@
 		<g:locales/>
 	</div>
 	<div class="main">
-  	<g:form url="[controller:'equipment', action:'save', params:[targetURI: targetURI]]" useToken="true">
+  	<g:form url="[controller:'equipment', action:'save', params:[targetURI: targetURI]]" useToken="true" class="simple-list">
   	  <fieldset>
       	<h4 class="section-title">
           <span class="question-default">
-            <img src="../images/icons/star_small.png">
+            <img src="${resource(dir:'images/icons',file:'star_small.png')}">
           </span>
           Basic Information
-        </h4>
-      	<g:selectFromList name="dataLocation.id" label="${message(code:'entity.dataLocation.label')}" bean="${equipment}" field="dataLocation" optionKey="id" multiple="false"
-  			ajaxLink="${createLink(controller:'location', action:'getAjaxData', params:[class: 'DataLocation'])}"
-  			from="${dataLocations}" value="${equipment?.dataLocation?.id}" values="${dataLocations.collect{it.names}}" />
-  						
-      	<g:selectFromList name="type.id" label="${message(code:'entity.equipmentType.label')}" bean="${equipment}" field="type" optionKey="id" multiple="false"
+        </h4>  			  		
+  		<div class="row">
+			<input type="hidden" name="dataLocation.id" value="${equipment.dataLocation.id}" />
+			<label><g:message code="datalocation.label"/>:</label> ${equipment.dataLocation.names}
+		</div>				
+      	<g:selectFromList name="type.id" label="${message(code:'equipment.type.label')}" bean="${equipment}" field="type" optionKey="id" multiple="false"
   			ajaxLink="${createLink(controller:'equipmentType', action:'getAjaxData')}"
   			from="${types}" value="${equipment?.type?.id}" values="${types.collect{it.names}}" />
 			
-    		<g:input name="expectedLifeTime" label="${message(code:'equipment.expectedlifetime.label')}" bean="${equipment}" field="expectedLifeTime"/>
+    		<g:input name="expectedLifeTime" label="${message(code:'equipment.expected.life.time.label')}" bean="${equipment}" field="expectedLifeTime"/>
 			
     		<g:input name="serialNumber" label="${message(code:'equipment.serial.number.label')}" bean="${equipment}" field="serialNumber"/>
     		<g:input name="model" label="${message(code:'equipment.model.label')}" bean="${equipment}" field="model"/>
@@ -41,13 +41,13 @@
 			
     		<g:input name="room" label="${message(code:'equipment.room.label')}" bean="${equipment}" field="room"/>
 		
-    		<g:input name="obsolete" type="checkbox" label="${message(code:'equipment.obsolete.label')}" bean="${equipment}" field="obsolete"/>
-    		<g:input name="donation" type="checkbox" label="${message(code:'equipment.donation.label')}" bean="${equipment}" field="donation"/>
+    		<g:inputBox name="obsolete"  label="${message(code:'equipment.obsolete.label')}" bean="${equipment}" value="${equipment.obsolete}" checked="${(equipment.obsolete)? true:false}"/>
+    		<g:inputBox name="donation"  label="${message(code:'equipment.donation.label')}" bean="${equipment}" value="${equipment.donation}" checked="${(equipment.donation)? true:false}"/>
     	</fieldset>	
     	<fieldset>
       	<h4 class="section-title">
           <span class="question-default">
-            <img src="../images/icons/star_small.png">
+            <img src="${resource(dir:'images/icons',file:'star_small.png')}">
           </span>
           Manufacture Information
         </h4>
@@ -60,7 +60,7 @@
     	<fieldset>
       	<h4 class="section-title">
           <span class="question-default">
-            <img src="../images/icons/star_small.png">
+           <img src="${resource(dir:'images/icons',file:'star_small.png')}">
           </span>
           Supply Information
         </h4>
@@ -75,29 +75,29 @@
     	<fieldset>
       	<h4 class="section-title">
           <span class="question-default">
-            <img src="../images/icons/star_small.png">
+           <img src="${resource(dir:'images/icons',file:'star_small.png')}">
           </span>
           Status Information
         </h4>
       	<g:if test="${equipment.id == null}">
-     			<g:selectFromEnum name="status" bean="${equipment}" values="${Status.values()}" field="status" label="${message(code:'equipmentstatus.label')}"/>
-     			<g:inputDate name="dateOfEvent" precision="day"  value="${equipment.status?.dateOfEvent}" id="date-of-event" label="${message(code:'entity.date.of.event.label')}" bean="${equipment.status}" field="status.dateOfEvent"/>
+     			<g:selectFromEnum name="status" bean="${equipment}" values="${Status.values()}" field="status" label="${message(code:'equipment.status.label')}"/>
+     			<g:inputDate name="dateOfEvent" precision="day"  value="${equipment.status?.dateOfEvent}" id="date-of-event" label="${message(code:'equipment.status.date.of.event.label')}" bean="${equipment.status}" field="status.dateOfEvent"/>
       	</g:if>
       	<g:if test="${equipment?.status!=null}">
-	    	<table>
+	    	<table class="items">
 	    		<tr>
-	    			<th>Status</th>
-	    			<th>Date of Event</th>
-	    			<th>Recorded On</th>
-	    			<th>Current</th>
+	    			<th>${message(code:'equipment.status.label')}</th>
+	    			<th>${message(code:'equipment.status.date.of.event.label')}</th>
+	    			<th>${message(code:'equipment.status.recordedon.label')}</th>
+	    			<th>${message(code:'equipment.status.current.label')}</th>
 	    			<th></th>
 	    		</tr>
 	    		<g:each in="${equipment?.status.sort{a,b -> (a.current > b.current) ? -1 : 1}}" status="i" var="status">
 	    		<tr>
-	    			<td>${status.value}</td>
+	    			<td>${message(code: status?.value?.messageCode+'.'+status?.value?.name)}</td>
 	    			<td>${Utils.formatDate(status?.dateOfEvent)}</td>
 	    			<td>${Utils.formatDate(status?.statusChangeDate)}</td>
-	    			<td>${status.current}</td>
+	    			<td>${(status.current)? '\u2713':'X'}</td>
 	    			<td>
 		    			<ul>
 					<li>
@@ -113,7 +113,8 @@
 	    		</tr>
 	    		</g:each>
 	    	</table>
-  	    	<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'create', params:[equipment: equipment?.id])}">
+	    	<br />
+  	    	<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'create', params:[equipment: equipment?.id])}" class="next medium gray">
   	    		<g:message code="equipment.change.status.label" default="Change Status"/>
   	    	</a>
   	    	<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'list', params:[equipment: equipment?.id])}">
@@ -124,12 +125,12 @@
   	<fieldset>
       	<h4 class="section-title">
           <span class="question-default">
-            <img src="../images/icons/star_small.png">
+            <img src="${resource(dir:'images/icons',file:'star_small.png')}">
           </span>
           Warranty Information
         </h4>
-      	<g:inputDate name="warranty.startDate" precision="day" id="start-date" value="${equipment?.warranty?.startDate}" label="${message(code:'warranty.startDate.label')}" bean="${equipment?.warranty}" field="startDate"/>
-      	<g:inputDate name="warranty.endDate" precision="day" id="end-date" value="${equipment?.warranty?.endDate}" label="${message(code:'warranty.endDate.label')}" bean="${equipment?.warranty}" field="endDate"/>
+      	<g:inputDate name="warranty.startDate" precision="day" id="start-date" value="${equipment?.warranty?.startDate}" label="${message(code:'warranty.start.date.label')}" bean="${equipment?.warranty}" field="startDate"/>
+      	<g:inputDate name="warranty.endDate" precision="day" id="end-date" value="${equipment?.warranty?.endDate}" label="${message(code:'warranty.end.date.label')}" bean="${equipment?.warranty}" field="endDate"/>
       	<g:input name="warranty.contact.contactName" label="${message(code:'contact.name.label')}" bean="${equipment?.warranty?.contact}" field="contactName"/>
       	<g:input name="warranty.contact.email" label="${message(code:'contact.email.label')}" bean="${equipment?.warranty?.contact}" field="email"/>
       	<g:input name="warranty.contact.phone" label="${message(code:'contact.phone.label')}" bean="${equipment?.warranty?.contact}" field="phone"/>

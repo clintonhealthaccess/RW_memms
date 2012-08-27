@@ -96,7 +96,7 @@ public class Equipment {
 		for(def stat: status)
 		   if(stat.isCurrent())
 		   		return stat;
-	   return null;
+	   return false;
 	}
 	
 	String toString() {

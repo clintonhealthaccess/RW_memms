@@ -49,19 +49,17 @@ import org.apache.commons.lang.StringUtils
 class EquipmentService {
 	
 	static transactional = true
-	
 	def languageService;
 	def sessionFactory;
-	public List<Equipment> getEquipments(Map<String, String> params){
-		return Equipment.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc")
-	}
-	public List<Equipment> searchEquipment(String text, Map<String, String> params) {
+		
+	public List<Equipment> searchEquipment(String text,DataLocation location,Map<String, String> params) {
 		def dbFieldTypeNames = 'names_'+languageService.getCurrentLanguagePrefix();
 		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
 		def criteria = Equipment.createCriteria();
 		
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			    createAlias("type","t")
+				eq('dataLocation',location)
 				or{
 					ilike("serialNumber","%"+text+"%")
 					ilike(dbFieldDescriptions,"%"+text+"%") 
@@ -70,18 +68,11 @@ class EquipmentService {
 		}
 	}
 		
-	public List<Equipment> getEquipmentsByLocation(CalculationLocation location,Map<String, String> params) {
+	public List<Equipment> getEquipmentsByDataLocation(DataLocation dataLocation,Map<String, String> params) {
 		def criteria = Equipment.createCriteria();
-		if(location instanceof DataLocation){
 			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-				eq('dataLocation',location)
+				eq('dataLocation',dataLocation)
 			}
-		}else if (location instanceof Location){
-			def dataLocations = location.getDataLocations();
-			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-				'in'('dataLocation',dataLocations)
-			}
-		}
 	}
 	
 	public List<Equipment> filterEquipment(){

@@ -177,17 +177,13 @@
 button, input[type=submit], .next
   background: $yes
   border: 1px solid $yes - #222
-  clear: both
   color: $filler
   cursor: pointer
   display: inline-block
-  font-size: 14px
-  font-weight: bold
-  line-height: 1
+  font: bold 14px/1 Arial, sans-serif
   padding: 6px 40px
   text-decoration: none
   +border-radius(3px)
-  +box-shadow(#ddd 0px 3px 1px)
   +background(linear-gradient($yes + #090909, $yes - #090909))
   +text-shadow($yes - #333 0 1px 0)
   &:hover, &:focus
@@ -226,6 +222,28 @@ button, input[type=submit], .next
       color: #fff
       +background(linear-gradient($yes, $yes - #111))
       +text-shadow($yes - #333 0 1px 0)
+  &.import
+    +border-right-radius(0)
+    border-right: 1px solid #eee
+    margin-left: 5px
+  &.export
+    +border-left-radius(0)
+  &.push-r
+    margin-right: 10px
+    
+.edit-button, .delete-button
+  display: inline-block
+  height: 12px
+  opacity: 0.3
+  text-indent: -9999em
+  width: 12px
+  &:hover, &:focus
+    opacity: 1
+  
+.edit-button
+  background: url('../images/icons/mini_edit.png') no-repeat center
+.delete-button
+  background: url('../images/icons/mini_delete.png') no-repeat center
   
 select
   background: #f6f6f6
@@ -238,90 +256,6 @@ select
   &:hover, &:focus
     background: $filler + #030303
     border-color: $primary
-
-.entity-form-container
-  float: left
-  width: 100%
-  
-  .entity-form-header
-
-    .title
-      float: left
-      color: $primary
-       
-    .locales
-      float: right
-      padding: 4px
-    
-      a
-        padding: 2px
-    
-      a.no-link
-        font-weight: bold
-        
-  .forms-container 
-    width: 100%
-        
-  .data-search-column
-    float: right
-    margin-right: 20px
-    width: 460px
-    
-    form
-      border: none
-    
-    input.radio
-      width: auto
-  
-      label
-        font-weight: bold
-        margin-bottom: 2px
-    
-      #data
-        width: 600px
-    
-  .data-field-column
-    float: left
-    width: 460px
-    
-.entity-form-container form
-  background-color: inherit
-  border: 1px solid $filler
-  padding: 15px
-  position: relative
-  
-  .row
-    border-bottom: 1px dotted $filler
-    margin-bottom: 10px
-    padding-bottom: 10px
-    +pie-clearfix
-    
-    //.error-list
-    //  height: 14px
-      
-  .toggle-entry
-    float: left
-    margin-right: 15px
-
-  input, textarea
-    width: 280px
-    
-  input.radio
-    width: auto
-  
-  label
-    color: $primary
-    display: block
-    font-size: 11px
-    margin-bottom: 3px
-    
-  // fterrier start: added span for summary in admin forms
-  span, a
-    font-size: 11px
-    
-  span.bold
-    color: $primary
-  // fterrier end
     
 .focus-field
   border: solid 1px $filler - #222
@@ -452,16 +386,23 @@ form.search-form
   color: $primary
   display: inline-block
   font-size: 12px
+  input, button
+    float: left
   input
     background: #f9f9f9
     border: 1px solid $filler - #333
     color: #444
     font: normal 12px Arial, sans-serif
-    padding: 4px
+    margin: 0
+    padding: 3px 5px 4px
     +box-shadow($filler - #111, 1px, 1px, 3px, 0, inset)
     &:hover, &:focus
       background: $filler + #030303
       border-color: $primary
+  button
+    height: 23px
+    margin: 0 0 0 -1px
+    +border-left-radius(0)
 
 .form-box
   border: 1px solid #ddd
@@ -565,17 +506,41 @@ form.search-form
   width: 100%
   th, td
     line-height: 1.3
-    padding: 10px
+    padding: 10px 15px
   th, td, a
     font-size: 11px
   th
     border-top: 1px solid $primary
     background: $filler
     color: $primary
+    font-weight: bold
   td
-    border-top: 1px solid rgba(0, 0, 0, 0.1)
-  tr:first-child td
-    border-top: 1px solid $primary + #444
+    border-top: 1px solid rgba(0, 0, 0, 0.08)
+    padding: 5px 10px
+    &:first-child
+      padding-left: 15px
+    &:last-child
+      padding-right: 15px
+    
+  tr
+    &.even td
+      background: rgba(0, 0, 0, 0.015)
+    &:hover, &:focus
+      td
+        background: rgba(0, 0, 0, 0.015)
+      .edit-button, .delete-button
+        opacity: 0.7
+    &:first-child th
+      border-bottom: 1px solid rgba(0, 0, 0, 0.15)
+    &:last-child td
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08)
+  &.spaced
+    td
+      padding: 10px
+      &:first-child
+        padding-left: 15px
+      &:last-child
+        padding-right: 15px
     
 .simple-list
   fieldset
@@ -590,7 +555,7 @@ form.search-form
     margin-left: 7px
     padding-top: 5px
     vertical-align: top
-    width: 125px
+    width: 130px
   .row
     margin-bottom: 7px
     vertical-align: middle
@@ -599,3 +564,71 @@ form.search-form
       min-width: 50px
   input[type=text], textarea
     width: 290px
+    
+.paginateButtons
+  padding: 15px
+  +pie-clearfix
+  a
+    background: $filler
+    color: $primary
+    &:hover, &:focus
+      border: 1px solid $primary + #222
+  a, span
+    border: 1px solid rgba(0, 0, 0, 0.07)
+    display: block
+    float: left
+    margin-right: 3px
+    padding: 7px 10px
+    text-decoration: none
+    
+  span
+    background: $primary
+    color: #fff
+    
+.filters
+  border: 1px solid rgba(0, 0, 0, 0.1)
+  padding: 0
+  margin-bottom: 15px
+  h2
+    border-bottom: 1px solid #eee
+    font: bold 15px Arial, sans-serif
+    padding: 10px 15px
+    a
+      margin-top: 4px
+      opacity: 0.4
+      &:hover, &:focus
+        opacity: 1
+  ul
+    padding: 10px 15px 0
+    +pie-clearfix
+  li
+    display: inline
+    float: left
+    margin-bottom: 8px
+    width: 25%
+  label
+    display: block
+    font-size: 11px
+    margin-bottom: 2px
+  select
+    background: $filler + #111
+    border: 1px solid $primary + #222
+    color: $primary
+    font-size: 11px
+    font-weight: bold
+    padding: 4px
+    width: 215px
+    +border-radius(2px)
+  button
+    margin: 5px 15px 15px
+    
+.filter-results
+  color: #aaa
+  font: bold 14px Arial, sans-serif
+  padding: 5px 0
+  text-transform: uppercase
+  
+.form-languages a
+  font-size: 10px
+  margin-left: 5px
+  text-transform: uppercase

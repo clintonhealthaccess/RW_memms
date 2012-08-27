@@ -1,4 +1,4 @@
-<table>
+<table class="items">
 	<thead>
 		<tr>
 			<th/>
@@ -11,14 +11,14 @@
 		<g:each in="${entities}" status="i" var="model">
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 				<td>
-					<ul>
+					<ul class="horizontal">
 						<li>
-							<a href="${createLinkWithTargetURI(controller:'equipmentModel', action:'edit', params:[id: model.id])}">
+							<a href="${createLinkWithTargetURI(controller:'equipmentModel', action:'edit', params:[id: model.id])}" class="edit-button">
 								<g:message code="default.link.edit.label" />
 							</a>
 						</li>
 						<li>
-							<a href="${createLinkWithTargetURI(controller:'equipmentModel', action:'delete', params:[id: model.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');"><g:message code="default.link.delete.label" /></a>
+							<a href="${createLinkWithTargetURI(controller:'equipmentModel', action:'delete', params:[id: model.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');" class="delete-button"><g:message code="default.link.delete.label" /></a>
 						</li>
 						
 					</ul>
