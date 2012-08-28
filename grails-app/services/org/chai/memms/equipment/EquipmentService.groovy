@@ -90,8 +90,12 @@ class EquipmentService {
 	}
 	
 
-	public List<Equipment> filterEquipment(){
-		return null
+	public List<Equipment> filterEquipment(Map<String, String> params){
+		def equipments = null
+		if(params.containsKey("dataLocation") && params["dataLocation"] != null)
+			equipments = Equipment.where{dataLocation.id == params["dataLocation"]}
+
+		return equipments != null?equipments.list() : equipments
 	}
 	public List<Equipment> getEquipmentsByDataLocation(CalculationLocation location) {
 		

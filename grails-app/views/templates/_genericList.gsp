@@ -16,16 +16,7 @@
 		  			
 		  			</shiro:hasPermission>
 		  			
-		  			<shiro:hasPermission permission="${controllerName}:export">
-		  			<g:if test="${grailsApplication.getArtefactByLogicalPropertyName('Controller', controllerName).hasProperty('export')}">
-		  			&nbsp;
-			  			<a href="${createLinkWithTargetURI(controller: controllerName, action:'exporter')+(request.queryString==null?'':'&'+request.queryString)}" class="next medium gray left export">
-		  					<g:message code="default.export.label" />
-		  				</a>
-	  				</g:if>
-	  				</shiro:hasPermission>
-	  				<shiro:hasPermission permission="${controllerName}:export">
-	  				<g:if test="${grailsApplication.getArtefactByLogicalPropertyName('Controller', controllerName).hasProperty('importer')}">
+		  			<g:if test="${grailsApplication.getArtefactByLogicalPropertyName('Controller', controllerName).hasProperty('importer')}">
 	  				&nbsp;
 		  				<g:if test="${entityClass != null}">
 			  				<a href="${createLinkWithTargetURI(controller: 'entityImporter', action:'importer', params:[entityClass: entityClass.name])+(request.queryString==null?'':'&'+request.queryString)}" class="next medium gray left import">
@@ -33,74 +24,70 @@
 			  				</a>
 		  				</g:if>
 	  				</g:if>
-	  				</shiro:hasPermission>
+		  			<g:if test="${grailsApplication.getArtefactByLogicalPropertyName('Controller', controllerName).hasProperty('export')}">
+		  			&nbsp;
+			  			<a href="${createLinkWithTargetURI(controller: controllerName, action:'exporter')+(request.queryString==null?'':'&'+request.queryString)}" class="next medium gray left export">
+		  					<g:message code="default.export.label" />
+		  				</a>
+	  				</g:if>
+	  				<g:if test="${grailsApplication.getArtefactByLogicalPropertyName('Controller', controllerName).hasProperty('search')}">
+        				<g:searchBox action="search"/>
+        			</g:if>
 		     	</span>
 	     	</g:if>
 		</div>
 		
 		<!-- Filter starts here-->
 		<div class="filters main">
-		  <h2>Filter inventory<a href="#" class="right"><img src="../images/icons/icon_close_flash.png"></a></h2>
-		  <form class="filters-box">
-		    <ul>
-		      <li>
-		        <label>Locations</label>
-		        <select>
-		          <option>Please select</option>
-		          <option>Selection</option>
-		        </select>
-		      </li>
-		      <li>
-		        <label>Type</label>
-		        <select>
-		          <option>Please select</option>
-		          <option>Selection</option>
-		        </select>
-		      </li>
-		      <li>
-		        <label>Manufacturer</label>
-		        <select>
-		          <option>Please select</option>
-		          <option>Selection</option>
-		        </select>
-		      </li>
-		      <li>
-		        <label>Warranty</label>
-		        <select>
-		          <option>Please select</option>
-		          <option>Selection</option>
-		        </select>
-		      </li>
-		      <li>
-		        <label>District</label>
-		        <select>
-		          <option>Please select</option>
-		          <option>Selection</option>
-		        </select>
-		      </li>
-		      <li>
-		        <label>Status</label>
-		        <select>
-		          <option>Please select</option>
-		          <option>Selection</option>
-		        </select>
-		      </li>
-		      <li>
-		        <label>Supplier</label>
-		        <select>
-		          <option>Please select</option>
-		          <option>Selection</option>
-		        </select>
-		      </li>
-		      <li>
-		        <label>Donated</label>
-		        <select>
-		          <option>Please select</option>
-		          <option>Selection</option>
-		        </select>
-		      </li>
-		    </ul>
-		    <button type="submit">Filter</button>
+		  <h2>Filter inventory<a href="#" class="right"><img src="${resource(dir:'images/icons',file:'icon_close_flash.png')}" alt="Section"/></a></h2>
+		  <form class="filters-box" method="post">
+				<ul>
+					<li><g:selectFromList name="dataLocation"
+							label="${message(code:'inventory.datalocation.label')}" bean="${}"
+							field="dataLocation" optionKey="id" multiple="false"
+							ajaxLink="${createLink(controller:'location', action:'getAjaxData', params:[class: 'DataLocation'])}"
+							from="${dataLocations}" value="${dataLocations.collect{it.id}}"
+							values="${dataLocations.collect{it.names}}" /></li>
+							
+					<li><g:selectFromList name="equipmentType"
+							label="${message(code:'equipment.type.label')}" bean="${}"
+							field="type" optionKey="id" multiple="false"
+							ajaxLink="${createLink(controller:'EquipmentType', action:'getAjaxData', params:[class: 'EquipmentType'])}"
+							from="${equipmentType}" value="${equipmentType.collect{it.id}}"
+							values="${equipmentType.collect{it.names}}" /></li>
+							
+					<li><g:selectFromList name="manufacturer"
+							label="${message(code:'provider.manufacture.label')}" bean="${}"
+							field="MANUFACTURE" optionKey="id" multiple="false"
+							ajaxLink="${createLink(controller:'Provider', action:'getAjaxData', params:[class: 'Provider',type:'MANUFACTURE'])}"
+							
+							from="${dataLocations}" value="${manufacturers.collect{it.id}}"
+							values="${manufacturers.collect{it.contact.contactName}}" /></li>
+							
+					<li><g:selectFromList name="supplier"
+							label="${message(code:'provider.supplier.label')}" bean="${}"
+							field="SUPPLIER" optionKey="id" multiple="false"
+							ajaxLink="${createLink(controller:'Provider', action:'getAjaxData', params:[class: 'Provider',type:'SUPPLIER'])}"
+							
+							from="${suppliers}" value="${suppliers.collect{it.contact.contactName}}"
+							values="${suppliers.collect{it.contact.contactName}}" /></li>
+					<li>
+					<li><label>Obsolete</label> <select>
+							<option>Please select</option>
+							<option>Selection</option>
+					</select></li>
+					<li><label>Status</label> <select>
+							<option>Please select</option>
+							<option>Selection</option>
+					</select></li>
+					<label>Donated</label>
+					<select>
+						<option>Please select</option>
+						<option>Selection</option>
+					</select>
+					</li>
+				</ul>
+				<button type="submit">Filter</button>
 		  </form>
 		</div>
 		

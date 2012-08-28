@@ -115,6 +115,7 @@ class EquipmentController extends AbstractEntityController{
 			def user = getUser()
 			if(user != null){
 				equipments = equipmentService.getEquipmentsByDataLocation(user.location)
+				//equipments = filterEquipment
 			}
 		}
 		render(view:"/entity/list", model:[

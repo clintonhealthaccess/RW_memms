@@ -23,7 +23,7 @@
           </span>
           Basic Information
         </h4>
-      	<g:selectFromList name="dataLocation.id" label="${message(code:'entity.dataLocation.label')}" bean="${equipment}" field="dataLocation" optionKey="id" multiple="false"
+      	<g:selectFromList name="dataLocation.id" label="${message(code:'datalocation.label')}" bean="${equipment}" field="dataLocation" optionKey="id" multiple="false"
   			ajaxLink="${createLink(controller:'location', action:'getAjaxData', params:[class: 'DataLocation'])}"
   			from="${dataLocations}" value="${equipment?.dataLocation?.id}" values="${dataLocations.collect{it.names}}" />
 
