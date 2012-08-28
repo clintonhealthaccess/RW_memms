@@ -91,22 +91,22 @@
   <div id="navigation">
     <div class="wrapper">
       <ul id="main-menu" class="menu">
-    	<shiro:hasPermission permission="home:*">
+    	<shiro:hasPermission permission="menu:home">
 			<li><a class="${controllerName=='home'?'active':''}" href="${createLink(controller:'home', action:'index')}">Home</a></li>
 		</shiro:hasPermission>
-		<shiro:hasPermission permission="equipment:summaryPage">
+		<shiro:hasPermission permission="menu:inventory">
 			<li><a class="${controllerName=='equipment'?'active':''}" href="${createLink(controller:'equipment', action:'summaryPage')}">Inventory</a></li>
 		</shiro:hasPermission>
-		<shiro:hasPermission permission="maintenance:corrective:*">
+		<shiro:hasPermission permission="menu:correctivemaintenance">
 			<li><a class="${controllerName=='dashboard'?'active':''}" href="#">Corrective Maintenance</a></li>
 		</shiro:hasPermission>
-		<shiro:hasPermission permission="maintenance:preventive:*">
+		<shiro:hasPermission permission="menu:preventivemaintenance">
 			<li><a class="${controllerName=='dashboard'?'active':''}" href="#">Preventive Maintenance</a></li>
 		</shiro:hasPermission>
-		<shiro:hasPermission permission="report:*">
+		<shiro:hasPermission permission="menu:reports">
 			<li><a class="${controllerName=='dashboard'?'active':''}" href="#">Reports</a></li>
 		</shiro:hasPermission>
-		<shiro:hasPermission permission="admin:*">
+		<shiro:hasPermission permission="menu:admin">
 			<li><a href="#">Administration</a>
 	         	<ul class="submenu">
 	         		<li><a href="${createLink(controller: 'User', action:'list')}">Users</a></li>

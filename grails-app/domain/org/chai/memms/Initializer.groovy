@@ -211,7 +211,7 @@ public class Initializer {
 			
 			equipmentOne.warranty=warrantyOne
 			equipmentOne.addToStatus(statusOne)
-			equipmentOne.save(failOnError:true)
+			equipmentOne.save(failOnError:true,flush: true)
 
 			def equipmentTwo = newEquipment("SERIAL11",true,false,12,"Room A34","34900.23",['en':'Equipment Descriptions two'],
 				getDate(12,01,2009),getDate(10,10,2009),now(),
@@ -227,7 +227,7 @@ public class Initializer {
 			def statusTwo= newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentTwo,true)
 			equipmentTwo.warranty=warrantyTwo
 			equipmentTwo.addToStatus(statusTwo)
-			equipmentTwo.save(failOnError:true)
+			equipmentTwo.save(failOnError:true,flush: true)
 			
 			def equipmentThree = newEquipment("SERIAL12",false,true,34,"Room A1","98700.23",['en':'Equipment Descriptions three'],
 				getDate(14,8,2008),getDate(10,01,2009),now(),
@@ -261,7 +261,7 @@ public class Initializer {
 			equipmentFour.warranty=warrantyFour
 			equipmentFour.addToStatus(statusFour)
 			equipmentFour.addToStatus(statusFourOne)
-			equipmentFour.save(failOnError:true)
+			equipmentFour.save(failOnError:true,flush: true)
 			
 			def equipmentFive = newEquipment("SERIAL14",true,true,34,"Room A1","28723",['en':'Equipment Descriptions five'],
 				getDate(11,8,2008),getDate(11,10,2009),now(),
@@ -301,7 +301,7 @@ public class Initializer {
 			equipmentSix.addToStatus(statusSix)
 			equipmentSix.addToStatus(statusSixOne)
 			equipmentSix.addToStatus(statusSixTwo)
-			equipmentSix.save(failOnError:true)
+			equipmentSix.save(failOnError:true,flush: true)
 			
 			def equipmentSeven = newEquipment("SERIAL07",false,true,4,"Room A1","290540.23",['en':'Equipment Descriptions seven'],
 				getDate(1,7,2000),getDate(12,7,2001),now(),
@@ -321,7 +321,7 @@ public class Initializer {
 			equipmentSeven.addToStatus(statusSeven)
 			equipmentSeven.addToStatus(statusSevenOne)
 			equipmentSeven.addToStatus(statusSevenTwo)
-			equipmentSeven.save(failOnError:true)
+			equipmentSeven.save(failOnError:true,flush: true)
 			
 			def equipmentEight = newEquipment("SERIAL08",false,true,4,"Room A3","290540.23",['en':'Equipment Descriptions eight'],
 				getDate(1,7,2000),getDate(12,7,2001),now(),
@@ -341,7 +341,7 @@ public class Initializer {
 			equipmentEight.addToStatus(statusEight)
 			equipmentEight.addToStatus(statusEightOne)
 			equipmentEight.addToStatus(statusEightTwo)
-			equipmentEight.save(failOnError:true)
+			equipmentEight.save(failOnError:true,flush: true)
 			
 			def equipmentNine = newEquipment("SERIAL09",false,true,4,"Room 9A1","290540.23",['en':'Equipment Descriptions Nine'],
 				getDate(1,7,2000),getDate(12,7,2001),now(),
@@ -361,7 +361,7 @@ public class Initializer {
 			equipmentNine.addToStatus(statusNine)
 			equipmentNine.addToStatus(statusNineOne)
 			equipmentNine.addToStatus(statusNineTwo)
-			equipmentNine.save(failOnError:true)
+			equipmentNine.save(failOnError:true,flush: true)
 			
 			def equipmentTen = newEquipment("SERIAL10",false,true,4,"Room 10A1","290540.23",['en':'Equipment Descriptions Ten'],
 				getDate(1,7,2000),getDate(12,7,2001),now(),
@@ -381,7 +381,7 @@ public class Initializer {
 			equipmentTen.addToStatus(statusTen)
 			equipmentTen.addToStatus(statusTenOne)
 			equipmentTen.addToStatus(statusTenTwo)
-			equipmentTen.save(failOnError:true)
+			equipmentTen.save(failOnError:true,flush: true)
 
 		}
 	}
@@ -392,12 +392,12 @@ public class Initializer {
 	public static def newEquipment(def serialNumber,def donation,def obsolete,def expectedLifeTime,def room,def purchaseCost,def descriptions,def manufactureDate, def purchaseDate,def registeredOn,def model,def dataLocation,def department, def type,def manufacture,def supplier){
 		def equipment = new Equipment(serialNumber:serialNumber,donation:donation,obsolete:obsolete,room:room,expectedLifeTime:expectedLifeTime,purchaseCost:purchaseCost,manufactureDate:manufactureDate,purchaseDate:purchaseDate,registeredOn:registeredOn,model:model,dataLocation:dataLocation,department:department,type:type,manufacture:manufacture,supplier:supplier);
 		setLocaleValueInMap(equipment,descriptions,"Descriptions")
-		return equipment.save(failOnError: true)
+		return equipment.save(failOnError: true,flush: true)
 	}
 
 	public static def newEquipmentStatus(def dateOfEvent,def changedBy,def value, def equipment,def current){
 		def statusChangeDate = now()
-		return new EquipmentStatus(dateOfEvent:dateOfEvent,changedBy:changedBy,value:value,equipment:equipment,current:current,statusChangeDate:statusChangeDate).save(failOnError: true)
+		return new EquipmentStatus(dateOfEvent:dateOfEvent,changedBy:changedBy,status:value,equipment:equipment,current:current,statusChangeDate:statusChangeDate).save(failOnError: true,flush: true)
 	}
 
 	public static def newContact(def addressDescriptions,def contactName,def email, def phone, def street, def poBox){
@@ -407,7 +407,7 @@ public class Initializer {
 	}
 	
 	public static def newProvider(def code, def type, def contact){
-		return new Provider(code:code,type:type,contact:contact).save(failOnError: true)
+		return new Provider(code:code,type:type,contact:contact).save(failOnError: true,flush: true)
 	}
 	
 	public static def newProvider(def code, def type, def addressDescriptions, def contactName,def email, def phone, def street, def poBox){
@@ -430,33 +430,33 @@ public class Initializer {
 		def model = new EquipmentModel(code:code)
 		setLocaleValueInMap(model,names,"Names")
 		setLocaleValueInMap(model,descriptions,"Descriptions")
-		return model.save(failOnError: true)
+		return model.save(failOnError: true,flush: true)
 	}
 	
 	public static def newEquipmentType(def code, def names,def descriptions, def observation, def addedOn, def lastModifiedOn){
 		def type = new EquipmentType(code:code,observation:observation,addedOn:addedOn,lastModifiedOn:lastModifiedOn)
 		setLocaleValueInMap(type,names,"Names")
 		setLocaleValueInMap(type,descriptions,"Descriptions")
-		return type.save(failOnError: true)
+		return type.save(failOnError: true,flush: true)
 	}
 	
 	public static def newDepartment(def names,def code, def descriptions){
 		def department = new Department(code:code)
 		setLocaleValueInMap(department,names,"Names") 
 		setLocaleValueInMap(department,descriptions,"Descriptions")
-		return department.save(failOnError: true)
+		return department.save(failOnError: true,flush: true)
 	}
 	
 	public static def newDataLocationType(def names, def code) {
 		def dataLocationType = new DataLocationType(code: code)
 		setLocaleValueInMap(dataLocationType,names,"Names")
-		return dataLocationType.save(failOnError: true)
+		return dataLocationType.save(failOnError: true,flush: true)
 	}
 	
 	public static def newLocationLevel(def names, def code) {
 		def locationLevel = new LocationLevel(code: code)
 		setLocaleValueInMap(locationLevel,names,"Names")
-		return locationLevel.save(failOnError: true)
+		return locationLevel.save(failOnError: true,flush: true)
 	}
 	
 	public static def newLocation(def names, def code, def parent, def level) {
@@ -464,10 +464,10 @@ public class Initializer {
 		setLocaleValueInMap(location,names,"Names")
 		location.save(failOnError: true)
 		level.addToLocations(location)
-		level.save(failOnError: true)
+		level.save(failOnError: true,flush: true)
 		if (parent != null) {
 			parent.addToChildren(location)
-			parent.save(failOnError: true)
+			parent.save(failOnError: true,flush: true)
 		}
 		return location
 	}
@@ -475,14 +475,14 @@ public class Initializer {
 	public static def newDataLocation(def names, def code, def location, def type) {
 		def dataLocation = new DataLocation(code: code, location: location, type: type)
 		setLocaleValueInMap(dataLocation,names,"Names")
-		dataLocation.save(failOnError: true)
+		dataLocation.save(failOnError: true,flush: true)
 		if (location != null) {
 			location.addToDataLocations(dataLocation)
-			location.save(failOnError: true)
+			location.save(failOnError: true,flush: true)
 		}
 		if (type != null) {
 			type.addToDataLocations(dataLocation)
-			type.save(failOnError: true)
+			type.save(failOnError: true,flush: true)
 	   }
 		return dataLocation
 	}

@@ -117,7 +117,7 @@ log4j = {
 		   
 	debug  'grails.app',
 		   'org.chai.memms'
-	trace 'org.hibernate.type'
+	//trace 'org.hibernate.type'
 }
 
 

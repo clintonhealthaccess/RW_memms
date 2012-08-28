@@ -94,7 +94,7 @@
 	    		</tr>
 	    		<g:each in="${equipment?.status.sort{a,b -> (a.current > b.current) ? -1 : 1}}" status="i" var="status">
 	    		<tr>
-	    			<td>${message(code: status?.value?.messageCode+'.'+status?.value?.name)}</td>
+	    			<td>${message(code: status?.status?.messageCode+'.'+status?.status?.name)}</td>
 	    			<td>${Utils.formatDate(status?.dateOfEvent)}</td>
 	    			<td>${Utils.formatDate(status?.statusChangeDate)}</td>
 	    			<td>${(status.current)? '\u2713':'X'}</td>

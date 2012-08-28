@@ -43,8 +43,8 @@ class UserServiceSpec extends IntegrationTests{
 	  def dataLocation = DataLocation.findByCode(KIVUYE);
 	  def userOne = newUser("userOne",UUID.randomUUID().toString());
 	  def userTwo = newUser("userTwo",UUID.randomUUID().toString());
-	  def personUserOne = newPersonUser("personUserOne",UUID.randomUUID().toString(),dataLocation.id);
-	  def personUserTwo = newPersonUser("personUserTwo",UUID.randomUUID().toString(),dataLocation.id);
+	  def personUserOne = newOtherUser("personUserOne",UUID.randomUUID().toString(),dataLocation.id);
+	  def personUserTwo = newOtherUser("personUserTwo",UUID.randomUUID().toString(),dataLocation.id);
 	  def systemUserOne = newSystemUser("systemUserOne",UUID.randomUUID().toString(),dataLocation.id);
 	  def systemUserTwo = newSystemUser("systemUserTwo",UUID.randomUUID().toString(),dataLocation.id);
 	  
@@ -70,8 +70,8 @@ class UserServiceSpec extends IntegrationTests{
 	  def userTwo = newUser("userTwo",UUID.randomUUID().toString());
 	  def systemUserOne = newSystemUser("systemUserOne",UUID.randomUUID().toString(),dataLocation.id);
 	  def systemUserTwo = newSystemUser("systemUserTwo",UUID.randomUUID().toString(),dataLocation.id);
-	  def personUserOne = newPersonUser("personUserOne",UUID.randomUUID().toString(),dataLocation.id);
-	  def personUserTwo = newPersonUser("personUserTwo",UUID.randomUUID().toString(),dataLocation.id);
+	  def personUserOne = newOtherUser("personUserOne",UUID.randomUUID().toString(),dataLocation.id);
+	  def personUserTwo = newOtherUser("personUserTwo",UUID.randomUUID().toString(),dataLocation.id);
 	  
 	  when:
 	  def users = userService.searchUser("user",[:]);

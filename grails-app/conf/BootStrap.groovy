@@ -26,8 +26,10 @@
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+import org.chai.memms.location.CalculationLocation;
 import org.chai.memms.security.Role;
 import org.chai.memms.security.User;
+import org.chai.memms.security.UserType;
 
 import java.util.Date;
 
@@ -50,9 +52,46 @@ class BootStrap {
 			Initializer.createInventoryStructure()
 			break;
 			case "production":
-			//Initializer.createDummyStructure();
-			Initializer.createUsers();
-			//Initializer.createInventoryStructure()
+			if (Role.findByName('admin') == null) {
+				def adminRole = new Role(name: "admin")
+				adminRole.addToPermissions("*:*")
+				adminRole.save(failOnError: true, flush:true)
+			}
+			if (Role.findByName('clerc') == null) {
+				def dataClerkRole = new Role(name: "clerc")
+				dataClerkRole.addToPermissions("menu:home")
+				dataClerkRole.addToPermissions("menu:inventory")
+				dataClerkRole.addToPermissions("menu:correctivemaintenance")
+				dataClerkRole.addToPermissions("menu:preventivemaintenance")
+				dataClerkRole.addToPermissions("menu:reports")
+				dataClerkRole.addToPermissions("equipment:*")
+				dataClerkRole.addToPermissions("home:*")
+				dataClerkRole.save(failOnError: true, flush:true)
+			}
+			if (User.findByUsername('admin') == null) {
+				def userAdmin = new User(userType: UserType.ADMIN,code:"admin", location: CalculationLocation.findByCode(0), username: "admin",
+					firstname: "memms", lastname: "memms", email:'admin@memms.org', passwordHash: new Sha256Hash("admin").toHex(), active: true,
+					confirmed: true, uuid:'admin', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
+	
+				userAdmin.addToRoles(Role.findByName('admin'))
+				userAdmin.addToPermissions("*:*")
+				userAdmin.save(failOnError: true, flush:true)
+			}
+			if (User.findByUsername('clerc') == null) {
+				def clerc = new User(userType: UserType.ADMIN,code:"clerc", location: CalculationLocation.findByCode(327), username: "clerc",
+					firstname: "memms", lastname: "memms", email:'clerk@memms.org', passwordHash: new Sha256Hash("admin").toHex(), active: true,
+					confirmed: true, uuid:'admin', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
+	
+				clerc.addToRoles(Role.findByName('clerk'))
+				clerc.addToPermissions("menu:home")
+				clerc.addToPermissions("menu:inventory")
+				clerc.addToPermissions("menu:correctivemaintenance")
+				clerc.addToPermissions("menu:preventivemaintenance")
+				clerc.addToPermissions("menu:reports")
+				clerc.addToPermissions("equipment:*")
+				clerc.addToPermissions("home:*")
+				userAdmin.save(failOnError: true, flush:true)
+			}
 			break;
 		}
     }

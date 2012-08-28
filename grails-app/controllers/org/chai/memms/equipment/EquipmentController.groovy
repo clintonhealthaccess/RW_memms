@@ -180,7 +180,7 @@ class EquipmentController extends AbstractEntityController{
 		
 	}
 	static def newEquipmentStatus(def statusChangeDate,def changedBy,def value, def equipment,def current,def dateOfEvent){
-		return new EquipmentStatus(statusChangeDate:statusChangeDate,changedBy:changedBy,value:value,equipment:equipment,current:current,dateOfEvent:dateOfEvent).save(failOneError:true,flush:true)
+		return new EquipmentStatus(statusChangeDate:statusChangeDate,changedBy:changedBy,status:value,equipment:equipment,current:current,dateOfEvent:dateOfEvent).save(failOneError:true,flush:true)
 	}
 	
 }

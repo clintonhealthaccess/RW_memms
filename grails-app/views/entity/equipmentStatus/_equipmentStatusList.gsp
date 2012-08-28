@@ -27,7 +27,7 @@
 						</li>
 					</ul>
     			</td>
-    			<td>${status.value}</td>
+    			<td>${status.status}</td>
     			<td>${Utils.formatDate(status?.dateOfEvent)}</td>
     			<td>${Utils.formatDate(status?.statusChangeDate)}</td>
     			<td>${status.current}</td>
