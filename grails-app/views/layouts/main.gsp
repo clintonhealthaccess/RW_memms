@@ -5,7 +5,7 @@
 <html>
 <head>
 	<title><g:layoutTitle /></title>
-
+	<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
 	<g:layoutHead />	
 	<r:require module="core"/>
 	<r:layoutResources/>
@@ -91,34 +91,34 @@
   <div id="navigation">
     <div class="wrapper">
       <ul id="main-menu" class="menu">
-    	<shiro:hasPermission permission="home:*">
+    	<shiro:hasPermission permission="menu:home">
 			<li><a class="${controllerName=='home'?'active':''}" href="${createLink(controller:'home', action:'index')}">Home</a></li>
 		</shiro:hasPermission>
-		<shiro:hasPermission permission="equipment:summaryPage">
+		<shiro:hasPermission permission="menu:inventory">
 			<li><a class="${controllerName=='equipment'?'active':''}" href="${createLink(controller:'equipment', action:'summaryPage')}">Inventory</a></li>
 		</shiro:hasPermission>
-		<shiro:hasPermission permission="maintenance:corrective:*">
-			<li><a class="${controllerName=='dashboard'?'active':''}" href="${createLink(controller:'equipment', action:'index')}">Corrective Maintenance</a></li>
+		<shiro:hasPermission permission="menu:correctivemaintenance">
+			<li><a class="${controllerName=='dashboard'?'active':''}" href="#">Corrective Maintenance</a></li>
 		</shiro:hasPermission>
-		<shiro:hasPermission permission="maintenance:preventive:*">
-			<li><a class="${controllerName=='dashboard'?'active':''}" href="${createLink(controller:'equipment', action:'index')}">Preventive Maintenance</a></li>
+		<shiro:hasPermission permission="menu:preventivemaintenance">
+			<li><a class="${controllerName=='dashboard'?'active':''}" href="#">Preventive Maintenance</a></li>
 		</shiro:hasPermission>
-		<shiro:hasPermission permission="report:*">
-			<li><a class="${controllerName=='dashboard'?'active':''}" href="${createLink(controller:'equipment', action:'index')}">Report</a></li>
+		<shiro:hasPermission permission="menu:reports">
+			<li><a class="${controllerName=='dashboard'?'active':''}" href="#">Reports</a></li>
 		</shiro:hasPermission>
-		<shiro:hasPermission permission="admin:*">
+		<shiro:hasPermission permission="menu:admin">
 			<li><a href="#">Administration</a>
-         	<%--<ul class="submenu">
-         		<li><a href="${createLink(controller: 'User', action:'list')}">Users</a></li>
-				<li><a href="${createLink(controller: 'Department', action:'list')}">Departments</a></li>
-				<li><a href="${createLink(controller: 'EquipmentModel', action:'list')}">Equipment Models</a></li>
-				<li><a href="${createLink(controller: 'EquipmentType', action:'list')}">Equipment Types</a></li>
-				<li><a href="${createLink(controller: 'Location', action:'list')}">Location</a></li>
-				<li><a href="${createLink(controller: 'DataLocation', action:'list')}">Data Location</a></li>
-				<li><a href="${createLink(controller: 'LocationLevel', action:'list')}">Location Level</a></li>
-				<li><a href="${createLink(controller: 'DataLocationType', action:'list')}">Data Location Type</a></li>
-         	</ul>
-         --%></li>
+	         	<ul class="submenu">
+	         		<li><a href="${createLink(controller: 'User', action:'list')}">Users</a></li>
+					<li><a href="${createLink(controller: 'Department', action:'list')}">Departments</a></li>
+					<li><a href="${createLink(controller: 'EquipmentModel', action:'list')}">Equipment Models</a></li>
+					<li><a href="${createLink(controller: 'EquipmentType', action:'list')}">Equipment Types</a></li>
+					<li><a href="${createLink(controller: 'Location', action:'list')}">Location</a></li>
+					<li><a href="${createLink(controller: 'DataLocation', action:'list')}">Data Location</a></li>
+					<li><a href="${createLink(controller: 'LocationLevel', action:'list')}">Location Level</a></li>
+					<li><a href="${createLink(controller: 'DataLocationType', action:'list')}">Data Location Type</a></li>
+	         	</ul>
+        	 </li>
 		</shiro:hasPermission>
         
       </ul>

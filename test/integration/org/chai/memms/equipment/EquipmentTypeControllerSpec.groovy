@@ -10,7 +10,6 @@ class EquipmentTypeControllerSpec extends IntegrationTests{
 
 	def "can create and save an equipment type with default values - all locales"(){
 		setup:
-		def observation = Observation.USEDINMEMMS
 		equipmentTypeController = new EquipmentTypeController()
 		def equipmentType
 		when:
@@ -21,7 +20,7 @@ class EquipmentTypeControllerSpec extends IntegrationTests{
 			equipmentTypeController.params."names_$it" = "X-Ray Film Cutter $it"
 			equipmentTypeController.params."descriptions_$it" = "some kind of description $it"
 		}
-		equipmentTypeController.params.observation = observation
+		equipmentTypeController.params.observation = "USEDINMEMMS"
 		equipmentTypeController.params.addedOn = new Date()
 		equipmentTypeController.params.lastModifiedOn = new Date()
 		equipmentTypeController.save()

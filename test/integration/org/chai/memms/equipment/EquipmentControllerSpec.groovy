@@ -26,7 +26,6 @@ class EquipmentControllerSpec extends IntegrationTests{
 		
 		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURE,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
-		log.debug("-------Supplier created is: " + supplier.id + "\n\r")
 	
 		
 		equipmentController = new EquipmentController();

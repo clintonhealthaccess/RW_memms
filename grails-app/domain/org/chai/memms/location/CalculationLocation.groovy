@@ -77,8 +77,10 @@ abstract class CalculationLocation {
 			table "chai_location_abstract"
 			tablePerSubclass true
 			version false
+			coordinates type: "text"
 			names_en type: "text"
-			names_en type: "text"
+			names_fr type: "text"
+			names_rw type: "text"
 		}
 
 		@Override

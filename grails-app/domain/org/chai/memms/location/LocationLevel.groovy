@@ -41,7 +41,6 @@ class LocationLevel{
 	static hasMany = [locations: Location]
 	
 	static i18nFields = ['names']
-	static embedded = ['names']
 	
 	String toString() {
 		return "LocationLevel[Id=" + id + ", Code=" + code + "]";
@@ -56,6 +55,9 @@ class LocationLevel{
 		table "chai_location_level"
 		locations column: "location_id"
 		version false
+		names_en type:"text"
+		names_fr type:"text"
+		names_rw type:"text"
 	}
 	
 	@Override

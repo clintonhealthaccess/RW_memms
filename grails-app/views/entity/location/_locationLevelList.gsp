@@ -4,7 +4,6 @@
 			<th/>
 			<th><g:message code="entity.code.label"/></th>
 			<th><g:message code="entity.name.label"/></th>
-			<th><g:message code="entity.order.label"/></th>
 		</tr>
 	</thead>
 	<tbody>

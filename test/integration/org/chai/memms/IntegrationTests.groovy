@@ -157,8 +157,8 @@ abstract class IntegrationTests extends IntegrationSpec {
 			organisation: 'org', phoneNumber: '+250 11 111 11 11').save(failOnError: true)
 	}
 	
-	static def newPersonUser(def username, def uuid, def locationId) {
-		return new User(userType: UserType.PERSON, code: username, username: username, permissionString: '', passwordHash:'', uuid: uuid, locationId: locationId, firstname: 'first', lastname: 'last', organisation: 'org', phoneNumber: '+250 11 111 11 11').save(failOnError: true)
+	static def newOtherUser(def username, def uuid, def locationId) {
+		return new User(userType: UserType.OTHER, code: username, username: username, permissionString: '', passwordHash:'', uuid: uuid, locationId: locationId, firstname: 'first', lastname: 'last', organisation: 'org', phoneNumber: '+250 11 111 11 11').save(failOnError: true)
 	}
 	
 	static def newSystemUser(def username, def uuid, def locationId) {

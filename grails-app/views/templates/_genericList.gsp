@@ -30,6 +30,7 @@
 		  					<g:message code="default.export.label" />
 		  				</a>
 	  				</g:if>
+
 	  				<g:if test="${grailsApplication.getArtefactByLogicalPropertyName('Controller', controllerName).hasProperty('search')}">
         				<g:searchBox action="search"/>
         			</g:if>
@@ -40,16 +41,16 @@
 		<!-- Filter starts here-->
 		<div class="filters main">
 		  <h2>Filter inventory<a href="#" class="right"><img src="${resource(dir:'images/icons',file:'icon_close_flash.png')}" alt="Section"/></a></h2>
-		  <form class="filters-box" method="post">
+		  <g:form url="[controller:'equipment', action:'filter', params:[targetURI: targetURI]]" useToken="false" class="filters-box">
 				<ul>
-					<li><g:selectFromList name="dataLocation"
+					<%--<li><g:selectFromList name="dataLocation"
 							label="${message(code:'inventory.datalocation.label')}" bean="${}"
 							field="dataLocation" optionKey="id" multiple="false"
 							ajaxLink="${createLink(controller:'location', action:'getAjaxData', params:[class: 'DataLocation'])}"
 							from="${dataLocations}" value="${dataLocations.collect{it.id}}"
 							values="${dataLocations.collect{it.names}}" /></li>
 							
-					<li><g:selectFromList name="equipmentType"
+					--%><li><g:selectFromList name="equipmentType"
 							label="${message(code:'equipment.type.label')}" bean="${}"
 							field="type" optionKey="id" multiple="false"
 							ajaxLink="${createLink(controller:'EquipmentType', action:'getAjaxData', params:[class: 'EquipmentType'])}"
@@ -88,12 +89,13 @@
 					</li>
 				</ul>
 				<button type="submit">Filter</button>
-		  </form>
+				<input type="hidden" name="location" value="${dataLocation.id}"/>
+		  </g:form>
 		</div>
 		
 		<h2 class="filter-results">Showing filtered list of equipment which contain search term "Scanner"</h2>
 		<!-- Filter ends here -->
-		
+
 		<!-- Template goes here -->
 		
 		<div class="main table">

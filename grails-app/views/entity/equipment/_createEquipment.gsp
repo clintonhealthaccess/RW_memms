@@ -1,6 +1,5 @@
 <%@ page import="org.chai.memms.util.Utils" %>
 <%@ page import="org.chai.memms.equipment.EquipmentStatus.Status" %>
-
 <div  class="entity-form-container togglable">
   <div class="heading1-bar">
 		<h1>
@@ -13,7 +12,6 @@
 		</h1>
 		<g:locales/>
 	</div>
-
 	<div class="main">
   	<g:form url="[controller:'equipment', action:'save', params:[targetURI: targetURI]]" useToken="true" class="simple-list">
   	  <fieldset>
@@ -31,7 +29,7 @@
   			ajaxLink="${createLink(controller:'equipmentType', action:'getAjaxData')}"
   			from="${types}" value="${equipment?.type?.id}" values="${types.collect{it.names}}" />
 			
-    		<g:input name="expectedLifeTime" label="${message(code:'equipment.expectedlifetime.label')}" bean="${equipment}" field="expectedLifeTime"/>
+    		<g:input name="expectedLifeTime" label="${message(code:'equipment.expected.life.time.label')}" bean="${equipment}" field="expectedLifeTime"/>
 			
     		<g:input name="serialNumber" label="${message(code:'equipment.serial.number.label')}" bean="${equipment}" field="serialNumber"/>
     		<g:input name="model" label="${message(code:'equipment.model.label')}" bean="${equipment}" field="model"/>
@@ -43,8 +41,8 @@
 			
     		<g:input name="room" label="${message(code:'equipment.room.label')}" bean="${equipment}" field="room"/>
 		
-    		<g:input name="obsolete" type="checkbox" label="${message(code:'equipment.obsolete.label')}" bean="${equipment}" field="obsolete"/>
-    		<g:input name="donation" type="checkbox" label="${message(code:'equipment.donation.label')}" bean="${equipment}" field="donation"/>
+    		<g:inputBox name="obsolete"  label="${message(code:'equipment.obsolete.label')}" bean="${equipment}" value="${equipment.obsolete}" checked="${(equipment.obsolete)? true:false}"/>
+    		<g:inputBox name="donation"  label="${message(code:'equipment.donation.label')}" bean="${equipment}" value="${equipment.donation}" checked="${(equipment.donation)? true:false}"/>
     	</fieldset>	
     	<fieldset>
       	<h4 class="section-title">
@@ -72,6 +70,7 @@
     		<g:inputDate name="purchaseDate" precision="day" id="purchase-date" value="${equipment.purchaseDate}" label="${message(code:'equipment.purchase.date.label')}" bean="${equipment}" field="purchaseDate"/>
     		<g:input name="purchaseCost" label="${message(code:'equipment.purchase.cost.label')}" bean="${equipment}" field="purchaseCost"/>
     	
+
      	</fieldset>
     	<fieldset>
       	<h4 class="section-title">
@@ -81,23 +80,45 @@
           Status Information
         </h4>
       	<g:if test="${equipment.id == null}">
-     			<g:selectFromEnum name="status" bean="${equipment}" values="${Status.values()}" field="status" label="${message(code:'equipmentstatus.label')}"/>
-     			<g:inputDate name="dateOfEvent" precision="day"  value="${equipment.status?.dateOfEvent}" id="date-of-event" label="${message(code:'entity.date.of.event.label')}" bean="${equipment.status}" field="status.dateOfEvent"/>
+     			<g:selectFromEnum name="status" bean="${equipment}" values="${Status.values()}" field="status" label="${message(code:'equipment.status.label')}"/>
+     			<g:inputDate name="dateOfEvent" precision="day"  value="${equipment.status?.dateOfEvent}" id="date-of-event" label="${message(code:'equipment.status.date.of.event.label')}" bean="${equipment.status}" field="status.dateOfEvent"/>
       	</g:if>
       	<g:if test="${equipment?.status!=null}">
-  	    	<g:each in="${equipment?.status}" status="i" var="status">
-  		    	<table class="items">
-  		    		<tr>
-  		    			<td>${status.value}</td>
-  		    			<td>${Utils.formatDate(status?.statusChangeDate)}</td>
-  		    			<td>${status.current}</td>
-  		    			<td>${Utils.formatDate(status?.dateOfEvent)}</td>
-  		    		</tr>
-  		    	</table>
-  	    	</g:each>
-  	    	<br />
-  	    	<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'edit', params:[equipment: equipment?.id])}" class="next medium gray">
+	    	<table class="items">
+	    		<tr>
+	    			<th>${message(code:'equipment.status.label')}</th>
+	    			<th>${message(code:'equipment.status.date.of.event.label')}</th>
+	    			<th>${message(code:'equipment.status.recordedon.label')}</th>
+	    			<th>${message(code:'equipment.status.current.label')}</th>
+	    			<th></th>
+	    		</tr>
+	    		<g:each in="${equipment?.status.sort{a,b -> (a.current > b.current) ? -1 : 1}}" status="i" var="status">
+	    		<tr>
+	    			<td>${message(code: status?.status?.messageCode+'.'+status?.status?.name)}</td>
+	    			<td>${Utils.formatDate(status?.dateOfEvent)}</td>
+	    			<td>${Utils.formatDate(status?.statusChangeDate)}</td>
+	    			<td>${(status.current)? '\u2713':'X'}</td>
+	    			<td>
+		    			<ul>
+					<li>
+						<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'edit', params:[id: status.id,equipment: equipment?.id])}">
+							<g:message code="default.link.edit.label" />
+						</a>
+					</li>
+					<li>
+						<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'delete', params:[id: status.id,equipment: equipment?.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');"><g:message code="default.link.delete.label" /></a>
+					</li>
+				</ul>
+	    			</td>
+	    		</tr>
+	    		</g:each>
+	    	</table>
+	    	<br />
+  	    	<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'create', params:[equipment: equipment?.id])}" class="next medium gray">
   	    		<g:message code="equipment.change.status.label" default="Change Status"/>
+  	    	</a>
+  	    	<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'list', params:[equipment: equipment?.id])}">
+  	    		<g:message code="equipment.see.all.status.label" default="See all status"/>
   	    	</a>
      		</g:if>
      	</fieldset>
@@ -108,8 +129,8 @@
           </span>
           Warranty Information
         </h4>
-      	<g:inputDate name="warranty.startDate" precision="day" id="start-date" value="${equipment?.warranty?.startDate}" label="${message(code:'warranty.startDate.label')}" bean="${equipment?.warranty}" field="startDate"/>
-      	<g:inputDate name="warranty.endDate" precision="day" id="end-date" value="${equipment?.warranty?.endDate}" label="${message(code:'warranty.endDate.label')}" bean="${equipment?.warranty}" field="endDate"/>
+      	<g:inputDate name="warranty.startDate" precision="day" id="start-date" value="${equipment?.warranty?.startDate}" label="${message(code:'warranty.start.date.label')}" bean="${equipment?.warranty}" field="startDate"/>
+      	<g:inputDate name="warranty.endDate" precision="day" id="end-date" value="${equipment?.warranty?.endDate}" label="${message(code:'warranty.end.date.label')}" bean="${equipment?.warranty}" field="endDate"/>
       	<g:input name="warranty.contact.contactName" label="${message(code:'contact.name.label')}" bean="${equipment?.warranty?.contact}" field="contactName"/>
       	<g:input name="warranty.contact.email" label="${message(code:'contact.email.label')}" bean="${equipment?.warranty?.contact}" field="email"/>
       	<g:input name="warranty.contact.phone" label="${message(code:'contact.phone.label')}" bean="${equipment?.warranty?.contact}" field="phone"/>

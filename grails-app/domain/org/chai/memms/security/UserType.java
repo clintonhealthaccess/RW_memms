@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public enum UserType {
-	
+
 	ADMIN("user-admin", ""), 
 	SYSTEM("user-system", ""), 
 	OTHER("user-other", "");
