@@ -154,7 +154,7 @@ class EquipmentController extends AbstractEntityController{
 		def dataLocationTypesFilter = getLocationTypes()
 		def template = null
 		def inventories = null
-		def locationSkipLevels = new HashSet<LocationLevel>()
+		def locationSkipLevels = inventoryService.getSkipLocationLevels()
 		
 		if (location != null) {
 			template = '/inventory/sectionTable'

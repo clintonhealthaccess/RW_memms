@@ -43,14 +43,7 @@
 		  <h2>Filter inventory<a href="#" class="right"><img src="${resource(dir:'images/icons',file:'icon_close_flash.png')}" alt="Section"/></a></h2>
 		  <g:form url="[controller:'equipment', action:'filter', params:[targetURI: targetURI]]" useToken="false" class="filters-box">
 				<ul>
-					<%--<li><g:selectFromList name="dataLocation"
-							label="${message(code:'inventory.datalocation.label')}" bean="${}"
-							field="dataLocation" optionKey="id" multiple="false"
-							ajaxLink="${createLink(controller:'location', action:'getAjaxData', params:[class: 'DataLocation'])}"
-							from="${dataLocations}" value="${dataLocations.collect{it.id}}"
-							values="${dataLocations.collect{it.names}}" /></li>
-							
-					--%><li><g:selectFromList name="equipmentType"
+					<li><g:selectFromList name="equipmentType"
 							label="${message(code:'equipment.type.label')}" bean="${}"
 							field="type" optionKey="id" multiple="false"
 							ajaxLink="${createLink(controller:'EquipmentType', action:'getAjaxData', params:[class: 'EquipmentType'])}"

@@ -72,7 +72,7 @@ class BootStrap {
 				def userAdmin = new User(userType: UserType.ADMIN,code:"admin", location: CalculationLocation.findByCode(0), username: "admin",
 					firstname: "memms", lastname: "memms", email:'admin@memms.org', passwordHash: new Sha256Hash("admin").toHex(), active: true,
 					confirmed: true, uuid:'admin', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
-	
+				log.debug("============ roles: ")
 				userAdmin.addToRoles(Role.findByName('admin'))
 				userAdmin.addToPermissions("*:*")
 				userAdmin.save(failOnError: true, flush:true)
