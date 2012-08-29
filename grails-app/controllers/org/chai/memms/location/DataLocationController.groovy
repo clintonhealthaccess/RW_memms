@@ -4,9 +4,8 @@ import org.chai.memms.AbstractEntityController;
 import org.chai.memms.equipment.Equipment;
 
 class DataLocationController extends AbstractEntityController {
-
 	def locationService	
-	def languageService
+	
 	def bindParams(def entity) {
 		entity.properties = params
 	}
@@ -42,19 +41,21 @@ class DataLocationController extends AbstractEntityController {
 	
 	def deleteEntity(def entity) {
 		if(Equipment.findByDataLocation(entity)!=null)
-			flash.message = message(code: 'datalocation.hasequipment', args: [message(code: getLabel(), default: 'entity'), params.id], default: 'Data Location {0} still has associated equipment.')
+			flash.message = message(code: 'datalocation.hasequipment', args: [message(code: getLabel(), default: 'entity'), params.id], default: '{0} still has associated equipment.')
+		else entity.delete()
 	}
 
 	def list = {
 		adaptParamsForList()
-		List<DataLocation> locations = DataLocation.list(params);
+		List<DataLocation> locations = DataLocation.list(offset:params.offset,max:params.max,sort:params.sort ?:names,order: params.order ?:"asc");
 
 		render (view: '/entity/list', model:[
 			template:"location/dataLocationList",
 			entities: locations,
-			entityCount: DataLocation.count(),
+			entityCount: locations.totalCount,
 			code: getLabel(),
-			entityClass: getEntityClass()
+			entityClass: getEntityClass(),
+			names:names
 		])
 	}
 	
@@ -65,8 +66,10 @@ class DataLocationController extends AbstractEntityController {
 		render (view: '/entity/list', model:[
 			template:"location/dataLocationList",
 			entities: locations,
-			entityCount: locationService.countLocation(DataLocation.class, params['q']),
-			code: getLabel()
+			entityCount: locations.totalCount,
+			code: getLabel(),
+			q:params['q'],
+			names:names
 		])
 	}
 	

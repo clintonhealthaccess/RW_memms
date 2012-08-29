@@ -109,14 +109,14 @@
 		<shiro:hasPermission permission="menu:admin">
 			<li><a href="#">Administration</a>
 	         	<ul class="submenu">
-	         		<li><a href="${createLink(controller: 'User', action:'list')}">Users</a></li>
-					<li><a href="${createLink(controller: 'Department', action:'list')}">Departments</a></li>
-					<li><a href="${createLink(controller: 'EquipmentModel', action:'list')}">Equipment Models</a></li>
-					<li><a href="${createLink(controller: 'EquipmentType', action:'list')}">Equipment Types</a></li>
-					<li><a href="${createLink(controller: 'Location', action:'list')}">Location</a></li>
-					<li><a href="${createLink(controller: 'DataLocation', action:'list')}">Data Location</a></li>
-					<li><a href="${createLink(controller: 'LocationLevel', action:'list')}">Location Level</a></li>
-					<li><a href="${createLink(controller: 'DataLocationType', action:'list')}">Data Location Type</a></li>
+					<li><a href="${createLink(controller: 'Department', action:'list')}"><g:message code="department.label"/></a></li>
+					<li><a href="${createLink(controller: 'EquipmentType', action:'list')}"><g:message code="equipment.type.label"/></a></li>
+					<li><a href="${createLink(controller: 'Provider', action:'list')}">Manufacture and Supplier</a></li>
+					<li><a href="${createLink(controller: 'DataLocation', action:'list')}"><g:message code="datalocation.label"/></a></li>
+					<li><a href="${createLink(controller: 'DataLocationType', action:'list')}"><g:message code="datalocation.type.label"/></a></li>
+					<li><a href="${createLink(controller: 'Location', action:'list')}"><g:message code="location.label"/></a></li>
+					<li><a href="${createLink(controller: 'LocationLevel', action:'list')}"><g:message code="location.level.label"/></a></li>
+					<li><a href="${createLink(controller: 'User', action:'list')}"><g:message code="user.label"/></a></li>
 	         	</ul>
         	 </li>
 		</shiro:hasPermission>

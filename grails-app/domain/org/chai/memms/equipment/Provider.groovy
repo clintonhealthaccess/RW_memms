@@ -14,13 +14,11 @@ import i18nfields.I18nFields
 public class Provider{
 	
 	enum Type{
-		
+		BOTH("both"),
 		MANUFACTURE("manufacture"),
-		SUPPLIER("supplier"),
-		BOTH("both")
+		SUPPLIER("supplier")
 		
 		String messageCode = "provider.type"
-		
 		final String name
 		Type(String name){ this.name = name }
 		String getKey() { return name() }
@@ -35,9 +33,10 @@ public class Provider{
 	static hasMany = [manufactures: Equipment, suppliers: Equipment]
    
 	static constraints ={
+		importFrom Contact
 		code nullable: false, blank: false, unique: true
 		type nullable: false
-		contact nullable: false 
+		//contact nullable: false 
 	}
 	static mapping = {
 	    version false

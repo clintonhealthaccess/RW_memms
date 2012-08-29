@@ -1,4 +1,3 @@
-
 <table class="items spaced">
 
 	<thead>

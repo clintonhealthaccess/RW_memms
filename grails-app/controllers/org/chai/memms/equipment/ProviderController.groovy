@@ -5,6 +5,7 @@ package org.chai.memms.equipment
 
 import org.chai.memms.AbstractEntityController;
 import org.chai.memms.equipment.Provider.Type;
+import org.chai.memms.equipment.Provider;
 
 /**
  * @author Jean Kahigiso M.
@@ -36,8 +37,8 @@ class ProviderController  extends AbstractEntityController {
 	
 	def deleteEntity(def entity) {
 		if(entity.manufactures.size() > 0 || entity.suppliers.size() > 0 ){
-			
-		}else super.delete(entity)
+			flash.message = message(code: 'provider.hasequipments', args: [message(code: getLabel(), default: 'entity'), params.id], default: '{0} still has associated equipments.')
+		}else super.deleteEntity(entity)
 	}
 	def getModel(def entity) {
 	     [
@@ -51,7 +52,7 @@ class ProviderController  extends AbstractEntityController {
 	
 	def list = {
 		adaptParamsForList()
-		List<Provider> providers = Provider.list(params)
+		List<Provider> providers = Provider.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc")
 		render(view:"/entity/list", model:[
 			template:"provider/providerList",
 			entities: providers,
@@ -61,39 +62,31 @@ class ProviderController  extends AbstractEntityController {
 			])
 	}
 	
+	def search = {
+		adaptParamsForList()
+		List<Provider> providers = providerService.searchProvider(null, params['q'], params)		
+		render (view: '/entity/list', model:[
+			template:"provider/providerList",
+			entities: providers,
+			entityCount: providers.totalCount,
+			code: getLabel(),
+			q:params['q']
+		])
+		
+	}
 	def getAjaxData = {
 		def type =params['type']
 		type = Type."$type";
-		List<Provider> providers = providerService.searchProvider(type, params['term'], [:])		
+		List<Provider> providers = providerService.searchProvider(type, params['term'], [:])
 		render(contentType:"text/json") {
 			elements = array {
 				providers.each { provider ->
 					elem (
 						key: provider.id,
-						value: provider.contact.contactName + ' ['+provider.code+']' 
+						value: provider.contact.contactName + ' ['+provider.code+']'
 					)
 				}
 			}
 		}
 	}
-	def search = {
-		adaptParamsForList()
-		List<Provider> providers = providerService.searchProvider(null, params['q'], params)
-				
-		render (view: '/entity/list', model:[
-			template:"provider/providerList",
-			entities: providers,
-			entityCount: providerService.countProvider(null, params['q']),
-			code: getLabel()
-		])
-		
-	}
-	def importer ={
-		
-	}
-	def export = {
-		
-	}
-
-
 }

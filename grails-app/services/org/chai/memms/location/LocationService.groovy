@@ -78,6 +78,7 @@ public class LocationService {
 		return levels;
 	}
 	
+	
 	List<DataLocation> getDataLocationsOfType(Set<CalculationLocation> locations,Set<DataLocationType> types){
 		if (log.isDebugEnabled()) log.debug("List<DataLocation> getDataLocations(Set<CalculationLocation> "+locations+"Set<DataLocationType>"+types+")");
 		def dataLocations= new ArrayList<DataLocation>()
@@ -100,14 +101,23 @@ public class LocationService {
 		return dataLocations;
 	}
 
-	Long getNumberOfDataLocationsForType(DataLocationType dataLocationType){
-		return (Long)sessionFactory.getCurrentSession().createCriteria(DataLocation.class)
-		.add(Restrictions.eq("type", dataLocationType))
-		.setProjection(Projections.rowCount()).uniqueResult();
+	Long getNumberOfDataLocationsForType(DataLocationType type){
+		def dataLocations = DataLocation.createCriteria().list(){eq("type",type)}
+		return dataLocations.totalCount;
 	}
-		
-	Integer countLocation(Class<CalculationLocation> clazz, String text) {
-		return getSearchCriteria(clazz, text).setProjection(Projections.count("id")).uniqueResult()
+	
+	public <T extends CalculationLocation> List<T> searchLocation(Class<T> clazz, String text, Map<String, String> params) {
+		def dbFieldName = 'names_'+languageService.getCurrentLanguagePrefix();
+		def criteria = clazz.createCriteria()
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:dbFieldName,order: params.order ?:"asc"){
+			createAlias("level","l")
+			or{ 
+				if(clazz instanceof Location )
+					ilike("l."+dbFieldName,"%"+text+"%")
+				ilike("code","%"+text+"%")
+				ilike(dbFieldName,"%"+text+"%")
+			}
+		}
 	}
 	
 	public <T extends CalculationLocation> T getCalculationLocation(Long id, Class<T> clazz) {
@@ -117,37 +127,6 @@ public class LocationService {
 	public <T extends CalculationLocation> T findCalculationLocationByCode(String code, Class<T> clazz) {
 		return (T) sessionFactory.getCurrentSession().createCriteria(clazz)
 				.add(Restrictions.eq("code", code)).uniqueResult();
-	}
-	
-	public <T extends CalculationLocation> List<T> searchLocation(Class<T> clazz, String text, Map<String, String> params) {
-		def criteria = getSearchCriteria(clazz, text)
-		
-		if (params['offset'] != null) criteria.setFirstResult(params['offset'])
-		if (params['max'] != null) criteria.setMaxResults(params['max'])
-		List<T> locations = criteria.addOrder(Order.asc("id")).list()
-		
-		StringUtils.split(text).each { chunk ->
-			locations.retainAll { location ->
-				Utils.matches(chunk, location.getNames(languageService.getCurrentLanguage())) ||
-				Utils.matches(chunk, location.code)
-			}
-		}
-		return locations
-	}
-	
-	private <T extends CalculationLocation> Criteria getSearchCriteria(Class<T> clazz, String text) {
-		def dbFieldName = 'names_'+languageService.getCurrentLanguagePrefix();
-		def criteria = sessionFactory.getCurrentSession().createCriteria(clazz)
-		
-		def textRestrictions = Restrictions.conjunction()
-		StringUtils.split(text).each { chunk ->
-			def disjunction = Restrictions.disjunction();
-			disjunction.add(Restrictions.ilike("code", chunk, MatchMode.ANYWHERE))
-			disjunction.add(Restrictions.ilike(dbFieldName, chunk, MatchMode.ANYWHERE))
-			textRestrictions.add(disjunction)
-		}
-		criteria.add(textRestrictions)
-		return criteria
 	}
 	
 	// TODO property of level?

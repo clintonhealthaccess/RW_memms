@@ -28,7 +28,7 @@ class User {
 	UserType userType
 	
 	def utilsService
-	
+	static belongsTo = Role
 	static hasMany = [ roles: Role ]
 	
 	User() {
@@ -48,7 +48,7 @@ class User {
 		permissions << permission
 		this.permissionString = utilsService.unsplit(permissions, User.PERMISSION_DELIMITER)
 	}
-	
+		
 	def removeFromPermissions(def permission) {
 		def permissions = getPermissions()
 		permissions.remove(permission)
@@ -67,7 +67,7 @@ class User {
 	
 	private def addDefaultPermissions() {
 		userType.defaultPermissions.each { permissionToAdd ->
-			def permission = permissionToAdd.replaceAll('<id>', locationId+'')
+			def permission = permissionToAdd.replaceAll('<id>', location+'')
 			addToPermissions(permission)
 		}
 	}
@@ -119,5 +119,6 @@ class User {
 	static mapping = {
 		table "memms_user"
 		cache true
+		version false
 	}
 }

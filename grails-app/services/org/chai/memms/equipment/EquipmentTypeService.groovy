@@ -47,42 +47,20 @@ class EquipmentTypeService {
 	
 	def languageService;
 	def sessionFactory;
-	
-	Integer countEquipmentType(String text) {
-		return getSearchCriteria(text).setProjection(Projections.count("id")).uniqueResult()
-	}
- 
+		
 	public List<EquipmentType> searchEquipmentType(String text, Map<String, String> params) {
-		def criteria = getSearchCriteria(text)
-		
-		if (params['offset'] != null) criteria.setFirstResult(params['offset'])
-		if (params['max'] != null) criteria.setMaxResults(params['max'])
-		List<EquipmentType> equipmentTypes = criteria.addOrder(Order.desc("id")).list()
-		
-		StringUtils.split(text).each { chunk ->
-			equipmentTypes.retainAll { equipmentType ->
-				Utils.matches(chunk, equipmentType.getDescriptions(languageService.getCurrentLanguage())) ||
-				Utils.matches(chunk, equipmentType.getNames(languageService.getCurrentLanguage())) ||
-				Utils.matches(chunk, equipmentType.code)
+		def dbFieldName = 'names_'+languageService.getCurrentLanguagePrefix();
+		def dbFieldDescritpion = 'descriptions_'+languageService.getCurrentLanguagePrefix();
+		def criteria = EquipmentType.createCriteria()
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			or{
+				//TODO
+				//ilike("observation","%"+text+"%")
+				ilike("code","%"+text+"%")
+				ilike(dbFieldName,"%"+text+"%")
+				ilike(dbFieldDescritpion,"%"+text+"%")
 			}
+			
 		}
-		return equipmentTypes
-	}
-	
-	private Criteria getSearchCriteria(String text) {
-		def dbFieldNames = 'names_'+languageService.getCurrentLanguagePrefix();
-		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
-		def criteria = sessionFactory.getCurrentSession().createCriteria(EquipmentType.class)
-		
-		def textRestrictions = Restrictions.conjunction()
-		StringUtils.split(text).each { chunk ->
-			def disjunction = Restrictions.disjunction();
-			disjunction.add(Restrictions.ilike("code", chunk, MatchMode.ANYWHERE))
-			disjunction.add(Restrictions.ilike(dbFieldNames, chunk, MatchMode.ANYWHERE))
-			disjunction.add(Restrictions.ilike(dbFieldDescriptions, chunk, MatchMode.ANYWHERE))
-			textRestrictions.add(disjunction)
-		}
-		criteria.add(textRestrictions)
-		return criteria
 	}
 }

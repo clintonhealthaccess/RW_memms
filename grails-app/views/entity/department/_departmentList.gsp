@@ -2,8 +2,8 @@
 	<thead>
 		<tr>
 			<th/>
-			<th><g:message code="entity.code.label"/></th>
-			<th><g:message code="entity.names.label"/></th>
+			<g:sortableColumn property="code" params="[q:q]" title="${message(code: 'entity.code.label')}" />
+			<g:sortableColumn property="${names}" params="[q:q]" title="${message(code: 'entity.names.label')}" />
 			<th><g:message code="entity.descriptions.label"/></th>
 		</tr>
 	</thead>

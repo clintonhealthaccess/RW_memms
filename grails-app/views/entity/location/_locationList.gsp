@@ -2,10 +2,10 @@
 	<thead>
 		<tr>
 			<th/>
-			<th><g:message code="entity.code.label"/></th>
-			<th><g:message code="entity.name.label"/></th>
-			<th><g:message code="location.level.label"/></th>
-			<th><g:message code="location.parent.label"/></th>
+			<g:sortableColumn property="code" params="[q:q]" title="${message(code: 'entity.code.label')}" />
+			<g:sortableColumn property="${names}" params="[q:q]" title="${message(code: 'entity.name.label')}" />
+			<g:sortableColumn property="level" params="[q:q]" title="${message(code: 'location.level.label')}" />
+			<g:sortableColumn property="parent" params="[q:q]" title="${message(code: 'location.parent.label')}" />
 		</tr>
 	</thead>
 	<tbody>

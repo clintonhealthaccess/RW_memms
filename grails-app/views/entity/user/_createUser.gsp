@@ -31,17 +31,11 @@
 			<g:selectFromList name="location.id" label="${message(code:'datalocation.label')}" bean="${user}" field="location" optionKey="id" multiple="false"
 				ajaxLink="${createLink(controller:'location', action:'getAjaxData', params:[class: 'CalculationLocation'])}"
 				from="${dataLocations}" value="${user.location?.id}" values="${dataLocations.collect{it.names}}" />
-						
-			<div>
-				<label><g:message code="user.confirmed.label"/></label>
-				<g:checkBox name="confirmed" value="${user.confirmed}" />
-			</div>
-			
-			<div>
-				<label><g:message code="user.active.label"/></label>
-				<g:checkBox name="active" value="${user.active}" />
-			</div>
-			
+				
+			<g:inputBox name="confirmed"  label="${message(code:'user.confirmed.label')}" bean="${user}" field="confirmed" value="${user.confirmed}" checked="${(user.confirmed)? true:false}"/>		
+		
+			<g:inputBox name="active"  label="${message(code:'user.active.label')}" bean="${user}" field="active" value="${user.active}" checked="${(user.active)? true:false}"/>		
+		
 			<g:selectFromList name="roles" label="${message(code:'roles.label')}" bean="${user}" field="roles" 
 				from="${roles}" value="${user.roles*.id}" optionValue="name" optionKey="id" multiple="true"/>
 			

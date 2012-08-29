@@ -42,7 +42,7 @@
 		<g:if test="${grailsApplication.getArtefactByLogicalPropertyName('Controller', controllerName).hasProperty('filter')}">
 			<!-- Filter starts here-->
 			<div class="filters main">
-			  <h2>Filter inventory<a href="#" class="right"><img src="../images/icons/icon_close_flash.png"></a></h2>
+			  <h2>Filter inventory<a href="#" class="right"><img src="${resource(dir:'images/icons',file:'icon_close_flash.png')}"></a></h2>
 			  <form class="filters-box">
 			    <ul>
 			      <li>
