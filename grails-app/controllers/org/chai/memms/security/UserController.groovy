@@ -49,7 +49,6 @@ class UserController  extends  AbstractEntityController{
 	def getModel(def entity) {
 		def dataLocations = []
 		if (entity.location != null) dataLocations << entity.location
-		log.debug("-----Locations for this user : " + dataLocations.each{it.getNames(new Locale("en"))} + " Count: " + dataLocations.size())
 		[
 			user:entity,
 			roles: Role.list(),
@@ -74,8 +73,8 @@ class UserController  extends  AbstractEntityController{
 	}
 	
 	def saveEntity(def entity) {
-		entity.setDefaultPermissions()
-		entity.setDefaultRoles()
+//		entity.setDefaultPermissions()
+//		entity.setDefaultRoles()
 		entity.save()
 	}
 	
