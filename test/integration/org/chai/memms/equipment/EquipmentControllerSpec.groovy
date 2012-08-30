@@ -103,4 +103,15 @@ class EquipmentControllerSpec extends IntegrationTests{
 			Equipment."findByDescriptions_$it"("test descriptions $it").getDescriptions(new Locale("$it")).equals("test descriptions $it")
 		}
 	}
+
+//	def "can filter equipments by DataLocation, manufacturer, supplier, EquipmentType"(){
+//		setup:
+//		Initializer.createUsers()
+//		Initializer.createDummyStructure()
+//		Initializer.createInventoryStructure()
+//		equipmentController = new EquipmentController();
+//
+//		when:
+//		equipmentController.params
+//	}
 }

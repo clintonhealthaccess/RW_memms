@@ -43,7 +43,6 @@ class FilterTagLib {
 		
 	def locationFilter = {attrs, body ->
 		Location.withTransaction {
-			log.debug("================= Attributes: " + attrs)
 			def model = new HashMap(attrs)
 			def location = attrs['selected']
 			def locationFilterRoot = locationService.getRootLocation()

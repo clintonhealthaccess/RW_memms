@@ -1,3 +1,4 @@
+<%@ page import="org.chai.memms.equipment.EquipmentStatus.Status" %>
 <div class="entity-list">
 	<div>
 		<div class="heading1-bar">
@@ -41,48 +42,49 @@
 		<!-- Filter starts here-->
 		<div class="filters main">
 		  <h2>Filter inventory<a href="#" class="right"><img src="${resource(dir:'images/icons',file:'icon_close_flash.png')}" alt="Section"/></a></h2>
-		  <g:form url="[controller:'equipment', action:'filter', params:[targetURI: targetURI]]" useToken="false" class="filters-box">
+		  <g:if test="${flash.error}">
+                    ${flash.error}
+		  <h2 class="filter-results">Showing filtered list of equipment which contain search term "Scanner"</h2>
+		  </g:if>
+		  <g:form url="[controller:'equipment', action:'filter']" method="get" useToken="false" class="filters-box">
 				<ul>
-					<li><g:selectFromList name="equipmentType"
+					<li><g:selectFromList name="equipmentType.id"
 							label="${message(code:'equipment.type.label')}" bean="${}"
 							field="type" optionKey="id" multiple="false"
 							ajaxLink="${createLink(controller:'EquipmentType', action:'getAjaxData', params:[class: 'EquipmentType'])}"
 							from="${equipmentType}" value="${equipmentType.collect{it.id}}"
 							values="${equipmentType.collect{it.names}}" /></li>
-							
-					<li><g:selectFromList name="manufacturer"
+
+					<li><g:selectFromList name="manufacturer.id"
 							label="${message(code:'provider.manufacture.label')}" bean="${}"
 							field="MANUFACTURE" optionKey="id" multiple="false"
 							ajaxLink="${createLink(controller:'Provider', action:'getAjaxData', params:[class: 'Provider',type:'MANUFACTURE'])}"
-							
 							from="${dataLocations}" value="${manufacturers.collect{it.id}}"
 							values="${manufacturers.collect{it.contact.contactName}}" /></li>
-							
-					<li><g:selectFromList name="supplier"
+
+					<li><g:selectFromList name="supplier.id"
 							label="${message(code:'provider.supplier.label')}" bean="${}"
 							field="SUPPLIER" optionKey="id" multiple="false"
 							ajaxLink="${createLink(controller:'Provider', action:'getAjaxData', params:[class: 'Provider',type:'SUPPLIER'])}"
-							
-							from="${suppliers}" value="${suppliers.collect{it.contact.contactName}}"
+							from="${suppliers}"
+							value="${suppliers.collect{it.contact.contactName}}"
 							values="${suppliers.collect{it.contact.contactName}}" /></li>
 					<li>
-					<li><label>Obsolete</label> <select>
-							<option>Please select</option>
-							<option>Selection</option>
+					<li><label>Obsolete</label> <select name="obsolete">
+							<option value="">Please select</option>
+							<option value="true">True</option>
+							<option value="false">False</option>
 					</select></li>
-					<li><label>Status</label> <select>
-							<option>Please select</option>
-							<option>Selection</option>
+					<li><label>Donated</label> <select name="donated">
+							<option value="">Please select</option>
+							<option value="true">True</option>
+							<option value="false">False</option>
 					</select></li>
-					<label>Donated</label>
-					<select>
-						<option>Please select</option>
-						<option>Selection</option>
-					</select>
-					</li>
+					<li><g:selectFromEnum name="status" values="${Status.values()}" field="status" label="${message(code:'equipment.status.label')}" /></li>
+
 				</ul>
 				<button type="submit">Filter</button>
-				<input type="hidden" name="location" value="${dataLocation.id}"/>
+				<input type="hidden" name="dataLocation.id" value="${dataLocation.id}"/>
 		  </g:form>
 		</div>
 		
