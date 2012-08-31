@@ -3,12 +3,12 @@
 	<thead>
 		<tr>
 			<th/>
-			<th><g:message code="entity.code.label"/></th>
-			<th><g:message code="entity.name.label"/></th>
+			<g:sortableColumn property="code" params="[q:q]" title="${message(code: 'entity.code.label')}" />
+			<g:sortableColumn property="${names}" params="[q:q]" title="${message(code: 'entity.name.label')}" />
 			<th><g:message code="entity.description.label"/></th>
-			<th><g:message code="entity.observation.label"/></th>
-			<th><g:message code="equipment.type.added.on.label"/></th>
-			<th><g:message code="equipment.type.last.modified.on.label"/></th>
+			<g:sortableColumn property="observation" params="[q:q]" title="${message(code: 'entity.observation.label')}" />
+			<g:sortableColumn property="addedOn" params="[q:q]" title="${message(code: 'equipment.type.added.on.label')}" />
+			<g:sortableColumn property="lastModifiedOn" params="[q:q]" title="${message(code: 'equipment.type.last.modified.on.label')}" />
 		</tr>
 	</thead>
 	<tbody>

@@ -43,10 +43,10 @@ class UserServiceSpec extends IntegrationTests{
 	  def dataLocation = DataLocation.findByCode(KIVUYE);
 	  def userOne = newUser("userOne",UUID.randomUUID().toString());
 	  def userTwo = newUser("userTwo",UUID.randomUUID().toString());
-	  def personUserOne = newOtherUser("personUserOne",UUID.randomUUID().toString(),dataLocation.id);
-	  def personUserTwo = newOtherUser("personUserTwo",UUID.randomUUID().toString(),dataLocation.id);
-	  def systemUserOne = newSystemUser("systemUserOne",UUID.randomUUID().toString(),dataLocation.id);
-	  def systemUserTwo = newSystemUser("systemUserTwo",UUID.randomUUID().toString(),dataLocation.id);
+	  def personUserOne = newOtherUser("personUserOne",UUID.randomUUID().toString(),dataLocation);
+	  def personUserTwo = newOtherUser("personUserTwo",UUID.randomUUID().toString(),dataLocation);
+	  def systemUserOne = newSystemUser("systemUserOne",UUID.randomUUID().toString(),dataLocation);
+	  def systemUserTwo = newSystemUser("systemUserTwo",UUID.randomUUID().toString(),dataLocation);
 	  
 	  
 	  
@@ -55,10 +55,11 @@ class UserServiceSpec extends IntegrationTests{
 	  def sortUsersByFirstname = userService.searchUser("one",["sort":"firstname"]);
 	  def sortUsersByUsername = userService.searchUser("two",["sort":"username"]);
 	  then:
-	  users.equals([userOne,userTwo,personUserOne,personUserTwo,systemUserOne,systemUserTwo])
+	  //test default sorting
+	  users.equals([systemUserTwo,systemUserOne,personUserTwo,personUserOne,userTwo,userOne])
 	  sortUsersByFirstname.equals([userOne,personUserOne,systemUserOne])
 	  //test if the sorting params is taken in consideration
-	  sortUsersByUsername.equals([personUserTwo,systemUserTwo,userTwo,])
+	  sortUsersByUsername.equals([userTwo,systemUserTwo,personUserTwo])
 	  
   }
   
@@ -68,10 +69,10 @@ class UserServiceSpec extends IntegrationTests{
 	  def dataLocation = DataLocation.findByCode(KIVUYE);
 	  def userOne = newUser("userOne",UUID.randomUUID().toString());
 	  def userTwo = newUser("userTwo",UUID.randomUUID().toString());
-	  def systemUserOne = newSystemUser("systemUserOne",UUID.randomUUID().toString(),dataLocation.id);
-	  def systemUserTwo = newSystemUser("systemUserTwo",UUID.randomUUID().toString(),dataLocation.id);
-	  def personUserOne = newOtherUser("personUserOne",UUID.randomUUID().toString(),dataLocation.id);
-	  def personUserTwo = newOtherUser("personUserTwo",UUID.randomUUID().toString(),dataLocation.id);
+	  def systemUserOne = newSystemUser("systemUserOne",UUID.randomUUID().toString(),dataLocation);
+	  def systemUserTwo = newSystemUser("systemUserTwo",UUID.randomUUID().toString(),dataLocation);
+	  def personUserOne = newOtherUser("personUserOne",UUID.randomUUID().toString(),dataLocation);
+	  def personUserTwo = newOtherUser("personUserTwo",UUID.randomUUID().toString(),dataLocation);
 	  
 	  when:
 	  def users = userService.searchUser("user",[:]);

@@ -52,37 +52,31 @@ class BootStrap {
 			Initializer.createInventoryStructure()
 			break;
 			case "production":
-			if (Role.findByName('admin') == null) {
+			if (!Role.count()) {
 				def adminRole = new Role(name: "admin")
 				adminRole.addToPermissions("*:*")
-				adminRole.save(failOnError: true, flush:true)
+				adminRole.save(failOnError: true)
+				
+				def clercRole = new Role(name: "clerc")
+				clercRole.addToPermissions("home:*")
+				clercRole.addToPermissions("menu:home")
+				clercRole.addToPermissions("menu:inventory")
+				clercRole.addToPermissions("menu:correctivemaintenance")
+				clercRole.addToPermissions("menu:preventivemaintenance")
+				clercRole.addToPermissions("menu:reports")
+				clercRole.addToPermissions("equipment:*")
+				clercRole.save(failOnError: true)
 			}
-			if (Role.findByName('clerc') == null) {
-				def dataClerkRole = new Role(name: "clerc")
-				dataClerkRole.addToPermissions("menu:home")
-				dataClerkRole.addToPermissions("menu:inventory")
-				dataClerkRole.addToPermissions("menu:correctivemaintenance")
-				dataClerkRole.addToPermissions("menu:preventivemaintenance")
-				dataClerkRole.addToPermissions("menu:reports")
-				dataClerkRole.addToPermissions("equipment:*")
-				dataClerkRole.addToPermissions("home:*")
-				dataClerkRole.save(failOnError: true, flush:true)
-			}
-			if (User.findByUsername('admin') == null) {
+			if (!User.count()) {
 				def userAdmin = new User(userType: UserType.ADMIN,code:"admin", location: CalculationLocation.findByCode(0), username: "admin",
-					firstname: "memms", lastname: "memms", email:'admin@memms.org', passwordHash: new Sha256Hash("admin").toHex(), active: true,
-					confirmed: true, uuid:'admin', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
-				log.debug("============ roles: ")
-				userAdmin.addToRoles(Role.findByName('admin'))
-				userAdmin.addToPermissions("*:*")
-				userAdmin.save(failOnError: true, flush:true)
-			}
-			if (User.findByUsername('clerc') == null) {
-				def clerc = new User(userType: UserType.ADMIN,code:"clerc", location: CalculationLocation.findByCode(327), username: "clerc",
-					firstname: "memms", lastname: "memms", email:'clerk@memms.org', passwordHash: new Sha256Hash("admin").toHex(), active: true,
-					confirmed: true, uuid:'admin', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
-	
-				clerc.addToRoles(Role.findByName('clerk'))
+					firstname: "First Name", lastname: "Last Name", email:'admin@memms.org', passwordHash: new Sha256Hash("admin").toHex(), active: true,
+					confirmed: true, uuid:'admin', defaultLanguage:'en', phoneNumber: '+250 78 111 11 11', organisation:'org')
+				userAdmin.addToPermissions("*:*")				
+				userAdmin.save(failOnError: true)
+				
+				def clerc = new User(userType: UserType.OTHER,code:"clerc", location: CalculationLocation.findByCode(327), username: "clerc",
+					firstname: "memms", lastname: "memms", email:'clerk@memms.org', passwordHash: new Sha256Hash("clerc").toHex(), active: true,
+					confirmed: true, uuid:'clerc', defaultLanguage:'en', phoneNumber: '+250 72 111 11 11', organisation:'org')
 				clerc.addToPermissions("menu:home")
 				clerc.addToPermissions("menu:inventory")
 				clerc.addToPermissions("menu:correctivemaintenance")
@@ -90,7 +84,8 @@ class BootStrap {
 				clerc.addToPermissions("menu:reports")
 				clerc.addToPermissions("equipment:*")
 				clerc.addToPermissions("home:*")
-				userAdmin.save(failOnError: true, flush:true)
+				clerc.save(failOnError: true)
+				
 			}
 			break;
 		}

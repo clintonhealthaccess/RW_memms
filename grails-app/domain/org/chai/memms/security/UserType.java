@@ -6,9 +6,16 @@ import java.util.Set;
 
 public enum UserType {
 
-	ADMIN("user-admin", ""), 
-	SYSTEM("user-system", ""), 
-	OTHER("user-other", "");
+	ADMIN("admin"), 
+	SYSTEM("system"), 
+	OTHER("other");
+	
+	String messageCode = "user.type";	
+	String name;
+	UserType(String name){ this.name=name; }
+	public String getName(){
+		return name;
+	}
 	
 	protected Set<String> defaultPermissions;
 	protected Set<String> defaultRoles;

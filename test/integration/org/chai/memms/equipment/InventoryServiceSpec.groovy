@@ -1,4 +1,4 @@
-/** 
+/**
  * Copyright (c) 2012, Clinton Health Access Initiative.
  *
  * All rights reserved.
@@ -13,7 +13,7 @@
  *     * Neither the name of the <organization> nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -25,67 +25,37 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 package org.chai.memms.equipment
 
-import java.util.List;
-import java.util.Map;
-import org.chai.memms.equipment.Provider.Type;
-import org.chai.memms.location.CalculationLocation;
-import org.chai.memms.util.Utils;
-import org.chai.memms.equipment.Provider;
+import org.chai.memms.Initializer;
+import org.chai.memms.IntegrationTests;
+import org.chai.memms.location.DataLocationType
+import org.chai.memms.location.Location
 
-/**
- * @author Jean Kahigiso M.
- *
- */
-class ProviderService {
-	static transactional = true
-	
-	def languageService;
-	def sessionFactory;
-	
-	
-	public List<Provider> getManufacturesOnly(){
-		return Provider.findAllByType(Type.MANUFACTURE)
-	}
-	public List<Provider> getSuppliersOnly(){
-		return Provider.findAllByType(Type.SUPPLIER)
-	}
-	public List<Provider> getSuppliersAndManufactures(){
-		return Provider.findAllByTypeNotEqual(Type.BOTH)
-	}
-	
-	public List<Provider> getSuppliersAndBoth(){
-		return Provider.findAllByTypeNotEqual(Type.MANUFACTURE)
-	}
+class InventoryServiceSpec extends IntegrationTests{
+	def inventoryService
+	def "can retrieve all location levels to skip"() {
+		setup:
+		Initializer.createUsers()
+		Initializer.createDummyStructure()
+		Initializer.createInventoryStructure()
+		when:
+		def skipLevels = inventoryService.getSkipLocationLevels()
 
-	public List<Provider> getManufacturesAndBoth(){
-		return Provider.findAllByTypeNotEqual(Type.SUPPLIER)
+		then:
+		skipLevels.size() == grailsApplication.config.location.sector.skip.level.size()
 	}
-
-	public List<Provider> searchProvider(Type type,String text, Map<String, String> params) {
-		def dbFieldDescriptions = 'addressDescriptions_'+languageService.getCurrentLanguagePrefix();
-		def criteria = Provider.createCriteria()
-		
-		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			if(type!=null){
-				or{
-					eq('type',type)
-					eq('type',Type.BOTH)
-				}
-			}
-			or{
-				ilike("code","%"+text+"%")
-				//TODO
-				//	ilike("type","%"+text+"%")
-				ilike("phone","%"+text+"%")
-				ilike("contactName","%"+text+"%")
-				ilike("email","%"+text+"%")
-				ilike("street","%"+text+"%")
-				ilike("poBox","%"+text+"%")
-				ilike(dbFieldDescriptions,"%"+text+"%")
-			}
-		}
 	
+	def "can retrieve inventories from a location, given an EquipmentType to filter on"() {
+		setup:
+		Initializer.createUsers()
+		Initializer.createDummyStructure()
+		Initializer.createInventoryStructure()
+		def types = grailsApplication.config.site.datalocationtype.checked.collect{ DataLocationType.findByCode(it) }.toSet()
+		when:
+		def inventories = inventoryService.getInventoryByLocation(Location.findByCode('Burera'),types)
+		then:
+		inventories.size == 1
 	}
 }

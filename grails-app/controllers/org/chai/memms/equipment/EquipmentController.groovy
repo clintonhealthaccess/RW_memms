@@ -105,11 +105,15 @@ class EquipmentController extends AbstractEntityController{
 	}
 	 
 	def getModel(def entity) {
+		def manufactures = []
+		def suppliers = []
+		if (entity.manufacture != null) manufactures << entity.manufacture
+		if (entity.supplier != null) suppliers << entity.supplier
 		[
 			equipment:entity,
 			departments:Department.list([cache: true]),
-			manufactures: providerService.getManufacturesAndBoth(),
-			suppliers: providerService.getSuppliersAndBoth(),
+			manufactures: manufactures,
+			suppliers: suppliers,
 			types: EquipmentType.list([cache: true]),
 			gra: DataLocation.list([cache: true])
 		]

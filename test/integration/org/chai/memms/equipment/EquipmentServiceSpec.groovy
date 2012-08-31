@@ -119,25 +119,51 @@ class EquipmentServiceSpec extends IntegrationTests{
 
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
-
-		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURE,manufactureContact)
-		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
+		def manufacture = Initializer.newProvider(CODE(111), Type.MANUFACTURE,manufactureContact)
+		def supplier = Initializer.newProvider(CODE(222), Type.SUPPLIER,supplierContact)
+		
 		def user  = newUser("admin", "Admin UID")
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentModel = Initializer.newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 
-		Initializer.newEquipment("SERIAL10",true,false,32,"ROOM A1","2900.23",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
+		def equipmentOne = Initializer.newEquipment("SERIAL10",true,false,32,"ROOM A1","2900.23",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
 				,Initializer.getDate(10,10,2010),new Date(),"equipmentModel",DataLocation.findByCode('Kivuye HC'),department,equipmentType,manufacture,supplier)
-		Initializer.newEquipment("SERIAL11",true,false,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+		def equipmentTwo = Initializer.newEquipment("SERIAL11",false,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
 				,Initializer.getDate(10,10,2010),new Date(),"equipmentModel",DataLocation.findByCode('Butaro DH'),department,equipmentType,manufacture,supplier)
-		def List<Equipment> equipments
-
-		when:
-		equipments = equipmentService.filterEquipment(DataLocation.findByCode('Kivuye HC'), Provider.findByCode(CODE(124)), Provider.findByCode(CODE(123)), EquipmentType.findByCode(CODE(15810)),[:])
+		
+		
+		def List<Equipment> equipmentsOne, equipmentsTwo, equipmentsThree
+		def equipmentStatusOneActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("admin"),Status.INSTOCK,equipmentOne,false)
+		def equipmentStatusOneInActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentOne,true)
+		def equipmentStatusTwo = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("admin"),Status.DISPOSED,equipmentOne,true)
+		
+		equipmentOne.addToStatus(equipmentStatusOneInActive).save(failOnError:true,flush: true)
+		equipmentOne.addToStatus(equipmentStatusOneActive).save(failOnError:true,flush: true)
+		equipmentTwo.addToStatus(equipmentStatusTwo).save(failOnError:true,flush: true)
+		
+		when://Search by defaults
+		
+		equipmentsOne = equipmentService.filterEquipment(DataLocation.findByCode('Butaro DH'),
+			supplier, manufacture,equipmentType,'false','true',Status.DISPOSED,adaptParamsForList())
 
 		then:
-		equipments.size() == 1
-		equipments[0].getDescriptions(new Locale("en")).equals('Equipment Descriptions one')
+		Equipment.count() == 2
+		equipmentsOne.size() == 1
+		equipmentsOne[0].getDescriptions(new Locale("en")).equals('Equipment Descriptions two')
+		
+		when://Search by active status
+		
+		equipmentsTwo = equipmentService.filterEquipment(DataLocation.findByCode('Kivuye HC'),
+			supplier, manufacture,equipmentType,'true','false',Status.OPERATIONAL,adaptParamsForList())
+		equipmentsThree = equipmentService.filterEquipment(DataLocation.findByCode('Kivuye HC'),
+			supplier, manufacture,equipmentType,'true','false',Status.INSTOCK,adaptParamsForList())
+
+		then:
+		Equipment.count() == 2
+		equipmentsTwo.size() == 1
+		equipmentsThree.size() == 0
+		equipmentsTwo[0].getDescriptions(new Locale("en")).equals('Equipment Descriptions one')
+		equipmentsTwo[0].status.size() == 2
 	}
 }

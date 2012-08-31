@@ -38,7 +38,6 @@
 		     	</span>
 	     	</g:if>
 		</div>
-		
 		<!-- Filter starts here-->
 		<div class="filters main">
 		  <h2>Filter inventory<a href="#" class="right"><img src="${resource(dir:'images/icons',file:'icon_close_flash.png')}" alt="Section"/></a></h2>
