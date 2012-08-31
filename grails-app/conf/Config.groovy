@@ -155,6 +155,7 @@ site.from.email="no-reply@memms.org"
 site.datalocationtype.checked=["District Hospital","Health Center"]
 
 location.sector.skip.level=["Sector"]
+status.to.display.on.equipment.form = 5
 
 i18nFields{
 	locales = ["en","fr","rw"]

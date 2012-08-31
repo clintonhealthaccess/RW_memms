@@ -47,10 +47,8 @@ import org.apache.commons.lang.StringUtils
  *
  */
 class EquipmentService {
-	
 	static transactional = true
 	def languageService;
-	def sessionFactory;
 		
 	public List<Equipment> searchEquipment(String text,DataLocation location,Map<String, String> params) {
 		def dbFieldTypeNames = 'names_'+languageService.getCurrentLanguagePrefix();

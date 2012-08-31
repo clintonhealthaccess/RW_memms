@@ -29,6 +29,7 @@ package org.chai.memms.location;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import org.chai.memms.util.Utils;
 /**
 * @author Jean Kahigiso M.
@@ -43,11 +44,31 @@ class Location extends CalculationLocation {
 	List<Location> getChildren(Set<LocationLevel> skipLevels) {		
 		def result = new ArrayList<Location>();
 		for (def child : children) {
-			if (skipLevels != null && skipLevels.contains(child.getLevel())) {
+			if (skipLevels != null && skipLevels.contains(child.level)) {
 				result.addAll(child.getChildren(skipLevels));
 			}
 			else result.add(child);
 		}
+		return result;
+	}
+	
+	//gets all data location children
+	@Override
+	public List<DataLocation> getDataLocationChildren(Set<LocationLevel> skipLevels, Set<DataLocationType> types) {
+		List<DataLocation> result = new ArrayList<DataLocation>();
+		
+		List<DataLocation> dataLocations = getDataLocations();
+		for (DataLocation dataLocation : dataLocations) {
+			if (types == null || types.contains(dataLocation.type))
+				result.add(dataLocation);
+		}
+		
+		for (Location child : children) {
+			if (skipLevels != null && skipLevels.contains(child.level)) {
+				result.addAll(child.getDataLocationChildren(skipLevels, types));
+			}
+		}
+		
 		return result;
 	}
 
@@ -56,12 +77,12 @@ class Location extends CalculationLocation {
 		List<DataLocation> result = new ArrayList<DataLocation>();
 		List<DataLocation> dataLocations = getDataLocations().asList();
 		for (DataLocation dataLocation : dataLocations) {
-			if (types == null || types.contains(dataLocation.getType())) 
+			if (types == null || types.contains(dataLocation.type)) 
 				result.add(dataLocation);
 		}
 		
 		for (Location child : children) {
-			if (skipLevels != null && skipLevels.contains(child.getLevel())) {
+			if (skipLevels != null && skipLevels.contains(child.level)) {
 				result.addAll(child.getDataLocationChildren(skipLevels, types));
 			}
 		}

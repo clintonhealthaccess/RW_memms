@@ -53,6 +53,7 @@ class EquipmentController extends AbstractEntityController{
 	def providerService
 	def equipmentService
 	def inventoryService
+	def grailsApplication
 	
 	def index = {
 		redirect(action: "summaryPage", params: params)
@@ -104,17 +105,20 @@ class EquipmentController extends AbstractEntityController{
 	}
 	 
 	def getModel(def entity) {
-		def manufactures = []
-		def suppliers = []
+		def manufactures = []; def suppliers = []; def departments = []; def types = []; def dataLocations = [];
 		if (entity.manufacture != null) manufactures << entity.manufacture
 		if (entity.supplier != null) suppliers << entity.supplier
+		if (entity.department!=null) departments << entity.department
+		if (entity.type!=null) types << entity.type
+		if (entity.dataLocation!=null) dataLocations << entity.dataLocation
 		[
-			equipment:entity,
-			departments:Department.list([cache: true]),
+			equipment: entity,
+			departments: departments,
 			manufactures: manufactures,
 			suppliers: suppliers,
-			types: EquipmentType.list([cache: true]),
-			dataLocations: DataLocation.list([cache: true])
+			types: types,
+			dataLocations: dataLocations,
+			numberOfStatusToDisplay: grailsApplication.config.status.to.display.on.equipment.form
 		]
 	}
 
