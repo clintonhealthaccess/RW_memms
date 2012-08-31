@@ -130,25 +130,9 @@ ul.horizontal li.last { margin-right: 0; }
 /* line 18, ../../src/stylesheets/partials/_layout.sass */
 #content { background: url("../images/bg/content_bg.png") repeat-x top center; }
 /* line 21, ../../src/stylesheets/partials/_layout.sass */
-<<<<<<< HEAD
-
-#content .main { background: white; -moz-border-radius-bottomleft: 5px; -webkit-border-bottom-left-radius: 5px; border-bottom-left-radius: 5px; -moz-border-radius-bottomright: 5px; -webkit-border-bottom-right-radius: 5px; border-bottom-right-radius: 5px; -webkit-box-shadow: #cccccc 0 0 2px; -moz-box-shadow: #cccccc 0 0 2px; box-shadow: #cccccc 0 0 2px; }
-=======
 #content .main { background: white; border: 1px solid rgba(0, 0, 0, 0.1); }
->>>>>>> master
 
-<<<<<<< HEAD
-
-/* line 26, ../../src/stylesheets/partials/_layout.sass */
-<<<<<<< HEAD
-.main { padding: 15px; }
-
-
-=======
-=======
->>>>>>> master
 /* line 27, ../../src/stylesheets/partials/_layout.sass */
->>>>>>> design
 .clearfix { clear: both; *zoom: 1; }
 /* line 38, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .clearfix:after { content: ""; display: table; clear: both; }
@@ -561,128 +545,128 @@ form.search-form button { height: 23px; margin: 0 0 0 -1px; -moz-border-radius-t
 .form-box a { font-size: 11px; }
 /* line 331, ../../src/stylesheets/partials/_forms.sass */
 .form-box.wide { background: #e8f3fb; width: 350px; }
+/* line 334, ../../src/stylesheets/partials/_forms.sass */
+.form-box.register { width: 460px; }
 
-/* line 335, ../../src/stylesheets/partials/_forms.sass */
+/* line 337, ../../src/stylesheets/partials/_forms.sass */
 .nice-form { padding-top: 10px; }
-/* line 338, ../../src/stylesheets/partials/_forms.sass */
+/* line 340, ../../src/stylesheets/partials/_forms.sass */
 .nice-form input, .nice-form select { font-family: "Lucida Grande", Arial, sans-serif; width: 250px; background: #e9f4fc; border: 1px solid #b6c1c9; color: #444444; font-size: 14px; padding: 4px; margin-bottom: 0px; -webkit-box-shadow: #d8e3eb, 1px, 1px, 3px, 0, inset; -moz-box-shadow: #d8e3eb, 1px, 1px, 3px, 0, inset; box-shadow: #d8e3eb, 1px, 1px, 3px, 0, inset; }
-/* line 348, ../../src/stylesheets/partials/_forms.sass */
+/* line 350, ../../src/stylesheets/partials/_forms.sass */
 .nice-form input:hover, .nice-form input:focus, .nice-form select:hover, .nice-form select:focus { background: #ecf7ff; border-color: #258cd5; }
-/* line 352, ../../src/stylesheets/partials/_forms.sass */
+/* line 354, ../../src/stylesheets/partials/_forms.sass */
 .nice-form select { width: 200px; }
-/* line 355, ../../src/stylesheets/partials/_forms.sass */
+/* line 357, ../../src/stylesheets/partials/_forms.sass */
 .nice-form label, .nice-form span, .nice-form a, .nice-form div:not(.error-list) { font-family: "Lucida Grande", Arial, sans-serif; color: #258cd5; font-size: 11px; margin: 0 auto; padding: 3px; }
-/* line 362, ../../src/stylesheets/partials/_forms.sass */
-.nice-form td:first-child { width: 345px; text-align: right; }
-/* line 366, ../../src/stylesheets/partials/_forms.sass */
+/* line 364, ../../src/stylesheets/partials/_forms.sass */
 .nice-form td { vertical-align: middle; }
-/* line 369, ../../src/stylesheets/partials/_forms.sass */
+/* line 367, ../../src/stylesheets/partials/_forms.sass */
 .nice-form tr { height: 42px; }
 
-/* line 373, ../../src/stylesheets/partials/_forms.sass */
+/* line 371, ../../src/stylesheets/partials/_forms.sass */
 .login-form button { margin-bottom: 5px; }
-/* line 375, ../../src/stylesheets/partials/_forms.sass */
+/* line 373, ../../src/stylesheets/partials/_forms.sass */
 .login-form td:first-child { text-align: center; }
-/* line 377, ../../src/stylesheets/partials/_forms.sass */
+/* line 375, ../../src/stylesheets/partials/_forms.sass */
 .login-form input { width: 200px; text-align: center; }
-/* line 380, ../../src/stylesheets/partials/_forms.sass */
+/* line 378, ../../src/stylesheets/partials/_forms.sass */
 .login-form input[type=checkbox] { width: 14px; }
-/* line 382, ../../src/stylesheets/partials/_forms.sass */
+/* line 380, ../../src/stylesheets/partials/_forms.sass */
 .login-form a { display: block; }
-/* line 384, ../../src/stylesheets/partials/_forms.sass */
+/* line 382, ../../src/stylesheets/partials/_forms.sass */
 .login-form button { margin: 0 auto; }
-/* line 386, ../../src/stylesheets/partials/_forms.sass */
+/* line 384, ../../src/stylesheets/partials/_forms.sass */
 .login-form .error-list { position: relative; left: 20px; }
 
-/* line 390, ../../src/stylesheets/partials/_forms.sass */
+/* line 388, ../../src/stylesheets/partials/_forms.sass */
 .todo { padding: 7px; }
-/* line 392, ../../src/stylesheets/partials/_forms.sass */
+/* line 390, ../../src/stylesheets/partials/_forms.sass */
 .todo a { background: rgba(255, 255, 255, 0.8); border: 1px solid rgba(0, 0, 0, 0.12); display: block; font-size: 12px; margin: 3px; padding: 8px 10px; text-decoration: none; -webkit-border-radius: 2px; -moz-border-radius: 2px; -ms-border-radius: 2px; -o-border-radius: 2px; border-radius: 2px; }
-/* line 401, ../../src/stylesheets/partials/_forms.sass */
+/* line 399, ../../src/stylesheets/partials/_forms.sass */
 .todo a:hover, .todo a:focus { background: url("../images/follow2.png") no-repeat 305px center white; border: 1px solid rgba(0, 0, 0, 0.35); color: #222222; -webkit-box-shadow: rgba(0, 0, 0, 0.08) 1px 1px 4px inset; -moz-box-shadow: rgba(0, 0, 0, 0.08) 1px 1px 4px inset; box-shadow: rgba(0, 0, 0, 0.08) 1px 1px 4px inset; }
 
-/* line 407, ../../src/stylesheets/partials/_forms.sass */
+/* line 405, ../../src/stylesheets/partials/_forms.sass */
 .items { width: 100%; }
-/* line 409, ../../src/stylesheets/partials/_forms.sass */
+/* line 407, ../../src/stylesheets/partials/_forms.sass */
 .items th, .items td { line-height: 1.3; padding: 10px 15px; }
-/* line 412, ../../src/stylesheets/partials/_forms.sass */
+/* line 410, ../../src/stylesheets/partials/_forms.sass */
 .items th, .items td, .items a { font-size: 11px; }
-/* line 414, ../../src/stylesheets/partials/_forms.sass */
+/* line 412, ../../src/stylesheets/partials/_forms.sass */
 .items th { border-top: 1px solid #258cd5; background: #e9f4fc; color: #258cd5; font-weight: bold; }
-/* line 419, ../../src/stylesheets/partials/_forms.sass */
+/* line 417, ../../src/stylesheets/partials/_forms.sass */
 .items td { border-top: 1px solid rgba(0, 0, 0, 0.08); padding: 5px 10px; }
-/* line 422, ../../src/stylesheets/partials/_forms.sass */
+/* line 420, ../../src/stylesheets/partials/_forms.sass */
 .items td:first-child { padding-left: 15px; }
-/* line 424, ../../src/stylesheets/partials/_forms.sass */
+/* line 422, ../../src/stylesheets/partials/_forms.sass */
 .items td:last-child { padding-right: 15px; }
-/* line 428, ../../src/stylesheets/partials/_forms.sass */
+/* line 426, ../../src/stylesheets/partials/_forms.sass */
 .items tr.even td { background: rgba(0, 0, 0, 0.015); }
-/* line 431, ../../src/stylesheets/partials/_forms.sass */
+/* line 429, ../../src/stylesheets/partials/_forms.sass */
 .items tr:hover td, .items tr:focus td { background: rgba(0, 0, 0, 0.015); }
-/* line 433, ../../src/stylesheets/partials/_forms.sass */
+/* line 431, ../../src/stylesheets/partials/_forms.sass */
 .items tr:hover .edit-button, .items tr:hover .delete-button, .items tr:focus .edit-button, .items tr:focus .delete-button { opacity: 0.7; }
-/* line 435, ../../src/stylesheets/partials/_forms.sass */
+/* line 433, ../../src/stylesheets/partials/_forms.sass */
 .items tr:first-child th { border-bottom: 1px solid rgba(0, 0, 0, 0.15); }
-/* line 437, ../../src/stylesheets/partials/_forms.sass */
+/* line 435, ../../src/stylesheets/partials/_forms.sass */
 .items tr:last-child td { border-bottom: 1px solid rgba(0, 0, 0, 0.08); }
-/* line 440, ../../src/stylesheets/partials/_forms.sass */
+/* line 438, ../../src/stylesheets/partials/_forms.sass */
 .items.spaced td { padding: 10px; }
-/* line 442, ../../src/stylesheets/partials/_forms.sass */
+/* line 440, ../../src/stylesheets/partials/_forms.sass */
 .items.spaced td:first-child { padding-left: 15px; }
-/* line 444, ../../src/stylesheets/partials/_forms.sass */
+/* line 442, ../../src/stylesheets/partials/_forms.sass */
 .items.spaced td:last-child { padding-right: 15px; }
 
-/* line 448, ../../src/stylesheets/partials/_forms.sass */
+/* line 446, ../../src/stylesheets/partials/_forms.sass */
 .simple-list fieldset { display: block; padding: 10px 0; }
-/* line 451, ../../src/stylesheets/partials/_forms.sass */
+/* line 449, ../../src/stylesheets/partials/_forms.sass */
 .simple-list legend { font-size: 14px; font-weight: bold; }
-/* line 454, ../../src/stylesheets/partials/_forms.sass */
+/* line 452, ../../src/stylesheets/partials/_forms.sass */
 .simple-list label { display: inline-block; font-size: 11px; margin-left: 7px; padding-top: 5px; vertical-align: top; width: 130px; }
-/* line 461, ../../src/stylesheets/partials/_forms.sass */
+/* line 459, ../../src/stylesheets/partials/_forms.sass */
 .simple-list .row { margin-bottom: 7px; vertical-align: middle; }
-/* line 465, ../../src/stylesheets/partials/_forms.sass */
+/* line 463, ../../src/stylesheets/partials/_forms.sass */
 .simple-list .date select { min-width: 50px; }
-/* line 467, ../../src/stylesheets/partials/_forms.sass */
+/* line 465, ../../src/stylesheets/partials/_forms.sass */
 .simple-list input[type=text], .simple-list textarea { width: 290px; }
 
-/* line 470, ../../src/stylesheets/partials/_forms.sass */
+/* line 468, ../../src/stylesheets/partials/_forms.sass */
 .paginateButtons { padding: 15px; *zoom: 1; }
 /* line 38, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .paginateButtons:after { content: ""; display: table; clear: both; }
-/* line 473, ../../src/stylesheets/partials/_forms.sass */
+/* line 471, ../../src/stylesheets/partials/_forms.sass */
 .paginateButtons a { background: #e9f4fc; color: #258cd5; }
-/* line 476, ../../src/stylesheets/partials/_forms.sass */
+/* line 474, ../../src/stylesheets/partials/_forms.sass */
 .paginateButtons a:hover, .paginateButtons a:focus { border: 1px solid #47aef7; }
-/* line 478, ../../src/stylesheets/partials/_forms.sass */
+/* line 476, ../../src/stylesheets/partials/_forms.sass */
 .paginateButtons a, .paginateButtons span { border: 1px solid rgba(0, 0, 0, 0.07); display: block; float: left; margin-right: 3px; padding: 7px 10px; text-decoration: none; }
-/* line 486, ../../src/stylesheets/partials/_forms.sass */
+/* line 484, ../../src/stylesheets/partials/_forms.sass */
 .paginateButtons span { background: #258cd5; color: white; }
 
-/* line 490, ../../src/stylesheets/partials/_forms.sass */
+/* line 488, ../../src/stylesheets/partials/_forms.sass */
 .filters { border: 1px solid rgba(0, 0, 0, 0.1); padding: 0; margin-bottom: 15px; }
-/* line 494, ../../src/stylesheets/partials/_forms.sass */
+/* line 492, ../../src/stylesheets/partials/_forms.sass */
 .filters h2 { border-bottom: 1px solid #eeeeee; font: bold 15px Arial, sans-serif; padding: 10px 15px; }
-/* line 498, ../../src/stylesheets/partials/_forms.sass */
+/* line 496, ../../src/stylesheets/partials/_forms.sass */
 .filters h2 a { margin-top: 4px; opacity: 0.4; }
-/* line 501, ../../src/stylesheets/partials/_forms.sass */
+/* line 499, ../../src/stylesheets/partials/_forms.sass */
 .filters h2 a:hover, .filters h2 a:focus { opacity: 1; }
-/* line 503, ../../src/stylesheets/partials/_forms.sass */
+/* line 501, ../../src/stylesheets/partials/_forms.sass */
 .filters ul { padding: 10px 15px 0; *zoom: 1; }
 /* line 38, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .filters ul:after { content: ""; display: table; clear: both; }
-/* line 506, ../../src/stylesheets/partials/_forms.sass */
+/* line 504, ../../src/stylesheets/partials/_forms.sass */
 .filters li { display: inline; float: left; margin-bottom: 8px; width: 25%; }
-/* line 511, ../../src/stylesheets/partials/_forms.sass */
+/* line 509, ../../src/stylesheets/partials/_forms.sass */
 .filters label { display: block; font-size: 11px; margin-bottom: 2px; }
-/* line 515, ../../src/stylesheets/partials/_forms.sass */
+/* line 513, ../../src/stylesheets/partials/_forms.sass */
 .filters select { background: #faffff; border: 1px solid #47aef7; color: #258cd5; font-size: 11px; font-weight: bold; padding: 4px; width: 215px; -webkit-border-radius: 2px; -moz-border-radius: 2px; -ms-border-radius: 2px; -o-border-radius: 2px; border-radius: 2px; }
-/* line 524, ../../src/stylesheets/partials/_forms.sass */
+/* line 522, ../../src/stylesheets/partials/_forms.sass */
 .filters button { margin: 5px 15px 15px; }
 
-/* line 527, ../../src/stylesheets/partials/_forms.sass */
+/* line 525, ../../src/stylesheets/partials/_forms.sass */
 .filter-results { color: #aaaaaa; font: bold 14px Arial, sans-serif; padding: 5px 0; text-transform: uppercase; }
 
-/* line 533, ../../src/stylesheets/partials/_forms.sass */
+/* line 531, ../../src/stylesheets/partials/_forms.sass */
 .form-languages a { font-size: 10px; margin-left: 5px; text-transform: uppercase; }
 
 /* line 2, ../../src/stylesheets/partials/_flashes.sass */

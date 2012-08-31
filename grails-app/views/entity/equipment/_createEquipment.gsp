@@ -43,14 +43,9 @@
 			
       		<g:input name="room" label="${message(code:'equipment.room.label')}" bean="${equipment}" field="room"/>
 		
-<<<<<<< HEAD
     		<g:inputBox name="obsolete"  label="${message(code:'equipment.obsolete.label')}" bean="${equipment}" field="obsolete" value="${equipment.obsolete}" checked="${(equipment.obsolete)? true:false}"/>
     		<g:inputBox name="donation"  label="${message(code:'equipment.donation.label')}" bean="${equipment}" field="donation" value="${equipment.donation}" checked="${(equipment.donation)? true:false}"/>
 
-=======
-    		<g:inputBox name="obsolete"  label="${message(code:'equipment.obsolete.label')}" bean="${equipment}" value="${equipment.obsolete}" checked="${(equipment.obsolete)? true:false}"/>
-    		<g:inputBox name="donation"  label="${message(code:'equipment.donation.label')}" bean="${equipment}" value="${equipment.donation}" checked="${(equipment.donation)? true:false}"/>
->>>>>>> equipment create
     	</fieldset>	
     	<div class="form-aside">
      	  <h5>Aside title</h5>
