@@ -68,12 +68,12 @@
 							from="${suppliers}"
 							value="${suppliers.collect{it.contact.contactName}}"
 							values="${suppliers.collect{it.contact.contactName}}" /></li>
-					<li>
 					<li><label>Obsolete</label> <select name="obsolete">
 							<option value="">Please select</option>
 							<option value="true">True</option>
 							<option value="false">False</option>
-					</select></li>
+					  </select>
+					</li>
 					<li><label>Donated</label> <select name="donated">
 							<option value="">Please select</option>
 							<option value="true">True</option>
