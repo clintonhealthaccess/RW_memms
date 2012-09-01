@@ -112,7 +112,7 @@ button, input[type=submit], .next
     padding: 5px 15px
     +text-shadow(rgba(0, 0, 0, 0.2) 0 1px 0)
   &.gray
-    background: #eee
+    background: #d9d9d9
     border: 1px solid #ddd
     color: #666
     +box-shadow(#fff 0px 3px 1px)
@@ -125,13 +125,9 @@ button, input[type=submit], .next
       +background(linear-gradient($yes, $yes - #111))
       +text-shadow($yes - #333 0 1px 0)
   &.import
-    +border-right-radius(0)
-    border-right: 1px solid #eee
-    margin-left: 5px
-  &.export
-    +border-left-radius(0)
+    margin-right: 5px
   &.push-r
-    margin-right: 10px
+    margin-right: 5px
     
 .edit-button, .delete-button
   display: inline-block
@@ -331,6 +327,8 @@ form.search-form
   &.wide
     background: #e8f3fb
     width: 350px
+  &.register
+    width: 460px
     
 .nice-form
   padding-top: 10px
@@ -358,10 +356,6 @@ form.search-form
     font-size: 11px
     margin: 0 auto
     padding: 3px
-    
-  td:first-child
-    width: 345px
-    text-align: right
 
   td
     vertical-align: middle
@@ -482,11 +476,37 @@ form.search-form
     margin-right: 3px
     padding: 7px 10px
     text-decoration: none
-    
+
   span
     background: $primary
     color: #fff
     
+.foldable-container
+  border-top: 1px dotted $dropdown - #191919
+  margin-top: 6px
+  
+.foldable
+  &.opened:not(.current)
+    padding-bottom: 0px !important
+
+  a.foldable-toggle
+    display: block
+    cursor: pointer
+    height: 14px
+    margin-top: -3px
+    width: 20px
+    float: left
+    text-indent: -9999px
+    background-image: url('../images/icons/toggle_plus.png')
+    &.toggled
+      background-image: url('../images/icons/toggle_minus.png')
+
+.filter-bar
+  color: #888888
+  font-size: 11px
+  margin-top: 15px
+  padding: 15px 15px 40px
+  
 .filters
   border: 1px solid rgba(0, 0, 0, 0.1)
   padding: 0
@@ -506,8 +526,8 @@ form.search-form
   li
     display: inline
     float: left
-    margin-bottom: 8px
-    width: 25%
+    height: 50px
+    width: 33%
   label
     display: block
     font-size: 11px
@@ -519,7 +539,7 @@ form.search-form
     font-size: 11px
     font-weight: bold
     padding: 4px
-    width: 215px
+    width: 300px
     +border-radius(2px)
   button
     margin: 5px 15px 15px

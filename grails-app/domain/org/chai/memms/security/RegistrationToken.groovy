@@ -9,4 +9,9 @@ class RegistrationToken {
 	
 	static constraints = {
 	}
+	static mapping = {
+		table "memms_registration_token"
+		cache true
+		version false
+	}
 }

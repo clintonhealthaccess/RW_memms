@@ -47,6 +47,7 @@ abstract class CalculationLocation {
 			for (Location child : getChildren(skipLevels)) {
 				result = result | child.collectLocations(locations, dataLocations, skipLevels, types);
 			}
+			
 		
 			List<DataLocation> dataLocationsChildren = getDataLocations(skipLevels, types);
 			if (!dataLocationsChildren.isEmpty()) {
@@ -76,8 +77,10 @@ abstract class CalculationLocation {
 			table "chai_location_abstract"
 			tablePerSubclass true
 			version false
+			coordinates type: "text"
 			names_en type: "text"
-			names_en type: "text"
+			names_fr type: "text"
+			names_rw type: "text"
 		}
 
 		@Override

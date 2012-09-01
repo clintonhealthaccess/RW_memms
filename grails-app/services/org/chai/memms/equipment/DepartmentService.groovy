@@ -32,64 +32,26 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.chai.memms.equipment.Provider.Type;
 import org.chai.memms.util.Utils;
-import org.hibernate.Criteria;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
-
 /**
  * @author Jean Kahigiso M.
  *
  */
 class DepartmentService {
 	static transactional = true
-	
 	def languageService;
 	def sessionFactory;
-	
-	
-	Integer countDepartment(String text) {
-		return getSearchCriteria(text).setProjection(Projections.count("id")).uniqueResult()
-	}
 
-	public List<Department> searchDepartment(String text, Map<String, String> params){
-		def criteria = getSearchCriteria(text)
-		def dbFieldNames = 'names_'+languageService.getCurrentLanguagePrefix();
-		List<Department> departments = []
-		
-		if (params['offset'] != null) criteria.setFirstResult(params['offset'])
-		if (params['max'] != null) criteria.setMaxResults(params['max'])
-		if (params['order'] != null) departments = criteria.addOrder(Order.asc(params['order'])).list()
-		else  departments = criteria.addOrder(Order.asc(dbFieldNames)).list()
-		
-		StringUtils.split(text).each { chunk ->
-			departments.retainAll { department ->
-				Utils.matches(chunk, department.code) ||
-				Utils.matches(chunk, department.getNames(languageService.getCurrentLanguage())) ||
-				Utils.matches(chunk, department.getDescriptions(languageService.getCurrentLanguage()))	
-			}
-		}
-		return departments
-	}
-	
-	public Criteria getSearchCriteria(String text) {
+	public List<Department> searchDepartment(String text, Map<String, String> params){ 
+		def criteria = Department.createCriteria()
 		def dbFieldNames = 'names_'+languageService.getCurrentLanguagePrefix();
 		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
-
-		def criteria = sessionFactory.getCurrentSession().createCriteria(Department.class)
 		
-		def textRestrictions = Restrictions.conjunction()
-		StringUtils.split(text).each { chunk ->
-			def disjunction = Restrictions.disjunction();
-			disjunction.add(Restrictions.ilike("code", chunk, MatchMode.ANYWHERE))
-			disjunction.add(Restrictions.ilike(dbFieldNames, chunk, MatchMode.ANYWHERE))
-			disjunction.add(Restrictions.ilike(dbFieldDescriptions, chunk, MatchMode.ANYWHERE))
-			
-			textRestrictions.add(disjunction)
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			or{
+				ilike("code","%"+text+"%")
+				ilike(dbFieldNames,"%"+text+"%")
+				ilike(dbFieldDescriptions,"%"+text+"%")
+			}
 		}
-		criteria.add(textRestrictions)
-		return criteria
-		
 	}
 }

@@ -8,4 +8,10 @@ class PasswordToken {
 	
     static constraints = {
     }
+	
+	static mapping = {
+		table "memms_password_token"
+		cache true
+		version false
+	}
 }

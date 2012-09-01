@@ -9,7 +9,6 @@ class Role {
 	def utilsService
 	
     static hasMany = [ users: User ]
-    static belongsTo = User
 
 	def getPermissions() {
 		return utilsService.split(permissionString, User.PERMISSION_DELIMITER)
@@ -31,6 +30,7 @@ class Role {
 	static mapping = {
 		table "memms_user_role"
 		cache true
+		version false
 	}
 	
 	String toString() {

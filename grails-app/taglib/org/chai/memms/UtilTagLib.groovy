@@ -70,10 +70,10 @@ class UtilTagLib {
 		out << render(template:"/tags/util/locales", model: attrs)
 	}
 	
-	def i18n = { attrs, body ->
-		def text = languageService.getText(attrs['field'])
-		out << text 
-	}
+//	def i18n = { attrs, body ->
+//		def text = languageService.getText(attrs['field'])
+//		out << text 
+//	}
 	
 	def prettyList = { attrs, body ->
 		def entities = attrs['entities']

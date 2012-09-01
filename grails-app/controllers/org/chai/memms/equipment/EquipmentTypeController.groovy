@@ -35,7 +35,6 @@ import org.chai.memms.AbstractEntityController;
  */
 class EquipmentTypeController extends AbstractEntityController{
 	def equipmentTypeService
-	def languageService
 	
 	def getEntity(def id) {
 		return EquipmentType.get(id);
@@ -58,7 +57,7 @@ class EquipmentTypeController extends AbstractEntityController{
 	}
 	def deleteEntity(def entity) {
 		if (entity.equipments.size() != 0)
-			flash.message = message(code: 'equipment.type.hasequipment', args: [message(code: getLabel(), default: 'entity'), params.id], default: 'Equipment Type {0} still has associated equipment.')
+			flash.message = message(code: 'equipment.type.hasequipment', args: [message(code: getLabel(), default: 'entity'), params.id], default: '{0} still has associated equipment.')
 		else
 			super.deleteEntity(entity);
 	}
@@ -80,14 +79,30 @@ class EquipmentTypeController extends AbstractEntityController{
 	}
 	def list = {
 		adaptParamsForList()
-		List<EquipmentType> types = EquipmentType.list(params);
+		List<EquipmentType> types = EquipmentType.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc");
 		render(view:"/entity/list",model:[
 			template: "equipmentType/equipmentTypeList",
 			entities: types,
-			entityCount: EquipmentType.count(),
+			entityCount: types.totalCount,
 			code: getLabel(),
-			entityClass: getEntityClass()
+			entityClass: getEntityClass(),
+			names:names
 			])
+	}
+	
+	def search = {
+		adaptParamsForList()
+		List<EquipmentType> types = equipmentTypeService.searchEquipmentType(params['q'], params)	
+		render (view: '/entity/list', model:[
+			template:"equipmentType/equipmentTypeList",
+			entities: types,
+			entityCount: types.totalCount,,
+			code: getLabel(),
+			q:params['q'],
+			names:names
+			
+		])
+		
 	}
 	
 	def getAjaxData = {
@@ -102,18 +117,6 @@ class EquipmentTypeController extends AbstractEntityController{
 				}
 			}
 		}
-	}
-	
-	def search = {
-		adaptParamsForList()
-		List<EquipmentType> types = equipmentTypeService.searchEquipmentType(params['q'], params)	
-		render (view: '/entity/list', model:[
-			template:"equipmentType/equipmentTypeList",
-			entities: types,
-			entityCount: equipmentTypeService.countEquipmentType(params['q']),
-			code: getLabel()
-		])
-		
 	}
 	
 	def importer ={

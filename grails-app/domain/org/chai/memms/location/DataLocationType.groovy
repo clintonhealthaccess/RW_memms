@@ -41,7 +41,6 @@ public class DataLocationType {
 	static hasMany = [dataLocations: DataLocation]
 	
 	static i18nFields = ['names']
-	static embedded = ['names']
 	
 	
 	String toString() {
@@ -57,6 +56,9 @@ public class DataLocationType {
 		table "chai_location_data_location_type"
 		dataLocactions column:"data_location_id"
 		version false
+		names_en type:"text"
+		names_fr type:"text"
+		names_rw type:"text"
 	}
 
 	@Override

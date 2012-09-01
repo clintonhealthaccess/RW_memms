@@ -11,7 +11,7 @@ import java.util.Map;
 class LocationController extends AbstractEntityController {
 
 	def locationService
-	def languageService;
+	
 	def bindParams(def entity) {
 		entity.properties = params		
 	}
@@ -39,10 +39,10 @@ class LocationController extends AbstractEntityController {
 
 	def deleteEntity(def entity) {
 		if (entity.children.size() != 0) {
-			flash.message = message(code: 'location.haschildren', args: [message(code: getLabel(), default: 'entity'), params.id], default: 'Location {0} still has associated children.')
+			flash.message = message(code: 'location.haschildren', args: [message(code: getLabel(), default: 'entity'), params.id], default: '{0} still has associated children.')
 		}
 		else if (entity.dataLocations.size() != 0) {
-			flash.message = message(code: 'location.hasdataentities', args: [message(code: getLabel(), default: 'entity'), params.id], default: 'Location {0} still has associated data entities.')
+			flash.message = message(code: 'location.hasdataentities', args: [message(code: getLabel(), default: 'entity'), params.id], default: '{0} still has associated facility.')
 		}
 		else {
 			super.deleteEntity(entity)
@@ -59,33 +59,15 @@ class LocationController extends AbstractEntityController {
 
 	def list = {
 		adaptParamsForList()
-		
-		List<Location> locations = Location.list(params);
-
+		List<Location> locations = Location.list(offset:params.offset,max:params.max,sort:params.sort ?:"level",order: params.order ?:"asc");
 		render (view: '/entity/list', model:[
 			template:"location/locationList",
 			entities: locations,
-			entityCount: Location.count(),
+			entityCount: locations.totalCount,
 			code: getLabel(),
-			entityClass: getEntityClass()
+			entityClass: getEntityClass(),
+			names:names
 		])
-	}
-	
-	def getAjaxData = {
-		def clazz = Location.class
-		if (params['class'] != null) clazz = Class.forName('org.chai.memms.location.'+params['class'], true, Thread.currentThread().contextClassLoader)
-		
-		def locations = locationService.searchLocation(clazz, params['term'], [:])		
-		render(contentType:"text/json") {
-			elements = array {
-				locations.each { location ->
-					elem (
-						key: location.id,
-						value: location.names + ' ['+location.class.simpleName+']' 
-					)
-				}
-			}
-		}
 	}
 	
 	def search = {
@@ -96,9 +78,28 @@ class LocationController extends AbstractEntityController {
 		render (view: '/entity/list', model:[
 			template:"location/locationList",
 			entities: locations,
-			entityCount: locationService.countLocation(Location.class, params['q']),
-			code: getLabel()
+			entityCount: locations.totalCount,
+			code: getLabel(),
+			q:params['q'],
+			names:names
 		])
+	}
+	
+	def getAjaxData = {
+		def clazz = Location.class
+		if (params['class'] != null) clazz = Class.forName('org.chai.memms.location.'+params['class'], true, Thread.currentThread().contextClassLoader)
+		
+		def locations = locationService.searchLocation(clazz, params['term'], [:])
+		render(contentType:"text/json") {
+			elements = array {
+				locations.each { location ->
+					elem (
+						key: location.id,
+						value: location.names + ' ['+location.class.simpleName+']'
+					)
+				}
+			}
+		}
 	}
 	
 }

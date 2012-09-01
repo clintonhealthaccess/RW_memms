@@ -137,3 +137,97 @@ ul.horizontal
   text-align: center
   text-transform: uppercase
   +pie-clearfix
+
+.nice-button
+  border: 1px solid rgba(0, 0, 0, 0.1)
+  font: 13px arial !important
+  padding: 12px 18px 10px 40px
+  text-decoration: none
+  +border-radius(3px)
+  +box-shadow($filler - #111 1px 1px 3px inset)
+  +text-shadow(white 0 1px 0)
+    
+  &.program
+    background: url("../images/icons/star.png") no-repeat 14px 50% #fcfcfc
+    &:hover, &:focus
+      background: url("../images/icons/star_hover.png") no-repeat 14px 50%
+  &.survey
+    background: url("../images/icons/survey.png") no-repeat 14px 50% #fcfcfc
+    &:hover, &:focus
+      background: url("../images/icons/survey_hover.png") no-repeat 14px 50% #fcfcfc
+  &.location
+    background: url("../images/icons/marker.png") no-repeat 14px 50% #fcfcfc
+    &:hover, &:focus
+      background: url("../images/icons/marker_hover.png") no-repeat 14px 50% #fcfcfc
+  &.time
+    background: url("../images/icons/calendar.png") no-repeat 14px 50% #fcfcfc
+    &:hover, &:focus
+      background: url("../images/icons/calendar_hover.png") no-repeat 14px 50% #fcfcfc
+  &.datalocation
+    background: url("../images/icons/datalocation.png") no-repeat 14px 50% #fcfcfc
+    &:hover, &:focus
+      background: url("../images/icons/datalocation_hover.png") no-repeat 14px 50% #fcfcfc
+
+.nice-button2
+  text-decoration: none
+  background: $filler
+  border: 1px solid $dropdown - #111
+  display: inline-block 
+  margin-bottom: 3px
+  padding: 4px 4px
+  text-align: center
+  width: 42%
+  +border-radius(3px)
+  &:hover, &:focus
+    border-color: $primary_light
+
+.with-highlight
+  margin-right: 10px
+  &:hover, &:focus, &.dropdown-selected  
+    background-color: $primary !important
+    color: white
+    position: relative
+    text-decoration: none
+    z-index: 5
+    +box-shadow($primary - #222 0 2px 9px 0 inset)
+    +text-shadow($primary - #333 0 1px 0)
+    +border-radius(3px)
+    +transition(all 0.3s)
+      
+.dropdown
+  position: relative
+  
+  .dropdown-list
+    padding-bottom: 6px
+    background: $dropdown
+    border: 1px solid $dropdown - #222
+    display: none
+    min-width: 200px
+    opacity: 0.95
+    position: absolute
+    z-index: 10
+    +border-bottom-radius(3px)
+    +border-top-right-radius(3px)
+    +box-shadow(#ccc 2px 2px 3px, $dropdown - #111 0 0 8px 3px inset)
+    
+    li
+      margin-left: 10px
+      padding-top: 8px
+      padding-bottom: 8px
+      border-bottom: 1px dotted $dropdown - #191919
+      display: block
+      white-space: nowrap
+          
+      &:last-child
+        border: none
+        padding-bottom: 0px
+        
+      a
+        color: $primary
+        font-size: 11px
+        font-weight: bold
+        text-decoration: none
+        +text-shadow(white 0 1px 0)
+        
+        &:hover
+          color: $primary_dark

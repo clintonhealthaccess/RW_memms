@@ -45,58 +45,18 @@ class UserService {
 	static transactional = true
 	def sessionFactory;
 	def utilsService
-	public List<User> searchUser(String text, Map<String, String> params) {
-		def criteria = getSearchCriteria(text)
-		
-		if (params['offset'] != null) criteria.setFirstResult(params['offset'])
-		if (params['max'] != null) criteria.setMaxResults(params['max'])
-		
-		List<User> users =[];
-		
-		if(params['sort']!=null)
-			users = criteria.addOrder(Order.asc(params['sort'])).list()
-		else
-			users = criteria.addOrder(Order.asc("id")).list()
-		
-		//log.debug("\r\n\r\n user service one " + users.each{it.username} +" \r\n\r\n")
-			
-		StringUtils.split(text).each { chunk ->
-			users.retainAll { user ->
-				utilsService.matches(chunk, user.username) ||
-				utilsService.matches(chunk, user.email) ||
-				utilsService.matches(chunk, user.firstname) ||
-				utilsService.matches(chunk, user.lastname) ||
-				utilsService.matches(chunk, user.organisation)
+	
+	List<User> searchUser(String text, Map<String, String> params) {
+		def criteria = User.createCriteria()
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			or{
+				ilike("username","%"+text+"%")
+				ilike("email","%"+text+"%")
+				ilike("firstname","%"+text+"%")
+				ilike("lastname","%"+text+"%")
+				ilike("organisation","%"+text+"%")
+				ilike("phoneNumber","%"+text+"%")				
 			}
 		}
-		return users
-		
 	}
-	
-	public Integer countUser(String text) {
-		return getSearchCriteria(text).setProjection(Projections.count("id")).uniqueResult()
-	}
-	
-	private Criteria getSearchCriteria(String text) {
-		def criteria = sessionFactory.getCurrentSession().createCriteria(User.class);
-		
-		//log.debug("\r\n\r\n user service one " + criteria +" \r\n\r\n")
-		
-		def textRestrictions = Restrictions.conjunction()
-		StringUtils.split(text).each { chunk ->
-			def disjunction = Restrictions.disjunction();
-			disjunction.add(Restrictions.ilike("username", chunk, MatchMode.ANYWHERE))
-			disjunction.add(Restrictions.ilike("email", chunk, MatchMode.ANYWHERE))
-			disjunction.add(Restrictions.ilike("firstname", chunk, MatchMode.ANYWHERE))
-			disjunction.add(Restrictions.ilike("lastname", chunk, MatchMode.ANYWHERE))
-			disjunction.add(Restrictions.ilike("organisation", chunk, MatchMode.ANYWHERE))
-			
-			textRestrictions.add(disjunction)
-		}
-		criteria.add(textRestrictions)
-		return criteria
-		
-	}
-	
-	
 }

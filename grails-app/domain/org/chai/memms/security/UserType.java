@@ -5,10 +5,17 @@ import java.util.HashSet;
 import java.util.Set;
 
 public enum UserType {
+
+	ADMIN("admin"), 
+	SYSTEM("system"), 
+	OTHER("other");
 	
-	PERSON("user-person", ""), 
-	SYSTEM("user-system", ""), 
-	OTHER("user-other", "");
+	String messageCode = "user.type";	
+	String name;
+	UserType(String name){ this.name=name; }
+	public String getName(){
+		return name;
+	}
 	
 	protected Set<String> defaultPermissions;
 	protected Set<String> defaultRoles;

@@ -35,8 +35,13 @@ import org.apache.commons.logging.Log;
 * @author Jean Kahigiso M
 *
 */
-abstract class AbstractEntityController extends AbstractController {	
+abstract class AbstractEntityController extends AbstractController {
+		
+	def languageService
+	def names = 'names_'+languageService.getCurrentLanguagePrefix();
+	def descriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
 	def entityExportService
+	
 	def languges = grailsApplication.config.i18nFields.locales
 	def index = {
         redirect(action: "list", params: params)

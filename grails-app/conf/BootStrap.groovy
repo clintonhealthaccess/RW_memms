@@ -1,4 +1,4 @@
-/*
+/**
 * Copyright (c) 2011, Clinton Health Access Initiative.
 *
 * All rights reserved.
@@ -26,8 +26,10 @@
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+import org.chai.memms.location.CalculationLocation;
 import org.chai.memms.security.Role;
 import org.chai.memms.security.User;
+import org.chai.memms.security.UserType;
 
 import java.util.Date;
 
@@ -50,9 +52,41 @@ class BootStrap {
 			Initializer.createInventoryStructure()
 			break;
 			case "production":
-			Initializer.createDummyStructure();
-			Initializer.createUsers();
-			Initializer.createInventoryStructure()
+			if (!Role.count()) {
+				def adminRole = new Role(name: "admin")
+				adminRole.addToPermissions("*:*")
+				adminRole.save(failOnError: true)
+				
+				def clercRole = new Role(name: "clerc")
+				clercRole.addToPermissions("home:*")
+				clercRole.addToPermissions("menu:home")
+				clercRole.addToPermissions("menu:inventory")
+				clercRole.addToPermissions("menu:correctivemaintenance")
+				clercRole.addToPermissions("menu:preventivemaintenance")
+				clercRole.addToPermissions("menu:reports")
+				clercRole.addToPermissions("equipment:*")
+				clercRole.save(failOnError: true)
+			}
+			if (!User.count()) {
+				def userAdmin = new User(userType: UserType.ADMIN,code:"admin", location: CalculationLocation.findByCode(0), username: "admin",
+					firstname: "First Name", lastname: "Last Name", email:'admin@memms.org', passwordHash: new Sha256Hash("admin").toHex(), active: true,
+					confirmed: true, uuid:'admin', defaultLanguage:'en', phoneNumber: '+250 78 111 11 11', organisation:'org')
+				userAdmin.addToPermissions("*:*")				
+				userAdmin.save(failOnError: true)
+				
+				def clerc = new User(userType: UserType.OTHER,code:"clerc", location: CalculationLocation.findByCode(327), username: "clerc",
+					firstname: "memms", lastname: "memms", email:'clerk@memms.org', passwordHash: new Sha256Hash("clerc").toHex(), active: true,
+					confirmed: true, uuid:'clerc', defaultLanguage:'en', phoneNumber: '+250 72 111 11 11', organisation:'org')
+				clerc.addToPermissions("menu:home")
+				clerc.addToPermissions("menu:inventory")
+				clerc.addToPermissions("menu:correctivemaintenance")
+				clerc.addToPermissions("menu:preventivemaintenance")
+				clerc.addToPermissions("menu:reports")
+				clerc.addToPermissions("equipment:*")
+				clerc.addToPermissions("home:*")
+				clerc.save(failOnError: true)
+				
+			}
 			break;
 		}
     }

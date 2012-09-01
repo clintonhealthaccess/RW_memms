@@ -27,9 +27,11 @@
  */
 package org.chai.memms.equipment
 
+import grails.gorm.DetachedCriteria
 import java.util.List;
 import java.util.Map;
 import org.chai.memms.equipment.Equipment
+import org.chai.memms.equipment.EquipmentStatus.Status;
 import org.chai.memms.location.CalculationLocation;
 import org.chai.memms.location.DataLocation
 import org.chai.memms.location.Location
@@ -49,66 +51,65 @@ import org.apache.commons.lang.StringUtils
 class EquipmentService {
 	
 	static transactional = true
-	
 	def languageService;
 	def sessionFactory;
-	
-	Integer countEquipment(String text) {
-		return getSearchCriteria(text).setProjection(Projections.count("id")).uniqueResult()
-	}
-	
-	public List<Equipment> searchEquipment(String text, Map<String, String> params) {
-		def criteria = getSearchCriteria(text)
-		List<Equipment> equipments = []
-		if (params['offset'] != null) criteria.setFirstResult(params['offset'])
-		if (params['max'] != null) criteria.setMaxResults(params['max'])
-		if (params['order'] != null) equipments criteria.addOrder(Order.asc(params['order'])).list()
-		else equipments = criteria.addOrder(Order.asc("id")).list()
 		
-		StringUtils.split(text).each { chunk ->
-			equipments.retainAll { equipment ->
-				Utils.matches(chunk, equipment.serialNumber) ||
-				Utils.matches(chunk, equipment.getDescriptions(languageService.getCurrentLanguage()))
-			}
-		}
-		return equipments
-	}
-	
-	private Criteria getSearchCriteria(String text) {
+	public List<Equipment> searchEquipment(String text,DataLocation location,Map<String, String> params) {
+		def dbFieldTypeNames = 'names_'+languageService.getCurrentLanguagePrefix();
 		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
-		def criteria = sessionFactory.getCurrentSession().createCriteria(Equipment.class)
+		def criteria = Equipment.createCriteria();
 		
-		def textRestrictions = Restrictions.conjunction()
-		StringUtils.split(text).each { chunk ->
-			def disjunction = Restrictions.disjunction();
-			disjunction.add(Restrictions.ilike("serialNumber", chunk, MatchMode.ANYWHERE))
-			disjunction.add(Restrictions.ilike(dbFieldDescriptions, chunk, MatchMode.ANYWHERE))
-			textRestrictions.add(disjunction)
+		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			    createAlias("type","t")
+				eq('dataLocation',location)
+				or{
+					ilike("serialNumber","%"+text+"%")
+					ilike(dbFieldDescriptions,"%"+text+"%") 
+					ilike("t."+dbFieldTypeNames,"%"+text+"%")
+			    }
 		}
-		criteria.add(textRestrictions)
-		return criteria
+	}
+		
+	public List<Equipment> getEquipmentsByDataLocation(DataLocation dataLocation,Map<String, String> params) {
+		def criteria = Equipment.createCriteria();
+			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+				eq('dataLocation',dataLocation)
+			}
 	}
 	
 
-	public List<Equipment> filterEquipment(){
-		return null
-	}
-	public List<Equipment> getEquipmentsByDataLocation(CalculationLocation location) {
+	public List<Equipment> filterEquipment(def dataLocation, def supplier, def manufacturer, def equipmentType, 
+		def donation, def obsolete,def status,Map<String, String> params){
 		
-		List<Equipment> equipments = []
-		
-		if(location instanceof DataLocation){
-			equipments = Equipment.findAll{
-				dataLocation == location
+		def criteria = Equipment.createCriteria();
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			if(dataLocation != null){
+				eq('dataLocation',dataLocation)
 			}
-		}else if (location instanceof Location){
-			equipments = Equipment.findAll{
-				dataLocation in ((Location)location).dataLocations
+			if(supplier != null){
+				eq ("supplier", supplier)
 			}
+			if(manufacturer != null){
+				eq ("manufacture", manufacturer)
+			}
+			if(equipmentType != null){
+				eq ("type", equipmentType)
+			}
+			if(donation){
+				eq ("donation", (donation.equals('true'))?true:false)
+			}
+			if(obsolete){
+				eq ("obsolete", (obsolete.equals('true'))?true:false)
+			}
+			if(!status.equals(Status.NONE)){
+				createAlias("status","t")
+				and{
+					eq ("t.status", status)
+					eq ("t.current", true)
+				}
+			}
+				
 		}
-		
-		return equipments
-
 	}
 
 }

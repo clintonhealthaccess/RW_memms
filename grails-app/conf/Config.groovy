@@ -117,6 +117,7 @@ log4j = {
 		   
 	debug  'grails.app',
 		   'org.chai.memms'
+	//trace 'org.hibernate.type'
 }
 
 
@@ -151,6 +152,9 @@ site.fallback.language="en"
 site.contact.email="contact@memms.org"
 site.entity.list.max=40
 site.from.email="no-reply@memms.org"
+site.datalocationtype.checked=["District Hospital","Health Center"]
+
+location.sector.skip.level=["Sector"]
 
 i18nFields{
 	locales = ["en","fr","rw"]

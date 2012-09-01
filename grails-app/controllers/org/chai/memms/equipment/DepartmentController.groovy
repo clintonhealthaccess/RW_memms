@@ -11,7 +11,6 @@ import org.chai.memms.AbstractEntityController;
  */
 class DepartmentController extends AbstractEntityController{
 	def departmentService
-	def languageService
 	
 	def getEntity(def id) {
 		return Department.get(id);
@@ -31,7 +30,7 @@ class DepartmentController extends AbstractEntityController{
 	
 	def deleteEntity(def entity) {
 		if (entity.equipments.size() != 0) {
-			flash.message = message(code: 'department.hasequipments', args: [message(code: getLabel(), default: 'entity'), params.id], default: 'Department {0} still has associated equipments.')
+			flash.message = message(code: 'department.hasequipments', args: [message(code: getLabel(), default: 'entity'), params.id], default: '{0} still has associated equipments.')
 		}
 		else {
 			super.deleteEntity(entity)
@@ -53,30 +52,17 @@ class DepartmentController extends AbstractEntityController{
 	
 	def list={
 		adaptParamsForList()
-		def departments = Department.list(params)
+		List<Department> departments = Department.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc")
 		render(view:"/entity/list", model:[
 			template:"department/departmentList",
 			entities: departments,
-			entityCount: Department.count(),
+			entityCount: departments.totalCount,
 			code: getLabel(),
-			entityClass: getEntityClass()
+			entityClass: getEntityClass(),
+			names:names
 			])
 	}
 	
-	def getAjaxData = {
-		List<Department> departments = departmentService.searchDepartment(params['term'], [:])
-		render(contentType:"text/json") {
-			elements = array {
-				departments.each { department ->
-					elem (
-						key: department.id,
-						value: department.getNames(languageService.getCurrentLanguage()) 
-					)
-				}
-			}
-		}
-		
-	}
 	def search = {
 		adaptParamsForList()
 		List<Department> departments = departmentService.searchDepartment(params['q'], params)
@@ -84,15 +70,25 @@ class DepartmentController extends AbstractEntityController{
 		render (view:"/entity/list", model:[
 			template:"department/departmentList",
 			entities: departments,
-			entityCount: departmentService.countDepartment(params['q']),
-			code: getLabel()
+			entityCount: departments.totalCount,
+			code: getLabel(),
+			names:names,
+			q:params['q']
 		])
 		
 	}
-	def importer ={
-		
-	}
-	def export = {
+	def getAjaxData = {
+		List<Department> departments = departmentService.searchDepartment(params['term'], [:])
+		render(contentType:"text/json") {
+			elements = array {
+				departments.each { department ->
+					elem (
+						key: department.id,
+						value: department.getNames(languageService.getCurrentLanguage())
+					)
+				}
+			}
+		}
 		
 	}
 }

@@ -55,7 +55,7 @@ class EquipmentStatus {
 	Date dateOfEvent;
 	Date statusChangeDate;
 	User changedBy
-	Status value
+	Status status
 	boolean current
 	
 	static belongsTo = [equipment:Equipment]
@@ -68,7 +68,7 @@ class EquipmentStatus {
 		dateOfEvent nullable:false, validator:{it <= new Date()} 
 		statusChangeDate nullable:false, validator:{it <= new Date()} 
 		changedBy nullable:false 
-		value nullable: false, blank:false
+		status nullable: false, blank:false
 		current nullable: false
 	}
 	
