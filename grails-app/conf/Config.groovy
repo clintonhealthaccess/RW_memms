@@ -145,7 +145,7 @@ environments {
 	production {
 		grails.mail.host = "smtp.gmail.com"
 		grails.mail.port = 465
-		// configuration defined in ${home}/.grails/kevin-config.groovy
+		// configuration defined in ${home}/.grails/memms-config.groovy
 //		grails.mail.username = "youracount@gmail.com"
 //		grails.mail.password = "yourpassword"
 		grails.mail.props = [
@@ -167,9 +167,10 @@ site.fallback.language="en"
 site.contact.email="contact@memms.org"
 site.entity.list.max=40
 site.from.email="no-reply@memms.org"
-site.datalocationtype.checked=["District Hospital","Health Center"]
 
+site.datalocationtype.checked=["District Hospital","Health Center"]
 location.sector.skip.level=["Sector"]
+
 status.to.display.on.equipment.form = 5
 
 i18nFields{

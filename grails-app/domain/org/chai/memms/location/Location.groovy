@@ -52,26 +52,6 @@ class Location extends CalculationLocation {
 		return result;
 	}
 	
-	//gets all data location children
-	@Override
-	public List<DataLocation> getDataLocationChildren(Set<LocationLevel> skipLevels, Set<DataLocationType> types) {
-		List<DataLocation> result = new ArrayList<DataLocation>();
-		
-		List<DataLocation> dataLocations = getDataLocations().asList();;
-		for (DataLocation dataLocation : dataLocations) {
-			if (types == null || types.contains(dataLocation.type))
-				result.add(dataLocation);
-		}
-		
-		for (Location child : children) {
-			if (skipLevels != null && skipLevels.contains(child.level)) {
-				result.addAll(child.getDataLocationChildren(skipLevels, types));
-			}
-		}
-		
-		return result;
-	}
-
 	//gets all data locations
 	List<DataLocation> getDataLocations(Set<LocationLevel> skipLevels, Set<DataLocationType> types) {
 		List<DataLocation> result = new ArrayList<DataLocation>();
@@ -82,8 +62,8 @@ class Location extends CalculationLocation {
 		}
 		
 		for (Location child : children) {
-			if (skipLevels != null && skipLevels.contains(child.level)) {
-				result.addAll(child.getDataLocationChildren(skipLevels, types));
+			if (skipLevels != null && !skipLevels.contains(child.level)) {
+				result.addAll(child.getDataLocations(skipLevels, types));
 			}
 		}
 		

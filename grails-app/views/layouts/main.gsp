@@ -1,6 +1,5 @@
 <%@ page import="org.apache.shiro.SecurityUtils" %>
 <%@ page import="org.chai.memms.security.User" %>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -92,31 +91,31 @@
     <div class="wrapper">
       <ul id="main-menu" class="menu">
     	<shiro:hasPermission permission="menu:home">
-			<li><a class="${controllerName=='home'?'active':''}" href="${createLink(controller:'home', action:'index')}">Home</a></li>
+			<li><a class="${controllerName=='home'?'active':''}" href="${createLink(controller:'home', action:'index')}"><g:message code="header.navigation.home"/></a></li>
 		</shiro:hasPermission>
 		<shiro:hasPermission permission="menu:inventory">
-			<li><a class="${controllerName=='equipment'?'active':''}" href="${createLink(controller:'equipment', action:'summaryPage')}">Inventory</a></li>
+			<li><a class="${controllerName=='equipment'?'active':''}" href="${createLink(controller:'equipment', action:'summaryPage')}"><g:message code="header.navigation.inventory"/></a></li>
 		</shiro:hasPermission>
 		<shiro:hasPermission permission="menu:correctivemaintenance">
-			<li><a class="${controllerName=='dashboard'?'active':''}" href="#">Corrective Maintenance</a></li>
+			<li><a class="${controllerName=='dashboard'?'active':''}" href="#"><g:message code="header.navigation.corrective.maintenance"/></a></li>
 		</shiro:hasPermission>
 		<shiro:hasPermission permission="menu:preventivemaintenance">
-			<li><a class="${controllerName=='dashboard'?'active':''}" href="#">Preventive Maintenance</a></li>
+			<li><a class="${controllerName=='dashboard'?'active':''}" href="#"><g:message code="header.navigation.preventive.maintenance"/></a></li>
 		</shiro:hasPermission>
 		<shiro:hasPermission permission="menu:reports">
-			<li><a class="${controllerName=='dashboard'?'active':''}" href="#">Reports</a></li>
+			<li><a class="${controllerName=='dashboard'?'active':''}" href="#"><g:message code="header.navigation.reports"/></a></li>
 		</shiro:hasPermission>
 		<shiro:hasPermission permission="menu:admin">
-			<li><a href="#">Administration</a>
+			<li><a href="#"><g:message code="header.navigation.administration"/></a>
 	         	<ul class="submenu">
-					<li><a href="${createLink(controller: 'Department', action:'list')}"><g:message code="department.label"/></a></li>
-					<li><a href="${createLink(controller: 'EquipmentType', action:'list')}"><g:message code="equipment.type.label"/></a></li>
-					<li><a href="${createLink(controller: 'Provider', action:'list')}">Manufacture and Supplier</a></li>
-					<li><a href="${createLink(controller: 'DataLocation', action:'list')}"><g:message code="datalocation.label"/></a></li>
-					<li><a href="${createLink(controller: 'DataLocationType', action:'list')}"><g:message code="datalocation.type.label"/></a></li>
-					<li><a href="${createLink(controller: 'Location', action:'list')}"><g:message code="location.label"/></a></li>
-					<li><a href="${createLink(controller: 'LocationLevel', action:'list')}"><g:message code="location.level.label"/></a></li>
-					<li><a href="${createLink(controller: 'User', action:'list')}"><g:message code="user.label"/></a></li>
+					<li><a href="${createLink(controller: 'department', action:'list')}"><g:message code="department.label"/></a></li>
+					<li><a href="${createLink(controller: 'equipmentType', action:'list')}"><g:message code="equipment.type.label"/></a></li>
+					<li><a href="${createLink(controller: 'provider', action:'list')}"><g:message code="header.navigation.manufacture.and.supplier"/></a></li>
+					<li><a href="${createLink(controller: 'dataLocation', action:'list')}"><g:message code="datalocation.label"/></a></li>
+					<li><a href="${createLink(controller: 'dataLocationType', action:'list')}"><g:message code="datalocation.type.label"/></a></li>
+					<li><a href="${createLink(controller: 'location', action:'list')}"><g:message code="location.label"/></a></li>
+					<li><a href="${createLink(controller: 'locationLevel', action:'list')}"><g:message code="location.level.label"/></a></li>
+					<li><a href="${createLink(controller: 'user', action:'list')}"><g:message code="user.label"/></a></li>
 	         	</ul>
         	 </li>
 		</shiro:hasPermission>
@@ -133,11 +132,13 @@
 	
 	<div id="footer">
     <div class="wrapper">
-      &copy; Clinton Health Access Initiative
+      &copy;<g:message code="footer.labels.chai"/>
       <br>
-      <a href="#">About</a>
+      <a href="#"><g:message code="footer.labels.about"/></a>
       |
-      <a href="#">Contact</a>
+      <a href="#"><g:message code="footer.labels.contact"/></a>
+      |
+      <a href="#"><g:message code="footer.labels.helpdesk"/></a>
     </div>
   </div>
 	

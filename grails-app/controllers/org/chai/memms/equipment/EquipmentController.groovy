@@ -198,11 +198,12 @@ class EquipmentController extends AbstractEntityController{
 
 		render (view: '/entity/list', model:[
 					template:"equipment/equipmentList",
+					dataLocation:cmd.dataLocation,
 					entities: equipments,
 					entityCount: equipments.totalCount,
-					filterCmd:cmd,
 					code: getLabel(),
-					dataLocation:cmd.dataLocation,
+					entityClass: getEntityClass(),
+					filterCmd:cmd,
 					q:params['q']
 				])
 
@@ -243,14 +244,14 @@ class FilterCommand {
 
 	static constraints = {
 		
-		equipmentType(blank: true,nullable:true)
-		manufacturer(blank: true,nullable:true)
-		supplier(blank: true,nullable:true)
-		status(blank: true,nullable:true)
-		donated(blank: true,nullable:true)
-		obsolete(blank: true,nullable:true)
+		equipmentType nullable:true
+		manufacturer nullable:true 
+		supplier nullable:true 
+		status nullable:true 
+		donated nullable:true 
+		obsolete nullable:true
 		
-		dataLocation(blank: false,nullable:false, validator:{val, obj ->
+		dataLocation(nullable:false, validator:{val, obj ->
 			return (obj.equipmentType != null || obj.manufacturer != null || obj.supplier != null || (obj.status != null && obj.status != Status.NONE) || obj.donated || obj.obsolete)?true:"select.atleast.one.value.text"
 			})
 	}
