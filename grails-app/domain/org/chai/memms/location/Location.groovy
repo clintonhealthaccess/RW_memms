@@ -1,6 +1,6 @@
 package org.chai.memms.location;
 /** 
- * Copyright (c) 2011, Clinton Health Access Initiative.
+ * Copyright (c) 2012, Clinton Health Access Initiative.
  *
  * All rights reserved.
  *
@@ -57,7 +57,7 @@ class Location extends CalculationLocation {
 	public List<DataLocation> getDataLocationChildren(Set<LocationLevel> skipLevels, Set<DataLocationType> types) {
 		List<DataLocation> result = new ArrayList<DataLocation>();
 		
-		List<DataLocation> dataLocations = getDataLocations();
+		List<DataLocation> dataLocations = getDataLocations().asList();;
 		for (DataLocation dataLocation : dataLocations) {
 			if (types == null || types.contains(dataLocation.type))
 				result.add(dataLocation);

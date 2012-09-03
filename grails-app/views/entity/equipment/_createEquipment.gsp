@@ -31,8 +31,6 @@
   			from="${types}" value="${equipment?.type?.id}" values="${types.collect{it.names}}" />
 			
     		<g:input name="expectedLifeTime" label="${message(code:'equipment.expected.life.time.label')}" bean="${equipment}" field="expectedLifeTime"/>
-
-			
       		<g:input name="serialNumber" label="${message(code:'equipment.serial.number.label')}" bean="${equipment}" field="serialNumber"/>
       		<g:input name="model" label="${message(code:'equipment.model.label')}" bean="${equipment}" field="model"/>
       		<g:i18nTextarea name="descriptions" bean="${equipment}" label="${message(code:'entity.descriptions.label')}" field="descriptions" height="150" width="300" maxHeight="150" />
@@ -74,6 +72,7 @@
       	<h4 class="section-title">
           <span class="question-default">
             <img src="${resource(dir:'images/icons',file:'star_small.png')}">
+
           </span>
           <g:message code="equipment.section.manufacture.information.label" default="Manufacture Information"/>
         </h4>
@@ -157,7 +156,7 @@
       	<fieldset class="form-content">
       	<h4 class="section-title">
           <span class="question-default">
-           <img src="${resource(dir:'images/icons',file:'star_small.png')}">
+            <img src="${resource(dir:'images/icons',file:'star_small.png')}" alt="Section"/>
           </span>
           <g:message code="equipment.section.status.information.label" default="Status Information"/> 
         </h4>
@@ -210,7 +209,7 @@
       	<fieldset class="form-content">
       	<h4 class="section-title">
           <span class="question-default">
-            <img src="${resource(dir:'images/icons',file:'star_small.png')}">
+            <img src="${resource(dir:'images/icons',file:'star_small.png')}" alt="Section"/>
           </span>
           <g:message code="equipment.section.warranty.information.label" default="Warranty Information"/>
         </h4>

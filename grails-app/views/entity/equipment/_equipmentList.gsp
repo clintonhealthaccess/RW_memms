@@ -49,8 +49,8 @@
   	    				<g:message code="equipment.change.status.label" default="Change Status"/>
   	    			</a>
 				</td>
-				<td>${(equipment.donation)? '\u2713':'X'}</td>
 				<td>${(equipment.obsolete)? '\u2713':'X'}</td>
+				<td>${(equipment.donation)? '\u2713':'X'}</td>
 			</tr>
 		</g:each>
 	</tbody>
