@@ -402,7 +402,7 @@ form.search-form
   width: 100%
   th, td
     line-height: 1.3
-    padding: 10px 15px
+    padding: 10px
   th, td, a
     font-size: 11px
   th
@@ -437,6 +437,17 @@ form.search-form
         padding-left: 15px
       &:last-child
         padding-right: 15px
+        
+  th.sortable a
+    background-position: right
+    background-repeat: no-repeat
+    padding-right: 1.1em
+
+  th.asc a
+    background-image: url(../images/skin/sorted_asc.gif)
+
+  th.desc a
+    background-image: url(../images/skin/sorted_desc.gif)
     
 .simple-list
   fieldset
