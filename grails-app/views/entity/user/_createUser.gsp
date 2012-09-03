@@ -1,20 +1,20 @@
 <%@ page import="org.chai.memms.security.UserType" %>
 
-<div >
-	
-	<div >
-		<h3 >
-		<g:if test="${user.id != null}">
+<div>
+	<div class="heading1-bar">
+	  <g:locales/>
+		<h1>
+  		<g:if test="${user.id != null}">
 				<g:message code="default.edit.label" args="[message(code:'user.label')]" />
 			</g:if>
 			<g:else>
 				<g:message code="default.new.label" args="[message(code:'user.label')]" />
 			</g:else>
-		</h3>
-		<g:locales/>
+		</h1>
 	</div>
-	<div >
-		<g:form url="[controller:'user', action:'save', params: [targetURI: targetURI]]" useToken="true">			
+	
+	<div class="main">
+		<g:form url="[controller:'user', action:'save', params: [targetURI: targetURI]]" useToken="true" class="simple-list">
 			<g:input name="username" label="${message(code:'user.username.label')}" bean="${user}" field="username"/>
 			
 			<g:input name="firstname" label="${message(code:'user.firstname.label')}" bean="${user}" field="firstname"/>
@@ -42,8 +42,8 @@
 			<g:if test="${user.id != null}">
 				<input type="hidden" name="id" value="${user.id}"/>
 			</g:if>
-			
-			<div>
+			<br/>
+			<div class="buttons">
 				<button type="submit"><g:message code="default.button.save.label"/></button>
 				<a href="${createLink(uri: targetURI)}"><g:message code="default.link.cancel.label"/></a>
 			</div>
