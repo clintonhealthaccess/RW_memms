@@ -40,6 +40,8 @@ public class Contact {
 	String phone
 	String street
 	String poBox
+	String city
+	String country
 	
 		
 	static i18nFields =["addressDescriptions"]
@@ -48,9 +50,11 @@ public class Contact {
 		
 		email blank: true, nullable: true, email:true 
 		phone blank: true, nullable: true 
+		city blank: true, nullable: true
+		country blank: true, nullable: true
 		street blank: true, nullable: true 
 		poBox blank: true, nullable: true
-		contactName blank: true, nullable: true 
+		contactName blank: false, nullable: false
 		addressDescriptions blank: true, nullable: true 
 		
 	}

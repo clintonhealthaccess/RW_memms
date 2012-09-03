@@ -4,7 +4,7 @@
 <meta name="layout" content="main" />
 </head>
 <body>
-	<div class="main">
+
 		<table class="listing">
 			<thead>
 				<th><g:message code="inventory.datalocation.label" /></th>
@@ -35,6 +35,6 @@
 				</g:each>
 			</tbody>
 		</table>
-	</div>
+
 </body>
 </html>

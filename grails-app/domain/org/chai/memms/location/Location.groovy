@@ -29,6 +29,7 @@ package org.chai.memms.location;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import org.chai.memms.util.Utils;
 /**
 * @author Jean Kahigiso M.
@@ -40,28 +41,29 @@ class Location extends CalculationLocation {
 	 static hasMany = [dataLocations: DataLocation,children: Location]
 	
 	//gets all location children
-	List<Location> getChildren(Set<LocationLevel> skipLevels) {		
+	List<Location> getChildren(Set<LocationLevel> skipLevels) {
 		def result = new ArrayList<Location>();
 		for (def child : children) {
-			if (skipLevels != null && skipLevels.contains(child.getLevel())) {
+			if (skipLevels != null && skipLevels.contains(child.level)) {
 				result.addAll(child.getChildren(skipLevels));
 			}
 			else result.add(child);
 		}
 		return result;
 	}
-
-	//gets all data locations
+	
+	// returns the children data locations only, without collecting data locations at lower levels
+	// if the child's level is skipped, returns the child's data locations
 	List<DataLocation> getDataLocations(Set<LocationLevel> skipLevels, Set<DataLocationType> types) {
 		List<DataLocation> result = new ArrayList<DataLocation>();
 		List<DataLocation> dataLocations = getDataLocations().asList();
 		for (DataLocation dataLocation : dataLocations) {
-			if (types == null || types.contains(dataLocation.getType())) 
+			if (types == null || types.contains(dataLocation.type)) 
 				result.add(dataLocation);
 		}
 		
 		for (Location child : children) {
-			if (skipLevels != null && !skipLevels.contains(child.getLevel())) {
+			if (skipLevels != null && skipLevels.contains(child.level)) {
 				result.addAll(child.getDataLocations(skipLevels, types));
 			}
 		}

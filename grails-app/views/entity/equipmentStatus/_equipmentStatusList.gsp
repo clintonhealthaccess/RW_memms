@@ -4,10 +4,10 @@
 	<thead>
 		<tr>
 			<th></th>
-			<th><g:message code="equipment.status.label"/></th>
-			<th><g:message code="equipment.status.date.of.event.label"/></th>
-			<th><g:message code="equipment.status.recordedon.label"/></th>
-			<th><g:message code="equipment.status.current.label"/></th>
+			<g:sortableColumn property="status" params="[equipment: equipment?.id]" title="${message(code: 'equipment.status.label')}" />
+			<g:sortableColumn property="dateOfEvent" params="[equipment: equipment?.id]" title="${message(code: 'equipment.status.date.of.event.label')}" />
+			<g:sortableColumn property="statusChangeDate" params="[equipment: equipment?.id]" title="${message(code: 'equipment.status.recordedon.label')}" />
+			<g:sortableColumn property="current" params="[equipment: equipment?.id]" title="${message(code: 'equipment.status.current.label')}" />
 		</tr>
 	</thead>
 	<tbody>		
@@ -15,11 +15,6 @@
     		<tr  class="${(i % 2) == 0 ? 'odd' : 'even'}">
     			<td>
 	    			<ul class="horizontal">
-						<li>
-							<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'edit', params:[id: status.id,equipment: status.equipment?.id])}" class="edit-button">
-								<g:message code="default.link.edit.label" />
-							</a>
-						</li>
 						<li>
 							<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'delete', params:[id: status.id,equipment: status.equipment?.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');" class="delete-button">
 								<g:message code="default.link.delete.label" />

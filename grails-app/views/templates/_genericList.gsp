@@ -37,11 +37,14 @@
 		     	</span>
 	     	</g:if>
 		</div>
+		<shiro:hasPermission permission="${controllerName}:filter">
+		<g:if test="${grailsApplication.getArtefactByLogicalPropertyName('Controller', controllerName).hasProperty('filter')}">
 		<!-- Filter starts here-->
 		<g:render template="${equipmentFilterTemplate}"/>
 				<h2 class="filter-results">Showing filtered list of equipment which contain search term "Scanner"</h2>
 		<!-- Filter ends here -->
-
+		</g:if>
+		</shiro:hasPermission>
 		<!-- Template goes here -->
 		
 		<div class="main table">

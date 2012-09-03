@@ -57,10 +57,8 @@ public class Provider{
 	static hasMany = [manufactures: Equipment, suppliers: Equipment]
    
 	static constraints ={
-		importFrom Contact
 		code nullable: false, blank: false, unique: true
 		type nullable: false
-		//contact nullable: false 
 	}
 	static mapping = {
 	    version false

@@ -27,7 +27,6 @@
  */
 package org.chai.memms.equipment
 
-import org.apache.jasper.compiler.Node.ParamsAction;
 import org.apache.shiro.SecurityUtils;
 import org.chai.memms.AbstractEntityController;
 import org.chai.memms.Contact
@@ -54,6 +53,7 @@ class EquipmentController extends AbstractEntityController{
 	def providerService
 	def equipmentService
 	def inventoryService
+	def grailsApplication
 	
 	def index = {
 		redirect(action: "summaryPage", params: params)
@@ -105,17 +105,21 @@ class EquipmentController extends AbstractEntityController{
 	}
 	 
 	def getModel(def entity) {
-		def manufactures = []
-		def suppliers = []
+		def manufactures = []; def suppliers = []; def departments = []; def types = []; def dataLocations = [];
 		if (entity.manufacture != null) manufactures << entity.manufacture
 		if (entity.supplier != null) suppliers << entity.supplier
+		if (entity.department!=null) departments << entity.department
+		if (entity.type!=null) types << entity.type
+		if (entity.dataLocation!=null) dataLocations << entity.dataLocation
 		[
-			equipment:entity,
-			departments:Department.list([cache: true]),
+			equipment: entity,
+			departments: departments,
 			manufactures: manufactures,
 			suppliers: suppliers,
-			types: EquipmentType.list([cache: true]),
-			gra: DataLocation.list([cache: true])
+			types: types,
+			dataLocations: dataLocations,
+			numberOfStatusToDisplay: grailsApplication.config.status.to.display.on.equipment.form
+
 		]
 	}
 
@@ -196,11 +200,12 @@ class EquipmentController extends AbstractEntityController{
 		render (view: '/entity/list', model:[
 					template:"equipment/equipmentList",
 					equipmentFilterTemplate:"equipment/equipmentFilter",
+					dataLocation:cmd.dataLocation,
 					entities: equipments,
 					entityCount: equipments.totalCount,
-					filterCmd:cmd,
 					code: getLabel(),
-					dataLocation:cmd.dataLocation,
+					entityClass: getEntityClass(),
+					filterCmd:cmd,
 					q:params['q']
 				])
 
@@ -241,14 +246,14 @@ class FilterCommand {
 
 	static constraints = {
 		
-		equipmentType(blank: true,nullable:true)
-		manufacturer(blank: true,nullable:true)
-		supplier(blank: true,nullable:true)
-		status(blank: true,nullable:true)
-		donated(blank: true,nullable:true)
-		obsolete(blank: true,nullable:true)
+		equipmentType nullable:true
+		manufacturer nullable:true 
+		supplier nullable:true 
+		status nullable:true 
+		donated nullable:true 
+		obsolete nullable:true
 		
-		dataLocation(blank: false,nullable:false, validator:{val, obj ->
+		dataLocation(nullable:false, validator:{val, obj ->
 			return (obj.equipmentType != null || obj.manufacturer != null || obj.supplier != null || (obj.status != null && obj.status != Status.NONE) || obj.donated || obj.obsolete)?true:"select.atleast.one.value.text"
 			})
 	}

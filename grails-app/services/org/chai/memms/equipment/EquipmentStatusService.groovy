@@ -1,4 +1,4 @@
-/**
+/** 
  * Copyright (c) 2012, Clinton Health Access Initiative.
  *
  * All rights reserved.
@@ -13,7 +13,7 @@
  *     * Neither the name of the <organization> nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -27,75 +27,19 @@
  */
 package org.chai.memms.equipment
 
-import org.chai.memms.AbstractEntityController;
-import org.chai.memms.equipment.EquipmentStatus.Status;
+import org.grails.datastore.mapping.query.api.Criteria;
 
 /**
  * @author Jean Kahigiso M.
  *
  */
-
-class EquipmentStatusController extends AbstractEntityController{
-	def equipmentStatusService
-    def getEntity(def id) {
-		return EquipmentStatus.get(id);
-	}
-	def createEntity() {
-		def entity = new EquipmentStatus();
-		if(!params["equipment.id"]) entity.equipment = Equipment.get(params.int("equipment"))
-		return entity;
-	}
-
-	def getTemplate() {
-		return "/entity/equipmentStatus/createEquipmentStatus";
-	}
-
-	def getLabel() {
-		return "equipment.status.label";
-	}
-	
-	def getEntityClass() {
-		return EquipmentStatus.class;
-	}
-	
-	def bindParams(def entity) {
-		log.debug("status values: "+entity+" "+params)
-		if(entity.id==null){
-			entity.changedBy= getUser()
-			entity.statusChangeDate=new Date()
-			entity.current = true
-			def status = EquipmentStatus.findByCurrentAndEquipment(true,entity.equipment)
-			if(status!=null) {
-				status.current=false
-				status.save()
-			}
-			entity.properties= params
-		}	
-	}
-	
-	def getModel(def entity) {
-		[
-			status:entity
-		]
-	}
-	
-	def list={
-		adaptParamsForList()
-		def equipment = Equipment.get(params.int("equipment"))
-		
-		if (equipment == null) {
-			response.sendError(404)
-		}else{
-			List<EquipmentStatus> equipmentStatus  = equipmentStatusService.getEquipmentStatusByEquipment(equipment,params)		
-			render(view:"/entity/list", model:[
-				template: "equipmentStatus/equipmentStatusList",
-				equipment: equipment,
-				entities: equipmentStatus,
-				entityCount: equipmentStatus.totalCount,
-				code: getLabel(),
-				entityClass: getEntityClass(),
-				
-				])
+class EquipmentStatusService {
+	static transactional = true
+	List<Equipment> getEquipmentStatusByEquipment(Equipment equipment, Map<String,String> params){
+		def criteria = EquipmentStatus.createCriteria()
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"current",order: params.order ?:"desc"){
+			eq("equipment",equipment)
 		}
 	}
 }
+

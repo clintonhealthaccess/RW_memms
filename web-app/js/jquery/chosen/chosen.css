@@ -50,7 +50,7 @@
 }
 .chzn-container-single .chzn-single span {
   margin-right: 26px;
-  display: block;
+  display: inline;
   overflow: hidden;
   white-space: nowrap;
   -o-text-overflow: ellipsis;

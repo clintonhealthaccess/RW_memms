@@ -39,7 +39,7 @@ import i18nfields.I18nFields
 @i18nfields.I18nFields
 class EquipmentType {
 
-	//def languageService
+	def languageService
 	enum Observation{		
 		USEDINMEMMS("used.in.memms"),
 		RETIRED("retired"),

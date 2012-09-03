@@ -1,5 +1,3 @@
-package org.chai.memms.equipment
-
 /**
  * Copyright (c) 2012, Clinton Health Access Initiative.
  *
@@ -27,26 +25,21 @@ package org.chai.memms.equipment
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
+package org.chai.memms.equipment
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils
 import org.chai.memms.equipment.EquipmentType
 import org.chai.memms.equipment.Provider.Type;
 import org.chai.memms.util.Utils;
-import org.hibernate.Criteria;
-import org.hibernate.criterion.MatchMode
-import org.hibernate.criterion.Order
-import org.hibernate.criterion.Projections
-import org.hibernate.criterion.Restrictions
-
+/**
+ * @author Jean Kahigiso M.
+ *
+ */
 class EquipmentTypeService {
 
 	static transactional = true
-	
 	def languageService;
-	def sessionFactory;
 		
 	public List<EquipmentType> searchEquipmentType(String text, Map<String, String> params) {
 		def dbFieldName = 'names_'+languageService.getCurrentLanguagePrefix();

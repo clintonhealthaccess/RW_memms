@@ -41,9 +41,9 @@ class EquipmentStatus {
 		
 		NONE("none"),
 		OPERATIONAL("operational"),
-		INSTOCK("inStock"),
-		UNDERMAINTENANCE("underMaintenance"),
-		FORDISPOSAL("forDisposal"),
+		INSTOCK("in.stock"),
+		UNDERMAINTENANCE("under.maintenance"),
+		FORDISPOSAL("for.disposal"),
 		DISPOSED("disposed")
 		
 		String messageCode = "equipment.status"

@@ -64,7 +64,7 @@ public class Equipment {
 	static embedded = ["warranty"]
 	
 	static constraints = {
-		
+		importFrom Contact
 		supplier nullable: false
 		manufacture nullable: false
 		warranty nullable: true
@@ -93,7 +93,7 @@ public class Equipment {
 	}
 	
 	 def getCurrentStatus = {
-		for(def stat: status)
+		for(EquipmentStatus stat: status)
 		   if(stat.isCurrent())
 		   		return stat;
 	   return false;
