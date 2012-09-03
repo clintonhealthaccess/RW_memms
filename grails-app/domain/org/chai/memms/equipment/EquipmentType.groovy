@@ -90,8 +90,8 @@ class EquipmentType {
 	}
 	
 	String toString() {
-		//return "EquipmentType[Id=" + id + "code="+code+"]";
-		return getNames(languageService.getCurrentLanguage()) + ' [' + code + ']'
+		return "EquipmentType[Id=" + id + "code="+code+"]";
+		//return getNames(languageService.getCurrentLanguage()) + ' [' + code + ']'
 	}
 	@Override
 	public int hashCode() {
