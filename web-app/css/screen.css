@@ -713,11 +713,11 @@ form.search-form button { height: 23px; margin: 0 0 0 -1px; -moz-border-radius-t
 /* line 532, ../../src/stylesheets/partials/_forms.sass */
 .filters h2 a:hover, .filters h2 a:focus { opacity: 1; }
 /* line 534, ../../src/stylesheets/partials/_forms.sass */
-.filters ul { padding: 10px 15px 0; *zoom: 1; }
+.filters ul.filters-list { padding: 10px 15px 0; *zoom: 1; }
 /* line 38, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
-.filters ul:after { content: ""; display: table; clear: both; }
+.filters ul.filters-list:after { content: ""; display: table; clear: both; }
 /* line 537, ../../src/stylesheets/partials/_forms.sass */
-.filters li { display: inline; float: left; height: 50px; width: 33%; }
+.filters ul.filters-list > li { display: inline; float: left; height: 50px; width: 33%; }
 /* line 542, ../../src/stylesheets/partials/_forms.sass */
 .filters label { display: block; font-size: 11px; margin-bottom: 2px; }
 /* line 546, ../../src/stylesheets/partials/_forms.sass */
