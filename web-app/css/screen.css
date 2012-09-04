@@ -732,110 +732,110 @@ form.search-form button { height: 23px; margin: 0 0 0 -1px; -moz-border-radius-t
 .form-languages a { font-size: 10px; margin-left: 5px; text-transform: uppercase; }
 
 /* line 2, ../../src/stylesheets/partials/_flashes.sass */
-.nav-help { background: url("../images/icons/point.png") no-repeat 0 0; padding: 10px 10px 10px 42px; }
+.nav-help { background: url("../images/icons/point.png") no-repeat 0 0; margin: 10px 15px; padding: 10px 10px 10px 42px; }
 
-/* line 6, ../../src/stylesheets/partials/_flashes.sass */
+/* line 7, ../../src/stylesheets/partials/_flashes.sass */
 .success-box { background-color: #f6fdeb; border: 1px solid #e5ecda; margin-bottom: 10px; padding: 10px; -webkit-border-radius: 3px; -moz-border-radius: 3px; -ms-border-radius: 3px; -o-border-radius: 3px; border-radius: 3px; *zoom: 1; text-shadow: white, 0, 1px, 0; }
 /* line 38, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .success-box:after { content: ""; display: table; clear: both; }
-/* line 15, ../../src/stylesheets/partials/_flashes.sass */
+/* line 16, ../../src/stylesheets/partials/_flashes.sass */
 .success-box .success { float: left; width: 70%; }
-/* line 18, ../../src/stylesheets/partials/_flashes.sass */
+/* line 19, ../../src/stylesheets/partials/_flashes.sass */
 .success-box form { float: right; }
 
-/* line 21, ../../src/stylesheets/partials/_flashes.sass */
+/* line 22, ../../src/stylesheets/partials/_flashes.sass */
 .success { background: url("../images/icons/check.png") no-repeat 0 0; padding: 10px 10px 10px 42px; }
 
-/* line 25, ../../src/stylesheets/partials/_flashes.sass */
+/* line 26, ../../src/stylesheets/partials/_flashes.sass */
 .question-container { margin-bottom: 20px; *zoom: 1; }
 /* line 38, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .question-container:after { content: ""; display: table; clear: both; }
 
-/* line 29, ../../src/stylesheets/partials/_flashes.sass */
+/* line 30, ../../src/stylesheets/partials/_flashes.sass */
 .question-help-container { position: relative; }
 
-/* line 32, ../../src/stylesheets/partials/_flashes.sass */
+/* line 33, ../../src/stylesheets/partials/_flashes.sass */
 .question-help { background: url("../images/icons/info.png") no-repeat 11px center #f6fdeb; border: 1px solid #e5ecda; font-size: 11px; line-height: 1.5; margin-bottom: 10px; padding: 15px 45px; position: relative; -webkit-border-radius: 3px; -moz-border-radius: 3px; -ms-border-radius: 3px; -o-border-radius: 3px; border-radius: 3px; text-shadow: white, 0, 1px, 0; }
 
-/* line 43, ../../src/stylesheets/partials/_flashes.sass */
+/* line 44, ../../src/stylesheets/partials/_flashes.sass */
 .show-question-help { display: none; }
-/* line 45, ../../src/stylesheets/partials/_flashes.sass */
+/* line 46, ../../src/stylesheets/partials/_flashes.sass */
 .show-question-help a { font-size: 11px; opacity: 0.6; text-shadow: white 0 1px 0; }
-/* line 49, ../../src/stylesheets/partials/_flashes.sass */
+/* line 50, ../../src/stylesheets/partials/_flashes.sass */
 .show-question-help a:hover, .show-question-help a:focus { color: #258cd5; opacity: 1; }
-/* line 52, ../../src/stylesheets/partials/_flashes.sass */
+/* line 53, ../../src/stylesheets/partials/_flashes.sass */
 .show-question-help.moved { float: right; margin-top: -42px; position: relative; z-index: 11; }
 
-/* line 58, ../../src/stylesheets/partials/_flashes.sass */
+/* line 59, ../../src/stylesheets/partials/_flashes.sass */
 .hide-question-help { background: url("../images/icons/icon_close_flash.png") no-repeat center; cursor: pointer; height: 12px; left: 97%; opacity: 0.3; position: absolute; text-indent: -6666px; top: 40%; width: 12px; }
-/* line 68, ../../src/stylesheets/partials/_flashes.sass */
+/* line 69, ../../src/stylesheets/partials/_flashes.sass */
 .hide-question-help:hover, .hide-question-help:focus { opacity: 1; }
 
-/* line 72, ../../src/stylesheets/partials/_flashes.sass */
+/* line 73, ../../src/stylesheets/partials/_flashes.sass */
 #incomplete-sections-container > div { background: url("../images/icons/fail.png") no-repeat 11px center #f4e9e9; border: 1px solid #e3d8d8; margin-bottom: 10px; padding: 10px 10px 10px 52px; -webkit-border-radius: 3px; -moz-border-radius: 3px; -ms-border-radius: 3px; -o-border-radius: 3px; border-radius: 3px; *zoom: 1; text-shadow: white, 0, 1px, 0; }
 /* line 38, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 #incomplete-sections-container > div:after { content: ""; display: table; clear: both; }
-/* line 80, ../../src/stylesheets/partials/_flashes.sass */
+/* line 81, ../../src/stylesheets/partials/_flashes.sass */
 #incomplete-sections-container li { padding: 6px 0 0 10px; }
 
-/* line 84, ../../src/stylesheets/partials/_flashes.sass */
+/* line 85, ../../src/stylesheets/partials/_flashes.sass */
 #invalid-questions-container > div { background: url("../images/icons/warning.png") no-repeat 11px center #e9f4fc; border: 1px solid #e5ecda; padding: 10px 10px 10px 52px; -webkit-border-radius: 3px; -moz-border-radius: 3px; -ms-border-radius: 3px; -o-border-radius: 3px; border-radius: 3px; *zoom: 1; text-shadow: white, 0, 1px, 0; }
 /* line 38, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 #invalid-questions-container > div:after { content: ""; display: table; clear: both; }
-/* line 91, ../../src/stylesheets/partials/_flashes.sass */
+/* line 92, ../../src/stylesheets/partials/_flashes.sass */
 #invalid-questions-container h5 { font-style: italic; padding: 10px 0 5px 8px; }
 
-/* line 96, ../../src/stylesheets/partials/_flashes.sass */
+/* line 97, ../../src/stylesheets/partials/_flashes.sass */
 .message.login { background: #e9f4fc; border: 1px solid #d8e3eb; color: #d30000; font-size: 11px; margin: 15px auto 0; padding: 10px; text-align: center; width: 400px; -webkit-border-radius: 5px; -moz-border-radius: 5px; -ms-border-radius: 5px; -o-border-radius: 5px; border-radius: 5px; text-shadow: white, 0, 1px, 0; }
 
-/* line 108, ../../src/stylesheets/partials/_flashes.sass */
+/* line 109, ../../src/stylesheets/partials/_flashes.sass */
 .item-status { position: absolute; right: 0px; }
-/* line 112, ../../src/stylesheets/partials/_flashes.sass */
+/* line 113, ../../src/stylesheets/partials/_flashes.sass */
 .item-status span { display: block; width: 16px; height: 12px; }
-/* line 117, ../../src/stylesheets/partials/_flashes.sass */
+/* line 118, ../../src/stylesheets/partials/_flashes.sass */
 .item-status span.hidden { display: none; }
-/* line 122, ../../src/stylesheets/partials/_flashes.sass */
+/* line 123, ../../src/stylesheets/partials/_flashes.sass */
 .item-status .section-status-complete, .item-status .objective-status-complete { background: url("../images/icons/status_complete.png") center no-repeat; }
-/* line 124, ../../src/stylesheets/partials/_flashes.sass */
+/* line 125, ../../src/stylesheets/partials/_flashes.sass */
 .item-status .section-status-invalid, .item-status .objective-status-invalid { background: url("../images/icons/status_invalid.png") center no-repeat; }
-/* line 126, ../../src/stylesheets/partials/_flashes.sass */
+/* line 127, ../../src/stylesheets/partials/_flashes.sass */
 .item-status .section-status-closed, .item-status .objective-status-closed { background: url("../images/icons/status_closed.png") center no-repeat; }
 
-/* line 130, ../../src/stylesheets/partials/_flashes.sass */
+/* line 131, ../../src/stylesheets/partials/_flashes.sass */
 .element.errors { position: relative; }
 
-/* line 133, ../../src/stylesheets/partials/_flashes.sass */
+/* line 134, ../../src/stylesheets/partials/_flashes.sass */
 .error-list { opacity: 0.75; padding-left: 135px; *zoom: 1; }
 /* line 38, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .error-list:after { content: ""; display: table; clear: both; }
-/* line 137, ../../src/stylesheets/partials/_flashes.sass */
+/* line 138, ../../src/stylesheets/partials/_flashes.sass */
 .error-list li { background: #d30000; color: white; float: left; font-size: 11px; font-weight: bold; padding: 7px 15px; -webkit-box-shadow: #aaaaaa 1px 1px 3px; -moz-box-shadow: #aaaaaa 1px 1px 3px; box-shadow: #aaaaaa 1px 1px 3px; text-shadow: #8f0000 0 1px 0; }
-/* line 146, ../../src/stylesheets/partials/_flashes.sass */
+/* line 147, ../../src/stylesheets/partials/_flashes.sass */
 .error-list li:last-child { -moz-border-radius-bottomleft: 5px; -webkit-border-bottom-left-radius: 5px; border-bottom-left-radius: 5px; -moz-border-radius-bottomright: 5px; -webkit-border-bottom-right-radius: 5px; border-bottom-right-radius: 5px; -moz-border-radius-topright: 5px; -webkit-border-top-right-radius: 5px; border-top-right-radius: 5px; }
-/* line 149, ../../src/stylesheets/partials/_flashes.sass */
+/* line 150, ../../src/stylesheets/partials/_flashes.sass */
 .error-list li a { color: white; font-size: 11px; }
 
-/* line 153, ../../src/stylesheets/partials/_flashes.sass */
+/* line 154, ../../src/stylesheets/partials/_flashes.sass */
 .adv-form .error-list { position: absolute; top: 21px; left: 0; z-index: 20; }
 
-/* line 163, ../../src/stylesheets/partials/_flashes.sass */
+/* line 164, ../../src/stylesheets/partials/_flashes.sass */
 .ajax-in-process input, .ajax-in-process input:hover, .ajax-in-process input:focus { background: url("../images/icons/in_progress.gif") no-repeat 95% center; }
-/* line 165, ../../src/stylesheets/partials/_flashes.sass */
+/* line 166, ../../src/stylesheets/partials/_flashes.sass */
 .ajax-in-process select, .ajax-in-process select:hover, .ajax-in-process select:focus { background: url("../images/icons/in_progress.gif") no-repeat 90% center; }
 
-/* line 169, ../../src/stylesheets/partials/_flashes.sass */
+/* line 170, ../../src/stylesheets/partials/_flashes.sass */
 .ajax-error input, .ajax-error input:hover, .ajax-error input:focus { background: url("../images/icons/input_error.png") no-repeat 95% center; }
-/* line 171, ../../src/stylesheets/partials/_flashes.sass */
+/* line 172, ../../src/stylesheets/partials/_flashes.sass */
 .ajax-error select, .ajax-error select:hover, .ajax-error select:focus { background: url("../images/icons/input_error.png") no-repeat 90% center; }
 
-/* line 174, ../../src/stylesheets/partials/_flashes.sass */
+/* line 175, ../../src/stylesheets/partials/_flashes.sass */
 .ajax-disabled, .skipped { cursor: wait; opacity: 0.5; }
 
-/* line 179, ../../src/stylesheets/partials/_flashes.sass */
+/* line 180, ../../src/stylesheets/partials/_flashes.sass */
 .message { background: #65c029; border: 1px solid #54af18; color: white; font-size: 11px; font-weight: bold; margin: 0 275px; opacity: 0.8; padding: 5px 10px; position: absolute; text-align: center; top: 0; width: 430px; -moz-border-radius-bottomleft: 3px; -webkit-border-bottom-left-radius: 3px; border-bottom-left-radius: 3px; -moz-border-radius-bottomright: 3px; -webkit-border-bottom-right-radius: 3px; border-bottom-right-radius: 3px; -webkit-box-shadow: #cccccc 0 1px 3px; -moz-box-shadow: #cccccc 0 1px 3px; box-shadow: #cccccc 0 1px 3px; text-shadow: #439e07 0 1px 0; }
-/* line 195, ../../src/stylesheets/partials/_flashes.sass */
+/* line 196, ../../src/stylesheets/partials/_flashes.sass */
 .message.error { background: #d30000; border: 1px solid #c20000; text-shadow: #b10000 0 1px 0; }
-/* line 199, ../../src/stylesheets/partials/_flashes.sass */
+/* line 200, ../../src/stylesheets/partials/_flashes.sass */
 .message:hover { opacity: 1; }
 
 /* line 2, ../../src/stylesheets/partials/_nicetable.sass */

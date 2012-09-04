@@ -5,7 +5,7 @@
 </head>
 <body>
 
-		<table class="listing">
+		<table class="items">
 			<thead>
 				<th><g:message code="inventory.datalocation.label" /></th>
 				<th><g:message code="inventory.equipment.count" /></th>

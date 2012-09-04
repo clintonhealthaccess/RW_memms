@@ -12,16 +12,18 @@
 				<g:dataLocationTypeFilter linkParams="${params}" selected="${currentLocationTypes}"/>
 			</div>
 						
-			<div class="main">			
+			<div class="main table">			
 				<g:if test="${inventories == null}">
 					<p class="nav-help"><g:message code="inventory.summary.selectlocation.text"/></p>
 				</g:if>
 				<g:else>
-					<div>
-						<div>
-							<g:message code="location.label"/>: ${currentLocation.names}
-						</div>
-					</div>
+				  <br/>
+					<h4 class="section-title">
+            <span class="question-default">
+              <img src="${resource(dir:'images/icons',file:'star_small.png')}">
+            </span>
+            <g:message code="location.label"/>: ${currentLocation.names}
+          </h4>
 					<g:render template="${template}"/>				
 				</g:else>
 			</div>
