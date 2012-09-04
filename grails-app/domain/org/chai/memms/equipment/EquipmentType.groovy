@@ -39,7 +39,7 @@ import i18nfields.I18nFields
 @i18nfields.I18nFields
 class EquipmentType {
 
-	
+	def languageService
 	enum Observation{		
 		USEDINMEMMS("used.in.memms"),
 		RETIRED("retired"),
@@ -91,6 +91,7 @@ class EquipmentType {
 	
 	String toString() {
 		return "EquipmentType[Id=" + id + "code="+code+"]";
+		//return getNames(languageService.getCurrentLanguage()) + ' [' + code + ']'
 	}
 	@Override
 	public int hashCode() {
