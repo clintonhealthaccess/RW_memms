@@ -105,8 +105,8 @@ class EquipmentController extends AbstractEntityController{
 	}
 	 
 	def getModel(def entity) {
-		def manufactures = []; def suppliers = []; def departments = []; def types = []; def dataLocations = [];
-		if (entity.manufacture != null) manufactures << entity.manufacture
+		def manufacturers = []; def suppliers = []; def departments = []; def types = []; def dataLocations = [];
+		if (entity.manufacturer != null) manufacturers << entity.manufacturer
 		if (entity.supplier != null) suppliers << entity.supplier
 		if (entity.department!=null) departments << entity.department
 		if (entity.type!=null) types << entity.type
@@ -114,7 +114,7 @@ class EquipmentController extends AbstractEntityController{
 		[
 			equipment: entity,
 			departments: departments,
-			manufactures: manufactures,
+			manufacturers: manufacturers,
 			suppliers: suppliers,
 			types: types,
 			dataLocations: dataLocations,

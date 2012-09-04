@@ -65,7 +65,7 @@ class EquipmentSpec extends IntegrationTests{
 		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
 		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),Initializer.getDate(12, 12, 2012),[:])
 
-		equipment.manufacture=manufacture
+		equipment.manufacturer=manufacture
 		equipment.supplier=supplier
 		
 		equipment.warranty=warranty
@@ -95,7 +95,7 @@ class EquipmentSpec extends IntegrationTests{
 		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
 		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),Initializer.getDate(12, 12, 2012),[:])
 
-		equipment.manufacture=manufacture
+		equipment.manufacturer=manufacture
 		equipment.supplier=supplier
 		equipment.warranty=warranty
 
@@ -125,7 +125,7 @@ class EquipmentSpec extends IntegrationTests{
 		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
 		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),Initializer.getDate(12, 12, 2012),[:])
 
-		equipment.manufacture=manufacture
+		equipment.manufacturer=manufacture
 		equipment.supplier=supplier
 		equipment.warranty=warranty
 
@@ -156,7 +156,7 @@ class EquipmentSpec extends IntegrationTests{
 		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
 		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),Initializer.getDate(12, 12, 2012),[:])
 
-		equipment.manufacture=manufacture
+		equipment.manufacturer=manufacture
 		equipment.supplier=supplier
 		equipment.warranty=warranty
 
@@ -186,7 +186,7 @@ class EquipmentSpec extends IntegrationTests{
 		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
 		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),Initializer.getDate(12, 12, 2012),[:])
 
-		equipment.manufacture=manufacture
+		equipment.manufacturer=manufacture
 		equipment.supplier=supplier
 		equipment.warranty=warranty
 
@@ -216,7 +216,7 @@ class EquipmentSpec extends IntegrationTests{
 		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
 		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),Initializer.getDate(12, 12, 2012),[:])
 
-		equipment.manufacture=manufacture
+		equipment.manufacturer=manufacture
 		equipment.supplier=supplier
 		equipment.warranty=warranty
 

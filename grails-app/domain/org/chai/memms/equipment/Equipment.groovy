@@ -50,7 +50,7 @@ public class Equipment {
 	boolean donation
 	boolean obsolete
 	
-	Provider manufacture
+	Provider manufacturer
 	Provider supplier
 	Warranty warranty
 	
@@ -66,7 +66,7 @@ public class Equipment {
 	static constraints = {
 		importFrom Contact
 		supplier nullable: false
-		manufacture nullable: false
+		manufacturer nullable: false
 		warranty nullable: true
 		
 		serialNumber nullable: false, blank: false,  unique: true

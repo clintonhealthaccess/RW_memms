@@ -31,7 +31,7 @@ import org.chai.memms.Contact;
 
 import i18nfields.I18nFields
 /**
- * @author JeanKahigiso
+ * @author Jean Kahigiso M.
  *
  */
 @i18nfields.I18nFields
@@ -39,7 +39,7 @@ public class Provider{
 	
 	enum Type{
 		BOTH("both"),
-		MANUFACTURE("manufacture"),
+		MANUFACTURER("manufacturer"),
 		SUPPLIER("supplier")
 		
 		String messageCode = "provider.type"
@@ -53,7 +53,7 @@ public class Provider{
 	Contact contact
 	
 	static embedded = ["contact"]
-	static mappedBy = [manufactures: "manufacture",suppliers: "supplier"]
+	static mappedBy = [manufactures: "manufacturer",suppliers: "supplier"]
 	static hasMany = [manufactures: Equipment, suppliers: Equipment]
    
 	static constraints ={

@@ -7,7 +7,7 @@
 			<g:sortableColumn property="type" defaultOrder="asc" title="${message(code: 'equipment.type.label', default: 'Type')}" params="[q:q,location:dataLocation.id]" />
 			<g:sortableColumn property="model" defaultOrder="asc" title="${message(code: 'equipment.model.label', default: 'Model')}" params="[q:q,location:dataLocation.id]" />
 			
-			<g:sortableColumn property="manufacture" defaultOrder="asc" title="${message(code: 'provider.manufacture.label', default: 'Manufacture')}" params="[q:q,location:dataLocation.id]" />
+			<g:sortableColumn property="manufacturer" defaultOrder="asc" title="${message(code: 'provider.manufacturer.label', default: 'manufacturer')}" params="[q:q,location:dataLocation.id]" />
 			<g:sortableColumn property="supplier" defaultOrder="asc" title="${message(code: 'provider.supplier.label', default: 'Supplier')}" params="[q:q,location:dataLocation.id]" />
 			<th><g:message code="location.label"/></th>
 			<th><g:message code="equipment.status.label"/></th>
@@ -36,7 +36,7 @@
 				<td>${equipment.serialNumber}</td>
 				<td>${equipment.type.names}</td>
 				<td>${equipment.model}</td>
-				<td>${equipment.manufacture.contact.contactName}</td>
+				<td>${equipment.manufacturer.contact.contactName}</td>
 				<td>${equipment.supplier.contact.contactName}</td>
 				<td>
 					<g:message code="datalocation.label"/>: ${equipment.dataLocation.names}<br/>

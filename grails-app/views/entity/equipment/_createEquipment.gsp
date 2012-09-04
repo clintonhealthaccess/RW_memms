@@ -44,27 +44,29 @@
     		<g:inputBox name="donation"  label="${message(code:'equipment.donation.label')}" bean="${equipment}" field="donation" value="${equipment.donation}" checked="${(equipment.donation)? true:false}"/>
     	</fieldset>	
     	<div class="form-aside">
-       	  <h5>Equipment Type Details</h5>
-       	  <ul class="half">
-       	    <li>
-       	      <span class="label">Code</span>
-       	      <span class="text">${equipment?.type?.code}</span>
-     	    </li>
-     	    <li>
-       	      <span class="label">Name</span>
-       	      <span class="text">${equipment?.type?.names}</span>
-       	    </li>
-       	    </ul>
-       	    <ul class="half">
-       	     <li>
-       	      <span class="label">Added On:</span>
-       	      <span class="text">${Utils.formatDate(equipment?.type?.addedOn)}</span>
-       	    </li>
-       	    <li>
-       	      <span class="label">Last Modification:</span>
-       	      <span class="text">${Utils.formatDate(equipment?.type?.lastModifiedOn)}</span>
-       	    </li>
-       	  </ul>
+    		<div class="form-aside-type">
+	       	  <h5>Equipment Type Details</h5>
+	       	  <ul class="half">
+	       	    <li>
+	       	      <span class="label">Code</span>
+	       	      <span class="text">${equipment?.type?.code}</span>
+	     	    </li>
+	     	    <li>
+	       	      <span class="label">Name</span>
+	       	      <span class="text">${equipment?.type?.names}</span>
+	       	    </li>
+	       	    </ul>
+	       	    <ul class="half">
+	       	     <li>
+	       	      <span class="label">Added On:</span>
+	       	      <span class="text">${Utils.formatDate(equipment?.type?.addedOn)}</span>
+	       	    </li>
+	       	    <li>
+	       	      <span class="label">Last Modification:</span>
+	       	      <span class="text">${Utils.formatDate(equipment?.type?.lastModifiedOn)}</span>
+	       	    </li>
+	       	  </ul>
+	       	 </div>
        	</div>
       </div>   
       <div class="form-section">
@@ -74,39 +76,51 @@
             <img src="${resource(dir:'images/icons',file:'star_small.png')}">
 
           </span>
-          <g:message code="equipment.section.manufacture.information.label" default="Manufacture Information"/>
+          <g:message code="equipment.section.manufacturer.information.label" default="Manufacturer Information"/>
         </h4>
-      	<g:selectFromList name="manufacture.id" label="${message(code:'provider.manufacture.label')}" bean="${equipment}" field="manufacture" optionKey="id" multiple="false"
-  			ajaxLink="${createLink(controller:'provider', action:'getAjaxData', params: [type:'MANUFACTURE'])}"
-  			from="${manufactures}" value="${equipment?.manufacture?.id}" values="${manufactures.collect{it.contact.contactName}}" />	
+      	<g:selectFromList name="manufacturer.id" label="${message(code:'provider.manufacturer.label')}" bean="${equipment}" field="manufacturer" optionKey="id" multiple="false"
+  			ajaxLink="${createLink(controller:'provider', action:'getAjaxData', params: [type:'MANUFACTURER'])}"
+  			from="${manufacturers}" value="${equipment?.manufacturer?.id}" values="${manufacturers.collect{it.contact.contactName}}" />	
   			<g:inputDate name="manufactureDate" precision="day"  value="${equipment.manufactureDate}" id="manufacture-date" label="${message(code:'equipment.manufacture.date.label')}" bean="${equipment}" field="manufactureDate"/>
      	</fieldset>
-    	  <div class="form-aside">
-       	  <h5>Manufacture Details</h5>
-       	  <ul class="half">
-       	    <li>
-       	      <span class="label">Name:</span>
-       	      <span class="text">${equipment?.manufacture?.contact?.contactName}</span>
-       	    </li>
-       	    <li>
-       	      <span class="label">Email</span>
-       	      <span class="text">${equipment?.manufacture?.contact?.email}</span>
-       	    </li>
-       	  </ul>
-    	  <ul class="half">
-       	    <li>
-       	      <span class="label">Phone</span>
-       	      <span class="text">${equipment?.manufacture?.contact?.phone}</span>
-       	    </li>
-       	    <li>
-       	      <span class="label">PO. Box</span>
-       	      <span class="text">${equipment?.manufacture?.contact?.poBox}</span>
-       	    </li>
-       	    <li>
-       	      <span class="label">Street</span>
-       	      <span class="text">${equipment?.manufacture?.contact?.street}</span>
-     	    </li>
-       	  </ul>
+    	  <div id="form-aside-manufacturer" class="form-aside">
+    	 	 <div id="form-aside-${equipment?.manufacturer?.id}">
+		       	  <h5>Manufacturer Details</h5>
+		       	  <ul class="half">
+		       	    <li>
+		       	      <span class="label">Name:</span>
+		       	      <span class="text">${equipment?.manufacturer?.contact?.contactName}</span>
+		       	    </li>
+		       	    <li>
+		       	      <span class="label">Email</span>
+		       	      <span class="text">${equipment?.manufacturer?.contact?.email}</span>
+		       	    </li>
+		       	  </ul>
+		    	  <ul class="half">
+		    	   <li><span class="label">Address</span></li>
+		       	    <li>
+		       	      <span class="label">Phone</span>
+		       	      <span class="text">${equipment?.manufacturer?.contact?.phone}</span>
+		       	    </li>
+		       	    <li>
+		       	      <span class="label">PO. Box</span>
+		       	      <span class="text">${equipment?.manufacturer?.contact?.poBox}</span>
+		       	    </li>
+		       	    <li>
+		       	      <span class="label">Street</span>
+		       	      <span class="text">${equipment?.manufacturer?.contact?.street}</span>
+		     	    </li>
+		     	     <li>
+		       	      <span class="label">City</span>
+		       	      <span class="text">${equipment?.manufacturer?.contact?.city}</span>
+		     	    </li>
+		     	     <li>
+		       	      <span class="label">Country</span>
+		       	      <span class="text">${equipment?.manufacturer?.contact?.country}</span>
+		     	    </li>
+		       	  </ul>
+	       	 </div>
+	       	 
        	</div>
       </div>
       <div class="form-section">
@@ -123,33 +137,43 @@
     		<g:inputDate name="purchaseDate" precision="day" id="purchase-date" value="${equipment.purchaseDate}" label="${message(code:'equipment.purchase.date.label')}" bean="${equipment}" field="purchaseDate"/>
     		<g:input name="purchaseCost" label="${message(code:'equipment.purchase.cost.label')}" bean="${equipment}" field="purchaseCost"/>
      	</fieldset>
-    	<div class="form-aside">
-       	  <h5>Supplier Details</h5>
-          <ul class="half">
-       	    <li>
-       	      <span class="label">Name:</span>
-       	      <span class="text">${equipment?.supplier?.contact?.contactName}</span>
-       	    </li>
-       	    <li>
-       	      <span class="label">Email</span>
-       	      <span class="text">${equipment?.supplier?.contact?.email}</span>
-       	    </li>
-       	  </ul>
-    	  <ul class="half">
-    	  	<li><span class="label">Address</span></li>
-       	    <li>
-       	      <span class="label">Phone</span>
-       	      <span class="text">${equipment?.supplier?.contact?.phone}</span>
-       	    </li>
-       	    <li>
-       	      <span class="label">PO. Box</span>
-       	      <span class="text">${equipment?.supplier?.contact?.poBox}</span>
-       	    </li>
-       	    <li>
-       	      <span class="label">Street</span>
-       	      <span class="text">${equipment?.supplier?.contact?.street}</span>
-     	    </li>
-       	  </ul>
+     	 <div id="form-aside-supplier" class="form-aside">
+    	 	 <div id="form-aside-${equipment?.supplier?.id}">
+		       	  <h5>Supplier Details</h5>
+		          <ul class="half">
+		       	    <li>
+		       	      <span class="label">Name:</span>
+		       	      <span class="text">${equipment?.supplier?.contact?.contactName}</span>
+		       	    </li>
+		       	    <li>
+		       	      <span class="label">Email</span>
+		       	      <span class="text">${equipment?.supplier?.contact?.email}</span>
+		       	    </li>
+		       	  </ul>
+		    	  <ul class="half">
+		    	  	<li><span class="label">Address</span></li>
+		       	    <li>
+		       	      <span class="label">Phone</span>
+		       	      <span class="text">${equipment?.supplier?.contact?.phone}</span>
+		       	    </li>
+		       	    <li>
+		       	      <span class="label">PO. Box</span>
+		       	      <span class="text">${equipment?.supplier?.contact?.poBox}</span>
+		       	    </li>
+		       	    <li>
+		       	      <span class="label">Street</span>
+		       	      <span class="text">${equipment?.supplier?.contact?.street}</span>
+		     	    </li>
+		     	     <li>
+		       	      <span class="label">City</span>
+		       	      <span class="text">${equipment?.supplier?.contact?.city}</span>
+		     	    </li>
+		     	     <li>
+		       	      <span class="label">Country</span>
+		       	      <span class="text">${equipment?.supplier?.contact?.country}</span>
+		     	    </li>
+		       	  </ul>
+	       	  </div>
        	</div>
       </div>
       <div class="form-section">

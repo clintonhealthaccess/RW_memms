@@ -98,6 +98,7 @@ class ProviderController  extends AbstractEntityController {
 		])
 		
 	}
+	
 	def getAjaxData = {
 		if(log.isDebugEnabled()) log.debug("Sent Params: " + params)
 		def type =params['type']
@@ -109,6 +110,14 @@ class ProviderController  extends AbstractEntityController {
 					elem (
 						key: provider.id,
 						value: provider.contact.contactName + ' ['+provider.code+']'
+					)
+				}
+			}
+			htmls = array {
+				providers.each { provider ->
+					elem (
+						key: provider.id,
+						html: g.render(template:"/templates/providerFormSide",model:[provider:provider])						  
 					)
 				}
 			}

@@ -27,12 +27,7 @@
  */
 package org.chai.memms.equipment
 
-import java.util.List;
-import java.util.Map;
 import org.chai.memms.equipment.Provider.Type;
-import org.chai.memms.location.CalculationLocation;
-import org.chai.memms.util.Utils;
-import org.chai.memms.equipment.Provider;
 
 /**
  * @author Jean Kahigiso M.
@@ -44,25 +39,6 @@ class ProviderService {
 	def languageService;
 	def sessionFactory;
 	
-	
-	public List<Provider> getManufacturesOnly(){
-		return Provider.findAllByType(Type.MANUFACTURE)
-	}
-	public List<Provider> getSuppliersOnly(){
-		return Provider.findAllByType(Type.SUPPLIER)
-	}
-	public List<Provider> getSuppliersAndManufactures(){
-		return Provider.findAllByTypeNotEqual(Type.BOTH)
-	}
-	
-	public List<Provider> getSuppliersAndBoth(){
-		return Provider.findAllByTypeNotEqual(Type.MANUFACTURE)
-	}
-
-	public List<Provider> getManufacturesAndBoth(){
-		return Provider.findAllByTypeNotEqual(Type.SUPPLIER)
-	}
-
 	public List<Provider> searchProvider(Type type,String text, Map<String, String> params) {
 		def dbFieldDescriptions = 'addressDescriptions_'+languageService.getCurrentLanguagePrefix();
 		def criteria = Provider.createCriteria()
@@ -88,4 +64,5 @@ class ProviderService {
 		}
 	
 	}
+
 }

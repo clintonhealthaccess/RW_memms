@@ -64,8 +64,9 @@
 					<li><g:selectFromList name="manufacturer.id"
 							label="${message(code:'provider.manufacture.label')}" bean="${}"
 							field="MANUFACTURE" optionKey="id" multiple="false"
-							ajaxLink="${createLink(controller:'Provider', action:'getAjaxData', params:[class: 'Provider',type:'MANUFACTURE'])}"
-							from="${dataLocations}" value="${manufacturers.collect{it.id}}"
+							ajaxLink="${createLink(controller:'Provider', action:'getAjaxData', params:[class: 'Provider',type:'MANUFACTURER'])}"
+							from="${dataLocations}" 
+							value="${manufacturers.collect{it.contact.contactName}}"
 							values="${manufacturers.collect{it.contact.contactName}}" /></li>
 
 					<li><g:selectFromList name="supplier.id"

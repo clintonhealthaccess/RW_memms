@@ -34,10 +34,33 @@
 			}, function (data) {
 				var terms = {};
 				$.each(data.elements, function (i, val) {
-					terms[val.key] = val.value;
+					terms[val.key] = val.value; 
 				});
+				if(data.htmls)
+					getHtml(data.htmls,"${field}")
 				return terms;
 			});
 		});
+		function getHtml(htmls,field){
+			var html=""
+			alert("length: "+htmls.length+" field: "+field)
+			$.each(htmls, function (i, val) {
+				html=html+" "+val.html
+			});
+			if(field=="supplier"){
+				$("#form-aside-supplier").append(html);
+				//$(".form-aside-hidden").hide();
+			}
+				
+			if(field=="manufacturer"){
+				$("#form-aside-manufacturer").append(html);
+				//$(".form-aside-hidden").hide();
+			}
+// 			$('#options-${random}').change(function() {
+// 				var test = $('#options-${random} option:selected').val($(this).find(":selected").text());
+// 				 alert("Selcted id: "+test)
+// 				});
+				
+		};	
 	</script>
 </g:if>

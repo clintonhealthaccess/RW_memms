@@ -9,6 +9,8 @@
 			<th><g:message code="contact.phone.label"/></th>
 			<th><g:message code="contact.pobox.label"/></th>
 			<g:sortableColumn property="contact.street" title="${message(code: 'contact.street.label', default: 'Street')}" params="[q:q]" />
+			<g:sortableColumn property="contact.city" title="${message(code: 'contact.city.label', default: 'City')}" params="[q:q]" />
+			<g:sortableColumn property="contact.country" title="${message(code: 'contact.country.label', default: 'Country')}" params="[q:q]" />
 			<th><g:message code="contact.address.descriptions.label"/></th>
 		</tr>
 	</thead>
@@ -48,6 +50,12 @@
 				</td>
 				<td>
 					${provider.contact.street}
+				</td>
+				<td>
+					${provider.contact.city}
+				</td>
+				<td>
+					${provider.contact.country}
 				</td>
 				<td>
 					${provider.contact.addressDescriptions}

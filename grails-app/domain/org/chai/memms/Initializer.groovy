@@ -182,10 +182,10 @@ public class Initializer {
 			def contactEight = newContact(['en':'Address Descriptions Eight'],"Manufacture and Supplier Ericson","jkl6@yahoo.com","0768-123-787","Street 156","8988")
 			
 			
-			def manufactureOne = newProvider("ONE",Type.MANUFACTURE,contactOne)
-			def manufactureTwo = newProvider("TWO",Type.MANUFACTURE,sontactTwo)
-			def manufactureThree = newProvider("THREE",Type.MANUFACTURE,contactThree)
-			def manufactureFour = newProvider("FOUR",Type.MANUFACTURE,contactFour)
+			def manufactureOne = newProvider("ONE",Type.MANUFACTURER,contactOne)
+			def manufactureTwo = newProvider("TWO",Type.MANUFACTURER,sontactTwo)
+			def manufactureThree = newProvider("THREE",Type.MANUFACTURER,contactThree)
+			def manufactureFour = newProvider("FOUR",Type.MANUFACTURER,contactFour)
 			
 			
 			def supplierOne = newProvider("FIVE",Type.SUPPLIER,contactFive)
@@ -392,7 +392,7 @@ public class Initializer {
 	
 	//Models definition
 	public static def newEquipment(def serialNumber,def donation,def obsolete,def expectedLifeTime,def room,def purchaseCost,def descriptions,def manufactureDate, def purchaseDate,def registeredOn,def model,def dataLocation,def department, def type,def manufacture,def supplier){
-		def equipment = new Equipment(serialNumber:serialNumber,donation:donation,obsolete:obsolete,room:room,expectedLifeTime:expectedLifeTime,purchaseCost:purchaseCost,manufactureDate:manufactureDate,purchaseDate:purchaseDate,registeredOn:registeredOn,model:model,dataLocation:dataLocation,department:department,type:type,manufacture:manufacture,supplier:supplier);
+		def equipment = new Equipment(serialNumber:serialNumber,donation:donation,obsolete:obsolete,room:room,expectedLifeTime:expectedLifeTime,purchaseCost:purchaseCost,manufactureDate:manufactureDate,purchaseDate:purchaseDate,registeredOn:registeredOn,model:model,dataLocation:dataLocation,department:department,type:type,manufacturer:manufacture,supplier:supplier);
 		setLocaleValueInMap(equipment,descriptions,"Descriptions")
 		return equipment.save(failOnError: true,flush: true)
 	}
