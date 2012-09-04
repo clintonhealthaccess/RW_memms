@@ -50,7 +50,7 @@ class EquipmentServiceSpec extends IntegrationTests{
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
 
-		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURE,manufactureContact)
+		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
 		def user  = newUser("admin", "Admin UID")
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
@@ -92,7 +92,7 @@ class EquipmentServiceSpec extends IntegrationTests{
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
 
-		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURE,manufactureContact)
+		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
 		def user  = newUser("admin", "Admin UID")
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
@@ -119,7 +119,7 @@ class EquipmentServiceSpec extends IntegrationTests{
 
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
-		def manufacture = Initializer.newProvider(CODE(111), Type.MANUFACTURE,manufactureContact)
+		def manufacture = Initializer.newProvider(CODE(111), Type.MANUFACTURER,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(222), Type.SUPPLIER,supplierContact)
 		
 		def user  = newUser("admin", "Admin UID")

@@ -100,9 +100,11 @@ class ProviderController  extends AbstractEntityController {
 	}
 	
 	def getAjaxData = {
-		if(log.isDebugEnabled()) log.debug("Sent Params: " + params)
+		if(log.isDebugEnabled()) log.debug("Provider getAjaxData Sent Params: " + params)
+		def detailsLabel='';
 		def type =params['type']
 		type = Type."$type";
+		if(type.equals(Type.MANUFACTURER)) detailsLabel="provider.manufacturer.details" else detailsLabel="provider.supplier.details"
 		List<Provider> providers = providerService.searchProvider(type, params['term'], [:])
 		render(contentType:"text/json") {
 			elements = array {
@@ -117,7 +119,7 @@ class ProviderController  extends AbstractEntityController {
 				providers.each { provider ->
 					elem (
 						key: provider.id,
-						html: g.render(template:"/templates/providerFormSide",model:[provider:provider])						  
+						html: g.render(template:"/templates/providerFormSide",model:[provider:provider,type:type,label:detailsLabel,cssClass:"form-aside-hidden",field:type.name])						  
 					)
 				}
 			}

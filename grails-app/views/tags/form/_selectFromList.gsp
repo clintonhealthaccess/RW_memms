@@ -40,27 +40,11 @@
 					getHtml(data.htmls,"${field}")
 				return terms;
 			});
-		});
-		function getHtml(htmls,field){
-			var html=""
-			alert("length: "+htmls.length+" field: "+field)
-			$.each(htmls, function (i, val) {
-				html=html+" "+val.html
+			$('#options-${random}').change(function() {
+				var selectedValue = "#form-aside-${field}-"+$('#options-${random} option:selected').val();
+				$("#form-aside-${field} .current").hide("slow").removeClass("current").addClass("form-aside-hidden")
+				$(selectedValue).show("slow").addClass("current").removeClass("form-aside-hidden")
 			});
-			if(field=="supplier"){
-				$("#form-aside-supplier").append(html);
-				//$(".form-aside-hidden").hide();
-			}
-				
-			if(field=="manufacturer"){
-				$("#form-aside-manufacturer").append(html);
-				//$(".form-aside-hidden").hide();
-			}
-// 			$('#options-${random}').change(function() {
-// 				var test = $('#options-${random} option:selected').val($(this).find(":selected").text());
-// 				 alert("Selcted id: "+test)
-// 				});
-				
-		};	
+		});
 	</script>
 </g:if>

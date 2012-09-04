@@ -88,7 +88,7 @@ class EquipmentService {
 				eq ("supplier", supplier)
 			}
 			if(manufacturer != null){
-				eq ("manufacture", manufacturer)
+				eq ("manufacturer", manufacturer)
 			}
 			if(equipmentType != null){
 				eq ("type", equipmentType)

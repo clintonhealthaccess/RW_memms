@@ -25,7 +25,7 @@ class EquipmentControllerSpec extends IntegrationTests{
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact(['en':'Address Descriptions '],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
 		
-		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURE,manufactureContact)
+		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
 	
 		
@@ -44,7 +44,7 @@ class EquipmentControllerSpec extends IntegrationTests{
 		equipmentController.params.registeredOn = Initializer.now()
 		equipmentController.params.department = department
 		equipmentController.params.type = equipmentType
-		equipmentController.params.manufacture = manufacture
+		equipmentController.params.manufacturer = manufacture
 		equipmentController.params.supplier = supplier
 		equipmentController.params.dataLocation = DataLocation.list().first()
 		equipmentController.params.status="DISPOSED"
@@ -66,7 +66,7 @@ class EquipmentControllerSpec extends IntegrationTests{
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact(['en':'Address Descriptions '],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
 		
-		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURE,manufactureContact)
+		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentModel = Initializer.newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
@@ -90,7 +90,7 @@ class EquipmentControllerSpec extends IntegrationTests{
 		equipmentController.params.department = department
 		equipmentController.params.model = "equipmentModel"
 		equipmentController.params.type = equipmentType
-		equipmentController.params.manufacture = manufacture
+		equipmentController.params.manufacturer = manufacture
 		equipmentController.params.supplier = supplier
 		equipmentController.params.dataLocation = DataLocation.list().first()
 		equipmentController.params.status="FORDISPOSAL"
@@ -111,7 +111,7 @@ class EquipmentControllerSpec extends IntegrationTests{
 
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
-		def manufacture = Initializer.newProvider(CODE(111), Type.MANUFACTURE,manufactureContact)
+		def manufacture = Initializer.newProvider(CODE(111), Type.MANUFACTURER,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(222), Type.SUPPLIER,supplierContact)
 		
 		def user  = newUser("admin", "Admin UID")
@@ -153,7 +153,7 @@ class EquipmentControllerSpec extends IntegrationTests{
 
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
-		def manufacture = Initializer.newProvider(CODE(111), Type.MANUFACTURE,manufactureContact)
+		def manufacture = Initializer.newProvider(CODE(111), Type.MANUFACTURER,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(222), Type.SUPPLIER,supplierContact)
 		
 		def user  = newUser("admin", "Admin UID")
@@ -201,7 +201,7 @@ class EquipmentControllerSpec extends IntegrationTests{
 		
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
-		def manufacture = Initializer.newProvider(CODE(111), Type.MANUFACTURE,manufactureContact)
+		def manufacture = Initializer.newProvider(CODE(111), Type.MANUFACTURER,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(222), Type.SUPPLIER,supplierContact)
 		
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())

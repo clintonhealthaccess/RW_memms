@@ -116,6 +116,14 @@ class EquipmentTypeController extends AbstractEntityController{
 					)
 				}
 			}
+			htmls = array {
+				types.each { type ->
+					elem (
+						key: type.id,
+						html: g.render(template:"/templates/typeFormSide",model:[type:type,label:label,cssClass:"form-aside-hidden",field:'type'])
+					)
+				}
+			}
 		}
 	}
 	

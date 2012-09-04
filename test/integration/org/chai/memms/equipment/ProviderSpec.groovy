@@ -42,7 +42,7 @@ class ProviderSpec extends IntegrationTests{
 		def othersContact = Initializer.newContact(['en':'Unknown Address Descriptions Two'],"Unknown Other","jk1@yahoo.com","0768-111-787","Street 12","89288")
 		
 		when:
-		def manufacturer = new Provider(code:CODE(123), type: Type.MANUFACTURE, contact:manufactureContact)
+		def manufacturer = new Provider(code:CODE(123), type: Type.MANUFACTURER, contact:manufactureContact)
 		manufacturer.save(failOnError: true)
 		def supplier = new Provider(code:CODE(124), type: Type.SUPPLIER, contact:supplierContact)
 		supplier.save(failOnError: true)
