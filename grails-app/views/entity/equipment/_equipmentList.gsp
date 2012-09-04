@@ -43,11 +43,10 @@
 					<g:message code="department.label"/>: ${equipment.department.names}<br/>
 					<g:message code="equipment.room.label"/>: ${equipment.room}<br/>
 				</td>
-				<td>
-					${message(code: equipment.getCurrentStatus()?.status?.messageCode+'.'+equipment.getCurrentStatus()?.status?.name)}
-					<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'create', params:[equipment: equipment?.id])}" class="next medium gray">
-  	    				<g:message code="equipment.change.status.label" default="Change Status"/>
-  	    			</a>
+				<td>					
+					<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'create', params:[equipment: equipment?.id])}" title="asd">
+    				${message(code: equipment.getCurrentStatus()?.status?.messageCode+'.'+equipment.getCurrentStatus()?.status?.name)}
+    			</a>
 				</td>
 				<td>${(equipment.obsolete)? '\u2713':'X'}</td>
 				<td>${(equipment.donation)? '\u2713':'X'}</td>

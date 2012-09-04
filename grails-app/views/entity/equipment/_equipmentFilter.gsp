@@ -11,7 +11,7 @@
 			</g:hasErrors>
 
 			<g:form url="[controller:'equipment', action:'filter']" method="get" useToken="false" class="filters-box">
-				<ul>
+				<ul class="filters-list">
 					<li><g:selectFromList name="equipmentType.id"
 							label="${message(code:'equipment.type.label')}" bean="${filterCmd}"
 							field="type" optionKey="${filterCmd?.equipmentType? 'id' : null}" multiple="false"
@@ -33,7 +33,6 @@
 							from="${filterCmd?.supplier}" value="${filterCmd?.supplier?.id}"
 							values="${filterCmd?.manufacturer?.collect{it.contact.contactName + ' ['+ it.code +']'}}"
 							/></li>
-					<li>
 					<li><label>Obsolete</label> <select name="obsolete">
 							<option value="">Please select</option>
 							<option value="true" ${filterCmd?.obsolete?.equals("true")? 'selected' : ''} >True</option>
