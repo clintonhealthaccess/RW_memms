@@ -44,7 +44,7 @@
 					<g:message code="equipment.room.label"/>: ${equipment.room}<br/>
 				</td>
 				<td>					
-					<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'create', params:[equipment: equipment?.id])}" title="asd">
+					<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'create', params:[equipment: equipment?.id])}" title="Update equipment status" class="tooltip">
     				${message(code: equipment.getCurrentStatus()?.status?.messageCode+'.'+equipment.getCurrentStatus()?.status?.name)}
     			</a>
 				</td>
