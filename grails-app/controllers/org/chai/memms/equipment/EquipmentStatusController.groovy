@@ -57,20 +57,31 @@ class EquipmentStatusController extends AbstractEntityController{
 	def getEntityClass() {
 		return EquipmentStatus.class;
 	}
+	def deleteEntity(def entity) {
+		
+	}
 	
 	def bindParams(def entity) {
-		log.debug("status values: "+entity+" "+params)
-		if(entity.id==null){
-			entity.changedBy= getUser()
-			entity.statusChangeDate=new Date()
-			entity.current = true
-			def status = EquipmentStatus.findByCurrentAndEquipment(true,entity.equipment)
-			if(status!=null) {
-				status.current=false
-				status.save()
+		if(log.isDebugEnabled()) log.debug("Equipment status params: "+params)
+		
+		def equipment = Equipment.get(params.int("equipment.id"))
+		if (equipment == null || entity.id != null) {
+			response.sendError(404)
+		}else{
+			if(entity.id==null){
+				entity.changedBy= getUser()
+				entity.statusChangeDate=new Date()
+				def status = EquipmentStatus.findByCurrentAndEquipment(true,equipment)
+				if(status!=null && status.dateOfEvent < entity.dateOfEvent) {
+					entity.current = true
+					status.current=false
+					status.save()
+				}else{
+					entity.current = false
+				}
+				entity.properties = params
 			}
-			entity.properties= params
-		}	
+		}
 	}
 	
 	def getModel(def entity) {

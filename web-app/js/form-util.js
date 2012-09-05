@@ -40,21 +40,8 @@ function getHtml(htmls,field){
 	$.each(htmls, function (i, val) {
 		html=html+" "+val.html
 	});
-	
-	if(field=="supplier"){
-		$("#form-aside-supplier .form-aside-hidden").remove();
-		$("#form-aside-supplier").append(html);
-		$(".form-aside-hidden").hide();
-	}
-		
-	if(field=="manufacturer"){
-		$("#form-aside-manufacturer .form-aside-hidden").remove();
-		$("#form-aside-manufacturer").append(html);
-		$(".form-aside-hidden").hide();
-	}
-	if(field=="type"){
-		$("#form-aside-type .form-aside-hidden").remove();
-		$("#form-aside-type").append(html);
-		$(".form-aside-hidden").hide();
-	}	
+	var attrId= "#form-aside-"+field
+	$(attrId+" .form-aside-hidden").remove();
+	$(attrId).append(html);
+	$(".form-aside-hidden").hide();
 }

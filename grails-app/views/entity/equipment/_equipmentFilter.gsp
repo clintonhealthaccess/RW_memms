@@ -20,29 +20,29 @@
 							values="${filterCmd?.equipmentType?.collect{it.names + ' ['+ it.code +']'}}"/></li>
 
 					<li><g:selectFromList name="manufacturer.id"
-							label="${message(code:'provider.manufacture.label')}" bean="${filterCmd}"
+							label="${message(code:'provider.type.manufacturer')}" bean="${filterCmd}"
 							field="manufacturer" optionKey="${filterCmd?.manufacturer? 'id' : null}" multiple="false"
 							ajaxLink="${createLink(controller:'Provider', action:'getAjaxData', params:[class: 'Provider',type:'MANUFACTURE'])}"
 							from="${filterCmd?.manufacturer}" value="${filterCmd?.manufacturer?.id}" 
 							values="${filterCmd?.manufacturer?.collect{it.contact.contactName + ' ['+ it.code +']'}}"/></li>
 
 					<li><g:selectFromList name="supplier.id"
-							label="${message(code:'provider.supplier.label')}" bean="${filterCmd}"
+							label="${message(code:'provider.type.supplier')}" bean="${filterCmd}"
 							field="supplier" optionKey="${filterCmd?.supplier? 'id' : null}" multiple="false"
 							ajaxLink="${createLink(controller:'Provider', action:'getAjaxData', params:[class: 'Provider',type:'SUPPLIER'])}"
 							from="${filterCmd?.supplier}" value="${filterCmd?.supplier?.id}"
 							values="${filterCmd?.manufacturer?.collect{it.contact.contactName + ' ['+ it.code +']'}}"
 							/></li>
 					<li>
-					<li><label>Obsolete</label> <select name="obsolete">
-							<option value="">Please select</option>
-							<option value="true" ${filterCmd?.obsolete?.equals("true")? 'selected' : ''} >True</option>
-							<option value="false" ${filterCmd?.obsolete?.equals("false")? 'selected' : ''}>False</option>
+					<li><label><g:message code="equipment.obsolete.label" /></label> <select name="obsolete">
+							<option value=""><g:message code="default.please.select" /></option>
+							<option value="true" ${filterCmd?.obsolete?.equals("true")? 'selected' : ''} ><g:message code="default.boolean.true" /></option>
+							<option value="false" ${filterCmd?.obsolete?.equals("false")? 'selected' : ''}><g:message code="default.boolean.false" /></option>
 					</select></li>
-					<li><label>Donated</label> <select name="donated">
-							<option value="">Please select</option>
-							<option value="true" ${filterCmd?.donated?.equals("true")? 'selected' : ''}>True</option>
-							<option value="false" ${filterCmd?.donated?.equals("false")? 'selected' : ''}>False</option>
+					<li><label><g:message code="equipment.donate.label" /></label> <select name="donated">
+							<option value=""><g:message code="default.please.select" /></option>
+							<option value="true" ${filterCmd?.donated?.equals("true")? 'selected' : ''}><g:message code="default.boolean.true" /></option>
+							<option value="false" ${filterCmd?.donated?.equals("false")? 'selected' : ''}><g:message code="default.boolean.false" /></option>
 					</select></li>
 					<li><g:selectFromEnum name="status" values="${Status.values()}" field="status" label="${message(code:'equipment.status.label')}" /></li>
 

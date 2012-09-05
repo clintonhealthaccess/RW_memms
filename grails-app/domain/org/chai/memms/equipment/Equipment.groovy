@@ -75,7 +75,9 @@ public class Equipment {
 		room nullable: true, blank: true
 		
 		manufactureDate nullable: false, blank: false, validator:{it <= new Date()}
-		purchaseDate nullable: false, blank: false, validator:{it <= new Date()}
+		purchaseDate nullable: false, blank: false, validator:{ val, obj ->
+			return (val <= new Date()) && (val.after(obj.manufactureDate) || (val.compareTo(obj.manufactureDate)==0))
+			}
 		
 		descriptions nullable: true, blank: true
 		donation nullable: false
@@ -98,6 +100,13 @@ public class Equipment {
 		   		return stat;
 	   return false;
 	}
+	 
+	def getCurrenStatusBasedOnDate = {
+		def currentStatus= null
+		for(def state : status)
+			
+	}
+	
 	
 	String toString() {
 		return "Equipment[id=" + id + "]";

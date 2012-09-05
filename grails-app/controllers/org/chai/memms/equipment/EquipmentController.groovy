@@ -88,7 +88,7 @@ class EquipmentController extends AbstractEntityController{
 	
 	def validateEntity(def entity) {
 		boolean valid = true
-		if(entity.id!=null && params["status"].equals("NONE") && params["dateOfEvent"]){
+		if(entity.id==null && params["status"].equals("NONE") && params["dateOfEvent"]){
 			valid = false
 			entity.errors.rejectValue("status","equipment.status.notselected", "You have to select a status.");
 		}
@@ -214,6 +214,12 @@ class EquipmentController extends AbstractEntityController{
 					q:params['q']
 				])
 
+	}
+	def obsolate = {
+		
+	}
+	def donate ={
+		
 	}
 	
 	def export = {

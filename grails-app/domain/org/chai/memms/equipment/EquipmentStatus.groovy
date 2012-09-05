@@ -61,12 +61,14 @@ class EquipmentStatus {
 	
 	static belongsTo = [equipment:Equipment]
 	
-	boolean isCurrent(){
+	boolean isCurrent(){ 
 		return current
 	}
 	
 	static constraints = {
-		dateOfEvent nullable:false, validator:{it <= new Date()} 
+		dateOfEvent nullable:false, validator:{val, obj ->
+			return (val <= new Date()) &&  (val.after(obj.equipment.purchaseDate) || (val.compareTo(obj.equipment.purchaseDate)==0))
+			} 
 		statusChangeDate nullable:false, validator:{it <= new Date()} 
 		changedBy nullable:false 
 		status nullable: false, blank:false
