@@ -45,13 +45,12 @@
 				</td>
 				<td>					
 					<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'create', params:[equipment: equipment?.id])}" title="Update equipment status" class="tooltip">
-    				${message(code: equipment.getCurrentStatus()?.status?.messageCode+'.'+equipment.getCurrentStatus()?.status?.name)}
-    			</a>
+	    				Will add text later
+	    			</a>
 				</td>
 				<td>${(equipment.obsolete)? '\u2713':'X'}</td>
 				<td>${(equipment.donation)? '\u2713':'X'}</td>
 			</tr>
 		</g:each>
 	</tbody>
-	
 </table>

@@ -1,0 +1,13 @@
+.tipsy { padding: 5px; font-size: 12px; line-height: 1.4; position: absolute; z-index: 100000; letter-spacing: 0.05; }
+  .tipsy-inner { padding:15px 10px 10px 40px; background: url('../images/icon_tip.png') no-repeat #fff 10px 50%; border: 1px solid #ddd; -moz-box-shadow: #ddd 0 0 5px; -webkit-box-shadow: #ddd 0 0 5px; -o-box-shadow: #ddd 0 0 5px; box-shadow: #ddd 0 0 5px; max-width: 400px; color: #425160; text-align: left; }
+  .tipsy-inner { border-radius: 3px; -moz-border-radius:3px; -webkit-border-radius:3px; }
+  .tipsy-arrow { position: absolute; background: url('../images/tipsy.gif') no-repeat top left; width: 9px; height: 5px; }
+  .tipsy-n .tipsy-arrow { top: 0; left: 50%; margin-left: -4px; }
+    .tipsy-nw .tipsy-arrow { top: 0; left: 10px; }
+    .tipsy-ne .tipsy-arrow { top: 0; right: 10px; }
+  .tipsy-s .tipsy-arrow { bottom: 0; left: 50%; margin-left: -4px; background-position: bottom left; }
+    .tipsy-sw .tipsy-arrow { bottom: 0; left: 10px; background-position: bottom left; }
+    .tipsy-se .tipsy-arrow { bottom: 0; right: 10px; background-position: bottom left; }
+  .tipsy-e .tipsy-arrow { top: 50%; margin-top: -4px; right: 0; width: 5px; height: 9px; background-position: top right; }
+  .tipsy-w .tipsy-arrow { top: 50%; margin-top: -4px; left: 0; width: 5px; height: 9px; }
+
