@@ -49,6 +49,8 @@ import org.apache.commons.lang.StringUtils;
  */
 public class Utils {
 	
+	def grailsApplication
+	
 	private final static String DATE_FORMAT = "dd-MM-yyyy";
 	private final static String DATE_FORMAT_TIME = "dd-MM-yyyy hh:mm:ss";
 	public final static String ZIP_FILE_EXTENSION = ".zip";
@@ -104,8 +106,10 @@ public class Utils {
 		return new SimpleDateFormat(DATE_FORMAT).parse(string);
 	}
 	
-	public static boolean containsId(String string, Long id) {
-		return string.matches(".*\\$"+id+"(\\D|\\z|\\s)(.|\\s)*");
+	//TODO implement reg expressions in groovy
+	public static boolean containsId(String word, Long id) {
+		def pattern = ~/".*\\$"+id+"(\\D|\\z|\\s)(.|\\s)*"/
+		return word.matches(pattern);
 	}
 	
 	public static String stripHtml(String htmlString) {
@@ -137,5 +141,21 @@ public class Utils {
 		return exportableClazz;
 	}
 
-	
+	/**
+	 * fieldName has to start with capital letter as
+	 * it is used to create setter of the object field
+	 * @param object
+	 * @param map
+	 * @param fieldName
+	 * @return
+	 */
+	def setLocaleValueInMap(def object, def map, def fieldName){
+		def methodName = 'set'+fieldName
+		grailsApplication.config.i18nFields.locales.each{ loc ->
+			if(map.get(loc) != null)
+				object."$methodName"(map.get(loc),new Locale(loc))
+			else
+				object."$methodName"("",new Locale(loc))
+		}
+	}
 }

@@ -1,4 +1,4 @@
-/** 
+/**
  * Copyright (c) 2012, Clinton Health Access Initiative.
  *
  * All rights reserved.
@@ -25,96 +25,71 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
-package org.chai.memms.equipment
-
-import java.util.Date;
-import i18nfields.I18nFields
+package org.chai.memms.imports;
 
 /**
- * @author Eugene Munyaneza
+ * @author Jean Kahigiso M.
  *
  */
+public class ImporterError {
+	
+	private String fileName;
+	private Integer lineNumber;
+	private String header;
+	private String messageCode;
 
-@i18nfields.I18nFields
-class EquipmentType {
-
-	def languageService
-	enum Observation{		
-		USEDINMEMMS("used.in.memms"),
-		RETIRED("retired"),
-		TOODETAILED("too.detailed"),
-		NOTINSCOPE("not.in.scope")
-		
-		String messageCode = "equipment.type"	
-
-		String name
-		Observation(String name){ this.name=name }
-		String getKey() { return name() }
+	public ImporterError(String fileName, Integer lineNumber, String header, String messageCode) {
+		super();
+		this.fileName = fileName;
+		this.lineNumber = lineNumber;
+		this.header = header;
+		this.messageCode = messageCode;
 	}
 	
-	String code
-	String names
-	String descriptions
-	Observation observation
-	
-	Date addedOn
-	Date lastModifiedOn
-	
-	
-	static i18nFields = ["descriptions","names"]
-	static hasMany = [equipments: Equipment]
-	
-    static constraints = {
-		
-		code nullable: false, blank: false,  unique: true
-		names nullable: true, blank: true
-		descriptions nullable: true, blank: true
-		
-		addedOn nullable: false, blank: false, validator:{it <= new Date()}
-		lastModifiedOn nullable: false, blank: false, validator:{it <= new Date()}
-		
-		observation nullable: false
-    }
-	
-	static mapping = {
-		table "memms_equipment_type"
-		version false
-		descriptions_en type: 'text'
-		descriptions_fr type: 'text'
-		descriptions_rw type: 'text'
-		names_en type: 'text'
-		names_fr type: 'text'
-		names_rw type: 'text'
-		
-	}
-	
-	String toString() {
-		return "EquipmentType[Id=" + id + "code="+code+"]";
-		//return getNames(languageService.getCurrentLanguage()) + ' [' + code + ']'
-	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((code == null) ? 0 : code.hashCode());
+		result = prime * result
+				+ ((fileName == null) ? 0 : fileName.hashCode());
+		result = prime * result + ((header == null) ? 0 : header.hashCode());
+		result = prime * result
+				+ ((lineNumber == null) ? 0 : lineNumber.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
-		if (this.is(obj))
+		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		EquipmentType other = (EquipmentType) obj;
-		if (code == null) {
-			if (other.code != null)
+		ImporterError other = (ImporterError) obj;
+		if (fileName == null) {
+			if (other.fileName != null)
 				return false;
-		} else if (!code.equals(other.code))
+		} else if (!fileName.equals(other.fileName))
+			return false;
+		if (header == null) {
+			if (other.header != null)
+				return false;
+		} else if (!header.equals(other.header))
+			return false;
+		if (lineNumber == null) {
+			if (other.lineNumber != null)
+				return false;
+		} else if (!lineNumber.equals(other.lineNumber))
 			return false;
 		return true;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "ImporterError [fileName=" + fileName + ", lineNumber="
+				+ lineNumber + ", header=" + header + ", messageCode="
+				+ messageCode + "]";
+	}
+
 }
