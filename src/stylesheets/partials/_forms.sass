@@ -401,6 +401,7 @@ form.search-form
       +box-shadow(rgba(0, 0, 0, 0.08) 1px 1px 4px inset)
 
 .items
+  border-collapse: separate
   margin-bottom: 15px
   width: 100%
   th, td
@@ -432,6 +433,8 @@ form.search-form
         opacity: 0.7
     &:first-child th
       border-bottom: 1px solid rgba(0, 0, 0, 0.15)
+    &:first-child td
+      border-top: 0
     &:last-child td
       border-bottom: 1px solid rgba(0, 0, 0, 0.08)
   &.spaced
