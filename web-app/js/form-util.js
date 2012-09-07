@@ -31,6 +31,8 @@ function getRichTextContent(){
 		})
 	});
 }
+
+
 /**
  * 
  * form-aside loader
@@ -44,4 +46,28 @@ function getHtml(htmls,field){
 	$(attrId+" .form-aside-hidden").remove();
 	$(attrId).append(html);
 	$(".form-aside-hidden").hide();
+}
+/**
+ * Edit donation and obsolete
+ */
+function updateEquipment(baseUrl){
+$(".list-check-box-spinner").hide();
+$(".list-check-box").change(function(event){
+	$(event.target).hide();
+    $(event.target).prev().show();
+	$.ajax({
+		type :'GET',
+		dataType: 'json',
+		data:{"equipment.id":event.target.id,"field":event.target.name},
+		url: baseUrl,
+		success: function(data) {
+			$(event.target).prev().fadeOut("slow");
+			$(event.target).fadeIn("slow");
+		},
+		error: function(data) {
+			$(event.target).prev().fadeOut("slow");
+			$(event.target).fadeIn("slow");
+		}
+	});
+})
 }

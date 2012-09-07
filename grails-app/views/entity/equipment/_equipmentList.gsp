@@ -44,15 +44,24 @@
 					<g:message code="equipment.room.label"/>: ${equipment.room}<br/>
 				</td>
 				<td>
-					${message(code: equipment.getCurrentStatus()?.status?.messageCode+'.'+equipment.getCurrentStatus()?.status?.name)}
-					<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'create', params:[equipment: equipment?.id])}" class="next medium gray">
-  	    				<g:message code="equipment.change.status.label" default="Change Status"/>
+					<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'create', params:[equipment: equipment?.id])}" class="tooltip">
+  	    				${message(code: equipment.getCurrentState()?.status?.messageCode+'.'+equipment.getCurrentState()?.status?.name)}
   	    			</a>
 				</td>
-				<td>${(equipment.obsolete)? '\u2713':'X'}</td>
-				<td>${(equipment.donation)? '\u2713':'X'}</td>
+				<td>
+					<g:listCheckBox name="obsolete" id="${equipment.id}" checked="${(!equipment.obsolete)?:'checked'}"/>
+				</td>
+				<td>
+					<g:listCheckBox name="donation" id="${equipment.id}" checked="${(!equipment.donation)?:'checked'}"/>
+				</td>
 			</tr>
 		</g:each>
 	</tbody>
 	
 </table>
+<script type="text/javascript">
+	$(document).ready(function() {
+		var url = "${createLink(controller:'equipment',action: 'updateDonationAndObsolete')}"
+		updateEquipment(url);
+	});
+</script>

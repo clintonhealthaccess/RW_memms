@@ -81,24 +81,18 @@ class EquipmentService {
 		
 		def criteria = Equipment.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			if(dataLocation != null){
+			if(dataLocation != null)
 				eq('dataLocation',dataLocation)
-			}
-			if(supplier != null){
+			if(supplier != null)
 				eq ("supplier", supplier)
-			}
-			if(manufacturer != null){
+			if(manufacturer != null)
 				eq ("manufacturer", manufacturer)
-			}
-			if(equipmentType != null){
+			if(equipmentType != null)
 				eq ("type", equipmentType)
-			}
-			if(donation){
+			if(donation)
 				eq ("donation", (donation.equals('true'))?true:false)
-			}
-			if(obsolete){
+			if(obsolete)
 				eq ("obsolete", (obsolete.equals('true'))?true:false)
-			}
 			if(!status.equals(Status.NONE)){
 				createAlias("status","t")
 				and{

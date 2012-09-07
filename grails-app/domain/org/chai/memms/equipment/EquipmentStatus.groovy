@@ -53,25 +53,25 @@ class EquipmentStatus {
 		String getKey() { return name() }
 	}
 	
+	
 	Date dateOfEvent;
 	Date statusChangeDate;
 	User changedBy
 	Status status
-	boolean current
+	Boolean current
 	
 	static belongsTo = [equipment:Equipment]
 	
-	boolean isCurrent(){ 
+	def isCurrent(){
 		return current
 	}
-	
 	static constraints = {
 		dateOfEvent nullable:false, validator:{val, obj ->
 			return (val <= new Date()) &&  (val.after(obj.equipment.purchaseDate) || (val.compareTo(obj.equipment.purchaseDate)==0))
 			} 
-		statusChangeDate nullable:false, validator:{it <= new Date()} 
-		changedBy nullable:false 
-		status nullable: false, blank:false
+		statusChangeDate nullable: false, validator:{it <= new Date()} 
+		changedBy nullable: false 
+		status blank: false, nullable: false, inList:[Status.OPERATIONAL,Status.INSTOCK,Status.UNDERMAINTENANCE,Status.FORDISPOSAL,Status.DISPOSED]
 		current nullable: false
 	}
 	
@@ -79,4 +79,12 @@ class EquipmentStatus {
 		table "memms_equipment_status"
 		version false
 	}
+
+	@Override
+	public String toString() {
+		return "EquipmentStatus [dateOfEvent=" + dateOfEvent + ", changedBy="
+				+ changedBy + ", status=" + status + ", current=" + current
+				+ "]";
+	}	
+	
 }
