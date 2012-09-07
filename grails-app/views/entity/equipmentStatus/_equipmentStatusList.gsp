@@ -4,10 +4,10 @@
 	<thead>
 		<tr>
 			<th></th>
-			<g:sortableColumn property="status" params="[equipment: equipment?.id]" title="${message(code: 'equipment.status.label')}" />
-			<g:sortableColumn property="dateOfEvent" params="[equipment: equipment?.id]" title="${message(code: 'equipment.status.date.of.event.label')}" />
-			<g:sortableColumn property="statusChangeDate" params="[equipment: equipment?.id]" title="${message(code: 'equipment.status.recordedon.label')}" />
-			<g:sortableColumn property="current" params="[equipment: equipment?.id]" title="${message(code: 'equipment.status.current.label')}" />
+			<g:sortableColumn property="status" params="['equipment.id': equipment?.id]" title="${message(code: 'equipment.status.label')}" />
+			<g:sortableColumn property="dateOfEvent" params="['equipment.id': equipment?.id]" title="${message(code: 'equipment.status.date.of.event.label')}" />
+			<g:sortableColumn property="statusChangeDate" params="['equipment.id': equipment?.id]" title="${message(code: 'equipment.status.recordedon.label')}" />
+			<g:sortableColumn property="current" params="['equipment.id': equipment?.id]" title="${message(code: 'equipment.status.current.label')}" />
 		</tr>
 	</thead>
 	<tbody>		
@@ -25,7 +25,7 @@
     			<td>${status.status}</td>
     			<td>${Utils.formatDate(status?.dateOfEvent)}</td>
     			<td>${Utils.formatDate(status?.statusChangeDate)}</td>
-    			<td>${status.current}</td>
+    			<td>${(status.current)? '\u2713':'X'}</td>
     		</tr>
    		</g:each>
 	</tbody>

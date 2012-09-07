@@ -38,6 +38,7 @@ import i18nfields.I18nFields
 public class Provider{
 	
 	enum Type{
+		NONE("none"),
 		BOTH("both"),
 		MANUFACTURER("manufacturer"),
 		SUPPLIER("supplier")
@@ -58,7 +59,7 @@ public class Provider{
    
 	static constraints ={
 		code nullable: false, blank: false, unique: true
-		type nullable: false
+		type nullable: false, inList: [Type.BOTH,Type.MANUFACTURER,Type.SUPPLIER]
 	}
 	static mapping = {
 	    version false

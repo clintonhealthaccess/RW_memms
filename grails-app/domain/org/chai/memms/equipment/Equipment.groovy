@@ -96,8 +96,12 @@ public class Equipment {
 	}
 	
 	def getCurrentState() {
-		if(status)
-			return getCurrentStatusBasedOnTime();
+		if(status){
+			for(EquipmentStatus state : status)
+				if(state.isCurrent().is(getCurrentStatusBasedOnTime())) return state 
+		 setCurrentStatus()
+		 return getCurrentStatusBasedOnTime();
+		}
 		return null
 	}
 	def setCurrentStatus(){
@@ -114,11 +118,9 @@ public class Equipment {
 		}
 	}
 
-	
 	def getCurrentStatusBasedOnTime(){
 		EquipmentStatus currentStatus = status.asList()[0]
 		for(EquipmentStatus state : status){
-			if(state.isCurrent()) return state
 			if(state.dateOfEvent.after(currentStatus.dateOfEvent)){
 				currentStatus= state;
 			}else if(state.dateOfEvent.compareTo(currentStatus.dateOfEvent)==0){

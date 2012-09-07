@@ -6,7 +6,6 @@
 			<g:sortableColumn property="serialNumber" defaultOrder="asc" title="${message(code: 'equipment.serial.number.label', default: 'Serial Number')}" params="[q:q,location:dataLocation.id]" />
 			<g:sortableColumn property="type" defaultOrder="asc" title="${message(code: 'equipment.type.label', default: 'Type')}" params="[q:q,location:dataLocation.id]" />
 			<g:sortableColumn property="model" defaultOrder="asc" title="${message(code: 'equipment.model.label', default: 'Model')}" params="[q:q,location:dataLocation.id]" />
-			
 			<g:sortableColumn property="manufacturer" defaultOrder="asc" title="${message(code: 'provider.manufacturer.label', default: 'manufacturer')}" params="[q:q,location:dataLocation.id]" />
 			<g:sortableColumn property="supplier" defaultOrder="asc" title="${message(code: 'provider.supplier.label', default: 'Supplier')}" params="[q:q,location:dataLocation.id]" />
 			<th><g:message code="location.label"/></th>
