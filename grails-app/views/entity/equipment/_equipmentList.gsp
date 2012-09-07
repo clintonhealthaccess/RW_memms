@@ -44,7 +44,7 @@
 					<g:message code="equipment.room.label"/>: ${equipment.room}<br/>
 				</td>
 				<td>
-					<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'create', params:[equipment: equipment?.id])}" class="tooltip">
+					<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'create', params:[equipment: equipment?.id])}" title="Update equipment status" class="tooltip">
   	    				${message(code: equipment.getCurrentState()?.status?.messageCode+'.'+equipment.getCurrentState()?.status?.name)}
   	    			</a>
 				</td>
@@ -56,8 +56,7 @@
 				</td>
 			</tr>
 		</g:each>
-	</tbody>
-	
+	</tbody>	
 </table>
 <script type="text/javascript">
 	$(document).ready(function() {

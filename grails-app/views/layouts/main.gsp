@@ -79,12 +79,6 @@
       
     </div>
     
-    <div>
-  		<g:if test="${flash.message}">
-  			<div>${flash.message}</div>
-  		</g:if>	
-  	</div>
-    
   </div>
   
   <div id="navigation">
@@ -123,6 +117,12 @@
       </ul>
     </div>
   </div>
+  
+  <div class="flash-message">
+		<g:if test="${flash.message}">
+      <p>${flash.message}</p>
+		</g:if>	
+	</div>
 	
 	<div id="content">
 	  <div class="wrapper">

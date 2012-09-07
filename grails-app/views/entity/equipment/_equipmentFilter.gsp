@@ -11,7 +11,7 @@
 			</g:hasErrors>
 
 			<g:form url="[controller:'equipment', action:'filter']" method="get" useToken="false" class="filters-box">
-				<ul>
+				<ul class="filters-list">
 					<li><g:selectFromList name="equipmentType.id"
 							label="${message(code:'equipment.type.label')}" bean="${filterCmd}"
 							field="type" optionKey="${filterCmd?.equipmentType? 'id' : null}" multiple="false"

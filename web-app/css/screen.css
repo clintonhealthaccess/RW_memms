@@ -55,6 +55,7 @@ a.no-link { color: #0059a2; text-decoration: none; }
 .section-title { background: #e9f4fc; color: #258cd5; display: inline-block; font-family: Arial, sans-serif; font-weight: bold; left: -15px; line-height: 1.5; margin: 0 0 10px 0; max-width: 850px; padding: 7px 20px 7px 22px; position: relative; -moz-border-radius-topright: 100px; -webkit-border-top-right-radius: 100px; border-top-right-radius: 100px; -moz-border-radius-bottomright: 100px; -webkit-border-bottom-right-radius: 100px; border-bottom-right-radius: 100px; -webkit-box-shadow: #e0ebf3, -2px, -2px, 2px, 0, inset; -moz-box-shadow: #e0ebf3, -2px, -2px, 2px, 0, inset; box-shadow: #e0ebf3, -2px, -2px, 2px, 0, inset; text-shadow: white, 0, 1px, 0; }
 /* line 49, /Users/jeankahigiso/Documents/springsourceworkspace/memms/src/stylesheets/partials/_shared.sass */
 .section-title span { background: #258cd5; color: white; display: block; font-weight: bold; height: 18px; left: -10px; padding: 3px; position: absolute; text-align: center; top: 4px; width: 18px; -webkit-border-radius: 50px; -moz-border-radius: 50px; -ms-border-radius: 50px; -o-border-radius: 50px; border-radius: 50px; text-shadow: #439e07, 0, 1px, 0; }
+<<<<<<< HEAD
 
 /* line 64, /Users/jeankahigiso/Documents/springsourceworkspace/memms/src/stylesheets/partials/_shared.sass */
 #questions .incomplete h4 span, #questions .invalid h4 span, #questions span.question-default { background: #258cd5; color: #e9f4fc; text-shadow: #036ab3, 0, 1px, 0; }
@@ -84,9 +85,43 @@ a.no-link { color: #0059a2; text-decoration: none; }
 .fourth { float: left; width: 25%; }
 
 /* line 92, /Users/jeankahigiso/Documents/springsourceworkspace/memms/src/stylesheets/partials/_shared.sass */
+=======
+/* line 64, ../../src/stylesheets/partials/_shared.sass */
+.section-title.alt { left: 0; }
+
+/* line 67, ../../src/stylesheets/partials/_shared.sass */
+#questions .incomplete h4 span, #questions .invalid h4 span, #questions span.question-default { background: #258cd5; color: #e9f4fc; text-shadow: #036ab3, 0, 1px, 0; }
+
+/* line 72, ../../src/stylesheets/partials/_shared.sass */
+.follow { background: url("../images/icons/follow.png") no-repeat right center !important; padding-right: 20px !important; }
+
+/* line 76, ../../src/stylesheets/partials/_shared.sass */
+.hidden { display: none; }
+
+/* line 79, ../../src/stylesheets/partials/_shared.sass */
+.push-10 { margin-bottom: 10px; }
+
+/* line 81, ../../src/stylesheets/partials/_shared.sass */
+.push-top-10 { margin-top: 10px; }
+
+/* line 83, ../../src/stylesheets/partials/_shared.sass */
+.push-15 { margin-bottom: 15px; }
+
+/* line 85, ../../src/stylesheets/partials/_shared.sass */
+.push-20 { margin-bottom: 20px !important; }
+
+/* line 88, ../../src/stylesheets/partials/_shared.sass */
+.third { float: left; width: 33%; }
+
+/* line 91, ../../src/stylesheets/partials/_shared.sass */
+.fourth { float: left; width: 25%; }
+
+/* line 95, ../../src/stylesheets/partials/_shared.sass */
+>>>>>>> design
 ul.horizontal { *zoom: 1; }
 /* line 38, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 ul.horizontal:after { content: ""; display: table; clear: both; }
+<<<<<<< HEAD
 /* line 94, /Users/jeankahigiso/Documents/springsourceworkspace/memms/src/stylesheets/partials/_shared.sass */
 ul.horizontal li { display: inline; float: left; margin-right: 5px; }
 /* line 98, /Users/jeankahigiso/Documents/springsourceworkspace/memms/src/stylesheets/partials/_shared.sass */
@@ -109,10 +144,35 @@ ul.horizontal li.last { margin-right: 0; }
 .entity-form-container h5 { color: #888888; font-size: 16px; font-weight: bold; margin-top: 20px; }
 
 /* line 132, /Users/jeankahigiso/Documents/springsourceworkspace/memms/src/stylesheets/partials/_shared.sass */
+=======
+/* line 97, ../../src/stylesheets/partials/_shared.sass */
+ul.horizontal li { display: inline; float: left; margin-right: 5px; }
+/* line 101, ../../src/stylesheets/partials/_shared.sass */
+ul.horizontal li.last { margin-right: 0; }
+
+/* line 104, ../../src/stylesheets/partials/_shared.sass */
+.italic { font-style: italic; }
+
+/* line 107, ../../src/stylesheets/partials/_shared.sass */
+.edit-link { background: url("../images/icons/mini_edit.png") no-repeat; display: inline-block; height: 14px; margin-left: 3px; opacity: 0.3; text-indent: -9999px; width: 12px; }
+/* line 115, ../../src/stylesheets/partials/_shared.sass */
+.edit-link:hover { opacity: 0.6; }
+
+/* line 118, ../../src/stylesheets/partials/_shared.sass */
+.delete-link { background: url("../images/icons/mini_delete.png") no-repeat; display: inline-block; height: 14px; margin-left: 3px; opacity: 0.3; text-indent: -9999px; width: 12px; }
+/* line 126, ../../src/stylesheets/partials/_shared.sass */
+.delete-link:hover { opacity: 0.6; }
+
+/* line 129, ../../src/stylesheets/partials/_shared.sass */
+.entity-form-container h5 { color: #888888; font-size: 16px; font-weight: bold; margin-top: 20px; }
+
+/* line 135, ../../src/stylesheets/partials/_shared.sass */
+>>>>>>> design
 .login-heading { color: #258cd5; font-size: 18px; font-weight: bold; padding: 30px 15px 10px; text-align: center; text-transform: uppercase; *zoom: 1; }
 /* line 38, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .login-heading:after { content: ""; display: table; clear: both; }
 
+<<<<<<< HEAD
 /* line 141, /Users/jeankahigiso/Documents/springsourceworkspace/memms/src/stylesheets/partials/_shared.sass */
 .nice-button { border: 1px solid rgba(0, 0, 0, 0.1); font: 13px arial !important; padding: 12px 18px 10px 40px; text-decoration: none; -webkit-border-radius: 3px; -moz-border-radius: 3px; -ms-border-radius: 3px; -o-border-radius: 3px; border-radius: 3px; -webkit-box-shadow: #d8e3eb 1px 1px 3px inset; -moz-box-shadow: #d8e3eb 1px 1px 3px inset; box-shadow: #d8e3eb 1px 1px 3px inset; text-shadow: white 0 1px 0; }
 /* line 150, /Users/jeankahigiso/Documents/springsourceworkspace/memms/src/stylesheets/partials/_shared.sass */
@@ -157,6 +217,52 @@ ul.horizontal li.last { margin-right: 0; }
 /* line 225, /Users/jeankahigiso/Documents/springsourceworkspace/memms/src/stylesheets/partials/_shared.sass */
 .dropdown .dropdown-list li a { color: #258cd5; font-size: 11px; font-weight: bold; text-decoration: none; text-shadow: white 0 1px 0; }
 /* line 232, /Users/jeankahigiso/Documents/springsourceworkspace/memms/src/stylesheets/partials/_shared.sass */
+=======
+/* line 144, ../../src/stylesheets/partials/_shared.sass */
+.nice-button { border: 1px solid rgba(0, 0, 0, 0.1); font: 13px arial !important; padding: 12px 18px 10px 40px; text-decoration: none; -webkit-border-radius: 3px; -moz-border-radius: 3px; -ms-border-radius: 3px; -o-border-radius: 3px; border-radius: 3px; -webkit-box-shadow: #d8e3eb 1px 1px 3px inset; -moz-box-shadow: #d8e3eb 1px 1px 3px inset; box-shadow: #d8e3eb 1px 1px 3px inset; text-shadow: white 0 1px 0; }
+/* line 153, ../../src/stylesheets/partials/_shared.sass */
+.nice-button.program { background: url("../images/icons/star.png") no-repeat 14px 50% #fcfcfc; }
+/* line 155, ../../src/stylesheets/partials/_shared.sass */
+.nice-button.program:hover, .nice-button.program:focus { background: url("../images/icons/star_hover.png") no-repeat 14px 50%; }
+/* line 157, ../../src/stylesheets/partials/_shared.sass */
+.nice-button.survey { background: url("../images/icons/survey.png") no-repeat 14px 50% #fcfcfc; }
+/* line 159, ../../src/stylesheets/partials/_shared.sass */
+.nice-button.survey:hover, .nice-button.survey:focus { background: url("../images/icons/survey_hover.png") no-repeat 14px 50% #fcfcfc; }
+/* line 161, ../../src/stylesheets/partials/_shared.sass */
+.nice-button.location { background: url("../images/icons/marker.png") no-repeat 14px 50% #fcfcfc; }
+/* line 163, ../../src/stylesheets/partials/_shared.sass */
+.nice-button.location:hover, .nice-button.location:focus { background: url("../images/icons/marker_hover.png") no-repeat 14px 50% #fcfcfc; }
+/* line 165, ../../src/stylesheets/partials/_shared.sass */
+.nice-button.time { background: url("../images/icons/calendar.png") no-repeat 14px 50% #fcfcfc; }
+/* line 167, ../../src/stylesheets/partials/_shared.sass */
+.nice-button.time:hover, .nice-button.time:focus { background: url("../images/icons/calendar_hover.png") no-repeat 14px 50% #fcfcfc; }
+/* line 169, ../../src/stylesheets/partials/_shared.sass */
+.nice-button.datalocation { background: url("../images/icons/datalocation.png") no-repeat 14px 50% #fcfcfc; }
+/* line 171, ../../src/stylesheets/partials/_shared.sass */
+.nice-button.datalocation:hover, .nice-button.datalocation:focus { background: url("../images/icons/datalocation_hover.png") no-repeat 14px 50% #fcfcfc; }
+
+/* line 174, ../../src/stylesheets/partials/_shared.sass */
+.nice-button2 { text-decoration: none; background: #e9f4fc; border: 1px solid #bed3e3; display: inline-block; margin-bottom: 3px; padding: 4px 4px; text-align: center; width: 42%; -webkit-border-radius: 3px; -moz-border-radius: 3px; -ms-border-radius: 3px; -o-border-radius: 3px; border-radius: 3px; }
+/* line 184, ../../src/stylesheets/partials/_shared.sass */
+.nice-button2:hover, .nice-button2:focus { border-color: #238eda; }
+
+/* line 187, ../../src/stylesheets/partials/_shared.sass */
+.with-highlight { margin-right: 10px; }
+/* line 189, ../../src/stylesheets/partials/_shared.sass */
+.with-highlight:hover, .with-highlight:focus, .with-highlight.dropdown-selected { background-color: #258cd5 !important; color: white; position: relative; text-decoration: none; z-index: 5; -webkit-box-shadow: #036ab3 0 2px 9px 0 inset; -moz-box-shadow: #036ab3 0 2px 9px 0 inset; box-shadow: #036ab3 0 2px 9px 0 inset; text-shadow: #0059a2 0 1px 0; -webkit-border-radius: 3px; -moz-border-radius: 3px; -ms-border-radius: 3px; -o-border-radius: 3px; border-radius: 3px; -webkit-transition: all 0.3s; -moz-transition: all 0.3s; -o-transition: all 0.3s; transition: all 0.3s; }
+
+/* line 200, ../../src/stylesheets/partials/_shared.sass */
+.dropdown { position: relative; }
+/* line 203, ../../src/stylesheets/partials/_shared.sass */
+.dropdown .dropdown-list { padding-bottom: 6px; background: #cfe4f4; border: 1px solid #adc2d2; display: none; min-width: 200px; opacity: 0.95; position: absolute; z-index: 10; -moz-border-radius-bottomleft: 3px; -webkit-border-bottom-left-radius: 3px; border-bottom-left-radius: 3px; -moz-border-radius-bottomright: 3px; -webkit-border-bottom-right-radius: 3px; border-bottom-right-radius: 3px; -moz-border-radius-topright: 3px; -webkit-border-top-right-radius: 3px; border-top-right-radius: 3px; -webkit-box-shadow: #cccccc 2px 2px 3px, #bed3e3 0 0 8px 3px inset; -moz-box-shadow: #cccccc 2px 2px 3px, #bed3e3 0 0 8px 3px inset; box-shadow: #cccccc 2px 2px 3px, #bed3e3 0 0 8px 3px inset; }
+/* line 216, ../../src/stylesheets/partials/_shared.sass */
+.dropdown .dropdown-list li { margin-left: 10px; padding-top: 8px; padding-bottom: 8px; border-bottom: 1px dotted #b6cbdb; display: block; white-space: nowrap; }
+/* line 224, ../../src/stylesheets/partials/_shared.sass */
+.dropdown .dropdown-list li:last-child { border: none; padding-bottom: 0px; }
+/* line 228, ../../src/stylesheets/partials/_shared.sass */
+.dropdown .dropdown-list li a { color: #258cd5; font-size: 11px; font-weight: bold; text-decoration: none; text-shadow: white 0 1px 0; }
+/* line 235, ../../src/stylesheets/partials/_shared.sass */
+>>>>>>> design
 .dropdown .dropdown-list li a:hover { color: #1f7cbd; }
 
 /* line 1, /Users/jeankahigiso/Documents/springsourceworkspace/memms/src/stylesheets/partials/_layout.sass */
@@ -438,13 +544,21 @@ ul.horizontal li.last { margin-right: 0; }
 /* line 53, /Users/jeankahigiso/Documents/springsourceworkspace/memms/src/stylesheets/partials/_forms.sass */
 .go-back:hover, .go-back:focus { opacity: 1; }
 
+<<<<<<< HEAD
 /* line 55, /Users/jeankahigiso/Documents/springsourceworkspace/memms/src/stylesheets/partials/_forms.sass */
 .form-aside-hidden { display: none; }
 
 /* line 57, /Users/jeankahigiso/Documents/springsourceworkspace/memms/src/stylesheets/partials/_forms.sass */
+=======
+/* line 55, ../../src/stylesheets/partials/_forms.sass */
+.form-aside-hidden { display: none; }
+
+/* line 57, ../../src/stylesheets/partials/_forms.sass */
+>>>>>>> design
 .facility-type { background: #f6fdeb; border: 1px solid #e5ecda; margin: 15px; padding: 11px 15px; width: 940px; -webkit-border-radius: 5px; -moz-border-radius: 5px; -ms-border-radius: 5px; -o-border-radius: 5px; border-radius: 5px; *zoom: 1; }
 /* line 38, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .facility-type:after { content: ""; display: table; clear: both; }
+<<<<<<< HEAD
 /* line 65, /Users/jeankahigiso/Documents/springsourceworkspace/memms/src/stylesheets/partials/_forms.sass */
 .facility-type.no-margin { margin: 0 0 15px; }
 /* line 67, /Users/jeankahigiso/Documents/springsourceworkspace/memms/src/stylesheets/partials/_forms.sass */
@@ -546,13 +660,121 @@ ul.filtered li:hover { background-color: yellow; }
 .element-list-row { background: #fafafa; border: 1px solid #cfe4f4; padding: 15px; position: relative; }
 
 /* line 260, /Users/jeankahigiso/Documents/springsourceworkspace/memms/src/stylesheets/partials/_forms.sass */
+=======
+/* line 65, ../../src/stylesheets/partials/_forms.sass */
+.facility-type.no-margin { margin: 0 0 15px; }
+/* line 67, ../../src/stylesheets/partials/_forms.sass */
+.facility-type h4 { color: #888888; float: left; font-size: 12px; padding: 3px 5px 0 0; }
+/* line 72, ../../src/stylesheets/partials/_forms.sass */
+.facility-type #facility-type-filter { color: #258cd5; font-size: 11px; }
+
+/* line 76, ../../src/stylesheets/partials/_forms.sass */
+.buttons { border-top: 1px solid #eeeeee; padding: 15px 7px; }
+
+/* line 80, ../../src/stylesheets/partials/_forms.sass */
+button, input[type=submit], .next { background: #65c029; border: 1px solid #439e07; color: #e9f4fc; cursor: pointer; display: inline-block; font: bold 14px/1 Arial, sans-serif; padding: 6px 40px; text-decoration: none; -webkit-border-radius: 3px; -moz-border-radius: 3px; -ms-border-radius: 3px; -o-border-radius: 3px; border-radius: 3px; background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #6ec932), color-stop(100%, #5cb720)); background: -webkit-linear-gradient(#6ec932, #5cb720); background: -moz-linear-gradient(#6ec932, #5cb720); background: -o-linear-gradient(#6ec932, #5cb720); background: linear-gradient(#6ec932, #5cb720); text-shadow: #328d00 0 1px 0; }
+/* line 92, ../../src/stylesheets/partials/_forms.sass */
+button:hover, button:focus, input[type=submit]:hover, input[type=submit]:focus, .next:hover, .next:focus { background: #439e07; border: 1px solid #328d00; color: white; background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #65c029), color-stop(100%, #54af18)); background: -webkit-linear-gradient(#65c029, #54af18); background: -moz-linear-gradient(#65c029, #54af18); background: -o-linear-gradient(#65c029, #54af18); background: linear-gradient(#65c029, #54af18); }
+/* line 97, ../../src/stylesheets/partials/_forms.sass */
+button:active, input[type=submit]:active, .next:active { position: relative; top: 2px; -webkit-box-shadow: #dddddd 0px 1px 1px; -moz-box-shadow: #dddddd 0px 1px 1px; box-shadow: #dddddd 0px 1px 1px; }
+/* line 101, ../../src/stylesheets/partials/_forms.sass */
+button#cancel-button, input[type=submit]#cancel-button, .next#cancel-button { background: none; border: none; color: #d30000; font-size: 11px; padding: 7px 10px; text-decoration: underline; -webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none; background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #ffffff)); background: -webkit-linear-gradient(#ffffff, #ffffff); background: -moz-linear-gradient(#ffffff, #ffffff); background: -o-linear-gradient(#ffffff, #ffffff); background: linear-gradient(#ffffff, #ffffff); text-shadow: white 0 0 0; }
+/* line 111, ../../src/stylesheets/partials/_forms.sass */
+button.medium, input[type=submit].medium, .next.medium { font-size: 11px; padding: 5px 15px; text-shadow: rgba(0, 0, 0, 0.2) 0 1px 0; }
+/* line 115, ../../src/stylesheets/partials/_forms.sass */
+button.gray, input[type=submit].gray, .next.gray { background: #d9d9d9; border: 1px solid #dddddd; color: #666666; -webkit-box-shadow: white 0px 3px 1px; -moz-box-shadow: white 0px 3px 1px; box-shadow: white 0px 3px 1px; background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #eeeeee), color-stop(100%, #e9e9e9)); background: -webkit-linear-gradient(#eeeeee, #e9e9e9); background: -moz-linear-gradient(#eeeeee, #e9e9e9); background: -o-linear-gradient(#eeeeee, #e9e9e9); background: linear-gradient(#eeeeee, #e9e9e9); text-shadow: white 0 1px 0; }
+/* line 122, ../../src/stylesheets/partials/_forms.sass */
+button.gray:hover, button.gray:focus, input[type=submit].gray:hover, input[type=submit].gray:focus, .next.gray:hover, .next.gray:focus { background: #439e07; border: 1px solid #328d00; color: white; background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #65c029), color-stop(100%, #54af18)); background: -webkit-linear-gradient(#65c029, #54af18); background: -moz-linear-gradient(#65c029, #54af18); background: -o-linear-gradient(#65c029, #54af18); background: linear-gradient(#65c029, #54af18); text-shadow: #328d00 0 1px 0; }
+/* line 128, ../../src/stylesheets/partials/_forms.sass */
+button.import, input[type=submit].import, .next.import { margin-right: 5px; }
+/* line 130, ../../src/stylesheets/partials/_forms.sass */
+button.push-r, input[type=submit].push-r, .next.push-r { margin-right: 5px; }
+
+/* line 133, ../../src/stylesheets/partials/_forms.sass */
+.edit-button, .delete-button { display: inline-block; height: 12px; opacity: 0.3; text-indent: -9999em; width: 12px; }
+/* line 139, ../../src/stylesheets/partials/_forms.sass */
+.edit-button:hover, .edit-button:focus, .delete-button:hover, .delete-button:focus { opacity: 1; }
+
+/* line 142, ../../src/stylesheets/partials/_forms.sass */
+.edit-button { background: url("../images/icons/mini_edit.png") no-repeat center; }
+
+/* line 144, ../../src/stylesheets/partials/_forms.sass */
+.delete-button { background: url("../images/icons/mini_delete.png") no-repeat center; }
+
+/* line 147, ../../src/stylesheets/partials/_forms.sass */
+select { background: #f6f6f6; border: 1px solid #b6c1c9; color: #444444; font: normal 12px Arial, sans-serif; padding: 2px; min-width: 140px; -webkit-box-shadow: #d8e3eb 1px 1px 3px 0 inset; -moz-box-shadow: #d8e3eb 1px 1px 3px 0 inset; box-shadow: #d8e3eb 1px 1px 3px 0 inset; }
+/* line 155, ../../src/stylesheets/partials/_forms.sass */
+select:hover, select:focus { background: #ecf7ff; border-color: #258cd5; }
+
+/* line 159, ../../src/stylesheets/partials/_forms.sass */
+.focus-field { border: solid 1px #c7d2da; background: #effaff; color: #333333; padding: 3px; }
+
+/* line 165, ../../src/stylesheets/partials/_forms.sass */
+.idle-field { background: #f9f9f9; border: 1px solid #b6c1c9; color: #444444; font: normal 12px Arial, sans-serif; padding: 3px; -webkit-box-shadow: #d8e3eb, 1px, 1px, 3px, 0, inset; -moz-box-shadow: #d8e3eb, 1px, 1px, 3px, 0, inset; box-shadow: #d8e3eb, 1px, 1px, 3px, 0, inset; }
+/* line 172, ../../src/stylesheets/partials/_forms.sass */
+.idle-field:hover, .idle-field:focus { background: #ecf7ff; border-color: #258cd5; }
+
+/* line 176, ../../src/stylesheets/partials/_forms.sass */
+.completed-field { background: #ededed; color: #333333; border: solid 1px #65c029; }
+
+/* line 181, ../../src/stylesheets/partials/_forms.sass */
+.ajax-search-field { width: 340px; }
+
+/* line 184, ../../src/stylesheets/partials/_forms.sass */
+.login-field { background: #e9f4fc; border: 1px solid #b6c1c9; color: #444444; font: normal 18px "Lucida Grande", Arial, sans-serif; padding: 4px; text-align: center; width: 154px; -webkit-box-shadow: #d8e3eb, 1px, 1px, 3px, 0, inset; -moz-box-shadow: #d8e3eb, 1px, 1px, 3px, 0, inset; box-shadow: #d8e3eb, 1px, 1px, 3px, 0, inset; }
+/* line 193, ../../src/stylesheets/partials/_forms.sass */
+.login-field:hover, .login-field:focus { background: #ecf7ff; border-color: #258cd5; }
+
+/* line 198, ../../src/stylesheets/partials/_forms.sass */
+textarea.login-field { width: 400px; height: 50px; text-align: left; }
+
+/* line 204, ../../src/stylesheets/partials/_forms.sass */
+.login-label { color: #258cd5; font-family: "Lucida Grande", Arial, sans-serif; font-size: 11px; margin: 0 auto; padding: 3px; text-align: center; width: 154px; }
+
+/* line 213, ../../src/stylesheets/partials/_forms.sass */
+ul.filtered { border: 1px solid lightgrey; padding: 4px; height: 270px; overflow: auto; }
+/* line 219, ../../src/stylesheets/partials/_forms.sass */
+ul.filtered li { display: block; white-space: nowrap; }
+/* line 223, ../../src/stylesheets/partials/_forms.sass */
+ul.filtered li span { color: grey; }
+/* line 226, ../../src/stylesheets/partials/_forms.sass */
+ul.filtered li:hover { background-color: yellow; }
+
+/* line 230, ../../src/stylesheets/partials/_forms.sass */
+.element-list .element-map-header, .element-list .element-map-body { display: block; }
+/* line 233, ../../src/stylesheets/partials/_forms.sass */
+.element-list .element-map-header .element-map-header, .element-list .element-map-body .element-map-header { font-size: 11px; }
+/* line 235, ../../src/stylesheets/partials/_forms.sass */
+.element-list .element-map-header input, .element-list .element-map-body input { width: 121px; }
+/* line 237, ../../src/stylesheets/partials/_forms.sass */
+.element-list .element-map-header select, .element-list .element-map-body select { width: 129px; }
+/* line 240, ../../src/stylesheets/partials/_forms.sass */
+.element-list li { position: relative; }
+/* line 243, ../../src/stylesheets/partials/_forms.sass */
+.element-list h5 { color: #258cd5; font-size: 14px; }
+
+/* line 247, ../../src/stylesheets/partials/_forms.sass */
+.element-map-level-2 { float: left; padding-top: 5px; position: relative; }
+/* line 251, ../../src/stylesheets/partials/_forms.sass */
+.element-map-level-2 > li { margin-bottom: 5px; }
+
+/* line 254, ../../src/stylesheets/partials/_forms.sass */
+.element-list-row { background: #fafafa; border: 1px solid #cfe4f4; padding: 15px; position: relative; }
+
+/* line 260, ../../src/stylesheets/partials/_forms.sass */
+>>>>>>> design
 ul.element-map { *zoom: 1; }
 /* line 38, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 ul.element-map:after { content: ""; display: table; clear: both; }
+<<<<<<< HEAD
 /* line 262, /Users/jeankahigiso/Documents/springsourceworkspace/memms/src/stylesheets/partials/_forms.sass */
+=======
+/* line 262, ../../src/stylesheets/partials/_forms.sass */
+>>>>>>> design
 ul.element-map li { *zoom: 1; }
 /* line 38, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 ul.element-map li:after { content: ""; display: table; clear: both; }
+<<<<<<< HEAD
 /* line 265, /Users/jeankahigiso/Documents/springsourceworkspace/memms/src/stylesheets/partials/_forms.sass */
 ul.element-map ul.element-map li { display: inline; float: left; }
 /* line 269, /Users/jeankahigiso/Documents/springsourceworkspace/memms/src/stylesheets/partials/_forms.sass */
@@ -716,9 +938,175 @@ form.search-form button { height: 23px; margin: 0 0 0 -1px; -moz-border-radius-t
 /* line 533, /Users/jeankahigiso/Documents/springsourceworkspace/memms/src/stylesheets/partials/_forms.sass */
 .filters h2 a:hover, .filters h2 a:focus { opacity: 1; }
 /* line 535, /Users/jeankahigiso/Documents/springsourceworkspace/memms/src/stylesheets/partials/_forms.sass */
+=======
+/* line 265, ../../src/stylesheets/partials/_forms.sass */
+ul.element-map ul.element-map li { display: inline; float: left; }
+/* line 269, ../../src/stylesheets/partials/_forms.sass */
+ul.element-map label { font-size: 10px; margin-bottom: 3px; }
+
+/* line 273, ../../src/stylesheets/partials/_forms.sass */
+.form-heading-list { padding-left: 20px; }
+/* line 275, ../../src/stylesheets/partials/_forms.sass */
+.form-heading-list li { background: url("../images/select.png") no-repeat left center; color: #258cd5; padding-left: 10px; }
+
+/* line 280, ../../src/stylesheets/partials/_forms.sass */
+.inline-list li { display: inline; float: left; }
+
+/* line 284, ../../src/stylesheets/partials/_forms.sass */
+form.search-form { color: #258cd5; display: inline-block; font-size: 12px; }
+/* line 288, ../../src/stylesheets/partials/_forms.sass */
+form.search-form input, form.search-form button { float: left; }
+/* line 290, ../../src/stylesheets/partials/_forms.sass */
+form.search-form input { background: #f9f9f9; border: 1px solid #b6c1c9; color: #444444; font: normal 12px Arial, sans-serif; margin: 0; padding: 3px 5px 4px; -webkit-box-shadow: #d8e3eb, 1px, 1px, 3px, 0, inset; -moz-box-shadow: #d8e3eb, 1px, 1px, 3px, 0, inset; box-shadow: #d8e3eb, 1px, 1px, 3px, 0, inset; }
+/* line 298, ../../src/stylesheets/partials/_forms.sass */
+form.search-form input:hover, form.search-form input:focus { background: #ecf7ff; border-color: #258cd5; }
+/* line 301, ../../src/stylesheets/partials/_forms.sass */
+form.search-form button { height: 23px; margin: 0 0 0 -1px; -moz-border-radius-topleft: 0; -webkit-border-top-left-radius: 0; border-top-left-radius: 0; -moz-border-radius-bottomleft: 0; -webkit-border-bottom-left-radius: 0; border-bottom-left-radius: 0; }
+
+/* line 306, ../../src/stylesheets/partials/_forms.sass */
+.form-box { border: 1px solid #dddddd; margin: 0 auto; width: 250px; -webkit-box-shadow: #eeeeee 0 0 5px; -moz-box-shadow: #eeeeee 0 0 5px; box-shadow: #eeeeee 0 0 5px; -webkit-border-radius: 3px; -moz-border-radius: 3px; -ms-border-radius: 3px; -o-border-radius: 3px; border-radius: 3px; }
+/* line 313, ../../src/stylesheets/partials/_forms.sass */
+.form-box table.listing tbody { border: none; }
+/* line 315, ../../src/stylesheets/partials/_forms.sass */
+.form-box table.listing tr:last-child td { border: none; padding-top: 10px; padding-bottom: 10px; }
+/* line 319, ../../src/stylesheets/partials/_forms.sass */
+.form-box table.listing tr:first-child td { border: none; }
+/* line 321, ../../src/stylesheets/partials/_forms.sass */
+.form-box table.listing td { border: none; padding: 12px 0 5px 0; text-align: center; }
+/* line 326, ../../src/stylesheets/partials/_forms.sass */
+.form-box a { font-size: 11px; }
+/* line 328, ../../src/stylesheets/partials/_forms.sass */
+.form-box.wide { background: #e8f3fb; width: 350px; }
+/* line 331, ../../src/stylesheets/partials/_forms.sass */
+.form-box.register { padding: 0 10px; width: 460px; }
+
+/* line 335, ../../src/stylesheets/partials/_forms.sass */
+.nice-form { padding-top: 10px; }
+/* line 338, ../../src/stylesheets/partials/_forms.sass */
+.nice-form input, .nice-form select { font-family: "Lucida Grande", Arial, sans-serif; width: 250px; background: #e9f4fc; border: 1px solid #b6c1c9; color: #444444; font-size: 14px; padding: 4px; margin-bottom: 0px; -webkit-box-shadow: #d8e3eb, 1px, 1px, 3px, 0, inset; -moz-box-shadow: #d8e3eb, 1px, 1px, 3px, 0, inset; box-shadow: #d8e3eb, 1px, 1px, 3px, 0, inset; }
+/* line 348, ../../src/stylesheets/partials/_forms.sass */
+.nice-form input:hover, .nice-form input:focus, .nice-form select:hover, .nice-form select:focus { background: #ecf7ff; border-color: #258cd5; }
+/* line 352, ../../src/stylesheets/partials/_forms.sass */
+.nice-form select { width: 200px; }
+/* line 355, ../../src/stylesheets/partials/_forms.sass */
+.nice-form label, .nice-form span, .nice-form a, .nice-form div:not(.error-list) { font-family: "Lucida Grande", Arial, sans-serif; color: #258cd5; font-size: 11px; margin: 0 auto; padding: 3px; }
+/* line 362, ../../src/stylesheets/partials/_forms.sass */
+.nice-form td { vertical-align: middle; }
+/* line 365, ../../src/stylesheets/partials/_forms.sass */
+.nice-form tr { height: 42px; }
+
+/* line 369, ../../src/stylesheets/partials/_forms.sass */
+.login-form button { margin-bottom: 5px; }
+/* line 371, ../../src/stylesheets/partials/_forms.sass */
+.login-form td:first-child { text-align: center; }
+/* line 373, ../../src/stylesheets/partials/_forms.sass */
+.login-form input { width: 200px; text-align: center; }
+/* line 376, ../../src/stylesheets/partials/_forms.sass */
+.login-form input[type=checkbox] { width: 14px; }
+/* line 378, ../../src/stylesheets/partials/_forms.sass */
+.login-form a { display: block; }
+/* line 380, ../../src/stylesheets/partials/_forms.sass */
+.login-form button { margin: 0 auto; }
+/* line 382, ../../src/stylesheets/partials/_forms.sass */
+.login-form .error-list { position: relative; left: 20px; }
+
+/* line 386, ../../src/stylesheets/partials/_forms.sass */
+.todo { padding: 7px; }
+/* line 388, ../../src/stylesheets/partials/_forms.sass */
+.todo a { background: rgba(255, 255, 255, 0.8); border: 1px solid rgba(0, 0, 0, 0.12); display: block; font-size: 12px; margin: 3px; padding: 8px 10px; text-decoration: none; -webkit-border-radius: 2px; -moz-border-radius: 2px; -ms-border-radius: 2px; -o-border-radius: 2px; border-radius: 2px; }
+/* line 397, ../../src/stylesheets/partials/_forms.sass */
+.todo a:hover, .todo a:focus { background: url("../images/follow2.png") no-repeat 305px center white; border: 1px solid rgba(0, 0, 0, 0.35); color: #222222; -webkit-box-shadow: rgba(0, 0, 0, 0.08) 1px 1px 4px inset; -moz-box-shadow: rgba(0, 0, 0, 0.08) 1px 1px 4px inset; box-shadow: rgba(0, 0, 0, 0.08) 1px 1px 4px inset; }
+
+/* line 403, ../../src/stylesheets/partials/_forms.sass */
+.items { margin-bottom: 15px; width: 100%; }
+/* line 406, ../../src/stylesheets/partials/_forms.sass */
+.items th, .items td { line-height: 1.3; padding: 10px; }
+/* line 409, ../../src/stylesheets/partials/_forms.sass */
+.items th, .items td, .items a { font-size: 11px; }
+/* line 411, ../../src/stylesheets/partials/_forms.sass */
+.items th { border-top: 1px solid #258cd5; background: #e9f4fc; color: #258cd5; font-weight: bold; }
+/* line 416, ../../src/stylesheets/partials/_forms.sass */
+.items td { border-top: 1px solid rgba(0, 0, 0, 0.08); padding: 5px 10px; }
+/* line 419, ../../src/stylesheets/partials/_forms.sass */
+.items td:first-child { padding-left: 15px; }
+/* line 421, ../../src/stylesheets/partials/_forms.sass */
+.items td:last-child { padding-right: 15px; }
+/* line 425, ../../src/stylesheets/partials/_forms.sass */
+.items tr.even td { background: rgba(0, 0, 0, 0.015); }
+/* line 428, ../../src/stylesheets/partials/_forms.sass */
+.items tr:hover td, .items tr:focus td { background: rgba(0, 0, 0, 0.015); }
+/* line 430, ../../src/stylesheets/partials/_forms.sass */
+.items tr:hover .edit-button, .items tr:hover .delete-button, .items tr:focus .edit-button, .items tr:focus .delete-button { opacity: 0.7; }
+/* line 432, ../../src/stylesheets/partials/_forms.sass */
+.items tr:first-child th { border-bottom: 1px solid rgba(0, 0, 0, 0.15); }
+/* line 434, ../../src/stylesheets/partials/_forms.sass */
+.items tr:last-child td { border-bottom: 1px solid rgba(0, 0, 0, 0.08); }
+/* line 437, ../../src/stylesheets/partials/_forms.sass */
+.items.spaced td { padding: 10px; }
+/* line 439, ../../src/stylesheets/partials/_forms.sass */
+.items.spaced td:first-child { padding-left: 15px; }
+/* line 441, ../../src/stylesheets/partials/_forms.sass */
+.items.spaced td:last-child { padding-right: 15px; }
+/* line 444, ../../src/stylesheets/partials/_forms.sass */
+.items th.sortable a { background-position: right; background-repeat: no-repeat; padding-right: 1.1em; }
+/* line 449, ../../src/stylesheets/partials/_forms.sass */
+.items th.asc a { background-image: url(../images/skin/sorted_asc.gif); }
+/* line 452, ../../src/stylesheets/partials/_forms.sass */
+.items th.desc a { background-image: url(../images/skin/sorted_desc.gif); }
+
+/* line 456, ../../src/stylesheets/partials/_forms.sass */
+.simple-list fieldset { display: block; padding: 10px 0; }
+/* line 459, ../../src/stylesheets/partials/_forms.sass */
+.simple-list legend { font-size: 14px; font-weight: bold; }
+/* line 462, ../../src/stylesheets/partials/_forms.sass */
+.simple-list label { display: inline-block; font-size: 11px; margin-left: 7px; padding-top: 5px; vertical-align: top; width: 130px; }
+/* line 469, ../../src/stylesheets/partials/_forms.sass */
+.simple-list .row { margin-bottom: 7px; vertical-align: middle; }
+/* line 473, ../../src/stylesheets/partials/_forms.sass */
+.simple-list .date select { min-width: 50px; }
+/* line 475, ../../src/stylesheets/partials/_forms.sass */
+.simple-list input[type=text], .simple-list textarea { width: 290px; }
+
+/* line 478, ../../src/stylesheets/partials/_forms.sass */
+.paginateButtons { padding: 0 15px 15px; *zoom: 1; }
+/* line 38, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
+.paginateButtons:after { content: ""; display: table; clear: both; }
+/* line 481, ../../src/stylesheets/partials/_forms.sass */
+.paginateButtons a { background: #e9f4fc; color: #258cd5; }
+/* line 484, ../../src/stylesheets/partials/_forms.sass */
+.paginateButtons a:hover, .paginateButtons a:focus { border: 1px solid #47aef7; }
+/* line 486, ../../src/stylesheets/partials/_forms.sass */
+.paginateButtons a, .paginateButtons span { border: 1px solid rgba(0, 0, 0, 0.07); display: block; float: left; margin-right: 3px; padding: 7px 10px; text-decoration: none; }
+/* line 494, ../../src/stylesheets/partials/_forms.sass */
+.paginateButtons span { background: #258cd5; color: white; }
+
+/* line 498, ../../src/stylesheets/partials/_forms.sass */
+.foldable-container { border-top: 1px dotted #b6cbdb; margin-top: 6px; }
+
+/* line 503, ../../src/stylesheets/partials/_forms.sass */
+.foldable.opened:not(.current) { padding-bottom: 0px !important; }
+/* line 506, ../../src/stylesheets/partials/_forms.sass */
+.foldable a.foldable-toggle { display: block; cursor: pointer; height: 14px; margin-top: -3px; width: 20px; float: left; text-indent: -9999px; background-image: url("../images/icons/toggle_plus.png"); }
+/* line 515, ../../src/stylesheets/partials/_forms.sass */
+.foldable a.foldable-toggle.toggled { background-image: url("../images/icons/toggle_minus.png"); }
+
+/* line 518, ../../src/stylesheets/partials/_forms.sass */
+.filter-bar { color: #888888; font-size: 11px; margin-top: 15px; padding: 15px 15px 40px; }
+
+/* line 524, ../../src/stylesheets/partials/_forms.sass */
+.filters { border: 1px solid rgba(0, 0, 0, 0.1); padding: 0; margin-bottom: 15px; }
+/* line 528, ../../src/stylesheets/partials/_forms.sass */
+.filters h2 { border-bottom: 1px solid #eeeeee; font: bold 15px Arial, sans-serif; padding: 10px 15px; }
+/* line 532, ../../src/stylesheets/partials/_forms.sass */
+.filters h2 a { margin-top: 4px; opacity: 0.4; }
+/* line 535, ../../src/stylesheets/partials/_forms.sass */
+.filters h2 a:hover, .filters h2 a:focus { opacity: 1; }
+/* line 537, ../../src/stylesheets/partials/_forms.sass */
+>>>>>>> design
 .filters ul.filters-list { padding: 10px 15px 0; *zoom: 1; }
 /* line 38, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .filters ul.filters-list:after { content: ""; display: table; clear: both; }
+<<<<<<< HEAD
 /* line 538, /Users/jeankahigiso/Documents/springsourceworkspace/memms/src/stylesheets/partials/_forms.sass */
 .filters ul.filters-list > li { display: inline; float: left; height: 50px; width: 33%; }
 /* line 543, /Users/jeankahigiso/Documents/springsourceworkspace/memms/src/stylesheets/partials/_forms.sass */
@@ -738,9 +1126,36 @@ form.search-form button { height: 23px; margin: 0 0 0 -1px; -moz-border-radius-t
 .nav-help { background: url("../images/icons/point.png") no-repeat 0 0; margin: 10px 15px; padding: 10px 10px 10px 42px; }
 
 /* line 7, /Users/jeankahigiso/Documents/springsourceworkspace/memms/src/stylesheets/partials/_flashes.sass */
+=======
+/* line 540, ../../src/stylesheets/partials/_forms.sass */
+.filters ul.filters-list > li { display: inline; float: left; height: 50px; width: 33%; }
+/* line 545, ../../src/stylesheets/partials/_forms.sass */
+.filters label { display: block; font-size: 11px; margin-bottom: 2px; }
+/* line 549, ../../src/stylesheets/partials/_forms.sass */
+.filters select { background: #faffff; border: 1px solid #47aef7; color: #258cd5; font-size: 11px; font-weight: bold; padding: 4px; width: 300px; -webkit-border-radius: 2px; -moz-border-radius: 2px; -ms-border-radius: 2px; -o-border-radius: 2px; border-radius: 2px; }
+/* line 558, ../../src/stylesheets/partials/_forms.sass */
+.filters button { margin: 5px 15px 15px; }
+
+/* line 561, ../../src/stylesheets/partials/_forms.sass */
+.filter-results { color: #aaaaaa; font: bold 14px Arial, sans-serif; padding: 5px 0; text-transform: uppercase; }
+
+/* line 567, ../../src/stylesheets/partials/_forms.sass */
+.form-languages a { font-size: 10px; margin-left: 5px; text-transform: uppercase; }
+
+/* line 1, ../../src/stylesheets/partials/_flashes.sass */
+.flash-message { background: #f6fdeb; border-bottom: #d8e3eb 1px solid; text-align: center; background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f6fdeb), color-stop(100%, #edf4e2)); background: -webkit-linear-gradient(#f6fdeb, #edf4e2); background: -moz-linear-gradient(#f6fdeb, #edf4e2); background: -o-linear-gradient(#f6fdeb, #edf4e2); background: linear-gradient(#f6fdeb, #edf4e2); }
+/* line 6, ../../src/stylesheets/partials/_flashes.sass */
+.flash-message p { color: #217c00; font-size: 12px; font-weight: bold; padding: 10px 0; text-shadow: rgba(255, 255, 255, 0.2) 0 1px 0; }
+
+/* line 13, ../../src/stylesheets/partials/_flashes.sass */
+.nav-help { background: url("../images/icons/point.png") no-repeat 0 0; margin: 10px 15px; padding: 10px 10px 10px 42px; }
+
+/* line 18, ../../src/stylesheets/partials/_flashes.sass */
+>>>>>>> design
 .success-box { background-color: #f6fdeb; border: 1px solid #e5ecda; margin-bottom: 10px; padding: 10px; -webkit-border-radius: 3px; -moz-border-radius: 3px; -ms-border-radius: 3px; -o-border-radius: 3px; border-radius: 3px; *zoom: 1; text-shadow: white, 0, 1px, 0; }
 /* line 38, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .success-box:after { content: ""; display: table; clear: both; }
+<<<<<<< HEAD
 /* line 16, /Users/jeankahigiso/Documents/springsourceworkspace/memms/src/stylesheets/partials/_flashes.sass */
 .success-box .success { float: left; width: 70%; }
 /* line 19, /Users/jeankahigiso/Documents/springsourceworkspace/memms/src/stylesheets/partials/_flashes.sass */
@@ -750,10 +1165,22 @@ form.search-form button { height: 23px; margin: 0 0 0 -1px; -moz-border-radius-t
 .success { background: url("../images/icons/check.png") no-repeat 0 0; padding: 10px 10px 10px 42px; }
 
 /* line 26, /Users/jeankahigiso/Documents/springsourceworkspace/memms/src/stylesheets/partials/_flashes.sass */
+=======
+/* line 27, ../../src/stylesheets/partials/_flashes.sass */
+.success-box .success { float: left; width: 70%; }
+/* line 30, ../../src/stylesheets/partials/_flashes.sass */
+.success-box form { float: right; }
+
+/* line 33, ../../src/stylesheets/partials/_flashes.sass */
+.success { background: url("../images/icons/check.png") no-repeat 0 0; padding: 10px 10px 10px 42px; }
+
+/* line 37, ../../src/stylesheets/partials/_flashes.sass */
+>>>>>>> design
 .question-container { margin-bottom: 20px; *zoom: 1; }
 /* line 38, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .question-container:after { content: ""; display: table; clear: both; }
 
+<<<<<<< HEAD
 /* line 30, /Users/jeankahigiso/Documents/springsourceworkspace/memms/src/stylesheets/partials/_flashes.sass */
 .question-help-container { position: relative; }
 
@@ -775,16 +1202,47 @@ form.search-form button { height: 23px; margin: 0 0 0 -1px; -moz-border-radius-t
 .hide-question-help:hover, .hide-question-help:focus { opacity: 1; }
 
 /* line 73, /Users/jeankahigiso/Documents/springsourceworkspace/memms/src/stylesheets/partials/_flashes.sass */
+=======
+/* line 41, ../../src/stylesheets/partials/_flashes.sass */
+.question-help-container { position: relative; }
+
+/* line 44, ../../src/stylesheets/partials/_flashes.sass */
+.question-help { background: url("../images/icons/info.png") no-repeat 11px center #f6fdeb; border: 1px solid #e5ecda; font-size: 11px; line-height: 1.5; margin-bottom: 10px; padding: 15px 45px; position: relative; -webkit-border-radius: 3px; -moz-border-radius: 3px; -ms-border-radius: 3px; -o-border-radius: 3px; border-radius: 3px; text-shadow: white, 0, 1px, 0; }
+
+/* line 55, ../../src/stylesheets/partials/_flashes.sass */
+.show-question-help { display: none; }
+/* line 57, ../../src/stylesheets/partials/_flashes.sass */
+.show-question-help a { font-size: 11px; opacity: 0.6; text-shadow: white 0 1px 0; }
+/* line 61, ../../src/stylesheets/partials/_flashes.sass */
+.show-question-help a:hover, .show-question-help a:focus { color: #258cd5; opacity: 1; }
+/* line 64, ../../src/stylesheets/partials/_flashes.sass */
+.show-question-help.moved { float: right; margin-top: -42px; position: relative; z-index: 11; }
+
+/* line 70, ../../src/stylesheets/partials/_flashes.sass */
+.hide-question-help { background: url("../images/icons/icon_close_flash.png") no-repeat center; cursor: pointer; height: 12px; left: 97%; opacity: 0.3; position: absolute; text-indent: -6666px; top: 40%; width: 12px; }
+/* line 80, ../../src/stylesheets/partials/_flashes.sass */
+.hide-question-help:hover, .hide-question-help:focus { opacity: 1; }
+
+/* line 84, ../../src/stylesheets/partials/_flashes.sass */
+>>>>>>> design
 #incomplete-sections-container > div { background: url("../images/icons/fail.png") no-repeat 11px center #f4e9e9; border: 1px solid #e3d8d8; margin-bottom: 10px; padding: 10px 10px 10px 52px; -webkit-border-radius: 3px; -moz-border-radius: 3px; -ms-border-radius: 3px; -o-border-radius: 3px; border-radius: 3px; *zoom: 1; text-shadow: white, 0, 1px, 0; }
 /* line 38, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 #incomplete-sections-container > div:after { content: ""; display: table; clear: both; }
+<<<<<<< HEAD
 /* line 81, /Users/jeankahigiso/Documents/springsourceworkspace/memms/src/stylesheets/partials/_flashes.sass */
 #incomplete-sections-container li { padding: 6px 0 0 10px; }
 
 /* line 85, /Users/jeankahigiso/Documents/springsourceworkspace/memms/src/stylesheets/partials/_flashes.sass */
+=======
+/* line 92, ../../src/stylesheets/partials/_flashes.sass */
+#incomplete-sections-container li { padding: 6px 0 0 10px; }
+
+/* line 96, ../../src/stylesheets/partials/_flashes.sass */
+>>>>>>> design
 #invalid-questions-container > div { background: url("../images/icons/warning.png") no-repeat 11px center #e9f4fc; border: 1px solid #e5ecda; padding: 10px 10px 10px 52px; -webkit-border-radius: 3px; -moz-border-radius: 3px; -ms-border-radius: 3px; -o-border-radius: 3px; border-radius: 3px; *zoom: 1; text-shadow: white, 0, 1px, 0; }
 /* line 38, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 #invalid-questions-container > div:after { content: ""; display: table; clear: both; }
+<<<<<<< HEAD
 /* line 92, /Users/jeankahigiso/Documents/springsourceworkspace/memms/src/stylesheets/partials/_flashes.sass */
 #invalid-questions-container h5 { font-style: italic; padding: 10px 0 5px 8px; }
 
@@ -839,6 +1297,62 @@ form.search-form button { height: 23px; margin: 0 0 0 -1px; -moz-border-radius-t
 /* line 196, /Users/jeankahigiso/Documents/springsourceworkspace/memms/src/stylesheets/partials/_flashes.sass */
 .message.error { background: #d30000; border: 1px solid #c20000; text-shadow: #b10000 0 1px 0; }
 /* line 200, /Users/jeankahigiso/Documents/springsourceworkspace/memms/src/stylesheets/partials/_flashes.sass */
+=======
+/* line 103, ../../src/stylesheets/partials/_flashes.sass */
+#invalid-questions-container h5 { font-style: italic; padding: 10px 0 5px 8px; }
+
+/* line 108, ../../src/stylesheets/partials/_flashes.sass */
+.message.login { background: #e9f4fc; border: 1px solid #d8e3eb; color: #d30000; font-size: 11px; margin: 15px auto 0; padding: 10px; text-align: center; width: 400px; -webkit-border-radius: 5px; -moz-border-radius: 5px; -ms-border-radius: 5px; -o-border-radius: 5px; border-radius: 5px; text-shadow: white, 0, 1px, 0; }
+
+/* line 120, ../../src/stylesheets/partials/_flashes.sass */
+.item-status { position: absolute; right: 0px; }
+/* line 124, ../../src/stylesheets/partials/_flashes.sass */
+.item-status span { display: block; width: 16px; height: 12px; }
+/* line 129, ../../src/stylesheets/partials/_flashes.sass */
+.item-status span.hidden { display: none; }
+/* line 134, ../../src/stylesheets/partials/_flashes.sass */
+.item-status .section-status-complete, .item-status .objective-status-complete { background: url("../images/icons/status_complete.png") center no-repeat; }
+/* line 136, ../../src/stylesheets/partials/_flashes.sass */
+.item-status .section-status-invalid, .item-status .objective-status-invalid { background: url("../images/icons/status_invalid.png") center no-repeat; }
+/* line 138, ../../src/stylesheets/partials/_flashes.sass */
+.item-status .section-status-closed, .item-status .objective-status-closed { background: url("../images/icons/status_closed.png") center no-repeat; }
+
+/* line 142, ../../src/stylesheets/partials/_flashes.sass */
+.element.errors { position: relative; }
+
+/* line 145, ../../src/stylesheets/partials/_flashes.sass */
+.error-list { opacity: 0.65; padding-left: 140px; *zoom: 1; }
+/* line 38, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
+.error-list:after { content: ""; display: table; clear: both; }
+/* line 149, ../../src/stylesheets/partials/_flashes.sass */
+.error-list li { background: #d30000; color: white; float: left; font-size: 11px; padding: 7px 15px; -webkit-box-shadow: #aaaaaa 1px 1px 3px; -moz-box-shadow: #aaaaaa 1px 1px 3px; box-shadow: #aaaaaa 1px 1px 3px; text-shadow: #8f0000 0 1px 0; }
+/* line 157, ../../src/stylesheets/partials/_flashes.sass */
+.error-list li:last-child { -moz-border-radius-bottomleft: 5px; -webkit-border-bottom-left-radius: 5px; border-bottom-left-radius: 5px; -moz-border-radius-bottomright: 5px; -webkit-border-bottom-right-radius: 5px; border-bottom-right-radius: 5px; -moz-border-radius-topright: 5px; -webkit-border-top-right-radius: 5px; border-top-right-radius: 5px; }
+/* line 160, ../../src/stylesheets/partials/_flashes.sass */
+.error-list li a { color: white; font-size: 11px; }
+
+/* line 164, ../../src/stylesheets/partials/_flashes.sass */
+.adv-form .error-list { position: absolute; top: 21px; left: 0; z-index: 20; }
+
+/* line 174, ../../src/stylesheets/partials/_flashes.sass */
+.ajax-in-process input, .ajax-in-process input:hover, .ajax-in-process input:focus { background: url("../images/icons/in_progress.gif") no-repeat 95% center; }
+/* line 176, ../../src/stylesheets/partials/_flashes.sass */
+.ajax-in-process select, .ajax-in-process select:hover, .ajax-in-process select:focus { background: url("../images/icons/in_progress.gif") no-repeat 90% center; }
+
+/* line 180, ../../src/stylesheets/partials/_flashes.sass */
+.ajax-error input, .ajax-error input:hover, .ajax-error input:focus { background: url("../images/icons/input_error.png") no-repeat 95% center; }
+/* line 182, ../../src/stylesheets/partials/_flashes.sass */
+.ajax-error select, .ajax-error select:hover, .ajax-error select:focus { background: url("../images/icons/input_error.png") no-repeat 90% center; }
+
+/* line 185, ../../src/stylesheets/partials/_flashes.sass */
+.ajax-disabled, .skipped { cursor: wait; opacity: 0.5; }
+
+/* line 190, ../../src/stylesheets/partials/_flashes.sass */
+.message { background: #65c029; border: 1px solid #54af18; color: white; font-size: 11px; font-weight: bold; margin: 0 275px; opacity: 0.8; padding: 5px 10px; position: absolute; text-align: center; top: 0; width: 430px; -moz-border-radius-bottomleft: 3px; -webkit-border-bottom-left-radius: 3px; border-bottom-left-radius: 3px; -moz-border-radius-bottomright: 3px; -webkit-border-bottom-right-radius: 3px; border-bottom-right-radius: 3px; -webkit-box-shadow: #cccccc 0 1px 3px; -moz-box-shadow: #cccccc 0 1px 3px; box-shadow: #cccccc 0 1px 3px; text-shadow: #439e07 0 1px 0; }
+/* line 206, ../../src/stylesheets/partials/_flashes.sass */
+.message.error { background: #d30000; border: 1px solid #c20000; text-shadow: #b10000 0 1px 0; }
+/* line 210, ../../src/stylesheets/partials/_flashes.sass */
+>>>>>>> design
 .message:hover { opacity: 1; }
 
 /* line 2, /Users/jeankahigiso/Documents/springsourceworkspace/memms/src/stylesheets/partials/_nicetable.sass */
