@@ -34,7 +34,6 @@
 							values="${filterCmd?.manufacturer?.collect{it.contact.contactName + ' ['+ it.code +']'}}"
 							/></li>
 					<li>
-					<li>
 						<label><g:message code="equipment.obsolete.label" /></label> 
 						<select name="obsolete">
 								<option value=""><g:message code="default.please.select" /></option>
