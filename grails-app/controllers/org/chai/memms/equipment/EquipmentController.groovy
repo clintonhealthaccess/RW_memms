@@ -81,27 +81,35 @@ class EquipmentController extends AbstractEntityController{
 		return Equipment.class;
 	}
 	def bindParams(def entity) {
-		if(!entity.id)
+		if(log.isDebugEnabled()) log.debug("Equipment params: before bind "+params)
+		if(!entity.id){
 			entity.registeredOn=new Date()
-		bindData(entity,params, [exclude:['status','dateOfEvent']])
+		}
+		bindData(entity,params,[exclude:["status","dateOfEvent"]])
+		if(log.isDebugEnabled()) log.debug("Equipment params: after bind  "+entity.serialNumber)
+		//entity.properties = params
 	}
 	
 	def validateEntity(def entity) {
 		boolean valid = true
-		if(entity.id!=null && params["status"].equals("NONE") && params["dateOfEvent"]){
-			valid = false
-			entity.errors.rejectValue("status","equipment.status.notselected", "You have to select a status.");
+		if(entity.id==null){
+			valid = (!params.cmd.hasErrors())
+			if(log.isDebugEnabled()) log.debug("Rejecting status: "+params.cmd.errors)
 		}
 		return (valid & entity.validate())
 	}
 	
 	def saveEntity(def entity) {
+		def currentStatus 
+		if(entity.id==null)
+			currentStatus = newEquipmentStatus(new Date(),getUser(),params.cmd.status,entity,true,params.cmd.dateOfEvent)
 		entity.save()
-		if(params['status'] && params["dateOfEvent"]){
-			def status = params['status']
-			status = Status."$status"
-			def currentStatus = newEquipmentStatus(new Date(),getUser(),status,entity,true,params["dateOfEvent"])
-		}
+		currentStatus.save()
+	}
+
+	def save ={StatusCommand cmd ->
+		params.cmd = cmd
+		super.saveWithoutTokenCheck()
 	}
 	 
 	def getModel(def entity) {
@@ -118,7 +126,8 @@ class EquipmentController extends AbstractEntityController{
 			suppliers: suppliers,
 			types: types,
 			dataLocations: dataLocations,
-			numberOfStatusToDisplay: grailsApplication.config.status.to.display.on.equipment.form
+			numberOfStatusToDisplay: grailsApplication.config.status.to.display.on.equipment.form,
+			cmd:params.cmd
 
 		]
 	}
@@ -249,9 +258,22 @@ class EquipmentController extends AbstractEntityController{
 	}
 	
 	static def newEquipmentStatus(def statusChangeDate,def changedBy,def value, def equipment,def current,def dateOfEvent){
-		return new EquipmentStatus(statusChangeDate:statusChangeDate,changedBy:changedBy,status:value,equipment:equipment,current:current,dateOfEvent:dateOfEvent).save(failOneError:true,flush:true)
+		return new EquipmentStatus(statusChangeDate:statusChangeDate,changedBy:changedBy,status:value,equipment:equipment,current:current,dateOfEvent:dateOfEvent)
 	}
 	
+}
+class StatusCommand {
+	Status status
+	Date dateOfEvent
+	
+	static constraints = {
+		status nullable: false, inList: [Status.DISPOSED,Status.FORDISPOSAL,Status.INSTOCK,Status.OPERATIONAL,Status.UNDERMAINTENANCE]
+		dateOfEvent nullable: false 
+	}
+	
+	String toString(){
+		return "StatusCommand [Status "+status+" dateOfEvent: "+dateOfEvent+"]";
+	}
 }
 
 class FilterCommand {
@@ -284,9 +306,9 @@ class FilterCommand {
 		donated nullable:true 
 		obsolete nullable:true
 		
-		dataLocation(nullable:false, validator:{val, obj ->
+		dataLocation nullable:false, validator:{val, obj ->
 			return (obj.equipmentType != null || obj.manufacturer != null || obj.supplier != null || (obj.status != null && obj.status != Status.NONE) || obj.donated || obj.obsolete)?true:"select.atleast.one.value.text"
-			})
+			}
 	}
 	
 	String toString() {
