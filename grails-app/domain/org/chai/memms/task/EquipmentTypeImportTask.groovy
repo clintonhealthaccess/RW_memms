@@ -31,18 +31,23 @@ package org.chai.memms.task
 import java.util.Map;
 
 import org.chai.memms.imports.EquipmentTypeImporter
+import org.chai.memms.equipment.EquipmentTypeService;
 import org.chai.memms.imports.FileImporter;
 import org.chai.memms.imports.ImporterErrorManager;
+import org.chai.memms.util.Utils;
 
 class EquipmentTypeImportTask extends ImportTask {
 
+	def equipmentTypeService
+	def sessionFactory;
+	
 	String getInformation() {
 		return message(code: 'equipment.type.label') + '<br/>'+message(code:'import.file.label')+': '+getInputFilename()
 	}
 	
 	FileImporter getImporter(ImporterErrorManager errorManager) {
 		
-		return new EquipmentTypeImporter(errorManager)
+		return new EquipmentTypeImporter(sessionFactory,equipmentTypeService,errorManager)
 	}
 	
 	String getFormView() {

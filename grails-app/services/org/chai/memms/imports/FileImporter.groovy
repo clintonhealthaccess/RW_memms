@@ -92,7 +92,7 @@ public abstract class FileImporter{
 		}
 		int delimiterChar = CsvPreference.EXCEL_PREFERENCE.getDelimiterChar();
 		if (delimiter != null) delimiterChar = delimiter;
-		CsvPreference preference = new CsvPreference('"', delimiterChar, CsvPreference.EXCEL_PREFERENCE.getEndOfLineSymbols());
+		CsvPreference preference = new CsvPreference('"'.getChars()[0], delimiterChar, CsvPreference.EXCEL_PREFERENCE.getEndOfLineSymbols());
 		return new CsvMapReader(new InputStreamReader(inputStream, charset), preference);
 	}
 	

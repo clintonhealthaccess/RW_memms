@@ -197,6 +197,8 @@ i18nFields{
 file.upload.available.charset=["UTF-8", "ISO-8859-1"]
 file.upload.delimiter=","
 
+task.temp.folder='files/'
+
 /**
 * Configuration file override
 */

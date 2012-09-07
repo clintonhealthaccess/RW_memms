@@ -88,7 +88,7 @@ ul.horizontal { *zoom: 1; }
 /* line 38, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 ul.horizontal:after { content: ""; display: table; clear: both; }
 /* line 94, ../../src/stylesheets/partials/_shared.sass */
-ul.horizontal li { display: inline; float: left; margin-right: 5px; }
+ul.horizontal li { display: inline; margin-right: 5px; }
 /* line 98, ../../src/stylesheets/partials/_shared.sass */
 ul.horizontal li.last { margin-right: 0; }
 

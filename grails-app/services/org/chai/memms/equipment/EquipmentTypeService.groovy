@@ -65,10 +65,11 @@ class EquipmentTypeService {
 	}
 	
 	def importToObservation = {
-		if(it.compareToIgnoreCase("Retired concept")) return Observation.RETIRED
-		else if(it.compareToIgnoreCase("Too detailed")) return Observation.TOODETAILED
-		else if(it.compareToIgnoreCase("Outside scope")) return Observation.RETIRED
+		if (it == null) return Observation.USEDINMEMMS
+		else if(it?.compareToIgnoreCase("Retired concept")) return Observation.RETIRED
+		else if(it?.compareToIgnoreCase("Too detailed")) return Observation.TOODETAILED
+		else if(it?.compareToIgnoreCase("Outside scope")) return Observation.RETIRED
 		else if(!(it?.trim())) return Observation.USEDINMEMMS
-		else return null
+		else return Observation.USEDINMEMMS
 	}
 }

@@ -29,9 +29,11 @@
 package org.chai.memms.imports
 
 import org.chai.memms.equipment.EquipmentType
+import org.chai.memms.equipment.EquipmentTypeService;
 import org.chai.memms.imports.ImporterErrorManager
 import org.chai.memms.imports.ImporterError
 import org.chai.memms.util.ImportExportConstant;
+import org.chai.memms.util.UtilsService;
 import org.hibernate.SessionFactory;
 
 import java.io.IOException;
@@ -42,16 +44,17 @@ import java.util.Map;
 import java.util.Set;
 
 import org.supercsv.io.ICsvMapReader
-import org.chai.memms.util.Utils;
 
 class EquipmentTypeImporter extends FileImporter {
 	
-	def utils
+	def sessionFactory
 	def equipmentTypeService
 	private ImporterErrorManager manager
 
-	public EquipmentTypeImporter(ImporterErrorManager manager) {
+	public EquipmentTypeImporter(SessionFactory sessionFactory,EquipmentTypeService equipmentTypeService,ImporterErrorManager manager) {
+		this.equipmentTypeService = equipmentTypeService
 		this.manager = manager
+		this.sessionFactory = sessionFactory
 	}
 
 	private boolean importData(String fileName,ICsvMapReader reader,Integer numberOfLinesToImport,  String[] headers,  Map<String,Integer> positions) throws IOException{
@@ -65,27 +68,39 @@ class EquipmentTypeImporter extends FileImporter {
 			Integer lineNumber=  reader.getLineNumber();
 			
 			String newDeviceCode = rowValues.get(ImportExportConstant.DEVICE_CODE)
-			String newDeviceNameEn = rowValues.get(ImportExportConstant.DEVICE_NAME_EN)
-			String newDeviceNameFr = rowValues.get(ImportExportConstant.DEVICE_NAME_FR)
+			String newDeviceNameEn = rowValues.get(ImportExportConstant.DEVICE_NAME_EN)?:"none"
+			String newDeviceNameFr = rowValues.get(ImportExportConstant.DEVICE_NAME_FR)?:"none"
 			//This is boolean
 			String newDeviceIncludedInMemms = rowValues.get(ImportExportConstant.DEVICE_INCLUDED_IN_MEMMS)
-			String newDescriptionEn = rowValues.get(ImportExportConstant.DEVICE_DESCRIPTION_EN)
-			String newDescriptionFR = rowValues.get(ImportExportConstant.DEVICE_DESCRIPTION_FR)
+			String newDescriptionEn = rowValues.get(ImportExportConstant.DEVICE_DESCRIPTION_EN)?:"none"
+			String newDescriptionFr = rowValues.get(ImportExportConstant.DEVICE_DESCRIPTION_FR)?:"none"
 			//This is an enum
 			String newDeviceObservation = rowValues.get(ImportExportConstant.DEVICE_OBSERVATION)
-
+			
+			if (log.isInfoEnabled()) log.info("Importing values code:$newDeviceCode, names:([en: $newDeviceNameEn], [fr: $newDeviceNameFr]), included in memms: $newDeviceIncludedInMemms, descriptions:([en: $newDescriptionEn], [fr: $newDescriptionFr]), Observation: $newDeviceObservation");
 			//Exists so update
 			def equipmentType = EquipmentType.findByCode(newDeviceCode)
 			if(equipmentType != null){
 				equipmentType.lastModifiedOn = new Date()
-				utils.setLocaleValueInMap(equipmentType,["en":newDeviceNameEn,"fr":newDeviceNameFr],"Names")
-				utils.setLocaleValueInMap(equipmentType,["en":newDescriptionEn,"fr":newDescriptionFR],"Descriptions")
-				equipmentType.save(failOnError: true,flush: true)
+				UtilsService.setLocaleValueInMap(equipmentType,["en":newDeviceNameEn,"fr":newDeviceNameFr],"Names")
+				UtilsService.setLocaleValueInMap(equipmentType,["en":newDescriptionEn,"fr":newDescriptionFr],"Descriptions")
+				if(equipmentType.save(flush: true) == null){
+					manager.numberOfUnsavedRows++
+					manager.getErrors().add(new ImporterError(fileName,lineNumber, Arrays.asList(headers).toString(),"import.error.message.not.saved"))
+				}else{
+				manager.numberOfSavedRows++
+				}
 			}else{
-				equipmentType = new EquipmentType(code:newDeviceCode,addedOn:new Date(),lastModifiedOn:new Date(),observation:equipmentTypeService.importToObservation(newDeviceObservation))
-				utils.setLocaleValueInMap(equipmentType,["en":newDeviceNameEn,"fr":newDeviceNameFr],"Names")
-				utils.setLocaleValueInMap(equipmentType,["en":newDescriptionEn,"fr":newDescriptionFR],"Descriptions")
-				equipmentType.save(failOnError: true,flush: true)
+				equipmentType = new EquipmentType(code:newDeviceCode,addedOn:new Date(),lastModifiedOn:new Date())
+				UtilsService.setLocaleValueInMap(equipmentType,["en":newDeviceNameEn,"fr":newDeviceNameFr],"Names")
+				equipmentType.observation = equipmentTypeService.importToObservation( newDeviceObservation )
+				UtilsService.setLocaleValueInMap(equipmentType,["en":newDescriptionEn,"fr":newDescriptionFr],"Descriptions")
+				if(equipmentType.save(flush: true) == null){
+					manager.numberOfUnsavedRows++
+					manager.getErrors().add(new ImporterError(fileName,lineNumber, Arrays.asList(headers).toString(),"import.error.message.not.saved"))
+				}else{
+				manager.numberOfSavedRows++
+				}
 			}
 			if (log.isInfoEnabled()) log.info("finished importing line");
 
@@ -115,7 +130,7 @@ class EquipmentTypeImporter extends FileImporter {
 			manager.getErrors().add(new ImporterError(fileName,csvMapReader.getLineNumber(), Arrays.asList(headers).toString(),"import.error.message.unknowm.header"));
 		else{
 			while (!readEntirely) {
-				Equipment.withNewTransaction {
+				EquipmentType.withNewTransaction {
 					try {
 						readEntirely = importData(fileName, csvMapReader, ImportExportConstant.NUMBER_OF_LINES_TO_IMPORT, headers, positions);
 					} catch (IOException e) {
@@ -124,6 +139,8 @@ class EquipmentTypeImporter extends FileImporter {
 				}
 				sessionFactory.getCurrentSession().clear();
 			}
+			
+			if (log.isInfoEnabled()) log.info("Finished all imports, total lines saved=" + manager.numberOfSavedRows +", total lines not saved=" + manager.numberOfUnsavedRows  +", errors=" + manager.errors );
 		}
 	}
 }

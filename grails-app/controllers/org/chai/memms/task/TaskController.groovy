@@ -180,7 +180,7 @@ class TaskController extends AbstractController {
 	private def fillFields(def task) {
 		// we fill the default fields
 		task.status = TaskStatus.NEW
-		task.user = currentUser
+		task.user = user
 		task.added = new Date()
 	}
 	

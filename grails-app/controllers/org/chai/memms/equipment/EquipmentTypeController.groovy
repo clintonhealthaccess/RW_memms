@@ -86,7 +86,8 @@ class EquipmentTypeController extends AbstractEntityController{
 			entityCount: types.totalCount,
 			code: getLabel(),
 			entityClass: getEntityClass(),
-			names:names
+			names:names,
+			importTask:'EquipmentTypeImportTask'
 			])
 	}
 	
@@ -99,8 +100,8 @@ class EquipmentTypeController extends AbstractEntityController{
 			entityCount: types.totalCount,,
 			code: getLabel(),
 			q:params['q'],
-			names:names
-			
+			names:names,
+			importTask:'EquipmentTypeImportTask'
 		])
 		
 	}

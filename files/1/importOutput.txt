@@ -1,0 +1,6 @@
+Number of saved rows: 27623
+Number of unsaved rows: 1
+Number of rows saved with error: 0
+
+File Name: MEMMS Concept List.csv Line Number: 27623 
+ - import.error.message.not.saved, Column: [device_code, device_name_en, include_in_MEMMS, observations, device_description_en, device_description_fr, device_name_fr]

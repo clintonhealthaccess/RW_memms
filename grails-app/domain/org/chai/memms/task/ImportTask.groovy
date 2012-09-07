@@ -32,6 +32,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.chai.memms.imports.FileImporter;
 import org.chai.memms.imports.ImporterErrorManager
+import org.chai.memms.util.Utils;
 import org.springframework.web.multipart.MultipartFile;
 
 abstract class ImportTask extends Task {
@@ -72,7 +73,7 @@ abstract class ImportTask extends Task {
 		
 		if (inputFile.exists() && importer != null) {
 			withTransaction {
-				importFile(importer, inputFile, encoding, delimiter, errorManager)
+				importFile(importer, inputFile, encoding, delimiter)
 			}
 			
 			// put errorManager output in a file and save it

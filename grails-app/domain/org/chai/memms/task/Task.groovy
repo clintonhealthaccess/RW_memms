@@ -112,6 +112,7 @@ abstract class Task implements Progress {
 	}
 	
 	static mapping = {
+		table "memms_tasks"
 		version false
 	}
 	
