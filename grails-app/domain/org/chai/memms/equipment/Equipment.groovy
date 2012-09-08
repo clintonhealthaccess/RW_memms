@@ -29,6 +29,7 @@ package org.chai.memms.equipment
 
 import org.chai.memms.Contact
 import org.chai.memms.Warranty;
+import org.chai.memms.equipment.EquipmentStatus.Status;
 import org.chai.memms.location.DataLocation;
 
 import i18nfields.I18nFields
@@ -47,8 +48,8 @@ public class Equipment {
 	String room
 	
 	Integer expectedLifeTime
-	boolean donation
-	boolean obsolete
+	Boolean donation
+	Boolean obsolete
 	
 	Provider manufacturer
 	Provider supplier
@@ -75,7 +76,9 @@ public class Equipment {
 		room nullable: true, blank: true
 		
 		manufactureDate nullable: false, blank: false, validator:{it <= new Date()}
-		purchaseDate nullable: false, blank: false, validator:{it <= new Date()}
+		purchaseDate nullable: false, blank: false, validator:{ val, obj ->
+			return (val <= new Date()) && (val.after(obj.manufactureDate) || (val.compareTo(obj.manufactureDate)==0))
+			}
 		
 		descriptions nullable: true, blank: true
 		donation nullable: false
@@ -92,12 +95,42 @@ public class Equipment {
 		
 	}
 	
-	 def getCurrentStatus = {
-		for(EquipmentStatus stat: status)
-		   if(stat.isCurrent())
-		   		return stat;
-	   return false;
+	def getCurrentState() {
+		if(status){
+			for(EquipmentStatus state : status)
+				if(state.isCurrent().is(getCurrentStatusBasedOnTime())) return state 
+		 setCurrentStatus()
+		 return getCurrentStatusBasedOnTime();
+		}
+		return null
 	}
+	def setCurrentStatus(){
+		if(status){
+			def state = getCurrentStatusBasedOnTime()
+			status.each{ stat ->
+				if(!stat.is(state)){
+					stat.current = false
+					stat.save(flush:true)
+				}
+			}
+			state.current = true
+			state.save(flush:true)
+		}
+	}
+
+	def getCurrentStatusBasedOnTime(){
+		EquipmentStatus currentStatus = status.asList()[0]
+		for(EquipmentStatus state : status){
+			if(state.dateOfEvent.after(currentStatus.dateOfEvent)){
+				currentStatus= state;
+			}else if(state.dateOfEvent.compareTo(currentStatus.dateOfEvent)==0){
+				if(state.statusChangeDate.after(currentStatus.statusChangeDate))
+					currentStatus = state
+			}
+		}
+		return currentStatus
+	}
+	
 	
 	String toString() {
 		return "Equipment[id=" + id + "]";

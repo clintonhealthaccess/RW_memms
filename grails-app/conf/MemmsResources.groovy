@@ -77,6 +77,12 @@ modules = {
 		resource url: '/js/jquery/cluetip/jquery.cluetip.css', bundle: 'core'
 		resource url: '/js/cluetip_init.js', bundle: 'core'
 	}
+	tipsy {
+		dependsOn 'jquery'
+
+		resource url: '/js/jquery/tipsy/src/javascripts/jquery.tipsy.js', bundle: 'core'
+		resource url: '/js/tipsy_init.js', bundle: 'core'
+	}
 
 	form {
 		dependsOn 'jquery,cluetip,fieldselection'

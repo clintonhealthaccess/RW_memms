@@ -223,6 +223,32 @@ class EquipmentController extends AbstractEntityController{
 	def importer = {
 		
 	}
+	def updateDonationAndObsolete = {
+		if (log.isDebugEnabled()) log.debug("equipment.donation "+params['equipment.id'])
+		def equipment = Equipment.get(params.int(['equipment.id']))
+		def property = params['field'];
+		if (equipment == null || property ==null)
+			response.sendError(404)
+		else {
+			def value= false; def entity = null; def error = ""
+			if(property.equals("obsolete")){
+				if(equipment.obsolete) equipment.obsolete = false
+				else equipment.obsolete = true
+				entity = equipment.save(flush:true)
+				
+			}
+			if(property.equals("donation")){
+				if(equipment.donation) equipment.donation = false
+				else equipment.donation = true
+				entity = equipment.save(flush:true)
+			}
+			
+			if(entity!=null) value=true 
+			else error = "error.updating.try.again"
+			render(contentType:"text/json") { results = [value,error]}
+		}
+	}
+	
 	static def newEquipmentStatus(def statusChangeDate,def changedBy,def value, def equipment,def current,def dateOfEvent){
 		return new EquipmentStatus(statusChangeDate:statusChangeDate,changedBy:changedBy,status:value,equipment:equipment,current:current,dateOfEvent:dateOfEvent).save(failOneError:true,flush:true)
 	}

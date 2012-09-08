@@ -57,10 +57,10 @@
           </span>
           <g:message code="equipment.section.manufacturer.information.label" default="Manufacturer Information"/>
         </h4>
-      	<g:selectFromList name="manufacturer.id" label="${message(code:'provider.type.manufacturer.label')}" bean="${equipment}" field="manufacturer" optionKey="id" multiple="false"
+      	<g:selectFromList name="manufacturer.id" label="${message(code:'provider.type.manufacturer')}" bean="${equipment}" field="manufacturer" optionKey="id" multiple="false"
   			ajaxLink="${createLink(controller:'provider', action:'getAjaxData', params: [type:'MANUFACTURER'])}"
   			from="${manufacturers}" value="${equipment?.manufacturer?.id}" values="${manufacturers.collect{it.contact.contactName}}" />	
-  			<g:inputDate name="manufactureDate" precision="day"  value="${equipment.manufactureDate}" id="manufacture-date" label="${message(code:'equipment.manufacture.date.label')}" bean="${equipment}" field="manufactureDate"/>
+  			<g:inputDate name="manufactureDate" precision="day" valueDefault="none"  value="${equipment.manufactureDate}" id="manufacture-date" label="${message(code:'equipment.manufacture.date.label')}" bean="${equipment}" field="manufactureDate"/>
      	</fieldset>
     	  <div id="form-aside-manufacturer" class="form-aside">
 	    	  <g:if test="${equipment.id != null}">
@@ -76,7 +76,7 @@
           </span>
           <g:message code="equipment.section.supplier.information.label" default="Supplier Information"/>
         </h4>
-      	<g:selectFromList name="supplier.id" label="${message(code:'provider.type.supplier.label')}" bean="${equipment}" field="supplier" optionKey="id" multiple="false"
+      	<g:selectFromList name="supplier.id" label="${message(code:'provider.type.supplier')}" bean="${equipment}" field="supplier" optionKey="id" multiple="false"
   			ajaxLink="${createLink(controller:'provider', action:'getAjaxData', params: [type:'SUPPLIER'])}"
   			from="${suppliers}" value="${equipment?.supplier?.id}" values="${suppliers.collect{it.contact.contactName}}" />		
     		<g:inputDate name="purchaseDate" precision="day" id="purchase-date" value="${equipment.purchaseDate}" label="${message(code:'equipment.purchase.date.label')}" bean="${equipment}" field="purchaseDate"/>
@@ -97,7 +97,7 @@
           <g:message code="equipment.section.status.information.label" default="Status Information"/> 
         </h4>
       	<g:if test="${equipment.id == null}">
-     			<g:selectFromEnum name="status" bean="${equipment}" values="${Status.values()}" field="status" label="${message(code:'equipment.status.label')}"/>
+     			<g:selectFromEnum name="status" bean="${equipment.status}" values="${Status.values()}" field="status" label="${message(code:'equipment.status.label')}"/>
      			<g:inputDate name="dateOfEvent" precision="day"  value="${equipment.status?.dateOfEvent}" id="date-of-event" label="${message(code:'equipment.status.date.of.event.label')}" bean="${equipment.status}" field="status.dateOfEvent"/>
       	</g:if>
       	<g:if test="${equipment?.status!=null}">
@@ -116,7 +116,7 @@
 			    			<td>
 				    		<ul>
 								<li>
-									<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'delete', params:[id: status.id,equipment: equipment?.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');" class="delete-button"><g:message code="default.link.delete.label" /></a>
+									<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'delete', params:[id: status.id,'equipment.id': equipment?.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');" class="delete-button"><g:message code="default.link.delete.label" /></a>
 								</li>
 							</ul>
 			    			</td>
@@ -129,10 +129,10 @@
 	    		</g:each>
 	    	</table>
 	    	<br />
-  	    	<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'create', params:[equipment: equipment?.id])}" class="next medium gray">
+  	    	<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'create', params:['equipment.id': equipment?.id])}" class="next medium gray">
   	    		<g:message code="equipment.change.status.label" default="Change Status"/>
   	    	</a>
-  	    	<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'list', params:[equipment: equipment?.id])}">
+  	    	<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'list', params:['equipment.id': equipment?.id])}">
   	    		<g:message code="equipment.see.all.status.label" default="See all status"/>
   	    	</a>
      		</g:if>

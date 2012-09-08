@@ -1,6 +1,6 @@
 <div class="entity-form-container togglable">
 	<div class="heading1-bar">
-		<h1 class="asd">
+		<h1>
 			<g:if test="${department.id != null}">
 				<g:message code="default.edit.label" args="[message(code:'department.label')]" />
 			</g:if>

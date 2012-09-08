@@ -225,4 +225,142 @@ class EquipmentSpec extends IntegrationTests{
 		Equipment.count() == 0
 		equipment.errors.hasFieldErrors('purchaseDate') == true
 	}
+	
+	def "can get current status based on time"(){
+		setup:
+		setupLocationTree()
+		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
+		def equipmentModel = Initializer.newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
+		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
+		def user  = newUser("admin", "Admin UID")
+		def equipment = new Equipment(serialNumber:"test123", purchaseCost:"1,200",manufactureDate:Initializer.getDate(22,07,2010),
+			purchaseDate:Initializer.getDate(22,07,2010),registeredOn:Initializer.getDate(22,07,2010), model:"equipmentModel", department:department,
+			 dataLocation:DataLocation.list().first(),donation:true,obsolete:false,expectedLifeTime:20,
+			 descriptions:['en':'Equipment Descriptions'], type:equipmentType)
+
+		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+		
+		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
+		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
+		
+		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
+		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),Initializer.getDate(12, 12, 2012),[:])
+
+		equipment.manufacturer=manufacture
+		equipment.supplier=supplier
+		equipment.warranty=warranty
+		equipment.save(failOnError: true)
+		
+		when:
+		def statusThree= Initializer.newEquipmentStatus(Initializer.getDate(10, 12, 2010),User.findByUsername("admin"),Status.INSTOCK,equipment,false)
+		def statusTwo= Initializer.newEquipmentStatus(Initializer.getDate(10, 12, 2011),User.findByUsername("admin"),Status.OPERATIONAL,equipment,false)
+		def statusOne= Initializer.newEquipmentStatus(Initializer.getDate(10, 07, 2012),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipment,true)
+		equipment.status =[statusThree,statusTwo,statusOne]
+		equipment.save(failOnError: true)
+		then:
+		Equipment.count() == 1
+		Equipment.list()[0].getCurrentStatusBasedOnTime().is(statusOne)
+	}
+	
+	def "can set current status based on time"(){
+		setup:
+		setupLocationTree()
+		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
+		def equipmentModel = Initializer.newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
+		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
+		def user  = newUser("admin", "Admin UID")
+		def equipment = new Equipment(serialNumber:"test123", purchaseCost:"1,200",manufactureDate:Initializer.getDate(22,07,2010),
+			purchaseDate:Initializer.getDate(22,07,2010),registeredOn:Initializer.getDate(22,07,2010), model:"equipmentModel", department:department,
+			 dataLocation:DataLocation.list().first(),donation:true,obsolete:false,expectedLifeTime:20,
+			 descriptions:['en':'Equipment Descriptions'], type:equipmentType)
+
+		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+		
+		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
+		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
+		
+		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
+		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),Initializer.getDate(12, 12, 2012),[:])
+
+		equipment.manufacturer=manufacture
+		equipment.supplier=supplier
+		equipment.warranty=warranty
+		equipment.save(failOnError: true)
+		when:
+		def statusThree= Initializer.newEquipmentStatus(Initializer.getDate(10, 12, 2010),User.findByUsername("admin"),Status.INSTOCK,equipment,false)
+		def statusTwo= Initializer.newEquipmentStatus(Initializer.getDate(10, 12, 2011),User.findByUsername("admin"),Status.OPERATIONAL,equipment,true)
+		def statusOne= Initializer.newEquipmentStatus(Initializer.getDate(10, 07, 2012),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipment,false)
+		equipment.status =[statusThree,statusTwo,statusOne]
+		equipment.save(failOnError: true)
+		Equipment.list()[0].setCurrentStatus()
+		then:
+		Equipment.count() == 1
+		Equipment.list()[0].getCurrentStatusBasedOnTime().is(statusOne)
+		statusTwo.current == false
+	}
+	
+	def "can get current status"(){
+		setup:
+		setupLocationTree()
+		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
+		def equipmentModel = Initializer.newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
+		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
+		def user  = newUser("admin", "Admin UID")
+		def equipment = new Equipment(serialNumber:"test123", purchaseCost:"1,200",manufactureDate:Initializer.getDate(22,07,2010),
+			purchaseDate:Initializer.getDate(22,07,2010),registeredOn:Initializer.getDate(22,07,2010), model:"equipmentModel", department:department,
+			 dataLocation:DataLocation.list().first(),donation:true,obsolete:false,expectedLifeTime:20,
+			 descriptions:['en':'Equipment Descriptions'], type:equipmentType)
+		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
+		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
+		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
+		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),Initializer.getDate(12, 12, 2012),[:])
+		equipment.manufacturer=manufacture
+		equipment.supplier=supplier
+		equipment.warranty=warranty
+		equipment.save(failOnError: true)
+		
+		
+		when:
+		def statusThree= Initializer.newEquipmentStatus(Initializer.getDate(10, 12, 2010),User.findByUsername("admin"),Status.INSTOCK,equipment,false)
+		def statusTwo= Initializer.newEquipmentStatus(Initializer.getDate(10, 12, 2011),User.findByUsername("admin"),Status.OPERATIONAL,equipment,false)
+		def statusOne= Initializer.newEquipmentStatus(Initializer.getDate(10, 07, 2012),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipment,false)
+		equipment.status =[statusThree,statusTwo,statusOne]
+		equipment.save(failOnError: true)
+		then:
+		Equipment.count() == 1
+		Equipment.list()[0].getCurrentState().is(statusOne)
+		statusTwo.current == false
+		
+		
+		when:
+		equipment.status=[]
+		equipment.save(failOnError: true)
+		def statusSix= Initializer.newEquipmentStatus(Initializer.getDate(10, 12, 2010),User.findByUsername("admin"),Status.INSTOCK,equipment,false)
+		def statusFive= Initializer.newEquipmentStatus(Initializer.getDate(10, 12, 2011),User.findByUsername("admin"),Status.OPERATIONAL,equipment,false)
+		def statusFour= Initializer.newEquipmentStatus(Initializer.getDate(10, 07, 2012),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipment,true)
+		equipment.status =[statusSix,statusFive,statusFour]
+		equipment.save(failOnError: true)
+		then:
+		Equipment.count() == 1
+		Equipment.list()[0].getCurrentState().is(statusFour)
+		statusFive.current == false
+		
+		when:
+		equipment.status=[]
+		equipment.save(failOnError: true)
+		def statusN= Initializer.newEquipmentStatus(Initializer.getDate(10, 12, 2010),User.findByUsername("admin"),Status.INSTOCK,equipment,false)
+		def statusH= Initializer.newEquipmentStatus(Initializer.getDate(10, 12, 2011),User.findByUsername("admin"),Status.OPERATIONAL,equipment,true)
+		def statusS= Initializer.newEquipmentStatus(Initializer.getDate(10, 07, 2012),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipment,false)
+		equipment.status =[statusN,statusH,statusS]
+		equipment.save(failOnError: true)
+		then:
+		Equipment.count() == 1
+		Equipment.list()[0].getCurrentState().is(statusS)
+		statusH.current == false
+	}
+	
 }

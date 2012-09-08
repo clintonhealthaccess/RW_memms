@@ -329,6 +329,7 @@ form.search-form
     background: #e8f3fb
     width: 350px
   &.register
+    padding: 0 10px
     width: 460px
     
 .nice-form
@@ -400,6 +401,8 @@ form.search-form
       +box-shadow(rgba(0, 0, 0, 0.08) 1px 1px 4px inset)
 
 .items
+  border-collapse: separate
+  margin-bottom: 15px
   width: 100%
   th, td
     line-height: 1.3
@@ -414,6 +417,7 @@ form.search-form
   td
     border-top: 1px solid rgba(0, 0, 0, 0.08)
     padding: 5px 10px
+    position: relative
     &:first-child
       padding-left: 15px
     &:last-child
@@ -429,6 +433,8 @@ form.search-form
         opacity: 0.7
     &:first-child th
       border-bottom: 1px solid rgba(0, 0, 0, 0.15)
+    &:first-child td
+      border-top: 0
     &:last-child td
       border-bottom: 1px solid rgba(0, 0, 0, 0.08)
   &.spaced
@@ -474,7 +480,7 @@ form.search-form
     width: 290px
     
 .paginateButtons
-  padding: 15px
+  padding: 0 15px 15px
   +pie-clearfix
   a
     background: $filler
@@ -539,7 +545,7 @@ form.search-form
       display: inline
       float: left
       height: 50px
-      width: 33%
+      width: 32%
   label
     display: block
     font-size: 11px
@@ -550,7 +556,7 @@ form.search-form
     color: $primary
     font-size: 11px
     font-weight: bold
-    padding: 4px
+    padding: 3px
     width: 300px
     +border-radius(2px)
   button
@@ -566,3 +572,13 @@ form.search-form
   font-size: 10px
   margin-left: 5px
   text-transform: uppercase
+  
+.checkbox
+  position: relative
+  .list-check-box-spinner, .list-check-box
+    position: absolute
+  .list-check-box-spinner
+    top: -7px
+  .list-check-box
+    margin: 0
+    top: -5px

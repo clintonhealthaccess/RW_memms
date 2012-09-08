@@ -246,4 +246,42 @@ class EquipmentControllerSpec extends IntegrationTests{
 		then:
 		commandFilter.hasErrors() == true
 	}
+	def "test update donation and obsolete ajax updateDonationAndObsolete()"(){
+		setup:
+		setupLocationTree()
+
+		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+		def manufacture = Initializer.newProvider(CODE(111), Type.MANUFACTURER,manufactureContact)
+		def supplier = Initializer.newProvider(CODE(222), Type.SUPPLIER,supplierContact)
+		
+		def user  = newUser("admin", "Admin UID")
+		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
+		def equipmentModel = Initializer.newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
+		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
+
+		def equipmentOne = Initializer.newEquipment("SERIAL10",true,false,32,"ROOM A1","2900.23",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),new Date(),"equipmentModel",DataLocation.findByCode('Kivuye HC'),department,equipmentType,manufacture,supplier)
+		def equipmentTwo = Initializer.newEquipment("SERIAL11",true,false,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),new Date(),"equipmentModel",DataLocation.findByCode('Butaro DH'),department,equipmentType,manufacture,supplier)		
+		equipmentOne.save(flush: true)
+		equipmentTwo.save(flush: true)
+		
+		when:
+		equipmentController = new EquipmentController();
+		equipmentController.params.field = "donation"
+		equipmentController.params['equipment.id'] = equipmentOne.id
+		equipmentController.updateDonationAndObsolete()
+		then:
+		equipmentOne.donation == false
+		
+		when:
+		equipmentController = new EquipmentController();
+		equipmentController.params.field = "obsolete"
+		equipmentController.params['equipment.id'] = equipmentTwo.id
+		equipmentController.updateDonationAndObsolete()
+		then:
+		equipmentTwo.obsolete == true
+//		
+	}
 }

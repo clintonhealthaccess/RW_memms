@@ -48,6 +48,10 @@ class FormTagLib {
 		if (attrs["id"] == null) attrs["id"] = 'date-field-one'
 		out << render(template:"/tags/form/inputDate", model: attrs)
 	}
+	
+	def listCheckBox = { attrs, body ->
+		out << render(template:"/tags/form/listCheckBox", model: attrs)
+	}
 		
 	def selectFromEnum = { attrs, body ->
 		out << render(template:"/tags/form/selectFromEnum", model: attrs)
