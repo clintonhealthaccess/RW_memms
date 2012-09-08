@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, Clinton Health Access Initiative.
+ * Copyright (c) 2012, Clinton Health Access Initiative.
  *
  * All rights reserved.
  *
@@ -37,11 +37,11 @@ import org.chai.memms.location.LocationService;
 import org.chai.memms.util.Utils;
 import org.hibernate.SessionFactory
 
-public abstract class ExportService {
+public abstract class Exporter {
 
 	public LanguageService languageService;
 	public SessionFactory sessionFactory;
 	
-	public abstract List<String> getExportDataHeaders(String language);
-	public abstract File exportData(String language) throws IOException;
+	public abstract List<String> getExportDataHeaders();
+	public abstract File exportData() throws IOException;
 }
