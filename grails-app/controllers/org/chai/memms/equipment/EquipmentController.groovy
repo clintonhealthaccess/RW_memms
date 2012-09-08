@@ -104,7 +104,8 @@ class EquipmentController extends AbstractEntityController{
 		if(entity.id==null)
 			currentStatus = newEquipmentStatus(new Date(),getUser(),params.cmd.status,entity,true,params.cmd.dateOfEvent)
 		entity.save()
-		currentStatus.save()
+		(!currentStatus)?:currentStatus.save()
+		
 	}
 
 	def save ={StatusCommand cmd ->
@@ -252,8 +253,7 @@ class EquipmentController extends AbstractEntityController{
 			}
 			
 			if(entity!=null) value=true 
-			else error = "error.updating.try.again"
-			render(contentType:"text/json") { results = [value,error]}
+			render(contentType:"text/json") { results = [value]}
 		}
 	}
 	

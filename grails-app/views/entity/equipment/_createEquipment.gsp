@@ -98,7 +98,7 @@
         </h4>
       	<g:if test="${equipment.id == null}">
       			<g:selectFromEnum name="status" bean="${cmd}" values="${Status.values()}" field="status" label="${message(code:'equipment.status.label')}"/>
-     			<g:inputDate name="dateOfEvent" precision="day"  value="${equipment.status?.dateOfEvent}" id="date-of-event" label="${message(code:'equipment.status.date.of.event.label')}" bean="${cmd}" field="dateOfEvent"/>
+     			<g:inputDate name="dateOfEvent" precision="day"  value="${cmd.status?.dateOfEvent}" id="date-of-event" label="${message(code:'equipment.status.date.of.event.label')}" bean="${cmd}" field="dateOfEvent"/>
       	</g:if>
       	<g:if test="${equipment?.status!=null}">
 	    	<table class="items">
