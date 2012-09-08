@@ -43,7 +43,7 @@ class EquipmentTypeImportTask extends ImportTask {
 	def sessionFactory;
 	
 	String getInformation() {
-		return message(code: 'equipment.type.label') + '<br/>'+message(code:'import.file.label')+': '+getInputFilename()
+		return message(code: 'equipment.type.label') + '<br/>'+ message(code:'import.file.label')+': '+getInputFilename()
 	}
 	
 	FileImporter getImporter(ImporterErrorManager errorManager) {

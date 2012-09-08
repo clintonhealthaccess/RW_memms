@@ -40,7 +40,8 @@ class EquipmentTypeExportTask extends DataExportTask {
 	def sessionFactory;
 	
 	String getInformation() {
-		return message(code: 'equipment.type.label') + '<br/>'+message(code:'import.file.label')+': '+getInputFilename()
+		//TODO find out why the message is not working
+		return "export"//message(code: 'equipment.type.label') + '<br/>'+message(code:'import.file.label')+': '+getOutputFilename()
 	}
 	
 	Exporter getExporter() {
