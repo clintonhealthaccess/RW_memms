@@ -142,6 +142,7 @@ class EquipmentController extends AbstractEntityController{
 	}
 	
 	def summaryPage = {
+		if(getUser().location instanceof DataLocation) redirect(uri: "/equipment/list/" + getUser().location.id)
 		def location = Location.get(params.int('location'))
 		def dataLocationTypesFilter = getLocationTypes()
 		def template = null
@@ -150,6 +151,7 @@ class EquipmentController extends AbstractEntityController{
 		adaptParamsForList()
 		
 		def locationSkipLevels = inventoryService.getSkipLocationLevels()
+		
 		
 		if (location != null) {
 			template = '/inventory/sectionTable'
