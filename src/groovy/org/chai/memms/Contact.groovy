@@ -62,7 +62,6 @@ public class Contact {
 		version false
 		addressDescriptions_en type: "text"
 		addressDescriptions_fr type: "text"
-		addressDescriptions_rw type: "text"
 	}
 	
 }

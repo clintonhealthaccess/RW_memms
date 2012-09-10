@@ -29,8 +29,8 @@
 package org.chai.memms.equipment
 
 import java.util.Date;
-
 import i18nfields.I18nFields
+
 /**
  * @author Eugene Munyaneza
  *
@@ -39,8 +39,8 @@ import i18nfields.I18nFields
 @i18nfields.I18nFields
 class EquipmentType {
 
-	def languageService
-	enum Observation{		
+	enum Observation{
+		NONE("none"),
 		USEDINMEMMS("used.in.memms"),
 		RETIRED("retired"),
 		TOODETAILED("too.detailed"),
@@ -74,7 +74,7 @@ class EquipmentType {
 		addedOn nullable: false, blank: false, validator:{it <= new Date()}
 		lastModifiedOn nullable: false, blank: false, validator:{it <= new Date()}
 		
-		observation nullable: false
+		observation nullable: false, inLIst:[Observation.USEDINMEMMS,Observation.RETIRED,Observation.TOODETAILED,Observation.NOTINSCOPE]
     }
 	
 	static mapping = {
@@ -82,16 +82,13 @@ class EquipmentType {
 		version false
 		descriptions_en type: 'text'
 		descriptions_fr type: 'text'
-		descriptions_rw type: 'text'
 		names_en type: 'text'
 		names_fr type: 'text'
-		names_rw type: 'text'
 		
 	}
 	
 	String toString() {
 		return "EquipmentType[Id=" + id + "code="+code+"]";
-		//return getNames(languageService.getCurrentLanguage()) + ' [' + code + ']'
 	}
 	@Override
 	public int hashCode() {

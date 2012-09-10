@@ -53,7 +53,6 @@ class EquipmentStatus {
 		String getKey() { return name() }
 	}
 	
-	
 	Date dateOfEvent;
 	Date statusChangeDate;
 	User changedBy
@@ -86,5 +85,29 @@ class EquipmentStatus {
 				+ changedBy + ", status=" + status + ", current=" + current
 				+ "]";
 	}	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this.is(obj))
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		EquipmentStatus other = (EquipmentStatus) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
+	
 	
 }

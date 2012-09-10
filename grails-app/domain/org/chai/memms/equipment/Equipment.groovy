@@ -77,8 +77,11 @@ public class Equipment {
 		
 		manufactureDate nullable: false, blank: false, validator:{it <= new Date()}
 		purchaseDate nullable: false, blank: false, validator:{ val, obj ->
-			return (val <= new Date()) && (val.after(obj.manufactureDate) || (val.compareTo(obj.manufactureDate)==0))
+			return  ((val <= new Date()) && val.after(obj.manufactureDate) || (val.compareTo(obj.manufactureDate)==0))
 			}
+		registeredOn nullable: false,validator: { val, obj ->
+			return (val.after(obj.purchaseDate) || (val.compareTo(obj.purchaseDate)==0))
+		}
 		
 		descriptions nullable: true, blank: true
 		donation nullable: false
@@ -91,7 +94,6 @@ public class Equipment {
 		version false
 		descriptions_en type: 'text'
 		descriptions_fr type: 'text'
-		descriptions_rw type: 'text'
 		
 	}
 	

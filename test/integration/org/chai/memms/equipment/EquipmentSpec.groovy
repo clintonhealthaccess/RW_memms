@@ -52,7 +52,7 @@ class EquipmentSpec extends IntegrationTests{
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 		when:
 		def equipment = new Equipment(serialNumber:"test123", purchaseCost:"1,200",manufactureDate:Initializer.getDate(22,07,2010),
-			purchaseDate:Initializer.getDate(22,07,2010),registeredOn:Initializer.getDate(22,07,2010), model:"equipmentModel", department:department,
+			purchaseDate:Initializer.getDate(22,07,2010),registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,
 			 dataLocation:DataLocation.list().first(),donation:true,obsolete:false,expectedLifeTime:20,
 			 descriptions:['en':'Equipment Descriptions'], type:equipmentType)
 
@@ -84,7 +84,7 @@ class EquipmentSpec extends IntegrationTests{
 		def equipmentType = Initializer.newEquipmentType(CODE(15810), ["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 		when:
 		def equipment = new Equipment(purchaseCost:"1,200",manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),
-				registeredOn:Initializer.getDate(22,07,2010), model:"equipmentModel", department:department,donation:true,obsolete:false,expectedLifeTime:20,
+				registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,donation:true,obsolete:false,expectedLifeTime:20,
 				dataLocation:DataLocation.list().first(),descriptions:['en':'Equipment Descriptions'], type:equipmentType)
 
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
@@ -114,7 +114,7 @@ class EquipmentSpec extends IntegrationTests{
 		def equipmentType = Initializer.newEquipmentType(CODE(15810), ["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 		when:
 		def equipment = new Equipment(serialNumber:"test123",manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),
-				registeredOn:Initializer.getDate(22,07,2010), model:"equipmentModel", department:department,donation:true,obsolete:false,expectedLifeTime:20,
+				registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,donation:true,obsolete:false,expectedLifeTime:20,
 				dataLocation:DataLocation.list().first(),descriptions:['en':'Equipment Descriptions'],type:equipmentType)
 
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
@@ -150,7 +150,7 @@ class EquipmentSpec extends IntegrationTests{
 				Initializer.getDate(22,07,2010),"equipmentModel",DataLocation.list().first(),department, equipmentType,manufacture,supplier)
 		when:
 		def equipment = new Equipment(serialNumber:"test123",purchaseCost:"1,200",manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),
-				registeredOn:Initializer.getDate(22,07,2010), model:"equipmentModel", department:department, donation:true,obsolete:false,expectedLifeTime:20,
+				registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department, donation:true,obsolete:false,expectedLifeTime:20,
 				dataLocation:DataLocation.list().first(),descriptions:['en':'Equipment Descriptions'],type:equipmentType)
 
 		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
@@ -175,7 +175,7 @@ class EquipmentSpec extends IntegrationTests{
 		def equipmentType = Initializer.newEquipmentType("15810", ["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 		when:
 		def equipment = new Equipment(serialNumber:"test123", purchaseCost:"1,200",manufactureDate:Initializer.now().next(),purchaseDate:Initializer.getDate(22,07,2010),
-				registeredOn:Initializer.getDate(22,07,2010), model:"equipmentModel", department:department, donation:true,obsolete:false,expectedLifeTime:20,
+				registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department, donation:true,obsolete:false,expectedLifeTime:20,
 				dataLocation:DataLocation.list().first(),descriptions:['en':'Equipment Descriptions'],type:equipmentType)
 
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
@@ -196,7 +196,7 @@ class EquipmentSpec extends IntegrationTests{
 		equipment.errors.hasFieldErrors('manufactureDate') == true
 	}
 
-	def "purchase date must be after today"() {
+	def "purchase date can't be after today"() {
 
 		setup:
 		setupLocationTree()
@@ -234,7 +234,7 @@ class EquipmentSpec extends IntegrationTests{
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 		def user  = newUser("admin", "Admin UID")
 		def equipment = new Equipment(serialNumber:"test123", purchaseCost:"1,200",manufactureDate:Initializer.getDate(22,07,2010),
-			purchaseDate:Initializer.getDate(22,07,2010),registeredOn:Initializer.getDate(22,07,2010), model:"equipmentModel", department:department,
+			purchaseDate:Initializer.getDate(22,07,2010),registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,
 			 dataLocation:DataLocation.list().first(),donation:true,obsolete:false,expectedLifeTime:20,
 			 descriptions:['en':'Equipment Descriptions'], type:equipmentType)
 
@@ -271,7 +271,7 @@ class EquipmentSpec extends IntegrationTests{
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 		def user  = newUser("admin", "Admin UID")
 		def equipment = new Equipment(serialNumber:"test123", purchaseCost:"1,200",manufactureDate:Initializer.getDate(22,07,2010),
-			purchaseDate:Initializer.getDate(22,07,2010),registeredOn:Initializer.getDate(22,07,2010), model:"equipmentModel", department:department,
+			purchaseDate:Initializer.getDate(22,07,2010),registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,
 			 dataLocation:DataLocation.list().first(),donation:true,obsolete:false,expectedLifeTime:20,
 			 descriptions:['en':'Equipment Descriptions'], type:equipmentType)
 
@@ -309,7 +309,7 @@ class EquipmentSpec extends IntegrationTests{
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 		def user  = newUser("admin", "Admin UID")
 		def equipment = new Equipment(serialNumber:"test123", purchaseCost:"1,200",manufactureDate:Initializer.getDate(22,07,2010),
-			purchaseDate:Initializer.getDate(22,07,2010),registeredOn:Initializer.getDate(22,07,2010), model:"equipmentModel", department:department,
+			purchaseDate:Initializer.getDate(22,07,2010),registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,
 			 dataLocation:DataLocation.list().first(),donation:true,obsolete:false,expectedLifeTime:20,
 			 descriptions:['en':'Equipment Descriptions'], type:equipmentType)
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")

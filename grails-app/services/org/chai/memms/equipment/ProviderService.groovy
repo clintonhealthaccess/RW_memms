@@ -39,7 +39,7 @@ class ProviderService {
 	def languageService;
 	def sessionFactory;
 	
-	public List<Provider> searchProvider(Type type,String text, Map<String, String> params) {
+	public List<Provider> searchProvider(Type type,String text, Map<String, String>params){
 		def dbFieldDescriptions = 'addressDescriptions_'+languageService.getCurrentLanguagePrefix();
 		def criteria = Provider.createCriteria()
 		

@@ -58,7 +58,6 @@ class Warranty{
 		version false
 		descriptions_en type: "text"
 		descriptions_fr type: "text"
-		descriptions_rw type: "text"
 	}
 
 	@Override

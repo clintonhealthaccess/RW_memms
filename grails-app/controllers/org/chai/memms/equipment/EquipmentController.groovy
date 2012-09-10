@@ -86,8 +86,7 @@ class EquipmentController extends AbstractEntityController{
 			entity.registeredOn=new Date()
 		}
 		bindData(entity,params,[exclude:["status","dateOfEvent"]])
-		if(log.isDebugEnabled()) log.debug("Equipment params: after bind  "+entity.serialNumber)
-		//entity.properties = params
+		if(log.isDebugEnabled()) log.debug("Equipment params: after bind  "+entity)
 	}
 	
 	def validateEntity(def entity) {
@@ -179,59 +178,63 @@ class EquipmentController extends AbstractEntityController{
 	
 	def list={ 
 		def dataLocation = DataLocation.get(params.int('location'))
-		if (dataLocation == null){
+		if (dataLocation == null)
 			response.sendError(404)
-		}
+			
 		adaptParamsForList()
-		
-		def equipments = equipmentService.getEquipmentsByDataLocation(dataLocation,params)
-												
-			render(view:"/entity/list", model:[
+		def equipments = equipmentService.getEquipmentsByDataLocation(dataLocation,params)								
+		render(view:"/entity/list", model:[
 				template:"equipment/equipmentList",
 				filterTemplate:"equipment/equipmentFilter",
 				dataLocation:dataLocation,
 				entities: equipments,
-				//filterCmd: filterCommand,
 				entityCount: equipments.totalCount,
 				code: getLabel(),
 				entityClass: getEntityClass()
-				])
+			])
 
 	}
 
 	def filter = { FilterCommand cmd ->
 		if (log.isDebugEnabled()) log.debug("equipments.filter, command "+cmd)
-
-		if (cmd.dataLocation == null){
+		if (cmd.dataLocation == null)
 			response.sendError(404)
-		}
 
 		adaptParamsForList()
-		def equipments = []
-
-		equipments = equipmentService.filterEquipment(
-				cmd.dataLocation,cmd.supplier,cmd.manufacturer,cmd.equipmentType,cmd.donated,cmd.obsolete,cmd.status,params)
-
+		def equipments = equipmentService.filterEquipment(cmd.dataLocation,cmd.supplier,cmd.manufacturer,cmd.equipmentType,cmd.donated,cmd.obsolete,cmd.status,params)
 		render (view: '/entity/list', model:[
-					template:"equipment/equipmentList",
-					filterTemplate:"equipment/equipmentFilter",
-					dataLocation:cmd.dataLocation,
-					entities: equipments,
-					entityCount: equipments.totalCount,
-					code: getLabel(),
-					entityClass: getEntityClass(),
-					filterCmd:cmd,
-					q:params['q']
+				template:"equipment/equipmentList",
+				filterTemplate:"equipment/equipmentFilter",
+				dataLocation:cmd.dataLocation,
+				entities: equipments,
+				entityCount: equipments.totalCount,
+				code: getLabel(),
+				entityClass: getEntityClass(),
+				filterCmd:cmd,
+				q:params['q']
 				])
 
 	}
 	
-	def export = {
-		
-	}
 	def importer = {
-		
+	
 	}
+	
+	def export = {
+		def dataLocation = DataLocation.get(params.int('location'))
+		if (dataLocation == null)
+			response.sendError(404)
+		adaptParamsForList()
+		def equipments = equipmentService.getEquipmentsByDataLocation(dataLocation,params)	
+		
+		File file = equipmentService.exporter(dataLocation,equipments)
+		
+		response.setHeader "Content-disposition", "attachment; filename=${file.name}.csv"
+		response.contentType = 'text/csv'
+		response.outputStream << file.text
+		response.outputStream.flush()
+	}
+	
 	def updateDonationAndObsolete = {
 		if (log.isDebugEnabled()) log.debug("equipment.donation "+params['equipment.id'])
 		def equipment = Equipment.get(params.int(['equipment.id']))

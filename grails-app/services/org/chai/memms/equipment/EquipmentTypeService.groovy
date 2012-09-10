@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.chai.memms.equipment.EquipmentType
+import org.chai.memms.equipment.EquipmentType.Observation
 import org.chai.memms.equipment.Provider.Type;
 import org.chai.memms.util.Utils;
 /**
@@ -55,5 +56,20 @@ class EquipmentTypeService {
 			}
 			
 		}
+	}
+	
+	def importToBoolean = {
+		if(it.compareToIgnoreCase("no")) return false
+		else if(it.compareToIgnoreCase("yes")) return true
+		else return null
+	}
+	
+	def importToObservation = {
+		if (it == null) return Observation.USEDINMEMMS
+		else if(it?.compareToIgnoreCase("Retired concept")) return Observation.RETIRED
+		else if(it?.compareToIgnoreCase("Too detailed")) return Observation.TOODETAILED
+		else if(it?.compareToIgnoreCase("Outside scope")) return Observation.RETIRED
+		else if(!(it?.trim())) return Observation.USEDINMEMMS
+		else return Observation.USEDINMEMMS
 	}
 }

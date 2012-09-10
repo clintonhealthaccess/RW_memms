@@ -40,7 +40,7 @@ class EquipmentControllerSpec extends IntegrationTests{
 		equipmentController.params.obsolete = false
 		equipmentController.params.descriptions_en = "test_english_descriptions"
 		equipmentController.params.manufactureDate = Initializer.getDate(1,1,2012)
-		equipmentController.params.purchaseDate = Initializer.getDate(1,1,2012)
+		equipmentController.params.purchaseDate = Initializer.getDate(2,1,2012)
 		equipmentController.params.registeredOn = Initializer.now()
 		equipmentController.params.department = department
 		equipmentController.params.type = equipmentType
@@ -50,7 +50,7 @@ class EquipmentControllerSpec extends IntegrationTests{
 		equipmentController.params.status="DISPOSED"
 		equipmentController.params.dateOfEvent=Initializer.now()
 		equipmentController.save(failOnError: true)
-		
+				
 		then:
 		Equipment.count() == 1;
 		Equipment.findBySerialNumber("SERIAL12129").serialNumber.equals("SERIAL12129")
@@ -88,14 +88,13 @@ class EquipmentControllerSpec extends IntegrationTests{
 		equipmentController.params.purchaseDate = Initializer.getDate(1,1,2012)
 		equipmentController.params.registeredOn = Initializer.getDate(1,1,2012)
 		equipmentController.params.department = department
-		equipmentController.params.model = "equipmentModel"
 		equipmentController.params.type = equipmentType
 		equipmentController.params.manufacturer = manufacture
 		equipmentController.params.supplier = supplier
 		equipmentController.params.dataLocation = DataLocation.list().first()
 		equipmentController.params.status="FORDISPOSAL"
 		equipmentController.params.dateOfEvent=Initializer.now()
-		equipmentController.save()
+		equipmentController.save(failOnError: true)
 		
 		then:
 		Equipment.count() == 1;
@@ -281,7 +280,6 @@ class EquipmentControllerSpec extends IntegrationTests{
 		equipmentController.params['equipment.id'] = equipmentTwo.id
 		equipmentController.updateDonationAndObsolete()
 		then:
-		equipmentTwo.obsolete == true
-//		
+		equipmentTwo.obsolete == true		
 	}
 }
