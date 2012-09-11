@@ -26,11 +26,12 @@ class EquipmentStatusSpec extends IntegrationTests{
 		def equipmentModel = Initializer.newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 		def equipment = Initializer.newEquipment(
-					"SERIAL10",true,false,32,"ROOM A1"
+					"SERIAL10",false,false,32,"ROOM A1"
 					,"2900.23",
 					['en':'Equipment Descriptions'],
 					Initializer.getDate(22,07,2010),
 					Initializer.getDate(10,10,2010),
+					"RWF",
 					new Date(),
 					"equipmentModel",
 					DataLocation.list().first(),

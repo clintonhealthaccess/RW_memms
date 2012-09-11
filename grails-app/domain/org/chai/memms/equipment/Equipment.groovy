@@ -76,7 +76,7 @@ public class Equipment {
 			if(val == null && obj.donation == null) return false
 			if(obj.donation == true) return ((val == null) && (obj.currency==null))
 		}
-		currency  nullable: true, blank: true, inList: ["RFW","USD","EUR"], validator:{ val, obj ->
+		currency  nullable: true, blank: true, inList: ["RWF","USD","EUR"], validator:{ val, obj ->
 			if(val == null && obj.donation == null) return false
 		}
 		expectedLifeTime nullable: false, blank: false

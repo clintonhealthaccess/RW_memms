@@ -96,8 +96,8 @@ class EquipmentController extends AbstractEntityController{
 				params["warranty.contact.poBox"]=""
 				params["warranty.contact.city"]=""
 				params["warranty.contact.country"]=""
-				grailsApplication.config.i18nFields.locales.each{it ->
-					params["warranty.contact.addressDescriptions_"+it] = ""
+				grailsApplication.config.i18nFields.locales.each{loc ->
+					params["warranty.contact.addressDescriptions_"+loc] = ""
 				}
 				entity.warranty.contact=null
 			}
@@ -253,7 +253,7 @@ class EquipmentController extends AbstractEntityController{
 		response.outputStream.flush()
 	}
 	
-	def updateDonationAndObsolete = {
+	def updateObsolete = {
 		if (log.isDebugEnabled()) log.debug("equipment.donation "+params['equipment.id'])
 		def equipment = Equipment.get(params.int(['equipment.id']))
 		def property = params['field'];

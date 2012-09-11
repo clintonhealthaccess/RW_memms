@@ -56,6 +56,6 @@
 </table>
 <script type="text/javascript">
 	$(document).ready(function() {
-		updateEquipment("${createLink(controller:'equipment',action: 'updateDonationAndObsolete')}");
+		updateEquipment("${createLink(controller:'equipment',action: 'updateObsolete')}");
 	});
 </script>

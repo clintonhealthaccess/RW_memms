@@ -300,7 +300,7 @@ public class Initializer {
 			equipmentFive.save(failOnError:true)
 			
 			def equipmentSix = newEquipment("SERIAL15",false,true,4,"Room A1","290540.23",['en':'Equipment Descriptions six'],
-				getDate(1,7,2000),getDate(12,7,2001),"RFW",now(),
+				getDate(1,7,2000),getDate(12,7,2001),"RWF",now(),
 				'MODEL3',
 				DataLocation.findByCode(BUTARO),
 				Department.findByCode('ANAESTHETICS'),
@@ -360,7 +360,7 @@ public class Initializer {
 			equipmentEight.save(failOnError:true,flush: true)
 			
 			def equipmentNine = newEquipment("SERIAL09",false,true,4,"Room 9A1","290540.23",['en':'Equipment Descriptions Nine'],
-				getDate(1,7,2000),getDate(12,7,2001),"RFW",now(),
+				getDate(1,7,2000),getDate(12,7,2001),"RWF",now(),
 				'MODEL3',
 				DataLocation.findByCode(BUTARO),
 				Department.findByCode('ANAESTHETICS'),
@@ -380,7 +380,7 @@ public class Initializer {
 			equipmentNine.save(failOnError:true,flush: true)
 			
 			def equipmentTen = newEquipment("SERIAL10",false,true,4,"Room 10A1","290540.23",['en':'Equipment Descriptions Ten'],
-				getDate(1,7,2000),getDate(12,7,2001),"RFW",now(),
+				getDate(1,7,2000),getDate(12,7,2001),"RWF",now(),
 				'MODELTen3',
 				DataLocation.findByCode(BUTARO),
 				Department.findByCode('ANAESTHETICS'),
