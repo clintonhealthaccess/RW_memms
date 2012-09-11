@@ -57,10 +57,10 @@ class EquipmentServiceSpec extends IntegrationTests{
 		def equipmentModel = Initializer.newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 
-		Initializer.newEquipment("SERIAL10",true,false,32,"ROOM A1","2900.23",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),new Date(),"equipmentModel",DataLocation.list().first(),department,equipmentType,manufacture,supplier)
-		Initializer.newEquipment("SERIAL11",true,false,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),new Date(),"equipmentModel",DataLocation.list().first(),department,equipmentType,manufacture,supplier)
+		Initializer.newEquipment("SERIAL10",true,false,32,"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),'',new Date(),"equipmentModel",DataLocation.list().first(),department,equipmentType,manufacture,supplier)
+		Initializer.newEquipment("SERIAL11",false,false,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),"RWF",new Date(),"equipmentModel",DataLocation.list().first(),department,equipmentType,manufacture,supplier)
 		def List<Equipment> equipments
 
 		when://Searching by serial number
@@ -99,10 +99,10 @@ class EquipmentServiceSpec extends IntegrationTests{
 		def equipmentModel = Initializer.newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 
-		Initializer.newEquipment("SERIAL10",true,false,32,"ROOM A1","2900.23",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),new Date(),"equipmentModel",DataLocation.findByCode('Kivuye HC'),department,equipmentType,manufacture,supplier)
-		Initializer.newEquipment("SERIAL11",true,false,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),new Date(),"equipmentModel",DataLocation.findByCode('Butaro DH'),department,equipmentType,manufacture,supplier)
+		Initializer.newEquipment("SERIAL10",true,false,32,"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),"",new Date(),"equipmentModel",DataLocation.findByCode('Kivuye HC'),department,equipmentType,manufacture,supplier)
+		Initializer.newEquipment("SERIAL11",false,false,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),"USD",new Date(),"equipmentModel",DataLocation.findByCode('Butaro DH'),department,equipmentType,manufacture,supplier)
 		def List<Equipment> equipments
 
 		when:
@@ -127,10 +127,10 @@ class EquipmentServiceSpec extends IntegrationTests{
 		def equipmentModel = Initializer.newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 
-		def equipmentOne = Initializer.newEquipment("SERIAL10",true,false,32,"ROOM A1","2900.23",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),new Date(),"equipmentModel",DataLocation.findByCode('Kivuye HC'),department,equipmentType,manufacture,supplier)
+		def equipmentOne = Initializer.newEquipment("SERIAL10",true,false,32,"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),"",new Date(),"equipmentModel",DataLocation.findByCode('Kivuye HC'),department,equipmentType,manufacture,supplier)
 		def equipmentTwo = Initializer.newEquipment("SERIAL11",false,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),new Date(),"equipmentModel",DataLocation.findByCode('Butaro DH'),department,equipmentType,manufacture,supplier)
+				,Initializer.getDate(10,10,2010),"USD",new Date(),"equipmentModel",DataLocation.findByCode('Butaro DH'),department,equipmentType,manufacture,supplier)
 		
 		
 		def List<Equipment> equipmentsOne, equipmentsTwo, equipmentsThree

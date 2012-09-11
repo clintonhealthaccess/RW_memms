@@ -58,7 +58,6 @@ class LocationLevel{
 		version false
 		names_en type:"text"
 		names_fr type:"text"
-		names_rw type:"text"
 	}
 	
 	@Override

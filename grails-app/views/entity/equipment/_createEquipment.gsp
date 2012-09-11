@@ -39,8 +39,6 @@
     			from="${departments}" value="${equipment?.department?.id}" values="${departments.collect{it.names}}" />
 			
       		<g:input name="room" label="${message(code:'equipment.room.label')}" bean="${equipment}" field="room"/>
-    		<g:inputBox name="obsolete"  label="${message(code:'equipment.obsolete.label')}" bean="${equipment}" field="obsolete" value="${equipment.obsolete}" checked="${(equipment.obsolete)? true:false}"/>
-    		<g:inputBox name="donation"  label="${message(code:'equipment.donation.label')}" bean="${equipment}" field="donation" value="${equipment.donation}" checked="${(equipment.donation)? true:false}"/>
     	</fieldset>	
    		<div id="form-aside-type" class="form-aside">
     	  <g:if test="${equipment.id != null}">
@@ -80,7 +78,8 @@
   			ajaxLink="${createLink(controller:'provider', action:'getAjaxData', params: [type:'SUPPLIER'])}"
   			from="${suppliers}" value="${equipment?.supplier?.id}" values="${suppliers.collect{it.contact.contactName}}" />		
     		<g:inputDate name="purchaseDate" precision="day" id="purchase-date" value="${equipment.purchaseDate}" label="${message(code:'equipment.purchase.date.label')}" bean="${equipment}" field="purchaseDate"/>
-    		<g:input name="purchaseCost" label="${message(code:'equipment.purchase.cost.label')}" bean="${equipment}" field="purchaseCost"/>
+    		<g:inputBox name="donation"  label="${message(code:'equipment.donation.label')}" bean="${equipment}" field="donation" value="${equipment.donation}" checked="${(equipment.donation)? true:false}"/>
+    		<g:currency costName="purchaseCost" id="purchase-cost" costLabel="${message(code:'equipment.purchase.cost.label')}" bean="${equipment}" costField="purchaseCost"  currencyName="currency" values="${currencies}" currencyField="currency" currencyLabel="${message(code:'equipment.currency.label')}"/>
      	</fieldset>
      	 <div id="form-aside-supplier" class="form-aside">
      		<g:if test="${equipment.id != null}">
@@ -97,10 +96,12 @@
           <g:message code="equipment.section.status.information.label" default="Status Information"/> 
         </h4>
       	<g:if test="${equipment.id == null}">
-     			<g:selectFromEnum name="status" bean="${equipment.status}" values="${Status.values()}" field="status" label="${message(code:'equipment.status.label')}"/>
-     			<g:inputDate name="dateOfEvent" precision="day"  value="${equipment.status?.dateOfEvent}" id="date-of-event" label="${message(code:'equipment.status.date.of.event.label')}" bean="${equipment.status}" field="status.dateOfEvent"/>
+      			<g:inputBox name="obsolete"  label="${message(code:'equipment.obsolete.label')}" bean="${equipment}" field="obsolete" value="${equipment.obsolete}" checked="${(equipment.obsolete)? true:false}"/>
+      			<g:selectFromEnum name="status" bean="${cmd}" values="${Status.values()}" field="status" label="${message(code:'equipment.status.label')}"/>
+     			<g:inputDate name="dateOfEvent" precision="day"  value="${cmd?.dateOfEvent}" id="date-of-event" label="${message(code:'equipment.status.date.of.event.label')}" bean="${cmd}" field="dateOfEvent"/>
       	</g:if>
       	<g:if test="${equipment?.status!=null}">
+      	<g:inputBox name="obsolete"  label="${message(code:'equipment.obsolete.label')}" bean="${equipment}" field="obsolete" value="${equipment.obsolete}" checked="${(equipment.obsolete)? true:false}"/>
 	    	<table class="items">
 	    		<tr>
 	    			<th></th>
@@ -149,15 +150,10 @@
           </span>
           <g:message code="equipment.section.warranty.information.label" default="Warranty Information"/>
         </h4>
+        <g:inputBox name="warranty.sameAsSupplier"  label="${message(code:'equipment.same.as.supplier.label')}" bean="${equipment}" field="warranty.sameAsSupplier" checked="${(equipment.warranty?.sameAsSupplier)? true:false}"/>
       	<g:inputDate name="warranty.startDate" precision="day" id="start-date" value="${equipment?.warranty?.startDate}" label="${message(code:'warranty.start.date.label')}" bean="${equipment}" field="warranty.startDate"/>
-      	<g:inputDate name="warranty.endDate" precision="day" id="end-date" value="${equipment?.warranty?.endDate}" label="${message(code:'warranty.end.date.label')}" bean="${equipment}" field="warranty.endDate"/>
-      	<g:input name="warranty.contact.contactName" label="${message(code:'entity.name.label')}" bean="${equipment}" field="warranty.contact.contactName"/>
-      	<g:input name="warranty.contact.email" label="${message(code:'contact.email.label')}" bean="${equipment}" field="warranty.contact.email"/>
-      	<g:input name="warranty.contact.phone" label="${message(code:'contact.phone.label')}" bean="${equipment}" field="warranty.contact.phone"/>
-      	<g:input name="warranty.contact.poBox" label="${message(code:'contact.pobox.label')}" bean="${equipment}" field="warranty.contact.poBox"/>
-      	<g:input name="warranty.contact.city" label="${message(code:'contact.city.label')}" bean="${equipment}" field="warranty.contact.city"/>
-      	<g:input name="warranty.contact.country" label="${message(code:'contact.country.label')}" bean="${equipment}" field="warranty.contact.country"/>
-  	    <g:i18nTextarea name="warranty.contact.addressDescriptions" bean="${equipment}" label="${message(code:'contact.address.descriptions.label')}" field="warranty.contact.addressDescriptions" height="150" width="300" maxHeight="150" />
+    	<g:input name="warranty.numberOfMonth" label="${message(code:'equipment.warranty.period.label')}" bean="${equipment}" field="warranty.numberOfMonth"/>
+      	<g:address  bean="${equipment}" warranty="true" field="warranty.contact"/>
      	<g:i18nTextarea name="warranty.descriptions" bean="${equipment}" label="${message(code:'warranty.descriptions.label')}" field="descriptions" height="150" width="300" maxHeight="150" />	 			
   		</fieldset> 
   		<div class="form-aside">
@@ -165,7 +161,7 @@
        	</div>
       </div>
   		<g:if test="${equipment.id != null}">
-  			<input type="hidden" name="id" value="${equipment.id}"></input>
+  			<input type="hidden" name="id" value="${equipment.id}"/>
   		</g:if>
   		
   		<div class="buttons">
@@ -176,3 +172,8 @@
   	</g:form>
   </div>
 </div>
+<script type="text/javascript">
+	$(document).ready(function() {
+		getToHide("${equipment.donation}","${equipment.warranty?.sameAsSupplier}");
+	});
+</script>

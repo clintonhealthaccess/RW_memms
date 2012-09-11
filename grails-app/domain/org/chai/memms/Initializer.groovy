@@ -215,8 +215,8 @@ public class Initializer {
 		
 		
 		if(!Equipment.count()){
-			def equipmentOne = newEquipment("SERIAL01",true,false,24,"Room A1","2900.23",['en':'Equipment Descriptions'],
-				getDate(22,07,2010),getDate(10,10,2010),now(),
+			def equipmentOne = newEquipment("SERIAL01",true,false,24,"Room A1","",['en':'Equipment Descriptions'],
+				getDate(22,07,2010),getDate(10,10,2010),"",now(),
 				'MODEL1',
 				DataLocation.findByCode(BUTARO),
 				Department.findByCode('SURGERY'),
@@ -226,15 +226,15 @@ public class Initializer {
 				)
 						
 			def warrantyContactOne = newContact(['fr':'Warranty Address Descriptions One'],"Warranty","jk@yahoo.com","0768-888-787","Street 654","8988")
-			def warrantyOne = newWarranty(warrantyContactOne,getDate(10, 12, 2010),getDate(12, 12, 2012),[:])
+			def warrantyOne = newWarranty(warrantyContactOne,getDate(10, 12, 2010),22,false,[:])
 			def statusOne= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentOne,true)
 			
 			equipmentOne.warranty=warrantyOne
 			equipmentOne.addToStatus(statusOne)
 			equipmentOne.save(failOnError:true,flush: true)
 
-			def equipmentTwo = newEquipment("SERIAL11",true,false,12,"Room A34","34900.23",['en':'Equipment Descriptions two'],
-				getDate(12,01,2009),getDate(10,10,2009),now(),
+			def equipmentTwo = newEquipment("SERIAL11",false,false,12,"Room A34","34900.23",['en':'Equipment Descriptions two'],
+				getDate(12,01,2009),getDate(10,10,2009),"USD",now(),
 				'MODEL2',
 				DataLocation.findByCode(KIVUYE),
 				Department.findByCode('PEDIATRY'),
@@ -243,14 +243,14 @@ public class Initializer {
 				Provider.findByCode("FIVE")
 				)
 			
-			def warrantyTwo = newWarranty(['en':'warranty one'],'warranty name1','email1@gmail.com',"0768-111-787","Street 154","898",getDate(10, 12, 2010),getDate(12, 12, 2012),[:])
+			def warrantyTwo = newWarranty(['en':'warranty one'],'warranty name1','email1@gmail.com',"0768-111-787","Street 154","898",getDate(10, 12, 2010),14,false,[:])
 			def statusTwo= newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentTwo,true)
 			equipmentTwo.warranty=warrantyTwo
 			equipmentTwo.addToStatus(statusTwo)
 			equipmentTwo.save(failOnError:true,flush: true)
 			
 			def equipmentThree = newEquipment("SERIAL12",false,true,34,"Room A1","98700.23",['en':'Equipment Descriptions three'],
-				getDate(14,8,2008),getDate(10,01,2009),now(),
+				getDate(14,8,2008),getDate(10,01,2009),"EUR",now(),
 				'MODEL3',
 				DataLocation.findByCode(BUNGWE),
 				Department.findByCode('EMERGENCY'),
@@ -259,14 +259,14 @@ public class Initializer {
 				Provider.findByCode("FIVE")
 				)
 			
-			def warrantyThree = newWarranty(['en':'warranty two'],'warranty name2','email2@gmail.com',"0768-222-787","Street 154","88",getDate(10, 12, 2010),getDate(12, 12, 2012),[:])
+			def warrantyThree = newWarranty(['en':'warranty two'],'warranty name2','email2@gmail.com',"0768-222-787","Street 154","88",getDate(10, 12, 2010),12,false,[:])
 			def statusThree= newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentThree,true)
 			equipmentThree.warranty=warrantyTwo
 			equipmentThree.addToStatus(statusThree)
 			equipmentThree.save(failOnError:true)
 			
-			def equipmentFour = newEquipment("SERIAL13",true,false,12,"Room A1","78900.23",['en':'Equipment Descriptions four'],
-				getDate(18,2,2011),getDate(10,10,2011),now(),
+			def equipmentFour = newEquipment("SERIAL13",true,false,12,"Room A1","",['en':'Equipment Descriptions four'],
+				getDate(18,2,2011),getDate(10,10,2011),"",now(),
 				'MODEL2',
 				DataLocation.findByCode(KIVUYE),
 				Department.findByCode('CARDIOLOGY'),
@@ -275,7 +275,7 @@ public class Initializer {
 				Provider.findByCode("SEVEN")
 				)
 			
-			def warrantyFour = newWarranty(['en':'warranty two'],'warranty name2','email2@gmail.com',"0768-222-787","Street 154","888",getDate(10, 12, 2010),getDate(12, 12, 2012),[:])
+			def warrantyFour = newWarranty(['en':'warranty two'],'warranty name2','email2@gmail.com',"0768-222-787","Street 154","888",getDate(10, 12, 2010),24,false,[:])
 			def statusFour = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentFour,false)
 			def statusFourOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentFour,true)
 			equipmentFour.warranty=warrantyFour
@@ -283,8 +283,8 @@ public class Initializer {
 			equipmentFour.addToStatus(statusFourOne)
 			equipmentFour.save(failOnError:true,flush: true)
 			
-			def equipmentFive = newEquipment("SERIAL14",true,true,34,"Room A1","28723",['en':'Equipment Descriptions five'],
-				getDate(11,8,2008),getDate(11,10,2009),now(),
+			def equipmentFive = newEquipment("SERIAL14",true,true,34,"Room A1","",['en':'Equipment Descriptions five'],
+				getDate(11,8,2008),getDate(11,10,2009),"",now(),
 				'MODEL1',
 				DataLocation.findByCode(BUNGWE),
 				Department.findByCode('CONSULTATION'),
@@ -293,7 +293,7 @@ public class Initializer {
 				Provider.findByCode("SIX")
 				)
 			
-			def warrantyFive = newWarranty(['en':'warranty Five'],'warranty name3','email3@gmail.com',"0768-333-787","Street 154","988",getDate(10, 12, 2010),getDate(12, 12, 2012),[:])
+			def warrantyFive = newWarranty(['en':'warranty Five'],'warranty name3','email3@gmail.com',"0768-333-787","Street 154","988",getDate(10, 12, 2010),8,false,[:])
 			def statusFive= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentFive,false)
 			def statusFiveOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentFive,false)
 			def statusFiveTwo = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentFive,true)
@@ -304,7 +304,7 @@ public class Initializer {
 			equipmentFive.save(failOnError:true)
 			
 			def equipmentSix = newEquipment("SERIAL15",false,true,4,"Room A1","290540.23",['en':'Equipment Descriptions six'],
-				getDate(1,7,2000),getDate(12,7,2001),now(),
+				getDate(1,7,2000),getDate(12,7,2001),"RWF",now(),
 				'MODEL3',
 				DataLocation.findByCode(BUTARO),
 				Department.findByCode('ANAESTHETICS'),
@@ -313,7 +313,7 @@ public class Initializer {
 				Provider.findByCode("SIX")
 				)
 			
-			def warrantySix = newWarranty(['en':'warranty four'],'warranty name4','email4@gmail.com',"0768-444-787","Street 154","8988",getDate(10, 12, 2010),getDate(12, 12, 2012),[:])
+			def warrantySix = newWarranty(['en':'warranty four'],'warranty name4','email4@gmail.com',"0768-444-787","Street 154","8988",getDate(10, 12, 2010),48,false,[:])
 			def statusSix= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentSix,false)
 			def statusSixOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentSix,false)
 			def statusSixTwo = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentSix,true)
@@ -324,7 +324,7 @@ public class Initializer {
 			equipmentSix.save(failOnError:true,flush: true)
 			
 			def equipmentSeven = newEquipment("SERIAL07",false,true,4,"Room A1","290540.23",['en':'Equipment Descriptions seven'],
-				getDate(1,7,2000),getDate(12,7,2001),now(),
+				getDate(1,7,2000),getDate(12,7,2001),"USD",now(),
 				'MODEL3',
 				DataLocation.findByCode(BUTARO),
 				Department.findByCode('ANAESTHETICS'),
@@ -333,7 +333,7 @@ public class Initializer {
 				Provider.findByCode("SIX")
 				)
 			
-			def warrantySeven = newWarranty(['en':'warranty seven'],'warranty name7','email7@gmail.com',"0768-777-787","Street 174","8988",getDate(1, 12, 2010),getDate(12, 12, 2012),[:])
+			def warrantySeven = newWarranty(['en':'warranty seven'],'warranty name7','email7@gmail.com',"0768-777-787","Street 174","8988",getDate(1, 12, 2010),4,false,[:])
 			def statusSeven= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentSeven,false)
 			def statusSevenOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentSeven,false)
 			def statusSevenTwo = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentSeven,true)
@@ -344,7 +344,7 @@ public class Initializer {
 			equipmentSeven.save(failOnError:true,flush: true)
 			
 			def equipmentEight = newEquipment("SERIAL08",false,true,4,"Room A3","290540.23",['en':'Equipment Descriptions eight'],
-				getDate(1,7,2000),getDate(12,7,2001),now(),
+				getDate(1,7,2000),getDate(12,7,2001),"EUR",now(),
 				'MODEL8',
 				DataLocation.findByCode(BUTARO),
 				Department.findByCode('ANAESTHETICS'),
@@ -353,7 +353,7 @@ public class Initializer {
 				Provider.findByCode("EIGHT")
 				)
 			
-			def warrantyEight = newWarranty(['en':'warranty four'],'warranty name4','email4@gmail.com',"0768-444-787","Street 154","8988",getDate(10, 12, 2010),getDate(12, 12, 2012),[:])
+			def warrantyEight = newWarranty(['en':'warranty four'],'warranty name4','email4@gmail.com',"0768-444-787","Street 154","8988",getDate(10, 12, 2010),17,false,[:])
 			def statusEight= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentEight,false)
 			def statusEightOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentEight,false)
 			def statusEightTwo = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentEight,true)
@@ -364,7 +364,7 @@ public class Initializer {
 			equipmentEight.save(failOnError:true,flush: true)
 			
 			def equipmentNine = newEquipment("SERIAL09",false,true,4,"Room 9A1","290540.23",['en':'Equipment Descriptions Nine'],
-				getDate(1,7,2000),getDate(12,7,2001),now(),
+				getDate(1,7,2000),getDate(12,7,2001),"RWF",now(),
 				'MODEL3',
 				DataLocation.findByCode(BUTARO),
 				Department.findByCode('ANAESTHETICS'),
@@ -373,7 +373,7 @@ public class Initializer {
 				Provider.findByCode("SIX")
 				)
 			
-			def warrantyNine = newWarranty(['en':'warranty Nine'],'warranty name9','email94@gmail.com',"0768-999-787","Street 954","8989",getDate(10, 12, 2010),getDate(12, 12, 2012),[:])
+			def warrantyNine = newWarranty(['en':'warranty Nine'],'warranty name9','email94@gmail.com',"0768-999-787","Street 954","8989",getDate(10, 12, 2010),9,false,[:])
 			def statusNine= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentNine,false)
 			def statusNineOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentNine,false)
 			def statusNineTwo = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentNine,true)
@@ -384,7 +384,7 @@ public class Initializer {
 			equipmentNine.save(failOnError:true,flush: true)
 			
 			def equipmentTen = newEquipment("SERIAL10",false,true,4,"Room 10A1","290540.23",['en':'Equipment Descriptions Ten'],
-				getDate(1,7,2000),getDate(12,7,2001),now(),
+				getDate(1,7,2000),getDate(12,7,2001),"RWF",now(),
 				'MODELTen3',
 				DataLocation.findByCode(BUTARO),
 				Department.findByCode('ANAESTHETICS'),
@@ -393,7 +393,7 @@ public class Initializer {
 				Provider.findByCode("SIX")
 				)
 			
-			def warrantyTen = newWarranty(['en':'warranty Ten'],'warranty name10','email410@gmail.com',"0768-100-787","Street 154","8988",getDate(10, 12, 2010),getDate(12, 12, 2012),[:])
+			def warrantyTen = newWarranty(['en':'warranty Ten'],'warranty name10','email410@gmail.com',"0768-100-787","Street 154","8988",getDate(10, 12, 2010),28,false,[:])
 			def statusTen= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentTen,false)
 			def statusTenOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentTen,false)
 			def statusTenTwo = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentTen,true)
@@ -409,8 +409,8 @@ public class Initializer {
 	
 	
 	//Models definition
-	public static def newEquipment(def serialNumber,def donation,def obsolete,def expectedLifeTime,def room,def purchaseCost,def descriptions,def manufactureDate, def purchaseDate,def registeredOn,def model,def dataLocation,def department, def type,def manufacture,def supplier){
-		def equipment = new Equipment(serialNumber:serialNumber,donation:donation,obsolete:obsolete,room:room,expectedLifeTime:expectedLifeTime,purchaseCost:purchaseCost,manufactureDate:manufactureDate,purchaseDate:purchaseDate,registeredOn:registeredOn,model:model,dataLocation:dataLocation,department:department,type:type,manufacturer:manufacture,supplier:supplier);
+	public static def newEquipment(def serialNumber,def donation,def obsolete,def expectedLifeTime,def room,def purchaseCost,def descriptions,def manufactureDate, def purchaseDate,def currency,def registeredOn,def model,def dataLocation,def department, def type,def manufacture,def supplier){
+		def equipment = new Equipment(serialNumber:serialNumber,donation:donation,obsolete:obsolete,room:room,expectedLifeTime:expectedLifeTime,purchaseCost:purchaseCost,currency:currency,manufactureDate:manufactureDate,purchaseDate:purchaseDate,registeredOn:registeredOn,model:model,dataLocation:dataLocation,department:department,type:type,manufacturer:manufacture,supplier:supplier);
 		setLocaleValueInMap(equipment,descriptions,"Descriptions")
 		return equipment.save(failOnError: true,flush: true)
 	}
@@ -435,15 +435,15 @@ public class Initializer {
 		return newProvider(code,type,contact)
 	}
 	
-	public static def newWarranty(def contact, def startDate,def endDate,def descriptions){
-		def warranty = new Warranty(contact:contact,startDate:startDate,endDate:endDate)
+	public static def newWarranty(def contact, def startDate,def numberOfMonth,def sameAsSupplier,def descriptions){
+		def warranty = new Warranty(contact:contact,startDate:startDate,numberOfMonth:numberOfMonth,sameAsSupplier:sameAsSupplier)
 		setLocaleValueInMap(warranty,descriptions,"Descriptions")
 		return warranty
 	}
 	
-	public static def newWarranty(def addressDescriptions,def contactName,def email,def phone,def street,def poBox,def startDate,def endDate,def descriptions){
+	public static def newWarranty(def addressDescriptions,def contactName,def email,def phone,def street,def poBox,def startDate,def numberOfMonth,def sameAsSupplier,def descriptions){
 		def contact = newContact(addressDescriptions,contactName,email,phone,street,poBox)
-		return newWarranty(contact, startDate,endDate,descriptions)
+		return newWarranty(contact, startDate,numberOfMonth,sameAsSupplier,descriptions)
 	}
 	
 	public static def newEquipmentModel(def names,def code,def descriptions){

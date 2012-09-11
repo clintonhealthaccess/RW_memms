@@ -27,8 +27,6 @@
  */
 package org.chai.memms
 
-
-
 import i18nfields.I18nFields
 /**
  * @author Jean Kahigiso M.
@@ -38,7 +36,8 @@ import i18nfields.I18nFields
 class Warranty{
 	
 	Date startDate
-	Date endDate
+	Integer numberOfMonth
+	Boolean sameAsSupplier
 	String descriptions
 	Contact contact
 	
@@ -47,42 +46,16 @@ class Warranty{
 	
 	static constraints = {
 		startDate nullable:false, validator:{it <= new Date()} 
-		endDate nullable:false, validator: { val, obj -> 
-			return (val >= obj.startDate)
-			} 
 		descriptions nullable: true, blank: true
-		contact nullable: true
+		contact nullable: true,validator:{val, obj ->
+			 if(obj.sameAsSupplier==true) return (val==null)
+			}
+		sameAsSupplier nullable: true
 	}
 	
 	static mapping = {
 		version false
 		descriptions_en type: "text"
 		descriptions_fr type: "text"
-		descriptions_rw type: "text"
 	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this.is(obj))
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Warranty other = (Warranty) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
-	}	
-	
 }

@@ -50,24 +50,45 @@ function getHtml(htmls,field){
 /**
  * Edit donation and obsolete
  */
-function updateEquipment(baseUrl){
-$(".list-check-box-spinner").hide();
-$(".list-check-box").change(function(event){
-	$(event.target).hide();
-    $(event.target).prev().show();
-	$.ajax({
-		type :'GET',
-		dataType: 'json',
-		data:{"equipment.id":event.target.id,"field":event.target.name},
-		url: baseUrl,
-		success: function(data) {
+function updateEquipment(baseUrl,failMsg){
+	$(".list-check-box-spinner").hide();
+	$(".ajax-error").hide()
+	$(".list-check-box").change(function(event){
+		$(event.target).hide();
+	    $(event.target).prev().show();
+	    $(event.target).next().hide();
+	    var state= event.target.checked
+		$.ajax({
+			type :'GET',
+			dataType: 'json',
+			data:{"equipment.id":event.target.id,"field":event.target.name},
+			url: baseUrl,
+			success: function(data) {
+				$(event.target).prev().fadeOut("slow");
+				$(event.target).fadeIn("slow");
+			}
+		});
+		$(event.target).ajaxError(function(){
+			if(state) $(event.target).attr('checked',false);
+			else $(event.target).attr('checked',true);
 			$(event.target).prev().fadeOut("slow");
 			$(event.target).fadeIn("slow");
-		},
-		error: function(data) {
-			$(event.target).prev().fadeOut("slow");
-			$(event.target).fadeIn("slow");
-		}
-	});
-})
+			$(event.target).next().show("slow");	
+		
+		});
+	})
+}
+function getToHide(donation,sameAsSupplier){
+	if(donation=="true")
+		$("#purchase-cost").addClass("hidden").hide()
+	if(sameAsSupplier=="true")
+		$("#address").addClass("hidden").hide()
+		
+	$(".add-equipment-form :input").change(function(event){
+		var currentDiv = $(event.target).parents("div.row");
+		if(currentDiv.nextAll("div.can-be-hidden").is(":visible"))
+			currentDiv.nextAll("div.can-be-hidden").slideUp()
+		else
+			currentDiv.nextAll("div.can-be-hidden").slideDown()
+	})
 }

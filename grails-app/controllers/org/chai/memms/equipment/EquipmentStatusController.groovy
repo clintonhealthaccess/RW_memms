@@ -52,6 +52,7 @@ class EquipmentStatusController extends AbstractEntityController{
 
 	def getLabel() {
 		return "equipment.status.label";
+
 	}
 	
 	def getEntityClass() {
@@ -66,7 +67,6 @@ class EquipmentStatusController extends AbstractEntityController{
 	
 	def bindParams(def entity) {
 		if(log.isDebugEnabled()) log.debug("Equipment status params: "+params)
-		
 		def equipment = Equipment.get(params.int("equipment.id"))
 		if (equipment == null || entity.id != null) {
 			response.sendError(404)

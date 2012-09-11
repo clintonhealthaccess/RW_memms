@@ -54,7 +54,7 @@ public class Contact {
 		country blank: true, nullable: true
 		street blank: true, nullable: true 
 		poBox blank: true, nullable: true
-		contactName blank: false, nullable: false
+		contactName blank: true, nullable: true
 		addressDescriptions blank: true, nullable: true 
 		
 	}
@@ -62,7 +62,6 @@ public class Contact {
 		version false
 		addressDescriptions_en type: "text"
 		addressDescriptions_fr type: "text"
-		addressDescriptions_rw type: "text"
 	}
 	
 }

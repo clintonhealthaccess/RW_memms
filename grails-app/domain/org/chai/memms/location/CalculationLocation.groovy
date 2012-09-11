@@ -80,7 +80,6 @@ abstract class CalculationLocation {
 			coordinates type: "text"
 			names_en type: "text"
 			names_fr type: "text"
-			names_rw type: "text"
 		}
 
 		@Override

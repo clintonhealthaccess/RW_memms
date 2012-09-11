@@ -63,7 +63,7 @@ class EquipmentTypeController extends AbstractEntityController{
 	}
 	
 	def bindParams(def entity) {		
-		if(!params.id){
+		if(!entity.id){
 			entity.addedOn= new Date()
 			entity.lastModifiedOn= new Date()
 		}else{
@@ -137,7 +137,7 @@ class EquipmentTypeController extends AbstractEntityController{
 	
 	}
 	
-	def export = {
+	def exporter = {
 	
 	}
 

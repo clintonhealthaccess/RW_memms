@@ -117,6 +117,13 @@ log4j = {
     //appenders {
     //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
     //}
+	
+	error  'grails.app.services.org.grails.plugin.resource',
+			'grails.app.resourceMappers.org.grails.plugin.resource',
+			'grails.app.taglib.org.grails.plugin.resource',
+			'grails.app.resourceMappers.org.grails.plugin.cachedresources',
+			'grails.app.services.grails.plugin.springcache',
+			'grails.plugin.springcache'
 
     error  'org.codehaus.groovy.grails.web.servlet',  //  controllers
            'org.codehaus.groovy.grails.web.pages', //  GSP
@@ -186,12 +193,13 @@ site.from.email="no-reply@memms.org"
 
 site.datalocationtype.checked=["District Hospital","Health Center"]
 location.sector.skip.level=["Sector"]
+site.possible.currency = ["":"NONE","RWF":"RWF","USD":"USD","EUR":"EUR"]
 
 status.to.display.on.equipment.form = 5
 
 i18nFields{
-	locales = ["en","fr","rw"]
-	extraLocales = ["rw"]
+	locales = ["en","fr"]//,"rw"]
+//	extraLocales = ["rw"]
 }
 
 file.upload.available.charset=["UTF-8", "ISO-8859-1"]

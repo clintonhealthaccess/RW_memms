@@ -20,6 +20,7 @@ classes
 eclipse_workspace_settings.epf
 userScripts/**
 scripts/**
+file/**
 bin/
 *.hprof
 *.hprof.index
