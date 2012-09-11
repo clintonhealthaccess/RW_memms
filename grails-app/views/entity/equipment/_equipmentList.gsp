@@ -6,12 +6,12 @@
 			<g:sortableColumn property="serialNumber" defaultOrder="asc" title="${message(code: 'equipment.serial.number.label')}" params="[q:q,location:dataLocation.id]" />
 			<g:sortableColumn property="type" defaultOrder="asc" title="${message(code: 'equipment.type.label')}" params="[q:q,location:dataLocation.id]" />
 			<g:sortableColumn property="model" defaultOrder="asc" title="${message(code: 'equipment.model.label')}" params="[q:q,location:dataLocation.id]" />
-			<g:sortableColumn property="manufacturer" defaultOrder="asc" title="${message(code: 'provider.manufacturer.label')}" params="[q:q,location:dataLocation.id]" />
-			<g:sortableColumn property="supplier" defaultOrder="asc" title="${message(code: 'provider.supplier.label')}" params="[q:q,location:dataLocation.id]" />
+			<g:sortableColumn property="manufacturer" defaultOrder="asc" title="${message(code: 'provider.type.manufacturer')}" params="[q:q,location:dataLocation.id]" />
+			<g:sortableColumn property="supplier" defaultOrder="asc" title="${message(code: 'provider.type.supplier')}" params="[q:q,location:dataLocation.id]" />
 			<th><g:message code="location.label"/></th>
 			<th><g:message code="equipment.status.label"/></th>
-			<g:sortableColumn property="obsolete" defaultOrder="asc" title="${message(code: 'equipment.obsolete.label')}" params="[q:q,location:dataLocation.id]" />
 			<g:sortableColumn property="donation" defaultOrder="asc" title="${message(code: 'equipment.donation.label')}" params="[q:q,location:dataLocation.id]" />
+			<g:sortableColumn property="obsolete" defaultOrder="asc" title="${message(code: 'equipment.obsolete.label')}" params="[q:q,location:dataLocation.id]" />
 		</tr>
 	</thead>
 	<tbody>
@@ -46,11 +46,9 @@
   	    				${message(code: equipment.getCurrentState()?.status?.messageCode+'.'+equipment.getCurrentState()?.status?.name)}
   	    			</a>
 				</td>
+				<td>${(equipment.donation)? '\u2713':'X'}</td>
 				<td>
 					<g:listCheckBox name="obsolete" id="${equipment.id}" checked="${(!equipment.obsolete)?:'checked'}"/>
-				</td>
-				<td>
-					<g:listCheckBox name="donation" id="${equipment.id}" checked="${(!equipment.donation)?:'checked'}"/>
 				</td>
 			</tr>
 		</g:each>

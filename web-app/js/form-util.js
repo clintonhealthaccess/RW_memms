@@ -79,9 +79,9 @@ function updateEquipment(baseUrl,failMsg){
 	})
 }
 function getToHide(donation,sameAsSupplier){
-	if(donation==true)
+	if(donation=="true")
 		$("#purchase-cost").addClass("hidden").hide()
-	if(sameAsSupplier==true)
+	if(sameAsSupplier=="true")
 		$("#address").addClass("hidden").hide()
 		
 	$(".add-equipment-form :input").change(function(event){

@@ -85,11 +85,20 @@ class EquipmentController extends AbstractEntityController{
 		if(!entity.id){
 			entity.registeredOn=new Date()
 		}else{
-			if(entity.donation=='on'){
+			if(params["donation"]=="on"){
 				params["purchaseCost"] = ""
 				params["currency"] = ""
 			}
-			if(entity.warranty.sameAsSupplier){
+			if(params["warranty.sameAsSupplier"]=="on"){
+				params["warranty.contact.contactName"]=""
+				params["warranty.contact.email"]=""
+				params["warranty.contact.phone"]=""
+				params["warranty.contact.poBox"]=""
+				params["warranty.contact.city"]=""
+				params["warranty.contact.country"]=""
+				grailsApplication.config.i18nFields.locales.each{it ->
+					params["warranty.contact.addressDescriptions_"+it] = ""
+				}
 				entity.warranty.contact=null
 			}
 		}
