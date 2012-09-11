@@ -1,27 +1,27 @@
-/* line 17, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 17, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video { margin: 0; padding: 0; border: 0; font: inherit; font-size: 100%; vertical-align: baseline; }
 
-/* line 22, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 22, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 html { line-height: 1; }
 
-/* line 24, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 24, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 ol, ul { list-style: none; }
 
-/* line 26, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 26, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 table { border-collapse: collapse; border-spacing: 0; }
 
-/* line 28, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 28, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 caption, th, td { text-align: left; font-weight: normal; vertical-align: middle; }
 
-/* line 30, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 30, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 q, blockquote { quotes: none; }
-/* line 103, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 103, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 q:before, q:after, blockquote:before, blockquote:after { content: ""; content: none; }
 
-/* line 32, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 32, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 a img { border: none; }
 
-/* line 116, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 116, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary { display: block; }
 
 @font-face { font-family: "Droid"; src: url("../fonts/DroidSans.eot"); src: local("☺"), url("../fonts/DroidSans.woff") format("woff"), url("../fonts/DroidSans.ttf") format("truetype"), url("../fonts/DroidSans.svg") format("svg"); font-weight: normal; font-style: normal; }
@@ -43,7 +43,7 @@ a.no-link { color: #0059a2; text-decoration: none; }
 
 /* line 17, ../../src/stylesheets/partials/_shared.sass */
 .main { clear: both; color: #666666; font-size: 12px; padding: 15px; *zoom: 1; }
-/* line 38, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 38, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .main:after { content: ""; display: table; clear: both; }
 /* line 23, ../../src/stylesheets/partials/_shared.sass */
 .main.table { padding: 0; }
@@ -87,7 +87,7 @@ a.no-link { color: #0059a2; text-decoration: none; }
 
 /* line 95, ../../src/stylesheets/partials/_shared.sass */
 ul.horizontal { *zoom: 1; }
-/* line 38, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 38, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 ul.horizontal:after { content: ""; display: table; clear: both; }
 /* line 97, ../../src/stylesheets/partials/_shared.sass */
 ul.horizontal li { display: inline; margin-right: 5px; }
@@ -112,7 +112,7 @@ ul.horizontal li.last { margin-right: 0; }
 
 /* line 134, ../../src/stylesheets/partials/_shared.sass */
 .login-heading { color: #258cd5; font-size: 18px; font-weight: bold; padding: 30px 15px 10px; text-align: center; text-transform: uppercase; *zoom: 1; }
-/* line 38, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 38, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .login-heading:after { content: ""; display: table; clear: both; }
 
 /* line 143, ../../src/stylesheets/partials/_shared.sass */
@@ -163,7 +163,7 @@ ul.horizontal li.last { margin-right: 0; }
 
 /* line 1, ../../src/stylesheets/partials/_layout.sass */
 .wrapper, .clearfix, .half { *zoom: 1; }
-/* line 38, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 38, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .wrapper:after, .clearfix:after, .half:after { content: ""; display: table; clear: both; }
 
 /* line 4, ../../src/stylesheets/partials/_layout.sass */
@@ -191,7 +191,7 @@ ul.horizontal li.last { margin-right: 0; }
 
 /* line 1, ../../src/stylesheets/partials/_header.sass */
 #header { background: url("../images/bg-header.png") repeat-x center; height: 90px; position: relative; *zoom: 1; }
-/* line 38, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 38, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 #header:after { content: ""; display: table; clear: both; }
 /* line 7, ../../src/stylesheets/partials/_header.sass */
 #header h2 { color: white; font-family: Arial, sans-serif; font-size: 15px; line-height: 1.4; position: absolute; right: 0; text-align: right; top: 45px; width: 500px; text-shadow: white, 0, 1px, 0; }
@@ -209,7 +209,7 @@ ul.horizontal li.last { margin-right: 0; }
 
 /* line 44, ../../src/stylesheets/partials/_header.sass */
 .heading1-bar { *zoom: 1; }
-/* line 38, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 38, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .heading1-bar:after { content: ""; display: table; clear: both; }
 /* line 46, ../../src/stylesheets/partials/_header.sass */
 .heading1-bar h1 { color: #258cd5; float: left; font: bold 18px Arial, sans-serif; padding: 23px 10px 15px 0; text-transform: uppercase; }
@@ -218,7 +218,7 @@ ul.horizontal li.last { margin-right: 0; }
 
 /* line 3, ../../src/stylesheets/partials/_nav.sass */
 #switcher, #top_nav { position: absolute; top: 0; *zoom: 1; }
-/* line 38, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 38, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 #switcher:after, #top_nav:after { content: ""; display: table; clear: both; }
 /* line 8, ../../src/stylesheets/partials/_nav.sass */
 #switcher li, #top_nav li { display: inline; float: left; margin-left: 3px; }
@@ -238,7 +238,7 @@ ul.horizontal li.last { margin-right: 0; }
 
 /* line 39, ../../src/stylesheets/partials/_nav.sass */
 #main-menu { float: left; *zoom: 1; }
-/* line 38, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 38, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 #main-menu:after { content: ""; display: table; clear: both; }
 /* line 42, ../../src/stylesheets/partials/_nav.sass */
 #main-menu > li { display: inline; float: left; height: 42px; position: relative; }
@@ -281,7 +281,7 @@ ul.horizontal li.last { margin-right: 0; }
 
 /* line 131, ../../src/stylesheets/partials/_nav.sass */
 #tab-nav { background: #eeeeee; border-bottom: 1px solid #e3e3e3; margin: -15px -15px 15px; background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fafafa), color-stop(100%, #f1f1f1)); background: -webkit-linear-gradient(#fafafa, #f1f1f1); background: -moz-linear-gradient(#fafafa, #f1f1f1); background: -o-linear-gradient(#fafafa, #f1f1f1); background: linear-gradient(#fafafa, #f1f1f1); *zoom: 1; }
-/* line 38, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 38, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 #tab-nav:after { content: ""; display: table; clear: both; }
 /* line 137, ../../src/stylesheets/partials/_nav.sass */
 #tab-nav li { margin-right: 0; }
@@ -404,7 +404,7 @@ ul.horizontal li.last { margin-right: 0; }
 
 /* line 2, ../../src/stylesheets/partials/_forms.sass */
 .form-section { border-bottom: 1px solid #eeeeee; *zoom: 1; }
-/* line 38, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 38, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .form-section:after { content: ""; display: table; clear: both; }
 /* line 5, ../../src/stylesheets/partials/_forms.sass */
 .form-section .form-content { float: left; width: 55%; }
@@ -414,7 +414,7 @@ ul.horizontal li.last { margin-right: 0; }
 .form-section h5 { font-size: 12px; margin-bottom: 1em; text-transform: uppercase; }
 /* line 16, ../../src/stylesheets/partials/_forms.sass */
 .form-section li { *zoom: 1; }
-/* line 38, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 38, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .form-section li:after { content: ""; display: table; clear: both; }
 /* line 18, ../../src/stylesheets/partials/_forms.sass */
 .form-section span { display: inline-block; font-size: 11px; line-height: 1.5; }
@@ -430,7 +430,7 @@ ul.horizontal li.last { margin-right: 0; }
 
 /* line 38, ../../src/stylesheets/partials/_forms.sass */
 .form-actions { border-top: 2px solid #e9f4fc; margin-top: 15px; *zoom: 1; }
-/* line 38, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 38, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .form-actions:after { content: ""; display: table; clear: both; }
 /* line 42, ../../src/stylesheets/partials/_forms.sass */
 .form-actions li { display: inline; float: left; padding: 10px 0 10px 10px; }
@@ -445,7 +445,7 @@ ul.horizontal li.last { margin-right: 0; }
 
 /* line 57, ../../src/stylesheets/partials/_forms.sass */
 .facility-type { background: #f6fdeb; border: 1px solid #e5ecda; margin: 15px; padding: 11px 15px; width: 940px; -webkit-border-radius: 5px; -moz-border-radius: 5px; -ms-border-radius: 5px; -o-border-radius: 5px; border-radius: 5px; *zoom: 1; }
-/* line 38, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 38, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .facility-type:after { content: ""; display: table; clear: both; }
 /* line 65, ../../src/stylesheets/partials/_forms.sass */
 .facility-type.no-margin { margin: 0 0 15px; }
@@ -549,11 +549,11 @@ ul.filtered li:hover { background-color: yellow; }
 
 /* line 260, ../../src/stylesheets/partials/_forms.sass */
 ul.element-map { *zoom: 1; }
-/* line 38, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 38, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 ul.element-map:after { content: ""; display: table; clear: both; }
 /* line 262, ../../src/stylesheets/partials/_forms.sass */
 ul.element-map li { *zoom: 1; }
-/* line 38, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 38, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 ul.element-map li:after { content: ""; display: table; clear: both; }
 /* line 265, ../../src/stylesheets/partials/_forms.sass */
 ul.element-map ul.element-map li { display: inline; float: left; }
@@ -684,71 +684,83 @@ form.search-form button { height: 23px; margin: 0 0 0 -1px; -moz-border-radius-t
 /* line 477, ../../src/stylesheets/partials/_forms.sass */
 .simple-list .row { margin-bottom: 7px; vertical-align: middle; }
 /* line 481, ../../src/stylesheets/partials/_forms.sass */
-.simple-list .date select { min-width: 50px; }
+.simple-list .rows-wrapper .row { float: left; }
 /* line 483, ../../src/stylesheets/partials/_forms.sass */
+.simple-list .rows-wrapper input[type=text] { margin: 0; width: 200px; }
+/* line 486, ../../src/stylesheets/partials/_forms.sass */
+.simple-list .rows-wrapper select[name=currency] { height: 23px; margin-left: 3px; min-width: 50px; width: 90px; }
+/* line 491, ../../src/stylesheets/partials/_forms.sass */
+.simple-list .rows-wrapper label[for=currency] { display: none; }
+/* line 494, ../../src/stylesheets/partials/_forms.sass */
+.simple-list .date select { min-width: 50px; }
+/* line 496, ../../src/stylesheets/partials/_forms.sass */
 .simple-list input[type=text], .simple-list textarea { width: 290px; }
 
-/* line 486, ../../src/stylesheets/partials/_forms.sass */
+/* line 499, ../../src/stylesheets/partials/_forms.sass */
 .paginateButtons { padding: 0 15px 15px; *zoom: 1; }
-/* line 38, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 38, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .paginateButtons:after { content: ""; display: table; clear: both; }
-/* line 489, ../../src/stylesheets/partials/_forms.sass */
-.paginateButtons a { background: #e9f4fc; color: #258cd5; }
-/* line 492, ../../src/stylesheets/partials/_forms.sass */
-.paginateButtons a:hover, .paginateButtons a:focus { border: 1px solid #47aef7; }
-/* line 494, ../../src/stylesheets/partials/_forms.sass */
-.paginateButtons a, .paginateButtons span { border: 1px solid rgba(0, 0, 0, 0.07); display: block; float: left; margin-right: 3px; padding: 7px 10px; text-decoration: none; }
 /* line 502, ../../src/stylesheets/partials/_forms.sass */
+.paginateButtons a { background: #e9f4fc; color: #258cd5; }
+/* line 505, ../../src/stylesheets/partials/_forms.sass */
+.paginateButtons a:hover, .paginateButtons a:focus { border: 1px solid #47aef7; }
+/* line 507, ../../src/stylesheets/partials/_forms.sass */
+.paginateButtons a, .paginateButtons span { border: 1px solid rgba(0, 0, 0, 0.07); display: block; float: left; margin-right: 3px; padding: 7px 10px; text-decoration: none; }
+/* line 515, ../../src/stylesheets/partials/_forms.sass */
 .paginateButtons span { background: #258cd5; color: white; }
 
-/* line 506, ../../src/stylesheets/partials/_forms.sass */
+/* line 519, ../../src/stylesheets/partials/_forms.sass */
 .foldable-container { border-top: 1px dotted #b6cbdb; margin-top: 6px; }
 
-/* line 511, ../../src/stylesheets/partials/_forms.sass */
+/* line 524, ../../src/stylesheets/partials/_forms.sass */
 .foldable.opened:not(.current) { padding-bottom: 0px !important; }
-/* line 514, ../../src/stylesheets/partials/_forms.sass */
+/* line 527, ../../src/stylesheets/partials/_forms.sass */
 .foldable a.foldable-toggle { display: block; cursor: pointer; height: 14px; margin-top: -3px; width: 20px; float: left; text-indent: -9999px; background-image: url("../images/icons/toggle_plus.png"); }
-/* line 523, ../../src/stylesheets/partials/_forms.sass */
+/* line 536, ../../src/stylesheets/partials/_forms.sass */
 .foldable a.foldable-toggle.toggled { background-image: url("../images/icons/toggle_minus.png"); }
 
-/* line 526, ../../src/stylesheets/partials/_forms.sass */
+/* line 539, ../../src/stylesheets/partials/_forms.sass */
 .filter-bar { color: #888888; font-size: 11px; margin-top: 15px; padding: 15px 15px 40px; }
 
-/* line 532, ../../src/stylesheets/partials/_forms.sass */
-.filters { border: 1px solid rgba(0, 0, 0, 0.1); padding: 0; margin-bottom: 15px; }
-/* line 536, ../../src/stylesheets/partials/_forms.sass */
-.filters h2 { border-bottom: 1px solid #eeeeee; font: bold 15px Arial, sans-serif; padding: 10px 15px; }
-/* line 540, ../../src/stylesheets/partials/_forms.sass */
-.filters h2 a { margin-top: 4px; opacity: 0.4; }
-/* line 543, ../../src/stylesheets/partials/_forms.sass */
-.filters h2 a:hover, .filters h2 a:focus { opacity: 1; }
 /* line 545, ../../src/stylesheets/partials/_forms.sass */
-.filters ul.filters-list { padding: 10px 15px 0; *zoom: 1; }
-/* line 38, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
-.filters ul.filters-list:after { content: ""; display: table; clear: both; }
-/* line 548, ../../src/stylesheets/partials/_forms.sass */
-.filters ul.filters-list > li { display: inline; float: left; height: 50px; width: 32%; }
+.filters { border: 1px solid rgba(0, 0, 0, 0.1); padding: 0; margin-bottom: 15px; }
+/* line 549, ../../src/stylesheets/partials/_forms.sass */
+.filters h2 { border-bottom: 1px solid #eeeeee; font: bold 15px Arial, sans-serif; padding: 10px 15px; }
 /* line 553, ../../src/stylesheets/partials/_forms.sass */
-.filters label { display: block; font-size: 11px; margin-bottom: 2px; }
-/* line 557, ../../src/stylesheets/partials/_forms.sass */
-.filters select { background: #faffff; border: 1px solid #47aef7; color: #258cd5; font-size: 11px; font-weight: bold; padding: 3px; width: 300px; -webkit-border-radius: 2px; -moz-border-radius: 2px; -ms-border-radius: 2px; -o-border-radius: 2px; border-radius: 2px; }
+.filters h2 a { margin-top: 4px; opacity: 0.4; }
+/* line 556, ../../src/stylesheets/partials/_forms.sass */
+.filters h2 a:hover, .filters h2 a:focus { opacity: 1; }
+/* line 558, ../../src/stylesheets/partials/_forms.sass */
+.filters ul.filters-list { padding: 10px 15px 0; *zoom: 1; }
+/* line 38, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
+.filters ul.filters-list:after { content: ""; display: table; clear: both; }
+/* line 561, ../../src/stylesheets/partials/_forms.sass */
+.filters ul.filters-list > li { display: inline; float: left; height: 50px; width: 32%; }
 /* line 566, ../../src/stylesheets/partials/_forms.sass */
+.filters label { display: block; font-size: 11px; margin-bottom: 2px; }
+/* line 570, ../../src/stylesheets/partials/_forms.sass */
+.filters select { background: #faffff; border: 1px solid #47aef7; color: #258cd5; font-size: 11px; font-weight: bold; padding: 3px; width: 300px; -webkit-border-radius: 2px; -moz-border-radius: 2px; -ms-border-radius: 2px; -o-border-radius: 2px; border-radius: 2px; }
+/* line 579, ../../src/stylesheets/partials/_forms.sass */
 .filters button { margin: 5px 15px 15px; }
 
-/* line 569, ../../src/stylesheets/partials/_forms.sass */
+/* line 582, ../../src/stylesheets/partials/_forms.sass */
 .filter-results { color: #aaaaaa; font: bold 14px Arial, sans-serif; padding: 5px 0; text-transform: uppercase; }
 
-/* line 575, ../../src/stylesheets/partials/_forms.sass */
+/* line 588, ../../src/stylesheets/partials/_forms.sass */
 .form-languages a { font-size: 10px; margin-left: 5px; text-transform: uppercase; }
 
-/* line 580, ../../src/stylesheets/partials/_forms.sass */
-.checkbox { position: relative; }
-/* line 582, ../../src/stylesheets/partials/_forms.sass */
+/* line 593, ../../src/stylesheets/partials/_forms.sass */
+.checkbox { position: relative; *zoom: 1; }
+/* line 38, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
+.checkbox:after { content: ""; display: table; clear: both; }
+/* line 596, ../../src/stylesheets/partials/_forms.sass */
 .checkbox .list-check-box-spinner, .checkbox .list-check-box { position: absolute; }
-/* line 584, ../../src/stylesheets/partials/_forms.sass */
+/* line 598, ../../src/stylesheets/partials/_forms.sass */
 .checkbox .list-check-box-spinner { top: -7px; }
-/* line 586, ../../src/stylesheets/partials/_forms.sass */
+/* line 600, ../../src/stylesheets/partials/_forms.sass */
 .checkbox .list-check-box { margin: 0; top: -5px; }
+/* line 603, ../../src/stylesheets/partials/_forms.sass */
+.checkbox .ajax-error { color: #d30000; display: inline-block; left: -50%; position: absolute; top: 12px; white-space: nowrap; }
 
 /* line 1, ../../src/stylesheets/partials/_flashes.sass */
 .flash-message { background: #f6fdeb; border-bottom: #d8e3eb 1px solid; text-align: center; background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f6fdeb), color-stop(100%, #edf4e2)); background: -webkit-linear-gradient(#f6fdeb, #edf4e2); background: -moz-linear-gradient(#f6fdeb, #edf4e2); background: -o-linear-gradient(#f6fdeb, #edf4e2); background: linear-gradient(#f6fdeb, #edf4e2); }
@@ -760,7 +772,7 @@ form.search-form button { height: 23px; margin: 0 0 0 -1px; -moz-border-radius-t
 
 /* line 18, ../../src/stylesheets/partials/_flashes.sass */
 .success-box { background-color: #f6fdeb; border: 1px solid #e5ecda; margin-bottom: 10px; padding: 10px; -webkit-border-radius: 3px; -moz-border-radius: 3px; -ms-border-radius: 3px; -o-border-radius: 3px; border-radius: 3px; *zoom: 1; text-shadow: white, 0, 1px, 0; }
-/* line 38, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 38, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .success-box:after { content: ""; display: table; clear: both; }
 /* line 27, ../../src/stylesheets/partials/_flashes.sass */
 .success-box .success { float: left; width: 70%; }
@@ -772,7 +784,7 @@ form.search-form button { height: 23px; margin: 0 0 0 -1px; -moz-border-radius-t
 
 /* line 37, ../../src/stylesheets/partials/_flashes.sass */
 .question-container { margin-bottom: 20px; *zoom: 1; }
-/* line 38, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 38, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .question-container:after { content: ""; display: table; clear: both; }
 
 /* line 41, ../../src/stylesheets/partials/_flashes.sass */
@@ -797,14 +809,14 @@ form.search-form button { height: 23px; margin: 0 0 0 -1px; -moz-border-radius-t
 
 /* line 84, ../../src/stylesheets/partials/_flashes.sass */
 #incomplete-sections-container > div { background: url("../images/icons/fail.png") no-repeat 11px center #f4e9e9; border: 1px solid #e3d8d8; margin-bottom: 10px; padding: 10px 10px 10px 52px; -webkit-border-radius: 3px; -moz-border-radius: 3px; -ms-border-radius: 3px; -o-border-radius: 3px; border-radius: 3px; *zoom: 1; text-shadow: white, 0, 1px, 0; }
-/* line 38, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 38, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 #incomplete-sections-container > div:after { content: ""; display: table; clear: both; }
 /* line 92, ../../src/stylesheets/partials/_flashes.sass */
 #incomplete-sections-container li { padding: 6px 0 0 10px; }
 
 /* line 96, ../../src/stylesheets/partials/_flashes.sass */
 #invalid-questions-container > div { background: url("../images/icons/warning.png") no-repeat 11px center #e9f4fc; border: 1px solid #e5ecda; padding: 10px 10px 10px 52px; -webkit-border-radius: 3px; -moz-border-radius: 3px; -ms-border-radius: 3px; -o-border-radius: 3px; border-radius: 3px; *zoom: 1; text-shadow: white, 0, 1px, 0; }
-/* line 38, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 38, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 #invalid-questions-container > div:after { content: ""; display: table; clear: both; }
 /* line 103, ../../src/stylesheets/partials/_flashes.sass */
 #invalid-questions-container h5 { font-style: italic; padding: 10px 0 5px 8px; }
@@ -830,7 +842,7 @@ form.search-form button { height: 23px; margin: 0 0 0 -1px; -moz-border-radius-t
 
 /* line 145, ../../src/stylesheets/partials/_flashes.sass */
 .error-list { opacity: 0.65; padding-left: 140px; *zoom: 1; }
-/* line 38, /Users/JeanKahigiso/.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 38, ../../../../.rvm/gems/jruby-1.6.7@memms/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .error-list:after { content: ""; display: table; clear: both; }
 /* line 149, ../../src/stylesheets/partials/_flashes.sass */
 .error-list li { background: #d30000; color: white; float: left; font-size: 11px; padding: 7px 15px; -webkit-box-shadow: #aaaaaa 1px 1px 3px; -moz-box-shadow: #aaaaaa 1px 1px 3px; box-shadow: #aaaaaa 1px 1px 3px; text-shadow: #8f0000 0 1px 0; }
