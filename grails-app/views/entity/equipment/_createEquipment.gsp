@@ -1,5 +1,7 @@
 <%@ page import="org.chai.memms.util.Utils" %>
 <%@ page import="org.chai.memms.equipment.EquipmentStatus.Status" %>
+<%@ page import="java.util.Date" %>
+
 <div  class="entity-form-container togglable">
   <div class="heading1-bar">
 		<h1>
@@ -109,7 +111,6 @@
 	    			<th>${message(code:'equipment.status.date.of.event.label')}</th>
 	    			<th>${message(code:'equipment.status.recordedon.label')}</th>
 	    			<th>${message(code:'equipment.status.current.label')}</th>
-	    			
 	    		</tr>
 	    		<g:each in="${equipment.status.sort{a,b -> (a.current > b.current) ? -1 : 1}}" status="i" var="status">
 		    		<g:if test="${i+1<numberOfStatusToDisplay}">
@@ -151,7 +152,7 @@
           <g:message code="equipment.section.warranty.information.label" default="Warranty Information"/>
         </h4>
         <g:inputBox name="warranty.sameAsSupplier"  label="${message(code:'equipment.same.as.supplier.label')}" bean="${equipment}" field="warranty.sameAsSupplier" checked="${(equipment.warranty?.sameAsSupplier)? true:false}"/>
-      	<g:inputDate name="warranty.startDate" precision="day" id="start-date" value="${equipment?.warranty?.startDate}" label="${message(code:'warranty.start.date.label')}" bean="${equipment}" field="warranty.startDate"/>
+      	<g:inputDate name="warranty.startDate" precision="day" id="start-date" value="${(equipment?.warranty?.startDate)?:new Date()}" label="${message(code:'warranty.start.date.label')}" bean="${equipment}" field="warranty.startDate"/>
     	<g:input name="warranty.numberOfMonth" label="${message(code:'equipment.warranty.period.label')}" bean="${equipment}" field="warranty.numberOfMonth"/>
       	<g:address  bean="${equipment}" warranty="true" field="warranty.contact"/>
      	<g:i18nTextarea name="warranty.descriptions" bean="${equipment}" label="${message(code:'warranty.descriptions.label')}" field="descriptions" height="150" width="300" maxHeight="150" />	 			

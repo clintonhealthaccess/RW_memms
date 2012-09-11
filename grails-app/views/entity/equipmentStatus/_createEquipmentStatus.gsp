@@ -1,5 +1,5 @@
 <%@ page import="org.chai.memms.equipment.EquipmentStatus.Status" %>
-
+<%@ page import="org.chai.memms.util.Utils" %>
 <div class="heading1-bar">
 	<h1>
 		<g:message code="default.new.label" args="[message(code:'equipmentstatus.label')]"/>
@@ -18,6 +18,32 @@
 		<g:if test="${status.id != null}">
 			<input type="hidden" name="id" value="${status.id}"></input>
 		</g:if>
+		<g:if test="${status.equipment!=null}">
+	    	<table class="items">
+	    		<tr>
+	    			<th></th>
+	    			<th>${message(code:'equipment.status.label')}</th>
+	    			<th>${message(code:'equipment.status.date.of.event.label')}</th>
+	    			<th>${message(code:'equipment.status.recordedon.label')}</th>
+	    			<th>${message(code:'equipment.status.current.label')}</th>
+	    		</tr>
+	    		<g:each in="${equipment.status.sort{a,b -> (a.current > b.current) ? -1 : 1}}" status="i" var="status">
+		    		<tr>
+		    			<td>
+			    		<ul>
+							<li>
+								<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'delete', params:[id: status.id,'equipment.id': equipment?.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');" class="delete-button"><g:message code="default.link.delete.label" /></a>
+							</li>
+						</ul>
+		    			</td>
+		    			<td>${message(code: status?.status?.messageCode+'.'+status?.status?.name)}</td>
+		    			<td>${Utils.formatDate(status?.dateOfEvent)}</td>
+		    			<td>${Utils.formatDate(status?.statusChangeDate)}</td>
+		    			<td>${(status.current)? '\u2713':'X'}</td>
+		    		</tr>
+	    		</g:each>
+	    	</table>
+    	</g:if>
 		<br/>
 		<div class="buttons">
 			<button type="submit"><g:message code="default.button.save.label"/></button>
