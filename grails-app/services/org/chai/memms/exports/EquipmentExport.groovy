@@ -15,6 +15,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.chai.memms.equipment.Equipment;
 import org.chai.memms.equipment.EquipmentType
+import org.chai.memms.task.DataExportTask;
 import org.chai.memms.util.ImportExportConstant;
 import org.chai.memms.util.Utils;
 import org.supercsv.io.CsvListWriter;
@@ -27,7 +28,7 @@ import org.supercsv.prefs.CsvPreference;
  */
 class EquipmentExport extends Exporter{
 	
-	public File exportData() throws IOException {
+	public File exportData(DataExportTask task) throws IOException {
 		if (log.isDebugEnabled()) log.debug("exportData");
 		File csvFile = File.createTempFile(getBasicInfo()+"_temp", ImportExportConstant.CSV_FILE_EXTENSION);
 		FileWriter csvFileWriter = new FileWriter(csvFile);
@@ -88,7 +89,5 @@ class EquipmentExport extends Exporter{
 		
 		return headers;
 	}
-
-	
 
 }

@@ -78,3 +78,17 @@ function updateEquipment(baseUrl,failMsg){
 		});
 	})
 }
+function getToHide(donation,sameAsSupplier){
+	if(donation==true)
+		$("#purchase-cost").addClass("hidden").hide()
+	if(sameAsSupplier==true)
+		$("#address").addClass("hidden").hide()
+		
+	$(".add-equipment-form :input").change(function(event){
+		var currentDiv = $(event.target).parents("div.row");
+		if(currentDiv.nextAll("div.can-be-hidden").is(":visible"))
+			currentDiv.nextAll("div.can-be-hidden").slideUp()
+		else
+			currentDiv.nextAll("div.can-be-hidden").slideDown()
+	})
+}

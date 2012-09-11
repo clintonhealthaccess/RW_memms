@@ -84,6 +84,14 @@ class EquipmentController extends AbstractEntityController{
 		if(log.isDebugEnabled()) log.debug("Equipment params: before bind "+params)
 		if(!entity.id){
 			entity.registeredOn=new Date()
+		}else{
+			if(entity.donation=='on'){
+				params["purchaseCost"] = ""
+				params["currency"] = ""
+			}
+			if(entity.warranty.sameAsSupplier){
+				entity.warranty.contact=null
+			}
 		}
 		bindData(entity,params,[exclude:["status","dateOfEvent"]])
 		if(log.isDebugEnabled()) log.debug("Equipment params: after bind  "+entity)
@@ -127,7 +135,8 @@ class EquipmentController extends AbstractEntityController{
 			types: types,
 			dataLocations: dataLocations,
 			numberOfStatusToDisplay: grailsApplication.config.status.to.display.on.equipment.form,
-			cmd:params.cmd
+			cmd:params.cmd,
+			currencies: grailsApplication.config.site.possible.currency
 
 		]
 	}

@@ -52,6 +52,14 @@ class FormTagLib {
 	def listCheckBox = { attrs, body ->
 		out << render(template:"/tags/form/listCheckBox", model: attrs)
 	}
+	
+	def currency = { attrs, body ->
+		out << render(template:"/tags/form/currency", model: attrs)
+	}
+	
+	def address = { attrs, body ->
+		out << render(template:"/tags/form/address", model: attrs)
+	}
 		
 	def selectFromEnum = { attrs, body ->
 		out << render(template:"/tags/form/selectFromEnum", model: attrs)

@@ -137,7 +137,7 @@ class EquipmentTypeController extends AbstractEntityController{
 	
 	}
 	
-	def export = {
+	def exporter = {
 	
 	}
 

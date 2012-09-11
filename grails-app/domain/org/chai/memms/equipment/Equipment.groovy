@@ -43,6 +43,7 @@ public class Equipment {
 	
 	String serialNumber
 	String purchaseCost
+	String currency
 	String descriptions
 	String model
 	String room
@@ -71,7 +72,13 @@ public class Equipment {
 		warranty nullable: true
 		
 		serialNumber nullable: false, blank: false,  unique: true
-		purchaseCost nullable: false, blank: false
+		purchaseCost nullable: true, blank: true, validator:{ val, obj ->
+			if(val == null && obj.donation == null) return false
+			if(obj.donation == true) return ((val == null) && (obj.currency==null))
+		}
+		currency  nullable: true, blank: true, inList: ["RFW","USD","EUR"], validator:{ val, obj ->
+			if(val == null && obj.donation == null) return false
+		}
 		expectedLifeTime nullable: false, blank: false
 		room nullable: true, blank: true
 		
@@ -79,14 +86,10 @@ public class Equipment {
 		purchaseDate nullable: false, blank: false, validator:{ val, obj ->
 			return  ((val <= new Date()) && val.after(obj.manufactureDate) || (val.compareTo(obj.manufactureDate)==0))
 			}
-		registeredOn nullable: false,validator: { val, obj ->
-			return (val.after(obj.purchaseDate) || (val.compareTo(obj.purchaseDate)==0))
-		}
-		
+		registeredOn nullable: false, blank:false
 		descriptions nullable: true, blank: true
 		donation nullable: false
 		obsolete nullable: false
-		
 	}
 	
 	static mapping = {

@@ -193,6 +193,7 @@ site.from.email="no-reply@memms.org"
 
 site.datalocationtype.checked=["District Hospital","Health Center"]
 location.sector.skip.level=["Sector"]
+site.possible.currency = ["":"NONE","RFW":"RFW","USD":"USD","EUR":"EUR"]
 
 status.to.display.on.equipment.form = 5
 
