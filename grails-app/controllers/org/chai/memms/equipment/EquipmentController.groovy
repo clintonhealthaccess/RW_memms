@@ -186,9 +186,9 @@ class EquipmentController extends AbstractEntityController{
 				entities: equipments,
 				entityCount: equipments.totalCount,
 				code: getLabel(),
-				entityClass: getEntityClass(),
-				exportTask:'EquipmentTypeExportTask',
-				importTask:'EquipmentTypeImportTask'
+				entityClass: getEntityClass()
+//				exportTask:'EquipmentTypeExportTask',
+//				importTask:'EquipmentTypeImportTask'
 				])
 
 	}
@@ -215,9 +215,9 @@ class EquipmentController extends AbstractEntityController{
 					code: getLabel(),
 					entityClass: getEntityClass(),
 					filterCmd:cmd,
-					q:params['q'],
-					exportTask:'EquipmentTypeExportTask',
-					importTask:'EquipmentTypeImportTask'
+					q:params['q']
+//					exportTask:'EquipmentTypeExportTask',
+//					importTask:'EquipmentTypeImportTask'
 				])
 
 	}
