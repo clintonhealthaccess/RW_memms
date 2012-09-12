@@ -169,7 +169,6 @@
   			<button type="submit"><g:message code="default.button.save.label"/></button>
   			<a href="${createLink(uri: targetURI)}"><g:message code="default.link.cancel.label"/></a>
   		</div>
-  		
   	</g:form>
   </div>
 </div>
