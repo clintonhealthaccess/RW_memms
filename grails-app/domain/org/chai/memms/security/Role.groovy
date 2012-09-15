@@ -34,7 +34,7 @@ class Role {
 	String permissionString
 	
 	def utilsService
-	
+	static belongsTo = User
     static hasMany = [ users: User ]
 
 	def getPermissions() {
@@ -52,7 +52,8 @@ class Role {
 	}
 	
     static constraints = {
-        name(nullable: false, blank: false, unique: true)
+        name nullable: false, blank: false, unique: true
+		permissionString nullable: false, blank: false
     }
 	static mapping = {
 		table "memms_user_role"
@@ -88,4 +89,12 @@ class Role {
 			return false;
 		return true;
 	}
+	
+//	def beforeDelete() {
+//		//Remove all the users before deletion
+//		withNewSession{
+//			users = []
+//			save()
+//		}
+//	 }
 }

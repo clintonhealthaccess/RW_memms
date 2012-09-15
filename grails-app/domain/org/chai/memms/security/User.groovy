@@ -68,7 +68,6 @@ class User {
 	UserType userType
 	
 	def utilsService
-	static belongsTo = Role
 	static hasMany = [ roles: Role ]
 	
 	User() {
@@ -120,4 +119,12 @@ class User {
 		cache true
 		version false
 	}
+	
+//	def beforeDelete() {
+//		//Remove all the users roles before deletion
+//		withNewSession{
+//			roles = []
+//			save()
+//		}
+//	}
 }

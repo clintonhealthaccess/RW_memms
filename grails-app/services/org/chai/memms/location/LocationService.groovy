@@ -110,7 +110,8 @@ public class LocationService {
 		def dbFieldName = 'names_'+languageService.getCurrentLanguagePrefix();
 		def criteria = clazz.createCriteria()
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:dbFieldName,order: params.order ?:"asc"){
-			createAlias("level","l")
+			if(clazz instanceof Location )
+				createAlias("level","l")
 			or{ 
 				if(clazz instanceof Location )
 					ilike("l."+dbFieldName,"%"+text+"%")

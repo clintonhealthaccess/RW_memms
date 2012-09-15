@@ -50,7 +50,7 @@ class EquipmentControllerSpec extends IntegrationTests{
 		equipmentController.params.dataLocation = DataLocation.list().first()
 		equipmentController.params.status="DISPOSED"
 		equipmentController.params.dateOfEvent=Initializer.now()
-		equipmentController.save(failOnError: true)
+		equipmentController.save()
 				
 		then:
 		Equipment.count() == 1;
@@ -96,7 +96,7 @@ class EquipmentControllerSpec extends IntegrationTests{
 		equipmentController.params.dataLocation = DataLocation.list().first()
 		equipmentController.params.status="FORDISPOSAL"
 		equipmentController.params.dateOfEvent=Initializer.now()
-		equipmentController.save(failOnError: true)
+		equipmentController.save()
 		
 		then:
 		Equipment.count() == 1;

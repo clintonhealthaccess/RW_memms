@@ -1,5 +1,7 @@
-/**
- * Copyright (c) 2012, Clinton Health Access Initiative.
+package org.chai.memms.util;
+
+/* 
+ * Copyright (c) 2011, Clinton Health Access Initiative.
  *
  * All rights reserved.
  *
@@ -13,7 +15,7 @@
  *     * Neither the name of the <organization> nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -26,33 +28,55 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.chai.memms.util
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
-class ImportExportConstant {
-	public final static String CSV_FILE_EXTENSION = ".csv";
-	public final static String TRUE = "TRUE";
-	public final static String FALSE = "FALSE";
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
+import net.sf.json.JSONSerializer;
+
+public class JSONUtils {
+
+	public static String getJSONFromMap(Map<String, ? extends Object> map) {
+		String result = null;
+		if (map != null) {
+			try {
+				JSONObject jsonObject = (JSONObject)JSONSerializer.toJSON(map);
+				result = jsonObject.toString();
+			} catch (JSONException e) {
+				// log
+			}
+		}
+		return result;
+	}
 	
-	//For use in imports
-	public final static Integer NUMBER_OF_LINES_TO_IMPORT = 100;
+	@SuppressWarnings("unchecked")
+	public static Map<String, Object> getMapFromJSON(String jsonString) {
+		Map<String, Object> descriptions = new HashMap<String, Object>();
+		if (jsonString != null) {
+			try {
+				JSONObject jsonObject = JSONObject.fromObject(jsonString);
+				return (Map<String, Object>)getObjectFromJSONObject(jsonObject);
+			} catch (JSONException e) {
+				// log
+			}
+		}
+		return descriptions;
+	}
 	
-	//Importing/exporting equipment types
-	public final static String DEVICE_CODE = "device_code"
-	public final static String DEVICE_NAME_EN = "device_name_en"
-	public final static String DEVICE_NAME_FR = "device_name_fr"
-	public final static String DEVICE_INCLUDED_IN_MEMMS = "include_in_MEMMS"
-	public final static String DEVICE_DESCRIPTION_EN = "device_description_en"
-	public final static String DEVICE_DESCRIPTION_FR = "device_description_fr"
-	public final static String DEVICE_OBSERVATION = "observations"
+	private static Object getObjectFromJSONObject(Object object) {
+		if (object instanceof JSONObject) {
+			Map<String, Object> descriptions = new HashMap<String, Object>();
+			@SuppressWarnings("unchecked")
+			Iterator<String> keyIterator = ((JSONObject)object).keys();
+			while (keyIterator.hasNext()) {
+				String type = (String) keyIterator.next();
+				descriptions.put(type, getObjectFromJSONObject(((JSONObject)object).get(type)));
+			}
+			return descriptions;
+		}
+		else return object;
+	}
 	
-	//Importing/exporting equipment
-	public final static String EQUIPMENT_SERIAL_NUMBER = ""
-	public final static String EQUIPMENT_TYPE = ""
-	public final static String EQUIPMENT_MODEL = ""
-	public final static String EQUIPMENT_MANUFACTURER = ""
-	public final static String EQUIPMENT_SUPPLIER = ""
-	public final static String EQUIPMENT_LOCATION = ""
-	public final static String EQUIPMENT_STATUS = ""
-	public final static String EQUIPMENT_DONATION = ""
-	public final static String EQUIPMENT_OBSOLETE = ""
 }

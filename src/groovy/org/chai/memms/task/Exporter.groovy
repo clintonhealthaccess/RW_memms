@@ -13,7 +13,7 @@
  *     * Neither the name of the <organization> nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -25,34 +25,16 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package org.chai.memms.task
 
-package org.chai.memms.util
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-class ImportExportConstant {
-	public final static String CSV_FILE_EXTENSION = ".csv";
-	public final static String TRUE = "TRUE";
-	public final static String FALSE = "FALSE";
-	
-	//For use in imports
-	public final static Integer NUMBER_OF_LINES_TO_IMPORT = 100;
-	
-	//Importing/exporting equipment types
-	public final static String DEVICE_CODE = "device_code"
-	public final static String DEVICE_NAME_EN = "device_name_en"
-	public final static String DEVICE_NAME_FR = "device_name_fr"
-	public final static String DEVICE_INCLUDED_IN_MEMMS = "include_in_MEMMS"
-	public final static String DEVICE_DESCRIPTION_EN = "device_description_en"
-	public final static String DEVICE_DESCRIPTION_FR = "device_description_fr"
-	public final static String DEVICE_OBSERVATION = "observations"
-	
-	//Importing/exporting equipment
-	public final static String EQUIPMENT_SERIAL_NUMBER = ""
-	public final static String EQUIPMENT_TYPE = ""
-	public final static String EQUIPMENT_MODEL = ""
-	public final static String EQUIPMENT_MANUFACTURER = ""
-	public final static String EQUIPMENT_SUPPLIER = ""
-	public final static String EQUIPMENT_LOCATION = ""
-	public final static String EQUIPMENT_STATUS = ""
-	public final static String EQUIPMENT_DONATION = ""
-	public final static String EQUIPMENT_OBSOLETE = ""
+import org.chai.memms.task.DataExportTask
+
+public  interface Exporter {
+	public abstract List<String> getExportDataHeaders();
+	public abstract File exportData(DataExportTask task) throws IOException;
 }

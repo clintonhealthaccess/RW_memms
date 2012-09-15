@@ -95,9 +95,43 @@ class LocationServiceSpec extends IntegrationTests {
 		result.equals(expectedResult.collect{Location.findByCode(it)})
 		
 		where:
-		text	| expectedResult
+		text | expectedResult
 		"Bur"	| [BURERA]
 		"Nor"	| [NORTH]
+		"n/a"	| []
+	}
+	
+	def "search Datalocation"() {
+		setup:
+		setupLocationTree()
+		
+		when:
+		def result = locationService.searchLocation(DataLocation.class, text,[:])
+		
+		then:
+		result.equals(expectedResult.collect{DataLocation.findByCode(it)})
+		
+		where:
+		text | expectedResult
+		"But"	| [BUTARO]
+		"Kiv"	| [KIVUYE]
+		"n/a"	| []
+	}
+	
+	def "search Calculationlocation"() {
+		setup:
+		setupLocationTree()
+		
+		when:
+		def result = locationService.searchLocation(CalculationLocation.class, text,[:])
+		
+		then:
+		result.equals(expectedResult.collect{CalculationLocation.findByCode(it)})
+		
+		where:
+		text | expectedResult
+		"But"	| [BUTARO]
+		"Bur"	| [BURERA]
 		"n/a"	| []
 	}
 	

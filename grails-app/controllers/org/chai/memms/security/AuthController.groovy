@@ -42,7 +42,7 @@ class AuthController {
     def shiroSecurityManager
 	def languageService
 	def grailsApplication
-	def getTargetUri() {
+	def getTargetURI() {
 		// this is because shiro automatically adds the parameter 'targetUri'
 		// and there is no way to change it so we expect it here as well
 		if (params.targetUri != null) return params.targetUri
@@ -96,8 +96,8 @@ class AuthController {
 			sendMail {
 				to user.email
 				from getFromEmail()
-				subject message(code:'register.account.email.subject', default:'DHSST - your account has been created, please confirm your email address.')
-				body message(code:'register.account.email.body', args:[user.firstname, url], default:'Dear {0},\n\nPlease confirm your email address by following this link: {1}\nSomeone will then review your account and activate it.\n\nYour DHSST Team.')
+				subject message(code:'register.account.email.subject', default:'MEMMS - your account has been created, please confirm your email address.')
+				body message(code:'register.account.email.body', args:[user.firstname, url], default:'Dear {0},\n\nPlease confirm your email address by following this link: {1}\nSomeone will then review your account and activate it.\n\nYour MEMMS Team.')
 			}
 			
 			flash.message = message(code:'register.account.successful', default:'Thanks for registering, you should receive a confirmation email.')
@@ -129,8 +129,8 @@ class AuthController {
 				sendMail {
 					to user.email
 					from getFromEmail()
-					subject message(code:'confirm.account.email.subject', default:'DHSST - your account has been verified.')
-					body message(code:'confirm.account.email.body', args:[user.firstname], default:'Dear {0},\n\nThank you, your email has been verified, someone will review your account and activate it.\nWe will let you know when it is ready.\n\nYour DHSST Team.')
+					subject message(code:'confirm.account.email.subject', default:'MEMMS - your account has been verified.')
+					body message(code:'confirm.account.email.body', args:[user.firstname], default:'Dear {0},\n\nThank you, your email has been verified, someone will review your account and activate it.\nWe will let you know when it is ready.\n\nYour MEMMS Team.')
 				}
 				
 				flash.message = message(code:'confirm.account.successful', default:'Your email has been verified. We will review your account and let you know when it is ready.')
@@ -168,12 +168,12 @@ class AuthController {
 				sendMail {
 					to user.email
 					from getFromEmail()
-					subject message(code:'activate.account.email.subject', default:'DHSST - your account has been activated.')
-					body message(code:'activate.account.email.body', args:[user.firstname, user.username, url], default:'Dear {0},\n\nYour email has just been activated by the DHSST team. You can now login using {1} as username and the password you set when you registered.\nOr follow this URL: {2}\n\nYour DHSST Team.')
+					subject message(code:'activate.account.email.subject', default:'MEMMS - your account has been activated.')
+					body message(code:'activate.account.email.body', args:[user.firstname, user.username, url], default:'Dear {0},\n\nYour email has just been activated by the MEMMS team. You can now login using {1} as username and the password you set when you registered.\nOr follow this URL: {2}\n\nYour MEMMS Team.')
 				}
 				
 				flash.message = message(code:'activate.account.successful', default:'The account has been activated and the user notified.')
-				redirect(uri: getTargetUri())
+				redirect(uri: getTargetURI())
 			}
 			else {
 				flash.message = message(code:'activate.account.unconfirmed', default:'The account has not been confirmed. Let the user confirm its address and activate later.')
@@ -185,7 +185,8 @@ class AuthController {
 	}
 	
     def signIn = {
-		if (log.isDebugEnabled()) log.debug("auth.singIn, params:"+params)
+		// TODO fix this with a command object
+		// and record statistics
         def authToken = new UsernamePasswordToken(params.username, params.password as String)
 
         // Support for "remember me"
@@ -193,30 +194,36 @@ class AuthController {
             authToken.rememberMe = true
         }
         
-        // If a controller redirected to this page, redirect back
-        // to it. Otherwise redirect to the root URI.
-        def targetUri = params.targetUri ?: "/"
-        
-        // Handle requests saved by Shiro filters.
-        def savedRequest = WebUtils.getSavedRequest(request)
-        if (savedRequest) {
-            targetUri = savedRequest.requestURI - request.contextPath
-            if (savedRequest.queryString) targetUri = targetUri + '?' + savedRequest.queryString
-        }
-        
         try{
             // Perform the actual login. An AuthenticationException
             // will be thrown if the username is unrecognised or the
             // password is incorrect.
             SecurityUtils.subject.login(authToken)
-
-            log.info "Redirecting to '${targetUri}'."
-            redirect(uri: targetUri)
+			
+			// If a controller redirected to this page, redirect back
+			// to it. Otherwise redirect to the root URI.
+			String targetURI = getTargetURI()
+			
+			// Handle requests saved by Shiro filters.
+			def savedRequest = WebUtils.getSavedRequest(request)
+			if (savedRequest) {
+				targetURI = savedRequest.requestURI - request.contextPath
+				if (savedRequest.queryString) targetURI = targetURI + '?' + savedRequest.queryString
+			}
+			
+			// append the user preferred language
+			def redirectURI = targetURI
+			
+			def language = User.findByUuid(SecurityUtils.subject.principal, [cache: true]).defaultLanguage
+			if (language) redirectURI = replaceParam(redirectURI, 'lang', language)
+			
+            if (log.isInfoEnabled()) log.info "Redirecting to '${redirectURI}'."
+            redirect(uri: redirectURI)
         }
         catch (AuthenticationException ex){
             // Authentication failed, so display the appropriate message
             // on the login page.
-            log.info "Authentication failure for user '${params.username}'."
+            if (log.isInfoEnabled()) log.info "Authentication failure for user '${params.username}'."
             flash.message = message(code: "login.failed")
 
             // Keep the username and "remember me" setting so that the
@@ -227,8 +234,8 @@ class AuthController {
             }
 
             // Remember the target URI too.
-            if (params.targetUri) {
-                m["targetUri"] = params.targetUri
+            if (params.targetURI) {
+                m["targetURI"] = params.targetURI
             }
 
             // Now redirect back to the login page.
@@ -236,6 +243,25 @@ class AuthController {
         }
     }
 	
+	def replaceParam(def uriToReplace, def paramToReplace, def newValue) {
+		def splitURI = uriToReplace.split('\\?', 2)
+		
+		def uri = splitURI[0]
+		def uriParams = splitURI.size() == 2 ? splitURI[1].split('&') : []
+		
+		def found = false
+		uriParams = uriParams.collect { param ->
+			def map = param.split('=', 2)
+			if (map[0] == paramToReplace) {
+				found = true
+				return 'lang='+newValue
+			}
+			else return map[0]+(map.size() == 2 ? ('='+map[1]) : '')
+		}
+		if (!found) uriParams << 'lang='+newValue
+		
+		return uri + '?' + uriParams.join('&')
+	}
     def signOut = {
         // Log the user out of the application.
         SecurityUtils.subject?.logout()
@@ -274,8 +300,8 @@ class AuthController {
 			sendMail {
 				to user.email
 				from getFromEmail()
-				subject message(code:'forgot.password.email.subject', default: "DHSST - Lost password?")
-				body message(code:'forgot.password.email.body', args:[user.firstname, url], default: "Dear {0}\n\nTo set a new password, please go to {1}.\n\nYour DHSST Team.")
+				subject message(code:'forgot.password.email.subject', default: "MEMMS - Lost password?")
+				body message(code:'forgot.password.email.body', args:[user.firstname, url], default: "Dear {0}\n\nTo set a new password, please go to {1}.\n\nYour MEMMS Team.")
 			}
 			flash.message = message(code:'forgot.password.successful', default:'An email has been sent with the instructions.')
 			redirect(action:'login')
@@ -289,11 +315,11 @@ class AuthController {
 		if (params.token != null) token = PasswordToken.findByToken(params.token)
 		if (token != null) {
 			// if token in URL
-			render (view:'newPassword', model:[token: token.token, newPassword: null, targetUri: getTargetUri()])
+			render (view:'newPassword', model:[token: token.token, newPassword: null, targetUri: getTargetURI()])
 		}
 		else if (SecurityUtils.subject?.principal != null) {
 			// if user is logged in
-			render (view:'newPassword', model:[newPassword: null, targetUri: getTargetUri()])
+			render (view:'newPassword', model:[newPassword: null, targetUri: getTargetURI()])
 		}
 		else {
 			// to 404 error page
@@ -305,7 +331,7 @@ class AuthController {
 		if (log.isDebugEnabled()) log.debug("auth.setPassword, params:"+params)
 		
 		if (cmd.hasErrors()) {
-			render (view: 'newPassword', model:[token: params.token, newPassword: cmd, targetUri: getTargetUri()])
+			render (view: 'newPassword', model:[token: params.token, newPassword: cmd, targetUri: getTargetURI()])
 		}
 		else {
 			PasswordToken token = null
@@ -327,9 +353,9 @@ class AuthController {
 				user.passwordHash = new Sha256Hash(cmd.password).toHex()
 				user.save()
 				
-				log.info("password changed succesfully, redirecting to: "+getTargetUri())
+				if (log.isInfoEnabled()) log.info("password changed succesfully, redirecting to: "+getTargetURI())
 				flash.message = message(code:'set.password.success', default:'Your new password has been set.')
-				redirect(uri: getTargetUri())
+				redirect(uri: getTargetURI())
 			}
 			else {
 				// to 404 error page
@@ -373,11 +399,11 @@ class RegisterCommand extends NewPasswordCommand {
 	String defaultLanguage
 	
 	static constraints = {
-		firstname(nullable:false, blank:false)
-		lastname(nullable:false, blank:false)
-		organisation(nullable:false, blank:false)
-		phoneNumber(nullable:false, blank:false, phoneNumber: true)
-		defaultLanguage(nullable:true)
+		firstname nullable:false, blank:false
+		lastname nullable:false, blank:false
+		organisation nullable:false, blank:false
+		phoneNumber nullable:false, blank:false, phoneNumber: true
+		defaultLanguage nullable:true
 		email(blank:false, email:true, validator: {val, obj ->
 			return User.findByEmail(val) == null && User.findByUsername(val) == null
 		})

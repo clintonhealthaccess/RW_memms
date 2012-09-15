@@ -47,6 +47,7 @@ class UserService {
 	def utilsService
 	
 	List<User> searchUser(String text, Map<String, String> params) {
+		if(log.isDebugEnabled()) log.debug("searchUser params=" + params)
 		def criteria = User.createCriteria()
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			or{

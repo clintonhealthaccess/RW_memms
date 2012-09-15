@@ -13,7 +13,7 @@
  *     * Neither the name of the <organization> nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -25,24 +25,35 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.exports
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+package org.chai.memms.task
 
-import org.chai.memms.location.LanguageService;
-import org.chai.memms.location.LocationService;
-import org.chai.memms.task.DataExportTask
+import java.util.Map;
+import java.util.Set;
+
+import org.chai.memms.equipment.EquipmentType;
+import org.chai.memms.equipment.Provider;
+import org.chai.memms.equipment.EquipmentStatus.Status;
+import org.chai.memms.exports.EquipmentExport;
+import org.chai.memms.exports.EquipmentTypeExport;
+import org.chai.memms.task.Exporter;
+import org.chai.memms.location.CalculationLocation;
+import org.chai.memms.location.DataLocationType;
 import org.chai.memms.util.Utils;
-import org.hibernate.SessionFactory
 
-public abstract class Exporter {
-
-	public LanguageService languageService;
-	public SessionFactory sessionFactory;
+class EquipmentExportTask extends DataExportTask{
+	String getInformation() {
+		//TODO find out why the message is not working
+		return "export equipment"//message(code: 'equipment.type.label') + '<br/>'+message(code:'import.file.label')+': '+getOutputFilename()
+	}
+	Exporter getExporter() {
+		return new EquipmentExport()
+	}
 	
-	public abstract List<String> getExportDataHeaders();
-	public abstract File exportData(DataExportTask task) throws IOException;
+	
+	Map getFormModel() {
+		return [
+			task: this
+		]
+	}
 }

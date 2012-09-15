@@ -18,7 +18,6 @@ class AccountControllerSpec extends IntegrationTests {
 		then:
 		//The response is response.sendError(404) which has a static mapping
 		accountController.response.redirectedUrl == null
-		//accountController.modelAndView == null
 	}
 	
 	
@@ -97,7 +96,7 @@ class AccountControllerSpec extends IntegrationTests {
 		setup:
 		setup:
 		def user = newUser('test@test.com', true, true)
-		//setupSecurityManager(user)
+		setupSecurityManager(user)
 		accountController = new AccountController()
 		
 		when:
@@ -106,7 +105,6 @@ class AccountControllerSpec extends IntegrationTests {
 		
 		then:
 		accountController.response.redirectUrl == '/user/list'
-		//User.list()[0].code != 'new_code'
 	}
 	
 }
