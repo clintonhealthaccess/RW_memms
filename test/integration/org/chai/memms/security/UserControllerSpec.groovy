@@ -56,7 +56,7 @@ class UserControllerSpec extends IntegrationTests{
 		userController.params.repeat = "exemple";
 		userController.params.permissionString = "*";
 		userController.params.confirmed = true
-		userController.params.active = true
+		userController.params.active = false
 		userController.save()
 		
 		then:

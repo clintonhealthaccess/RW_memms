@@ -56,7 +56,7 @@
 								<option value="false" ${filterCmd?.obsolete?.equals("false")? 'selected' : ''}><g:message code="default.boolean.false" /></option>
 						</select>
 					</li>
-					<li><g:selectFromEnum name="equipmentStatus" values="${Status.values()}" field="status" label="${message(code:'equipment.status.label')}" /></li>
+					<li><g:selectFromEnum name="equipmentStatus" values="${Status.values()}" field="equipmentStatus" label="${message(code:'equipment.status.label')}" /></li>
 					<li>
 						<label><g:message code="equipment.donate.label" /></label> 
 						<select name="donated">

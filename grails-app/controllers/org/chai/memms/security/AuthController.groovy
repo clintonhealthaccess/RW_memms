@@ -27,6 +27,8 @@
  */
 package org.chai.memms.security
 
+import grails.validation.ValidationException;
+
 import org.apache.commons.lang.RandomStringUtils
 import org.apache.shiro.SecurityUtils
 import org.apache.shiro.authc.AuthenticationException
@@ -34,6 +36,7 @@ import org.apache.shiro.authc.UsernamePasswordToken
 import org.apache.shiro.crypto.hash.Sha256Hash
 import org.apache.shiro.web.util.SavedRequest
 import org.apache.shiro.web.util.WebUtils
+import org.chai.memms.location.CalculationLocation;
 import org.chai.memms.security.NewPasswordCommand;
 import org.grails.datastore.mapping.config.utils.ConfigUtils;
 import org.chai.memms.security.User.UserType;
@@ -67,7 +70,7 @@ class AuthController {
 	
 	// this will disappear once we have a real registration mechanism
 	def sendRegistration = { RegisterCommand cmd ->
-		if (log.isDebugEnabled()) log.debug("auth.sendRegistration, params:"+params)
+		if (log.isDebugEnabled()) log.debug("auth.sendRegistration, params:"+params+", RegisterCommand:"+cmd)
 		
 		if (cmd.hasErrors()) {
 			if (log.isDebugEnabled()) log.debug("command has errors: "+cmd)
@@ -77,11 +80,9 @@ class AuthController {
 		else {
 			RegistrationToken token = new RegistrationToken(token: RandomStringUtils.randomAlphabetic(20), used: false)
 			
-			def user = new User(userType: UserType.OTHER, username: cmd.email, email: cmd.email, passwordHash: new Sha256Hash(cmd.password).toHex(), permissionString:'',
-				firstname: cmd.firstname, lastname: cmd.lastname, organisation: cmd.organisation,
+			def user = new User(userType: UserType.OTHER, username: cmd.email, email: cmd.email, passwordHash: new Sha256Hash(cmd.password).toHex(),
+				firstname: cmd.firstname, lastname: cmd.lastname, organisation: cmd.organisation,permissionString:'',
 				phoneNumber: cmd.phoneNumber, defaultLanguage: cmd.defaultLanguage, uuid: UUID.randomUUID().toString(),registrationToken:token).save(failOnError: true)
-				
-			
 			def url = createLink(absolute: true, controller:'auth', action:'confirmRegistration', params:[token:token.token])
 			
 			def contactEmail = grailsApplication.config.site.contact.email;
@@ -153,11 +154,20 @@ class AuthController {
 		if (user != null) {
 			if (user.confirmed) {
 				user.active = true
-				user.save()
+				
+				try {
+					user.save(failOnError: true)
+				}
+				catch (ValidationException e) {
+					flash.message = message(code:'activate.account.not.successful', default:'Account not activated, users has no facility or permissions.')
+					redirect(uri: getTargetURI())
+					return //Have to call this, otherwise it will continue executing the rest of the codes and cause an error on second redirect
+				}
 				
 				if(user.registrationToken != null){
 					//This assumes that a user has only one regitration token
 					RegistrationToken registrationTokenToDelete = user.registrationToken
+					if (log.isDebugEnabled()) log.debug("auth.confirmRegistration, registrationTokenToDelete:"+registrationTokenToDelete)
 					user.registrationToken = null
 					registrationTokenToDelete.delete()
 				}
@@ -200,6 +210,7 @@ class AuthController {
             // password is incorrect.
             SecurityUtils.subject.login(authToken)
 			
+			def user = User.findByUsername(params.username)
 			// If a controller redirected to this page, redirect back
 			// to it. Otherwise redirect to the root URI.
 			String targetURI = getTargetURI()
@@ -214,7 +225,8 @@ class AuthController {
 			// append the user preferred language
 			def redirectURI = targetURI
 			
-			def language = User.findByUuid(SecurityUtils.subject.principal, [cache: true]).defaultLanguage
+			def language = User.findByUuid(SecurityUtils.subject.principal, [cache: true])?.defaultLanguage
+			log.debug("loged in user=" + User.findByUuid(SecurityUtils.subject.principal, [cache: true])+"permission string="+User.findByUuid(SecurityUtils.subject.principal, [cache: true])?.permissions)
 			if (language) redirectURI = replaceParam(redirectURI, 'lang', language)
 			
             if (log.isInfoEnabled()) log.info "Redirecting to '${redirectURI}'."
@@ -407,5 +419,9 @@ class RegisterCommand extends NewPasswordCommand {
 		email(blank:false, email:true, validator: {val, obj ->
 			return User.findByEmail(val) == null && User.findByUsername(val) == null
 		})
+	}
+	String toString() {
+		return "RegisterCommand[firstname="+firstname+", lastname="+lastname+", organisation="+organisation+", email="+email+", phoneNumber="+phoneNumber+
+		", defaultLanguage="+defaultLanguage+", password=" + password + ", repeat=" + repeat + "]"
 	}
 }

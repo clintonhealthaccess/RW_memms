@@ -33,7 +33,7 @@
 					%>
 					<li>
 						<a href="${createLinkWithTargetURI(controller: 'account', action:'editAccount')}">
-							<g:message code="header.navigation.myaccount"/> : ${user.firstname} ${user.lastname}
+							<g:message code="header.navigation.myaccount"/> : ${user?.firstname} ${user?.lastname}
 						</a>
 					</li>
 				</shiro:user>

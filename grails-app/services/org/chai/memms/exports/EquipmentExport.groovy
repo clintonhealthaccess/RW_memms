@@ -78,16 +78,17 @@ class EquipmentExport implements Exporter{
 			if(equipmentExportFilter != null){
 				equipments = filterEquipment(equipmentExportFilter)
 			}
-			//Task.get(progress.id)?.setMaximum(equipments.size())
 			progress.setMaximum(equipments.size())
 			
 			for(Equipment equipment: equipments){
 				if (log.isDebugEnabled()) log.debug("exporting equipment=" + equipment)
-//				if (log.isDebugEnabled()) log.debug(" exportEquipment values code:"+equipmentType.code+", names:([en: "+equipmentType.getNames(new Locale("en"))+"], [fr: "+equipmentType.getNames(new Locale("fr"))+"]), "
-//					+", descriptions:([en: "+equipmentType.getDescriptions(new Locale("en"))+"], [fr: "+equipmentType.getDescriptions(new Locale("fr"))+"]), Observation: "+equipmentType.observation);
-//				List<String> line = [equipmentType.code,equipmentType.getNames(new Locale("en")),equipmentType.getNames(new Locale("fr")),
-//					equipmentType.getDescriptions(new Locale("en")),equipmentType.getDescriptions(new Locale("fr")),equipmentType.observation]
-//				writer.write(line)
+				List<String> line = [equipment.serialNumber,equipment.type.code,equipment.type?.getNames(new Locale("en")),equipment.type?.getNames(new Locale("fr")),equipment.model,
+					equipment.getCurrentState()?.status,equipment.dataLocation?.code,equipment.dataLocation?.getNames(new Locale("en")),equipment.dataLocation?.getNames(new Locale("fr")),
+					equipment.department?.code,equipment.department?.getNames(new Locale("en")),equipment.department?.getNames(new Locale("fr")),equipment.room,
+					equipment.manufacturer?.code,equipment.manufacturer?.contact?.contactName,equipment.manufactureDate,equipment.supplier?.code,equipment.supplier?.contact?.contactName,
+					equipment.purchaseDate,equipment.purchaseCost?:"n/a",equipment.currency?:"n/a",equipment.donation,equipment.obsolete,equipment.warranty?.startDate,equipment.warranty?.numberOfMonth]
+				log.debug("exporting line=" + line)
+				writer.write(line)
 				progress.incrementProgress()
 			}
 		} catch (IOException ioe){
@@ -98,7 +99,35 @@ class EquipmentExport implements Exporter{
 		}
 	}
 	
-	//dataLocationTypes:DataLocationType,
+	public List<String> getExportDataHeaders() {
+		List<String> headers = new ArrayList<String>()
+		headers.add(ImportExportConstant.EQUIPMENT_SERIAL_NUMBER)
+		headers.add(ImportExportConstant.DEVICE_CODE)
+		headers.add(ImportExportConstant.DEVICE_NAME_EN)
+		headers.add(ImportExportConstant.DEVICE_NAME_FR)
+		headers.add(ImportExportConstant.EQUIPMENT_MODEL)
+		headers.add(ImportExportConstant.EQUIPMENT_STATUS)
+		headers.add(ImportExportConstant.LOCATION_CODE)
+		headers.add(ImportExportConstant.LOCATION_NAME_EN)
+		headers.add(ImportExportConstant.LOCATION_NAME_FR)
+		headers.add(ImportExportConstant.DEPARTMENT_CODE)
+		headers.add(ImportExportConstant.DEPARTMENT_NAME_EN)
+		headers.add(ImportExportConstant.DEPARTMENT_NAME_FR)
+		headers.add(ImportExportConstant.ROOM)
+		headers.add(ImportExportConstant.MANUFACTURER_CODE)
+		headers.add(ImportExportConstant.MANUFACTURER_CONTACT_NAME)
+		headers.add(ImportExportConstant.EQUIPMENT_MANUFACTURE_DATE)
+		headers.add(ImportExportConstant.SUPPLIER_CODE)
+		headers.add(ImportExportConstant.SUPPLIER_CONTACT_NAME)
+		headers.add(ImportExportConstant.SUPPLIER_DATE)
+		headers.add(ImportExportConstant.EQUIPMENT_PURCHASE_COST)
+		headers.add(ImportExportConstant.EQUIPMENT_PURCHASE_COST_CURRENCY)
+		headers.add(ImportExportConstant.EQUIPMENT_DONATION)
+		headers.add(ImportExportConstant.EQUIPMENT_OBSOLETE)
+		headers.add(ImportExportConstant.EQUIPMENT_WARRANTY_START)
+		headers.add(ImportExportConstant.EQUIPMENT_WARRANTY_END)
+		return headers;
+	}
 	
 	public List<Equipment> filterEquipment(EquipmentExportFilter equipmentExportFilter){
 		
@@ -131,20 +160,5 @@ class EquipmentExport implements Exporter{
 		List<String> basicInfo = new ArrayList<String>();
 		basicInfo.add("equipment.export")
 		return basicInfo;
-	}
-	
-
-	public List<String> getExportDataHeaders() {
-		List<String> headers = new ArrayList<String>()
-		headers.add(ImportExportConstant.EQUIPMENT_SERIAL_NUMBER)
-		headers.add(ImportExportConstant.EQUIPMENT_TYPE)
-		headers.add(ImportExportConstant.EQUIPMENT_MODEL)
-		headers.add(ImportExportConstant.EQUIPMENT_MANUFACTURER)
-		headers.add(ImportExportConstant.EQUIPMENT_SUPPLIER)
-		headers.add(ImportExportConstant.EQUIPMENT_LOCATION)
-		headers.add(ImportExportConstant.EQUIPMENT_STATUS)
-		headers.add(ImportExportConstant.EQUIPMENT_DONATION)
-		headers.add(ImportExportConstant.EQUIPMENT_OBSOLETE)
-		return headers;
 	}
 }

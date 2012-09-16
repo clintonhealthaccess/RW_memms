@@ -36,6 +36,20 @@ class ImportExportConstant {
 	//For use in imports
 	public final static Integer NUMBER_OF_LINES_TO_IMPORT = 100;
 	
+	public final static String SUPPLIER_CODE = "Supplier"
+	public final static String SUPPLIER_DATE = "Supply date"
+	public final static String SUPPLIER_CONTACT_NAME = "Manufacturer_code"
+	
+	public final static String LOCATION_CODE = "Facility_code"
+	public final static String LOCATION_NAME_EN = "Facility_name_en"
+	public final static String LOCATION_NAME_FR = "Facility_name_fr"
+	
+	public final static String DEPARTMENT_CODE = "Department"
+	public final static String DEPARTMENT_NAME_EN = "Department_name_en"
+	public final static String DEPARTMENT_NAME_FR = "Department_name_fr"
+	
+	public final static String ROOM = "Room"
+	
 	//Importing/exporting equipment types
 	public final static String DEVICE_CODE = "device_code"
 	public final static String DEVICE_NAME_EN = "device_name_en"
@@ -46,13 +60,17 @@ class ImportExportConstant {
 	public final static String DEVICE_OBSERVATION = "observations"
 	
 	//Importing/exporting equipment
-	public final static String EQUIPMENT_SERIAL_NUMBER = ""
-	public final static String EQUIPMENT_TYPE = ""
-	public final static String EQUIPMENT_MODEL = ""
-	public final static String EQUIPMENT_MANUFACTURER = ""
-	public final static String EQUIPMENT_SUPPLIER = ""
-	public final static String EQUIPMENT_LOCATION = ""
-	public final static String EQUIPMENT_STATUS = ""
-	public final static String EQUIPMENT_DONATION = ""
-	public final static String EQUIPMENT_OBSOLETE = ""
+	public final static String EQUIPMENT_SERIAL_NUMBER = "Serial number"
+	public final static String EQUIPMENT_TYPE = "Type"
+	public final static String EQUIPMENT_MODEL = "Model"
+	public final static String MANUFACTURER_CODE = "Manufacturer_code"
+	public final static String MANUFACTURER_CONTACT_NAME = "Manufacturer_code"
+	public final static String EQUIPMENT_MANUFACTURE_DATE = "Manufacture date"
+	public final static String EQUIPMENT_PURCHASE_COST = "Cost"
+	public final static String EQUIPMENT_PURCHASE_COST_CURRENCY = "Currency"
+	public final static String EQUIPMENT_STATUS = "Status"
+	public final static String EQUIPMENT_DONATION = "Donation"
+	public final static String EQUIPMENT_OBSOLETE = "Obsolete"
+	public final static String EQUIPMENT_WARRANTY_START = "Warranty start"
+	public final static String EQUIPMENT_WARRANTY_END = "Warranty end"
 }

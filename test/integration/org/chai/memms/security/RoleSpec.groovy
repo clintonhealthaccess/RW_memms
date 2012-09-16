@@ -97,9 +97,9 @@ class RoleSpec  extends IntegrationTests {
 		def userThree
 		
 		User.withNewTransaction{
-			userOne = newUser('userone', 'userone', true, true)
-			userTwo = newUser('usertwo', 'userone', true, true)
-			userThree = newUser('userthree', 'userone', true, true)
+			userOne = newUser('userone', 'userone', false, true)
+			userTwo = newUser('usertwo', 'userone', false, true)
+			userThree = newUser('userthree', 'userone', false, true)
 		}
 
 		roleOne.addToUsers(userOne)
@@ -123,7 +123,6 @@ class RoleSpec  extends IntegrationTests {
 	
 	def "can delete a role which has users - users don't have other roles"() {
 		setup:
-		setupLocationTree()
 		
 		def roleOne = newRole("RoleOne", "*:*")
 		
@@ -131,8 +130,8 @@ class RoleSpec  extends IntegrationTests {
 		def userTwo
 		
 		User.withNewTransaction{
-			userOne = newUser('userone', 'userone', true, true)
-			userTwo = newUser('usertwo', 'userone', true, true)
+			userOne = newUser('userone', 'userone', false, true)
+			userTwo = newUser('usertwo', 'userone', false, true)
 		}
 
 		roleOne.addToUsers(userOne)
