@@ -27,32 +27,32 @@
  */
 package org.chai.memms.security
 
-import org.chai.memms.util.UtilsService
+import org.chai.memms.util.Utils
 
 class Role {
     String name
 	String permissionString
 	
-	def utilsService
-	
+	static belongsTo = User
     static hasMany = [ users: User ]
 
 	def getPermissions() {
-		return utilsService.split(permissionString, User.PERMISSION_DELIMITER)
+		return Utils.split(permissionString, User.PERMISSION_DELIMITER)
 	}
 	
 	def setPermissions(def permissions) {
-		this.permissionString = utilsService.unsplit(permissions, User.PERMISSION_DELIMITER)
+		this.permissionString = Utils.unsplit(permissions, User.PERMISSION_DELIMITER)
 	}
 	
 	def addToPermissions(def permission) {
 		def permissions = getPermissions()
 		permissions << permission
-		this.permissionString = utilsService.unsplit(permissions, User.PERMISSION_DELIMITER)
+		this.permissionString = Utils.unsplit(permissions, User.PERMISSION_DELIMITER)
 	}
 	
     static constraints = {
-        name(nullable: false, blank: false, unique: true)
+        name nullable: false, blank: false, unique: true
+		permissionString nullable: false, blank: false
     }
 	static mapping = {
 		table "memms_user_role"
