@@ -33,8 +33,8 @@
 <classpathentry kind="src" path=".plugin-src-mail-1.0-grails-app-taglib"/>
 <classpathentry kind="src" path=".plugin-src-mail-1.0-grails-app-views"/>
 <classpathentry kind="src" path=".plugin-src-mail-1.0-src-groovy"/>
-<classpathentry kind="src" path=".plugin-src-locations-0.2.1-CHAI-grails-app-domain"/>
-<classpathentry kind="src" path=".plugin-src-locations-0.2.1-CHAI-grails-app-services"/>
+<classpathentry kind="src" path=".plugin-src-locations-0.2.2-CHAI-grails-app-domain"/>
+<classpathentry kind="src" path=".plugin-src-locations-0.2.2-CHAI-grails-app-services"/>
 <classpathentry kind="src" path=".plugin-src-jquery-1.7.1-grails-app-conf"/>
 <classpathentry kind="src" path=".plugin-src-jquery-1.7.1-grails-app-i18n"/>
 <classpathentry kind="src" path=".plugin-src-jquery-1.7.1-grails-app-services"/>
@@ -270,6 +270,7 @@
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.spockframework/spock-core/jars/spock-core-0.6-groovy-1.8.jar"/>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/junit/junit-dep/jars/junit-dep-4.9.jar"/>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.hamcrest/hamcrest-core/jars/hamcrest-core-1.2.jar"/>
+<classpathentry kind="lib" path="lib/json-lib-2.4-jdk15.jar"/>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.apache.tomcat.embed/tomcat-embed-core/jars/tomcat-embed-core-7.0.27.jar"/>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.apache.tomcat.embed/tomcat-embed-jasper/jars/tomcat-embed-jasper-7.0.27.jar"/>
 <classpathentry kind="var" path="GRAILS_IVYCACHE/org.apache.tomcat.embed/tomcat-embed-logging-log4j/jars/tomcat-embed-logging-log4j-7.0.27.jar"/>

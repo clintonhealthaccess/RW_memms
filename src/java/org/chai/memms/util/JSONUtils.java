@@ -1,5 +1,5 @@
-/**
- * Copyright (c) 2012, Clinton Health Access Initiative.
+/** 
+ * Copyright (c) 2011, Clinton Health Access Initiative.
  *
  * All rights reserved.
  *
@@ -13,7 +13,7 @@
  *     * Neither the name of the <organization> nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -25,67 +25,57 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.security
+package org.chai.memms.util;
 
-import org.chai.memms.util.Utils
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
-class Role {
-    String name
-	String permissionString
-	
-	static belongsTo = User
-    static hasMany = [ users: User ]
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
+import net.sf.json.JSONSerializer;
 
-	def getPermissions() {
-		return Utils.split(permissionString, User.PERMISSION_DELIMITER)
-	}
-	
-	def setPermissions(def permissions) {
-		this.permissionString = Utils.unsplit(permissions, User.PERMISSION_DELIMITER)
-	}
-	
-	def addToPermissions(def permission) {
-		def permissions = getPermissions()
-		permissions << permission
-		this.permissionString = Utils.unsplit(permissions, User.PERMISSION_DELIMITER)
-	}
-	
-    static constraints = {
-        name nullable: false, blank: false, unique: true
-		permissionString nullable: false, blank: false
-    }
-	static mapping = {
-		table "memms_user_role"
-		cache true
-		version false
-	}
-	
-	String toString() {
-		return name;
-	}
+public class JSONUtils {
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
+	public static String getJSONFromMap(Map<String, ? extends Object> map) {
+		String result = null;
+		if (map != null) {
+			try {
+				JSONObject jsonObject = (JSONObject)JSONSerializer.toJSON(map);
+				result = jsonObject.toString();
+			} catch (JSONException e) {
+				// log
+			}
+		}
 		return result;
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this.is(obj))
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof Role))
-			return false;
-		Role other = (Role) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
+	
+	@SuppressWarnings("unchecked")
+	public static Map<String, Object> getMapFromJSON(String jsonString) {
+		Map<String, Object> descriptions = new HashMap<String, Object>();
+		if (jsonString != null) {
+			try {
+				JSONObject jsonObject = JSONObject.fromObject(jsonString);
+				return (Map<String, Object>)getObjectFromJSONObject(jsonObject);
+			} catch (JSONException e) {
+				// log
+			}
+		}
+		return descriptions;
 	}
+	
+	private static Object getObjectFromJSONObject(Object object) {
+		if (object instanceof JSONObject) {
+			Map<String, Object> descriptions = new HashMap<String, Object>();
+			@SuppressWarnings("unchecked")
+			Iterator<String> keyIterator = ((JSONObject)object).keys();
+			while (keyIterator.hasNext()) {
+				String type = (String) keyIterator.next();
+				descriptions.put(type, getObjectFromJSONObject(((JSONObject)object).get(type)));
+			}
+			return descriptions;
+		}
+		else return object;
+	}
+	
 }

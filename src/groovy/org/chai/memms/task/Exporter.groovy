@@ -25,24 +25,14 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.exports
+package org.chai.memms.task
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-
 import org.chai.memms.task.DataExportTask
-import org.chai.location.LanguageService;
-import org.chai.location.LocationService;
-import org.chai.memms.util.Utils;
-import org.hibernate.SessionFactory
 
-public abstract class Exporter {
-
-	public LanguageService languageService;
-	public SessionFactory sessionFactory;
-	
+public  interface Exporter {
 	public abstract List<String> getExportDataHeaders();
 	public abstract File exportData(DataExportTask task) throws IOException;
 }
