@@ -7,11 +7,11 @@ import org.chai.memms.Initializer;
 import org.chai.memms.IntegrationTests
 import org.chai.memms.equipment.Equipment;
 import org.chai.memms.equipment.EquipmentStatus;
-import org.chai.memms.location.CalculationLocation;
-import org.chai.memms.location.DataLocation
-import org.chai.memms.location.DataLocationType
-import org.chai.memms.location.Location
-import org.chai.memms.location.LocationLevel
+import org.chai.location.CalculationLocation;
+import org.chai.location.DataLocation
+import org.chai.location.DataLocationType
+import org.chai.location.Location
+import org.chai.location.LocationLevel
 import org.chai.memms.security.Role;
 import org.chai.memms.security.User
 import org.chai.memms.task.Task.TaskStatus

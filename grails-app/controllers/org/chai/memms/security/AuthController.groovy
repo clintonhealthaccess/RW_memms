@@ -36,7 +36,7 @@ import org.apache.shiro.authc.UsernamePasswordToken
 import org.apache.shiro.crypto.hash.Sha256Hash
 import org.apache.shiro.web.util.SavedRequest
 import org.apache.shiro.web.util.WebUtils
-import org.chai.memms.location.CalculationLocation;
+import org.chai.location.CalculationLocation;
 import org.chai.memms.security.NewPasswordCommand;
 import org.grails.datastore.mapping.config.utils.ConfigUtils;
 import org.chai.memms.security.User.UserType;

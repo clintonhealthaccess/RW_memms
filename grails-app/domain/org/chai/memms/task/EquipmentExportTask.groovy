@@ -37,8 +37,8 @@ import org.chai.memms.equipment.EquipmentStatus.Status;
 import org.chai.memms.exports.EquipmentExport;
 import org.chai.memms.exports.EquipmentTypeExport;
 import org.chai.memms.task.Exporter;
-import org.chai.memms.location.CalculationLocation;
-import org.chai.memms.location.DataLocationType;
+import org.chai.location.CalculationLocation;
+import org.chai.location.DataLocationType;
 import org.chai.memms.util.Utils;
 
 class EquipmentExportTask extends DataExportTask{
