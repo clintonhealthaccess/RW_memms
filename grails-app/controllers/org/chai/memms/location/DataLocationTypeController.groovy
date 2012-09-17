@@ -27,6 +27,8 @@
  */
 package org.chai.memms.location;
 
+import org.chai.location.DataLocation;
+import org.chai.location.DataLocationType;
 import org.chai.memms.AbstractEntityController;
 
 class DataLocationTypeController extends AbstractEntityController {

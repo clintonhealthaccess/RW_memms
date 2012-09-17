@@ -28,6 +28,7 @@
 package org.chai.memms.maintenance
 
 import org.chai.memms.equipment.Equipment;
+import org.chai.memms.security.User;
 
 /**
  * @author Jean Kahigiso M.
@@ -49,38 +50,51 @@ class WorkOrder {
 		OPEN("open"),
 		CLOSEDFIXED("closedfixed"),
 		CLOSEDFORDISPOSAL("closedfordisposal")
-		String messageCode = "order.status"
+		String messageCode = "work.order.status"
 		String name
 		OrderStatus(String name){ this.name=name }
 		String getKey() { return name() }
 	}
 	
 	String currency
-	String descriptions
+	String description
+	User addedBy
+	User lastModifiedBy
 	Integer estimatedCost
 	Date openOn
+	Date lastModifiedOn
 	Date closedOn
-	Boolean requestAssistance
+	Boolean assistaceRequested
 	
 	Criticality criticality
 	OrderStatus status
 	 
 	static belongsTo = [equipment: Equipment]
-	static hasMany = [comments: Comment, performedActions: MaintenanceProcess, materialsUsed: MaintenanceProcess]
+	static hasMany = [comments: Comment,notifications: Notification,notificationGroup: User,performedActions: MaintenanceProcess, materialsUsed: MaintenanceProcess]
 	
 	static constraints = {
-		requestAssistance nullable: true
-		descriptions nullable: false, blank: false
+		addedBy nullable: false
+		assistaceRequested nullable: false
+		description nullable: false, blank: false
 		openOn nullable: false, validation:{it <= new Date()}
+		lastModifiedOn nullable: true, validation:{ val, obj ->
+			if(val!=null)
+			return ((val <= new Date()) && (val.after(obj.openOn) || (val.compareTo(obj.openOn)==0)))
+			else return true
+		}
 		closedOn nullable: true, validation:{ val, obj ->
 			if(val!=null)
 				return ((val <= new Date()) && (val.after(obj.openOn) || (val.compareTo(obj.openOn)==0)))
 			else return true
 		}
+		lastModifiedBy nullable: true
 		criticality nullable: false, blank: false, inList: [Criticality.LOW,Criticality.HIGH,Criticality.NORAMAL]
 		status nullable: false, blank: false, inList:[OrderStatus.OPEN,OrderStatus.CLOSEDFIXED,OrderStatus.CLOSEDFORDISPOSAL]
+		estimatedCost nullable: true, blank: true, validator:{ val, obj ->
+			if(val == null && obj.currency != null) return false
+		}
 		currency  nullable: true, blank: true, inList: ["RWF","USD","EUR"], validator:{ val, obj ->
-			if(val == null && obj.donation == null) return false
+			if(val == null && obj.estimatedCost != null) return false
 		}
 	}
 	

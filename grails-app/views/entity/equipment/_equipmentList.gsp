@@ -12,6 +12,7 @@
 			<th><g:message code="equipment.status.label"/></th>
 			<g:sortableColumn property="donation" defaultOrder="asc" title="${message(code: 'equipment.donation.label')}" params="[q:q,location:dataLocation.id]" />
 			<g:sortableColumn property="obsolete" defaultOrder="asc" title="${message(code: 'equipment.obsolete.label')}" params="[q:q,location:dataLocation.id]" />
+			<th><g:message code="work.order.label"/></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -49,6 +50,11 @@
 				<td>${(equipment.donation)? '\u2713':'X'}</td>
 				<td>
 					<g:listCheckBox name="obsolete" id="${equipment.id}" checked="${(!equipment.obsolete)?:'checked'}"/>
+				</td>
+				<td>
+					<a href="${createLinkWithTargetURI(controller:'workOrder', action:'list', params:['equipment': equipment?.id])}" title="See list" class="tooltip">
+  	    				Orders
+  	    			</a>
 				</td>
 			</tr>
 		</g:each>

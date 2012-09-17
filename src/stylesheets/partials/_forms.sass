@@ -477,6 +477,19 @@ form.search-form
   .row
     margin-bottom: 7px
     vertical-align: middle
+  .rows-wrapper
+    .row
+      float: left
+    input[type=text]
+      margin: 0
+      width: 200px
+    select[name=currency]
+      height: 23px
+      margin-left: 3px
+      min-width: 50px
+      width: 90px
+    label[for=currency]
+      display: none
   .date
     select
       min-width: 50px
@@ -579,6 +592,7 @@ form.search-form
   
 .checkbox
   position: relative
+  +pie-clearfix
   .list-check-box-spinner, .list-check-box
     position: absolute
   .list-check-box-spinner
@@ -586,3 +600,10 @@ form.search-form
   .list-check-box
     margin: 0
     top: -5px
+  .ajax-error
+    color: $no
+    display: inline-block
+    left: -50%
+    position: absolute
+    top: 12px
+    white-space: nowrap

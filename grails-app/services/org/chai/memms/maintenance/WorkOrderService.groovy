@@ -25,63 +25,23 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.location;
+package org.chai.memms.maintenance
 
+import java.util.Map;
+import org.chai.memms.equipment.Equipment;
 
-import org.chai.memms.util.Utils;
-import i18nfields.I18nFields
 /**
-* @author Jean Kahigiso M.
-*
-*/
-@i18nfields.I18nFields
-class LocationLevel{
-
-	String code
-	String names
-	static hasMany = [locations: Location]
+ * @author Jean Kahigiso M.
+ *
+ */
+class WorkOrderService {
 	
-	static i18nFields = ['names']
-	
-	String toString() {
-		return "LocationLevel[Id=" + id + ", Code=" + code + "]";
+	List<WorkOrder> getWorkOrders(Equipment equipment, Map<String, String> params){
+		def criteria = WorkOrder.createCriteria();
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			if(equipment)
+				eq("equipment",equipment)
+		}
 	}
 	
-	static constraints ={
-		code nullable: false, unique: true, blank: false
-		names nullable: true, blank: true
-	}
-	
-	static mapping = {
-		table "chai_location_level"
-		locations column: "location_id"
-		version false
-		names_en type:"text"
-		names_fr type:"text"
-	}
-	
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((code == null) ? 0 : code.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this.is(obj))
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		LocationLevel other = (LocationLevel) obj;
-		if (code == null) {
-			if (other.code != null)
-				return false;
-		} else if (!code.equals(other.code))
-			return false;
-		return true;
-	}
 }

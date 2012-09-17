@@ -27,6 +27,7 @@
  */
 package org.chai.memms.location;
 
+import org.chai.location.LocationLevel;
 import org.chai.memms.AbstractEntityController;
 
 class LocationLevelController extends AbstractEntityController {

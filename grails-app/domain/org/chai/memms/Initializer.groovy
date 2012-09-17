@@ -39,11 +39,17 @@ import org.chai.memms.equipment.EquipmentType.Observation;
 import org.chai.memms.equipment.Provider
 import org.chai.memms.equipment.EquipmentStatus.Status;
 import org.chai.memms.equipment.Provider.Type;
-import org.chai.memms.location.CalculationLocation;
-import org.chai.memms.location.DataLocation;
-import org.chai.memms.location.DataLocationType;
-import org.chai.memms.location.Location;
-import org.chai.memms.location.LocationLevel;
+import org.chai.location.CalculationLocation;
+import org.chai.location.DataLocation;
+import org.chai.location.DataLocationType;
+import org.chai.location.Location;
+import org.chai.location.LocationLevel;
+import org.chai.memms.maintenance.Comment;
+import org.chai.memms.maintenance.MaintenanceProcess;
+import org.chai.memms.maintenance.Notification;
+import org.chai.memms.maintenance.WorkOrder;
+import org.chai.memms.maintenance.WorkOrder.Criticality;
+import org.chai.memms.maintenance.WorkOrder.OrderStatus;
 import org.chai.memms.security.Role
 import org.chai.memms.security.User
 import org.chai.memms.security.User.UserType
@@ -84,19 +90,19 @@ public class Initializer {
 		if(!User.count()){
 			def adminRole = new Role(name: "Admin")
 			adminRole.addToPermissions("*:*")
-			adminRole.save(failOnError: true, flush:true)
+			adminRole.save(failOnError: true)
 			
 			def dataClerkRole = new Role(name: "Clerk")
 			dataClerkRole.addToPermissions("equipment:*")
 			dataClerkRole.addToPermissions("home:*")
-			dataClerkRole.save(failOnError: true, flush:true)
+			dataClerkRole.save(failOnError: true)
 
 			def userAdmin = new User(userType: UserType.ADMIN,code:"admin", location: CalculationLocation.findByCode(RWANDA), username: "admin", 
 				firstname: "memms", lastname: "memms", email:'memms@memms.org', passwordHash: new Sha256Hash("admin").toHex(), active: true, 
 				confirmed: true, uuid:'admin', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
 
 			userAdmin.addToRoles(adminRole)
-			userAdmin.save(failOnError: true, flush:true)
+			userAdmin.save(failOnError: true)
 			
 			def userClerk= new User(userType: UserType.OTHER,code:"user", location: CalculationLocation.findByCode(KIVUYE), username: "user", 
 				firstname: "user", lastname: "user", email:'user@memms.org', passwordHash: new Sha256Hash("user").toHex(), active: true, 
@@ -106,7 +112,7 @@ public class Initializer {
 			userClerk.addToPermissions("home:*")
 			userClerk.addToPermissions("menu:home")
 			userClerk.addToPermissions("menu:inventory")
-			userClerk.save(failOnError: true, flush:true)
+			userClerk.save(failOnError: true)
 			
 			def userClerk1= new User(userType: UserType.OTHER,code:"user1", location: CalculationLocation.findByCode(BURERA), username: "user1",
 				firstname: "user", lastname: "user", email:'user1@memms.org', passwordHash: new Sha256Hash("user1").toHex(), active: true,
@@ -118,7 +124,7 @@ public class Initializer {
 			userClerk1.addToPermissions("home:*")
 			userClerk1.addToPermissions("menu:home")
 			userClerk1.addToPermissions("menu:inventory")
-			userClerk1.save(failOnError: true, flush:true)
+			userClerk1.save(failOnError: true)
 		}
 	}
 	
@@ -231,7 +237,7 @@ public class Initializer {
 			
 			equipmentOne.warranty=warrantyOne
 			equipmentOne.addToStatus(statusOne)
-			equipmentOne.save(failOnError:true,flush: true)
+			equipmentOne.save(failOnError:true)
 
 			def equipmentTwo = newEquipment("SERIAL11",false,false,12,"Room A34","34900.23",['en':'Equipment Descriptions two'],
 				getDate(12,01,2009),getDate(10,10,2009),"USD",now(),
@@ -247,7 +253,7 @@ public class Initializer {
 			def statusTwo= newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentTwo,true)
 			equipmentTwo.warranty=warrantyTwo
 			equipmentTwo.addToStatus(statusTwo)
-			equipmentTwo.save(failOnError:true,flush: true)
+			equipmentTwo.save(failOnError:true)
 			
 			def equipmentThree = newEquipment("SERIAL12",false,true,34,"Room A1","98700.23",['en':'Equipment Descriptions three'],
 				getDate(14,8,2008),getDate(10,01,2009),"EUR",now(),
@@ -281,7 +287,7 @@ public class Initializer {
 			equipmentFour.warranty=warrantyFour
 			equipmentFour.addToStatus(statusFour)
 			equipmentFour.addToStatus(statusFourOne)
-			equipmentFour.save(failOnError:true,flush: true)
+			equipmentFour.save(failOnError:true)
 			
 			def equipmentFive = newEquipment("SERIAL14",true,true,34,"Room A1","",['en':'Equipment Descriptions five'],
 				getDate(11,8,2008),getDate(11,10,2009),"",now(),
@@ -321,7 +327,7 @@ public class Initializer {
 			equipmentSix.addToStatus(statusSix)
 			equipmentSix.addToStatus(statusSixOne)
 			equipmentSix.addToStatus(statusSixTwo)
-			equipmentSix.save(failOnError:true,flush: true)
+			equipmentSix.save(failOnError:true)
 			
 			def equipmentSeven = newEquipment("SERIAL07",false,true,4,"Room A1","290540.23",['en':'Equipment Descriptions seven'],
 				getDate(1,7,2000),getDate(12,7,2001),"USD",now(),
@@ -341,7 +347,7 @@ public class Initializer {
 			equipmentSeven.addToStatus(statusSeven)
 			equipmentSeven.addToStatus(statusSevenOne)
 			equipmentSeven.addToStatus(statusSevenTwo)
-			equipmentSeven.save(failOnError:true,flush: true)
+			equipmentSeven.save(failOnError:true)
 			
 			def equipmentEight = newEquipment("SERIAL08",false,true,4,"Room A3","290540.23",['en':'Equipment Descriptions eight'],
 				getDate(1,7,2000),getDate(12,7,2001),"EUR",now(),
@@ -361,7 +367,7 @@ public class Initializer {
 			equipmentEight.addToStatus(statusEight)
 			equipmentEight.addToStatus(statusEightOne)
 			equipmentEight.addToStatus(statusEightTwo)
-			equipmentEight.save(failOnError:true,flush: true)
+			equipmentEight.save(failOnError:true)
 			
 			def equipmentNine = newEquipment("SERIAL09",false,true,4,"Room 9A1","290540.23",['en':'Equipment Descriptions Nine'],
 				getDate(1,7,2000),getDate(12,7,2001),"RWF",now(),
@@ -381,7 +387,7 @@ public class Initializer {
 			equipmentNine.addToStatus(statusNine)
 			equipmentNine.addToStatus(statusNineOne)
 			equipmentNine.addToStatus(statusNineTwo)
-			equipmentNine.save(failOnError:true,flush: true)
+			equipmentNine.save(failOnError:true)
 			
 			def equipmentTen = newEquipment("SERIAL10",false,true,4,"Room 10A1","290540.23",['en':'Equipment Descriptions Ten'],
 				getDate(1,7,2000),getDate(12,7,2001),"RWF",now(),
@@ -401,23 +407,68 @@ public class Initializer {
 			equipmentTen.addToStatus(statusTen)
 			equipmentTen.addToStatus(statusTenOne)
 			equipmentTen.addToStatus(statusTenTwo)
-			equipmentTen.save(failOnError:true,flush: true)
+			equipmentTen.save(failOnError:true)
 
 		}
 	}
 	
+	static def createCorrectiveMaintenanceStructure(){
+		def equipment01 =Equipment.findBySerialNumber("SERIAL01")
+		def equipment09 =Equipment.findBySerialNumber("SERIAL09")
+		def equipment11 =Equipment.findBySerialNumber("SERIAL11")
+		
+		def workOrderOne =  newWorkOrder(equipment01,"First order", Criticality.NORAMAL,OrderStatus.OPEN,User.findByUsername("admin"),now())
+		def workOrderTwo =  newWorkOrder(equipment01,"Second order", Criticality.LOW,OrderStatus.OPEN,User.findByUsername("admin"),now())
+		def workOrderFive =  newWorkOrder(equipment01,"Closed order", Criticality.HIGH,OrderStatus.CLOSEDFIXED,User.findByUsername("user"),now()-1,now(),true)
+		equipment01.addToWorkOrders(workOrderOne)
+		equipment01.addToWorkOrders(workOrderTwo)
+		equipment01.addToWorkOrders(workOrderFive)
+		equipment01.save(failOnError:true)
+		
+		def workOrderThree =  newWorkOrder(equipment09,"Third order", Criticality.NORAMAL,OrderStatus.OPEN,User.findByUsername("user"),now())
+		equipment09.addToWorkOrders(workOrderThree)
+		equipment09.save(failOnError:true)
+		
+		def workOrderFour =  newWorkOrder(equipment11,"Fourth order", Criticality.HIGH,OrderStatus.OPEN,User.findByUsername("admin"),now())
+		equipment11.addToWorkOrders(workOrderFour)
+		equipment11.save(failOnError:true)
+		
+	}
+	
+	
 	
 	
 	//Models definition
+	//Corrective Maintenance
+	public static def newWorkOrder(def equipment, def description, def criticality, def status, def addedBy, def openOn ){
+		return new WorkOrder(equipment:equipment,description: description,criticality:criticality,status:status,addedBy:addedBy,openOn: openOn,assistaceRequested:false).save(failOnError:true)
+	}
+	
+	public static def newWorkOrder(def equipment, def description, def criticality, def status, def addedBy, def openOn, def closedOn, def assistaceRequested){
+		return new WorkOrder(equipment:equipment, description:description, criticality:criticality, status:status, addedBy:addedBy, openOn: openOn, closedOn:closedOn, assistaceRequested:assistaceRequested).save(failOnError:true)
+	}
+	
+	public static newNotification(def workOrder, def sender, def receiver,def writtenOn, def content){
+		return new Notification(workOrder: workOrder, sender: sender, receiver: receiver, writtenOn: writtenOn, content: content ).save(failOnError: true)
+	}
+	
+	public static newComment(def workOrder, def writtenBy, def writtenOn, def content){
+		return new Comment(workOrder: workOrder, writtenBy: writtenBy, writtenOn: writtenOn, content: content ).save(failOnError: true)
+	}
+	
+	public static newMaintenanceProcess(def workOrder, def name, def addeOn, def addedBy){
+		return new MaintenanceProcess(workOrder: workOrder, name: name, addeOn: addeOn, addedBy: addedBy ).save(failOnError: true)
+	}
+	//Inventory
 	public static def newEquipment(def serialNumber,def donation,def obsolete,def expectedLifeTime,def room,def purchaseCost,def descriptions,def manufactureDate, def purchaseDate,def currency,def registeredOn,def model,def dataLocation,def department, def type,def manufacture,def supplier){
 		def equipment = new Equipment(serialNumber:serialNumber,donation:donation,obsolete:obsolete,room:room,expectedLifeTime:expectedLifeTime,purchaseCost:purchaseCost,currency:currency,manufactureDate:manufactureDate,purchaseDate:purchaseDate,registeredOn:registeredOn,model:model,dataLocation:dataLocation,department:department,type:type,manufacturer:manufacture,supplier:supplier);
 		setLocaleValueInMap(equipment,descriptions,"Descriptions")
-		return equipment.save(failOnError: true,flush: true)
+		return equipment.save(failOnError: true)
 	}
 
 	public static def newEquipmentStatus(def dateOfEvent,def changedBy,def value, def equipment,def current){
 		def statusChangeDate = now()
-		return new EquipmentStatus(dateOfEvent:dateOfEvent,changedBy:changedBy,status:value,equipment:equipment,current:current,statusChangeDate:statusChangeDate).save(failOnError: true,flush: true)
+		return new EquipmentStatus(dateOfEvent:dateOfEvent,changedBy:changedBy,status:value,equipment:equipment,current:current,statusChangeDate:statusChangeDate).save(failOnError: true)
 	}
 
 	public static def newContact(def addressDescriptions,def contactName,def email, def phone, def street, def poBox){
@@ -427,7 +478,7 @@ public class Initializer {
 	}
 	
 	public static def newProvider(def code, def type, def contact){
-		return new Provider(code:code,type:type,contact:contact).save(failOnError: true,flush: true)
+		return new Provider(code:code,type:type,contact:contact).save(failOnError: true)
 	}
 	
 	public static def newProvider(def code, def type, def addressDescriptions, def contactName,def email, def phone, def street, def poBox){
@@ -450,33 +501,34 @@ public class Initializer {
 		def model = new EquipmentModel(code:code)
 		setLocaleValueInMap(model,names,"Names")
 		setLocaleValueInMap(model,descriptions,"Descriptions")
-		return model.save(failOnError: true,flush: true)
+		return model.save(failOnError: true)
 	}
 	
 	public static def newEquipmentType(def code, def names,def descriptions, def observation, def addedOn, def lastModifiedOn){
 		def type = new EquipmentType(code:code,observation:observation,addedOn:addedOn,lastModifiedOn:lastModifiedOn)
 		setLocaleValueInMap(type,names,"Names")
 		setLocaleValueInMap(type,descriptions,"Descriptions")
-		return type.save(failOnError: true,flush: true)
+		return type.save(failOnError: true)
 	}
 	
 	public static def newDepartment(def names,def code, def descriptions){
 		def department = new Department(code:code)
 		setLocaleValueInMap(department,names,"Names") 
 		setLocaleValueInMap(department,descriptions,"Descriptions")
-		return department.save(failOnError: true,flush: true)
+		return department.save(failOnError: true)
 	}
 	
+	//Location
 	public static def newDataLocationType(def names, def code) {
 		def dataLocationType = new DataLocationType(code: code)
 		setLocaleValueInMap(dataLocationType,names,"Names")
-		return dataLocationType.save(failOnError: true,flush: true)
+		return dataLocationType.save(failOnError: true)
 	}
 	
 	public static def newLocationLevel(def names, def code) {
 		def locationLevel = new LocationLevel(code: code)
 		setLocaleValueInMap(locationLevel,names,"Names")
-		return locationLevel.save(failOnError: true,flush: true)
+		return locationLevel.save(failOnError: true)
 	}
 	
 	public static def newLocation(def names, def code, def parent, def level) {
@@ -484,10 +536,10 @@ public class Initializer {
 		setLocaleValueInMap(location,names,"Names")
 		location.save(failOnError: true)
 		level.addToLocations(location)
-		level.save(failOnError: true,flush: true)
+		level.save(failOnError: true)
 		if (parent != null) {
 			parent.addToChildren(location)
-			parent.save(failOnError: true,flush: true)
+			parent.save(failOnError: true)
 		}
 		return location
 	}
@@ -495,14 +547,14 @@ public class Initializer {
 	public static def newDataLocation(def names, def code, def location, def type) {
 		def dataLocation = new DataLocation(code: code, location: location, type: type)
 		setLocaleValueInMap(dataLocation,names,"Names")
-		dataLocation.save(failOnError: true,flush: true)
+		dataLocation.save(failOnError: true)
 		if (location != null) {
 			location.addToDataLocations(dataLocation)
-			location.save(failOnError: true,flush: true)
+			location.save(failOnError: true)
 		}
 		if (type != null) {
 			type.addToDataLocations(dataLocation)
-			type.save(failOnError: true,flush: true)
+			type.save(failOnError: true)
 	   }
 		return dataLocation
 	}
@@ -511,7 +563,7 @@ public class Initializer {
 		table "memms_initializer_data"
 		version false
 	}
-	
+	//Utils
 	/**
 	* fieldName has to start with capital letter as
 	* it is used to create setter of the object field

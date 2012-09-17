@@ -27,6 +27,8 @@
  */
 package org.chai.memms.location;
 
+import org.chai.location.Location;
+import org.chai.location.LocationLevel;
 import org.chai.memms.AbstractEntityController;
 import java.io.File;
 import java.io.FileWriter;
@@ -114,7 +116,7 @@ class LocationController extends AbstractEntityController {
 	
 	def getAjaxData = {
 		def clazz = Location.class
-		if (params['class'] != null) clazz = Class.forName('org.chai.memms.location.'+params['class'], true, Thread.currentThread().contextClassLoader)
+		if (params['class'] != null) clazz = Class.forName('org.chai.location.'+params['class'], true, Thread.currentThread().contextClassLoader)
 		
 		def locations = locationService.searchLocation(clazz, params['term'], [:])
 		render(contentType:"text/json") {

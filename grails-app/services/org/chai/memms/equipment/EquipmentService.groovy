@@ -33,9 +33,9 @@ import java.util.Map;
 import org.chai.memms.equipment.Equipment
 import org.chai.memms.equipment.EquipmentStatus.Status;
 import org.chai.memms.exports.EquipmentExport;
-import org.chai.memms.location.CalculationLocation;
-import org.chai.memms.location.DataLocation
-import org.chai.memms.location.Location
+import org.chai.location.CalculationLocation;
+import org.chai.location.DataLocation
+import org.chai.location.Location
 
 import org.chai.memms.util.Utils;
 import org.hibernate.Criteria;
@@ -69,7 +69,8 @@ class EquipmentService {
 		
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			    createAlias("type","t")
-				eq('dataLocation',location)
+				if(location)
+					eq('dataLocation',location)
 				or{
 					ilike("serialNumber","%"+text+"%")
 					ilike(dbFieldDescriptions,"%"+text+"%") 

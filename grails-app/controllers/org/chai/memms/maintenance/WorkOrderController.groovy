@@ -1,4 +1,4 @@
-/**
+/** 
  * Copyright (c) 2012, Clinton Health Access Initiative.
  *
  * All rights reserved.
@@ -13,7 +13,7 @@
  *     * Neither the name of the <organization> nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -25,65 +25,76 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.location;
+package org.chai.memms.maintenance
 
-import i18nfields.I18nFields
-import org.chai.memms.util.Utils;
+import org.chai.memms.AbstractEntityController;
+import org.chai.memms.equipment.Equipment;
+import org.chai.memms.maintenance.WorkOrder.OrderStatus;
+
 /**
-* @author Jean Kahigiso M.
-*
-*/
-@i18nfields.I18nFields
-public class DataLocationType {
+ * @author Jean Kahigiso M.
+ *
+ */
+class WorkOrderController extends AbstractEntityController{
+	def workOrderService
 	
-	String code
-	String names
-	static hasMany = [dataLocations: DataLocation]
-	
-	static i18nFields = ['names']
-	
-	
-	String toString() {
-		return "DataLocationType[Id=" + id + ", Code=" + code + "]";
+	def createEntity() {
+		def entity = new WorkOrder();
+		if(!params["equipment.id"] || params["equipment"]!=null) entity.equipment = Equipment.get(params.int("equipment"))
+		return entity;
 	}
 	
-	static constraints ={
-		code nullable: false, blank: false, unique: true
-		names nullable:true, blank: true
-	}
-	
-	static mapping = {
-		table "chai_location_data_location_type"
-		dataLocactions column:"data_location_id"
-		version false
-		names_en type:"text"
-		names_fr type:"text"
+
+	def getModel(entity) {
+		def equipments =  []
+		if(entity.equipment) equipments << entity.equipment
+		[
+			order:entity,
+			equipments: equipments
+		]
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((code == null) ? 0 : code.hashCode());
-		return result;
+	def getEntity(def id) {
+		return WorkOrder.get(id)
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this.is(obj))
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		DataLocationType other = (DataLocationType) obj;
-		if (code == null) {
-			if (other.code != null)
-				return false;
-		} else if (!code.equals(other.code))
-			return false;
-		return true;
+	def bindParams(def entity) {
+		if(!entity.id){
+			entity.addedBy = user
+			entity.openOn = new Date()
+			entity.assistaceRequested = false
+			entity.status = OrderStatus.OPEN
+		}else{
+		}
+		entity.properties = params
+	}
+
+	def getTemplate() {
+		return "/entity/workOrder/createWorkOrder";
+	}
+
+	def getLabel() {
+		return "work.order.label";
+	}
+
+	def getEntityClass() {
+		return WorkOrder.class;
+	}
+	
+	def list = {
+		adaptParamsForList()
+		Equipment equipment = null
+		
+		if(params["equipment"]) equipment = Equipment.get(params.int("equipment"))
+		List<WorkOrder> orders = workOrderService.getWorkOrders(equipment,params)
+		
+		render(view:"/entity/list", model:[
+		 template:"workorder/workorderList",
+		 entities: orders,
+		 entityCount: orders.totalCount,
+		 code: getLabel(),
+		 entityClass: getEntityClass(),
+		])
 	}	
-	
-	
+
 }
