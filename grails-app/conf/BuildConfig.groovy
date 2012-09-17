@@ -92,7 +92,7 @@ grails.project.dependency.resolution = {
 		compile ":yui-minify-resources:0.1.5"
         build ":tomcat:$grailsVersion"
 		compile ":rabbitmq:1.0.0.RC1"
-		compile ":locations:0.2.1-CHAI"
+		compile ":locations:0.2.2-CHAI"
 		
 		test (":spock:0.6") {changing = false}
 		//		test ":geb:0.7.1"
