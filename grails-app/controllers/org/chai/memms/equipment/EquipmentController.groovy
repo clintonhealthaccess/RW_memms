@@ -325,12 +325,13 @@ class EquipmentController extends AbstractEntityController{
 
 	}
 	
-	def export = {
+	def export = {FilterCommand cmd ->
 		def dataLocation = DataLocation.get(params.int('location'))
 		if (dataLocation == null)
 			response.sendError(404)
 		adaptParamsForList()
-		def equipments = equipmentService.getEquipmentsByDataLocation(dataLocation,params)	
+		
+		def equipments = equipmentService.filterEquipment(dataLocation,cmd.supplier,cmd.manufacturer,cmd.equipmentType,cmd.donated,cmd.obsolete,cmd.status,params)	
 		
 		File file = equipmentService.exporter(dataLocation,equipments)
 		
@@ -370,6 +371,7 @@ class EquipmentController extends AbstractEntityController{
 	}
 	
 }
+
 class StatusCommand {
 	Status status
 	Date dateOfEvent

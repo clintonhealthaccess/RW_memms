@@ -122,6 +122,7 @@ class EquipmentService {
 		this.writeFile(writer,equipements);
 		return csvFile;
 	}
+	
 	private void writeFile(ICsvListWriter writer,List<Equipment> equipments) throws IOException {
 		try{
 			String[] csvHeaders = null;

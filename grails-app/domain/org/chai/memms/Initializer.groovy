@@ -90,12 +90,18 @@ public class Initializer {
 			dataClerkRole.addToPermissions("equipment:*")
 			dataClerkRole.addToPermissions("home:*")
 			dataClerkRole.save(failOnError: true, flush:true)
+			
+			def testRole = new Role(name: "Test")
+	        testRole.addToPermissions("home:*;menu:home;menu:inventory;account:*;equipment:summaryPage;equipment:index;equipment:list;equipment:save;equipment:create")
+	        testRole.addToPermissions("equipment:filter;equipmentType:getAjaxData;provider:getAjaxData;department:getAjaxData;equipmentStatus:create")
+	        testRole.addToPermissions("equipmentStatus:list;equipmentStatus:save;equipmentStatus:delete;equipmentStatus:edit")
+	        testRole.save(failOnError: true, flush:true)
 
 			def userAdmin = new User(userType: UserType.ADMIN,code:"admin", location: CalculationLocation.findByCode(RWANDA), username: "admin", 
 				firstname: "memms", lastname: "memms", email:'memms@memms.org', passwordHash: new Sha256Hash("admin").toHex(), active: true, 
 				confirmed: true, uuid:'admin', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
 
-			userAdmin.addToRoles(adminRole)
+			userAdmin.addToRoles(testRole)
 			userAdmin.save(failOnError: true, flush:true)
 			
 			def userClerk= new User(userType: UserType.OTHER,code:"user", location: CalculationLocation.findByCode(KIVUYE), username: "user", 
