@@ -43,7 +43,9 @@ class UrlMappings {
 				// apply constraints here
 			}
 		}
+		"/equipmentStatus/$action/$equipment?/$id?"(controller:"equipmentStatus")
 		"/equipment/$action/$location?/$id?"(controller:"equipment")
+		"/workOrder/$action/$equipment?/$id?"(controller:"workOrder")
 		// homepage in home controller
 		"/"(controller:"home", action:"index")
 		"404"(view:'/404')

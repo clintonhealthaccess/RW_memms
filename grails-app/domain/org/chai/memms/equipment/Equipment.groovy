@@ -30,6 +30,7 @@ package org.chai.memms.equipment
 import org.chai.memms.Contact
 import org.chai.memms.Warranty;
 import org.chai.memms.equipment.EquipmentStatus.Status;
+import org.chai.memms.maintenance.WorkOrder;
 import org.chai.location.DataLocation;
 
 import i18nfields.I18nFields
@@ -60,7 +61,7 @@ public class Equipment {
 	Date purchaseDate
 	Date registeredOn
 	
-	static hasMany = [status: EquipmentStatus]
+	static hasMany = [status: EquipmentStatus, workOrders: WorkOrder]
 	static belongsTo = [dataLocation: DataLocation, department: Department, type: EquipmentType]
 	static i18nFields = ["observations","descriptions"]
 	static embedded = ["warranty"]

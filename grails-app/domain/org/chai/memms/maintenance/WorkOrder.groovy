@@ -25,67 +25,90 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.equipment
+package org.chai.memms.maintenance
 
-import org.aspectj.bridge.Version;
-import org.chai.memms.security.User
-import i18nfields.I18nFields
+import org.chai.memms.equipment.Equipment;
+import org.chai.memms.security.User;
 
 /**
  * @author Jean Kahigiso M.
  *
  */
-@i18nfields.I18nFields
-class EquipmentStatus {
+class WorkOrder {
 	
-	enum Status{
-		
-		NONE("none"),
-		OPERATIONAL("operational"),
-		INSTOCK("in.stock"),
-		UNDERMAINTENANCE("under.maintenance"),
-		FORDISPOSAL("for.disposal"),
-		DISPOSED("disposed")
-		
-		String messageCode = "equipment.status"
-		
-		final String name
-		Status(String name){ this.name=name }
+    enum Criticality{
+		NORAMAL("normal"),
+		LOW("low"),
+		HIGH("high")
+		String messageCode = "work.order.criticality"
+		String name
+		Criticality(String name){this.name=name}
+		String getKey(){ return name() }
+	}
+	
+	enum OrderStatus{
+		OPEN("open"),
+		CLOSEDFIXED("closedfixed"),
+		CLOSEDFORDISPOSAL("closedfordisposal")
+		String messageCode = "work.order.status"
+		String name
+		OrderStatus(String name){ this.name=name }
 		String getKey() { return name() }
 	}
 	
-	Date dateOfEvent;
-	Date statusChangeDate;
-	User changedBy
-	Status status
-	Boolean current
+	String currency
+	String description
+	User addedBy
+	User lastModifiedBy
+	Integer estimatedCost
+	Date openOn
+	Date lastModifiedOn
+	Date closedOn
+	Boolean assistaceRequested
 	
-	static belongsTo = [equipment:Equipment]
+	Criticality criticality
+	OrderStatus status
+	 
+	static belongsTo = [equipment: Equipment]
+	static hasMany = [comments: Comment,notifications: Notification,notificationGroup: User,performedActions: MaintenanceProcess, materialsUsed: MaintenanceProcess]
 	
-	def isCurrent(){
-		return current
-	}
 	static constraints = {
-		dateOfEvent nullable:false, validator:{val, obj ->
-			return (val <= new Date()) &&  (val.after(obj.equipment.purchaseDate) || (val.compareTo(obj.equipment.purchaseDate)==0))
-			} 
-		statusChangeDate nullable: false, validator:{it <= new Date()} 
-		changedBy nullable: false 
-		status blank: false, nullable: false, inList:[Status.OPERATIONAL,Status.INSTOCK,Status.UNDERMAINTENANCE,Status.FORDISPOSAL,Status.DISPOSED]
-		current nullable: false
+		addedBy nullable: false
+		assistaceRequested nullable: false
+		description nullable: false, blank: false
+		openOn nullable: false, validation:{it <= new Date()}
+		lastModifiedOn nullable: true, validation:{ val, obj ->
+			if(val!=null)
+			return ((val <= new Date()) && (val.after(obj.openOn) || (val.compareTo(obj.openOn)==0)))
+			else return true
+		}
+		closedOn nullable: true, validation:{ val, obj ->
+			if(val!=null)
+				return ((val <= new Date()) && (val.after(obj.openOn) || (val.compareTo(obj.openOn)==0)))
+			else return true
+		}
+		lastModifiedBy nullable: true
+		criticality nullable: false, blank: false, inList: [Criticality.LOW,Criticality.HIGH,Criticality.NORAMAL]
+		status nullable: false, blank: false, inList:[OrderStatus.OPEN,OrderStatus.CLOSEDFIXED,OrderStatus.CLOSEDFORDISPOSAL]
+		estimatedCost nullable: true, blank: true, validator:{ val, obj ->
+			if(val == null && obj.currency != null) return false
+		}
+		currency  nullable: true, blank: true, inList: ["RWF","USD","EUR"], validator:{ val, obj ->
+			if(val == null && obj.estimatedCost != null) return false
+		}
 	}
 	
 	static mapping = {
-		table "memms_equipment_status"
+		table "memms_work_order"
 		version false
 	}
+	
 
 	@Override
 	public String toString() {
-		return "EquipmentStatus [dateOfEvent=" + dateOfEvent + ", changedBy="
-				+ changedBy + ", status=" + status + ", current=" + current
-				+ "]";
+		return "WorkOrder [id=" + id + "]";
 	}	
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -93,6 +116,7 @@ class EquipmentStatus {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this.is(obj))
@@ -101,7 +125,7 @@ class EquipmentStatus {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		EquipmentStatus other = (EquipmentStatus) obj;
+		WorkOrder other = (WorkOrder) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -110,5 +134,16 @@ class EquipmentStatus {
 		return true;
 	}
 	
-	
 }
+
+
+
+
+
+
+
+
+
+
+
+

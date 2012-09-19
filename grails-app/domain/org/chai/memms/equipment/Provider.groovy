@@ -54,8 +54,8 @@ public class Provider{
 	Contact contact
 	
 	static embedded = ["contact"]
-	static mappedBy = [manufactures: "manufacturer",suppliers: "supplier"]
-	static hasMany = [manufactures: Equipment, suppliers: Equipment]
+	static mappedBy = [manufacturers: "manufacturer",suppliers: "supplier"]
+	static hasMany = [manufacturers: Equipment, suppliers: Equipment]
    
 	static constraints ={
 		code nullable: false, blank: false, unique: true

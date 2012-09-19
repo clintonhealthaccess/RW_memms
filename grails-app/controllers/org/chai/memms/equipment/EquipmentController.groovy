@@ -126,7 +126,7 @@ class EquipmentController extends AbstractEntityController{
 		
 	}
 
-	def save ={StatusCommand cmd ->
+	def save = { StatusCommand cmd ->
 		params.cmd = cmd
 		super.saveWithoutTokenCheck()
 	}
@@ -138,6 +138,7 @@ class EquipmentController extends AbstractEntityController{
 		if (entity.department!=null) departments << entity.department
 		if (entity.type!=null) types << entity.type
 		if (entity.dataLocation!=null) dataLocations << entity.dataLocation
+		
 		[
 			equipment: entity,
 			departments: departments,
@@ -235,7 +236,7 @@ class EquipmentController extends AbstractEntityController{
 	}
 	
 	
-	def generalExport={ExportFilterCommand cmd ->
+	def generalExport = { ExportFilterCommand cmd ->
 
 		// we do this because automatic data binding does not work with polymorphic elements
 		Set<CalculationLocation> calculationLocations = new HashSet<CalculationLocation>()
@@ -342,28 +343,49 @@ class EquipmentController extends AbstractEntityController{
 	}
 	
 	def updateObsolete = {
-		if (log.isDebugEnabled()) log.debug("equipment.donation "+params['equipment.id'])
-		def equipment = Equipment.get(params.int(['equipment.id']))
+		if (log.isDebugEnabled()) log.debug("updateObsolete equipment.obsolete "+params['equipment.id'])
+		Equipment equipment = Equipment.get(params.int(['equipment.id']))
 		def property = params['field'];
 		if (equipment == null || property ==null)
 			response.sendError(404)
 		else {
-			def value= false; def entity = null; def error = ""
+			def value= false; def entity = null;
 			if(property.equals("obsolete")){
 				if(equipment.obsolete) equipment.obsolete = false
 				else equipment.obsolete = true
 				entity = equipment.save(flush:true)
 				
-			}
-			if(property.equals("donation")){
-				if(equipment.donation) equipment.donation = false
-				else equipment.donation = true
-				entity = equipment.save(flush:true)
-			}
-			
+			}			
 			if(entity!=null) value=true 
 			render(contentType:"text/json") { results = [value]}
 		}
+	}
+	
+	def getAjaxData = {
+		
+		DataLocation dataLocation = null
+		if(params['dataLocation']) dataLocation = DataLocation.get(params.int("dataLocation"))
+		
+		List<Equipment> equipments = equipmentService.searchEquipment(params['term'],dataLocation, [:])
+		render(contentType:"text/json") {
+			elements = array {
+				equipments.each { equipment ->
+					elem (
+						key: equipment.id,
+						value: equipment.serialNumber
+					)
+				}
+			}
+			htmls = array {
+				equipments.each { equipment ->
+					elem (
+						key: equipment.id,
+						html: g.render(template:"/templates/equipmentFormSide",model:[equipment:equipment,cssClass:"form-aside-hidden",field:"equipment"])
+					)
+				}
+			}
+		}
+		
 	}
 	
 	static def newEquipmentStatus(def statusChangeDate,def changedBy,def value, def equipment,def current,def dateOfEvent){

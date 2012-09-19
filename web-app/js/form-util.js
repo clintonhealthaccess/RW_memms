@@ -51,7 +51,7 @@ function getHtml(htmls,field){
  * Edit donation and obsolete
  */
 function updateEquipment(baseUrl,failMsg){
-	$(".list-check-box-spinner").hide();
+	$(".ajax-spinner").hide();
 	$(".ajax-error").hide()
 	$(".list-check-box").change(function(event){
 		$(event.target).hide();

@@ -25,66 +25,36 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.equipment
+package org.chai.memms.maintenance
 
-import org.aspectj.bridge.Version;
-import org.chai.memms.security.User
-import i18nfields.I18nFields
+import org.chai.memms.security.User;
 
 /**
  * @author Jean Kahigiso M.
  *
  */
-@i18nfields.I18nFields
-class EquipmentStatus {
+class MaintenanceProcess {
 	
-	enum Status{
-		
-		NONE("none"),
-		OPERATIONAL("operational"),
-		INSTOCK("in.stock"),
-		UNDERMAINTENANCE("under.maintenance"),
-		FORDISPOSAL("for.disposal"),
-		DISPOSED("disposed")
-		
-		String messageCode = "equipment.status"
-		
-		final String name
-		Status(String name){ this.name=name }
-		String getKey() { return name() }
-	}
+	String name
+	Date addedOn
+	User addedBy
 	
-	Date dateOfEvent;
-	Date statusChangeDate;
-	User changedBy
-	Status status
-	Boolean current
+	static belongTo =[workOrder: WorkOrder]
 	
-	static belongsTo = [equipment:Equipment]
-	
-	def isCurrent(){
-		return current
-	}
-	static constraints = {
-		dateOfEvent nullable:false, validator:{val, obj ->
-			return (val <= new Date()) &&  (val.after(obj.equipment.purchaseDate) || (val.compareTo(obj.equipment.purchaseDate)==0))
-			} 
-		statusChangeDate nullable: false, validator:{it <= new Date()} 
-		changedBy nullable: false 
-		status blank: false, nullable: false, inList:[Status.OPERATIONAL,Status.INSTOCK,Status.UNDERMAINTENANCE,Status.FORDISPOSAL,Status.DISPOSED]
-		current nullable: false
+	static contraints = {
+		name nullable:false, blank: false
+		addedOn nullable:false, validation:{it <= new Date()}
+		addedBy nullable:false
 	}
 	
 	static mapping = {
-		table "memms_equipment_status"
-		version false
+		table "memms_work_order_maintenance_process"
+		version:  false
 	}
 
 	@Override
 	public String toString() {
-		return "EquipmentStatus [dateOfEvent=" + dateOfEvent + ", changedBy="
-				+ changedBy + ", status=" + status + ", current=" + current
-				+ "]";
+		return "MaintenanceProcess [id=" + id + ", name=" + name + "]";
 	}	
 	@Override
 	public int hashCode() {
@@ -101,7 +71,7 @@ class EquipmentStatus {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		EquipmentStatus other = (EquipmentStatus) obj;
+		MaintenanceProcess other = (MaintenanceProcess) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -109,6 +79,7 @@ class EquipmentStatus {
 			return false;
 		return true;
 	}
+	
 	
 	
 }

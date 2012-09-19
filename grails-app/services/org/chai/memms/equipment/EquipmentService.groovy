@@ -69,7 +69,8 @@ class EquipmentService {
 		
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			    createAlias("type","t")
-				eq('dataLocation',location)
+				if(location)
+					eq('dataLocation',location)
 				or{
 					ilike("serialNumber","%"+text+"%")
 					ilike(dbFieldDescriptions,"%"+text+"%") 

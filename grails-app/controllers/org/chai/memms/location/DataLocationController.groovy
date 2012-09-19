@@ -25,8 +25,10 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.location;
+package org.chai.memms.location;
 
+import org.chai.location.DataLocation;
+import org.chai.location.DataLocationType;
 import org.chai.memms.AbstractEntityController;
 import org.chai.memms.equipment.Equipment;
 
