@@ -78,7 +78,7 @@ class RoleController extends AbstractEntityController{
 		render(view:"/entity/list",model:[
 			template: "role/roleList",
 			entities: roles,
-			entityCount: 10,
+			entityCount: roles.totalCount,
 			code: getLabel(),
 			entityClass: getEntityClass()
 			])
@@ -91,7 +91,7 @@ class RoleController extends AbstractEntityController{
 			template:"role/roleList",
 			entities: filteredRoles,
 			entityClass: getEntityClass(),
-			entityCount: 10,
+			entityCount: filteredRoles.totalCount,
 			code: getLabel(),
 			q:params['q']
 		])
