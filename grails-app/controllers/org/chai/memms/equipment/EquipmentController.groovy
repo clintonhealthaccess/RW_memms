@@ -326,13 +326,14 @@ class EquipmentController extends AbstractEntityController{
 	}
 	
 	def export = {FilterCommand cmd ->
+		if (log.isDebugEnabled()) log.debug("equipments.export, command "+cmd)
 		def dataLocation = DataLocation.get(params.int('location'))
 		if (dataLocation == null)
 			response.sendError(404)
 		adaptParamsForList()
 		
 		def equipments = equipmentService.filterEquipment(dataLocation,cmd.supplier,cmd.manufacturer,cmd.equipmentType,cmd.donated,cmd.obsolete,cmd.status,params)	
-		
+		if (log.isDebugEnabled()) log.debug("equipments.export, number of equipments "+equipments.size() + ", DataLocation:"+dataLocation)
 		File file = equipmentService.exporter(dataLocation,equipments)
 		
 		response.setHeader "Content-disposition", "attachment; filename=${file.name}.csv"
@@ -391,7 +392,7 @@ class FilterCommand {
 	EquipmentType equipmentType
 	Provider manufacturer
 	Provider supplier
-	Status status
+	Status status = Status.NONE
 	String donated
 	String obsolete
 	
