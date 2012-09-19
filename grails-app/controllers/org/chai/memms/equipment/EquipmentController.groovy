@@ -333,7 +333,6 @@ class EquipmentController extends AbstractEntityController{
 		adaptParamsForList()
 		
 		def equipments = equipmentService.filterEquipment(dataLocation,cmd.supplier,cmd.manufacturer,cmd.equipmentType,cmd.donated,cmd.obsolete,cmd.status,params)	
-		if (log.isDebugEnabled()) log.debug("equipments.export, number of equipments "+equipments.size() + ", DataLocation:"+dataLocation)
 		File file = equipmentService.exporter(dataLocation,equipments)
 		
 		response.setHeader "Content-disposition", "attachment; filename=${file.name}.csv"
