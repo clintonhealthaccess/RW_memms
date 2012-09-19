@@ -95,7 +95,7 @@ class EquipmentStatusController extends AbstractEntityController{
 	
 	def list={
 		adaptParamsForList()
-		def equipment = Equipment.get(params.int("equipment.id"))
+		def equipment = Equipment.get(params.int("equipment"))
 		
 		if (equipment == null) {
 			response.sendError(404)

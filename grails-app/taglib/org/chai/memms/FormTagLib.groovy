@@ -31,6 +31,7 @@ class FormTagLib {
 	def textarea = { attrs, body ->
 		if (attrs["type"] == null) attrs["type"] = 'text'
 		if (attrs["rows"] == null) attrs["rows"] = '1'
+		if (attrs["width"] == null) attrs["width"] = '300'
 		out << render(template:"/tags/form/textarea", model: attrs)
 	}
 	

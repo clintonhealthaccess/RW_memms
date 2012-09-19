@@ -65,7 +65,9 @@ class BootStrap {
 				clercRole.addToPermissions("menu:correctivemaintenance")
 				clercRole.addToPermissions("menu:preventivemaintenance")
 				clercRole.addToPermissions("menu:reports")
-				clercRole.addToPermissions("equipment:*")
+				clercRole.addToPermissions("provider:getAjaxData")
+				clercRole.addToPermissions("equipmentType:getAjaxData")
+				clercRole.addToPermissions("department:getAjaxData")
 				clercRole.save(failOnError: true)
 			}
 			if (!User.count()) {

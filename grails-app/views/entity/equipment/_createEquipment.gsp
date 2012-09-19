@@ -118,7 +118,7 @@
 			    			<td>
 				    		<ul>
 								<li>
-									<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'delete', params:[id: status.id,'equipment.id': equipment?.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');" class="delete-button"><g:message code="default.link.delete.label" /></a>
+									<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'delete', params:[id: status.id,'equipment': equipment?.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');" class="delete-button"><g:message code="default.link.delete.label" /></a>
 								</li>
 							</ul>
 			    			</td>
@@ -134,7 +134,7 @@
   	    	<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'create', params:['equipment.id': equipment?.id])}" class="next medium gray">
   	    		<g:message code="equipment.change.status.label" default="Change Status"/>
   	    	</a>
-  	    	<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'list', params:['equipment.id': equipment?.id])}">
+  	    	<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'list', params:['equipment': equipment?.id])}">
   	    		<g:message code="equipment.see.all.status.label" default="See all status"/>
   	    	</a>
      		</g:if>

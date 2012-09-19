@@ -36,14 +36,14 @@ import org.chai.memms.security.User;
 class MaintenanceProcess {
 	
 	String name
-	Date addeOn
+	Date addedOn
 	User addedBy
 	
 	static belongTo =[workOrder: WorkOrder]
 	
 	static contraints = {
 		name nullable:false, blank: false
-		addeOn nullable:false, validation:{it <= new Date()}
+		addedOn nullable:false, validation:{it <= new Date()}
 		addedBy nullable:false
 	}
 	

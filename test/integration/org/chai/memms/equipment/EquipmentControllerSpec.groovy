@@ -280,7 +280,7 @@ class EquipmentControllerSpec extends IntegrationTests{
 		then:
 		commandFilter.hasErrors() == true
 	}
-	def "test update donation and obsolete ajax updateDonationAndObsolete()"(){
+	def "test update donation and obsolete ajax updateObsolete()"(){
 		setup:
 		setupLocationTree()
 
@@ -300,15 +300,7 @@ class EquipmentControllerSpec extends IntegrationTests{
 				,Initializer.getDate(10,10,2010),"",new Date(),"equipmentModel",DataLocation.findByCode('Butaro DH'),department,equipmentType,manufacture,supplier)		
 		equipmentOne.save(flush: true)
 		equipmentTwo.save(flush: true)
-		
-		when:
-		equipmentController = new EquipmentController();
-		equipmentController.params.field = "donation"
-		equipmentController.params['equipment.id'] = equipmentOne.id
-		equipmentController.updateObsolete()
-		then:
-		equipmentOne.donation == false
-		
+			
 		when:
 		equipmentController = new EquipmentController();
 		equipmentController.params.field = "obsolete"

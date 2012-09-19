@@ -37,6 +37,11 @@ import org.chai.memms.maintenance.WorkOrder.OrderStatus;
  */
 class WorkOrderController extends AbstractEntityController{
 	def workOrderService
+	def grailsApplication
+	
+	def getEntity(def id) {
+		return WorkOrder.get(id)
+	}
 	
 	def createEntity() {
 		def entity = new WorkOrder();
@@ -44,18 +49,14 @@ class WorkOrderController extends AbstractEntityController{
 		return entity;
 	}
 	
-
 	def getModel(entity) {
 		def equipments =  []
 		if(entity.equipment) equipments << entity.equipment
 		[
 			order:entity,
-			equipments: equipments
+			equipments: equipments,
+			currencies: grailsApplication.config.site.possible.currency
 		]
-	}
-
-	def getEntity(def id) {
-		return WorkOrder.get(id)
 	}
 
 	def bindParams(def entity) {
@@ -96,5 +97,34 @@ class WorkOrderController extends AbstractEntityController{
 		 entityClass: getEntityClass(),
 		])
 	}	
+	
+	def addProcess = {
+		
+		WorkOrder order = WorkOrder.get(params.int("order"))
+		def type = params["type"]
+		def value = params["value"]
+		def result = false
+		
+		if (order == null || (!type.equals("action-perfomed") && !type.equals("materials-used")))
+			response.sendError(404)
+		else {
+				if (log.isDebugEnabled()) log.debug("addProcess params: "+params)
+				def process = newProcess(order,value,now,user)
+				
+				if(type.equals("action-perfomed")) order.performedActions.add(process)
+				else order.materialsUsed.add(process)
+				
+				order.lastModifiedOn = now
+				order.lastModifiedBy = user
+				order.save(flush:true)
+				
+				if(process!=null) result=true
+				render(contentType:"text/json") { results = [result]}
+		}
+	}
+	
+	def newProcess(def workOrder,def name,def addedOn,def addedBy){
+		return new MaintenanceProcess(workOrder:workOrder,name:name,addedOn:addedOn,addedBy:addedBy).save(flush:true);
+	}
 
 }

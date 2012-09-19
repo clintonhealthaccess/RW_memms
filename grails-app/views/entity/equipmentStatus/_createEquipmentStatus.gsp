@@ -28,10 +28,10 @@
     	<table class="items">
     		<tr>
     			<th></th>
-    			<th>${message(code:'equipment.status.label')}</th>
-    			<th>${message(code:'equipment.status.date.of.event.label')}</th>
-    			<th>${message(code:'equipment.status.recordedon.label')}</th>
-    			<th>${message(code:'equipment.status.current.label')}</th>
+    			<th><g:message code="equipment.status.label"/></th>
+    			<th><g:message code="equipment.status.date.of.event.label"/></th>
+    			<th><g:message code="equipment.status.recordedon.label"/></th>
+    			<th><g:message code="equipment.status.current.label"/></th>
     		</tr>
     		<g:each in="${equipment.status.sort{a,b -> (a.current > b.current) ? -1 : 1}}" status="i" var="status">
 	    		<g:if test="${i+1<numberOfStatusToDisplay}">
@@ -52,7 +52,7 @@
     		</g:each>
     	</table>
     	<br/>
-    	<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'list', params:['equipment.id': equipment?.id])}">
+    	<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'list', params:['equipment': equipment?.id])}">
   	    		<g:message code="equipment.see.all.status.label" default="See all status"/>
   	    	</a>
    	</g:if>

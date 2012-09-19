@@ -236,7 +236,7 @@ class EquipmentController extends AbstractEntityController{
 	}
 	
 	
-	def generalExport={ExportFilterCommand cmd ->
+	def generalExport = { ExportFilterCommand cmd ->
 
 		// we do this because automatic data binding does not work with polymorphic elements
 		Set<CalculationLocation> calculationLocations = new HashSet<CalculationLocation>()

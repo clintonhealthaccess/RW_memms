@@ -109,21 +109,39 @@ public class Initializer {
 				confirmed: true, uuid:'user', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
 			userClerk.addToRoles(dataClerkRole)
 			userClerk.addToPermissions("equipment:*")
+			userClerk.addToPermissions("equipmentStatus:*")
 			userClerk.addToPermissions("home:*")
 			userClerk.addToPermissions("menu:home")
 			userClerk.addToPermissions("menu:inventory")
+			userClerk.addToPermissions("provider:getAjaxData")
+			userClerk.addToPermissions("equipmentType:getAjaxData")
+			userClerk.addToPermissions("department:getAjaxData")
+			userClerk.addToPermissions("account:editAccount")
+			userClerk.addToPermissions("account:saveAccount")
+			userClerk.addToPermissions("auth:newPassword")
+			userClerk.addToPermissions("auth:saveAccount")
+			userClerk.addToPermissions("auth:setPassword")
+			userClerk.addToPermissions("auth:retrievePassword")
 			userClerk.save(failOnError: true)
 			
 			def userClerk1= new User(userType: UserType.OTHER,code:"user1", location: CalculationLocation.findByCode(BURERA), username: "user1",
 				firstname: "user", lastname: "user", email:'user1@memms.org', passwordHash: new Sha256Hash("user1").toHex(), active: true,
 				confirmed: true, uuid:'user1', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
 			userClerk1.addToRoles(dataClerkRole)
-			userClerk1.addToPermissions("equipment:index")
-			userClerk1.addToPermissions("equipment:summaryPage")
-			userClerk1.addToPermissions("equipment:list")
+			userClerk1.addToPermissions("equipment:*")
+			userClerk1.addToPermissions("equipmentStatus:*")
 			userClerk1.addToPermissions("home:*")
 			userClerk1.addToPermissions("menu:home")
 			userClerk1.addToPermissions("menu:inventory")
+			userClerk1.addToPermissions("provider:getAjaxData")
+			userClerk1.addToPermissions("equipmentType:getAjaxData")
+			userClerk1.addToPermissions("department:getAjaxData")
+			userClerk1.addToPermissions("account:editAccount")
+			userClerk1.addToPermissions("account:saveAccount")
+			userClerk1.addToPermissions("auth:newPassword")
+			userClerk1.addToPermissions("auth:saveAccount")
+			userClerk1.addToPermissions("auth:setPassword")
+			userClerk1.addToPermissions("auth:retrievePassword")
 			userClerk1.save(failOnError: true)
 		}
 	}
@@ -413,26 +431,41 @@ public class Initializer {
 	}
 	
 	static def createCorrectiveMaintenanceStructure(){
+		def admin = User.findByUsername("admin")
+		def user = User.findByUsername("user")
 		def equipment01 =Equipment.findBySerialNumber("SERIAL01")
 		def equipment09 =Equipment.findBySerialNumber("SERIAL09")
 		def equipment11 =Equipment.findBySerialNumber("SERIAL11")
 		
-		def workOrderOne =  newWorkOrder(equipment01,"First order", Criticality.NORAMAL,OrderStatus.OPEN,User.findByUsername("admin"),now())
-		def workOrderTwo =  newWorkOrder(equipment01,"Second order", Criticality.LOW,OrderStatus.OPEN,User.findByUsername("admin"),now())
-		def workOrderFive =  newWorkOrder(equipment01,"Closed order", Criticality.HIGH,OrderStatus.CLOSEDFIXED,User.findByUsername("user"),now()-1,now(),true)
+		def workOrderOne =  newWorkOrder(equipment01,"First order", Criticality.NORAMAL,OrderStatus.OPEN,admin,now())
+		def workOrderTwo =  newWorkOrder(equipment01,"Second order", Criticality.LOW,OrderStatus.OPEN,admin,now())
+		def workOrderFive =  newWorkOrder(equipment01,"Closed order", Criticality.HIGH,OrderStatus.CLOSEDFIXED,user,now()-1,now(),true)
+		
 		equipment01.addToWorkOrders(workOrderOne)
 		equipment01.addToWorkOrders(workOrderTwo)
 		equipment01.addToWorkOrders(workOrderFive)
+		
 		equipment01.save(failOnError:true)
 		
-		def workOrderThree =  newWorkOrder(equipment09,"Third order", Criticality.NORAMAL,OrderStatus.OPEN,User.findByUsername("user"),now())
+		def actionOne = newMaintenanceProcess(workOrderOne,"cleaning material", now(), admin)
+		def actionTwo = newMaintenanceProcess(workOrderOne,"open material", now(), admin)
+		workOrderOne.addToPerformedActions(actionOne)
+		workOrderOne.addToPerformedActions(actionTwo)
+		
+		def materialOne = newMaintenanceProcess(workOrderOne,"material piece one", now(), admin)
+		def materialTwo = newMaintenanceProcess(workOrderOne,"material piece two", now(), admin)
+		workOrderOne.addToMaterialsUsed(materialOne)
+		workOrderOne.addToMaterialsUsed(materialTwo)
+		
+		
+		
+		def workOrderThree =  newWorkOrder(equipment09,"Third order", Criticality.NORAMAL,OrderStatus.OPEN,user,now())
 		equipment09.addToWorkOrders(workOrderThree)
 		equipment09.save(failOnError:true)
 		
-		def workOrderFour =  newWorkOrder(equipment11,"Fourth order", Criticality.HIGH,OrderStatus.OPEN,User.findByUsername("admin"),now())
+		def workOrderFour =  newWorkOrder(equipment11,"Fourth order", Criticality.HIGH,OrderStatus.OPEN,admin,now())
 		equipment11.addToWorkOrders(workOrderFour)
-		equipment11.save(failOnError:true)
-		
+		equipment11.save(failOnError:true)		
 	}
 	
 	
@@ -456,8 +489,8 @@ public class Initializer {
 		return new Comment(workOrder: workOrder, writtenBy: writtenBy, writtenOn: writtenOn, content: content ).save(failOnError: true)
 	}
 	
-	public static newMaintenanceProcess(def workOrder, def name, def addeOn, def addedBy){
-		return new MaintenanceProcess(workOrder: workOrder, name: name, addeOn: addeOn, addedBy: addedBy ).save(failOnError: true)
+	public static newMaintenanceProcess(def workOrder, def name, def addedOn, def addedBy){
+		return new MaintenanceProcess(workOrder: workOrder, name: name, addedOn: addedOn, addedBy: addedBy ).save(failOnError: true)
 	}
 	//Inventory
 	public static def newEquipment(def serialNumber,def donation,def obsolete,def expectedLifeTime,def room,def purchaseCost,def descriptions,def manufactureDate, def purchaseDate,def currency,def registeredOn,def model,def dataLocation,def department, def type,def manufacture,def supplier){

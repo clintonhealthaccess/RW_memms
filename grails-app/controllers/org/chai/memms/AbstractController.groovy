@@ -46,6 +46,10 @@ public abstract class AbstractController {
 		return User.findByUuid(SecurityUtils.subject.principal, [cache: true])
 	}
 	
+	def getNow(){
+		return new Date();
+	}
+	
 	def adaptParamsForList() {
 		log.debug("Grails application value: " + grailsApplication)
 		params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.site.entity.list.max, 30)
