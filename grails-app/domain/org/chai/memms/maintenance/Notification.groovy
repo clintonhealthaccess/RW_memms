@@ -35,17 +35,19 @@ import org.chai.memms.security.User;
  */
 class Notification {
 	
-	WorkOrder workOrder
  	User sender
 	User receiver
 	Date writtenOn
 	String content
+	Boolean read
 	
+	static belongsTo = [workOrder: WorkOrder]
 	static constraints ={
 		sender nullable: false
 		receiver nullable: false 
 		writtenOn nullable: false, validation:{it <=new Date()}
 		content nullable:false, blank:false
+		read nullable: false, blank:false
 	}
 	static mapping ={
 		table "memms_work_order_notification"

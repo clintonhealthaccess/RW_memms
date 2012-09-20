@@ -43,7 +43,7 @@ import i18nfields.I18nFields
 public class Equipment {
 	
 	String serialNumber
-	String purchaseCost
+	Long purchaseCost
 	String currency
 	String descriptions
 	String model

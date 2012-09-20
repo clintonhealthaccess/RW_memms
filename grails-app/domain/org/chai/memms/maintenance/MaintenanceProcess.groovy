@@ -35,16 +35,27 @@ import org.chai.memms.security.User;
  */
 class MaintenanceProcess {
 	
+	enum ProcessType{
+		ACTION("action"),
+		MATERIAL("material"),
+		String messageCode = "maintenance.process"
+		String name
+		ProcessType(String name){this.name=name}
+		String getKey(){ return name() }
+	}
+	
 	String name
 	Date addedOn
 	User addedBy
+	ProcessType type
 	
-	static belongTo =[workOrder: WorkOrder]
+	static belongsTo =[workOrder: WorkOrder]
 	
 	static contraints = {
 		name nullable:false, blank: false
 		addedOn nullable:false, validation:{it <= new Date()}
 		addedBy nullable:false
+		type nullable:false, inList:[ProcessType.ACTION,ProcessType.MATERIAL]
 	}
 	
 	static mapping = {
@@ -54,7 +65,7 @@ class MaintenanceProcess {
 
 	@Override
 	public String toString() {
-		return "MaintenanceProcess [id=" + id + ", name=" + name + "]";
+		return "MaintenanceProcess [id=" + id + ", name=" + name + ", workOrder="+ workOrder +"]";
 	}	
 	@Override
 	public int hashCode() {

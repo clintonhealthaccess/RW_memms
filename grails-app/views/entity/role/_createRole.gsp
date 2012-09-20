@@ -16,7 +16,7 @@
   	<g:form url="[controller:'role', action:'save', params:[targetURI: targetURI]]" useToken="true" class="simple-list">
 	
   		<g:input name="name" label="${message(code:'role.name.label')}" bean="${role}" field="name"/>
-  		<g:textarea name="permissionString"  label="${message(code:'role.permissions.label')}" rows="5" bean="${role}" value="${role.permissionString}" field="permissionString" />
+  		<g:textarea name="permissionString"  label="${message(code:'role.permissions.label')}" rows="12" width="400" bean="${role}" value="${role.permissionString}" field="permissionString" />
   		<g:if test="${role.id != null}">
   			<input type="hidden" name="id" value="${role.id}"></input>
   		</g:if>

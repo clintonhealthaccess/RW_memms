@@ -29,6 +29,7 @@ package org.chai.memms.maintenance
 
 import org.chai.memms.AbstractEntityController;
 import org.chai.memms.equipment.Equipment;
+import org.chai.memms.maintenance.MaintenanceProcess.ProcessType;
 import org.chai.memms.maintenance.WorkOrder.OrderStatus;
 
 /**
@@ -102,29 +103,44 @@ class WorkOrderController extends AbstractEntityController{
 		
 		WorkOrder order = WorkOrder.get(params.int("order"))
 		def type = params["type"]
+		type = ProcessType."$type"
 		def value = params["value"]
 		def result = false
 		
-		if (order == null || (!type.equals("action-perfomed") && !type.equals("materials-used")))
+		if (order == null || type==null || value.equals(""))
 			response.sendError(404)
 		else {
 				if (log.isDebugEnabled()) log.debug("addProcess params: "+params)
-				def process = newProcess(order,value,now,user)
-				
-				if(type.equals("action-perfomed")) order.performedActions.add(process)
-				else order.materialsUsed.add(process)
-				
-				order.lastModifiedOn = now
-				order.lastModifiedBy = user
-				order.save(flush:true)
-				
+				def process = newProcess(order,type,value,now,user)	
+				if(process){
+					order.processes.add(process)
+					order.lastModifiedOn = now
+					order.lastModifiedBy = user
+					order.save(flush:true)
+				}
 				if(process!=null) result=true
-				render(contentType:"text/json") { results = [result]}
+				render(contentType:"text/json") { results = [result,process] }
 		}
 	}
 	
-	def newProcess(def workOrder,def name,def addedOn,def addedBy){
-		return new MaintenanceProcess(workOrder:workOrder,name:name,addedOn:addedOn,addedBy:addedBy).save(flush:true);
+	def removeProcess = {
+		MaintenanceProcess  process = MaintenanceProcess.get(params.int("process"))
+		WorkOrder order = process.workOrder
+		def result = false
+		if(!process) response.sendError(404)
+		else{
+			result = true
+			process.delete()
+			order.lastModifiedOn = now
+			order.lastModifiedBy = user
+			order.save(flush:true)
+		}
+		render(contentType:"text/json") { results = [result,process] }
+	}
+	
+	
+	def newProcess(def workOrder,def type,def name,def addedOn,def addedBy){
+		return new MaintenanceProcess(workOrder:workOrder,type: type,name:name,addedOn:addedOn,addedBy:addedBy).save(failOnError:true, flush:true);
 	}
 
 }
