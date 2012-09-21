@@ -25,51 +25,50 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.security
 
+package org.chai.memms.maintenance
+
+import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils
-import org.hibernate.Criteria;
 import org.chai.location.CalculationLocation;
+import org.chai.memms.equipment.Equipment;
+import org.chai.memms.security.User
 import org.chai.memms.security.User.UserType;
-import org.chai.memms.util.Utils
-import org.hibernate.criterion.MatchMode
-import org.hibernate.criterion.Order
-import org.hibernate.criterion.Projections
-import org.hibernate.criterion.Restrictions
 
-/**
- * @author Jean Kahigiso M.
- *
- */
-class UserService {
-	static transactional = true
-	def sessionFactory;
-	
-	List<User> searchUser(String text, Map<String, String> params) {
-		if(log.isDebugEnabled()) log.debug("searchUser params=" + params)
-		def criteria = User.createCriteria()
-		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			or{
-				ilike("username","%"+text+"%")
-				ilike("email","%"+text+"%")
-				ilike("firstname","%"+text+"%")
-				ilike("lastname","%"+text+"%")
-				ilike("organisation","%"+text+"%")
-				ilike("phoneNumber","%"+text+"%")				
-			}
+class NotificationService {
+
+	def userService
+	def newNotification(WorkOrder workOrder, String content,User currentUser){
+		List<User> noticationGroup = [currentUser]
+		
+		
+		if(currentUser.userType == UserType.DATACLERK){
+			noticationGroup += userService.filterByCriterias(UserType.TECHNICIANFACILITY, workOrder.equipment.dataLocation, [:])
+		}else if(currentUser.userType == UserType.TECHNICIANFACILITY){
+			noticationGroup += userService.filterByCriterias(UserType.TECHNICIANMOH, null, [:])
 		}
+		
+		if(workOrder.notificationGroup != null) workOrder.notificationGroup += (noticationGroup - workOrder.notificationGroup)
+		else workOrder.notificationGroup = (noticationGroup - workOrder.notificationGroup)
+		workOrder.save(flush:true,failOnError: true)
+		sendNotifications(workOrder,content,currentUser)
 	}
 	
-	List<User> filterByCriterias(UserType userType, CalculationLocation location, Map<String, String> params){
-		def criteria = User.createCriteria();
+    def sendNotifications(WorkOrder workOrder, String content,User currentUser) {
+		workOrder.notificationGroup.findAll{
+			if(it != currentUser){
+					new Notification(workOrder:workOrder,sender:currentUser,receiver:it,writtenOn:new Date(),content:content).save(flush:true,failOnError: true)
+				}
+			}
+    }
+	
+	List<Notification> getNotifications(WorkOrder workOrder,User currentUser, Map<String, String> params){
+		def criteria = Notification.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			eq ("active", true)
-			if(location != null)
-				eq('location',location)
-			if(userType != null){
-					eq ("userType", userType)
+			and{
+				eq(workOrder,workOrder)
+				eq(receiver,currentUser)
 			}
 		}
 	}

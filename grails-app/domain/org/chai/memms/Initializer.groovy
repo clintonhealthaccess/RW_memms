@@ -108,11 +108,21 @@ public class Initializer {
 			dataClerkRole.addToPermissions("home:*")
 			dataClerkRole.save(failOnError: true, flush:true)
 			
-			def testRole = new Role(name: "Test")
-			testRole.addToPermissions("home:*;menu:home;menu:inventory;account:*;equipment:summaryPage;equipment:index;equipment:list;equipment:save;equipment:create")
-			testRole.addToPermissions("equipment:filter;equipment:export;equipmentType:getAjaxData;provider:getAjaxData;department:getAjaxData;equipmentStatus:create")
-			testRole.addToPermissions("equipmentStatus:list;equipmentStatus:save;equipmentStatus:delete;equipmentStatus:edit;equipment:updateObsolete")
-			testRole.save(failOnError: true, flush:true)
+			def dataClerkRoleOne = new Role(name: "Data Clerk")
+			dataClerkRoleOne.addToPermissions("home:*;menu:home,inventory;account:*;equipmentType:getAjaxData;provider:getAjaxData;department:getAjaxData")
+			dataClerkRoleOne.addToPermissions("equipment:filter,export,summaryPage,index,list,save,create,updateObsolete")
+			dataClerkRoleOne.addToPermissions("equipmentStatus:list,:save,delete,edit,create")
+			dataClerkRoleOne.save(failOnError: true, flush:true)
+			
+			def technicianFacilityRole = new Role(name: "Technician Facility")
+			technicianFacilityRole.addToPermissions("home:*;menu:home,inventory;account:*;equipment:*")
+			technicianFacilityRole.addToPermissions("")
+			technicianFacilityRole.save(failOnError: true, flush:true)
+			
+			def technicianMoHRole = new Role(name: "Technician MoH")
+			technicianMoHRole.addToPermissions("home:*;menu:home,inventory;account:*;equipment:*")
+			technicianMoHRole.addToPermissions("")
+			technicianMoHRole.save(failOnError: true, flush:true)
 
 			def userAdmin = new User(userType: UserType.ADMIN,code:"admin", location: CalculationLocation.findByCode(RWANDA), username: "admin", 
 				firstname: "memms", lastname: "memms", email:'memms@memms.org', passwordHash: new Sha256Hash("admin").toHex(), active: true, 
@@ -121,13 +131,25 @@ public class Initializer {
 			userAdmin.addToRoles(adminRole)
 			userAdmin.save(failOnError: true)
 			
-			def userClerkOne= new User(userType: UserType.OTHER,code:"user", location: CalculationLocation.findByCode(KIVUYE), username: "user", 
+			def userClerkOne= new User(userType: UserType.DATACLERK,code:"user", location: CalculationLocation.findByCode(KIVUYE), username: "user", 
 				firstname: "user", lastname: "user", email:'user@memms.org', passwordHash: new Sha256Hash("user").toHex(), active: true, 
 				confirmed: true, uuid:'user', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
-			userClerkOne.addToRoles(testRole)
+			userClerkOne.addToRoles(dataClerkRoleOne)
 			userClerkOne.save(failOnError: true, flush:true)
 			
-			def userClerk= new User(userType: UserType.OTHER,code:"user1", location: CalculationLocation.findByCode(BURERA), username: "user1",
+			def userTechnicianFacility= new User(userType: UserType.TECHNICIANFACILITY,code:"techf", location: CalculationLocation.findByCode(KIVUYE), username: "techf",
+				firstname: "technician", lastname: "facility", email:'techf@memms.org', passwordHash: new Sha256Hash("techf").toHex(), active: true,
+				confirmed: true, uuid:'techf', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
+			userTechnicianFacility.addToRoles(technicianFacilityRole)
+			userTechnicianFacility.save(failOnError: true, flush:true)
+			
+			def userTechnicianMoH= new User(userType: UserType.TECHNICIANMOH,code:"techMoH", location: CalculationLocation.findByCode(RWANDA), username: "techMoH",
+				firstname: "technician", lastname: "MoH", email:'techMoH@memms.org', passwordHash: new Sha256Hash("techMoH").toHex(), active: true,
+				confirmed: true, uuid:'techMoH', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
+			userTechnicianMoH.addToRoles(technicianMoHRole)
+			userTechnicianMoH.save(failOnError: true, flush:true)
+			
+			def userClerk= new User(userType: UserType.DATACLERK,code:"user1", location: CalculationLocation.findByCode(BURERA), username: "user1",
 				firstname: "user", lastname: "user", email:'user1@memms.org', passwordHash: new Sha256Hash("user1").toHex(), active: true,
 				confirmed: true, uuid:'user1', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
 			userClerk.addToPermissions("equipment:*")
@@ -244,7 +266,7 @@ public class Initializer {
 			def equipmentOne = newEquipment("SERIAL01",true,false,24,"Room A1","",['en':'Equipment Descriptions'],
 				getDate(22,07,2010),getDate(10,10,2010),"",now(),
 				'MODEL1',
-				DataLocation.findByCode(BUTARO),
+				DataLocation.findByCode(KIVUYE),
 				Department.findByCode('SURGERY'),
 				EquipmentType.findByCode("15819"),
 				Provider.findByCode("ONE"),
@@ -467,7 +489,7 @@ public class Initializer {
 		
 		def workOrderFour =  newWorkOrder(equipment11,"Fourth order", Criticality.HIGH,OrderStatus.OPEN,admin,now())
 		equipment11.addToWorkOrders(workOrderFour)
-		equipment11.save(failOnError:true)		
+		equipment11.save(failOnError:true)	
 	}
 	
 	

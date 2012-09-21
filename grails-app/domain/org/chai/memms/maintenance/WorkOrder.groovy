@@ -103,6 +103,13 @@ class WorkOrder {
 		version false
 	}
 	
+	List<Notification> getNotificationsForUser(User user){
+		notifications.findAll(it == user)
+	}
+	
+	List<Notification> getUnReadNotificationsForUser(User user){
+		getNotificationsForUser(user).findAll(!it.read)
+	}
 
 	@Override
 	public String toString() {
