@@ -41,8 +41,6 @@ class NotificationService {
 	def userService
 	def newNotification(WorkOrder workOrder, String content,User currentUser){
 		List<User> noticationGroup = [currentUser]
-		
-		
 		if(currentUser.userType == UserType.DATACLERK){
 			noticationGroup += userService.filterByCriterias(UserType.TECHNICIANFACILITY, workOrder.equipment.dataLocation, [:])
 		}else if(currentUser.userType == UserType.TECHNICIANFACILITY){
@@ -54,7 +52,14 @@ class NotificationService {
 		workOrder.save(flush:true,failOnError: true)
 		sendNotifications(workOrder,content,currentUser)
 	}
-	
+	/**
+	 * Preferable to always call newNotification because it updates the notification group.
+	 * Call this when sure that there wont be new users to add to the notification group
+	 * @param workOrder
+	 * @param content
+	 * @param currentUser
+	 * @return
+	 */
     def sendNotifications(WorkOrder workOrder, String content,User currentUser) {
 		workOrder.notificationGroup.findAll{
 			if(it != currentUser){
