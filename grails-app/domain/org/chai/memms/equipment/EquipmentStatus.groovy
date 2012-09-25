@@ -27,7 +27,6 @@
  */
 package org.chai.memms.equipment
 
-import org.aspectj.bridge.Version;
 import org.chai.memms.security.User
 import i18nfields.I18nFields
 
@@ -42,6 +41,7 @@ class EquipmentStatus {
 		
 		NONE("none"),
 		OPERATIONAL("operational"),
+		PARTIALLYOPERATIONAL("partially.operational"),
 		INSTOCK("in.stock"),
 		UNDERMAINTENANCE("under.maintenance"),
 		FORDISPOSAL("for.disposal"),
@@ -60,7 +60,7 @@ class EquipmentStatus {
 	Status status
 	Boolean current
 	
-	static belongsTo = [equipment:Equipment]
+	static belongsTo = [equipment: Equipment]
 	
 	def isCurrent(){
 		return current
@@ -71,7 +71,7 @@ class EquipmentStatus {
 			} 
 		statusChangeDate nullable: false, validator:{it <= new Date()} 
 		changedBy nullable: false 
-		status blank: false, nullable: false, inList:[Status.OPERATIONAL,Status.INSTOCK,Status.UNDERMAINTENANCE,Status.FORDISPOSAL,Status.DISPOSED]
+		status blank: false, nullable: false, inList:[Status.OPERATIONAL,Status.PARTIALLYOPERATIONAL,Status.INSTOCK,Status.UNDERMAINTENANCE,Status.FORDISPOSAL,Status.DISPOSED]
 		current nullable: false
 	}
 	

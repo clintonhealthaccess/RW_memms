@@ -59,10 +59,7 @@ function updateEquipment(baseUrl){
 	    $(event.target).next().hide();
 	    var state= event.target.checked
 		$.ajax({
-			type :'GET',
-			dataType: 'json',
-			data:{"equipment.id":event.target.id,"field":event.target.name},
-			url: baseUrl,
+			type :'GET',dataType: 'json',data:{"equipment.id":event.target.id,"field":event.target.name},url: baseUrl,
 			success: function(data) {
 				$(event.target).prev().fadeOut("slow");
 				$(event.target).fadeIn("slow");
@@ -87,10 +84,7 @@ function removeMaintenanceProcess(baseUrl){
 		$(this).prevAll(".ajax-spinner").show();
 		$(this).hide();
 		$.ajax({
-			type :'GET',
-			dataType: 'json',
-			data:{"process":$(this).attr("name")},
-			url:baseUrl,
+			type :'GET',dataType: 'json',data:{"process":$(this).attr("name")},url:baseUrl,
 			success: function(data) {
 				$(e.target).prevAll(".ajax-spinner").fadeOut("slow");
 				$(e.target).fadeIn("slow");
@@ -107,10 +101,10 @@ function removeMaintenanceProcess(baseUrl){
 	});
 }
 
-function addMaintenanceProcess(baseUrl,order){
+function addMaintenanceProcess(baseUrl,order,spinnerImgSrc,errorMsg){
 	$(".ajax-spinner").hide();
 	$(".ajax-error").hide()
-	$('.add-buttons').click(function(e){
+	$('.add-buttons').on("click",function(e){
 		e.preventDefault();
 		$(this).prevAll(".ajax-spinner").show();
 		$(this).hide();
@@ -124,7 +118,9 @@ function addMaintenanceProcess(baseUrl,order){
 				$(e.target).fadeIn("slow");
 				$(e.target).prevAll(".ajax-error").fadeOut("slow");
 				$(e.target).prevAll(".idle-field").val("")	
-				$(e.target).prevAll(".processes").append("<li>"+data.results[1].name+" <a href=\"#\" name="+data.results[1].id+" class=\"delete-process\">X</a></li>")	
+				$(e.target).prevAll(".processes").append("<li>" +"<span class='ajax-error'>"+errorMsg+"</span>"+
+								+"<img src='+spinnerImgSrc+' class='ajax-spinner'/>" +data.results[1].name
+								+"<a href=\"#\" name="+data.results[1].id+" class=\"delete-process\">X</a></li>")	
 			}
 		});
 		$(this).ajaxError(function(){

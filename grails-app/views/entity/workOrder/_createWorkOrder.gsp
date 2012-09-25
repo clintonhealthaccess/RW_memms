@@ -1,7 +1,6 @@
 <%@ page import="org.chai.memms.util.Utils" %>
 <%@ page import="org.chai.memms.maintenance.WorkOrder.OrderStatus" %>
 <%@ page import="org.chai.memms.maintenance.WorkOrder.Criticality" %>
-<%@ page import="java.util.Date" %>
 <div  class="entity-form-container togglable">
   <div class="heading1-bar">
 		<h1>
@@ -29,11 +28,11 @@
   		<g:if test="${order.id != null}">
   		<div class="row">
 	  		 <label><g:message code="work.order.reported.by.label"/> :</label>
-	  		 ${order.addedBy.firstname} ${order.addedBy.lastname}  - ${order.openOn}
+	  		 ${order.addedBy.firstname} ${order.addedBy.lastname}  - ${Utils.formatDateWithTime(order?.openOn)}
   		</div>
   		<div class="row">
 	  		 <label><g:message code="work.order.last.modified.by.label"/> :</label>
-	  		 ${order.lastModifiedBy?.firstname} ${order.lastModifiedBy?.lastname}  - ${order.lastModifiedOn}
+	  		 ${order.lastModifiedBy?.firstname} ${order.lastModifiedBy?.lastname}  - ${Utils.formatDateWithTime(order?.lastModifiedOn)}
   		</div>
   		</g:if>						
    		<g:textarea name="description" rows="12" width="380" label="${message(code:'entity.description.label')}" bean="${order}" field="description" value="${order.description}"/>
@@ -105,6 +104,24 @@
   			<a href="${createLink(uri: targetURI)}"><g:message code="default.link.cancel.label"/></a>
   		</div>  
   	</g:form>
+  	<div class="row">
+  		<div class="row">
+	  		<div><g:message code="work.order.comment.label"/></div>
+	  		<textarea name="content" class="idle-field" rows="8" cols="90"></textarea>
+  		</div>
+  		<div class="buttons">
+  			<button><g:message code="default.button.save.label"/></button>
+  		</div>  
+  		<ul class="comment-list">
+  			<g:each in="${order.comments.sort{a,b -> (a.writtenOn < b.writtenOn) ? -1 : 1}}" status="i" var="comment">
+	  		<li>
+	  		<div class="comment-written-by">${comment.writtenBy.firstname} ${comment.writtenBy.lastname}</div>
+	  		<div class ="comment-written-on">${Utils.formatDateWithTime(comment?.writtenOn)}</div>
+	  		<div class="comment-content">${comment.content}</div>
+	  		</li>
+	  		</g:each>
+  		</ul>
+  	</div>
   </div>
 </div>
 <script type="text/javascript">

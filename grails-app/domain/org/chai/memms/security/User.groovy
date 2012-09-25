@@ -112,7 +112,7 @@ class User {
 		registrationToken(nullable: true)
 		passwordToken(nullable: true)
 		active(validator: {val, obj ->
-			return val ? obj.location != null && (obj.permissionString || obj.roles.size() > 0) : true
+			//return val ? obj.location != null && (obj.permissionString || obj.roles.size() > 0) : true
 		})
     }
 	

@@ -1,5 +1,4 @@
 <table class="items spaced">
-
 	<thead>
 		<tr>
 			<th></th>

@@ -24,7 +24,7 @@
     			</td>
     			<td>${status.status}</td>
     			<td>${Utils.formatDate(status?.dateOfEvent)}</td>
-    			<td>${Utils.formatDate(status?.statusChangeDate)}</td>
+    			<td>${Utils.formatDateWithTime(status?.statusChangeDate)}</td>
     			<td>${(status.current)? '\u2713':'X'}</td>
     		</tr>
    		</g:each>

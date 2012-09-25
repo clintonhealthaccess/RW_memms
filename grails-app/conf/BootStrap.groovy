@@ -54,41 +54,43 @@ class BootStrap {
 			break;
 			case "production":
 			if (!Role.count()) {
-				def adminRole = new Role(name: "admin")
-				adminRole.addToPermissions("*:*")
-				adminRole.save(failOnError: true)
+				//Defining Role			
+				def defaultAdminRole = new Role(name: "Admin")
+				defaultAdminRole.addToPermissions("*")
+				defaultAdminRole.save(failOnError: true)
 				
-				def clercRole = new Role(name: "clerc")
-				clercRole.addToPermissions("home:*")
-				clercRole.addToPermissions("menu:home")
-				clercRole.addToPermissions("menu:inventory")
-				clercRole.addToPermissions("menu:correctivemaintenance")
-				clercRole.addToPermissions("menu:preventivemaintenance")
-				clercRole.addToPermissions("menu:reports")
-				clercRole.addToPermissions("provider:getAjaxData")
-				clercRole.addToPermissions("equipmentType:getAjaxData")
-				clercRole.addToPermissions("department:getAjaxData")
-				clercRole.save(failOnError: true)
+				def defaultClercRole = new Role(name: "Clerk")
+				defaultClercRole.addToPermissions("equipment:")
+				defaultClercRole.addToPermissions("equipmentStatus:*")
+				defaultClercRole.addToPermissions("home:*")
+				defaultClercRole.addToPermissions("menu:home")
+				defaultClercRole.addToPermissions("menu:inventory")
+				defaultClercRole.addToPermissions("provider:getAjaxData")
+				defaultClercRole.addToPermissions("equipmentType:getAjaxData")
+				defaultClercRole.addToPermissions("department:getAjaxData")
+				defaultClercRole.addToPermissions("account:editAccount")
+				defaultClercRole.addToPermissions("account:saveAccount")
+				defaultClercRole.addToPermissions("auth:newPassword")
+				defaultClercRole.addToPermissions("auth:saveAccount")
+				defaultClercRole.addToPermissions("auth:setPassword")
+				defaultClercRole.addToPermissions("auth:retrievePassword")
+				defaultClercRole.save(failOnError: true)
 			}
 			if (!User.count()) {
-				def userAdmin = new User(userType: UserType.ADMIN,code:"admin", location: CalculationLocation.findByCode(0), username: "admin",
-					firstname: "First Name", lastname: "Last Name", email:'admin@memms.org', passwordHash: new Sha256Hash("admin").toHex(), active: true,
-					confirmed: true, uuid:'admin', defaultLanguage:'en', phoneNumber: '+250 78 111 11 11', organisation:'org')
-				userAdmin.addToPermissions("*:*")				
-				userAdmin.save(failOnError: true)
+				//Defining User
+				//User with admin role
+				def admin = new User(userType: UserType.ADMIN,code:"admin", location: CalculationLocation.findByCode(0), username: "admin", 
+					firstname: "memms", lastname: "memms", email:'memms@memms.org', passwordHash: new Sha256Hash("admin").toHex(), active: true, 
+					confirmed: true, uuid:'admin', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
+				admin.addToRoles(Role.findByName("Admin"))
+				admin.save(failOnError: true)
 				
-				def clerc = new User(userType: UserType.OTHER,code:"clerc", location: CalculationLocation.findByCode(327), username: "clerc",
-					firstname: "memms", lastname: "memms", email:'clerk@memms.org', passwordHash: new Sha256Hash("clerc").toHex(), active: true,
-					confirmed: true, uuid:'clerc', defaultLanguage:'en', phoneNumber: '+250 72 111 11 11', organisation:'org')
-				clerc.addToPermissions("menu:home")
-				clerc.addToPermissions("menu:inventory")
-				clerc.addToPermissions("menu:correctivemaintenance")
-				clerc.addToPermissions("menu:preventivemaintenance")
-				clerc.addToPermissions("menu:reports")
-				clerc.addToPermissions("equipment:*")
-				clerc.addToPermissions("home:*")
-				clerc.save(failOnError: true)
-				
+				//User with default clerk role
+				def userClerkOne= new User(userType: UserType.OTHER,code:"user", location: CalculationLocation.findByCode(040403), username: "user", 
+					firstname: "user", lastname: "user", email:'user@memms.org', passwordHash: new Sha256Hash("user").toHex(), active: true, 
+					confirmed: true, uuid:'user', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
+				userClerkOne.addToRoles(Role.findByName("Clerk"))
+				userClerkOne.save(failOnError: true)
 			}
 			break;
 		}
