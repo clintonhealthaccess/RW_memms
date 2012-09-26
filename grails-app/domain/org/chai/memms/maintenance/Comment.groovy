@@ -36,10 +36,11 @@ import org.chai.memms.security.User;
  *
  */
 class Comment {
-	WorkOrder workOrder
 	User writtenBy
 	Date writtenOn
 	String content
+	
+   static belongsTo = [workOrder:WorkOrder]
    
    static constraints ={
 	   writtenBy nullable: false

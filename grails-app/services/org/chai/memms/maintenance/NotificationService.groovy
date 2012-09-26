@@ -63,18 +63,27 @@ class NotificationService {
     def sendNotifications(WorkOrder workOrder, String content,User currentUser) {
 		workOrder.notificationGroup.findAll{
 			if(it != currentUser){
-					new Notification(workOrder:workOrder,sender:currentUser,receiver:it,writtenOn:new Date(),content:content).save(flush:true,failOnError: true)
+					new Notification(workOrder:workOrder,sender:currentUser,receiver:it,writtenOn:new Date(),content:content,read:false).save(flush:true,failOnError: true)
 				}
 			}
     }
 	
-	List<Notification> getNotifications(WorkOrder workOrder,User currentUser, Map<String, String> params){
+	List<Notification> filterNotifications(WorkOrder workOrder,User sender, User receiver,Boolean read, Map<String, String> params){
 		def criteria = Notification.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			and{
-				eq(workOrder,workOrder)
-				eq(receiver,currentUser)
-			}
+			if(workOrder != null) eq("workOrder",workOrder)
+			if(sender != null) eq("sender",sender)
+			if(receiver != null) eq("receiver",receiver)
+			if(read != null) eq("read",read)
 		}
+	}
+	
+	Notification readNotification(def notificationID){
+		def notification = Notification.get(notificationID)
+		if(notification != null){
+			notification.read = true
+			notification.save(failOnError:true)
+		}
+		return notification
 	}
 }

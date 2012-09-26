@@ -59,26 +59,34 @@
 	        </h4>
         	<div class="row">
 		        <div class="process-action-perfomed">
-		        	<label><g:message code="work.order.performed.action.label"/> :${order.performedActions.size()}</label>
-		        	<ul class="maintenance-processes">
-			        	<g:each in="${order.performedActions}" status="i" var="action">
-				        	<li process-id="${action.id}" type="action">${action.name} <a href="#" class="delete-process">x</a></li>
+		        	<label><g:message code="work.order.performed.action.label"/> :</label>
+		        	<ul class="processes">
+			        	<g:each in="${order.actions.sort{a,b -> (a.id < b.id) ? -1 : 1}}" status="i" var="action">
+				        	<li>${action.name} 
+				        	<span class="ajax-error"><g:message code="entity.error.updating.try.again"/></span>
+		        			<img src="${resource(dir:'images',file:'spinner.gif')}" class="ajax-spinner"/>
+				        	<a href="#" name="${action.id}" class="delete-process">X</a></li>
 				        </g:each>
 		        	</ul>
-		        	<input type="text" name="action-perfomed" class="idle-field" value="" />
+		        	<input type="text" name="ACTION" class="idle-field" value="" />
  			        <span class="ajax-error"><g:message code="entity.error.updating.try.again"/></span>
 		        	<img src="${resource(dir:'images',file:'spinner.gif')}" class="ajax-spinner"/>
   					<a href="#" class="add-buttons"><g:message code="default.add.label"  args="${['']}"/></a>
 		        </div>
 		        
 		        <div class="process-materials-used">
-		        	<label><g:message code="work.order.materials.used.label"/> :${order.materialsUsed.size()}</label>
-		        	<ul class="maintenance-processes">
-		        		<g:each in="${order.materialsUsed}" status="i" var="material">
-				        	<li process-id="${material.id}" type="material" >${material.name} <a href="#" class="delete-process">x</a></li>
+		        	<label><g:message code="work.order.materials.used.label"/> :</label>
+		        	<ul class="processes">
+		        		<g:each in="${order.materials.sort{a,b -> (a.id < b.id) ? -1 : 1}}" status="i" var="material">
+				        	<li>
+				        	${material.name} 
+				        	<span class="ajax-error"><g:message code="entity.error.updating.try.again"/></span>
+		        			<img src="${resource(dir:'images',file:'spinner.gif')}" class="ajax-spinner"/>
+				        	<a href="#" name="${material.id}" class="delete-process">X</a>
+				        	</li>
 				        </g:each>
 		        	</ul>
-		        	<input type="text" name="materials-used" class="idle-field" value="" />
+		        	<input type="text" name="MATERIAL" class="idle-field" value="" />
 		        	<span class="ajax-error"><g:message code="entity.error.updating.try.again"/></span>
 		        	<img src="${resource(dir:'images',file:'spinner.gif')}" class="ajax-spinner"/>
   					<a href="#" class="add-buttons"><g:message code="default.add.label"  args="${['']}"/></a>
@@ -101,30 +109,8 @@
 </div>
 <script type="text/javascript">
 	$(document).ready(function() {
-		$(".ajax-spinner").hide();
-		$(".ajax-error").hide()
-		$('.add-buttons').click(function(e){
-			e.preventDefault();
-			var inputField = $(e.target).prevAll("img.ajax-spinner");
-			alert(inputField.attr('name'));
-			$(inputField).show();
-			$(e.target).hide();
-			$.ajax({
-				type :'GET',
-				dataType: 'json',
-				data:{"order":"${order.id}","type":$(inputField).attr('name'),"value":$(inputField).attr('value')},
-				url:"${createLink(controller:'workOrder',action: 'addProcess')}",
-				success: function(data) {
-					$(e.target).prevAll("img.ajax-spinner").hide();
-					$(e.target).show("slow");
-				}
-			});
-			$(this).ajaxError(function(){
-				$(e.target).prevAll("img.ajax-spinner").fadeOut("slow");
-				$(e.target).fadeIn("slow");
-				$(e.target).next().show("slow");	
-			});
-		})
+		addMaintenanceProcess("${createLink(controller:'workOrder',action: 'addProcess')}","${order.id}")
+		removeMaintenanceProcess("${createLink(controller:'workOrder',action: 'removeProcess')}")
 	});
 </script>
 

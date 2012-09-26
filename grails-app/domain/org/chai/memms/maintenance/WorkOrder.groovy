@@ -28,6 +28,7 @@
 package org.chai.memms.maintenance
 
 import org.chai.memms.equipment.Equipment;
+import org.chai.memms.maintenance.MaintenanceProcess.ProcessType;
 import org.chai.memms.security.User;
 
 /**
@@ -37,7 +38,7 @@ import org.chai.memms.security.User;
 class WorkOrder {
 	
     enum Criticality{
-		NORAMAL("normal"),
+		NORMAL("normal"),
 		LOW("low"),
 		HIGH("high")
 		String messageCode = "work.order.criticality"
@@ -60,7 +61,7 @@ class WorkOrder {
 	String description
 	User addedBy
 	User lastModifiedBy
-	Integer estimatedCost
+	Long estimatedCost
 	Date openOn
 	Date lastModifiedOn
 	Date closedOn
@@ -70,7 +71,7 @@ class WorkOrder {
 	OrderStatus status
 	 
 	static belongsTo = [equipment: Equipment]
-	static hasMany = [comments: Comment,notifications: Notification,notificationGroup: User,performedActions: MaintenanceProcess, materialsUsed: MaintenanceProcess]
+	static hasMany = [comments: Comment,notifications: Notification,notificationGroup: User,processes: MaintenanceProcess]
 	
 	static constraints = {
 		addedBy nullable: false
@@ -88,7 +89,7 @@ class WorkOrder {
 			else return true
 		}
 		lastModifiedBy nullable: true
-		criticality nullable: false, blank: false, inList: [Criticality.LOW,Criticality.HIGH,Criticality.NORAMAL]
+		criticality nullable: false, blank: false, inList: [Criticality.LOW,Criticality.HIGH,Criticality.NORMAL]
 		status nullable: false, blank: false, inList:[OrderStatus.OPEN,OrderStatus.CLOSEDFIXED,OrderStatus.CLOSEDFORDISPOSAL]
 		estimatedCost nullable: true, blank: true, validator:{ val, obj ->
 			if(val == null && obj.currency != null) return false
@@ -98,16 +99,32 @@ class WorkOrder {
 		}
 	}
 	
+	def getActions(){
+		List<MaintenanceProcess> actions = []
+		for(MaintenanceProcess process: processes)
+			if(process.type.equals(ProcessType.ACTION))
+				actions.add(process)
+		return actions;
+	}
+	
+	def getMaterials(){
+		List<MaintenanceProcess> materials = []
+		for(MaintenanceProcess process: processes)
+			if(process.type.equals(ProcessType.MATERIAL))
+				materials.add(process)
+		return materials;
+	}
+	
 	static mapping = {
 		table "memms_work_order"
 		version false
 	}
 	
-	List<Notification> getNotificationsForUser(User user){
-		notifications.findAll{it == user}
+	def getNotificationsForUser(def user){
+		notifications.findAll{it.sender == user}
 	}
 	
-	List<Notification> getUnReadNotificationsForUser(User user){
+	def getUnReadNotificationsForUser(def user){
 		getNotificationsForUser(user).findAll{!it.read}
 	}
 

@@ -50,7 +50,7 @@ function getHtml(htmls,field){
 /**
  * Edit donation and obsolete
  */
-function updateEquipment(baseUrl,failMsg){
+function updateEquipment(baseUrl){
 	$(".ajax-spinner").hide();
 	$(".ajax-error").hide()
 	$(".list-check-box").change(function(event){
@@ -78,6 +78,66 @@ function updateEquipment(baseUrl,failMsg){
 		});
 	})
 }
+
+function removeMaintenanceProcess(baseUrl){
+	$(".ajax-spinner").hide();
+	$(".ajax-error").hide()
+	$('.delete-process').click(function(e){
+		e.preventDefault();
+		$(this).prevAll(".ajax-spinner").show();
+		$(this).hide();
+		$.ajax({
+			type :'GET',
+			dataType: 'json',
+			data:{"process":$(this).attr("name")},
+			url:baseUrl,
+			success: function(data) {
+				$(e.target).prevAll(".ajax-spinner").fadeOut("slow");
+				$(e.target).fadeIn("slow");
+				$(e.target).prevAll(".ajax-error").fadeOut("slow");
+				$(e.target).parent("li").slideUp("slow").remove();
+			}
+		});
+		$(this).ajaxError(function(){
+			$(this).prevAll(".ajax-spinner").fadeOut("slow");
+			$(this).fadeIn("slow");
+			$(this).prevAll(".ajax-error").fadeIn("slow");
+		});
+		
+	});
+}
+
+function addMaintenanceProcess(baseUrl,order){
+	$(".ajax-spinner").hide();
+	$(".ajax-error").hide()
+	$('.add-buttons').click(function(e){
+		e.preventDefault();
+		$(this).prevAll(".ajax-spinner").show();
+		$(this).hide();
+		$.ajax({
+			type :'GET',
+			dataType: 'json',
+			data:{"order":order,"type":$(this).prevAll(".idle-field").attr('name'),"value":$(this).prevAll(".idle-field").attr('value')},
+			url:baseUrl,
+			success: function(data) {
+				$(e.target).prevAll(".ajax-spinner").fadeOut("slow");
+				$(e.target).fadeIn("slow");
+				$(e.target).prevAll(".ajax-error").fadeOut("slow");
+				$(e.target).prevAll(".idle-field").val("")	
+				$(e.target).prevAll(".processes").append("<li>"+data.results[1].name+" <a href=\"#\" name="+data.results[1].id+" class=\"delete-process\">X</a></li>")	
+			}
+		});
+		$(this).ajaxError(function(){
+			$(this).prevAll(".ajax-spinner").fadeOut("slow");
+			$(this).fadeIn("slow");
+			$(this).prevAll(".ajax-error").fadeIn("slow");	
+		});
+	})
+}
+
+/**
+ * Hide set of fields if an option is selected (donation - supplier is same as warranty provider)
+ */
 function getToHide(donation,sameAsSupplier){
 	if(donation=="true")
 		$("#purchase-cost").addClass("hidden").hide()

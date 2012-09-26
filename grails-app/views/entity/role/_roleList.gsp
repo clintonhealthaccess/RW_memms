@@ -25,9 +25,7 @@
 				<td>
 					${role?.name}
 				</td>
-				<td>
-					${role?.permissionString}
-				</td>
+				<td><g:stripHtml field="${role?.permissionString}" chars="30"/></td>
 			</tr>
 		</g:each>
 	</tbody>
