@@ -1,11 +1,18 @@
 <%@ page import="org.chai.memms.util.Utils" %>
+<%@ page import="org.apache.shiro.SecurityUtils" %>
+<%@ page import="org.chai.memms.security.User" %>
 <table class="items">
 	<thead>
 		<tr>
 			<th/>
 			<th><g:message code="equipment.serial.number.label"/></th>
 			<th><g:message code="equipment.type.label"/></th>
-			<th><g:message code="entity.description.label"/></th>
+			<th><g:message code="work.order.status.label"/></th>
+			<th><g:message code="work.order.criticality.label"/></th>
+			<th><g:message code="work.order.description.label"/></th>
+			<th><g:message code="work.order.openOn.label"/></th>
+			<th><g:message code="work.order.closedOn.label"/></th>
+			<th><g:message code="work.order.messages.label"/></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -31,7 +38,22 @@
 					${order.equipment.type.names}
 				</td>
 				<td>
+					${order.status}
+				</td>
+				<td>
+					${order.criticality}
+				</td>
+				<td>
 					<g:stripHtml field="${order.description}" chars="30"/>
+				</td>
+				<td>
+					${order.openOn}
+				</td>
+				<td>
+					${order.closedOn}
+				</td>
+				<td>
+					<a href="${createLinkWithTargetURI(controller:'#', action:'#', params:[id: order.id])}">${order.getUnReadNotificationsForUser(User.findByUuid(SecurityUtils.subject.principal, [cache: true])).size()}</a>
 				</td>
 			</tr>
 		</g:each>

@@ -25,34 +25,41 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 package org.chai.memms.maintenance
 
-import java.util.List;
-import java.util.Map;
-
-import org.chai.location.DataLocation;
+import org.chai.memms.Initializer;
+import org.chai.memms.IntegrationTests;
 import org.chai.memms.equipment.Equipment;
+import org.chai.memms.maintenance.WorkOrder.Criticality;
+import org.chai.memms.maintenance.WorkOrder.OrderStatus;
+import org.chai.memms.security.User;
+import org.chai.location.DataLocationType
+import org.chai.location.Location
 
-/**
- * @author Jean Kahigiso M.
- *
- */
-class WorkOrderService {
-	
-	List<WorkOrder> getWorkOrders(Equipment equipment, Map<String, String> params){
-		def criteria = WorkOrder.createCriteria();
-		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			if(equipment)
-				eq("equipment",equipment)
-		}
+class CorrectiveMaintenanceServiceSpec extends IntegrationTests{
+	def correctiveMaintenanceService
+	def "can retrieve all location levels to skip"() {
+		when:
+		def skipLevels = correctiveMaintenanceService.getSkipLocationLevels()
+
+		then:
+		skipLevels.size() == grailsApplication.config.location.sector.skip.level.size()
 	}
 	
-	public List<WorkOrder> getWorkOrdersByDataLocation(DataLocation dataLocation,Map<String, String> params) {
-		def criteria = WorkOrder.createCriteria();
-			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-				equipment{
-					eq('dataLocation',dataLocation)
-				}
-			}
+	def "can retrieve CorrectiveMaintenances from a location, given a DataLocationType to filter on"() {
+		setup:
+		setupLocationTree()
+		setupEquipment()
+		newUser("user", "user")
+		new WorkOrder(equipment:Equipment.findBySerialNumber(CODE(123)),description: "test work order",criticality:Criticality.NORMAL,status:OrderStatus.OPEN,
+			addedBy:User.findByUsername("user"),openOn: new Date(),assistaceRequested:false).save(failOnError:true)
+		
+		def types = grailsApplication.config.site.datalocationtype.checked.collect{ DataLocationType.findByCode(it) }.toSet()
+		when:
+		def correctiveMaintenances = correctiveMaintenanceService.getCorrectiveMaintenancesByLocation(Location.findByCode(BURERA),types,adaptParamsForList())
+		then:
+		correctiveMaintenances.totalCount == 2
+		correctiveMaintenances.correctiveMaintenanceList.size() == 2
 	}
 }

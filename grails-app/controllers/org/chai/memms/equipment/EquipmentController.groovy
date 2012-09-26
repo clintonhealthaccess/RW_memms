@@ -174,7 +174,7 @@ class EquipmentController extends AbstractEntityController{
 	def summaryPage = {
 		if(user.location instanceof DataLocation) redirect(uri: "/equipment/list/" + user.location.id)
 		
-		def location = Location.get(params.int('location'))
+		def location = Location.get(params.long('location'))
 		def dataLocationTypesFilter = getLocationTypes()
 		def template = null
 		def inventories = null
@@ -201,7 +201,7 @@ class EquipmentController extends AbstractEntityController{
 	}
 	
 	def list={ 
-		def dataLocation = DataLocation.get(params.int('location'))
+		def dataLocation = DataLocation.get(params.long('location'))
 		if (dataLocation == null)
 			response.sendError(404)
 			

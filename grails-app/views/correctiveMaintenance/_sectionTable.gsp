@@ -8,27 +8,27 @@
 		<table class="items">
 			<thead>
 				<th><g:message code="datalocation.label" /></th>
-				<th><g:message code="inventory.equipment.count" /></th>
+				<th><g:message code="correctiveMaintenance.workOrder.count" /></th>
 				<th></th>
 				<th></th>
 			</thead>
 			<tbody>
-				<g:each in="${inventories}" var="inventory">
+				<g:each in="${correctiveMaintenances}" var="correctiveMaintenance">
 					<tr>
 						<td>
-							${inventory.dataLocation.names}
+							${correctiveMaintenance.dataLocation.names}
 						</td>
 						<td>
-							${inventory.equipmentCount}
+							${correctiveMaintenance.workOrderCount}
 						</td>
-						<td>
+						<%--<td>
 							<shiro:hasPermission permission="equipment:create">
 								<a href="${createLink(controller: 'equipment', action: 'create', params:[location: inventory.dataLocation.id])}"><g:message code="inventory.add.equipment.label" /></a>
 							</shiro:hasPermission>
-						</td>
+						</td>--%>
 						<td>
-							<shiro:hasPermission permission="equipment:list">
-								<a href="${createLink(controller: 'equipment', action: 'list', params:[location: inventory.dataLocation.id] )}"><g:message code="inventory.manage.equipment.label" /></a>
+							<shiro:hasPermission permission="workOrder:list">
+								<a href="${createLink(controller: 'workOrder', action: 'list', params:[location: correctiveMaintenance.dataLocation.id] )}"><g:message code="correctiveMaintenance.manage.workOrder.label" /></a>
 							</shiro:hasPermission>
 						</td>
 					</tr>

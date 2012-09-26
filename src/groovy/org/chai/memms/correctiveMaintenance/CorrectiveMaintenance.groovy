@@ -25,34 +25,11 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.maintenance
+package org.chai.memms.correctiveMaintenance
 
-import java.util.List;
-import java.util.Map;
+import org.chai.location.DataLocation
 
-import org.chai.location.DataLocation;
-import org.chai.memms.equipment.Equipment;
-
-/**
- * @author Jean Kahigiso M.
- *
- */
-class WorkOrderService {
-	
-	List<WorkOrder> getWorkOrders(Equipment equipment, Map<String, String> params){
-		def criteria = WorkOrder.createCriteria();
-		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			if(equipment)
-				eq("equipment",equipment)
-		}
-	}
-	
-	public List<WorkOrder> getWorkOrdersByDataLocation(DataLocation dataLocation,Map<String, String> params) {
-		def criteria = WorkOrder.createCriteria();
-			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-				equipment{
-					eq('dataLocation',dataLocation)
-				}
-			}
-	}
+class CorrectiveMaintenance {
+	DataLocation dataLocation
+	Integer workOrderCount
 }

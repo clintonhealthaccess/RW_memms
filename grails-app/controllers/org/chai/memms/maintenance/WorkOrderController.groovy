@@ -27,6 +27,8 @@
  */
 package org.chai.memms.maintenance
 
+import org.chai.location.DataLocation;
+import org.chai.location.Location;
 import org.chai.memms.AbstractEntityController;
 import org.chai.memms.equipment.Equipment;
 import org.chai.memms.maintenance.MaintenanceProcess.ProcessType;
@@ -39,6 +41,7 @@ import org.chai.memms.maintenance.WorkOrder.OrderStatus;
 class WorkOrderController extends AbstractEntityController{
 	def workOrderService
 	def grailsApplication
+	def correctiveMaintenanceService
 	
 	def getEntity(def id) {
 		return WorkOrder.get(id)
@@ -86,9 +89,14 @@ class WorkOrderController extends AbstractEntityController{
 	def list = {
 		adaptParamsForList()
 		Equipment equipment = null
-		
-		if(params["equipment"]) equipment = Equipment.get(params.int("equipment"))
-		List<WorkOrder> orders = workOrderService.getWorkOrders(equipment,params)
+		List<WorkOrder> orders = null
+		if(params["equipment"]){
+			equipment = Equipment.get(params.long("equipment"))
+			orders = workOrderService.getWorkOrders(equipment,params)
+		}else if(params["location"]){
+			equipment = Equipment.get(params.int("equipment"))
+			orders = workOrderService.getWorkOrdersByDataLocation(DataLocation.get(params.long('location')),params)
+		}
 		
 		render(view:"/entity/list", model:[
 		 template:"workorder/workorderList",
@@ -97,7 +105,37 @@ class WorkOrderController extends AbstractEntityController{
 		 code: getLabel(),
 		 entityClass: getEntityClass(),
 		])
-	}	
+	}
+	
+	def summaryPage = {
+		if(user.location instanceof DataLocation) redirect(uri: "/workOrder/list/" + user.location.id)
+		
+		def location = Location.get(params.int('location'))
+		def dataLocationTypesFilter = getLocationTypes()
+		def template = null
+		def correctiveMaintenances = null
+		
+		adaptParamsForList()
+		
+		def locationSkipLevels = correctiveMaintenanceService.getSkipLocationLevels()
+		
+		
+		if (location != null) {
+			template = '/correctiveMaintenance/sectionTable'
+			correctiveMaintenances = correctiveMaintenanceService.getCorrectiveMaintenancesByLocation(location,dataLocationTypesFilter,params)
+		}
+		
+		render (view: '/correctiveMaintenance/summaryPage', model: [
+			correctiveMaintenances:correctiveMaintenances?.correctiveMaintenanceList,
+			currentLocation: location,
+			currentLocationTypes: dataLocationTypesFilter,
+			template: template,
+			entityCount: correctiveMaintenances?.totalCount,
+			locationSkipLevels: locationSkipLevels,
+			entityClass: getEntityClass()
+		])
+	}
+	
 	
 	def addProcess = {
 		
