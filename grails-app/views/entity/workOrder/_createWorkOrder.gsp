@@ -81,6 +81,7 @@
 		  		<textarea name="content" class="idle-field" id="comment-content" rows="8" cols="90"></textarea>
 	  		</div>
 	  		<div class="comment-button">
+	  			<span class="ajax-error"><g:message code="entity.error.updating.try.again"/></span>
 	  			<img src="${resource(dir:'images',file:'spinner.gif')}" class="ajax-spinner"/>
 	  			<button id="add-comment"><g:message code="work.order.comment.label"/></button>
 	  		</div> 
@@ -91,8 +92,8 @@
 </div>
 <script type="text/javascript">
 	$(document).ready(function() {
-		addMaintenanceProcess("${createLink(controller:'workOrder',action: 'addProcess')}","${order.id}")
-		removeMaintenanceProcess("${createLink(controller:'workOrder',action: 'removeProcess')}")
+		addProcess("${createLink(controller:'workOrder',action: 'addProcess')}","${order.id}")
+		removeProcess("${createLink(controller:'workOrder',action: 'removeProcess')}")
 		addComment("${createLink(controller:'workOrder',action: 'addComment')}","${order.id}")
 		removeComment("${createLink(controller:'workOrder',action: 'removeComment')}")
 	});

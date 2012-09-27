@@ -79,7 +79,7 @@ function updateEquipment(baseUrl){
 /**
  * Add maintenance process
  */
-function addMaintenanceProcess(baseUrl,order,spinnerImgSrc,errorMsg){
+function addProcess(baseUrl,order,spinnerImgSrc,errorMsg){
 	$(".ajax-spinner").hide();
 	$(".ajax-error").hide()
 	$('.process').on("click",".add-process-button",function(e){
@@ -110,7 +110,7 @@ function addMaintenanceProcess(baseUrl,order,spinnerImgSrc,errorMsg){
 /**
  * Remove Maintenance Process
  */
-function removeMaintenanceProcess(baseUrl){
+function removeProcess(baseUrl){
 	$(".ajax-spinner").hide();
 	$(".ajax-error").hide();
 	$('.process').on("click","a.delete-process",function(e){

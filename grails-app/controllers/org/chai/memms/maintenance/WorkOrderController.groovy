@@ -111,8 +111,8 @@ class WorkOrderController extends AbstractEntityController{
 		else {
 				if (log.isDebugEnabled()) log.debug("addProcess params: "+params)
 				def process = newProcess(order,type,value,now,user)	
-				if(process){
-					order.processes.add(process)
+				if(process!=null){
+					order.addToProcesses(process)
 					order.lastModifiedOn = now
 					order.lastModifiedBy = user
 					order.save(flush:true)
@@ -134,6 +134,7 @@ class WorkOrderController extends AbstractEntityController{
 			type = process.type
 			WorkOrder order = process.workOrder
 			result = true
+			order.processes.remove(process)
 			process.delete()
 			order.lastModifiedOn = now
 			order.lastModifiedBy = user
@@ -155,7 +156,7 @@ class WorkOrderController extends AbstractEntityController{
 			def comment = newComment(order,user, now,content)
 			if(comment==null) response.sendError(404)
 			else{ 
-				order.comments.add(comment)
+				order.addToComments(comment)
 				order.lastModifiedOn = now
 				order.lastModifiedBy = user
 				order.save(flush:true)
@@ -174,6 +175,7 @@ class WorkOrderController extends AbstractEntityController{
 		if(!comment) response.sendError(404)
 		else{
 			order = comment.workOrder
+			order.comments.remove(comment)
 			comment.delete()
 			order.lastModifiedOn = now
 			order.lastModifiedBy = user

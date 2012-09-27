@@ -3,6 +3,7 @@
 	<g:each in="${order.comments.sort{a,b -> (a.writtenOn < b.writtenOn) ? 1 : -1}}" status="i" var="comment">
 		<li>
 			<div class="delete-comment-option">
+			  	<span class="ajax-error"><g:message code="entity.error.updating.try.again"/></span>
 				<img src="${resource(dir:'images',file:'spinner.gif')}" class="ajax-spinner"/>
 				<a href="#" class="delete-comment" id="${comment.id}">X</a>
 			</div>
