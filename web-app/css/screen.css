@@ -763,7 +763,10 @@ form.search-form button { height: 23px; margin: 0 0 0 -1px; -moz-border-radius-t
 .checkbox .ajax-error { color: #d30000; display: inline-block; left: -50%; position: absolute; top: 12px; white-space: nowrap; }
 
 /* line 610, ../../src/stylesheets/partials/_forms.sass */
-.processes { border: 1px solid #47aef7; }
+.process-list-action { border: 1px solid #47aef7; }
+
+/* line 612, ../../src/stylesheets/partials/_forms.sass */
+.process-list-material { border: 1px solid #47aef7; }
 
 /* line 1, ../../src/stylesheets/partials/_flashes.sass */
 .flash-message { background: #f6fdeb; border-bottom: #d8e3eb 1px solid; text-align: center; background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f6fdeb), color-stop(100%, #edf4e2)); background: -webkit-linear-gradient(#f6fdeb, #edf4e2); background: -moz-linear-gradient(#f6fdeb, #edf4e2); background: -o-linear-gradient(#f6fdeb, #edf4e2); background: -ms-linear-gradient(#f6fdeb, #edf4e2); background: linear-gradient(#f6fdeb, #edf4e2); }

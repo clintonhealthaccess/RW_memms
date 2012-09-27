@@ -49,6 +49,8 @@ class Comment {
    static mapping ={
 	   table "memms_work_order_comment"
 	   version false
+	   content type:"text"
+	   
    }
 
 	@Override

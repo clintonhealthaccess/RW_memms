@@ -100,13 +100,12 @@ class WorkOrderController extends AbstractEntityController{
 	}	
 	
 	def addProcess = {
-		
 		WorkOrder order = WorkOrder.get(params.int("order"))
-		def type = params["type"]
+		def type = params["type"].toUpperCase()
 		type = ProcessType."$type"
 		def value = params["value"]
 		def result = false
-		
+		def html =""
 		if (order == null || type==null || value.equals(""))
 			response.sendError(404)
 		else {
@@ -117,30 +116,79 @@ class WorkOrderController extends AbstractEntityController{
 					order.lastModifiedOn = now
 					order.lastModifiedBy = user
 					order.save(flush:true)
+					result=true
+					def processes = (type==ProcessType.ACTION)? order.actions:order.materials
+					html = g.render(template:"/templates/processList",model:[processes:processes,type:type.name])
 				}
-				if(process!=null) result=true
-				render(contentType:"text/json") { results = [result,process] }
+				render(contentType:"text/json") { results = [result,html,type.name] }
 		}
 	}
 	
 	def removeProcess = {
 		MaintenanceProcess  process = MaintenanceProcess.get(params.int("process"))
-		WorkOrder order = process.workOrder
 		def result = false
+		def html =""
+		def type =null
 		if(!process) response.sendError(404)
 		else{
+			type = process.type
+			WorkOrder order = process.workOrder
 			result = true
 			process.delete()
 			order.lastModifiedOn = now
 			order.lastModifiedBy = user
 			order.save(flush:true)
+			def processes = (type==ProcessType.ACTION)? order.actions:order.materials
+			html = g.render(template:"/templates/processList",model:[processes:processes,type:type.name])
 		}
-		render(contentType:"text/json") { results = [result,process] }
+		render(contentType:"text/json") { results = [result,html,type.name]}
 	}
 	
+	def addComment ={
+		WorkOrder order = WorkOrder.get(params.int("order"))
+		def html =""
+		def content = params["content"]
+		def result = false
+		if (order == null || content.equals("") )
+			response.sendError(404)
+		else {
+			def comment = newComment(order,user, now,content)
+			if(comment==null) response.sendError(404)
+			else{ 
+				order.comments.add(comment)
+				order.lastModifiedOn = now
+				order.lastModifiedBy = user
+				order.save(flush:true)
+				result=true
+				html = g.render(template:"/templates/comments",model:[order:order])
+			}
+		}
+		render(contentType:"text/json") { results = [result,html] }
+	}
+	
+	def removeComment = {
+		Comment comment = Comment.get(params.int("comment"))
+		WorkOrder order
+		def html =""
+		def result = false
+		if(!comment) response.sendError(404)
+		else{
+			order = comment.workOrder
+			comment.delete()
+			order.lastModifiedOn = now
+			order.lastModifiedBy = user
+			order.save(flush:true)
+			result = true
+			html = g.render(template:"/templates/comments",model:[order:order])
+		}
+		render(contentType:"text/json") { results = [result,html] }
+	}
 	
 	def newProcess(def workOrder,def type,def name,def addedOn,def addedBy){
 		return new MaintenanceProcess(workOrder:workOrder,type: type,name:name,addedOn:addedOn,addedBy:addedBy).save(failOnError:true, flush:true);
+	}
+	def newComment(def workOrder, def writtenBy, def writtenOn, def content){
+		return new Comment(workOrder: workOrder, writtenBy: writtenBy, writtenOn: writtenOn, content: content ).save(failOnError: true, flush:true)
 	}
 
 }

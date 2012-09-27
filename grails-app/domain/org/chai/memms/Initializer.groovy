@@ -471,6 +471,15 @@ public class Initializer {
 		workOrderOne.addToProcesses(processTwo)
 		workOrderOne.addToProcesses(processThree)
 		workOrderOne.addToProcesses(processFour)
+		
+		def commentOne = newComment(workOrderOne, admin, now(), "comment one")
+		def commentTwo = newComment(workOrderOne, admin, now()-1, "comment one")
+		def commentThree = newComment(workOrderOne, admin, now()-2, "comment one")
+		
+		workOrderOne.addToComments(commentOne)
+		workOrderOne.addToComments(commentTwo)
+		workOrderOne.addToComments(commentThree)
+		
 		workOrderOne.save(failOnError:true)
 		
 		def workOrderThree =  newWorkOrder(equipment09,"Third order", Criticality.NORMAL,OrderStatus.OPEN,user,now())

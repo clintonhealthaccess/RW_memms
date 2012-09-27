@@ -29,6 +29,7 @@ package org.chai.memms.maintenance
 
 import java.util.Map;
 import org.chai.memms.equipment.Equipment;
+import org.chai.memms.maintenance.MaintenanceProcess.ProcessType;
 
 /**
  * @author Jean Kahigiso M.
@@ -43,5 +44,4 @@ class WorkOrderService {
 				eq("equipment",equipment)
 		}
 	}
-	
 }
