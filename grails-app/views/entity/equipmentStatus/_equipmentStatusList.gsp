@@ -22,7 +22,7 @@
 						</li>
 					</ul>
     			</td>
-    			<td>${status.status}</td>
+    			<td>${message(code: status?.status?.messageCode+'.'+status?.status?.name)}</td>
     			<td>${Utils.formatDate(status?.dateOfEvent)}</td>
     			<td>${Utils.formatDateWithTime(status?.statusChangeDate)}</td>
     			<td>${(status.current)? '\u2713':'X'}</td>

@@ -46,7 +46,7 @@
   	    				${message(code: equipment.getCurrentState()?.status?.messageCode+'.'+equipment.getCurrentState()?.status?.name)}
   	    			</a>
 				</td>
-				<td>${(equipment.donation)? '\u2713':'X'}</td>
+				<td>${(equipment.donation)? '\u2713':''}</td>
 				<td>
 					<g:listCheckBox name="obsolete" id="${equipment.id}" checked="${(!equipment.obsolete)?:'checked'}"/>
 				</td>
