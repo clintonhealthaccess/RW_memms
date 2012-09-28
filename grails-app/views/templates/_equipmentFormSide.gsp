@@ -29,7 +29,7 @@
 		</li>
 		<li>
 			<h3>${message(code:"provider.type.manufacturer")}</h3>
-			<ul class="half">
+			<ul>
 				<li>
 					<span class="label"><g:message code="entity.name.label"/>:</span>
 					<span class="text">${equipment.manufacturer?.contact?.contactName}</span>
@@ -46,7 +46,7 @@
 		</li>
 		<li>
 			<h3>${message(code:"provider.type.supplier")}</h3>
-			<ul class="half">
+			<ul>
 				<li>
 					<span class="label"><g:message code="entity.name.label"/>:</span>
 					<span class="text">${equipment.supplier?.contact?.contactName}</span>
@@ -63,7 +63,7 @@
 		</li>
 		<li>
 			<h3>${message(code:"equipment.status.current.status")}</h3>
-			<ul class="half">
+			<ul>
 				<li>
 					<span class="label"><g:message code="equipment.status.label"/>:</span>
 					<span class="text">${message(code: equipment.currentState?.status?.messageCode+'.'+equipment.currentState?.status?.name)}</span>
