@@ -27,6 +27,7 @@
  */
 package org.chai.memms.maintenance
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +38,8 @@ import org.chai.memms.Inventory
 import org.chai.memms.Inventories
 import org.chai.memms.correctiveMaintenance.CorrectiveMaintenance;
 import org.chai.memms.correctiveMaintenance.CorrectiveMaintenances;
+import org.chai.memms.maintenance.WorkOrder.Criticality;
+import org.chai.memms.maintenance.WorkOrder.OrderStatus;
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocationType;
 import org.chai.location.DataLocation
@@ -62,7 +65,7 @@ class CorrectiveMaintenanceService {
 		List<CorrectiveMaintenance> correctiveMaintenances = []
 		Set<LocationLevel> skipLevels = getSkipLocationLevels()
 		for(DataLocation dataLocation : location.collectDataLocations(skipLevels,types)){
-			correctiveMaintenances.add(new CorrectiveMaintenance(dataLocation:dataLocation,workOrderCount:workOrderService.getWorkOrdersByDataLocation(dataLocation,[:]).size()))
+			correctiveMaintenances.add(new CorrectiveMaintenance(dataLocation:dataLocation,workOrderCount:workOrderService.filterWorkOrders(dataLocation,null,null, null, null,null,null,[:]).size()))
 		}
 		
 		CorrectiveMaintenances correctiveMaintenance = new CorrectiveMaintenances()

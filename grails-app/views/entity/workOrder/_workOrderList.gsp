@@ -32,7 +32,10 @@
 					</ul>
 				</td>
 				<td>
-					${order.equipment.serialNumber}
+				<a rel="${createLinkWithTargetURI(controller:'workOrder', action:'getWorkOrderClueTipsAjaxData', params:[id: order.id])}" class="clueTip">
+								${order.equipment.serialNumber}
+							</a>
+					
 				</td>
 				<td>
 					${order.equipment.type.names}
@@ -59,3 +62,16 @@
 		</g:each>
 	</tbody>
 </table>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('a.clueTip').cluetip({
+			  //cluetipClass: 'jtip', for formating the output
+			  arrows: true,
+			  dropShadow: false,
+			  hoverIntent: false,
+			  sticky: true,
+			  mouseOutClose: true,
+			  closePosition: 'title'
+			});
+	});
+</script>

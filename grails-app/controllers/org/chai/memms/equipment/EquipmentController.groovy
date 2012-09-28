@@ -162,6 +162,7 @@ class EquipmentController extends AbstractEntityController{
 			List<Equipment> equipments = equipmentService.searchEquipment(params['q'],location,params)	
 			render (view: '/entity/list', model:[
 				template:"equipment/equipmentList",
+				filterTemplate:"equipment/equipmentFilter",
 				entities: equipments,
 				entityCount: equipments.totalCount,
 				code: getLabel(),

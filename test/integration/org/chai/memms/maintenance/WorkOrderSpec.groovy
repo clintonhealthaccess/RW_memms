@@ -47,6 +47,21 @@ class WorkOrderSpec extends IntegrationTests{
 		then:
 		WorkOrder.count() == 1
 	}
+	//TODO status custom validation not working
+	def "if status is clossed closedOn should be set"(){
+		setup:
+		setupLocationTree()
+		setupEquipment()
+		newUser("user", "user")
+		
+		when:
+		new WorkOrder(closedOn: null,equipment:Equipment.findBySerialNumber(CODE(123)), description: "test work order", criticality:Criticality.NORMAL, status:OrderStatus.CLOSEDFORDISPOSAL,
+				addedBy:User.findByUsername("user"), openOn:Initializer.getDate(12, 9, 2012), assistaceRequested:false).save()
+		new WorkOrder(equipment:Equipment.findBySerialNumber(CODE(123)),description: "test work order",criticality:Criticality.NORMAL,status:OrderStatus.CLOSEDFORDISPOSAL,
+				addedBy:User.findByUsername("user"),openOn: Initializer.getDate(12, 9, 2012),closedOn: Initializer.getDate(12, 10, 2012),assistaceRequested:false).save()
+		then:
+		WorkOrder.count() == 1
+	}
 	
 	def "retrieve notifications for a user"(){
 		setup:
