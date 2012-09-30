@@ -1,61 +1,45 @@
-<%@ page import="org.chai.memms.equipment.EquipmentStatus.Status" %>
+<%@ page import="org.chai.memms.maintenance.WorkOrder.Criticality"%>
+<%@ page import="org.chai.memms.maintenance.WorkOrder.OrderStatus"%>
+<%@ page import="java.util.Date" %>
 <div class="filters main">
-		  <h2>Filter inventory<a href="#" class="right"><img src="${resource(dir:'images/icons',file:'icon_close_flash.png')}" alt="Section"/></a></h2>
+	<h2>
+		Filter work orders<a href="#" class="right"><img
+			src="${resource(dir:'images/icons',file:'icon_close_flash.png')}"
+			alt="Section" /></a>
+	</h2>
 
-			<g:hasErrors bean="${filterCmd}">
-				<ul>
-					<g:eachError var="err" bean="${filterCmd}">
-						<h2><g:message error="${err}" /></h2>
-					</g:eachError>
-				</ul>
-			</g:hasErrors>
+	<g:hasErrors bean="${filterCmd}">
+		<ul>
+			<g:eachError var="err" bean="${filterCmd}">
+				<h2>
+					<g:message error="${err}" />
+				</h2>
+			</g:eachError>
+		</ul>
+	</g:hasErrors>
 
-			<g:form url="[controller:'equipment', action:'filter']" method="get" useToken="false" class="filters-box">
-				<ul class="filters-list">
-					<li><g:selectFromList name="equipmentType.id"
-							label="${message(code:'equipment.type.label')}" bean="${filterCmd}"
-							field="type" optionKey="id" multiple="false"
-							ajaxLink="${createLink(controller:'EquipmentType', action:'getAjaxData', params:[class: 'EquipmentType'])}"
-							from="${filterCmd?.equipmentType}" value="${filterCmd?.equipmentType?.id}" 
-							values="${filterCmd?.equipmentType.collect{it.names + ' ['+ it.code +']'}}"/></li>
-
-					<li><g:selectFromList name="manufacturer.id"
-							label="${message(code:'provider.type.manufacturer')}" bean="${filterCmd}"
-							field="manufacturer" optionKey="id" multiple="false"
-							ajaxLink="${createLink(controller:'Provider', action:'getAjaxData', params:[class: 'Provider',type:'MANUFACTURER'])}"
-							from="${filterCmd?.manufacturer}" value="${filterCmd?.manufacturer?.id}" 
-							values="${filterCmd?.manufacturer.collect{it.contact.contactName + ' ['+ it.code +']'}}"/></li>
-
-					<li><g:selectFromList name="supplier.id"
-							label="${message(code:'provider.type.supplier')}" bean="${filterCmd}"
-							field="supplier" optionKey="id" multiple="false"
-							ajaxLink="${createLink(controller:'Provider', action:'getAjaxData', params:[class: 'Provider',type:'SUPPLIER'])}"
-							from="${filterCmd?.supplier}" value="${filterCmd?.supplier?.id}"
-							values="${filterCmd?.manufacturer.collect{it.contact.contactName + ' ['+ it.code +']'}}"
-							/></li>
-					<li>
-						<label><g:message code="equipment.obsolete.label" /></label> 
-						<select name="obsolete">
-								<option value=""><g:message code="default.please.select" /></option>
-								<option value="true" ${filterCmd?.obsolete?.equals("true")? 'selected' : ''} ><g:message code="default.boolean.true" /></option>
-								<option value="false" ${filterCmd?.obsolete?.equals("false")? 'selected' : ''}><g:message code="default.boolean.false" /></option>
-						</select>
-					</li>
-					<li><g:selectFromEnum name="status" values="${Status.values()}" field="status" label="${message(code:'equipment.status.label')}" /></li>
-					<li>
-						<label><g:message code="equipment.donate.label" /></label> 
-						<select name="donated">
-								<option value=""><g:message code="default.please.select" /></option>
-								<option value="true" ${filterCmd?.donated?.equals("true")? 'selected' : ''}><g:message code="default.boolean.true" /></option>
-								<option value="false" ${filterCmd?.donated?.equals("false")? 'selected' : ''}><g:message code="default.boolean.false" /></option>
-						</select>
-					</li>
-				</ul>
-				<button type="submit">Filter</button>
-				<input type="hidden" name="dataLocation.id" value="${dataLocation.id}"/>
-		  </g:form>
-		</div>
-		<g:if test="${params?.q}">
-		<h2 class="filter-results">Showing filtered list of equipment which contain search term ${params?.q}</h2>
-		</g:if>
-		
+	<g:form url="[controller:'workOrder', action:'filter']" method="get"
+		useToken="false" class="filters-box">
+		<ul class="filters-list">
+			<li><g:selectFromEnum name="criticality" values="${Criticality.values()}" field="criticality" label="${message(code:'work.order.criticality.label')}" /></li>
+			<li><g:selectFromEnum name="status" values="${OrderStatus.values()}" field="status" label="${message(code:'work.order.status.label')}" /></li>
+			<li><label><g:message code="work.order.assistance.request.label" /></label> 
+			<select name="assistaceRequested">
+					<option value=""> <g:message code="default.please.select" /> </option>
+					<option value="true" ${filterCmd?.assistaceRequested?.equals("true")? 'selected' : ''}> <g:message code="default.boolean.true" /> </option>
+					<option value="false" ${filterCmd?.assistaceRequested?.equals("false")? 'selected' : ''}> <g:message code="default.boolean.false" /> </option>
+			</select></li>
+			<li> <g:inputDate name="openOn" precision="day" valueDefault="none"  value="${filterCmd?.openOn}" label="${message(code:'work.order.openOn.label')}" bean="${filterCmd}" field="openOn"/> </li>
+			<li> <g:inputDate name="closedOn" precision="day" valueDefault="none"  value="${filterCmd?.closedOn}" label="${message(code:'work.order.closedOn.label')}" bean="${filterCmd}" field="closedOn"/> </li>
+		</ul>
+		<button type="submit">Filter</button>
+		<input type="hidden" name="dataLocation.id" value="${dataLocation?.id}" />
+		<input type="hidden" name="equipment.id" value="${equipment?.id}" />
+	</g:form>
+</div>
+<g:if test="${params?.q}">
+	<h2 class="filter-results">
+		Showing filtered list of equipment which contain search term
+		${params?.q}
+	</h2>
+</g:if>

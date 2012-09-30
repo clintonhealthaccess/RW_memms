@@ -97,13 +97,14 @@ class WorkOrderController extends AbstractEntityController{
 	def list = {
 		adaptParamsForList()
 		Equipment equipment = null
+		DataLocation dataLocation = null
 		List<WorkOrder> orders = null
 		if(params["equipment"]){
 			equipment = Equipment.get(params.long("equipment"))
 			orders = workOrderService.filterWorkOrders(null,equipment,params)
-		}else if(params["location"]){
-			equipment = Equipment.get(params.int("equipment"))
-			orders = workOrderService.filterWorkOrders(DataLocation.get(params.long('location')),null,params)
+		}else if(params["dataLocation"]){
+		dataLocation = DataLocation.get(params.long('dataLocation'))
+			orders = workOrderService.filterWorkOrders(dataLocation,null,null,null,null,null,null,params)
 		}
 
 		render(view:"/entity/list", model:[
@@ -113,6 +114,8 @@ class WorkOrderController extends AbstractEntityController{
 					entityCount: orders.totalCount,
 					code: getLabel(),
 					entityClass: getEntityClass(),
+					equipment:equipment,
+					dataLocation:dataLocation
 				])
 	}
 
@@ -195,16 +198,42 @@ class WorkOrderController extends AbstractEntityController{
 		return new MaintenanceProcess(workOrder:workOrder,type: type,name:name,addedOn:addedOn,addedBy:addedBy).save(failOnError:true, flush:true);
 	}
 
-	def search = {//Make sure user has access to this location
+	def search = {
 		adaptParamsForList()
-		List<WorkOrder> workOrders = workOrderService.searchWorkOrder(params['q'],params.int("location"),params.int("equipment"),params)
+		Equipment equipment = null
+		DataLocation dataLocation = null
+		if(params["equipment"]){
+			equipment = Equipment.get(params.long("equipment"))
+		}else if(params["dataLocation"]){
+			dataLocation = DataLocation.get(params.long('dataLocation'))
+		}
+		List<WorkOrder> workOrders = workOrderService.searchWorkOrder(params['q'],dataLocation,equipment,params)
 		render (view: '/entity/list', model:[
 					template:"workorder/workorderList",
 					filterTemplate:"workorder/workOrderFilter",
 					entities: workOrders,
 					entityCount: workOrders.totalCount,
 					code: getLabel(),
+					equipment:equipment,
+					dataLocation:dataLocation,
 					q:params['q']
+				])
+	}
+
+	def filter = {FilterCommand cmd ->
+		if(log.isDebugEnabled()) log.debug(cmd)
+		adaptParamsForList()
+		List<WorkOrder> orders = workOrderService.filterWorkOrders(cmd.dataLocation,cmd.equipment,cmd.openOn,cmd.closedOn,cmd.getAssistanceStatus(),cmd.criticality,cmd.status,params)
+
+		render(view:"/entity/list", model:[
+					template:"workorder/workorderList",
+					filterTemplate:"workorder/workOrderFilter",
+					entities: orders,
+					entityCount: orders.totalCount,
+					code: getLabel(),
+					equipment:cmd.equipment,
+					dataLocation:cmd.dataLocation,
+					entityClass: getEntityClass(),
 				])
 	}
 }
@@ -213,7 +242,6 @@ class FilterCommand {
 	Date openOn
 	Date closedOn
 	String assistaceRequested
-	String open
 	Criticality criticality
 	OrderStatus status
 	DataLocation dataLocation
@@ -222,17 +250,12 @@ class FilterCommand {
 	public boolean getAssistanceStatus(){
 		if(assistaceRequested.equals("true")) return true
 		else if(assistaceRequested.equals("false")) return false
-	}
-
-	public boolean getOpenStatus(){
-		if(open.equals("true")) return true
-		else if(open.equals("false")) return false
+		else return null
 	}
 
 	static constraints = {
 		dataLocation  nullable:true
 		equipment nullable:true
-		open  nullable:true
 		openOn nullable:true
 		closedOn nullable:true
 		assistaceRequested nullable:true
@@ -241,8 +264,8 @@ class FilterCommand {
 	}
 
 	String toString() {
-		return "FilterCommand[OrderStatus="+status+", Criticality="+criticality+", Open="+opne
-		", closedOn="+closedOn+", openOn="+openOn+", Assistance Status="+ getAssistanceStatus() +", Open Status()"+getOpenStatus()+ "]"
+		return "FilterCommand[OrderStatus="+status+", Criticality="+criticality+ 
+		", closedOn="+closedOn+", openOn="+openOn+", Assistance Status="+ getAssistanceStatus() + "]"
 	}
 }
 

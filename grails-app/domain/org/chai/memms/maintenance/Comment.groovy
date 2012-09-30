@@ -44,7 +44,7 @@ class Comment {
    
    static constraints ={
 	   writtenBy nullable: false
-	   writtenOn nullable: false, validation:{it <=new Date()}
+	   writtenOn nullable: false, validator:{it <=new Date()}
 	   content nullable:false, blank:false
    }
    static mapping ={

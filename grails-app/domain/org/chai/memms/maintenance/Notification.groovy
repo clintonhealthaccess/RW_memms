@@ -45,7 +45,7 @@ class Notification {
 	static constraints ={
 		sender nullable: false
 		receiver nullable: false 
-		writtenOn nullable: false, validation:{it <=new Date()}
+		writtenOn nullable: false, validator:{it <=new Date()}
 		content nullable:false, blank:false
 		read nullable: false, blank:false
 	}

@@ -53,7 +53,7 @@ class MaintenanceProcess {
 	
 	static contraints = {
 		name nullable:false, blank: false
-		addedOn nullable:false, validation:{it <= new Date()}
+		addedOn nullable: false, validator:{it <=new Date()}
 		addedBy nullable:false
 		type nullable:false, inList:[ProcessType.ACTION,ProcessType.MATERIAL]
 	}
