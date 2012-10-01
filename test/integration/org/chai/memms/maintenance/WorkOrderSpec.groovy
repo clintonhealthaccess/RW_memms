@@ -30,12 +30,14 @@ package org.chai.memms.maintenance
 import org.chai.memms.Initializer;
 import org.chai.memms.IntegrationTests;
 import org.chai.memms.equipment.Equipment;
+import org.chai.memms.maintenance.MaintenanceProcess.ProcessType;
 import org.chai.memms.maintenance.WorkOrder.Criticality;
 import org.chai.memms.maintenance.WorkOrder.OrderStatus;
 import org.chai.memms.security.User;
 
 
 class WorkOrderSpec extends IntegrationTests{
+	
 	def "can create a workOrder"(){
 		setup:
 		setupLocationTree()
@@ -94,5 +96,40 @@ class WorkOrderSpec extends IntegrationTests{
 		then:
 		workOrder.notifications.size() == 2
 		workOrder.getUnReadNotificationsForUser(sender).size() == 2
+	}
+	
+	def "get list of actions performed"(){
+		setup:
+		setupLocationTree()
+		setupEquipment()
+		def user = newUser("user","user")
+		def workOrder = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, User.findByUsername("user"), new Date())
+		when:
+		def actionOne = Initializer.newMaintenanceProcess(workOrder,ProcessType.ACTION,"Action 1",Initializer.now(), user)
+		def actionTwo = Initializer.newMaintenanceProcess(workOrder,ProcessType.ACTION,"Action 2",Initializer.now(), user)
+		def actionThree = Initializer.newMaintenanceProcess(workOrder,ProcessType.ACTION,"Action 3",Initializer.now(), user)
+		def materialFour = Initializer.newMaintenanceProcess(workOrder,ProcessType.MATERIAL,"Material 1",Initializer.now(), user)
+		workOrder.processes=[actionOne,actionTwo,actionThree,materialFour]
+		then:
+		workOrder.actions.size() == 3
+		workOrder.actions.each{[actionOne,actionTwo,actionThree].contains(it) }
+		
+	} 
+	def "get list of used materials performed"(){
+		setup:
+		setupLocationTree()
+		setupEquipment()
+		def user = newUser("user","user")
+		def workOrder = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, User.findByUsername("user"), new Date())
+		when:
+		def materialOne = Initializer.newMaintenanceProcess(workOrder,ProcessType.MATERIAL,"Material 1",Initializer.now(), user)
+		def actionTwo = Initializer.newMaintenanceProcess(workOrder,ProcessType.ACTION,"Action 2",Initializer.now(), user)
+		def actionThree = Initializer.newMaintenanceProcess(workOrder,ProcessType.ACTION,"Action 3",Initializer.now(), user)
+		def materialFour = Initializer.newMaintenanceProcess(workOrder,ProcessType.MATERIAL,"Material 2",Initializer.now(), user)
+		workOrder.processes=[materialOne,actionTwo,actionThree,materialFour]
+		then:
+		workOrder.materials.size() == 2
+		workOrder.materials.each{[materialOne,materialFour].contains(it) }
+		
 	}
 }

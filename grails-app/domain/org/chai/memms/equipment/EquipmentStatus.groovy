@@ -27,7 +27,6 @@
  */
 package org.chai.memms.equipment
 
-import org.aspectj.bridge.Version;
 import org.chai.memms.security.User
 import i18nfields.I18nFields
 
@@ -42,6 +41,7 @@ class EquipmentStatus {
 		
 		NONE("none"),
 		OPERATIONAL("operational"),
+		PARTIALLYOPERATIONAL("partially.operational"),
 		INSTOCK("in.stock"),
 		UNDERMAINTENANCE("under.maintenance"),
 		FORDISPOSAL("for.disposal"),
@@ -59,8 +59,9 @@ class EquipmentStatus {
 	User changedBy
 	Status status
 	Boolean current
+	String reason
 	
-	static belongsTo = [equipment:Equipment]
+	static belongsTo = [equipment: Equipment]
 	
 	def isCurrent(){
 		return current
@@ -68,16 +69,18 @@ class EquipmentStatus {
 	static constraints = {
 		dateOfEvent nullable:false, validator:{val, obj ->
 			return (val <= new Date()) &&  (val.after(obj.equipment.purchaseDate) || (val.compareTo(obj.equipment.purchaseDate)==0))
-			} 
+		} 
 		statusChangeDate nullable: false, validator:{it <= new Date()} 
 		changedBy nullable: false 
-		status blank: false, nullable: false, inList:[Status.OPERATIONAL,Status.INSTOCK,Status.UNDERMAINTENANCE,Status.FORDISPOSAL,Status.DISPOSED]
+		status blank: false, nullable: false, inList:[Status.OPERATIONAL,Status.PARTIALLYOPERATIONAL,Status.INSTOCK,Status.UNDERMAINTENANCE,Status.FORDISPOSAL,Status.DISPOSED]
 		current nullable: false
+		reason nullable:true, blank:true
 	}
 	
 	static mapping = {
-		table "memms_equipment_status"
 		version false
+		table "memms_equipment_status"
+		reason type: "text"
 	}
 
 	@Override

@@ -101,6 +101,7 @@
       			<g:inputBox name="obsolete"  label="${message(code:'equipment.obsolete.label')}" bean="${equipment}" field="obsolete" value="${equipment.obsolete}" checked="${(equipment.obsolete)? true:false}"/>
       			<g:selectFromEnum name="status" bean="${cmd}" values="${Status.values()}" field="status" label="${message(code:'equipment.status.label')}"/>
      			<g:inputDate name="dateOfEvent" precision="day"  value="${cmd?.dateOfEvent}" id="date-of-event" label="${message(code:'equipment.status.date.of.event.label')}" bean="${cmd}" field="dateOfEvent"/>
+      			<g:i18nTextarea name="reason" bean="${cmd}" label="${message(code:'equipment.status.reason')}" field="cmd?.reason" height="150" width="300" maxHeight="150" />
       	</g:if>
       	<g:if test="${equipment?.status!=null}">
       	<g:inputBox name="obsolete"  label="${message(code:'equipment.obsolete.label')}" bean="${equipment}" field="obsolete" value="${equipment.obsolete}" checked="${(equipment.obsolete)? true:false}"/>
@@ -124,7 +125,7 @@
 			    			</td>
 			    			<td>${message(code: status?.status?.messageCode+'.'+status?.status?.name)}</td>
 			    			<td>${Utils.formatDate(status?.dateOfEvent)}</td>
-			    			<td>${Utils.formatDate(status?.statusChangeDate)}</td>
+			    			<td>${Utils.formatDateWithTime(status?.statusChangeDate)}</td>
 			    			<td>${(status.current)? '\u2713':'X'}</td>
 			    		</tr>
 		    		</g:if>

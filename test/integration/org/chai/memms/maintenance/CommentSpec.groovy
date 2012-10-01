@@ -35,13 +35,13 @@ class CommentSpec  extends IntegrationTests{
 		then:
 		commentWithErrors.errors.fieldErrorCount == 4
 		expectedFieldErrors.each{commentWithErrors.errors.hasFieldErrors(it)}
-		MaintenanceProcess.count() == 0
+		Comment.count() == 0
 
 		when://comment date should be before or equal to today
 		commentWithErrors = new Comment(content:"comment test", writtenOn:new Date().next(), writtenBy:user, workOrder:workOrder)
 		commentWithErrors.save()
 		then:
 		commentWithErrors.errors.hasFieldErrors("writtenOn") == true
-		MaintenanceProcess.count() == 0
+		Comment.count() == 0
 	}
 }

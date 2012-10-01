@@ -15,9 +15,7 @@
 			<a href="${createLink(controller: 'task', action: 'purge')}"><g:message code="task.delete.completed"/></a>
 		</span>
 	</div>
-
 	<g:render template="/templates/genericList" model="[entityName: entityName, template: '/entity/'+template]"/>
-	
 	<r:script>
 		${render(template:'/templates/progressImages')}
 	

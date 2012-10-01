@@ -32,6 +32,8 @@ import org.chai.memms.equipment.Equipment
 import org.chai.memms.maintenance.WorkOrder.Criticality
 import org.chai.memms.maintenance.WorkOrder.OrderStatus
 import org.chai.memms.security.User;
+import java.util.Map;
+import org.chai.memms.maintenance.MaintenanceProcess.ProcessType;
 
 /**
  * @author Jean Kahigiso M.

@@ -1,7 +1,6 @@
 <%@ page import="org.chai.memms.util.Utils" %>
 <%@ page import="org.chai.memms.maintenance.WorkOrder.OrderStatus" %>
 <%@ page import="org.chai.memms.maintenance.WorkOrder.Criticality" %>
-<%@ page import="java.util.Date" %>
 <div  class="entity-form-container togglable">
   <div class="heading1-bar">
 		<h1>
@@ -29,11 +28,11 @@
   		<g:if test="${order.id != null}">
   		<div class="row">
 	  		 <label><g:message code="work.order.reported.by.label"/> :</label>
-	  		 ${order.addedBy.firstname} ${order.addedBy.lastname}  - ${order.openOn}
+	  		 ${order.addedBy.firstname} ${order.addedBy.lastname}  - ${Utils.formatDateWithTime(order?.openOn)}
   		</div>
   		<div class="row">
 	  		 <label><g:message code="work.order.last.modified.by.label"/> :</label>
-	  		 ${order.lastModifiedBy?.firstname} ${order.lastModifiedBy?.lastname}  - ${order.lastModifiedOn}
+	  		 ${order.lastModifiedBy?.firstname} ${order.lastModifiedBy?.lastname}  - ${Utils.formatDateWithTime(order?.lastModifiedOn)}
   		</div>
   		</g:if>						
    		<g:textarea name="description" rows="12" width="380" label="${message(code:'entity.description.label')}" bean="${order}" field="description" value="${order.description}"/>
@@ -57,40 +56,9 @@
 	          </span>
 	          <g:message code="equipment.section.maintenance.information.label" default="Maintenance Information"/>
 	        </h4>
-        	<div class="row">
-		        <div class="process-action-perfomed">
-		        	<label><g:message code="work.order.performed.action.label"/> :</label>
-		        	<ul class="processes">
-			        	<g:each in="${order.actions.sort{a,b -> (a.id < b.id) ? -1 : 1}}" status="i" var="action">
-				        	<li>${action.name} 
-				        	<span class="ajax-error"><g:message code="entity.error.updating.try.again"/></span>
-		        			<img src="${resource(dir:'images',file:'spinner.gif')}" class="ajax-spinner"/>
-				        	<a href="#" name="${action.id}" class="delete-process">X</a></li>
-				        </g:each>
-		        	</ul>
-		        	<input type="text" name="ACTION" class="idle-field" value="" />
- 			        <span class="ajax-error"><g:message code="entity.error.updating.try.again"/></span>
-		        	<img src="${resource(dir:'images',file:'spinner.gif')}" class="ajax-spinner"/>
-  					<a href="#" class="add-buttons"><g:message code="default.add.label"  args="${['']}"/></a>
-		        </div>
-		        
-		        <div class="process-materials-used">
-		        	<label><g:message code="work.order.materials.used.label"/> :</label>
-		        	<ul class="processes">
-		        		<g:each in="${order.materials.sort{a,b -> (a.id < b.id) ? -1 : 1}}" status="i" var="material">
-				        	<li>
-				        	${material.name} 
-				        	<span class="ajax-error"><g:message code="entity.error.updating.try.again"/></span>
-		        			<img src="${resource(dir:'images',file:'spinner.gif')}" class="ajax-spinner"/>
-				        	<a href="#" name="${material.id}" class="delete-process">X</a>
-				        	</li>
-				        </g:each>
-		        	</ul>
-		        	<input type="text" name="MATERIAL" class="idle-field" value="" />
-		        	<span class="ajax-error"><g:message code="entity.error.updating.try.again"/></span>
-		        	<img src="${resource(dir:'images',file:'spinner.gif')}" class="ajax-spinner"/>
-  					<a href="#" class="add-buttons"><g:message code="default.add.label"  args="${['']}"/></a>
-		        </div>
+        	<div class="row maintenance-process">
+        		<g:render template="/templates/processes" model="['processes':order.actions,'processType':'action','label':'work.order.performed.action.label']" /> 
+        		<g:render template="/templates/processes" model="['processes':order.materials,'processType':'material','label':'work.order.materials.used.label']" /> 
         	</div>
 	         <g:currency costName="estimatedCost" id="estimated-cost" costLabel="${message(code:'work.order.estimated.cost.label')}" bean="${equipment}" costField="estimatedCost"  currencyName="currency" values="${currencies}" currencyField="currency" currencyLabel="${message(code:'work.order.currency.label')}"/>
 	        </fieldset>
@@ -105,12 +73,29 @@
   			<a href="${createLink(uri: targetURI)}"><g:message code="default.link.cancel.label"/></a>
   		</div>  
   	</g:form>
+  	<g:if test="${order.id != null}">
+	  	<div class="comment-section">
+	  		<div class="comment-field">
+		  		<label><g:message code="work.order.comment.label"/></label>
+		  		<input type="hidden" name="order" value="${order.id}"/>
+		  		<textarea name="content" class="idle-field" id="comment-content" rows="8" cols="90"></textarea>
+	  		</div>
+	  		<div class="comment-button">
+	  			<span class="ajax-error"><g:message code="entity.error.updating.try.again"/></span>
+	  			<img src="${resource(dir:'images',file:'spinner.gif')}" class="ajax-spinner"/>
+	  			<button id="add-comment"><g:message code="work.order.comment.label"/></button>
+	  		</div> 
+	  		 <g:render template="/templates/comments" model="['order':order]" /> 
+	  	</div>
+  	</g:if>
   </div>
 </div>
 <script type="text/javascript">
 	$(document).ready(function() {
-		addMaintenanceProcess("${createLink(controller:'workOrder',action: 'addProcess')}","${order.id}")
-		removeMaintenanceProcess("${createLink(controller:'workOrder',action: 'removeProcess')}")
+		addProcess("${createLink(controller:'workOrder',action: 'addProcess')}","${order.id}")
+		removeProcess("${createLink(controller:'workOrder',action: 'removeProcess')}")
+		addComment("${createLink(controller:'workOrder',action: 'addComment')}","${order.id}")
+		removeComment("${createLink(controller:'workOrder',action: 'removeComment')}")
 	});
 </script>
 

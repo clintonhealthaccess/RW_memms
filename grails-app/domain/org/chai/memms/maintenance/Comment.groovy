@@ -28,7 +28,6 @@
 package org.chai.memms.maintenance
 
 import java.util.Date;
-
 import org.chai.memms.security.User;
 
 /**
@@ -40,7 +39,7 @@ class Comment {
 	Date writtenOn
 	String content
 	
-   static belongsTo = [workOrder:WorkOrder]
+   static belongsTo = [workOrder: WorkOrder]
    
    static constraints ={
 	   writtenBy nullable: false
@@ -50,6 +49,8 @@ class Comment {
    static mapping ={
 	   table "memms_work_order_comment"
 	   version false
+	   content type:"text"
+	   
    }
 
 	@Override

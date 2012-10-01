@@ -203,5 +203,4 @@ abstract class IntegrationTests extends IntegrationSpec {
 		def params = [max:5,offset:0]
 		return params
 	}
-
 }

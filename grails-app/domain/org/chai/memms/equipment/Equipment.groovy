@@ -104,7 +104,7 @@ public class Equipment {
 	def getCurrentState() {
 		if(status){
 			for(EquipmentStatus state : status)
-				if(state.isCurrent().is(getCurrentStatusBasedOnTime())) return state 
+				if(state.isCurrent().equals(getCurrentStatusBasedOnTime())) return state 
 		 setCurrentStatus()
 		 return getCurrentStatusBasedOnTime();
 		}

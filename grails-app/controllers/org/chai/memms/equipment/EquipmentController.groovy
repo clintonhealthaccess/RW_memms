@@ -398,10 +398,12 @@ class EquipmentController extends AbstractEntityController{
 class StatusCommand {
 	Status status
 	Date dateOfEvent
+	String reason
 	
 	static constraints = {
 		status nullable: false, inList: [Status.DISPOSED,Status.FORDISPOSAL,Status.INSTOCK,Status.OPERATIONAL,Status.UNDERMAINTENANCE]
 		dateOfEvent nullable: false 
+		reason nullable: true
 	}
 	
 	String toString(){
