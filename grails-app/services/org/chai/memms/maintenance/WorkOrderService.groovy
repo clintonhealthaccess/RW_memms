@@ -27,8 +27,12 @@
  */
 package org.chai.memms.maintenance
 
+import org.chai.location.DataLocation
+import org.chai.memms.equipment.Equipment
+import org.chai.memms.maintenance.WorkOrder.Criticality
+import org.chai.memms.maintenance.WorkOrder.OrderStatus
+import org.chai.memms.security.User;
 import java.util.Map;
-import org.chai.memms.equipment.Equipment;
 import org.chai.memms.maintenance.MaintenanceProcess.ProcessType;
 
 /**
@@ -36,12 +40,92 @@ import org.chai.memms.maintenance.MaintenanceProcess.ProcessType;
  *
  */
 class WorkOrderService {
+
+	static transactional = true
+	def languageService;
+	def notificationService
+	/**
+	 * Searches for a WorkOrder that contains the search term
+	 * Pass a null value for the criteria you want to be ignored in the search other than the search text
+	 * NB workOrdersEquipment is named like this to avoid conflicting with the navigation property equipment
+	 * @param text
+	 * @param location
+	 * @param workOrdersEquipment
+	 * @param params
+	 * @return
+	 */
+	public List<WorkOrder> searchWorkOrder(String text,DataLocation location,Equipment workOrdersEquipment,Map<String, String> params) {
+		def dbFieldTypeNames = 'names_'+languageService.getCurrentLanguagePrefix();
+		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
+		def criteria = WorkOrder.createCriteria()
+		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			if(workOrdersEquipment)  eq('equipment',workOrdersEquipment)
+			if(location) equipment{eq('dataLocation',location)}
+			or{
+				ilike("description","%"+text+"%")
+				equipment{
+					or{
+						ilike("serialNumber","%"+text+"%")
+						ilike(dbFieldDescriptions,"%"+text+"%")
+						type{
+							or{
+								ilike(dbFieldTypeNames,"%"+text+"%")
+								ilike("code","%"+text+"%")
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 	
-	List<WorkOrder> getWorkOrders(Equipment equipment, Map<String, String> params){
+				
+
+	/**
+	 * Returns a filtered list of WorkOrders according to the passed criteria
+	 * Pass a null value for the criteria you want to be ignored in the filter
+	 * NB workOrdersEquipment is named like this to avoid conflicting with the navigation property equipment
+	 * @param dataLocation
+	 * @param workOrdersequipment
+	 * @param openOn
+	 * @param closedOn
+	 * @param assistaceRequested
+	 * @param open
+	 * @param criticality
+	 * @param status
+	 * @param params
+	 * @return
+	 */
+	List<WorkOrder> filterWorkOrders(DataLocation dataLocation,Equipment workOrdersEquipment, Date openOn, Date closedOn, Boolean assistaceRequested,
+	Criticality criticality, OrderStatus status,Map<String, String> params) {
 		def criteria = WorkOrder.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			if(equipment)
-				eq("equipment",equipment)
+			if(dataLocation)
+				equipment{
+					eq('dataLocation',dataLocation)
+				}
+			if(workOrdersEquipment)
+				eq("equipment",workOrdersEquipment)
+			if(openOn)
+				ge("openOn",openOn)
+			if(closedOn)
+				le("closedOn",closedOn)
+			if(assistaceRequested)
+				eq("assistaceRequested",assistaceRequested)
+			if(criticality)
+				eq("criticality",criticality)
+			if(status)
+				eq("status",status)
+		}
+	}
+	
+	def escalateWorkOrder(WorkOrder  workOrder,String content, User escalatedBy){
+		if(workOrder.assistaceRequested)
+			notificationService.sendNotifications(workOrder,"${content}\nPlease follow up on this work order.",escalatedBy)
+		else{
+			workOrder.assistaceRequested = true
+			workOrder.save(flush:true,failOnError: true)
+			notificationService.newNotification(workOrder,"${content}\nPlease follow up on this work order.",escalatedBy)
 		}
 	}
 }

@@ -488,6 +488,9 @@ public class Initializer {
 		def equipment11 =Equipment.findBySerialNumber("SERIAL11")
 		
 		def workOrderOne =  newWorkOrder(equipment01,"First order", Criticality.NORMAL,OrderStatus.OPEN,admin,now())
+		workOrderOne.notificationGroup = [User.findByUsername("admin"),User.findByUsername("admin")]
+		newNotification(workOrderOne, User.findByUsername("admin"),User.findByUsername("admin"),new Date(), "Work on this please")
+		workOrderOne.save(failOnError:true)
 		def workOrderTwo =  newWorkOrder(equipment01,"Second order", Criticality.LOW,OrderStatus.OPEN,admin,now())
 		def workOrderFive =  newWorkOrder(equipment01,"Closed order", Criticality.HIGH,OrderStatus.CLOSEDFIXED,user,now()-1,now(),true)
 		

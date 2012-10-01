@@ -51,9 +51,9 @@ class MaintenanceProcess {
 	
 	static belongsTo =[workOrder: WorkOrder]
 	
-	static contraints = {
+	static constraints = {
 		name nullable:false, blank: false
-		addedOn nullable:false, validation:{it <= new Date()}
+		addedOn nullable:false, validator:{it <= new Date()}
 		addedBy nullable:false
 		type nullable:false, inList:[ProcessType.ACTION,ProcessType.MATERIAL]
 	}

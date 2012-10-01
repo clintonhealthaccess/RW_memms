@@ -36,8 +36,8 @@ import org.chai.memms.security.User;
  *
  */
 class WorkOrder {
-	
-    enum Criticality{
+
+	enum Criticality{
 		NORMAL("normal"),
 		LOW("low"),
 		HIGH("high")
@@ -46,7 +46,7 @@ class WorkOrder {
 		Criticality(String name){this.name=name}
 		String getKey(){ return name() }
 	}
-	
+
 	enum OrderStatus{
 		OPEN("open"),
 		CLOSEDFIXED("closedfixed"),
@@ -56,7 +56,7 @@ class WorkOrder {
 		OrderStatus(String name){ this.name=name }
 		String getKey() { return name() }
 	}
-	
+
 	String currency
 	String description
 	User addedBy
@@ -66,21 +66,21 @@ class WorkOrder {
 	Date lastModifiedOn
 	Date closedOn
 	Boolean assistaceRequested
-	
+
 	Criticality criticality
 	OrderStatus status
-	 
+
 	static belongsTo = [equipment: Equipment]
 	static hasMany = [comments: Comment,notifications: Notification,notificationGroup: User,processes: MaintenanceProcess]
-	
+
 	static constraints = {
 		addedBy nullable: false
 		assistaceRequested nullable: false
 		description nullable: false, blank: false
 		openOn nullable: false, validation:{it <= new Date()}
-		lastModifiedOn nullable: true, validation:{ val, obj ->
+		lastModifiedOn nullable: true, validator:{ val, obj ->
 			if(val!=null)
-			return ((val <= new Date()) && (val.after(obj.openOn) || (val.compareTo(obj.openOn)==0)))
+				return ((val <= new Date()) && (val.after(obj.openOn) || (val.compareTo(obj.openOn)==0)))
 			else return true
 		}
 		closedOn nullable: true, validation:{ val, obj ->
@@ -90,7 +90,11 @@ class WorkOrder {
 		}
 		lastModifiedBy nullable: true
 		criticality nullable: false, blank: false, inList: [Criticality.LOW,Criticality.HIGH,Criticality.NORMAL]
-		status nullable: false, blank: false, inList:[OrderStatus.OPEN,OrderStatus.CLOSEDFIXED,OrderStatus.CLOSEDFORDISPOSAL]
+		status nullable: false, blank: false, inList:[OrderStatus.OPEN,OrderStatus.CLOSEDFIXED,OrderStatus.CLOSEDFORDISPOSAL], validator:{ val, obj ->
+			if(val == OrderStatus.OPEN && obj.closedOn == null) return true
+			else if(val != OrderStatus.OPEN && obj.closedOn != null) return true
+			else return false
+		}
 		estimatedCost nullable: true, blank: true, validator:{ val, obj ->
 			if(val == null && obj.currency != null) return false
 		}
@@ -98,7 +102,7 @@ class WorkOrder {
 			if(val == null && obj.estimatedCost != null) return false
 		}
 	}
-	
+
 	def getActions(){
 		List<MaintenanceProcess> actions = []
 		for(MaintenanceProcess process: processes)
@@ -106,7 +110,7 @@ class WorkOrder {
 				actions.add(process)
 		return actions;
 	}
-	
+
 	def getMaterials(){
 		List<MaintenanceProcess> materials = []
 		for(MaintenanceProcess process: processes)
@@ -114,16 +118,16 @@ class WorkOrder {
 				materials.add(process)
 		return materials;
 	}
-	
+
 	static mapping = {
 		table "memms_work_order"
 		version false
 	}
-	
+
 	def getNotificationsForUser(def user){
 		notifications.findAll{it.sender == user}
 	}
-	
+
 	def getUnReadNotificationsForUser(def user){
 		getNotificationsForUser(user).findAll{!it.read}
 	}
@@ -131,8 +135,8 @@ class WorkOrder {
 	@Override
 	public String toString() {
 		return "WorkOrder [id=" + id + "]";
-	}	
-	
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -140,7 +144,7 @@ class WorkOrder {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this.is(obj))
@@ -157,7 +161,7 @@ class WorkOrder {
 			return false;
 		return true;
 	}
-	
+
 }
 
 

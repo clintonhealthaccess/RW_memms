@@ -27,10 +27,20 @@
  */
 package org.chai.memms.maintenance
 
+import java.util.Date;
+import java.util.Map;
+
+import org.chai.location.DataLocation;
+import org.chai.location.Location;
 import org.chai.memms.AbstractEntityController;
 import org.chai.memms.equipment.Equipment;
+import org.chai.memms.equipment.EquipmentType;
+import org.chai.memms.equipment.Provider;
+import org.chai.memms.equipment.EquipmentStatus.Status;
 import org.chai.memms.maintenance.MaintenanceProcess.ProcessType;
+import org.chai.memms.maintenance.WorkOrder.Criticality;
 import org.chai.memms.maintenance.WorkOrder.OrderStatus;
+import org.chai.memms.security.User;
 
 /**
  * @author Jean Kahigiso M.
@@ -39,25 +49,26 @@ import org.chai.memms.maintenance.WorkOrder.OrderStatus;
 class WorkOrderController extends AbstractEntityController{
 	def workOrderService
 	def grailsApplication
-	
+	def correctiveMaintenanceService
+
 	def getEntity(def id) {
 		return WorkOrder.get(id)
 	}
-	
+
 	def createEntity() {
 		def entity = new WorkOrder();
 		if(!params["equipment.id"] || params["equipment"]!=null) entity.equipment = Equipment.get(params.int("equipment"))
 		return entity;
 	}
-	
+
 	def getModel(entity) {
 		def equipments =  []
 		if(entity.equipment) equipments << entity.equipment
 		[
-			order:entity,
-			equipments: equipments,
-			currencies: grailsApplication.config.site.possible.currency
-		]
+					order:entity,
+					equipments: equipments,
+					currencies: grailsApplication.config.site.possible.currency
+				]
 	}
 
 	def bindParams(def entity) {
@@ -82,23 +93,62 @@ class WorkOrderController extends AbstractEntityController{
 	def getEntityClass() {
 		return WorkOrder.class;
 	}
-	
+
 	def list = {
 		adaptParamsForList()
 		Equipment equipment = null
-		
-		if(params["equipment"]) equipment = Equipment.get(params.int("equipment"))
-		List<WorkOrder> orders = workOrderService.getWorkOrders(equipment,params)
-		
+		DataLocation dataLocation = null
+		List<WorkOrder> orders = null
+		if(params["equipment"]){
+			equipment = Equipment.get(params.long("equipment"))
+			orders = workOrderService.filterWorkOrders(null,equipment,params)
+		}else if(params["dataLocation"]){
+		dataLocation = DataLocation.get(params.long('dataLocation'))
+			orders = workOrderService.filterWorkOrders(dataLocation,null,null,null,null,null,null,params)
+		}
+
 		render(view:"/entity/list", model:[
-		 template:"workorder/workorderList",
-		 entities: orders,
-		 entityCount: orders.totalCount,
-		 code: getLabel(),
-		 entityClass: getEntityClass(),
-		])
-	}	
-	
+					template:"workorder/workorderList",
+					filterTemplate:"workorder/workOrderFilter",
+					entities: orders,
+					entityCount: orders.totalCount,
+					code: getLabel(),
+					entityClass: getEntityClass(),
+					equipment:equipment,
+					dataLocation:dataLocation
+				])
+	}
+
+	def summaryPage = {
+		if(user.location instanceof DataLocation) redirect(uri: "/workOrder/list/" + user.location.id)
+
+		def location = Location.get(params.int('location'))
+		def dataLocationTypesFilter = getLocationTypes()
+		def template = null
+		def correctiveMaintenances = null
+
+		adaptParamsForList()
+
+		def locationSkipLevels = correctiveMaintenanceService.getSkipLocationLevels()
+
+
+		if (location != null) {
+			template = '/correctiveMaintenance/sectionTable'
+			correctiveMaintenances = correctiveMaintenanceService.getCorrectiveMaintenancesByLocation(location,dataLocationTypesFilter,params)
+		}
+
+		render (view: '/correctiveMaintenance/summaryPage', model: [
+					correctiveMaintenances:correctiveMaintenances?.correctiveMaintenanceList,
+					currentLocation: location,
+					currentLocationTypes: dataLocationTypesFilter,
+					template: template,
+					entityCount: correctiveMaintenances?.totalCount,
+					locationSkipLevels: locationSkipLevels,
+					entityClass: getEntityClass()
+				])
+	}
+
+
 	def addProcess = {
 		WorkOrder order = WorkOrder.get(params.int("order"))
 		def type = params["type"].toUpperCase()
@@ -123,7 +173,7 @@ class WorkOrderController extends AbstractEntityController{
 				render(contentType:"text/json") { results = [result,html,type.name] }
 		}
 	}
-	
+
 	def removeProcess = {
 		MaintenanceProcess  process = MaintenanceProcess.get(params.int("process"))
 		def result = false
@@ -166,7 +216,12 @@ class WorkOrderController extends AbstractEntityController{
 		}
 		render(contentType:"text/json") { results = [result,html] }
 	}
-	
+
+	def getWorkOrderClueTipsAjaxData = {
+		def workOrder = WorkOrder.get(params.long("id"))
+		render (text: "<a href='${createLinkWithTargetURI(controller:'equipment', action:'edit', params:[id: workOrder.equipment.id])}'> Edit </a><br/>Facility:${workOrder.equipment.dataLocation.names_en} <br/>Department:${workOrder.equipment.department.names_en}<br/>Room:${workOrder.equipment.room}<br/>Status:${workOrder.equipment.getCurrentState()?.status}")
+	}
+
 	def removeComment = {
 		Comment comment = Comment.get(params.int("comment"))
 		WorkOrder order
@@ -193,4 +248,74 @@ class WorkOrderController extends AbstractEntityController{
 		return new Comment(workOrder: workOrder, writtenBy: writtenBy, writtenOn: writtenOn, content: content ).save(failOnError: true, flush:true)
 	}
 
+	def search = {
+		adaptParamsForList()
+		Equipment equipment = null
+		DataLocation dataLocation = null
+		if(params["equipment"]){
+			equipment = Equipment.get(params.long("equipment"))
+		}else if(params["dataLocation"]){
+			dataLocation = DataLocation.get(params.long('dataLocation'))
+		}
+		List<WorkOrder> workOrders = workOrderService.searchWorkOrder(params['q'],dataLocation,equipment,params)
+		render (view: '/entity/list', model:[
+					template:"workorder/workorderList",
+					filterTemplate:"workorder/workOrderFilter",
+					entities: workOrders,
+					entityCount: workOrders.totalCount,
+					code: getLabel(),
+					equipment:equipment,
+					dataLocation:dataLocation,
+					q:params['q']
+				])
+	}
+
+	def filter = {FilterCommand cmd ->
+		if(log.isDebugEnabled()) log.debug(cmd)
+		adaptParamsForList()
+		List<WorkOrder> orders = workOrderService.filterWorkOrders(cmd.dataLocation,cmd.equipment,cmd.openOn,cmd.closedOn,cmd.getAssistanceStatus(),cmd.criticality,cmd.status,params)
+
+		render(view:"/entity/list", model:[
+					template:"workorder/workorderList",
+					filterTemplate:"workorder/workOrderFilter",
+					entities: orders,
+					entityCount: orders.totalCount,
+					code: getLabel(),
+					equipment:cmd.equipment,
+					dataLocation:cmd.dataLocation,
+					entityClass: getEntityClass(),
+				])
+	}
 }
+
+class FilterCommand {
+	Date openOn
+	Date closedOn
+	String assistaceRequested
+	Criticality criticality
+	OrderStatus status
+	DataLocation dataLocation
+	Equipment equipment
+
+	public boolean getAssistanceStatus(){
+		if(assistaceRequested.equals("true")) return true
+		else if(assistaceRequested.equals("false")) return false
+		else return null
+	}
+
+	static constraints = {
+		dataLocation  nullable:true
+		equipment nullable:true
+		openOn nullable:true
+		closedOn nullable:true
+		assistaceRequested nullable:true
+		status nullable:true
+		criticality nullable:true
+	}
+
+	String toString() {
+		return "FilterCommand[OrderStatus="+status+", Criticality="+criticality+ 
+		", closedOn="+closedOn+", openOn="+openOn+", Assistance Status="+ getAssistanceStatus() + "]"
+	}
+}
+

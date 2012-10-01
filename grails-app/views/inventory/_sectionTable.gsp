@@ -1,6 +1,6 @@
 <table class="items spaced">
 	<thead>
-		<th><g:message code="inventory.datalocation.label" /></th>
+		<th><g:message code="datalocation.label" /></th>
 		<th><g:message code="inventory.equipment.count" /></th>
 		<th></th>
 		<th></th>
@@ -31,4 +31,5 @@
 <div class="paginateButtons">
 <g:paginate total="${entityCount}" params="${params}" action="${actionName}"/>
 </div>
-
+</body>
+</html>

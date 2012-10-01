@@ -36,10 +36,6 @@ import org.chai.location.Location
 class InventoryServiceSpec extends IntegrationTests{
 	def inventoryService
 	def "can retrieve all location levels to skip"() {
-		setup:
-		Initializer.createDummyStructure()
-		Initializer.createUsers()
-		Initializer.createInventoryStructure()
 		when:
 		def skipLevels = inventoryService.getSkipLocationLevels()
 
@@ -47,7 +43,7 @@ class InventoryServiceSpec extends IntegrationTests{
 		skipLevels.size() == grailsApplication.config.location.sector.skip.level.size()
 	}
 	
-	def "can retrieve inventories from a location, given an EquipmentType to filter on"() {
+	def "can retrieve inventories from a location, given a DataLocationType to filter on"() {
 		setup:
 		Initializer.createDummyStructure()
 		Initializer.createUsers()

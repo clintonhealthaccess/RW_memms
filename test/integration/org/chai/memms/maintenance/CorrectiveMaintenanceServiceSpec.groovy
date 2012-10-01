@@ -1,4 +1,4 @@
-/** 
+/**
  * Copyright (c) 2012, Clinton Health Access Initiative.
  *
  * All rights reserved.
@@ -13,7 +13,7 @@
  *     * Neither the name of the <organization> nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -25,62 +25,41 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 package org.chai.memms.maintenance
 
+import org.chai.memms.Initializer;
+import org.chai.memms.IntegrationTests;
+import org.chai.memms.equipment.Equipment;
+import org.chai.memms.maintenance.WorkOrder.Criticality;
+import org.chai.memms.maintenance.WorkOrder.OrderStatus;
 import org.chai.memms.security.User;
+import org.chai.location.DataLocationType
+import org.chai.location.Location
 
-/**
- * @author Jean Kahigiso M.
- *
- */
-class Notification {
-	
- 	User sender
-	User receiver
-	Date writtenOn
-	String content
-	Boolean read
-	
-	static belongsTo = [workOrder: WorkOrder]
-	static constraints ={
-		sender nullable: false
-		receiver nullable: false 
-		writtenOn nullable: false, validator:{it <=new Date()}
-		content nullable:false, blank:false
-		read nullable: false, blank:false
-	}
-	static mapping ={
-		table "memms_work_order_notification"
-		version false
-	}
+class CorrectiveMaintenanceServiceSpec extends IntegrationTests{
+	def correctiveMaintenanceService
+	def "can retrieve all location levels to skip"() {
+		when:
+		def skipLevels = correctiveMaintenanceService.getSkipLocationLevels()
 
-	@Override
-	public String toString() {
-		return "Notification [id=" + id + ", workOrder=" + workOrder
-				+ ", sender=" + sender + "]";
-	}
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this.is(obj))
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Notification other = (Notification) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
+		then:
+		skipLevels.size() == grailsApplication.config.location.sector.skip.level.size()
 	}
 	
+	def "can retrieve CorrectiveMaintenances from a location, given a DataLocationType to filter on"() {
+		setup:
+		setupLocationTree()
+		setupEquipment()
+		newUser("user", "user")
+		new WorkOrder(equipment:Equipment.findBySerialNumber(CODE(123)),description: "test work order",criticality:Criticality.NORMAL,status:OrderStatus.OPEN,
+			addedBy:User.findByUsername("user"),openOn: new Date(),assistaceRequested:false).save(failOnError:true)
+		
+		def types = grailsApplication.config.site.datalocationtype.checked.collect{ DataLocationType.findByCode(it) }.toSet()
+		when:
+		def correctiveMaintenances = correctiveMaintenanceService.getCorrectiveMaintenancesByLocation(Location.findByCode(BURERA),types,adaptParamsForList())
+		then:
+		correctiveMaintenances.totalCount == 2
+		correctiveMaintenances.correctiveMaintenanceList.size() == 2
+	}
 }
