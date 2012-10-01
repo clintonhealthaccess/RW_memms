@@ -220,7 +220,6 @@ class WorkOrderController extends AbstractEntityController{
 	def getWorkOrderClueTipsAjaxData = {
 		def workOrder = WorkOrder.get(params.long("id"))
 		def html = g.render(template:"/templates/workOrderClueTip",model:[workOrder:workOrder])
-		//render (text: html)
 		render(contentType:"text/plain", text:html)
 	}
 
