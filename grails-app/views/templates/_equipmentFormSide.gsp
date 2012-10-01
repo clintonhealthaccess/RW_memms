@@ -76,5 +76,7 @@
 		</li>
 	
 	</ul>
-	
+	<a href="${createLinkWithTargetURI(controller:'equipment', action:'edit', params:[id: equipment.id])}">
+		<g:message code="default.edit.label" args="[message(code:'equipment.label')]" />
+	</a>
 </div>

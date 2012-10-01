@@ -27,6 +27,7 @@
  */
 package org.chai.memms.maintenance
 
+import org.chai.location.CalculationLocation;
 import org.chai.memms.AbstractEntityController;
 import org.chai.memms.equipment.Equipment;
 import org.chai.memms.maintenance.MaintenanceProcess.ProcessType;
@@ -45,9 +46,7 @@ class WorkOrderController extends AbstractEntityController{
 	}
 	
 	def createEntity() {
-		def entity = new WorkOrder();
-		if(!params["equipment.id"] || params["equipment"]!=null) entity.equipment = Equipment.get(params.int("equipment"))
-		return entity;
+		return new WorkOrder();
 	}
 	
 	def getModel(entity) {
@@ -56,7 +55,8 @@ class WorkOrderController extends AbstractEntityController{
 		[
 			order:entity,
 			equipments: equipments,
-			currencies: grailsApplication.config.site.possible.currency
+			currencies: grailsApplication.config.site.possible.currency,
+			closed:(entity.status==OrderStatus.CLOSEDFIXED || entity.status == OrderStatus.CLOSEDFORDISPOSAL)? true:false
 		]
 	}
 
@@ -85,10 +85,21 @@ class WorkOrderController extends AbstractEntityController{
 	
 	def list = {
 		adaptParamsForList()
+		List<WorkOrder> orders= []
 		Equipment equipment = null
+		CalculationLocation  location = null
 		
-		if(params["equipment"]) equipment = Equipment.get(params.int("equipment"))
-		List<WorkOrder> orders = workOrderService.getWorkOrders(equipment,params)
+		if(params["location"]) location = CalculationLocation.get(params.int("location.id"))
+		if(params["equipment"]) equipment = Equipment.get(params.int("equipment.id"))
+		
+		if(location)
+			orders = workOrderService.getWorkOrdersByCalculationLocation(location, orders, params)
+			
+		if(equipment){
+		 	orders= workOrderService.getWorkOrdersByEquipment(equipment,params)
+		}else{
+			orders= workOrderService.getWorkOrdersByEquipment(null,params)
+		}
 		
 		render(view:"/entity/list", model:[
 		 template:"workorder/workorderList",

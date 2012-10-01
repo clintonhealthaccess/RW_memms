@@ -42,7 +42,6 @@ import org.chai.memms.security.User.UserType;
 import org.apache.commons.logging.Log;
 import org.chai.memms.equipment.Department
 import org.chai.memms.equipment.Equipment
-import org.chai.memms.equipment.EquipmentModel
 import org.chai.memms.equipment.EquipmentType
 import org.chai.memms.equipment.EquipmentType.Observation;
 import org.chai.memms.equipment.Provider.Type;
@@ -110,7 +109,6 @@ abstract class IntegrationTests extends IntegrationSpec {
 	
 	static def setupEquipment(){
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
-		def equipmentModel = Initializer.newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 		
 		def equipment = new Equipment(serialNumber:CODE(123),manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),

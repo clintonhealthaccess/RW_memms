@@ -55,7 +55,7 @@
     		</g:each>
     	</table>
     	<br/>
-    	<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'list', params:['equipment': equipment?.id])}">
+    	<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'list', params:['equipment.id': equipment?.id])}">
   	    		<g:message code="equipment.see.all.status.label" default="See all status"/>
   	    	</a>
    	</g:if>

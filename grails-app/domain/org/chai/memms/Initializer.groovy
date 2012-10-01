@@ -32,7 +32,6 @@ import org.apache.shiro.crypto.hash.Sha256Hash
 import org.chai.memms.Contact;
 import org.chai.memms.equipment.Department;
 import org.chai.memms.equipment.Equipment;
-import org.chai.memms.equipment.EquipmentModel;
 import org.chai.memms.equipment.EquipmentStatus;
 import org.chai.memms.equipment.EquipmentType
 import org.chai.memms.equipment.EquipmentType.Observation;
@@ -54,6 +53,7 @@ import org.chai.memms.maintenance.WorkOrder.OrderStatus;
 import org.chai.memms.security.Role
 import org.chai.memms.security.User
 import org.chai.memms.security.User.UserType
+import org.chai.memms.util.Utils;
 
 public class Initializer {
 		
@@ -240,14 +240,7 @@ public class Initializer {
 			def cardiology = newDepartment(['en':'Cardiology'],'CARDIOLOGY',['en':'Cardiology Dep'])
 			def gynaecology = newDepartment(['en':'Gynaecology'],'GYNAECOLOGY',['en':'Anaesthetics Dep'])
 		}
-		
-		if(!EquipmentModel.count()){
-			//Add Equipment Model
-			def modelOne = newEquipmentModel(['en':'Model One'],'MODEL1',['en':'Model One'])
-			def modelTwo= newEquipmentModel(['en':'Model Two'],'MODEL2',['en':'Model Two'])
-			def modelThree = newEquipmentModel(['en':'MODEL3'],'MODEL3',['en':'Model Three'])
-		}
-		
+			
 		if(!EquipmentType.count()){
 			//Add equipment types as defined in ecri
 			def typeOne = newEquipmentType("15810", ["en":"Accelerometers","fr":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now())
@@ -300,7 +293,7 @@ public class Initializer {
 						
 			def warrantyContactOne = newContact(['fr':'Warranty Address Descriptions One'],"Warranty","jk@yahoo.com","0768-888-787","Street 654","8988")
 			def warrantyOne = newWarranty(warrantyContactOne,getDate(10, 12, 2010),22,false,[:])
-			def statusOne= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentOne,true)
+			def statusOne= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentOne,true,[:])
 			
 			equipmentOne.warranty=warrantyOne
 			equipmentOne.addToStatus(statusOne)
@@ -317,7 +310,7 @@ public class Initializer {
 				)
 			
 			def warrantyTwo = newWarranty(['en':'warranty one'],'warranty name1','email1@gmail.com',"0768-111-787","Street 154","898",getDate(10, 12, 2010),14,false,[:])
-			def statusTwo= newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentTwo,true)
+			def statusTwo= newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentTwo,true,[:])
 			equipmentTwo.warranty=warrantyTwo
 			equipmentTwo.addToStatus(statusTwo)
 			equipmentTwo.save(failOnError:true)
@@ -333,7 +326,7 @@ public class Initializer {
 				)
 			
 			def warrantyThree = newWarranty(['en':'warranty two'],'warranty name2','email2@gmail.com',"0768-222-787","Street 154","88",getDate(10, 12, 2010),12,false,[:])
-			def statusThree= newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentThree,true)
+			def statusThree= newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentThree,true,[:])
 			equipmentThree.warranty=warrantyTwo
 			equipmentThree.addToStatus(statusThree)
 			equipmentThree.save(failOnError:true)
@@ -349,8 +342,8 @@ public class Initializer {
 				)
 			
 			def warrantyFour = newWarranty(['en':'warranty two'],'warranty name2','email2@gmail.com',"0768-222-787","Street 154","888",getDate(10, 12, 2010),24,false,[:])
-			def statusFour = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentFour,false)
-			def statusFourOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentFour,true)
+			def statusFour = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentFour,false,[:])
+			def statusFourOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentFour,true,[:])
 			equipmentFour.warranty=warrantyFour
 			equipmentFour.addToStatus(statusFour)
 			equipmentFour.addToStatus(statusFourOne)
@@ -367,9 +360,9 @@ public class Initializer {
 				)
 			
 			def warrantyFive = newWarranty(['en':'warranty Five'],'warranty name3','email3@gmail.com',"0768-333-787","Street 154","988",getDate(10, 12, 2010),8,false,[:])
-			def statusFive= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentFive,false)
-			def statusFiveOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentFive,false)
-			def statusFiveTwo = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentFive,true)
+			def statusFive= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentFive,false,[:])
+			def statusFiveOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentFive,false,[:])
+			def statusFiveTwo = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentFive,true,[:])
 			equipmentFive.warranty=warrantyFour
 			equipmentFive.addToStatus(statusFive)
 			equipmentFive.addToStatus(statusFiveOne)
@@ -387,9 +380,9 @@ public class Initializer {
 				)
 			
 			def warrantySix = newWarranty(['en':'warranty four'],'warranty name4','email4@gmail.com',"0768-444-787","Street 154","8988",getDate(10, 12, 2010),48,false,[:])
-			def statusSix= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentSix,false)
-			def statusSixOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentSix,false)
-			def statusSixTwo = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentSix,true)
+			def statusSix= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentSix,false,[:])
+			def statusSixOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentSix,false,[:])
+			def statusSixTwo = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentSix,true,[:])
 			equipmentSix.warranty=warrantySix
 			equipmentSix.addToStatus(statusSix)
 			equipmentSix.addToStatus(statusSixOne)
@@ -407,9 +400,9 @@ public class Initializer {
 				)
 			
 			def warrantySeven = newWarranty(['en':'warranty seven'],'warranty name7','email7@gmail.com',"0768-777-787","Street 174","8988",getDate(1, 12, 2010),4,false,[:])
-			def statusSeven= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentSeven,false)
-			def statusSevenOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentSeven,false)
-			def statusSevenTwo = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentSeven,true)
+			def statusSeven= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentSeven,false,[:])
+			def statusSevenOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentSeven,false,[:])
+			def statusSevenTwo = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentSeven,true,[:])
 			equipmentSeven.warranty=warrantySeven
 			equipmentSeven.addToStatus(statusSeven)
 			equipmentSeven.addToStatus(statusSevenOne)
@@ -427,9 +420,9 @@ public class Initializer {
 				)
 			
 			def warrantyEight = newWarranty(['en':'warranty four'],'warranty name4','email4@gmail.com',"0768-444-787","Street 154","8988",getDate(10, 12, 2010),17,false,[:])
-			def statusEight= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentEight,false)
-			def statusEightOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentEight,false)
-			def statusEightTwo = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentEight,true)
+			def statusEight= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentEight,false,[:])
+			def statusEightOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentEight,false,[:])
+			def statusEightTwo = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentEight,true,[:])
 			equipmentEight.warranty=warrantyEight
 			equipmentEight.addToStatus(statusEight)
 			equipmentEight.addToStatus(statusEightOne)
@@ -447,9 +440,9 @@ public class Initializer {
 				)
 			
 			def warrantyNine = newWarranty(['en':'warranty Nine'],'warranty name9','email94@gmail.com',"0768-999-787","Street 954","8989",getDate(10, 12, 2010),9,false,[:])
-			def statusNine= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentNine,false)
-			def statusNineOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentNine,false)
-			def statusNineTwo = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentNine,true)
+			def statusNine= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentNine,false,[:])
+			def statusNineOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentNine,false,[:])
+			def statusNineTwo = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentNine,true,[:])
 			equipmentNine.warranty=warrantyNine
 			equipmentNine.addToStatus(statusNine)
 			equipmentNine.addToStatus(statusNineOne)
@@ -467,9 +460,9 @@ public class Initializer {
 				)
 			
 			def warrantyTen = newWarranty(['en':'warranty Ten'],'warranty name10','email410@gmail.com',"0768-100-787","Street 154","8988",getDate(10, 12, 2010),28,false,[:])
-			def statusTen= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentTen,false)
-			def statusTenOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentTen,false)
-			def statusTenTwo = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentTen,true)
+			def statusTen= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentTen,false,[:])
+			def statusTenOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentTen,false,[:])
+			def statusTenTwo = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentTen,true,[:])
 			equipmentTen.warranty=warrantyTen
 			equipmentTen.addToStatus(statusTen)
 			equipmentTen.addToStatus(statusTenOne)
@@ -552,18 +545,20 @@ public class Initializer {
 	//Inventory
 	public static def newEquipment(def serialNumber,def donation,def obsolete,def expectedLifeTime,def room,def purchaseCost,def descriptions,def manufactureDate, def purchaseDate,def currency,def registeredOn,def model,def dataLocation,def department, def type,def manufacture,def supplier){
 		def equipment = new Equipment(serialNumber:serialNumber,donation:donation,obsolete:obsolete,room:room,expectedLifeTime:expectedLifeTime,purchaseCost:purchaseCost,currency:currency,manufactureDate:manufactureDate,purchaseDate:purchaseDate,registeredOn:registeredOn,model:model,dataLocation:dataLocation,department:department,type:type,manufacturer:manufacture,supplier:supplier);
-		setLocaleValueInMap(equipment,descriptions,"Descriptions")
+		Utils.setLocaleValueInMap(equipment,descriptions,"Descriptions")
 		return equipment.save(failOnError: true)
 	}
 
-	public static def newEquipmentStatus(def dateOfEvent,def changedBy,def value, def equipment,def current){
+	public static def newEquipmentStatus(def dateOfEvent,def changedBy,def value, def equipment,def current,def reasons){
 		def statusChangeDate = now()
-		return new EquipmentStatus(dateOfEvent:dateOfEvent,changedBy:changedBy,status:value,equipment:equipment,current:current,statusChangeDate:statusChangeDate).save(failOnError: true)
+		def status = new EquipmentStatus(dateOfEvent:dateOfEvent,changedBy:changedBy,status:value,equipment:equipment,current:current,statusChangeDate:statusChangeDate)
+		Utils.setLocaleValueInMap(status,reasons,"Reasons")
+		return status.save(failOnError: true)
 	}
 
 	public static def newContact(def addressDescriptions,def contactName,def email, def phone, def street, def poBox){
 		def contact = new Contact(contactName:contactName,email:email,phone:phone,street:street,poBox:poBox)
-		setLocaleValueInMap(contact,addressDescriptions,"AddressDescriptions")
+		Utils.setLocaleValueInMap(contact,addressDescriptions,"AddressDescriptions")
 		return contact;
 	}
 	
@@ -578,7 +573,7 @@ public class Initializer {
 	
 	public static def newWarranty(def contact, def startDate,def numberOfMonth,def sameAsSupplier,def descriptions){
 		def warranty = new Warranty(contact:contact,startDate:startDate,numberOfMonth:numberOfMonth,sameAsSupplier:sameAsSupplier)
-		setLocaleValueInMap(warranty,descriptions,"Descriptions")
+		Utils.setLocaleValueInMap(warranty,descriptions,"Descriptions")
 		return warranty
 	}
 	
@@ -586,44 +581,37 @@ public class Initializer {
 		def contact = newContact(addressDescriptions,contactName,email,phone,street,poBox)
 		return newWarranty(contact, startDate,numberOfMonth,sameAsSupplier,descriptions)
 	}
-	
-	public static def newEquipmentModel(def names,def code,def descriptions){
-		def model = new EquipmentModel(code:code)
-		setLocaleValueInMap(model,names,"Names")
-		setLocaleValueInMap(model,descriptions,"Descriptions")
-		return model.save(failOnError: true)
-	}
-	
+		
 	public static def newEquipmentType(def code, def names,def descriptions, def observation, def addedOn, def lastModifiedOn){
 		def type = new EquipmentType(code:code,observation:observation,addedOn:addedOn,lastModifiedOn:lastModifiedOn)
-		setLocaleValueInMap(type,names,"Names")
-		setLocaleValueInMap(type,descriptions,"Descriptions")
+		Utils.setLocaleValueInMap(type,names,"Names")
+		Utils.setLocaleValueInMap(type,descriptions,"Descriptions")
 		return type.save(failOnError: true)
 	}
 	
 	public static def newDepartment(def names,def code, def descriptions){
 		def department = new Department(code:code)
-		setLocaleValueInMap(department,names,"Names") 
-		setLocaleValueInMap(department,descriptions,"Descriptions")
+		Utils.setLocaleValueInMap(department,names,"Names") 
+		Utils.setLocaleValueInMap(department,descriptions,"Descriptions")
 		return department.save(failOnError: true)
 	}
 	
 	//Location
 	public static def newDataLocationType(def names, def code) {
 		def dataLocationType = new DataLocationType(code: code)
-		setLocaleValueInMap(dataLocationType,names,"Names")
+		Utils.setLocaleValueInMap(dataLocationType,names,"Names")
 		return dataLocationType.save(failOnError: true)
 	}
 	
 	public static def newLocationLevel(def names, def code) {
 		def locationLevel = new LocationLevel(code: code)
-		setLocaleValueInMap(locationLevel,names,"Names")
+		Utils.setLocaleValueInMap(locationLevel,names,"Names")
 		return locationLevel.save(failOnError: true)
 	}
 	
 	public static def newLocation(def names, def code, def parent, def level) {
 		def location = new Location(code: code, parent: parent, level: level)
-		setLocaleValueInMap(location,names,"Names")
+		Utils.setLocaleValueInMap(location,names,"Names")
 		location.save(failOnError: true)
 		level.addToLocations(location)
 		level.save(failOnError: true)
@@ -636,7 +624,7 @@ public class Initializer {
 	
 	public static def newDataLocation(def names, def code, def location, def type) {
 		def dataLocation = new DataLocation(code: code, location: location, type: type)
-		setLocaleValueInMap(dataLocation,names,"Names")
+		Utils.setLocaleValueInMap(dataLocation,names,"Names")
 		dataLocation.save(failOnError: true)
 		if (location != null) {
 			location.addToDataLocations(dataLocation)
@@ -653,26 +641,6 @@ public class Initializer {
 		table "memms_initializer_data"
 		version false
 	}
-	//Utils
-	/**
-	* fieldName has to start with capital letter as
-	* it is used to create setter of the object field
-	* @param object
-	* @param map
-	* @param fieldName
-	* @return
-	*/
-   public static def setLocaleValueInMap(def object, def map, def fieldName){
-	   def methodName = 'set'+fieldName
-	   //TODO replace with CONF variable if this fails
-	   def grailsApplication = new Initializer().domainClass.grailsApplication
-	   grailsApplication.config.i18nFields.locales.each{ loc ->
-		   if(map.get(loc) != null)
-			   object."$methodName"(map.get(loc),new Locale(loc))
-		   else
-			   object."$methodName"("",new Locale(loc))
-	   }
-   }
    public static def now(){
 	   return new Date()
    }

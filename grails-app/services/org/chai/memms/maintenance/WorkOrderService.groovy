@@ -28,6 +28,11 @@
 package org.chai.memms.maintenance
 
 import java.util.Map;
+
+import org.chai.location.CalculationLocation;
+import org.chai.location.DataLocation;
+import org.chai.location.DataLocationType;
+import org.chai.location.Location;
 import org.chai.memms.equipment.Equipment;
 import org.chai.memms.maintenance.MaintenanceProcess.ProcessType;
 
@@ -35,13 +40,36 @@ import org.chai.memms.maintenance.MaintenanceProcess.ProcessType;
  * @author Jean Kahigiso M.
  *
  */
-class WorkOrderService {
+class WorkOrderService {	
+	def equipmentService
+	def locationService
 	
-	List<WorkOrder> getWorkOrders(Equipment equipment, Map<String, String> params){
+	List<WorkOrder> getWorkOrdersByEquipment(Equipment equipment, Map<String, String> params){
 		def criteria = WorkOrder.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(equipment)
 				eq("equipment",equipment)
+		}
+	}
+	
+	List<WorkOrder> getWorkOrdersByCalculationLocation(CalculationLocation location,List<DataLocationType> types, Map<String, String> params){
+		def equipments =[]
+		def criteria = WorkOrder.createCriteria();
+		
+		if(location instanceof DataLocation)
+			equipments = equipmentService.getEquipmentsByDataLocation(location, [:])
+		else{
+			def dataLocations = locationService.getDataLocations(null,(types)? types:null)
+			for(DataLocation dataLocation: dataLocations)
+				equipments.addAll( equipmentService.getEquipmentsByDataLocation(dataLocation, [:]))
+		}
+		
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			or{
+				equipments.each { equipment ->
+					eq("equipment",equipment)
+				}
+			}
 		}
 	}
 }

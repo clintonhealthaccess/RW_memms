@@ -56,7 +56,6 @@ class EquipmentServiceSpec extends IntegrationTests{
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
 		def user  = newUser("admin", "Admin UID")
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
-		def equipmentModel = Initializer.newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 
 		Initializer.newEquipment("SERIAL10",true,false,32,"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
@@ -98,7 +97,6 @@ class EquipmentServiceSpec extends IntegrationTests{
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
 		def user  = newUser("admin", "Admin UID")
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
-		def equipmentModel = Initializer.newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 
 		Initializer.newEquipment("SERIAL10",true,false,32,"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
@@ -126,7 +124,6 @@ class EquipmentServiceSpec extends IntegrationTests{
 		
 		def user  = newUser("admin", "Admin UID")
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
-		def equipmentModel = Initializer.newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 
 		def equipmentOne = Initializer.newEquipment("SERIAL10",true,false,32,"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
@@ -136,9 +133,9 @@ class EquipmentServiceSpec extends IntegrationTests{
 		
 		
 		def List<Equipment> equipmentsOne, equipmentsTwo, equipmentsThree
-		def equipmentStatusOneActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("admin"),Status.INSTOCK,equipmentOne,false)
-		def equipmentStatusOneInActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentOne,true)
-		def equipmentStatusTwo = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("admin"),Status.DISPOSED,equipmentOne,true)
+		def equipmentStatusOneActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("admin"),Status.INSTOCK,equipmentOne,false,[:])
+		def equipmentStatusOneInActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentOne,true,[:])
+		def equipmentStatusTwo = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("admin"),Status.DISPOSED,equipmentOne,true,[:])
 		
 		equipmentOne.addToStatus(equipmentStatusOneInActive).save(failOnError:true,flush: true)
 		equipmentOne.addToStatus(equipmentStatusOneActive).save(failOnError:true,flush: true)
@@ -183,7 +180,6 @@ class EquipmentServiceSpec extends IntegrationTests{
 		def user  = newUser("user", "user", true, true)
 		setupSecurityManager(user)
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
-		def equipmentModel = Initializer.newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 
 		def equipmentOne = Initializer.newEquipment("SERIAL10",false,true,32,"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
@@ -197,8 +193,8 @@ class EquipmentServiceSpec extends IntegrationTests{
 	
 		
 		def List<Equipment> equipmentsOne, equipmentsTwo, equipmentsThree
-		def equipmentStatusOneActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("user"),Status.INSTOCK,equipmentOne,false)
-		def equipmentStatusOneInActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("user"),Status.OPERATIONAL,equipmentOne,true)
+		def equipmentStatusOneActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("user"),Status.INSTOCK,equipmentOne,false,[:])
+		def equipmentStatusOneInActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("user"),Status.OPERATIONAL,equipmentOne,true,[:])
 		
 		equipmentOne.warranty=warranty
 		equipmentOne.addToStatus(equipmentStatusOneActive).save(failOnError:true,flush: true)

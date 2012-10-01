@@ -34,6 +34,7 @@ import i18nfields.I18nFields
  * @author Jean Kahigiso M.
  *
  */
+
 @i18nfields.I18nFields
 class EquipmentStatus {
 	
@@ -59,9 +60,10 @@ class EquipmentStatus {
 	User changedBy
 	Status status
 	Boolean current
-	String reason
+	String reasons
 	
 	static belongsTo = [equipment: Equipment]
+	static i18nFields = ["reasons"]
 	
 	def isCurrent(){
 		return current
@@ -74,13 +76,14 @@ class EquipmentStatus {
 		changedBy nullable: false 
 		status blank: false, nullable: false, inList:[Status.OPERATIONAL,Status.PARTIALLYOPERATIONAL,Status.INSTOCK,Status.UNDERMAINTENANCE,Status.FORDISPOSAL,Status.DISPOSED]
 		current nullable: false
-		reason nullable:true, blank:true
+		reasons nullable: true, blank: true
 	}
 	
 	static mapping = {
 		version false
 		table "memms_equipment_status"
-		reason type: "text"
+		reasons_en type: "text"
+		reasons_fr type: "text"
 	}
 
 	@Override
