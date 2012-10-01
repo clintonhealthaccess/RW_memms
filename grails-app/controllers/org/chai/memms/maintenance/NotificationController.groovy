@@ -34,7 +34,7 @@ import org.chai.memms.AbstractEntityController;
  *
  */
 class NotificationController extends AbstractEntityController{
-	def departmentService
+	def notificationService
 	
 	def getEntity(def id) {
 		return Notification.get(id);
@@ -45,20 +45,15 @@ class NotificationController extends AbstractEntityController{
 	}
 
 	def getTemplate() {
-		return "/entity/department/createDepartment";
+		return "/entity/notification/createNotification";
 	}
 
 	def getLabel() {
-		return "department.label";
+		return "notification.label";
 	}
 	
 	def deleteEntity(def entity) {
-		if (entity.equipments.size() != 0) {
-			flash.message = message(code: 'department.hasequipments', args: [message(code: getLabel(), default: 'entity'), params.id], default: '{0} still has associated equipments.')
-		}
-		else {
-			super.deleteEntity(entity)
-		}
+		super.deleteEntity(entity)
 	}
 	
 	def getEntityClass() {
@@ -76,15 +71,16 @@ class NotificationController extends AbstractEntityController{
 	
 	def list={
 		adaptParamsForList()
-//		List<Notification> notification// = Department.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc")
-//		render(view:"/entity/list", model:[
-//			template:"department/departmentList",
-//			entities: departments,
-//			entityCount: departments.totalCount,
-//			code: getLabel(),
-//			entityClass: getEntityClass(),
-//			names:names
-//			])
+		Boolean read = false
+		if(params.workOrderId) read  = params.boolean("read")
+		List<Notification> notifications = notificationService.filterNotifications(WorkOrder.get(params.long("workOrderId")), null, null,read, params)
+		render(view:"/entity/list", model:[
+			template:"notification/notificationList",
+			notifications: notifications,
+			entityCount: notifications.totalCount,
+			code: getLabel(),
+			entityClass: getEntityClass()
+			])
 	}
 	
 	def search = {

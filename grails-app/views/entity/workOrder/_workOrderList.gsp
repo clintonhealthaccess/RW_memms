@@ -56,7 +56,7 @@
 					${order.closedOn}
 				</td>
 				<td>
-					<a href="${createLinkWithTargetURI(controller:'#', action:'#', params:[id: order.id])}">${order.getUnReadNotificationsForUser(User.findByUuid(SecurityUtils.subject.principal, [cache: true])).size()}</a>
+					<a href="${createLinkWithTargetURI(controller:'notification', action:'list', params:[workOrderId: order.id, read:false])}">${order.getUnReadNotificationsForUser(User.findByUuid(SecurityUtils.subject.principal, [cache: true])).size()}</a>
 				</td>
 			</tr>
 		</g:each>
