@@ -219,7 +219,9 @@ class WorkOrderController extends AbstractEntityController{
 
 	def getWorkOrderClueTipsAjaxData = {
 		def workOrder = WorkOrder.get(params.long("id"))
-		render (text: "<a href='${createLinkWithTargetURI(controller:'equipment', action:'edit', params:[id: workOrder.equipment.id])}'> Edit </a><br/>Facility:${workOrder.equipment.dataLocation.names_en} <br/>Department:${workOrder.equipment.department.names_en}<br/>Room:${workOrder.equipment.room}<br/>Status:${workOrder.equipment.getCurrentState()?.status}")
+		def html = g.render(template:"/templates/workOrderClueTip",model:[workOrder:workOrder])
+		//render (text: html)
+		render(contentType:"text/plain", text:html)
 	}
 
 	def removeComment = {
