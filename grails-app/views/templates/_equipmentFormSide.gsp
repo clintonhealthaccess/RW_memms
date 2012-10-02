@@ -15,7 +15,7 @@
 			<span class="text"> ${equipment.room}</span>
 		</li>
 		<li>
-			<h3>${message(code:"equipment.type.label")}</h3>
+			<h6>${message(code:"equipment.type.label")}</h6>
 			<ul>
 				<li>
 					<span class="label"><g:message code="entity.code.label" /></span>
@@ -28,7 +28,7 @@
 			</ul>
 		</li>
 		<li>
-			<h3>${message(code:"provider.type.manufacturer")}</h3>
+			<h6>${message(code:"provider.type.manufacturer")}</h6>
 			<ul>
 				<li>
 					<span class="label"><g:message code="entity.name.label"/>:</span>
@@ -45,7 +45,7 @@
 			</ul>
 		</li>
 		<li>
-			<h3>${message(code:"provider.type.supplier")}</h3>
+			<h6>${message(code:"provider.type.supplier")}</h6>
 			<ul>
 				<li>
 					<span class="label"><g:message code="entity.name.label"/>:</span>
@@ -62,7 +62,7 @@
 			</ul>
 		</li>
 		<li>
-			<h3>${message(code:"equipment.status.current.status")}</h3>
+			<h6>${message(code:"equipment.status.current.status")}</h6>
 			<ul>
 				<li>
 					<span class="label"><g:message code="equipment.status.label"/>:</span>

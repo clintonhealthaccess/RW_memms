@@ -7,8 +7,13 @@
 		width: 55%
 	.form-aside
 		float: right
-		padding-top: 10px
+		padding: 10px 0 20px
 		width: 40%
+	h6
+		color: #888
+		font-size: 12px
+		font-weight: bold
+		margin: 1em 0 .4em
 	h5
 		font-size: 12px
 		margin-bottom: 1em
@@ -471,6 +476,7 @@ form.search-form
 		font-size: 14px
 		font-weight: bold
 	label
+		color: $primary
 		display: inline-block
 		font-size: 11px
 		margin-left: 7px
@@ -566,6 +572,10 @@ form.search-form
 			float: left
 			height: 50px
 			width: 32%
+		.date
+			select
+				min-width: 31%
+				width: 31%
 	label
 		display: block
 		font-size: 11px
@@ -614,3 +624,49 @@ form.search-form
 	border: 1px solid $primary + #222
 .process-list-material
 	border: 1px solid $primary + #222
+	
+.process
+	margin-bottom: 15px
+	fieldset
+		display: inline
+		padding: 3px 0 10px
+		width: 390px
+		ul
+			margin-bottom: 10px
+		li
+			border-bottom: 1px solid #eee
+			line-height: 1.4
+			padding: 5px
+			position: relative
+			&:last-child
+				border-bottom: 0
+			.ajax-spinner
+				position: absolute
+				right: 28px
+				top: 6px
+	input[type=text]
+		width: 200px
+	.ajax-error
+		color: $no
+		font-size: 12px
+		padding: 0 0 0 3px
+		&.alt
+			display: block
+		
+a.delete-row
+	background: $no
+	color: #fff
+	display: block
+	float: right
+	font-size: 10px
+	font-weight: bold
+	height: 18px
+	line-height: 18px
+	margin-left: 5px
+	opacity: .2
+	text-align: center
+	text-decoration: none
+	width: 18px
+	+border-radius(50%)
+	&:hover, &:focus
+		opacity: 1
