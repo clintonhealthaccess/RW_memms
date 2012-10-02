@@ -3,12 +3,14 @@
 	<g:each in="${order.comments.sort{a,b -> (a.writtenOn < b.writtenOn) ? 1 : -1}}" status="i" var="comment">
 		<li>
 			<div class="delete-comment-option">
-			  	<span class="ajax-error"><g:message code="entity.error.updating.try.again"/></span>
-				<img src="${resource(dir:'images',file:'spinner.gif')}" class="ajax-spinner"/>
-				<a href="#" class="delete-comment" id="${comment.id}">X</a>
+			  <span class="ajax-error"><g:message code="entity.error.updating.try.again"/></span>
+			   <img src="${resource(dir:'images',file:'spinner.gif')}" class="ajax-spinner"/>
+			    <a href="#" class="delete-comment delete-row" id="${comment.id}">X</a>
 			</div>
-			<div class="comment-written-by">${comment.writtenBy.firstname} ${comment.writtenBy.lastname}</div>
-			<div class ="comment-written-on">${Utils.formatDateWithTime(comment?.writtenOn)}</div>
+			<div class="comment-meta">
+				<span class="comment-written-by">${comment.writtenBy.firstname} ${comment.writtenBy.lastname}</span>
+				<span class="comment-written-on">${Utils.formatDateWithTime(comment?.writtenOn)}</span>
+			</div>
 			<div class="comment-content">${comment.content}</div>
 		</li>
 	</g:each>

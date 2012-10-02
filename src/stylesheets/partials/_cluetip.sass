@@ -1,0 +1,49 @@
+.cluetip-default #cluetip-outer
+	background: $primary
+	
+.cluetip-default h3#cluetip-title
+	background: $primary
+	float: right
+	margin-top: 6px
+	margin-bottom: 0
+	opacity: 0.5
+	padding: 5px
+	position: relative
+	z-index: 10
+	&:hover, &:focus
+		opacity: 1
+	
+.cluetip-default div#cluetip-close
+	margin-bottom: 0
+	a
+		color: #fff
+	
+.clue-right-default .cluetip-arrows
+	background-image: url("../images/darrowleft.png")
+	
+.cluetip-default #cluetip-inner
+	color: #fff
+	font-size: 12px
+	line-height: 1.6
+	padding: 10px 15px 0
+	position: relative
+	a
+		background: $primary + #111
+		background: rgba(255, 255, 255, 0.2)
+		border-top: 1px solid $primary - #222
+		border-top: 1px solid rgba(0, 0, 0, 0.2)
+		color: #fff
+		color: rgba(255, 255, 255, 0.8)
+		display: block
+		font-weight: bold
+		margin: 6px -15px 0
+		padding: 4px 10px
+		text-align: center
+		text-decoration: none
+		&:hover, &:focus
+			background: $yes
+			border: 1px solid $yes - #111
+			color: #fff
+	span
+		color: #fff
+		font-weight: bold

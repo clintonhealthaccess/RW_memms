@@ -222,7 +222,7 @@ class WorkOrderController extends AbstractEntityController{
 
 	def getWorkOrderClueTipsAjaxData = {
 		def workOrder = WorkOrder.get(params.long("id"))
-		render (text: "<a href='${createLinkWithTargetURI(controller:'equipment', action:'edit', params:[id: workOrder.equipment.id])}'> Edit </a><br/>Facility:${workOrder.equipment.dataLocation.names_en} <br/>Department:${workOrder.equipment.department.names_en}<br/>Room:${workOrder.equipment.room}<br/>Status:${workOrder.equipment.getCurrentState()?.status}")
+		render (text: "Facility: <span>${workOrder.equipment.dataLocation.names_en}</span> <br/> Department: <span>${workOrder.equipment.department.names_en}</span> <br/>Room: <span>${workOrder.equipment.room}</span> <br/> Status: <span>${workOrder.equipment.getCurrentState()?.status}</span> <br/> <a href='${createLinkWithTargetURI(controller:'equipment', action:'edit', params:[id: workOrder.equipment.id])}'> Edit </a>")
 	}
 
 	def removeComment = {

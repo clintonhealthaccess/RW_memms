@@ -129,7 +129,7 @@
     &.hidden
       display: none
 
-  .section-status-incomplete, .objective-status-incomplete
+  //.section-status-incomplete, .objective-status-incomplete
 
   .section-status-complete, .objective-status-complete
     background: url('../images/icons/status_complete.png') center no-repeat
@@ -151,7 +151,8 @@
     color: #fff
     float: left
     font-size: 11px
-    padding: 7px 15px
+    font-weight: bold
+    padding: 5px 10px
     +box-shadow(#aaa 1px 1px 3px)
     +text-shadow($no - #444 0 1px 0)
     &:last-child
@@ -209,3 +210,10 @@
     +text-shadow($no - #222 0 1px 0)
   &:hover
     opacity: 1
+
+.register
+  td
+    vertical-align: top
+  .error-list
+    left: 10px
+    padding-left: 0

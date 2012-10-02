@@ -72,22 +72,29 @@
   			<a href="${createLink(uri: targetURI)}"><g:message code="default.link.cancel.label"/></a>
   		</div>  
   	</g:form>
-  	<g:if test="${order.id != null}">
+  </div>
+  
+  <g:if test="${order.id != null}">
+    <div class="heading1-bar">
+  		<h1><g:message code="work.order.comments.label"/></h1>
+  	</div>
+    <div class="main">
+  	
 	  	<div class="comment-section">
 	  		<div class="comment-field">
 		  		<label><g:message code="work.order.comment.label"/></label>
 		  		<input type="hidden" name="order" value="${order.id}"/>
-		  		<textarea name="content" class="idle-field" id="comment-content" rows="8" cols="90"></textarea>
+		  		<textarea name="content" class="idle-field" id="comment-content" rows="2" cols="90"></textarea>
 	  		</div>
 	  		<div class="comment-button">
+	  			<button class="medium" id="add-comment"><g:message code="work.order.comment.label"/></button>
 	  			<span class="ajax-error"><g:message code="entity.error.updating.try.again"/></span>
 	  			<img src="${resource(dir:'images',file:'spinner.gif')}" class="ajax-spinner"/>
-	  			<button id="add-comment"><g:message code="work.order.comment.label"/></button>
 	  		</div> 
 	  		 <g:render template="/templates/comments" model="['order':order,'closed':closed]" /> 
 	  	</div>
-  	</g:if>
-  </div>
+    </div>
+  </g:if>
 </div>
 <script type="text/javascript">
 	$(document).ready(function() {
