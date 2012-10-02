@@ -55,5 +55,7 @@
 				<input type="hidden" name="dataLocation.id" value="${dataLocation.id}"/>
 		  </g:form>
 		</div>
-		<h2 class="filter-results">Showing filtered list of equipment which contain search term "Scanner"</h2>
+		<g:if test="${params?.q}">
+		<h2 class="filter-results">Showing filtered list of equipment which contain search term ${params?.q}</h2>
+		</g:if>
 		

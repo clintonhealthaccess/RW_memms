@@ -194,7 +194,7 @@ class EquipmentController extends AbstractEntityController{
 	def summaryPage = {
 		if(user.location instanceof DataLocation) redirect(uri: "/equipment/list/" + user.location.id)
 		
-		def location = Location.get(params.int('location'))
+		def location = Location.get(params.long('location'))
 		def dataLocationTypesFilter = getLocationTypes()
 		def template = null
 		def inventories = null
@@ -384,7 +384,7 @@ class StatusCommand {
 	Date dateOfEvent
 	
 	static constraints = {
-		status nullable: false, inList: [Status.DISPOSED,Status.FORDISPOSAL,Status.INSTOCK,Status.OPERATIONAL,Status.UNDERMAINTENANCE]
+		status nullable: false, inList: [Status.DISPOSED,Status.FORDISPOSAL,Status.PARTIALLYOPERATIONAL,Status.INSTOCK,Status.OPERATIONAL,Status.UNDERMAINTENANCE]
 		dateOfEvent nullable: false 
 	}
 	

@@ -15,8 +15,8 @@
 			<label><g:message code="equipment.serial.number.label"/>:</label>${status.equipment.serialNumber}
 		</div>
 		<g:selectFromEnum name="status" bean="${status}" values="${Status.values()}" field="status" label="${message(code:'equipment.status.label')}"/>
-   		<g:inputDate name="dateOfEvent" precision="minute" default="none" dateFormatLabel = "${message(code:'entity.date.format.time.label')}" value="${status.dateOfEvent}" id="date-of-event" label="${message(code:'equipment.status.date.of.event.label')}" bean="${status}" field="dateOfEvent"/>
-    	<g:i18nTextarea name="reason" bean="${status}" label="${message(code:'equipment.status.reason')}" field="reason" height="150" width="300" maxHeight="150" />
+		<g:input name="dateOfEvent" label="${message(code:'equipment.status.date.of.event.label')}" bean="${status}" field="dateOfEvent"/>
+    	<g:i18nTextarea name="reasons" bean="${status}" label="${message(code:'equipment.status.reason')}" field="reasons" height="150" width="300" maxHeight="150" />
 		
 		<g:if test="${status.id != null}">
 			<input type="hidden" name="id" value="${status.id}"></input>

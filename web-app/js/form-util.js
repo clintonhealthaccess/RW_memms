@@ -1,38 +1,13 @@
+
 /**
- * data element Search
+ * 
+ * Date picker
  */
-function getDataElement(callback){
-	$('.search-form button').bind('click', function(){$(this).submit(); return false;});
-	$('.search-form').bind('submit', function() {
-		var element = this;
-		$.ajax({
-			type: 'GET', data: $(element).serialize(), url: $(element).attr('action'), 
-			success: function(data, textStatus){
-				if (data.result == 'success') {
-					var filtered = $(element).parent('div').find('.filtered');
-					filtered.html(data.html);
-					filtered.find('a.cluetip').cluetip(cluetipOptions);
-					filtered.find('li').bind('mousedown', callback);
-					filtered.find('li')
-				}
-			}
-		});
-		return false;
+function getDatePicker(){
+	$(function(){
+		$(".datePicker").datepicker();
 	});
 }
- 
-/**
- * rich text content retrieve
- */
-function getRichTextContent(){
-	$('.rich-textarea-form').bind('click',function(){
-		$('.toggle-entry textarea').each(function(){
-			$(this).val($(this).prev('div').children().html())
-		})
-	});
-}
-
-
 /**
  * 
  * form-aside loader
@@ -89,7 +64,7 @@ function addProcess(baseUrl,order,spinnerImgSrc,errorMsg){
 		$.ajax({
 			type :'GET',
 			dataType: 'json',
-			data:{"order":order,"type":$(this).prevAll(".idle-field").attr('name'),"value":$(this).prevAll(".idle-field").attr('value')},
+			data:{"order.id":order,"type":$(this).prevAll(".idle-field").attr('name'),"value":$(this).prevAll(".idle-field").attr('value')},
 			url:baseUrl,
 			success: function(data) {
 				$(e.target).prevAll(".ajax-error").fadeOut("slow");
@@ -118,7 +93,7 @@ function removeProcess(baseUrl){
 		$(this).fadeOut();
 		$(this).prevAll(".ajax-spinner").fadeIn();
 		$.ajax({
-			type :'GET',dataType: 'json',data:{"process":$(this).attr("name")},url:baseUrl,
+			type :'GET',dataType: 'json',data:{"process.id":$(this).attr("name")},url:baseUrl,
 			success: function(data) {
 				$(e.target).prevAll(".ajax-error").fadeOut("slow");
 				$(e.target).prevAll(".ajax-spinner").fadeOut("slow");
@@ -146,7 +121,7 @@ function addComment(baseUrl,order){
 		$(this).prevAll(".ajax-spinner").fadeIn();
 		$.ajax({
 			type :'GET',dataType: 'json',
-			data:{"order":order,"content":$("#comment-content").val()},
+			data:{"order.id":order,"content":$("#comment-content").val()},
 			url:baseUrl,
 			success: function(data) {
 				$(e.target).prevAll(".ajax-error").fadeOut("slow");
@@ -173,7 +148,7 @@ function removeComment(baseUrl){
 		$(this).fadeOut();
 		$(this).prevAll(".ajax-spinner").fadeIn();
 		$.ajax({
-			type :'GET',dataType: 'json',data:{"comment":$(this).attr("id")},
+			type :'GET',dataType: 'json',data:{"comment.id":$(this).attr("id")},
 			url:baseUrl,
 			success: function(data) {
 				$(e.target).prevAll(".ajax-error").fadeOut("slow");

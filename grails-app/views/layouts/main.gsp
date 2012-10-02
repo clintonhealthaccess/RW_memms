@@ -91,7 +91,7 @@
 			<li><a class="${controllerName=='equipment'?'active':''}" href="${createLink(controller:'equipment', action:'summaryPage')}"><g:message code="header.navigation.inventory"/></a></li>
 		</shiro:hasPermission>
 		<shiro:hasPermission permission="menu:correctivemaintenance">
-			<li><a class="${controllerName=='dashboard'?'active':''}" href="#"><g:message code="header.navigation.corrective.maintenance"/></a></li>
+			<li><a class="${controllerName=='workOrder'?'active':''}" href="${createLink(controller:'workOrder', action:'summaryPage')}"><g:message code="header.navigation.corrective.maintenance"/></a></li>
 		</shiro:hasPermission>
 		<shiro:hasPermission permission="menu:preventivemaintenance">
 			<li><a class="${controllerName=='dashboard'?'active':''}" href="#"><g:message code="header.navigation.preventive.maintenance"/></a></li>

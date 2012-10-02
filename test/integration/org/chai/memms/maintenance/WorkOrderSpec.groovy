@@ -49,6 +49,19 @@ class WorkOrderSpec extends IntegrationTests{
 		then:
 		WorkOrder.count() == 1
 	}
+	def "if status is clossed closedOn should be set"(){
+		setup:
+		setupLocationTree()
+		setupEquipment()
+		newUser("user", "user")
+		def workOrderWithError = new WorkOrder(equipment:Equipment.findBySerialNumber(CODE(123)), description: "test work order", criticality:Criticality.NORMAL, status:OrderStatus.CLOSEDFORDISPOSAL,
+				addedBy:User.findByUsername("user"), openOn:Initializer.getDate(12, 9, 2012), assistaceRequested:false)
+		when:
+		workOrderWithError.save()
+		then:
+		workOrderWithError.errors.hasFieldErrors("status") == true
+		WorkOrder.count() == 0
+	}
 	
 	def "retrieve notifications for a user"(){
 		setup:
@@ -99,7 +112,7 @@ class WorkOrderSpec extends IntegrationTests{
 		workOrder.processes=[actionOne,actionTwo,actionThree,materialFour]
 		then:
 		workOrder.actions.size() == 3
-		workOrder.actions.equals([actionOne,actionTwo,actionThree]) 
+		workOrder.actions.each{[actionOne,actionTwo,actionThree].contains(it) }
 		
 	} 
 	def "get list of used materials performed"(){
@@ -116,7 +129,7 @@ class WorkOrderSpec extends IntegrationTests{
 		workOrder.processes=[materialOne,actionTwo,actionThree,materialFour]
 		then:
 		workOrder.materials.size() == 2
-		workOrder.materials.equals([materialOne,materialFour])
+		workOrder.materials.each{[materialOne,materialFour].contains(it) }
 		
 	}
 }

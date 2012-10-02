@@ -58,9 +58,7 @@ modules = {
 	
 	datepicker {
 		dependsOn 'jquery'
-
-		resource url: '/js/jquery/datepicker/glDatePicker.js', bundle: 'core'
-		resource url: '/js/jquery/datepicker/datepicker.css', bundle: 'core'
+		
 	}
 	
 	fieldselection {
@@ -85,7 +83,7 @@ modules = {
 	}
 
 	form {
-		dependsOn 'jquery,cluetip,fieldselection'
+		dependsOn 'jquery,cluetip,fieldselection,datepicker'
 
 		resource url: '/js/jquery/form/jquery.form.js', bundle: 'core'
 		resource url: '/js/form-util.js', bundle: 'core'
