@@ -9,9 +9,9 @@
 			<th><g:message code="equipment.type.label"/></th>
 			<th><g:message code="work.order.status.label"/></th>
 			<th><g:message code="work.order.criticality.label"/></th>
-			<th><g:message code="work.order.description.label"/></th>
 			<th><g:message code="work.order.openOn.label"/></th>
 			<th><g:message code="work.order.closedOn.label"/></th>
+			<th><g:message code="work.order.description.label"/></th>
 			<th><g:message code="work.order.messages.label"/></th>
 		</tr>
 	</thead>
@@ -56,7 +56,7 @@
 					${order.closedOn}
 				</td>
 				<td>
-					<a href="${createLinkWithTargetURI(controller:'notification', action:'list', params:[workOrderId: order.id, read:false])}">${order.getUnReadNotificationsForUser(User.findByUuid(SecurityUtils.subject.principal, [cache: true])).size()}</a>
+					<a href="${createLinkWithTargetURI(controller:'notification', action:'list', params:[id: order.id, read:false])}">${order.getUnReadNotificationsForUser(User.findByUuid(SecurityUtils.subject.principal, [cache: true])).size()}</a>
 				</td>
 			</tr>
 		</g:each>

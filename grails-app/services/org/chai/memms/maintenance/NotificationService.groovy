@@ -68,11 +68,12 @@ class NotificationService {
 			}
     }
 	
-	List<Notification> filterNotifications(WorkOrder workOrder,User sender, User receiver,Boolean read, Map<String, String> params){
+	List<Notification> filterNotifications(WorkOrder workOrder,User receiver,Date from, Date to,Boolean read, Map<String, String> params){
 		def criteria = Notification.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(workOrder != null) eq("workOrder",workOrder)
-			if(sender != null) eq("sender",sender)
+			if(from != null) ge("writtenOn",from)
+			if(to != null) le("writtenOn",to)
 			if(receiver != null) eq("receiver",receiver)
 			if(read != null) eq("read",read)
 		}

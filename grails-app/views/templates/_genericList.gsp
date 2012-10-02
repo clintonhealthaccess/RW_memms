@@ -65,9 +65,7 @@
 		<g:if test="${entities.empty}">
 			<div class="main"><g:message code="entity.list.empty.label" args="[entityName]"/></div>
 		</g:if>
-		
 		<!-- End of template -->
-		
 		
 	</div>
 </div>

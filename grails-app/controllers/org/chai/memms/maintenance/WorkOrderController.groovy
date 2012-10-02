@@ -50,6 +50,7 @@ class WorkOrderController extends AbstractEntityController{
 	def workOrderService
 	def grailsApplication
 	def correctiveMaintenanceService
+	def locationService
 
 	def getEntity(def id) {
 		return WorkOrder.get(id)

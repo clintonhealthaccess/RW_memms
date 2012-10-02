@@ -27,7 +27,13 @@
  */
 package org.chai.memms.maintenance
 
+import java.util.Date;
+
+import org.chai.location.DataLocation;
 import org.chai.memms.AbstractEntityController;
+import org.chai.memms.equipment.Equipment;
+import org.chai.memms.maintenance.WorkOrder.Criticality;
+import org.chai.memms.maintenance.WorkOrder.OrderStatus;
 
 /**
  * @author Jean Kahigiso M.
@@ -69,15 +75,38 @@ class NotificationController extends AbstractEntityController{
 		]
 	}
 	
+	def read={
+		if(log.isDebugEnabled()) log.debug("Params = " + params)
+		adaptParamsForList()
+		def notificationId
+		if(!params.id) redirect(uri: getTargetURI())
+		else{
+			def notification = notificationService.readNotification(params.id)
+			if (log.isInfoEnabled()) log.info("reading notification: "+notification)
+
+			if (notification == null) {
+				flash.message = message(code: 'default.not.found.message', args: [message(code: getLabel(), default: 'notification'), params.id])
+				redirect(uri: getTargetURI())
+			}
+			else {
+				render(view: '/entity/notification/readNotification', model:[notification:notification, entityName:getLabel()])
+			}
+		}
+	}
+	
 	def list={
 		adaptParamsForList()
-		Boolean read = false
-		if(params.workOrderId) read  = params.boolean("read")
-		List<Notification> notifications = notificationService.filterNotifications(WorkOrder.get(params.long("workOrderId")), null, null,read, params)
+		
+		Boolean read = (params.read) ? params.boolean("read") : null;
+		WorkOrder workOrder = WorkOrder.get(params.id)
+		List<Notification> notifications = notificationService.filterNotifications(workOrder, user, null,null,read, params)
+		
 		render(view:"/entity/list", model:[
 			template:"notification/notificationList",
-			notifications: notifications,
+			filterTemplate:"notification/notificationFilter",
+			entities: notifications,
 			entityCount: notifications.totalCount,
+			workOrder:workOrder,
 			code: getLabel(),
 			entityClass: getEntityClass()
 			])
@@ -85,30 +114,49 @@ class NotificationController extends AbstractEntityController{
 	
 	def search = {
 		adaptParamsForList()
-//		List<Department> departments = departmentService.searchDepartment(params['q'], params)
-//				
-//		render (view:"/entity/list", model:[
-//			template:"department/departmentList",
-//			entities: departments,
-//			entityCount: departments.totalCount,
-//			code: getLabel(),
-//			names:names,
-//			q:params['q']
-//		])
-		
+		//TODO not implemented yet
 	}
 	def getAjaxData = {
-//		List<Department> departments = departmentService.searchDepartment(params['term'], [:])
-//		render(contentType:"text/json") {
-//			elements = array {
-//				departments.each { department ->
-//					elem (
-//						key: department.id,
-//						value: department.getNames(languageService.getCurrentLanguage())
-//					)
-//				}
-//			}
-//		}
-		
+		//TODO will be used fetch new notifications using ajax and update page
+	}
+	
+	def filter = {FilterCommand cmd ->
+		if(log.isDebugEnabled()) log.debug("Params = " + params+", cmd="+cmd)
+		adaptParamsForList()
+		List<Notification> notifications = notificationService.filterNotifications(cmd.workOrder, user, cmd.from,cmd.to,cmd.getReadStatus(), params)
+		render(view:"/entity/list", model:[
+			template:"notification/notificationList",
+			filterTemplate:"notification/notificationFilter",
+			entities: notifications,
+			entityCount: notifications.totalCount,
+			workOrder:cmd.workOrder,
+			code: getLabel(),
+			entityClass: getEntityClass()
+			])
 	}
 }
+
+class FilterCommand {
+	Date from
+	Date to
+	String read
+	WorkOrder workOrder
+
+	public boolean getReadStatus(){
+		if(read.equals("true")) return true
+		else if(read.equals("false")) return false
+		else return null
+	}
+
+	static constraints = {
+		from  nullable:true
+		to nullable:true
+		read nullable:true
+		workOrder nullable:true
+	}
+
+	String toString() {
+		return "FilterCommand[From="+from+", To="+to+", Read="+read+", WorkOrder="+workOrder+", Read Status="+ getReadStatus() + "]"
+	}
+}
+

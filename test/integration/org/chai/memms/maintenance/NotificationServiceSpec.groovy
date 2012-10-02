@@ -107,7 +107,7 @@ class NotificationServiceSpec  extends IntegrationTests{
 		Notification.count() == 2
 		Notification.get(notificationToRead.id).read
 	}
-	
+	//TODO filter by dates
 	def "can filter notifications"() {
 		setup:
 		setupLocationTree()
@@ -143,17 +143,15 @@ class NotificationServiceSpec  extends IntegrationTests{
 		notificationService.readNotification(notifications[0].id)
 		notificationService.readNotification(notifications[1].id)
 		when://getNotifications(WorkOrder workOrder,User sender, User receiver,Boolean read, Map<String, String> params)
-		def allNotifications = notificationService.filterNotifications(null,null, null,null, [:])
-		def readNotifications = notificationService.filterNotifications(null,null, null,true, [:])
-		def notificationsByWorkOrder = notificationService.filterNotifications(workOrderOne,null, null,null, [:])
-		def notificationsBySender = notificationService.filterNotifications(null,receiverFacility, null,null, [:])
-		def notificationsByreceiver = notificationService.filterNotifications(null,null, receiverMoH,null, [:])
-		def jointFilter = notificationService.filterNotifications(workOrderOne,senderOne, receiverFacility,true, [:])
+		def allNotifications = notificationService.filterNotifications(null,null, null,null,null, [:])
+		def readNotifications = notificationService.filterNotifications(null,null, null,null,true, [:])
+		def notificationsByWorkOrder = notificationService.filterNotifications(workOrderOne,null, null,null,null, [:])
+		def notificationsByreceiver = notificationService.filterNotifications(null,receiverMoH,null,null,null, [:])
+		def jointFilter = notificationService.filterNotifications(workOrderOne,receiverFacility,null,null,true, [:])
 		then:
 		allNotifications.size() == 4
 		readNotifications.size() == 2
 		notificationsByWorkOrder.size() == 3
-		notificationsBySender.size() == 2
 		notificationsByreceiver.size() == 1
 		jointFilter.size() == 1
 	}
