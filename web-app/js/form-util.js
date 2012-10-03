@@ -1,16 +1,21 @@
 
-/**
- * 
+/** 
  * Date picker
  */
-function getDatePicker(){
+function getDatePicker(iconPath){
 	$(function(){
-		$(".datePicker").datepicker();
+		$(".date-picker").datepicker({
+			changeYear: true,
+			dateFormat: "dd/mm/yy",
+			showOn: "both",
+			buttonImage: iconPath,
+			buttonImageOnly: true
+			
+		});
 	});
 }
-/**
- * 
- * form-aside loader
+/** 
+ * Form-aside loader
  */
 function getHtml(htmls,field){
 	var html=""

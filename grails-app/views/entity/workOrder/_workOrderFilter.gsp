@@ -29,8 +29,8 @@
 					<option value="true" ${filterCmd?.assistaceRequested?.equals("true")? 'selected' : ''}> <g:message code="default.boolean.true" /> </option>
 					<option value="false" ${filterCmd?.assistaceRequested?.equals("false")? 'selected' : ''}> <g:message code="default.boolean.false" /> </option>
 			</select></li>
-			<li> <g:inputDate name="openOn" precision="day" valueDefault="none"  value="${filterCmd?.openOn}" label="${message(code:'work.order.openOn.label')}" bean="${filterCmd}" field="openOn"/> </li>
-			<li> <g:inputDate name="closedOn" precision="day" valueDefault="none"  value="${filterCmd?.closedOn}" label="${message(code:'work.order.closedOn.label')}" bean="${filterCmd}" field="closedOn"/> </li>
+			<li><g:input name="openOn" dateClass="date-picker" label="${message(code:'work.order.openOn.label')}" bean="${filterCmd}" field="openOn"/></li>
+			<li><g:input name="closedOn" dateClass="date-picker" label="${message(code:'work.order.closedOn.label')}" bean="${filterCmd}" field="closedOn"/></li>
 		</ul>
 		<button type="submit">Filter</button>
 		<input type="hidden" name="dataLocation.id" value="${dataLocation?.id}" />

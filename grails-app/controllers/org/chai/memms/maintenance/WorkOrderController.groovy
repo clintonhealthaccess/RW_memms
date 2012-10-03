@@ -73,7 +73,7 @@ class WorkOrderController extends AbstractEntityController{
 	def bindParams(def entity) {
 		if(!entity.id){
 			entity.addedBy = user
-			entity.openOn = new Date()
+			entity.openOn = now
 			entity.assistaceRequested = false
 			entity.status = OrderStatus.OPEN
 		}else{
@@ -111,7 +111,7 @@ class WorkOrderController extends AbstractEntityController{
 		}
 
 		render(view:"/entity/list", model:[
-					template:"workorder/workorderList",
+					template:"workorder/workOrderList",
 					filterTemplate:"workorder/workOrderFilter",
 					entities: orders,
 					entityCount: orders.totalCount,
@@ -262,7 +262,7 @@ class WorkOrderController extends AbstractEntityController{
 		}
 		List<WorkOrder> workOrders = workOrderService.searchWorkOrder(params['q'],dataLocation,equipment,params)
 		render (view: '/entity/list', model:[
-					template:"workorder/workorderList",
+					template:"workorder/workOrderList",
 					filterTemplate:"workorder/workOrderFilter",
 					entities: workOrders,
 					entityCount: workOrders.totalCount,
@@ -273,13 +273,13 @@ class WorkOrderController extends AbstractEntityController{
 				])
 	}
 
-	def filter = {FilterCommand cmd ->
+	def filter = { FilterCommand cmd ->
 		if(log.isDebugEnabled()) log.debug(cmd)
 		adaptParamsForList()
 		List<WorkOrder> orders = workOrderService.filterWorkOrders(cmd.dataLocation,cmd.equipment,cmd.openOn,cmd.closedOn,cmd.getAssistanceStatus(),cmd.criticality,cmd.status,params)
 
 		render(view:"/entity/list", model:[
-					template:"workorder/workorderList",
+					template:"workorder/workOrderList",
 					filterTemplate:"workorder/workOrderFilter",
 					entities: orders,
 					entityCount: orders.totalCount,
@@ -292,6 +292,7 @@ class WorkOrderController extends AbstractEntityController{
 }
 
 class FilterCommand {
+	
 	Date openOn
 	Date closedOn
 	String assistaceRequested

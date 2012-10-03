@@ -58,6 +58,8 @@ modules = {
 	
 	datepicker {
 		dependsOn 'jquery'
+		resource url: '/js/jquery/jquery-ui/css/cupertino/jquery-ui-1.8.24.custom.css', bundle: 'core'
+		resource url: '/js/jquery/jquery-ui/js/jquery-ui-1.8.24.custom.min.js', bundle: 'core'
 		
 	}
 	
@@ -98,22 +100,12 @@ modules = {
 	
 	dropdown {
 		dependsOn 'jquery'
-
+		
 		resource url: '/js/dropdown_init.js', bundle: 'core'
 	}
-	
-	richeditor {
-		resource url: '/js/richeditor/nicEdit.js', bundle: 'admin'
-	}
-	
-	spinner {
-		dependsOn 'jquery'
-
-		resource url: '/js/spinner.js'
-	}
-	
+		
 	list {
-		dependsOn 'core,spinner,form,fieldselection,cluetip,dropdown,explanation,chosen'
+		dependsOn 'core,form,fieldselection,cluetip,dropdown,chosen'
 	}
 	
 	progressbar {
@@ -121,12 +113,6 @@ modules = {
 
 		resource url: '/js/jquery/progressbar/jquery.progressbar.js', bundle: 'core'
 		resource url: '/js/progressbar_init.js', bundle: 'core'
-	}
-	
-	explanation {
-		dependsOn 'jquery'
-
-		resource url: '/js/explanation_init.js', bundle: 'core'
 	}
 	
 }

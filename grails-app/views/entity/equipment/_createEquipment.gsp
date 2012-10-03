@@ -1,6 +1,5 @@
 <%@ page import="org.chai.memms.util.Utils" %>
 <%@ page import="org.chai.memms.equipment.EquipmentStatus.Status" %>
-<%@ page import="java.util.Date" %>
 
 <div  class="entity-form-container togglable">
   <div class="heading1-bar">
@@ -60,7 +59,7 @@
       	<g:selectFromList name="manufacturer.id" label="${message(code:'provider.type.manufacturer')}" bean="${equipment}" field="manufacturer" optionKey="id" multiple="false"
   			ajaxLink="${createLink(controller:'provider', action:'getAjaxData', params: [type:'MANUFACTURER'])}"
   			from="${manufacturers}" value="${equipment?.manufacturer?.id}" values="${manufacturers.collect{it.contact.contactName}}" />	
-  			<g:input name="manufactureDate" label="${message(code:'equipment.manufacture.date.label')}" bean="${equipment}" field="manufactureDate"/>
+  			<g:input name="manufactureDate" dateClass="date-picker" label="${message(code:'equipment.manufacture.date.label')}" bean="${equipment}" field="manufactureDate"/>
      	</fieldset>
     	  <div id="form-aside-manufacturer" class="form-aside">
 	    	  <g:if test="${equipment.id != null}">
@@ -79,7 +78,7 @@
       	<g:selectFromList name="supplier.id" label="${message(code:'provider.type.supplier')}" bean="${equipment}" field="supplier" optionKey="id" multiple="false"
   			ajaxLink="${createLink(controller:'provider', action:'getAjaxData', params: [type:'SUPPLIER'])}"
   			from="${suppliers}" value="${equipment?.supplier?.id}" values="${suppliers.collect{it.contact.contactName}}" />		
-  			<g:input name="purchaseDate" label="${message(code:'equipment.purchase.date.label')}" bean="${equipment}" field="purchaseDate"/>
+  			<g:input name="purchaseDate" dateClass="date-picker" label="${message(code:'equipment.purchase.date.label')}" bean="${equipment}" field="purchaseDate"/>
     		<g:inputBox name="donation"  label="${message(code:'equipment.donation.label')}" bean="${equipment}" field="donation" value="${equipment.donation}" checked="${(equipment.donation)? true:false}"/>
     		<g:currency costName="purchaseCost" id="purchase-cost" costLabel="${message(code:'equipment.purchase.cost.label')}" bean="${equipment}" costField="purchaseCost"  currencyName="currency" values="${currencies}" currencyField="currency" currencyLabel="${message(code:'equipment.currency.label')}"/>
      	</fieldset>
@@ -100,7 +99,7 @@
       	<g:if test="${equipment.id == null}">
       			<g:inputBox name="obsolete"  label="${message(code:'equipment.obsolete.label')}" bean="${equipment}" field="obsolete" value="${equipment.obsolete}" checked="${(equipment.obsolete)? true:false}"/>
       			<g:selectFromEnum name="status" bean="${cmd}" values="${Status.values()}" field="status" label="${message(code:'equipment.status.label')}"/>
-      			<g:input name="dateOfEvent" label="${message(code:'equipment.status.date.of.event.label')}" bean="${cmd}" field="dateOfEvent"/>
+      			<g:input name="dateOfEvent" dateClass="date-picker" label="${message(code:'equipment.status.date.of.event.label')}" bean="${cmd}" field="dateOfEvent"/>
       	</g:if>
       	<g:if test="${equipment?.status!=null}">
       	<g:inputBox name="obsolete"  label="${message(code:'equipment.obsolete.label')}" bean="${equipment}" field="obsolete" value="${equipment.obsolete}" checked="${(equipment.obsolete)? true:false}"/>
@@ -152,7 +151,7 @@
           <g:message code="equipment.section.warranty.information.label" default="Warranty Information"/>
         </h4>
         <g:inputBox name="warranty.sameAsSupplier"  label="${message(code:'equipment.same.as.supplier.label')}" bean="${equipment}" field="warranty.sameAsSupplier" checked="${(equipment.warranty?.sameAsSupplier)? true:false}"/>
-      	<g:input name="warranty.startDate" label="${message(code:'warranty.start.date.label')}" bean="${equipment}" field="warranty.startDate"/>
+      	<g:input name="warranty.startDate" dateClass="date-picker" label="${message(code:'warranty.start.date.label')}" bean="${equipment}" field="warranty.startDate"/>
     	<g:input name="warranty.numberOfMonth" label="${message(code:'equipment.warranty.period.label')}" bean="${equipment}" field="warranty.numberOfMonth"/>
       	<g:address  bean="${equipment}" warranty="true" field="warranty.contact"/>
      	<g:i18nTextarea name="warranty.descriptions" bean="${equipment}" label="${message(code:'warranty.descriptions.label')}" field="descriptions" height="150" width="300" maxHeight="150" />	 			
@@ -175,5 +174,6 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		getToHide("${equipment.donation}","${equipment.warranty?.sameAsSupplier}");
+		getDatePicker("${resource(dir:'images',file:'calendar.jpeg')}")
 	});
 </script>

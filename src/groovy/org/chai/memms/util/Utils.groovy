@@ -57,7 +57,6 @@ import org.chai.memms.security.User
  */
 public class Utils {
 	
-	
 	private final static String DATE_FORMAT = "dd/MM/yyyy";
 	private final static String DATE_FORMAT_TIME = "dd/MM/yyyy hh:mm:ss";
 	public final static String ZIP_FILE_EXTENSION = ".zip";

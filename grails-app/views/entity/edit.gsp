@@ -1,3 +1,4 @@
+<%@ page import="org.chai.memms.util.Utils" %>
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
