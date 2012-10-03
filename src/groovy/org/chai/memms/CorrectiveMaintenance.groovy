@@ -1,5 +1,5 @@
-/** 
- * Copyright (c) 2011, Clinton Health Access Initiative.
+/**
+ * Copyright (c) 2012, Clinton Health Access Initiative.
  *
  * All rights reserved.
  *
@@ -13,7 +13,7 @@
  *     * Neither the name of the <organization> nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -25,64 +25,11 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.equipment
+package org.chai.memms
 
-import i18nfields.I18nFields
+import org.chai.location.DataLocation
 
-/**
- * @author Jean Kahigiso M.
- *
- */
-@i18nfields.I18nFields
-class EquipmentModel {
-	
-	String code
-	String names
-	String descriptions
-	
-	static i18nFields = ["names","descriptions"]
-	static hasMany =  [equipments:Equipment]
-	
-	static constraints = {
-		code nullable: false, blank: false, unique: true
-		names  nullable: true, blank: true
-		descriptions  nullable: true, blank: true
-	}
-
-
-	static mapping = {
-		table "memms_equipment_model"
-		version false
-		names_en type: "text"
-		names_fr type: "text"
-		descriptions_en type: "text"
-		descriptions_fr type: "text"
-	}
-
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((code == null) ? 0 : code.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this.is(obj))
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		EquipmentModel other = (EquipmentModel) obj;
-		if (code == null) {
-			if (other.code != null)
-				return false;
-		} else if (!code.equals(other.code))
-			return false;
-		return true;
-	}	
-	
+class CorrectiveMaintenance {
+	DataLocation dataLocation
+	Integer workOrderCount
 }

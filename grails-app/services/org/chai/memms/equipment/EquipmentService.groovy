@@ -62,15 +62,15 @@ class EquipmentService {
 	static transactional = true
 	def languageService;
 		
-	public List<Equipment> searchEquipment(String text,DataLocation location,Map<String, String> params) {
+	public List<Equipment> searchEquipment(String text,DataLocation dataLocation,Map<String, String> params) {
 		def dbFieldTypeNames = 'names_'+languageService.getCurrentLanguagePrefix();
 		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
 		def criteria = Equipment.createCriteria();
 		
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			    createAlias("type","t")
-				if(location)
-					eq('dataLocation',location)
+				if(dataLocation!=null)
+					eq('dataLocation',dataLocation)
 				or{
 					ilike("serialNumber","%"+text+"%")
 					ilike(dbFieldDescriptions,"%"+text+"%") 
@@ -115,7 +115,6 @@ class EquipmentService {
 	}
 	
 	public File exporter(DataLocation dataLocation,List<Equipment> equipments){
-		if (log.isDebugEnabled()) log.debug("exportData");
 		if (log.isDebugEnabled()) log.debug("equipmentService.exporter, dataLocation code: "+dataLocation.code + ", ImportExportConstant: "+ImportExportConstant.CSV_FILE_EXTENSION)
 		File csvFile = File.createTempFile(dataLocation.code+"_export",ImportExportConstant.CSV_FILE_EXTENSION);
 		FileWriter csvFileWriter = new FileWriter(csvFile);
@@ -160,6 +159,7 @@ class EquipmentService {
 
 	public List<String> getExportDataHeaders() {
 		List<String> headers = new ArrayList<String>();
+		
 		headers.add(ImportExportConstant.EQUIPMENT_SERIAL_NUMBER)
 		headers.add(ImportExportConstant.DEVICE_CODE)
 		headers.add(ImportExportConstant.DEVICE_NAME_EN)

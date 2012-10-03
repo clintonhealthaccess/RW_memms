@@ -273,7 +273,7 @@
       function doNothing() {}; //empty function
       tipTitle ? $cluetipTitle.show().html(tipTitle) : (opts.showTitle) ? $cluetipTitle.show().html('&nbsp;') : $cluetipTitle.hide();
       if (opts.sticky) {
-        var $closeLink = $('<div id="cluetip-close"><a href="#">' + opts.closeText + '</a></div>');
+        var $closeLink = $('<div id="cluetip-close"><a href="#">' + '<img src="../images/icon_close.png" alt="Close" />' + '</a></div>');
         (opts.closePosition == 'bottom') ? $closeLink.appendTo($cluetipInner) : (opts.closePosition == 'title') ? $closeLink.prependTo($cluetipTitle) : $closeLink.prependTo($cluetipInner);
         $closeLink.bind('click.cluetip', function() {
           cluetipClose();

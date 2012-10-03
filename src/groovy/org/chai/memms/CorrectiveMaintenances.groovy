@@ -1,4 +1,4 @@
-package org.chai.memms.correctiveMaintenance
+package org.chai.memms
 
 import java.util.List;
 

@@ -41,9 +41,7 @@ class EquipmentStatusController extends AbstractEntityController{
 		return EquipmentStatus.get(id);
 	}
 	def createEntity() {
-		def entity = new EquipmentStatus();
-		if(!params["equipment.id"]) entity.equipment = Equipment.get(params.int("equipment"))
-		return entity;
+		return new EquipmentStatus();
 	}
 
 	def getTemplate() {
@@ -51,6 +49,7 @@ class EquipmentStatusController extends AbstractEntityController{
 	}
 
 	def getLabel() {
+		
 		return "equipment.status.label";
 
 	}
@@ -86,6 +85,7 @@ class EquipmentStatusController extends AbstractEntityController{
 	}
 	
 	def getModel(def entity) {
+		
 		[
 			status:entity,
 			equipment:entity.equipment,
@@ -95,11 +95,11 @@ class EquipmentStatusController extends AbstractEntityController{
 	
 	def list={
 		adaptParamsForList()
-		def equipment = Equipment.get(params.int("equipment"))
+		def equipment = Equipment.get(params.int("equipment.id"))
 		
-		if (equipment == null) {
+		if (equipment == null) 
 			response.sendError(404)
-		}else{
+		else{
 			List<EquipmentStatus> equipmentStatus  = equipmentStatusService.getEquipmentStatusByEquipment(equipment,params)		
 			render(view:"/entity/list", model:[
 				template: "equipmentStatus/equipmentStatusList",

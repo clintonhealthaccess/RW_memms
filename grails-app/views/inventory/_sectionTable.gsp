@@ -16,12 +16,12 @@
 				</td>
 				<td>
 					<shiro:hasPermission permission="equipment:create">
-						<a href="${createLink(controller: 'equipment', action: 'create', params:[location: inventory.dataLocation.id])}"><g:message code="inventory.add.equipment.label" /></a>
+						<a href="${createLink(controller: 'equipment', action: 'create', params:['dataLocation.id': inventory.dataLocation.id])}"><g:message code="inventory.add.equipment.label" /></a>
 					</shiro:hasPermission>
 				</td>
 				<td>
 					<shiro:hasPermission permission="equipment:list">
-						<a href="${createLink(controller: 'equipment', action: 'list', params:[location: inventory.dataLocation.id] )}"><g:message code="inventory.manage.equipment.label" /></a>
+						<a href="${createLink(controller: 'equipment', action: 'list', params:['dataLocation.id': inventory.dataLocation.id] )}"><g:message code="inventory.manage.equipment.label" /></a>
 					</shiro:hasPermission>
 				</td>
 			</tr>

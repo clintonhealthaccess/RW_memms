@@ -33,14 +33,20 @@ import org.chai.memms.maintenance.WorkOrder.Criticality
 import org.chai.memms.maintenance.WorkOrder.OrderStatus
 import org.chai.memms.security.User;
 import java.util.Map;
+import org.chai.location.CalculationLocation;
+import org.chai.location.DataLocation;
+import org.chai.location.DataLocationType;
+import org.chai.location.Location;
+import org.chai.memms.equipment.Equipment;
 import org.chai.memms.maintenance.MaintenanceProcess.ProcessType;
 
 /**
  * @author Jean Kahigiso M.
  *
  */
-class WorkOrderService {
-
+class WorkOrderService {	
+	def equipmentService
+	def locationService
 	static transactional = true
 	def languageService;
 	def notificationService
@@ -58,9 +64,12 @@ class WorkOrderService {
 		def dbFieldTypeNames = 'names_'+languageService.getCurrentLanguagePrefix();
 		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
 		def criteria = WorkOrder.createCriteria()
+		
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			if(workOrdersEquipment)  eq('equipment',workOrdersEquipment)
-			if(location) equipment{eq('dataLocation',location)}
+			if(workOrdersEquipment)  
+				eq('equipment',workOrdersEquipment)
+			if(location) 
+				equipment{eq('dataLocation',location)}
 			or{
 				ilike("description","%"+text+"%")
 				equipment{
@@ -104,6 +113,7 @@ class WorkOrderService {
 				equipment{
 					eq('dataLocation',dataLocation)
 				}
+				
 			if(workOrdersEquipment)
 				eq("equipment",workOrdersEquipment)
 			if(openOn)
@@ -119,13 +129,42 @@ class WorkOrderService {
 		}
 	}
 	
-	def escalateWorkOrder(WorkOrder  workOrder,String content, User escalatedBy){
+	def escalateWorkOrder(WorkOrder workOrder,String content, User escalatedBy){
 		if(workOrder.assistaceRequested)
 			notificationService.sendNotifications(workOrder,"${content}\nPlease follow up on this work order.",escalatedBy)
 		else{
 			workOrder.assistaceRequested = true
 			workOrder.save(flush:true,failOnError: true)
 			notificationService.newNotification(workOrder,"${content}\nPlease follow up on this work order.",escalatedBy)
+		}
+	}
+	
+	List<WorkOrder> getWorkOrdersByEquipment(Equipment equipment, Map<String, String> params){
+		def criteria = WorkOrder.createCriteria();
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			if(equipment)
+				eq("equipment",equipment)
+		}
+	}
+	
+	List<WorkOrder> getWorkOrdersByCalculationLocation(CalculationLocation location,List<DataLocationType> types, Map<String, String> params){
+		def equipments =[]
+		def criteria = WorkOrder.createCriteria();
+		
+		if(location instanceof DataLocation)
+			equipments = equipmentService.getEquipmentsByDataLocation(location, [:])
+		else{
+			def dataLocations = locationService.getDataLocations(null,(types)? types:null)
+			for(DataLocation dataLocation: dataLocations)
+				equipments.addAll( equipmentService.getEquipmentsByDataLocation(dataLocation, [:]))
+		}
+		
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			or{
+				equipments.each { equipment ->
+					eq("equipment",equipment)
+				}
+			}
 		}
 	}
 }

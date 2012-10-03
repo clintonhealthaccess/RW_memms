@@ -48,7 +48,6 @@ class EquipmentSpec extends IntegrationTests{
 		setup:
 		setupLocationTree()
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
-		def equipmentModel = Initializer.newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 		when:
 		def equipment = new Equipment(serialNumber:"test123",manufactureDate:Initializer.getDate(22,07,2010),
@@ -80,7 +79,6 @@ class EquipmentSpec extends IntegrationTests{
 		setup:
 		setupLocationTree()
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
-		def equipmentModel = Initializer.newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810), ["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 		when:
 		def equipment = new Equipment(purchaseCost:"1,200",manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),
@@ -110,7 +108,6 @@ class EquipmentSpec extends IntegrationTests{
 		setup:
 		setupLocationTree()
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
-		def equipmentModel = Initializer.newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810), ["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 		when:
 		def equipment = new Equipment(purchaseCost:"200455.8",serialNumber:"test123",manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),
@@ -142,7 +139,6 @@ class EquipmentSpec extends IntegrationTests{
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
-		def equipmentModel = Initializer.newEquipmentModel(['en':"testName"], CODE(124),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810), ["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
@@ -172,7 +168,6 @@ class EquipmentSpec extends IntegrationTests{
 		setup:
 		setupLocationTree()
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
-		def equipmentModel = Initializer.newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType("15810", ["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 		when:
 		def equipment = new Equipment(serialNumber:"test123", purchaseCost:"1,200",currency:"EURO",manufactureDate:Initializer.now().next(),purchaseDate:Initializer.getDate(22,07,2010),
@@ -202,7 +197,6 @@ class EquipmentSpec extends IntegrationTests{
 		setup:
 		setupLocationTree()
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
-		def equipmentModel = Initializer.newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType("15810", ["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 		when:
 		def equipment = new Equipment(serialNumber:"test123", purchaseCost:"1,200",currency:"USD",manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.now().next(),
@@ -231,7 +225,6 @@ class EquipmentSpec extends IntegrationTests{
 		setup:
 		setupLocationTree()
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
-		def equipmentModel = Initializer.newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 		def user  = newUser("admin", "Admin UID")
 		def equipment = new Equipment(serialNumber:"test123",manufactureDate:Initializer.getDate(22,07,2010),
@@ -254,9 +247,9 @@ class EquipmentSpec extends IntegrationTests{
 		equipment.save(failOnError: true)
 		
 		when:
-		def statusThree= Initializer.newEquipmentStatus(Initializer.getDate(10, 12, 2010),User.findByUsername("admin"),Status.INSTOCK,equipment,false)
-		def statusTwo= Initializer.newEquipmentStatus(Initializer.getDate(10, 12, 2011),User.findByUsername("admin"),Status.OPERATIONAL,equipment,false)
-		def statusOne= Initializer.newEquipmentStatus(Initializer.getDate(10, 07, 2012),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipment,true)
+		def statusThree= Initializer.newEquipmentStatus(Initializer.getDate(10, 12, 2010),User.findByUsername("admin"),Status.INSTOCK,equipment,false,[:])
+		def statusTwo= Initializer.newEquipmentStatus(Initializer.getDate(10, 12, 2011),User.findByUsername("admin"),Status.OPERATIONAL,equipment,false,[:])
+		def statusOne= Initializer.newEquipmentStatus(Initializer.getDate(10, 07, 2012),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipment,true,[:])
 		equipment.status =[statusThree,statusTwo,statusOne]
 		equipment.save(failOnError: true)
 		then:
@@ -268,7 +261,6 @@ class EquipmentSpec extends IntegrationTests{
 		setup:
 		setupLocationTree()
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
-		def equipmentModel = Initializer.newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 		def user  = newUser("admin", "Admin UID")
 		def equipment = new Equipment(serialNumber:"test123", purchaseCost:"1,200",currency:"RWF",manufactureDate:Initializer.getDate(22,07,2010),
@@ -290,9 +282,9 @@ class EquipmentSpec extends IntegrationTests{
 		equipment.warranty=warranty
 		equipment.save(failOnError: true)
 		when:
-		def statusThree= Initializer.newEquipmentStatus(Initializer.getDate(10, 12, 2010),User.findByUsername("admin"),Status.INSTOCK,equipment,false)
-		def statusTwo= Initializer.newEquipmentStatus(Initializer.getDate(10, 12, 2011),User.findByUsername("admin"),Status.OPERATIONAL,equipment,true)
-		def statusOne= Initializer.newEquipmentStatus(Initializer.getDate(10, 07, 2012),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipment,false)
+		def statusThree= Initializer.newEquipmentStatus(Initializer.getDate(10, 12, 2010),User.findByUsername("admin"),Status.INSTOCK,equipment,false,[:])
+		def statusTwo= Initializer.newEquipmentStatus(Initializer.getDate(10, 12, 2011),User.findByUsername("admin"),Status.OPERATIONAL,equipment,true,[:])
+		def statusOne= Initializer.newEquipmentStatus(Initializer.getDate(10, 07, 2012),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipment,false,[:])
 		equipment.status =[statusThree,statusTwo,statusOne]
 		equipment.save(failOnError: true)
 		Equipment.list()[0].setCurrentStatus()
@@ -306,7 +298,6 @@ class EquipmentSpec extends IntegrationTests{
 		setup:
 		setupLocationTree()
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
-		def equipmentModel = Initializer.newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 		def user  = newUser("admin", "Admin UID")
 		def equipment = new Equipment(serialNumber:"test123", purchaseCost:"1,200",currency:"RWF",manufactureDate:Initializer.getDate(22,07,2010),
@@ -326,9 +317,9 @@ class EquipmentSpec extends IntegrationTests{
 		
 		
 		when:
-		def statusThree= Initializer.newEquipmentStatus(Initializer.getDate(10, 12, 2010),User.findByUsername("admin"),Status.INSTOCK,equipment,false)
-		def statusTwo= Initializer.newEquipmentStatus(Initializer.getDate(10, 12, 2011),User.findByUsername("admin"),Status.OPERATIONAL,equipment,false)
-		def statusOne= Initializer.newEquipmentStatus(Initializer.getDate(10, 07, 2012),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipment,false)
+		def statusThree= Initializer.newEquipmentStatus(Initializer.getDate(10, 12, 2010),User.findByUsername("admin"),Status.INSTOCK,equipment,false,[:])
+		def statusTwo= Initializer.newEquipmentStatus(Initializer.getDate(10, 12, 2011),User.findByUsername("admin"),Status.OPERATIONAL,equipment,false,[:])
+		def statusOne= Initializer.newEquipmentStatus(Initializer.getDate(10, 07, 2012),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipment,false,[:])
 		equipment.status =[statusThree,statusTwo,statusOne]
 		equipment.save(failOnError: true)
 		then:
@@ -340,9 +331,9 @@ class EquipmentSpec extends IntegrationTests{
 		when:
 		equipment.status=[]
 		equipment.save(failOnError: true)
-		def statusSix= Initializer.newEquipmentStatus(Initializer.getDate(10, 12, 2010),User.findByUsername("admin"),Status.INSTOCK,equipment,false)
-		def statusFive= Initializer.newEquipmentStatus(Initializer.getDate(10, 12, 2011),User.findByUsername("admin"),Status.OPERATIONAL,equipment,false)
-		def statusFour= Initializer.newEquipmentStatus(Initializer.getDate(10, 07, 2012),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipment,true)
+		def statusSix= Initializer.newEquipmentStatus(Initializer.getDate(10, 12, 2010),User.findByUsername("admin"),Status.INSTOCK,equipment,false,[:])
+		def statusFive= Initializer.newEquipmentStatus(Initializer.getDate(10, 12, 2011),User.findByUsername("admin"),Status.OPERATIONAL,equipment,false,[:])
+		def statusFour= Initializer.newEquipmentStatus(Initializer.getDate(10, 07, 2012),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipment,true,[:])
 		equipment.status =[statusSix,statusFive,statusFour]
 		equipment.save(failOnError: true)
 		then:
@@ -353,9 +344,9 @@ class EquipmentSpec extends IntegrationTests{
 		when:
 		equipment.status=[]
 		equipment.save(failOnError: true)
-		def statusN= Initializer.newEquipmentStatus(Initializer.getDate(10, 12, 2010),User.findByUsername("admin"),Status.INSTOCK,equipment,false)
-		def statusH= Initializer.newEquipmentStatus(Initializer.getDate(10, 12, 2011),User.findByUsername("admin"),Status.OPERATIONAL,equipment,true)
-		def statusS= Initializer.newEquipmentStatus(Initializer.getDate(10, 07, 2012),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipment,false)
+		def statusN= Initializer.newEquipmentStatus(Initializer.getDate(10, 12, 2010),User.findByUsername("admin"),Status.INSTOCK,equipment,false,[:])
+		def statusH= Initializer.newEquipmentStatus(Initializer.getDate(10, 12, 2011),User.findByUsername("admin"),Status.OPERATIONAL,equipment,true,[:])
+		def statusS= Initializer.newEquipmentStatus(Initializer.getDate(10, 07, 2012),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipment,false,[:])
 		equipment.status =[statusN,statusH,statusS]
 		equipment.save(failOnError: true)
 		then:

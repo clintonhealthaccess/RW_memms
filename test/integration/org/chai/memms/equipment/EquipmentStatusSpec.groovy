@@ -23,7 +23,6 @@ class EquipmentStatusSpec extends IntegrationTests{
 		
 		def user  = newUser("admin", "Admin UID")
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
-		def equipmentModel = Initializer.newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 		def equipment = Initializer.newEquipment(
 					"SERIAL10",false,false,32,"ROOM A1"
@@ -40,7 +39,7 @@ class EquipmentStatusSpec extends IntegrationTests{
 					)
 		
 		when:
-		def statusOne = Initializer.newEquipmentStatus(new Date(),User.findByUsername("admin"),Status.INSTOCK,equipment,true)
+		def statusOne = Initializer.newEquipmentStatus(new Date(),User.findByUsername("admin"),Status.INSTOCK,equipment,true,[:])
 		def statusTwo = new EquipmentStatus(statusChangeDate:new Date(),changedBy:User.findByUsername("admin"),status:Status.INSTOCK,equipment:equipment,current:true,dateOfEvent:Initializer.getDate(10, 07,2012)).save(failOnError: true)
 		then:
 		EquipmentStatus.count() == 2

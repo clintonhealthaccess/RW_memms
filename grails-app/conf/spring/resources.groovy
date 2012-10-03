@@ -1,3 +1,5 @@
+import org.chai.memms.DatePropertyEditorRegistrar;
+
 /**
  * Copyright (c) 2012, Clinton Health Access Initiative.
  *
@@ -27,5 +29,8 @@
  */
 // Place your Spring DSL code here
 beans = {
-
-	}
+	
+	datePropertyEditorRegistrar(DatePropertyEditorRegistrar) {
+		messageSource = ref('messageSource')
+	 }
+}

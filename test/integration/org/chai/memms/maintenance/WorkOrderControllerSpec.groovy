@@ -70,7 +70,7 @@ class WorkOrderControllerSpec extends IntegrationTests{
 		def workOrder = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, User.findByUsername("user"), new Date())
 		workOrderController = new WorkOrderController()
 		when:
-		workOrderController.params.order = workOrder.id
+		workOrderController.params.'order.id' = workOrder.id
 		workOrderController.params.type = "action"
 		workOrderController.params."value" = "text action"
 		workOrderController.addProcess()
@@ -90,7 +90,7 @@ class WorkOrderControllerSpec extends IntegrationTests{
 		workOrder.save(flush:true)
 		workOrderController = new WorkOrderController()
 		when:
-		workOrderController.params.process = process.id
+		workOrderController.params.'process.id' = process.id
 		workOrderController.removeProcess()
 		then:
 		workOrder.actions.size() == 0
@@ -105,7 +105,7 @@ class WorkOrderControllerSpec extends IntegrationTests{
 		def workOrder = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, User.findByUsername("user"), new Date())
 		workOrderController = new WorkOrderController()
 		when:
-		workOrderController.params.order = workOrder.id
+		workOrderController.params.'order.id' = workOrder.id
 		workOrderController.params.content = "comment content text"
 		workOrderController.addComment()
 		then:
@@ -124,7 +124,7 @@ class WorkOrderControllerSpec extends IntegrationTests{
 		workOrder.save(flush:true)
 		workOrderController = new WorkOrderController()
 		when:
-		workOrderController.params.comment = comment.id
+		workOrderController.params.'comment.id' = comment.id
 		workOrderController.removeComment()
 		then:
 		workOrder.comments.size() == 0

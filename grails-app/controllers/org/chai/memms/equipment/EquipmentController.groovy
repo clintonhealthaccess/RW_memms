@@ -35,6 +35,7 @@ import org.chai.memms.equipment.EquipmentStatus.Status;
 import org.chai.memms.security.User;
 import org.chai.memms.security.User.UserType;
 import org.chai.memms.task.EquipmentExportFilter;
+import org.chai.memms.util.Utils;
 import org.chai.memms.equipment.Provider
 import org.chai.location.DataLocation;
 import org.chai.location.CalculationLocation;
@@ -66,9 +67,7 @@ class EquipmentController extends AbstractEntityController{
 	}
 
 	def createEntity() {
-		def entity = new Equipment();
-		if(!params["dataLocation.id"]) entity.dataLocation = DataLocation.get(params.int("location"));
-		return entity;
+		return new Equipment();
 	}
 
 	def getTemplate() {
@@ -120,7 +119,7 @@ class EquipmentController extends AbstractEntityController{
 	def saveEntity(def entity) {
 		def currentStatus 
 		if(entity.id==null)
-			currentStatus = newEquipmentStatus(new Date(),getUser(),params.cmd.status,entity,true,params.cmd.dateOfEvent)
+			currentStatus = newEquipmentStatus(now,user,params.cmd.status,entity,true,params.cmd.dateOfEvent)
 		entity.save()
 		(!currentStatus)?:currentStatus.save()
 		
@@ -152,10 +151,30 @@ class EquipmentController extends AbstractEntityController{
 
 		]
 	}
+	
+	def list={
+		def dataLocation = DataLocation.get(params.int('dataLocation.id'))
+		if (dataLocation == null)
+			response.sendError(404)
+			
+		adaptParamsForList()
+		def equipments = equipmentService.getEquipmentsByDataLocation(dataLocation,params)
+		render(view:"/entity/list", model:[
+				template:"equipment/equipmentList",
+				filterTemplate:"equipment/equipmentFilter",
+				dataLocation:dataLocation,
+				entities: equipments,
+				entityCount: equipments.totalCount,
+				code: getLabel(),
+				entityClass: getEntityClass()
+				])
+
+
+	}
 
 	def search = {
 		adaptParamsForList()
-		def location = DataLocation.get(params.int("location"));
+		def location = DataLocation.get(params.int("dataLocation.id"));
 		if (location == null)
 			response.sendError(404)
 		else{
@@ -200,43 +219,7 @@ class EquipmentController extends AbstractEntityController{
 			entityClass: getEntityClass()
 		])
 	}
-	
-	def list={ 
-		def dataLocation = DataLocation.get(params.long('location'))
-		if (dataLocation == null)
-			response.sendError(404)
-			
-		adaptParamsForList()
-		def equipments = equipmentService.getEquipmentsByDataLocation(dataLocation,params)								
-		render(view:"/entity/list", model:[
-				template:"equipment/equipmentList",
-				filterTemplate:"equipment/equipmentFilter",
-				dataLocation:dataLocation,
-				entities: equipments,
-				entityCount: equipments.totalCount,
-				code: getLabel(),
-				entityClass: getEntityClass()
-				])
-
-
-	}
-	
-	def getCalculationLocationAjaxData = {
-		List<CalculationLocation> calculationLocations = locationService.searchLocation(CalculationLocation.class, params['term'], [:])
-		render(contentType:"text/json") {
-			elements = array {
-				calculationLocations.each { calculationLocation ->
-					elem (
-						key: calculationLocation.id,
-						value: calculationLocation.getNames(languageService.getCurrentLanguage())
-					)
-				}
-			}
-		}
 		
-	}
-	
-	
 	def generalExport = { ExportFilterCommand cmd ->
 
 		// we do this because automatic data binding does not work with polymorphic elements
@@ -327,9 +310,9 @@ class EquipmentController extends AbstractEntityController{
 
 	}
 	
-	def export = {FilterCommand cmd ->
+	def export = { FilterCommand cmd ->
 		if (log.isDebugEnabled()) log.debug("equipments.export, command "+cmd)
-		def dataLocation = DataLocation.get(params.int('location'))
+		def dataLocation = DataLocation.get(params.int('dataLocation.id'))
 		if (dataLocation == null)
 			response.sendError(404)
 		adaptParamsForList()
@@ -365,9 +348,10 @@ class EquipmentController extends AbstractEntityController{
 	def getAjaxData = {
 		
 		DataLocation dataLocation = null
-		if(params['dataLocation']) dataLocation = DataLocation.get(params.int("dataLocation"))
-		
-		List<Equipment> equipments = equipmentService.searchEquipment(params['term'],dataLocation, [:])
+		if(params['dataLocation']) dataLocation = DataLocation.get(params.int("dataLocation.id"))
+		List<Equipment> equipments =[]
+		if(dataLocation) equipments = equipmentService.searchEquipment(params['term'],dataLocation, [:])
+		else equipments = equipmentService.searchEquipment(params['term'],null, [:])
 		render(contentType:"text/json") {
 			elements = array {
 				equipments.each { equipment ->
@@ -398,12 +382,10 @@ class EquipmentController extends AbstractEntityController{
 class StatusCommand {
 	Status status
 	Date dateOfEvent
-	String reason
 	
 	static constraints = {
-		status nullable: false, inList: [Status.DISPOSED,Status.FORDISPOSAL,Status.INSTOCK,Status.OPERATIONAL,Status.UNDERMAINTENANCE]
+		status nullable: false, inList: [Status.DISPOSED,Status.FORDISPOSAL,Status.PARTIALLYOPERATIONAL,Status.INSTOCK,Status.OPERATIONAL,Status.UNDERMAINTENANCE]
 		dateOfEvent nullable: false 
-		reason nullable: true
 	}
 	
 	String toString(){

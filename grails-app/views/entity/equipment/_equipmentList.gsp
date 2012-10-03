@@ -20,7 +20,7 @@
 				<td>
 					<ul class="horizontal">
 						<li>
-							<a href="${createLinkWithTargetURI(controller:'equipment', action:'edit', params:[id: equipment.id,location: equipment.dataLocation.id])}"  class="edit-button">
+							<a href="${createLinkWithTargetURI(controller:'equipment', action:'edit', params:[id: equipment.id])}"  class="edit-button">
 								<g:message code="default.link.edit.label" />
 							</a>
 						</li>
@@ -51,7 +51,7 @@
 					<g:listCheckBox name="obsolete" id="${equipment.id}" checked="${(!equipment.obsolete)?:'checked'}"/>
 				</td>
 				<td>
-					<a href="${createLinkWithTargetURI(controller:'workOrder', action:'list', params:['equipment': equipment?.id])}" title="See list" class="tooltip">
+					<a href="${createLinkWithTargetURI(controller:'workOrder', action:'list', params:['equipment.id': equipment?.id])}" title="See list" class="tooltip">
   	    				Orders
   	    			</a>
 				</td>

@@ -1,41 +1,21 @@
-/**
- * data element Search
+
+/** 
+ * Date picker
  */
-function getDataElement(callback){
-	$('.search-form button').bind('click', function(){$(this).submit(); return false;});
-	$('.search-form').bind('submit', function() {
-		var element = this;
-		$.ajax({
-			type: 'GET', data: $(element).serialize(), url: $(element).attr('action'), 
-			success: function(data, textStatus){
-				if (data.result == 'success') {
-					var filtered = $(element).parent('div').find('.filtered');
-					filtered.html(data.html);
-					filtered.find('a.cluetip').cluetip(cluetipOptions);
-					filtered.find('li').bind('mousedown', callback);
-					filtered.find('li')
-				}
-			}
+function getDatePicker(iconPath){
+	$(function(){
+		$(".date-picker").datepicker({
+			changeYear: true,
+			dateFormat: "dd/mm/yy",
+			showOn: "both",
+			buttonImage: iconPath,
+			buttonImageOnly: true
+			
 		});
-		return false;
 	});
 }
- 
-/**
- * rich text content retrieve
- */
-function getRichTextContent(){
-	$('.rich-textarea-form').bind('click',function(){
-		$('.toggle-entry textarea').each(function(){
-			$(this).val($(this).prev('div').children().html())
-		})
-	});
-}
-
-
-/**
- * 
- * form-aside loader
+/** 
+ * Form-aside loader
  */
 function getHtml(htmls,field){
 	var html=""
@@ -84,24 +64,24 @@ function addProcess(baseUrl,order,spinnerImgSrc,errorMsg){
 	$(".ajax-error").hide()
 	$('.process').on("click",".add-process-button",function(e){
 		e.preventDefault();
-		$(this).prevAll(".ajax-spinner").show();
 		$(this).hide();
+		$(this).nextAll(".ajax-spinner").show();
 		$.ajax({
 			type :'GET',
 			dataType: 'json',
-			data:{"order":order,"type":$(this).prevAll(".idle-field").attr('name'),"value":$(this).prevAll(".idle-field").attr('value')},
+			data:{"order.id":order,"type":$(this).prevAll(".idle-field").attr('name'),"value":$(this).prevAll(".idle-field").attr('value')},
 			url:baseUrl,
 			success: function(data) {
-				$(e.target).prevAll(".ajax-error").fadeOut("slow");
-				$(e.target).prevAll(".ajax-spinner").fadeOut("slow");
+				$(e.target).nextAll(".ajax-error").hide();
+				$(e.target).nextAll(".ajax-spinner").hide();
 				$(e.target).prevAll(".idle-field").val("")
 				$(e.target).fadeIn("slow");
 				refreshList(data.results[1],'.process-list-'+data.results[2])
 			}
 		});
 		$(this).ajaxError(function(){
-			$(this).prevAll(".ajax-spinner").fadeOut("slow");
-			$(this).prevAll(".ajax-error").fadeIn("slow");	
+			$(this).nextAll(".ajax-error").show();	
+			$(this).nextAll(".ajax-spinner").hide();
 			$(this).fadeIn("slow");
 		});
 	})
@@ -115,21 +95,21 @@ function removeProcess(baseUrl){
 	$(".ajax-error").hide();
 	$('.process').on("click","a.delete-process",function(e){
 		e.preventDefault();
-		$(this).fadeOut();
-		$(this).prevAll(".ajax-spinner").fadeIn();
+		$(this).hide();
+		$(this).nextAll(".ajax-spinner").show();
 		$.ajax({
-			type :'GET',dataType: 'json',data:{"process":$(this).attr("name")},url:baseUrl,
+			type :'GET',dataType: 'json',data:{"process.id":$(this).attr("name")},url:baseUrl,
 			success: function(data) {
-				$(e.target).prevAll(".ajax-error").fadeOut("slow");
-				$(e.target).prevAll(".ajax-spinner").fadeOut("slow");
+				$(e.target).nextAll(".ajax-error").hide();
+				$(e.target).nextAll(".ajax-spinner").hide();
 				$(e.target).fadeIn("slow");
 				refreshList(data.results[1],'.process-list-'+data.results[2])
 			}
 		});
 		
 		$(this).ajaxError(function(){
-			$(this).prevAll(".ajax-spinner").fadeOut("slow");
-			$(this).prevAll(".ajax-error").fadeIn("slow");	
+			$(this).nextAll(".ajax-error").show();
+			$(this).nextAll(".ajax-spinner").hide();	
 			$(this).fadeIn("slow");
 		});
 		
@@ -142,23 +122,23 @@ function removeProcess(baseUrl){
 function addComment(baseUrl,order){
 	$(".comment-section").on("click","#add-comment",function(e){
 		e.preventDefault();
-		$(this).fadeOut();
-		$(this).prevAll(".ajax-spinner").fadeIn();
+		$(this).hide();
+		$(this).nextAll(".ajax-spinner").show();
 		$.ajax({
 			type :'GET',dataType: 'json',
-			data:{"order":order,"content":$("#comment-content").val()},
+			data:{"order.id":order,"content":$("#comment-content").val()},
 			url:baseUrl,
 			success: function(data) {
-				$(e.target).prevAll(".ajax-error").fadeOut("slow");
-				$(e.target).prevAll(".ajax-spinner").fadeOut("slow");
+				$(e.target).nextAll(".ajax-error").hide();
+				$(e.target).nextAll(".ajax-spinner").hide();
 				$(e.target).fadeIn("slow");
 				$("#comment-content").val("")
 				refreshList(data.results[1],'.comment-list')
 			}
 		});
 		$(this).ajaxError(function(){
-			$(this).prevAll(".ajax-spinner").fadeOut("slow");
-			$(this).prevAll(".ajax-error").fadeIn("slow");	
+			$(this).nextAll(".ajax-error").show();
+			$(this).nextAll(".ajax-spinner").hide();	
 			$(this).fadeIn("slow");
 		});
 	})
@@ -170,22 +150,22 @@ function addComment(baseUrl,order){
 function removeComment(baseUrl){
 	$(".comment-section").on("click","a.delete-comment",function(e){
 		e.preventDefault();
-		$(this).fadeOut();
-		$(this).prevAll(".ajax-spinner").fadeIn();
+		$(this).hide();
+		$(this).prevAll(".ajax-spinner").show();
 		$.ajax({
-			type :'GET',dataType: 'json',data:{"comment":$(this).attr("id")},
+			type :'GET',dataType: 'json',data:{"comment.id":$(this).attr("id")},
 			url:baseUrl,
 			success: function(data) {
-				$(e.target).prevAll(".ajax-error").fadeOut("slow");
-				$(e.target).prevAll(".ajax-spinner").fadeOut("slow");
+				$(e.target).prevAll(".ajax-error").hide();
+				$(e.target).prevAll(".ajax-spinner").hide();
 				$(e.target).fadeIn("slow");
 				refreshList(data.results[1],'.comment-list')
 			}
 		});
 		$(this).ajaxError(function(){
-			$(this).prevAll(".ajax-spinner").fadeOut("slow");
-			$(this).prevAll(".ajax-error").fadeIn("slow");	
-			$(this).fadeIn("slow");	
+			$(this).prevAll(".ajax-error").show();
+			$(this).prevAll(".ajax-spinner").hide();	
+			$(this).fadeIn("slow");
 		});
 	})
 }

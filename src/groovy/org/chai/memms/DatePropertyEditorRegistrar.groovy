@@ -25,66 +25,26 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.equipment
+package org.chai.memms
 
-import org.chai.memms.AbstractEntityController;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import org.chai.memms.util.Utils;
+import org.springframework.beans.PropertyEditorRegistrar;
+import org.springframework.beans.PropertyEditorRegistry;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.context.i18n.LocaleContextHolder;
 /**
- * @author Jean Kahigiso M
+ * @author Jean Kahigiso M.
  *
  */
-class EquipmentModelController extends AbstractEntityController{
+class DatePropertyEditorRegistrar implements PropertyEditorRegistrar{
+	def messageSource
 	
-	def languges = grailsApplication.config.i18nFields.locales
-	
-	def getEntity(def id) {
-		return EquipmentModel.get(id);
+	@Override
+	public void registerCustomEditors(PropertyEditorRegistry registry) {
+		registry.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat(messageSource.getMessage("default.memms.date.format",null,Utils.DATE_FORMAT,LocaleContextHolder.locale )),true));
 	}
-
-	def createEntity() {
-		return new EquipmentModel();
-	}
-
-	def getTemplate() {
-		return "/entity/model/createModel";
-	}
-
-	def getLabel() {
-		return "equipment.model.label";
-	}
-
-	def getEntityClass() {
-		return EquipmentModel.class;
-	}
-	def deleteEntity(def entity) {
-		if (entity.equipments.size() != 0) {
-			flash.message = message(code: 'equipment.model.hasequipments', args: [message(code: getLabel(), default: 'entity'), params.id], default: 'Equipment model {0} still has associated equipments.')
-		}
-		else {
-			super.deleteEntity(entity)
-		}
-	}
-	
-	def bindParams(def entity) {
-		entity.properties = params		
-	}
-
-	def getModel(def entity) {
-		[
-			model: entity
-		]
-	}
-	def list = {
-		adaptParamsForList()
-		def models = EquipmentModel.list(params);
-		render(view:"/entity/list",model:[
-			template: "model/modelList",
-			entities: models,
-			entityCount: EquipmentModel.count(),
-			code: getLabel(),
-			entityClass: getEntityClass()
-			])
-	}
-	
 
 }

@@ -175,7 +175,7 @@ class NotificationController extends AbstractEntityController{
 		}
 	}
 	
-	def filter = {FilterCommand cmd ->
+	def filter = {FilterNotificationCommand cmd ->
 		if(log.isDebugEnabled()) log.debug("Params = " + params+", cmd="+cmd)
 		adaptParamsForList()
 		List<Notification> notifications = notificationService.filterNotifications(cmd.workOrder, user, cmd.from,cmd.to,cmd.getReadStatus(), params)
@@ -186,7 +186,8 @@ class NotificationController extends AbstractEntityController{
 			entityCount: notifications.totalCount,
 			workOrder:cmd.workOrder,
 			code: getLabel(),
-			entityClass: getEntityClass()
+			entityClass: getEntityClass(),
+			filterCommand:cmd
 			])
 	}
 }
@@ -205,7 +206,7 @@ class CreateNotificationCommand{
 	}
 }
 
-class FilterCommand {
+class FilterNotificationCommand {
 	Date from
 	Date to
 	String read

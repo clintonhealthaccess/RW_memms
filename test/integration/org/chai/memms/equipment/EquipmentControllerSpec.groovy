@@ -19,7 +19,6 @@ class EquipmentControllerSpec extends IntegrationTests{
 		setupSystemUser()
 		
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
-		def equipmentModel = Initializer.newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 		
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
@@ -70,7 +69,6 @@ class EquipmentControllerSpec extends IntegrationTests{
 		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
-		def equipmentModel = Initializer.newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 		
 		equipmentController = new EquipmentController();
@@ -117,7 +115,6 @@ class EquipmentControllerSpec extends IntegrationTests{
 		
 		def user  = newUser("admin", "Admin UID")
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
-		def equipmentModel = Initializer.newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 
 		def equipmentOne = Initializer.newEquipment("SERIAL10",false,false,32,"ROOM A1","2900.23",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
@@ -132,9 +129,9 @@ class EquipmentControllerSpec extends IntegrationTests{
 	
 		
 		def List<Equipment> equipmentsOne, equipmentsTwo, equipmentsThree
-		def equipmentStatusOneActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("admin"),Status.INSTOCK,equipmentOne,false)
-		def equipmentStatusOneInActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentOne,true)
-		def equipmentStatusTwo = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("admin"),Status.DISPOSED,equipmentOne,true)
+		def equipmentStatusOneActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("admin"),Status.INSTOCK,equipmentOne,false,[:])
+		def equipmentStatusOneInActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentOne,true,[:])
+		def equipmentStatusTwo = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("admin"),Status.DISPOSED,equipmentOne,true,[:])
 		
 		equipmentOne.addToStatus(equipmentStatusOneInActive).save(failOnError:true,flush: true)
 		equipmentOne.addToStatus(equipmentStatusOneActive).save(failOnError:true,flush: true)
@@ -142,7 +139,7 @@ class EquipmentControllerSpec extends IntegrationTests{
 
 		equipmentController = new EquipmentController();
 		when:
-		equipmentController.params.location = DataLocation.findByCode('Butaro DH').id
+		equipmentController.params.'dataLocation.id' = DataLocation.findByCode('Butaro DH').id
 		equipmentController.list()
 		
 		then:
@@ -192,7 +189,6 @@ class EquipmentControllerSpec extends IntegrationTests{
 		
 		def user  = newUser("admin", "Admin UID")
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
-		def equipmentModel = Initializer.newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 
 		def equipmentOne = Initializer.newEquipment("SERIAL10",true,false,32,"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
@@ -206,9 +202,9 @@ class EquipmentControllerSpec extends IntegrationTests{
 	
 		
 		def List<Equipment> equipmentsOne, equipmentsTwo, equipmentsThree
-		def equipmentStatusOneActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("admin"),Status.INSTOCK,equipmentOne,false)
-		def equipmentStatusOneInActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentOne,true)
-		def equipmentStatusTwo = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("admin"),Status.DISPOSED,equipmentOne,true)
+		def equipmentStatusOneActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("admin"),Status.INSTOCK,equipmentOne,false,[:])
+		def equipmentStatusOneInActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentOne,true,[:])
+		def equipmentStatusTwo = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("admin"),Status.DISPOSED,equipmentOne,true,[:])
 		
 		equipmentOne.addToStatus(equipmentStatusOneInActive).save(failOnError:true,flush: true)
 		equipmentOne.addToStatus(equipmentStatusOneActive).save(failOnError:true,flush: true)
@@ -291,7 +287,6 @@ class EquipmentControllerSpec extends IntegrationTests{
 		
 		def user  = newUser("admin", "Admin UID")
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
-		def equipmentModel = Initializer.newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 
 		def equipmentOne = Initializer.newEquipment("SERIAL10",true,false,32,"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
@@ -324,7 +319,6 @@ class EquipmentControllerSpec extends IntegrationTests{
 		def user  = newUser("user", "user", true, true)
 		setupSecurityManager(user)
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
-		def equipmentModel = Initializer.newEquipmentModel(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 
 		def equipmentOne = Initializer.newEquipment("SERIAL10",false,true,32,"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
@@ -338,9 +332,9 @@ class EquipmentControllerSpec extends IntegrationTests{
 	
 		
 		def List<Equipment> equipmentsOne, equipmentsTwo, equipmentsThree
-		def equipmentStatusOneActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("user"),Status.INSTOCK,equipmentOne,false)
-		def equipmentStatusOneInActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("user"),Status.OPERATIONAL,equipmentOne,true)
-		def equipmentStatusTwo = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("user"),Status.DISPOSED,equipmentOne,false)
+		def equipmentStatusOneActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("user"),Status.INSTOCK,equipmentOne,false,[:])
+		def equipmentStatusOneInActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("user"),Status.OPERATIONAL,equipmentOne,true,[:])
+		def equipmentStatusTwo = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("user"),Status.DISPOSED,equipmentOne,false,[:])
 		
 		equipmentOne.warranty=warranty
 		equipmentOne.addToStatus(equipmentStatusOneActive).save(failOnError:true,flush: true)
@@ -355,8 +349,8 @@ class EquipmentControllerSpec extends IntegrationTests{
 
 		equipmentController = new EquipmentController();
 		when:
-		equipmentController.params.dataLocation = DataLocation.findByCode(KIVUYE)
-		equipmentController.params.location = DataLocation.findByCode(KIVUYE).id
+		equipmentController.params.'dataLocation.id' = DataLocation.findByCode(KIVUYE).id
+		equipmentController.params.'location.id' = DataLocation.findByCode(KIVUYE).id
 		equipmentController.params.equipmentType = equipmentType
 		equipmentController.params.manufacturer = manufacture
 		equipmentController.params.supplier = supplier

@@ -57,9 +57,8 @@ import org.chai.memms.security.User
  */
 public class Utils {
 	
-	
-	private final static String DATE_FORMAT = "dd-MM-yyyy";
-	private final static String DATE_FORMAT_TIME = "dd-MM-yyyy hh:mm:ss";
+	private final static String DATE_FORMAT = "dd/MM/yyyy";
+	private final static String DATE_FORMAT_TIME = "dd/MM/yyyy hh:mm:ss";
 	public final static String ZIP_FILE_EXTENSION = ".zip";
 	
 	public final static String CODE_DELIMITER = "~";
@@ -199,4 +198,6 @@ public class Utils {
 			   object."$methodName"("",new Locale(loc))
 	   }
    }
+	
+	
 }

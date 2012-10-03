@@ -27,9 +27,9 @@
  */
 package org.chai.memms.maintenance
 
+import org.chai.location.CalculationLocation;
 import java.util.Date;
 import java.util.Map;
-
 import org.chai.location.DataLocation;
 import org.chai.location.Location;
 import org.chai.memms.AbstractEntityController;
@@ -57,25 +57,24 @@ class WorkOrderController extends AbstractEntityController{
 	}
 
 	def createEntity() {
-		def entity = new WorkOrder();
-		if(!params["equipment.id"] || params["equipment"]!=null) entity.equipment = Equipment.get(params.int("equipment"))
-		return entity;
+		return new WorkOrder();
 	}
 
 	def getModel(entity) {
 		def equipments =  []
 		if(entity.equipment) equipments << entity.equipment
 		[
-					order:entity,
-					equipments: equipments,
-					currencies: grailsApplication.config.site.possible.currency
-				]
+			order:entity,
+			equipments: equipments,
+			currencies: grailsApplication.config.site.possible.currency,
+			closed:(entity.status==OrderStatus.CLOSEDFIXED || entity.status == OrderStatus.CLOSEDFORDISPOSAL)? true:false
+		]
 	}
 
 	def bindParams(def entity) {
 		if(!entity.id){
 			entity.addedBy = user
-			entity.openOn = new Date()
+			entity.openOn = now
 			entity.assistaceRequested = false
 			entity.status = OrderStatus.OPEN
 		}else{
@@ -97,26 +96,30 @@ class WorkOrderController extends AbstractEntityController{
 
 	def list = {
 		adaptParamsForList()
+		List<WorkOrder> orders= []
 		Equipment equipment = null
-		DataLocation dataLocation = null
-		List<WorkOrder> orders = null
-		if(params["equipment"]){
-			equipment = Equipment.get(params.long("equipment"))
-			orders = workOrderService.filterWorkOrders(null,equipment,params)
-		}else if(params["dataLocation"]){
-		dataLocation = DataLocation.get(params.long('dataLocation'))
-			orders = workOrderService.filterWorkOrders(dataLocation,null,null,null,null,null,null,params)
+		CalculationLocation  location = null
+		if(params["location"]) location = CalculationLocation.get(params.int("location.id"))
+		if(params["equipment"]) equipment = Equipment.get(params.int("equipment.id"))
+		
+		if(location)
+			orders = workOrderService.getWorkOrdersByCalculationLocation(location, orders, params)
+			
+		if(equipment){
+		 	orders= workOrderService.getWorkOrdersByEquipment(equipment,params)
+		}else{
+			orders= workOrderService.getWorkOrdersByEquipment(null,params)
 		}
 
 		render(view:"/entity/list", model:[
-					template:"workorder/workorderList",
+					template:"workorder/workOrderList",
 					filterTemplate:"workorder/workOrderFilter",
 					entities: orders,
 					entityCount: orders.totalCount,
 					code: getLabel(),
 					entityClass: getEntityClass(),
 					equipment:equipment,
-					dataLocation:dataLocation
+					dataLocation:location
 				])
 	}
 
@@ -151,7 +154,7 @@ class WorkOrderController extends AbstractEntityController{
 
 
 	def addProcess = {
-		WorkOrder order = WorkOrder.get(params.int("order"))
+		WorkOrder order = WorkOrder.get(params.int("order.id"))
 		def type = params["type"].toUpperCase()
 		type = ProcessType."$type"
 		def value = params["value"]
@@ -176,7 +179,7 @@ class WorkOrderController extends AbstractEntityController{
 	}
 
 	def removeProcess = {
-		MaintenanceProcess  process = MaintenanceProcess.get(params.int("process"))
+		MaintenanceProcess  process = MaintenanceProcess.get(params.int("process.id"))
 		def result = false
 		def html =""
 		def type =null
@@ -197,7 +200,7 @@ class WorkOrderController extends AbstractEntityController{
 	}
 	
 	def addComment ={
-		WorkOrder order = WorkOrder.get(params.int("order"))
+		WorkOrder order = WorkOrder.get(params.int("order.id"))
 		def html =""
 		def content = params["content"]
 		def result = false
@@ -225,7 +228,7 @@ class WorkOrderController extends AbstractEntityController{
 	}
 
 	def removeComment = {
-		Comment comment = Comment.get(params.int("comment"))
+		Comment comment = Comment.get(params.int("comment.id"))
 		WorkOrder order
 		def html =""
 		def result = false
@@ -255,13 +258,13 @@ class WorkOrderController extends AbstractEntityController{
 		Equipment equipment = null
 		DataLocation dataLocation = null
 		if(params["equipment"]){
-			equipment = Equipment.get(params.long("equipment"))
+			equipment = Equipment.get(params.long("equipment.id"))
 		}else if(params["dataLocation"]){
-			dataLocation = DataLocation.get(params.long('dataLocation'))
+			dataLocation = DataLocation.get(params.long('dataLocation.id'))
 		}
 		List<WorkOrder> workOrders = workOrderService.searchWorkOrder(params['q'],dataLocation,equipment,params)
 		render (view: '/entity/list', model:[
-					template:"workorder/workorderList",
+					template:"workorder/workOrderList",
 					filterTemplate:"workorder/workOrderFilter",
 					entities: workOrders,
 					entityCount: workOrders.totalCount,
@@ -272,13 +275,13 @@ class WorkOrderController extends AbstractEntityController{
 				])
 	}
 
-	def filter = {FilterCommand cmd ->
+	def filter = { FilterWorkOrderCommand cmd ->
 		if(log.isDebugEnabled()) log.debug(cmd)
 		adaptParamsForList()
 		List<WorkOrder> orders = workOrderService.filterWorkOrders(cmd.dataLocation,cmd.equipment,cmd.openOn,cmd.closedOn,cmd.getAssistanceStatus(),cmd.criticality,cmd.status,params)
 
 		render(view:"/entity/list", model:[
-					template:"workorder/workorderList",
+					template:"workorder/workOrderList",
 					filterTemplate:"workorder/workOrderFilter",
 					entities: orders,
 					entityCount: orders.totalCount,
@@ -286,11 +289,13 @@ class WorkOrderController extends AbstractEntityController{
 					equipment:cmd.equipment,
 					dataLocation:cmd.dataLocation,
 					entityClass: getEntityClass(),
+					filterCmd:cmd
 				])
 	}
 }
 
-class FilterCommand {
+class FilterWorkOrderCommand {
+	
 	Date openOn
 	Date closedOn
 	String assistaceRequested

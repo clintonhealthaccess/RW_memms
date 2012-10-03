@@ -216,6 +216,8 @@ site.datalocationtype.checked=["District Hospital","Health Center"]
 location.sector.skip.level=["Sector"]
 site.possible.currency = ["":"NONE","RWF":"RWF","USD":"USD","EUR":"EUR"]
 
+site.valide.datalocationtype=["District Hospital","Health Center"]
+
 status.to.display.on.equipment.form = 5
 
 i18nFields{

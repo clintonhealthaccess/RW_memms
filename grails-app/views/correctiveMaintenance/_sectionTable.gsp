@@ -10,7 +10,6 @@
 				<th><g:message code="datalocation.label" /></th>
 				<th><g:message code="correctiveMaintenance.workOrder.count" /></th>
 				<th></th>
-				<th></th>
 			</thead>
 			<tbody>
 				<g:each in="${correctiveMaintenances}" var="correctiveMaintenance">
@@ -21,11 +20,6 @@
 						<td>
 							${correctiveMaintenance.workOrderCount}
 						</td>
-						<%--<td>
-							<shiro:hasPermission permission="equipment:create">
-								<a href="${createLink(controller: 'equipment', action: 'create', params:[location: inventory.dataLocation.id])}"><g:message code="inventory.add.equipment.label" /></a>
-							</shiro:hasPermission>
-						</td>--%>
 						<td>
 							<shiro:hasPermission permission="workOrder:list">
 								<a href="${createLink(controller: 'workOrder', action: 'list', params:[dataLocation: correctiveMaintenance.dataLocation.id] )}"><g:message code="correctiveMaintenance.manage.workOrder.label" /></a>
