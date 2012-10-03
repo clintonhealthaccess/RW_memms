@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.chai.location.CalculationLocation;
+import org.chai.location.DataLocation;
 import org.chai.memms.equipment.Equipment;
 import org.chai.memms.security.User
 import org.chai.memms.security.User.UserType;
@@ -61,12 +62,25 @@ class NotificationService {
 	 * @return
 	 */
     def sendNotifications(WorkOrder workOrder, String content,User currentUser) {
+		int sent = 0
 		workOrder.notificationGroup.findAll{
 			if(it != currentUser){
 					new Notification(workOrder:workOrder,sender:currentUser,receiver:it,writtenOn:new Date(),content:content,read:false).save(flush:true,failOnError: true)
+					sent++
 				}
 			}
+		return sent
     }
+	
+	public List<Notification> searchNotificition(String text,User user,WorkOrder workOrder, Boolean read,Map<String, String> params) {
+		def criteria = Notification.createCriteria()
+		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			eq('receiver',user)
+			if(workOrder)  eq('workOrder',workOrder)
+			if(read)  eq('read',read)
+			if(text) ilike("content","%"+text+"%")
+		}
+	}
 	
 	List<Notification> filterNotifications(WorkOrder workOrder,User receiver,Date from, Date to,Boolean read, Map<String, String> params){
 		def criteria = Notification.createCriteria();

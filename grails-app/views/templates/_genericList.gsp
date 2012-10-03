@@ -6,7 +6,7 @@
 		     	<span class="right">
 		     	<shiro:hasPermission permission="${controllerName}:create">
 					<g:if test="${!addTemplate}">
-		  				<a href="${createLinkWithTargetURI(controller: controllerName, action:'create', params:[location: dataLocation?.id,equipment:equipment?.id])+(request.queryString==null?'':'&'+request.queryString)}" class="next medium left push-r">
+		  				<a href="${createLinkWithTargetURI(controller: controllerName, action:'create', params:[location: dataLocation?.id,equipment:equipment?.id,workOrder:workOrder?.id])+(request.queryString==null?'':'&'+request.queryString)}" class="next medium left push-r">
 		  					<g:message code="default.new.label" args="[entityName]"/>
 		  				</a>
 		  			</g:if>
@@ -40,7 +40,7 @@
 	  				</g:if>
 
 	  				<g:if test="${grailsApplication.getArtefactByLogicalPropertyName('Controller', controllerName).hasProperty('search')}">
-        				<g:searchBox action="search"/>
+        				<g:searchBox action="search" params="${workOrder?[workOrder:workOrder.id,read:params.read]:'' }"/>
         			</g:if>
 		     	</span>
 	     	</g:if>

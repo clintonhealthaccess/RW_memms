@@ -28,12 +28,15 @@
 package org.chai.memms.maintenance
 
 import java.util.Date;
+import java.util.Map;
 
+import org.apache.jasper.compiler.Node.ParamsAction;
 import org.chai.location.DataLocation;
 import org.chai.memms.AbstractEntityController;
 import org.chai.memms.equipment.Equipment;
 import org.chai.memms.maintenance.WorkOrder.Criticality;
 import org.chai.memms.maintenance.WorkOrder.OrderStatus;
+import org.chai.memms.security.User;
 
 /**
  * @author Jean Kahigiso M.
@@ -96,9 +99,10 @@ class NotificationController extends AbstractEntityController{
 	
 	def list={
 		adaptParamsForList()
-		
+		log.debug("params : "+params)
 		Boolean read = (params.read) ? params.boolean("read") : null;
 		WorkOrder workOrder = WorkOrder.get(params.id)
+		log.debug("read : " + read)
 		List<Notification> notifications = notificationService.filterNotifications(workOrder, user, null,null,read, params)
 		
 		render(view:"/entity/list", model:[
@@ -112,12 +116,63 @@ class NotificationController extends AbstractEntityController{
 			])
 	}
 	
-	def search = {
+	def search = {log.debug("search = "+params)
 		adaptParamsForList()
-		//TODO not implemented yet
+		Boolean read = (params.read) ? params.boolean("read") : null;
+		WorkOrder workOrder = WorkOrder.get(params.workOrder)
+		List<Notification> notifications = notificationService.searchNotificition(params['q'],user,workOrder, read,params)
+		
+		render(view:"/entity/list", model:[
+			template:"notification/notificationList",
+			filterTemplate:"notification/notificationFilter",
+			entities: notifications,
+			entityCount: notifications.totalCount,
+			workOrder:workOrder,
+			code: getLabel(),
+			entityClass: getEntityClass(),
+			q:params['q']
+			])
 	}
 	def getAjaxData = {
 		//TODO will be used fetch new notifications using ajax and update page
+	}
+	
+	def save = {CreateNotificationCommand cmd ->
+		if (log.isDebugEnabled()) log.debug ('creating notifications with params:'+params+", Cmd:"+cmd)
+		
+		adaptParamsForList()
+					
+		if (!cmd.validate()) {
+			if (log.isInfoEnabled()) log.info ("validation error in ${cmd}: ${cmd.errors}}")
+			
+			def model = [template: getTemplate()]
+			model << [targetURI: getTargetURI()]
+			model << [workOrder: cmd.workOrder]
+			model << [cmd: cmd]
+			render(view: '/entity/edit', model: model)
+		}
+		else {
+			log.debug("target url=" + targetURI)
+			def sent = notificationService.newNotification(cmd.workOrder,cmd.content, user)
+			flash.message = message(code: 'default.saved.message', args: [message(code: getLabel(), default: 'entity')],sent.toString())
+			redirect(action: "list", id: cmd.workOrder.id)
+		}
+	}
+	
+	def create = {
+		WorkOrder workOrder = WorkOrder.get(params.workOrder)
+		
+		if(workOrder == null){
+			flash.message = message(code: 'workOrder.notspecified.message', args: [message(code: getLabel(), default: 'entity'), params.workOrder])
+			redirect(url: getTargetURI())
+		}else{
+
+			def model = [template: getTemplate()]
+			model << [targetURI: getTargetURI()]
+			model << [workOrder: workOrder]
+			
+			render(view: '/entity/edit', model: model)
+		}
 	}
 	
 	def filter = {FilterCommand cmd ->
@@ -133,6 +188,20 @@ class NotificationController extends AbstractEntityController{
 			code: getLabel(),
 			entityClass: getEntityClass()
 			])
+	}
+}
+
+class CreateNotificationCommand{
+	WorkOrder workOrder
+	String content
+	
+	static constraints = {
+		workOrder nullable:false
+		content nullable:false, blank:false
+	}
+	
+	String toString() {
+		return "CreateNotificationCommand[WorkOrder="+workOrder+", Content="+content+"]"
 	}
 }
 

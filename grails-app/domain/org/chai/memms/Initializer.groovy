@@ -99,7 +99,7 @@ public class Initializer {
 			defaultClercRole.addToPermissions("equipmentStatus:*")
 			defaultClercRole.addToPermissions("home:*")
 			defaultClercRole.addToPermissions("menu:home")
-			defaultClercRole.addToPermissions("menu:inventory")
+			defaultClercRole.addToPermissions("menu:inventory,correctivemaintenance")
 			defaultClercRole.addToPermissions("provider:getAjaxData")
 			defaultClercRole.addToPermissions("equipmentType:getAjaxData")
 			defaultClercRole.addToPermissions("department:getAjaxData")
@@ -117,19 +117,21 @@ public class Initializer {
 			faultyClercRole.addToPermissions("equipmentStatus:list;equipmentStatus:save;equipmentStatus:delete;equipmentStatus:edit;equipment:updateObsolete")
 			faultyClercRole.save(failOnError: true)
 			
-			def dataClerkRoleOne = new Role(name: "Data Clerk")
-			dataClerkRoleOne.addToPermissions("home:*;menu:home,inventory;account:*;equipmentType:getAjaxData;provider:getAjaxData;department:getAjaxData")
-			dataClerkRoleOne.addToPermissions("equipment:filter,export,summaryPage,index,list,save,create,updateObsolete")
-			dataClerkRoleOne.addToPermissions("equipmentStatus:list,:save,delete,edit,create")
-			dataClerkRoleOne.save(failOnError: true, flush:true)
+			def dataClerkRole = new Role(name: "Data Clerk")
+			dataClerkRole.addToPermissions("home:*;menu:home,inventory,correctivemaintenance;account:*;equipmentType:getAjaxData;provider:getAjaxData;department:getAjaxData")
+			dataClerkRole.addToPermissions("equipment:filter,export,summaryPage,index,list,save,create,updateObsolete")
+			dataClerkRole.addToPermissions("workOrder:filter,summaryPage,index,list,save,create")
+			dataClerkRole.addToPermissions("notification:*")
+			dataClerkRole.addToPermissions("equipmentStatus:list,:save,delete,edit,create")
+			dataClerkRole.save(failOnError: true, flush:true)
 			
 			def technicianFacilityRole = new Role(name: "Technician Facility")
-			technicianFacilityRole.addToPermissions("home:*;menu:home,inventory;account:*;equipment:*")
+			technicianFacilityRole.addToPermissions("home:*;menu:home,inventory,correctivemaintenance;account:*;equipment:*")
 			technicianFacilityRole.addToPermissions("")
 			technicianFacilityRole.save(failOnError: true, flush:true)
 			
 			def technicianMoHRole = new Role(name: "Technician MoH")
-			technicianMoHRole.addToPermissions("home:*;menu:home,inventory;account:*;equipment:*")
+			technicianMoHRole.addToPermissions("home:*;menu:home,inventory,correctivemaintenance;account:*;equipment:*")
 			technicianMoHRole.addToPermissions("")
 			technicianMoHRole.save(failOnError: true, flush:true)
 
@@ -144,7 +146,7 @@ public class Initializer {
 			def userClerk= new User(userType: UserType.DATACLERK,code:"user", location: CalculationLocation.findByCode(KIVUYE), username: "user", 
 				firstname: "user", lastname: "user", email:'user@memms.org', passwordHash: new Sha256Hash("user").toHex(), active: true, 
 				confirmed: true, uuid:'user', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
-			userClerk.addToRoles(dataClerkRoleOne)
+			userClerk.addToRoles(dataClerkRole)
 			userClerk.save(failOnError: true, flush:true)
 			
 			def userTechnicianFacility= new User(userType: UserType.TECHNICIANFACILITY,code:"techf", location: CalculationLocation.findByCode(KIVUYE), username: "techf",

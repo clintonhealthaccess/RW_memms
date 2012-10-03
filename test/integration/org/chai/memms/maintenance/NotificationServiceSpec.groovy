@@ -107,7 +107,6 @@ class NotificationServiceSpec  extends IntegrationTests{
 		Notification.count() == 2
 		Notification.get(notificationToRead.id).read
 	}
-	//TODO filter by dates
 	def "can filter notifications"() {
 		setup:
 		setupLocationTree()
@@ -148,11 +147,55 @@ class NotificationServiceSpec  extends IntegrationTests{
 		def notificationsByWorkOrder = notificationService.filterNotifications(workOrderOne,null, null,null,null, [:])
 		def notificationsByreceiver = notificationService.filterNotifications(null,receiverMoH,null,null,null, [:])
 		def jointFilter = notificationService.filterNotifications(workOrderOne,receiverFacility,null,null,true, [:])
+		def madeAfterToday = notificationService.filterNotifications(null,null, new Date().next(),null,null, [:])
+		def madeBeforeToday = notificationService.filterNotifications(null,null, null,new Date(),null, [:])
+		def madeBetweenYesterdayAndTomorrow = notificationService.filterNotifications(null,null, new Date().previous(),new Date().next(),null, [:])
 		then:
 		allNotifications.size() == 4
 		readNotifications.size() == 2
 		notificationsByWorkOrder.size() == 3
 		notificationsByreceiver.size() == 1
 		jointFilter.size() == 1
+		madeAfterToday.size() == 0
+		madeBeforeToday.size() == 4
+		madeBetweenYesterdayAndTomorrow.size() == 4
+	}
+	
+	def "can search notifications"() {
+		setup:
+		setupLocationTree()
+		setupEquipment()
+		def senderOne = newUser("senderOne", true,true)
+		senderOne.userType = UserType.DATACLERK
+		senderOne.location = DataLocation.findByCode(KIVUYE)
+		senderOne.save(failOnError:true)
+		
+		def senderTwo = newUser("senderTwo", true,true)
+		senderTwo.userType = UserType.DATACLERK
+		senderTwo.location = DataLocation.findByCode(KIVUYE)
+		senderTwo.save(failOnError:true)
+		
+		def receiverFacility = newUser("receiverFacility", true,true)
+		receiverFacility.userType = UserType.TECHNICIANFACILITY
+		receiverFacility.location = DataLocation.findByCode(KIVUYE)
+		receiverFacility.save(failOnError:true)
+		
+		def receiverMoH = newUser("receiverMoH", true,true)
+		receiverMoH.userType = UserType.TECHNICIANMOH
+		receiverMoH.location = Location.findByCode(RWANDA)
+		receiverMoH.save(failOnError:true)
+		
+		
+		def workOrderOne = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderOne, new Date())
+		def workOrderTwo = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderTwo, new Date())
+		
+		notificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne)
+		notificationService.newNotification(workOrderOne, "Send for rapair, follow up",senderOne)
+		
+		when:
+		def found = notificationService.searchNotificition("one",receiverFacility,workOrderOne, null,[:])
+		then:
+		Notification.count() == 2
+		found.size() == 1
 	}
 }

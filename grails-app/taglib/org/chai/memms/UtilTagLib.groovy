@@ -53,6 +53,7 @@ class UtilTagLib {
 	}
 	
 	def searchBox = { attrs, body ->
+		if(log.isDebugEnabled()) log.debug("Search tag with attrs:" + attrs)
 		if (attrs['controller'] == null) attrs['controller'] = controllerName;
 		if (attrs['action'] == null) attrs['action'] = actionName;
 		attrs['hiddenParams'] = new HashMap(attrs['params']?attrs['params']:params)
