@@ -36,8 +36,8 @@ import java.util.Set;
 import org.chai.location.LocationLevel;
 import org.chai.memms.Inventory
 import org.chai.memms.Inventories
-import org.chai.memms.correctiveMaintenance.CorrectiveMaintenance;
-import org.chai.memms.correctiveMaintenance.CorrectiveMaintenances;
+import org.chai.memms.CorrectiveMaintenance;
+import org.chai.memms.CorrectiveMaintenances;
 import org.chai.memms.maintenance.WorkOrder.Criticality;
 import org.chai.memms.maintenance.WorkOrder.OrderStatus;
 import org.chai.location.CalculationLocation;
