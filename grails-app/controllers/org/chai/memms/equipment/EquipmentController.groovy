@@ -57,6 +57,8 @@ class EquipmentController extends AbstractEntityController{
 	def equipmentService
 	def inventoryService
 	def grailsApplication
+	def equipmentStatusService
+	
 	
 	def index = {
 		redirect(action: "summaryPage", params: params)
@@ -119,10 +121,9 @@ class EquipmentController extends AbstractEntityController{
 	def saveEntity(def entity) {
 		def currentStatus 
 		if(entity.id==null)
-			currentStatus = newEquipmentStatus(now,user,params.cmd.status,entity,true,params.cmd.dateOfEvent)
+			currentStatus = equipmentStatusService.createEquipmentStatus(now,user,params.cmd.status,entity,true,params.cmd.dateOfEvent)
 		entity.save()
 		(!currentStatus)?:currentStatus.save()
-		
 	}
 
 	def save = { StatusCommand cmd ->
@@ -372,11 +373,6 @@ class EquipmentController extends AbstractEntityController{
 		}
 		
 	}
-	
-	static def newEquipmentStatus(def statusChangeDate,def changedBy,def value, def equipment,def current,def dateOfEvent){
-		return new EquipmentStatus(statusChangeDate:statusChangeDate,changedBy:changedBy,status:value,equipment:equipment,current:current,dateOfEvent:dateOfEvent)
-	}
-	
 }
 
 class StatusCommand {

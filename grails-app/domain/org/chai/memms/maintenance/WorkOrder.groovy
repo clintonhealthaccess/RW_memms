@@ -35,7 +35,8 @@ import org.chai.memms.security.User;
  * @author Jean Kahigiso M.
  *
  */
-class WorkOrder {
+@i18nfields.I18nFields
+public class WorkOrder {
 
 	enum Criticality{
 		NORMAL("normal"),
@@ -56,26 +57,49 @@ class WorkOrder {
 		OrderStatus(String name){ this.name=name }
 		String getKey() { return name() }
 	}
+	enum FailureReason{
+		NOTSPECIFIED("not.specified"),
+		MISUSE("misuse"),
+		SPAREPARTBROKEN("spare.part.broken"),
+		OTHER("other")
+		String messageCode = "work.failure.reason"
+		String name
+		FailureReason(String name){ this.name=name }
+		String getKey() { return name() }
+		
+	}
 
 	String currency
 	String description
+	String failureReasonDetails
+	String testResultsDescriptions
+	
 	User addedBy
 	User lastModifiedBy
-	Long estimatedCost
 	Date openOn
 	Date lastModifiedOn
 	Date closedOn
 	Boolean assistaceRequested
+	
+	Long estimatedCost
+	Integer workTime
+	Integer travelTime
 
 	Criticality criticality
 	OrderStatus status
-
+	FailureReason failureReason
+	
+	static i18nFields = ["failureReasonDetails","testResultsDescriptions"]
 	static belongsTo = [equipment: Equipment]
 	static hasMany = [comments: Comment,notifications: Notification,notificationGroup: User,processes: MaintenanceProcess]
 
 	static constraints = {
 		addedBy nullable: false
 		assistaceRequested nullable: false
+		failureReasonDetails nullable: true
+		testResultsDescriptions nullable: true
+		workTime nullable: true, blank: true
+		travelTime nullable: true, blank: true
 		description nullable: false, blank: false
 		openOn nullable: false, validation:{it <= new Date()}
 		lastModifiedOn nullable: true, validator:{ val, obj ->
@@ -95,7 +119,8 @@ class WorkOrder {
 			else if(val != OrderStatus.OPEN && obj.closedOn != null) return true
 			else return false
 		}
-		estimatedCost nullable: true, blank: true, validator:{ val, obj ->
+		failureReason nullable:false, blank:false, inList:[FailureReason.NOTSPECIFIED,FailureReason.SPAREPARTBROKEN,FailureReason.MISUSE,FailureReason.OTHER]
+		estimatedCost nullable: false, blank: false, validator:{ val, obj ->
 			if(val == null && obj.currency != null) return false
 		}
 		currency  nullable: true, blank: true, inList: ["RWF","USD","EUR"], validator:{ val, obj ->
