@@ -49,6 +49,7 @@ import org.chai.memms.maintenance.MaintenanceProcess.ProcessType;
 import org.chai.memms.maintenance.Notification;
 import org.chai.memms.maintenance.WorkOrder;
 import org.chai.memms.maintenance.WorkOrder.Criticality;
+import org.chai.memms.maintenance.WorkOrder.FailureReason;
 import org.chai.memms.maintenance.WorkOrder.OrderStatus;
 import org.chai.memms.security.Role
 import org.chai.memms.security.User
@@ -480,12 +481,12 @@ public class Initializer {
 		def equipment09 =Equipment.findBySerialNumber("SERIAL09")
 		def equipment11 =Equipment.findBySerialNumber("SERIAL11")
 		
-		def workOrderOne =  newWorkOrder(equipment01,"First order", Criticality.NORMAL,OrderStatus.OPEN,admin,now())
+		def workOrderOne =  newWorkOrder(equipment01,"First order", Criticality.NORMAL,OrderStatus.OPEN,admin,now(),FailureReason.NOTSPECIFIED)
 		workOrderOne.notificationGroup = [User.findByUsername("admin"),User.findByUsername("admin")]
 		newNotification(workOrderOne, User.findByUsername("admin"),User.findByUsername("admin"),new Date(), "Work on this please")
 		workOrderOne.save(failOnError:true)
-		def workOrderTwo =  newWorkOrder(equipment01,"Second order", Criticality.LOW,OrderStatus.OPEN,admin,now())
-		def workOrderFive =  newWorkOrder(equipment01,"Closed order", Criticality.HIGH,OrderStatus.CLOSEDFIXED,user,now()-1,now(),true)
+		def workOrderTwo =  newWorkOrder(equipment01,"Second order", Criticality.LOW,OrderStatus.OPEN,admin,now(),FailureReason.NOTSPECIFIED)
+		def workOrderFive =  newWorkOrder(equipment01,"Closed order", Criticality.HIGH,OrderStatus.CLOSEDFIXED,user,now()-1,now(),true,,FailureReason.MISUSE)
 		
 		equipment01.addToWorkOrders(workOrderOne)
 		equipment01.addToWorkOrders(workOrderTwo)
@@ -512,11 +513,11 @@ public class Initializer {
 		
 		workOrderOne.save(failOnError:true)
 		
-		def workOrderThree =  newWorkOrder(equipment09,"Third order", Criticality.NORMAL,OrderStatus.OPEN,user,now())
+		def workOrderThree =  newWorkOrder(equipment09,"Third order", Criticality.NORMAL,OrderStatus.OPEN,user,now(),FailureReason.NOTSPECIFIED)
 		equipment09.addToWorkOrders(workOrderThree)
 		equipment09.save(failOnError:true)
 		
-		def workOrderFour =  newWorkOrder(equipment11,"Fourth order", Criticality.HIGH,OrderStatus.OPEN,admin,now())
+		def workOrderFour =  newWorkOrder(equipment11,"Fourth order", Criticality.HIGH,OrderStatus.OPEN,admin,now(),FailureReason.NOTSPECIFIED)
 		equipment11.addToWorkOrders(workOrderFour)
 		equipment11.save(failOnError:true)	
 	}
@@ -526,12 +527,12 @@ public class Initializer {
 	
 	//Models definition
 	//Corrective Maintenance
-	public static def newWorkOrder(def equipment, def description, def criticality, def status, def addedBy, def openOn ){
-		return new WorkOrder(equipment:equipment,description: description,criticality:criticality,status:status,addedBy:addedBy,openOn: openOn,assistaceRequested:false).save(failOnError:true)
+	public static def newWorkOrder(def equipment, def description, def criticality, def status, def addedBy, def openOn,def failureReason ){
+		return new WorkOrder(equipment:equipment,description: description,criticality:criticality,status:status,addedBy:addedBy,openOn: openOn,assistaceRequested:false, failureReason:failureReason).save(failOnError:true)
 	}
 	
-	public static def newWorkOrder(def equipment, def description, def criticality, def status, def addedBy, def openOn, def closedOn, def assistaceRequested){
-		return new WorkOrder(equipment:equipment, description:description, criticality:criticality, status:status, addedBy:addedBy, openOn: openOn, closedOn:closedOn, assistaceRequested:assistaceRequested).save(failOnError:true)
+	public static def newWorkOrder(def equipment, def description, def criticality, def status, def addedBy, def openOn, def closedOn, def assistaceRequested,def failureReason){
+		return new WorkOrder(equipment:equipment, description:description, criticality:criticality, status:status, addedBy:addedBy, openOn: openOn, closedOn:closedOn, assistaceRequested:assistaceRequested,failureReason:failureReason).save(failOnError:true)
 	}
 	
 	public static newNotification(def workOrder, def sender, def receiver,def writtenOn, def content){

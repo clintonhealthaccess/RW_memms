@@ -79,7 +79,7 @@ class WorkOrderController extends AbstractEntityController{
 			entity.openOn = now
 			entity.assistaceRequested = false
 			entity.status = OrderStatus.OPEN
-			enity.failureReason = FailureReason.NOTSPECIFIED
+			entity.failureReason = FailureReason.NOTSPECIFIED
 		}
 		entity.properties = params
 	}

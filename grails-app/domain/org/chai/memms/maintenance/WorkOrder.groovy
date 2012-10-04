@@ -66,24 +66,29 @@ public class WorkOrder {
 		String name
 		FailureReason(String name){ this.name=name }
 		String getKey() { return name() }
-		
 	}
 
 	String currency
 	String description
 	String failureReasonDetails
 	String testResultsDescriptions
+	String returnedTo
 	
 	User addedBy
 	User lastModifiedBy
+	User receivedBy
+	User fixedBy
+	
 	Date openOn
 	Date lastModifiedOn
 	Date closedOn
+	Date returnedOn
 	Boolean assistaceRequested
 	
 	Long estimatedCost
 	Integer workTime
 	Integer travelTime
+	
 
 	Criticality criticality
 	OrderStatus status
@@ -95,18 +100,26 @@ public class WorkOrder {
 
 	static constraints = {
 		addedBy nullable: false
+		receivedBy nullable: true
+		fixedBy nullable: true
+		
 		assistaceRequested nullable: false
 		failureReasonDetails nullable: true
 		testResultsDescriptions nullable: true
 		workTime nullable: true, blank: true
 		travelTime nullable: true, blank: true
 		description nullable: false, blank: false
+		returnedTo nullable: true, blank: true
+		
 		openOn nullable: false, validation:{it <= new Date()}
+		returnedOn nullable: true, validation:{it <= new Date()}
+		
 		lastModifiedOn nullable: true, validator:{ val, obj ->
 			if(val!=null)
 				return ((val <= new Date()) && (val.after(obj.openOn) || (val.compareTo(obj.openOn)==0)))
 			else return true
 		}
+		
 		closedOn nullable: true, validation:{ val, obj ->
 			if(val!=null)
 				return ((val <= new Date()) && (val.after(obj.openOn) || (val.compareTo(obj.openOn)==0)))
@@ -120,7 +133,8 @@ public class WorkOrder {
 			else return false
 		}
 		failureReason nullable:false, blank:false, inList:[FailureReason.NOTSPECIFIED,FailureReason.SPAREPARTBROKEN,FailureReason.MISUSE,FailureReason.OTHER]
-		estimatedCost nullable: false, blank: false, validator:{ val, obj ->
+		
+		estimatedCost nullable: true, blank: true, validator:{ val, obj ->
 			if(val == null && obj.currency != null) return false
 		}
 		currency  nullable: true, blank: true, inList: ["RWF","USD","EUR"], validator:{ val, obj ->

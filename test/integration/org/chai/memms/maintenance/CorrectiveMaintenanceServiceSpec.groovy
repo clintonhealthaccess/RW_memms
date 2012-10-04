@@ -32,6 +32,7 @@ import org.chai.memms.Initializer;
 import org.chai.memms.IntegrationTests;
 import org.chai.memms.equipment.Equipment;
 import org.chai.memms.maintenance.WorkOrder.Criticality;
+import org.chai.memms.maintenance.WorkOrder.FailureReason;
 import org.chai.memms.maintenance.WorkOrder.OrderStatus;
 import org.chai.memms.security.User;
 import org.chai.location.DataLocationType
@@ -53,7 +54,7 @@ class CorrectiveMaintenanceServiceSpec extends IntegrationTests{
 		setupEquipment()
 		newUser("user", "user")
 		new WorkOrder(equipment:Equipment.findBySerialNumber(CODE(123)),description: "test work order",criticality:Criticality.NORMAL,status:OrderStatus.OPEN,
-			addedBy:User.findByUsername("user"),openOn: new Date(),assistaceRequested:false).save(failOnError:true)
+			addedBy:User.findByUsername("user"),openOn: new Date(),assistaceRequested:false,failureReason:FailureReason.NOTSPECIFIED).save(failOnError:true)
 		
 		def types = grailsApplication.config.site.datalocationtype.checked.collect{ DataLocationType.findByCode(it) }.toSet()
 		when:

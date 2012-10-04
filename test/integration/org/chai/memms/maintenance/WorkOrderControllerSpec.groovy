@@ -32,6 +32,7 @@ import org.chai.memms.IntegrationTests;
 import org.chai.memms.equipment.Equipment;
 import org.chai.memms.maintenance.MaintenanceProcess.ProcessType;
 import org.chai.memms.maintenance.WorkOrder.Criticality;
+import org.chai.memms.maintenance.WorkOrder.FailureReason;
 import org.chai.memms.maintenance.WorkOrder.OrderStatus;
 import org.chai.memms.security.User;
 import org.chai.memms.maintenance.WorkOrderController
@@ -67,7 +68,7 @@ class WorkOrderControllerSpec extends IntegrationTests{
 		setupEquipment()
 		setupSystemUser()
 		def user = newUser("user","user")
-		def workOrder = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, User.findByUsername("user"), new Date())
+		def workOrder = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, User.findByUsername("user"), new Date(),,FailureReason.NOTSPECIFIED)
 		workOrderController = new WorkOrderController()
 		when:
 		workOrderController.params.'order.id' = workOrder.id
@@ -84,7 +85,7 @@ class WorkOrderControllerSpec extends IntegrationTests{
 		setupEquipment()
 		setupSystemUser()
 		def user = newUser("user","user")
-		def workOrder = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, User.findByUsername("user"), new Date())
+		def workOrder = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, User.findByUsername("user"), new Date(),FailureReason.NOTSPECIFIED)
 		def process = Initializer.newMaintenanceProcess(workOrder, ProcessType.ACTION, "Process", Initializer.now(),User.findByUsername("user"))
 		workOrder.addToProcesses(process)
 		workOrder.save(flush:true)
@@ -102,7 +103,7 @@ class WorkOrderControllerSpec extends IntegrationTests{
 		setupEquipment()
 		setupSystemUser()
 		def user = newUser("user","user")
-		def workOrder = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, User.findByUsername("user"), new Date())
+		def workOrder = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, User.findByUsername("user"), new Date(),FailureReason.NOTSPECIFIED)
 		workOrderController = new WorkOrderController()
 		when:
 		workOrderController.params.'order.id' = workOrder.id
@@ -118,7 +119,7 @@ class WorkOrderControllerSpec extends IntegrationTests{
 		setupEquipment()
 		setupSystemUser()
 		def user = newUser("user","user")
-		def workOrder = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, User.findByUsername("user"), new Date())
+		def workOrder = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, User.findByUsername("user"), new Date(),FailureReason.NOTSPECIFIED)
 		def comment = Initializer.newComment(workOrder, User.findByUsername("user"), Initializer.now(), "Test comment")
 		workOrder.addToComments(comment)
 		workOrder.save(flush:true)

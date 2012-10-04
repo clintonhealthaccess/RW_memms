@@ -31,11 +31,13 @@ class EquipmentStatusServiceSpec extends IntegrationTests{
 	  def equipment = Equipment.findBySerialNumber(CODE(123))
 	  def status = equipmentStatusService.createEquipmentStatus(Initializer.now(),user,Status.OPERATIONAL,equipment,true,Initializer.now(),[:])
 	  status.save(flush:true)
+	  equipment.addToStatus(status)
+	  equipment.save(flush:true)
 	  when:
-	  def equipments = equipmentStatusService.getEquipmentStatusByEquipment(equipment,[:])
+	  def stats = equipmentStatusService.getEquipmentStatusByEquipment(equipment,[:])
 	  then:
 	  EquipmentStatus.count()==1
-	  equipments.equals([equipment.status])
+	  stats.equals(equipment.status.asList())
 	  
   }
 }

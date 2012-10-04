@@ -7,6 +7,7 @@ import org.chai.memms.IntegrationTests
 import org.chai.memms.equipment.Equipment;
 import org.chai.memms.maintenance.MaintenanceProcess.ProcessType;
 import org.chai.memms.maintenance.WorkOrder.Criticality;
+import org.chai.memms.maintenance.WorkOrder.FailureReason;
 import org.chai.memms.maintenance.WorkOrder.OrderStatus;
 import org.chai.memms.security.User;
 
@@ -17,7 +18,7 @@ class MaintenanceProcessSpec  extends IntegrationTests{
 		setupEquipment()
 		def user = newUser("user", "user")
 		def workOrder = new WorkOrder(equipment:Equipment.findBySerialNumber(CODE(123)),description: "test work order",criticality:Criticality.NORMAL,status:OrderStatus.OPEN,
-				addedBy:user,openOn: new Date(),assistaceRequested:false).save(failOnError:true)
+				addedBy:user,openOn: new Date(),assistaceRequested:false,failureReason:FailureReason.NOTSPECIFIED).save(failOnError:true)
 		when:
 		new MaintenanceProcess(name:"name test", addedOn:Initializer.now().previous(), addedBy:user, type:ProcessType.ACTION, workOrder:workOrder).save(failOnError:true)
 		then:
@@ -30,7 +31,7 @@ class MaintenanceProcessSpec  extends IntegrationTests{
 		setupEquipment()
 		def user = newUser("user", "user")
 		def workOrder = new WorkOrder(equipment:Equipment.findBySerialNumber(CODE(123)),description: "test work order",criticality:Criticality.NORMAL,status:OrderStatus.OPEN,
-				addedBy:user,openOn: new Date(),assistaceRequested:false).save(failOnError:true)
+				addedBy:user,openOn: new Date(),assistaceRequested:false,failureReason:FailureReason.NOTSPECIFIED).save(failOnError:true)
 		def maintenanceProcessWithErrors = new MaintenanceProcess()
 		def expectedFieldErrors = ["name","addedOn","addedBy","type","workOrder"]
 
@@ -48,7 +49,7 @@ class MaintenanceProcessSpec  extends IntegrationTests{
 		setupEquipment()
 		def user = newUser("user", "user")
 		def workOrder = new WorkOrder(equipment:Equipment.findBySerialNumber(CODE(123)),description: "test work order",criticality:Criticality.NORMAL,status:OrderStatus.OPEN,
-				addedBy:user,openOn: new Date(),assistaceRequested:false).save(failOnError:true)
+				addedBy:user,openOn: new Date(),assistaceRequested:false,failureReason:FailureReason.NOTSPECIFIED).save(failOnError:true)
 		def maintenanceProcessWithErrors
 		expect:
 		MaintenanceProcess.count() == 0

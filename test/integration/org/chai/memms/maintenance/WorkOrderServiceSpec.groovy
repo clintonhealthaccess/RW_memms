@@ -8,6 +8,7 @@ import org.chai.memms.Initializer;
 import org.chai.memms.IntegrationTests
 import org.chai.memms.equipment.Equipment;
 import org.chai.memms.maintenance.WorkOrder.Criticality;
+import org.chai.memms.maintenance.WorkOrder.FailureReason;
 import org.chai.memms.maintenance.WorkOrder.OrderStatus;
 import org.chai.memms.security.User;
 import org.chai.memms.security.User.UserType;
@@ -26,7 +27,7 @@ class WorkOrderServiceSpec  extends IntegrationTests{
 		setupLocationTree()
 		setupEquipment()
 		def senderOne = newUser("senderOne", true,true)
-		Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, User.findByUsername("senderOne"), new Date())
+		Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, User.findByUsername("senderOne"), new Date(),FailureReason.NOTSPECIFIED)
 
 		
 		when:
@@ -67,10 +68,10 @@ class WorkOrderServiceSpec  extends IntegrationTests{
 		setupEquipment()
 		def senderOne = newUser("senderOne", true,true)
 		new WorkOrder(equipment:Equipment.findBySerialNumber(CODE(123)),description: "Nothing yet",criticality:Criticality.NORMAL,status:OrderStatus.OPEN,
-			addedBy:User.findByUsername("senderOne"),openOn: Initializer.getDate(12, 9,2012),assistaceRequested:true).save(failOnError:true)
+			addedBy:User.findByUsername("senderOne"),openOn: Initializer.getDate(12, 9,2012),assistaceRequested:true,failureReason:FailureReason.NOTSPECIFIED).save(failOnError:true)
 			
 			new WorkOrder(equipment:Equipment.findBySerialNumber(CODE(123)),description: "Nothing yet",criticality:Criticality.LOW,status:OrderStatus.CLOSEDFIXED,
-				addedBy:User.findByUsername("senderOne"),openOn: Initializer.getDate(12, 8,2012), closedOn:Initializer.getDate(12, 11,2012),assistaceRequested:false).save(failOnError:true)
+				addedBy:User.findByUsername("senderOne"),openOn: Initializer.getDate(12, 8,2012), closedOn:Initializer.getDate(12, 11,2012),assistaceRequested:false,failureReason:FailureReason.NOTSPECIFIED).save(failOnError:true)
 		
 		when:
 		
@@ -133,7 +134,7 @@ class WorkOrderServiceSpec  extends IntegrationTests{
 		receiverTwo.location = DataLocation.findByCode(KIVUYE)
 		receiverTwo.save(failOnError:true)
 
-		def workOrder = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, sender, new Date())
+		def workOrder = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, sender, new Date(),FailureReason.NOTSPECIFIED)
 		notificationService.newNotification(workOrder, "Send for rapair",sender)
 
 		when://Can escalate

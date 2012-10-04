@@ -32,6 +32,7 @@ import org.chai.memms.IntegrationTests;
 import org.chai.memms.equipment.Equipment;
 import org.chai.memms.maintenance.MaintenanceProcess.ProcessType;
 import org.chai.memms.maintenance.WorkOrder.Criticality;
+import org.chai.memms.maintenance.WorkOrder.FailureReason;
 import org.chai.memms.maintenance.WorkOrder.OrderStatus;
 import org.chai.memms.security.User;
 
@@ -45,7 +46,7 @@ class WorkOrderSpec extends IntegrationTests{
 		newUser("user", "user")
 		when:
 		new WorkOrder(equipment:Equipment.findBySerialNumber(CODE(123)),description: "test work order",criticality:Criticality.NORMAL,status:OrderStatus.OPEN,
-			addedBy:User.findByUsername("user"),openOn: new Date(),assistaceRequested:false).save(failOnError:true)
+			addedBy:User.findByUsername("user"),openOn: new Date(),assistaceRequested:false,failureReason:FailureReason.NOTSPECIFIED).save(failOnError:true)
 		then:
 		WorkOrder.count() == 1
 	}
@@ -55,7 +56,7 @@ class WorkOrderSpec extends IntegrationTests{
 		setupEquipment()
 		newUser("user", "user")
 		def workOrderWithError = new WorkOrder(equipment:Equipment.findBySerialNumber(CODE(123)), description: "test work order", criticality:Criticality.NORMAL, status:OrderStatus.CLOSEDFORDISPOSAL,
-				addedBy:User.findByUsername("user"), openOn:Initializer.getDate(12, 9, 2012), assistaceRequested:false)
+				addedBy:User.findByUsername("user"), openOn:Initializer.getDate(12, 9, 2012), assistaceRequested:false,failureReason:FailureReason.NOTSPECIFIED)
 		when:
 		workOrderWithError.save()
 		then:
@@ -70,7 +71,7 @@ class WorkOrderSpec extends IntegrationTests{
 		def senderOne = newUser("senderOne", true,true)
 		def senderTwo = newUser("senderTwo", true,true)
 		def receiver = newUser("receiver", true,true)
-		def workOrder = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, User.findByUsername("senderOne"), new Date())
+		def workOrder = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, User.findByUsername("senderOne"), new Date(),FailureReason.NOTSPECIFIED)
 		when:
 		workOrder.addToNotifications(Initializer.newNotification(workOrder, senderOne, receiver,new Date(), "test one"))
 		workOrder.addToNotifications(Initializer.newNotification(workOrder, senderTwo, receiver,new Date(), "test one"))
@@ -86,7 +87,7 @@ class WorkOrderSpec extends IntegrationTests{
 		setupEquipment()
 		def sender = newUser("sender", true,true)
 		def receiver = newUser("receiver", true,true)
-		def workOrder = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, User.findByUsername("sender"), new Date())
+		def workOrder = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, User.findByUsername("sender"), new Date(),FailureReason.NOTSPECIFIED)
 		when:
 		workOrder.notifications = [
 			Initializer.newNotification(workOrder, sender, receiver,new Date(), "test one"),
@@ -103,7 +104,7 @@ class WorkOrderSpec extends IntegrationTests{
 		setupLocationTree()
 		setupEquipment()
 		def user = newUser("user","user")
-		def workOrder = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, User.findByUsername("user"), new Date())
+		def workOrder = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, User.findByUsername("user"), new Date(),FailureReason.NOTSPECIFIED)
 		when:
 		def actionOne = Initializer.newMaintenanceProcess(workOrder,ProcessType.ACTION,"Action 1",Initializer.now(), user)
 		def actionTwo = Initializer.newMaintenanceProcess(workOrder,ProcessType.ACTION,"Action 2",Initializer.now(), user)
@@ -120,7 +121,7 @@ class WorkOrderSpec extends IntegrationTests{
 		setupLocationTree()
 		setupEquipment()
 		def user = newUser("user","user")
-		def workOrder = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, User.findByUsername("user"), new Date())
+		def workOrder = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, User.findByUsername("user"), new Date(),FailureReason.NOTSPECIFIED)
 		when:
 		def materialOne = Initializer.newMaintenanceProcess(workOrder,ProcessType.MATERIAL,"Material 1",Initializer.now(), user)
 		def actionTwo = Initializer.newMaintenanceProcess(workOrder,ProcessType.ACTION,"Action 2",Initializer.now(), user)

@@ -121,7 +121,7 @@ class EquipmentController extends AbstractEntityController{
 	def saveEntity(def entity) {
 		def currentStatus 
 		if(entity.id==null)
-			currentStatus = equipmentStatusService.createEquipmentStatus(now,user,params.cmd.status,entity,true,params.cmd.dateOfEvent)
+			currentStatus = equipmentStatusService.createEquipmentStatus(now,user,params.cmd.status,entity,true,params.cmd.dateOfEvent,[:])
 		entity.save()
 		(!currentStatus)?:currentStatus.save()
 	}
