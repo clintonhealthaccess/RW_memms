@@ -64,7 +64,7 @@
 </table>
 <script type="text/javascript">
 	$(document).ready(function() {
-		getDatePicker("${resource(dir:'images',file:'calendar.jpeg')}")
+		getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}")
 		$('a.clueTip').cluetip({
 			  //cluetipClass: 'jtip', for formating the output
 			  arrows: true,

@@ -174,6 +174,6 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		getToHide("${equipment.donation}","${equipment.warranty?.sameAsSupplier}");
-		getDatePicker("${resource(dir:'images',file:'calendar.jpeg')}")
+		getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}")
 	});
 </script>

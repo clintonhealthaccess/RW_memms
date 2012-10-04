@@ -52,7 +52,7 @@
       </div> 
       	<g:if test="${order.id != null}">
 	      <div class="form-section">
-	    	<fieldset class="form-content">
+	    	<fieldset>
 	      	<h4 class="section-title">
 	          <span class="question-default">
 	            <img src="${resource(dir:'images/icons',file:'star_small.png')}">
@@ -63,10 +63,11 @@
         		<g:render template="/templates/processes" model="['processes':order.actions,'processType':'action','label':'work.order.performed.action.label','readonly':closed]" /> 
         		<g:render template="/templates/processes" model="['processes':order.materials,'processType':'material','label':'work.order.materials.used.label','readonly':closed]" /> 
         	</div>
-        	
-        	<g:input name="workTime" label="${message(code:'work.order.work.time.label')}" bean="${order}" field="workTime"/>
-        	<g:input name="travelTime" label="${message(code:'work.order.travel.time.label')}" bean="${order}" field="travelTime"/>
-	         <g:currency costName="estimatedCost" id="estimated-cost" costLabel="${message(code:'work.order.estimated.cost.label')}" bean="${equipment}" costField="estimatedCost"  currencyName="currency" values="${currencies}" currencyField="currency" currencyLabel="${message(code:'work.order.currency.label')}"/>
+        	<div class="form-content">
+        		<g:input name="workTime" label="${message(code:'work.order.work.time.label')}" bean="${order}" field="workTime"/>
+        		<g:input name="travelTime" label="${message(code:'work.order.travel.time.label')}" bean="${order}" field="travelTime"/>
+	        	<g:currency costName="estimatedCost" id="estimated-cost" costLabel="${message(code:'work.order.estimated.cost.label')}" bean="${equipment}" costField="estimatedCost"  currencyName="currency" values="${currencies}" currencyField="currency" currencyLabel="${message(code:'work.order.currency.label')}"/>
+			</div>
 	        </fieldset>
 	      </div>
 	      <div class="form-section">
