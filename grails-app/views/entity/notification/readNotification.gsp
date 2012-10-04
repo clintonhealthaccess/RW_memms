@@ -1,3 +1,4 @@
+<%@ page import="org.chai.memms.util.Utils" %>
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -15,10 +16,24 @@
 	</div>
 	
 	<div class="main">
-	Sent By: ${notification?.sender?.firstname +" "+ notification?.sender?.lastname}
-	Content: ${notification?.content}
-  	<div class="buttons">
-  			<a href="${createLink(uri: targetURI)}"><button><g:message code="default.button.back.label"/></button></a>
+	<div class="comment-section">
+	<ul class="comment-list">
+	<li>
+	<div class="comment-meta">
+				<span class="comment-written-by">${notification.sender.firstname} ${notification.sender.lastname}</span>
+				<span class="comment-written-on">${Utils.formatDateWithTime(notification?.writtenOn)}</span>
+			</div>
+			<div class="comment-content">${notification.content}</div>
+  	
+  	
+	  		
+  	</li>
+  	<li>
+  	<div class="comment-button">
+	  			<a href="${createLink(uri: targetURI)}"><button class="medium" id="add-comment"><g:message code="default.button.back.label" args="${['']}"/></button></a>
+	  		</div> 
+	  		</li>
+  	</ul>
   	</div>
   </div>
 </div>

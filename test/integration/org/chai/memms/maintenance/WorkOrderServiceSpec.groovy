@@ -74,7 +74,7 @@ class WorkOrderServiceSpec  extends IntegrationTests{
 		
 		when:
 		
-		//Filter by DataLocation    // dataLocation,workOrdersEquipment,openOn,closedOn,assistaceRequested,criticality,status
+		//Filter by DataLocation
 		def workOrdersPassesDataLocation = workOrderService.filterWorkOrders(DataLocation.findByCode(KIVUYE),null,null,null,null,null,null,adaptParamsForList())
 		def workOrdersFailsDataLocation = workOrderService.filterWorkOrders(DataLocation.findByCode(BUTARO),null,null,null,null,null,null,adaptParamsForList())
 		
@@ -118,36 +118,47 @@ class WorkOrderServiceSpec  extends IntegrationTests{
 		setup:
 		setupLocationTree()
 		setupEquipment()
-		def sender = newUser("sender", true,true)
-		sender.userType = UserType.DATACLERK
-		sender.location = DataLocation.findByCode(KIVUYE)
-		sender.save(failOnError:true)
+		
+		def clerk = newUser("clerk", true,true)
+		clerk.userType = UserType.DATACLERK
+		clerk.location = DataLocation.findByCode(KIVUYE)
+		clerk.save(failOnError:true)
 
-		def receiverOne = newUser("receiverOne", true,true)
-		receiverOne.userType = UserType.TECHNICIANFACILITY
-		receiverOne.location = DataLocation.findByCode(KIVUYE)
-		receiverOne.save(failOnError:true)
+		def technicianFacilityOne = newUser("technicianFacilityOne", true,true)
+		technicianFacilityOne.userType = UserType.TECHNICIANFACILITY
+		technicianFacilityOne.location = DataLocation.findByCode(KIVUYE)
+		technicianFacilityOne.save(failOnError:true)
 
-		def receiverTwo = newUser("receiverTwo", true,true)
-		receiverTwo.userType = UserType.TECHNICIANFACILITY
-		receiverTwo.location = DataLocation.findByCode(KIVUYE)
-		receiverTwo.save(failOnError:true)
+		def technicianFacilityTwo = newUser("technicianFacilityTwo", true,true)
+		technicianFacilityTwo.userType = UserType.TECHNICIANFACILITY
+		technicianFacilityTwo.location = DataLocation.findByCode(KIVUYE)
+		technicianFacilityTwo.save(failOnError:true)
+		
+		def technicianMoHOne = newUser("technicianMoHOne", true,true)
+		technicianMoHOne.userType = UserType.TECHNICIANMOH
+		technicianMoHOne.location = DataLocation.findByCode(KIVUYE)
+		technicianMoHOne.save(failOnError:true)
+		
+		def technicianMoHTwo = newUser("technicianMoHTwo", true,true)
+		technicianMoHTwo.userType = UserType.TECHNICIANMOH
+		technicianMoHTwo.location = DataLocation.findByCode(KIVUYE)
+		technicianMoHTwo.save(failOnError:true)
 
-		def workOrder = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, sender, new Date())
-		notificationService.newNotification(workOrder, "Send for rapair",sender)
+		def workOrder = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, clerk, new Date())
+		notificationService.newNotification(workOrder, "Send for rapair",clerk)
 
 		when://Can escalate
-		workOrderService.escalateWorkOrder(workOrder,"",sender)
-		then:
-		workOrder.assistaceRequested == true
-		Notification.count() == 4
-		workOrder.notificationGroup.size() == 3
-
-		when://Can reescalate
-		workOrderService.escalateWorkOrder(workOrder,"",sender)
+		workOrderService.escalateWorkOrder(workOrder,"please follow this up",technicianFacilityOne)
 		then:
 		workOrder.assistaceRequested == true
 		Notification.count() == 6
-		workOrder.notificationGroup.size() == 3
+		workOrder.notificationGroup.size() == 5
+
+		when://Can reescalate
+		workOrderService.escalateWorkOrder(workOrder,"follow this up again",clerk)
+		then:
+		workOrder.assistaceRequested == true
+		Notification.count() == 10
+		workOrder.notificationGroup.size() == 5
 	}
 }

@@ -32,6 +32,8 @@ import org.chai.memms.equipment.Equipment
 import org.chai.memms.maintenance.WorkOrder.Criticality
 import org.chai.memms.maintenance.WorkOrder.OrderStatus
 import org.chai.memms.security.User;
+import org.chai.memms.util.Utils;
+
 import java.util.Map;
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocation;
@@ -117,14 +119,14 @@ class WorkOrderService {
 			if(workOrdersEquipment)
 				eq("equipment",workOrdersEquipment)
 			if(openOn)
-				ge("openOn",openOn)
+				ge("openOn",Utils.getMinDateFromDateTime(openOn))
 			if(closedOn)
-				le("closedOn",closedOn)
+				le("closedOn",Utils.getMaxDateFromDateTime(closedOn))
 			if(assistaceRequested)
 				eq("assistaceRequested",assistaceRequested)
-			if(criticality)
+			if(criticality && criticality != Criticality.NONE)
 				eq("criticality",criticality)
-			if(status)
+			if(status && status != OrderStatus.NONE)
 				eq("status",status)
 		}
 	}
@@ -135,7 +137,7 @@ class WorkOrderService {
 		else{
 			workOrder.assistaceRequested = true
 			workOrder.save(flush:true,failOnError: true)
-			notificationService.newNotification(workOrder,"${content}\nPlease follow up on this work order.",escalatedBy)
+			notificationService.newNotification(workOrder,"${content}\nPlease follow up on this work order.",escalatedBy,true)
 		}
 	}
 	

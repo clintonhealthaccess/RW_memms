@@ -27,6 +27,8 @@
  */
 package org.chai.memms.util;
 
+import groovy.time.TimeCategory;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -177,6 +179,17 @@ public class Utils {
 			exportableClazz = clazz;
 		}
 		return exportableClazz;
+	}
+	
+	public static Date getMaxDateFromDateTime(Date date){
+		Integer.metaClass.mixin TimeCategory
+		Date.metaClass.mixin TimeCategory
+		
+		Date cleanedDate = date.clearTime()
+		cleanedDate + 23.hours + 59.minutes + 59.minutes
+	}
+	public static Date getMinDateFromDateTime(Date date){
+		date.clearTime()
 	}
 	
 	/**

@@ -19,8 +19,8 @@
 								<option value="false" ${filterCmd?.read?.equals("false")? 'selected' : ''}><g:message code="default.boolean.false" /></option>
 						</select>
 					</li>
-					<li> <g:inputDate name="from" precision="day" valueDefault="none"  value="${filterCmd?.from}" label="${message(code:'notification.date.from.label')}" bean="${filterCmd}" field="from"/> </li>
-			<li> <g:inputDate name="to" precision="day" valueDefault="none"  value="${filterCmd?.to}" label="${message(code:'notification.date.to.label')}" bean="${filterCmd}" field="to"/> </li>
+					<li> <g:input name="from" dateClass="date-picker" label="${message(code:'notification.date.from.label')}" bean="${filterCmd}" field="from"/></li>
+			<li><g:input name="to" dateClass="date-picker" label="${message(code:'notification.date.to.label')}" bean="${filterCmd}" field="to"/> </li>
 				</ul>
 				<button type="submit">Filter</button>
 				<g:if test="">
@@ -31,4 +31,8 @@
 		<g:if test="${params?.q}">
 		<h2 class="filter-results">Showing filtered list of notifications which contain search term ${params?.q}</h2>
 		</g:if>
-		
+<script type="text/javascript">
+	$(document).ready(function() {
+		getDatePicker("${resource(dir:'images',file:'calendar.jpeg')}")
+	});
+	</script>

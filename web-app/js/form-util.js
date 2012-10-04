@@ -27,6 +27,28 @@ function getHtml(htmls,field){
 	$(attrId).append(html);
 	$(".form-aside-hidden").hide();
 }
+function escaletWorkOrder(baseUrl){
+	$(".ajax-spinner").hide();
+	$("tr").on("click",".escalate",function(e){
+		e.preventDefault();
+		$(this).nextAll(".ajax-spinner").show();
+		$.ajax({
+			type :'GET',dataType: 'json',
+			data:{"order.id":event.target.id},
+			url:baseUrl,
+			success: function(data) {
+				$(e.target).nextAll(".ajax-error").hide();
+				$(e.target).nextAll(".ajax-spinner").hide();
+				$(e.target).fadeIn("slow");
+			}
+		});
+		$(this).ajaxError(function(){
+			$(this).nextAll(".ajax-error").show();
+			$(this).nextAll(".ajax-spinner").hide();	
+			$(this).fadeIn("slow");
+		});
+	})
+}
 /**
  * Edit donation and obsolete
  */

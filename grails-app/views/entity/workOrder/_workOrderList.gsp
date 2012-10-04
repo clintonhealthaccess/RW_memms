@@ -47,13 +47,14 @@
 					${order.criticality}
 				</td>
 				<td>
-					<g:stripHtml field="${order.description}" chars="30"/>
-				</td>
-				<td>
 					${order.openOn}
 				</td>
 				<td>
 					${order.closedOn}
+				</td>
+				<td>
+	  			<button class="escalate" id="${order.id}"><g:message code="work.order.escalate.issue.link.label"/></button>
+	  			<img src="${resource(dir:'images',file:'spinner.gif')}" class="ajax-spinner"/>
 				</td>
 				<td>
 					<a href="${createLinkWithTargetURI(controller:'notification', action:'list', params:[id: order.id, read:false])}">${order.getUnReadNotificationsForUser(User.findByUuid(SecurityUtils.subject.principal, [cache: true])).size()}</a>
@@ -64,6 +65,7 @@
 </table>
 <script type="text/javascript">
 	$(document).ready(function() {
+		escaletWorkOrder("${createLink(controller:'workOrder',action: 'escalate')}")
 		getDatePicker("${resource(dir:'images',file:'calendar.jpeg')}")
 		$('a.clueTip').cluetip({
 			  //cluetipClass: 'jtip', for formating the output

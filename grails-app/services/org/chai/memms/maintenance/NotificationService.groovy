@@ -36,15 +36,16 @@ import org.chai.location.DataLocation;
 import org.chai.memms.equipment.Equipment;
 import org.chai.memms.security.User
 import org.chai.memms.security.User.UserType;
+import org.chai.memms.util.Utils;
 
 class NotificationService {
 
 	def userService
-	def newNotification(WorkOrder workOrder, String content,User currentUser){
+	def newNotification(WorkOrder workOrder, String content,User currentUser,Boolean escalation = false){
 		List<User> noticationGroup = [currentUser]
-		if(currentUser.userType == UserType.DATACLERK){
+		if(!escalation){
 			noticationGroup += userService.filterByCriterias(UserType.TECHNICIANFACILITY, workOrder.equipment.dataLocation, [:])
-		}else if(currentUser.userType == UserType.TECHNICIANFACILITY){
+		}else{
 			noticationGroup += userService.filterByCriterias(UserType.TECHNICIANMOH, null, [:])
 		}
 		
@@ -86,8 +87,8 @@ class NotificationService {
 		def criteria = Notification.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(workOrder != null) eq("workOrder",workOrder)
-			if(from != null) ge("writtenOn",from)
-			if(to != null) le("writtenOn",to)
+			if(from != null) ge("writtenOn",Utils.getMinDateFromDateTime(from))
+			if(to != null) le("writtenOn",Utils.getMinDateFromDateTime(to))
 			if(receiver != null) eq("receiver",receiver)
 			if(read != null) eq("read",read)
 		}

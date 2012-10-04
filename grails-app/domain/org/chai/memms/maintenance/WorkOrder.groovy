@@ -38,6 +38,7 @@ import org.chai.memms.security.User;
 class WorkOrder {
 
 	enum Criticality{
+		NONE("none"),
 		NORMAL("normal"),
 		LOW("low"),
 		HIGH("high")
@@ -48,6 +49,7 @@ class WorkOrder {
 	}
 
 	enum OrderStatus{
+		NONE("none"),
 		OPEN("open"),
 		CLOSEDFIXED("closedfixed"),
 		CLOSEDFORDISPOSAL("closedfordisposal")

@@ -220,6 +220,21 @@ class WorkOrderController extends AbstractEntityController{
 		}
 		render(contentType:"text/json") { results = [result,html] }
 	}
+	//TODO not complete
+	def escalate ={
+		WorkOrder order = WorkOrder.get(params.int("order.id"))
+		log.debug(order)
+		def html =""
+		def content = "Please review work order on equipment serial number: ${order.equipment.serialNumber}"
+		def result = false
+		if (order == null)
+			response.sendError(404)
+		else {
+			def sent = workOrderService.escalateWorkOrder(order,content, user)
+			result=true 
+		}
+		render(contentType:"text/json") { results = [result] }
+	}
 
 	def getWorkOrderClueTipsAjaxData = {
 		def workOrder = WorkOrder.get(params.long("id"))
