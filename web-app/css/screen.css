@@ -780,36 +780,33 @@ form.search-form button { height: 23px; margin: 0 0 0 -1px; -moz-border-radius-t
 .checkbox .ajax-error { color: #d30000; display: inline-block; left: -50%; position: absolute; top: 12px; white-space: nowrap; }
 
 /* line 638, ../../src/stylesheets/partials/_forms.sass */
-.process-list-action { border: 1px solid #47aef7; height: 200px; overflow-y: scroll; }
+.process-list-action, .process-list-material { border: 1px solid #47aef7; height: 200px; overflow-y: scroll; }
 
-/* line 642, ../../src/stylesheets/partials/_forms.sass */
-.process-list-material { border: 1px solid #47aef7; }
-
-/* line 645, ../../src/stylesheets/partials/_forms.sass */
+/* line 643, ../../src/stylesheets/partials/_forms.sass */
 .process { margin-bottom: 15px; }
-/* line 647, ../../src/stylesheets/partials/_forms.sass */
+/* line 645, ../../src/stylesheets/partials/_forms.sass */
 .process fieldset { display: inline; padding: 3px 0 10px; width: 330px; }
-/* line 651, ../../src/stylesheets/partials/_forms.sass */
+/* line 649, ../../src/stylesheets/partials/_forms.sass */
 .process fieldset ul { margin-bottom: 10px; }
-/* line 653, ../../src/stylesheets/partials/_forms.sass */
+/* line 651, ../../src/stylesheets/partials/_forms.sass */
 .process fieldset li { border-bottom: 1px solid #eeeeee; line-height: 1.4; padding: 5px; position: relative; }
-/* line 658, ../../src/stylesheets/partials/_forms.sass */
+/* line 656, ../../src/stylesheets/partials/_forms.sass */
 .process fieldset li:last-child { border-bottom: 0; }
-/* line 660, ../../src/stylesheets/partials/_forms.sass */
+/* line 658, ../../src/stylesheets/partials/_forms.sass */
 .process fieldset li .ajax-spinner { position: absolute; right: 28px; top: 6px; }
-/* line 664, ../../src/stylesheets/partials/_forms.sass */
+/* line 662, ../../src/stylesheets/partials/_forms.sass */
 .process input[type=text] { width: 200px; }
-/* line 666, ../../src/stylesheets/partials/_forms.sass */
+/* line 664, ../../src/stylesheets/partials/_forms.sass */
 .process .ajax-error { color: #d30000; font-size: 12px; padding: 0 0 0 3px; }
-/* line 670, ../../src/stylesheets/partials/_forms.sass */
+/* line 668, ../../src/stylesheets/partials/_forms.sass */
 .process .ajax-error.alt { display: block; }
 
-/* line 673, ../../src/stylesheets/partials/_forms.sass */
+/* line 671, ../../src/stylesheets/partials/_forms.sass */
 a.delete-row { background: #d30000; color: white; display: block; float: right; font-size: 10px; font-weight: bold; height: 18px; line-height: 18px; margin-left: 5px; opacity: 0.2; text-align: center; text-decoration: none; width: 18px; -webkit-border-radius: 50%; -moz-border-radius: 50%; -ms-border-radius: 50%; -o-border-radius: 50%; border-radius: 50%; }
-/* line 688, ../../src/stylesheets/partials/_forms.sass */
+/* line 686, ../../src/stylesheets/partials/_forms.sass */
 a.delete-row:hover, a.delete-row:focus { opacity: 1; }
 
-/* line 693, ../../src/stylesheets/partials/_forms.sass */
+/* line 691, ../../src/stylesheets/partials/_forms.sass */
 .ui-datepicker-trigger { position: relative; left: -20px; top: 4px; }
 
 /* line 1, ../../src/stylesheets/partials/_flashes.sass */
