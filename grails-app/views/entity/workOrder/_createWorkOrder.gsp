@@ -140,7 +140,7 @@
 		removeProcess("${createLink(controller:'workOrder',action: 'removeProcess')}")
 		addComment("${createLink(controller:'workOrder',action: 'addComment')}","${order.id}")
 		removeComment("${createLink(controller:'workOrder',action: 'removeComment')}")
-		getDatePicker("${resource(dir:'images',file:'calendar.jpeg')}")
+		getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}")
 	});
 </script>
 

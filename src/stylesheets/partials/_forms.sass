@@ -9,6 +9,7 @@
 		background: url('../images/bg-body.png')
 		border: 1px solid #f6f6f6
 		float: right
+		margin-top: 15px
 		margin-bottom: 15px
 		padding: 10px 2% 20px 3%
 		width: 33%
@@ -488,10 +489,10 @@ form.search-form
 		color: $primary
 		display: inline-block
 		font-size: 11px
+		line-height: 1.4
 		margin-left: 7px
 		padding-top: 5px
 		vertical-align: top
-		white-space: nowrap
 		width: 100px
 	.row
 		margin-bottom: 7px
@@ -512,6 +513,8 @@ form.search-form
 	.date
 		select
 			min-width: 50px
+	.date-picker
+		width: 132px !important
 	input[type=text], textarea
 		width: 320px
 		
@@ -638,7 +641,7 @@ form.search-form
 	
 // jkahigiso start: added textare style	
 .hide-list
-	border: 0px solid $primary + #222
+	display: none
 // jkahigiso end
 	
 .process
@@ -693,3 +696,5 @@ a.delete-row
 	position: relative
 	left: -20px
 	top: 4px
+.ui-datepicker-title, .ui-datepicker-calendar
+	font-size: 12px !important
