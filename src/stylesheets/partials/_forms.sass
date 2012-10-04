@@ -4,11 +4,16 @@
 	+pie-clearfix
 	.form-content
 		float: left
-		width: 55%
+		width: 60%
 	.form-aside
+		background: url('../images/bg-body.png')
+		border: 1px solid #f6f6f6
 		float: right
-		padding: 10px 0 20px
-		width: 40%
+		margin-bottom: 15px
+		padding: 10px 2% 20px 3%
+		width: 33%
+		.pulled
+			margin-top: -6px
 	h6
 		color: #888
 		font-size: 12px
@@ -116,6 +121,10 @@ button, input[type=submit], .next
 	&.medium
 		font-size: 11px
 		padding: 5px 15px
+		+text-shadow(rgba(0, 0, 0, 0.2) 0 1px 0)
+	&.small
+		font-size: 11px
+		padding: 3px 10px
 		+text-shadow(rgba(0, 0, 0, 0.2) 0 1px 0)
 	&.gray
 		background: #d9d9d9
@@ -486,7 +495,8 @@ form.search-form
 		margin-left: 7px
 		padding-top: 5px
 		vertical-align: top
-		width: 130px
+		white-space: nowrap
+		width: 100px
 	.row
 		margin-bottom: 7px
 		vertical-align: middle
@@ -495,7 +505,7 @@ form.search-form
 			float: left
 		input[type=text]
 			margin: 0
-			width: 200px
+			width: 230px
 		select[name=currency]
 			height: 23px
 			margin-left: 3px
@@ -507,7 +517,7 @@ form.search-form
 		select
 			min-width: 50px
 	input[type=text], textarea
-		width: 290px
+		width: 320px
 		
 .paginateButtons
 	padding: 0 15px 15px
@@ -635,7 +645,7 @@ form.search-form
 	fieldset
 		display: inline
 		padding: 3px 0 10px
-		width: 390px
+		width: 330px
 		ul
 			margin-bottom: 10px
 		li
@@ -675,3 +685,10 @@ a.delete-row
 	+border-radius(50%)
 	&:hover, &:focus
 		opacity: 1
+
+// ui-datepicker overrides
+		
+.ui-datepicker-trigger
+	position: relative
+	left: -20px
+	top: 4px

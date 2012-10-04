@@ -1,4 +1,4 @@
-<div class="process process-${processType}">
+<div class="process process-${processType} half">
  	<label><g:message code="${label}"/> :</label>
  	<fieldset>
    	<g:render template="/templates/processList" model="['processes':processes,'type':processType]" /> 

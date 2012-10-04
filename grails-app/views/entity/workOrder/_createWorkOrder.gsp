@@ -50,7 +50,7 @@
       </div> 
       	<g:if test="${order.id != null}">
 	      <div class="form-section">
-	    	<fieldset class="form-content">
+	    	<fieldset>
 	      	<h4 class="section-title">
 	          <span class="question-default">
 	            <img src="${resource(dir:'images/icons',file:'star_small.png')}">
@@ -61,7 +61,9 @@
         		<g:render template="/templates/processes" model="['processes':order.actions,'processType':'action','label':'work.order.performed.action.label','readonly':closed]" /> 
         		<g:render template="/templates/processes" model="['processes':order.materials,'processType':'material','label':'work.order.materials.used.label','readonly':closed]" /> 
         	</div>
+			<div class="form-content">
 	         <g:currency costName="estimatedCost" id="estimated-cost" costLabel="${message(code:'work.order.estimated.cost.label')}" bean="${equipment}" costField="estimatedCost"  currencyName="currency" values="${currencies}" currencyField="currency" currencyLabel="${message(code:'work.order.currency.label')}"/>
+			</div>
 	        </fieldset>
 	       </div>
       	</g:if>

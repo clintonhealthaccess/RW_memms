@@ -1,6 +1,10 @@
 <%@ page import="org.chai.memms.util.Utils" %>
 <div id="form-aside-${field}-${equipment.id}" class="${(cssClass)?:cssClass}">
+	<a href="${createLinkWithTargetURI(controller:'equipment', action:'edit', params:[id: equipment.id])}" class="next small gray right pulled">
+		<g:message code="default.edit.label" args="[message(code:'equipment.label')]" />
+	</a>
 	<h5><g:message code="equipment.details.label" /></h5>
+	
 	<ul>
 		<li>
 			<span class="label"><g:message code="equipment.serial.number.label" /></span>
@@ -76,7 +80,4 @@
 		</li>
 	
 	</ul>
-	<a href="${createLinkWithTargetURI(controller:'equipment', action:'edit', params:[id: equipment.id])}">
-		<g:message code="default.edit.label" args="[message(code:'equipment.label')]" />
-	</a>
 </div>
