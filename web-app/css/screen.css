@@ -797,7 +797,7 @@ form.search-form button { height: 23px; margin: 0 0 0 -1px; -moz-border-radius-t
 /* line 663, ../../src/stylesheets/partials/_forms.sass */
 .process fieldset li .ajax-spinner { position: absolute; right: 28px; top: 6px; }
 /* line 667, ../../src/stylesheets/partials/_forms.sass */
-.process input[type=text] { width: 200px; }
+.process input[type=text] { width: 264px; }
 /* line 669, ../../src/stylesheets/partials/_forms.sass */
 .process .ajax-error { color: #d30000; font-size: 12px; padding: 0 0 0 3px; }
 /* line 673, ../../src/stylesheets/partials/_forms.sass */
