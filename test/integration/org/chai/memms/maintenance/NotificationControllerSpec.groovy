@@ -142,7 +142,7 @@ class NotificationControllerSpec  extends IntegrationTests{
 		def workOrderTwo = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderTwo, new Date())
 		
 		notificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne)
-		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility)
+		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility,true)
 		notificationService.newNotification(workOrderTwo, "Send for rapair, two",senderTwo)
 		setupSecurityManager(receiverFacility)
 		def notifications = notificationService.searchNotificition("one",receiverFacility,workOrderOne,null,[:])
@@ -188,7 +188,7 @@ class NotificationControllerSpec  extends IntegrationTests{
 		def workOrderTwo = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderTwo, new Date())
 		
 		notificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne)
-		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility)
+		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility, true)
 		notificationService.newNotification(workOrderTwo, "Send for rapair, two",senderTwo)
 		setupSecurityManager(receiverFacility)
 		def notifications = notificationService.searchNotificition("one",receiverFacility,workOrderOne,null,[:])

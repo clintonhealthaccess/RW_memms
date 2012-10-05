@@ -19,8 +19,8 @@
 								<option value="false" ${filterCmd?.read?.equals("false")? 'selected' : ''}><g:message code="default.boolean.false" /></option>
 						</select>
 					</li>
-					<li> <g:input name="from" dateClass="date-picker" label="${message(code:'notification.date.from.label')}" bean="${filterCmd}" field="from"/></li>
-			<li><g:input name="to" dateClass="date-picker" label="${message(code:'notification.date.to.label')}" bean="${filterCmd}" field="to"/> </li>
+					<li> <g:input name="from" dateClass="date-picker" label="${message(code:'notification.date.from.label')}" bean="${filterCmd}" field="from" value="${filterCmd?.from}"/></li>
+			<li><g:input name="to" dateClass="date-picker" label="${message(code:'notification.date.to.label')}" bean="${filterCmd}" field="to" value="${filterCmd?.to}"/> </li>
 				</ul>
 				<button type="submit">Filter</button>
 				<g:if test="">

@@ -1,7 +1,9 @@
 package org.chai.memms
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.chai.memms.security.User;
 import org.chai.memms.util.Utils
+import org.apache.shiro.SecurityUtils;
 
 /*
 * Copyright (c) 2011, Clinton Health Access Initiative.
@@ -35,6 +37,13 @@ class UtilTagLib {
 	
 	def languageService
 	
+	def notificationService
+	
+	def notificationCount = { attrs, body ->
+		//TODO find if a user object can be passed form the view
+		def user = User.findByUuid(SecurityUtils.subject.principal, [cache: true])
+		out << notificationService.getUnreadNotifications(user)
+	}
 	def createLinkWithTargetURI = {attrs, body ->
 		if (attrs['params'] == null) attrs['params'] = [:]
 		else attrs['params'] = new HashMap(attrs['params'])

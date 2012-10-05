@@ -187,7 +187,7 @@ class NotificationController extends AbstractEntityController{
 			workOrder:cmd.workOrder,
 			code: getLabel(),
 			entityClass: getEntityClass(),
-			filterCommand:cmd
+			filterCmd:cmd
 			])
 	}
 }

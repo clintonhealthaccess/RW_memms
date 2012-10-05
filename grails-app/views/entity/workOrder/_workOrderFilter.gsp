@@ -21,16 +21,16 @@
 	<g:form url="[controller:'workOrder', action:'filter']" method="get"
 		useToken="false" class="filters-box">
 		<ul class="filters-list">
-			<li><g:selectFromEnum name="criticality" values="${Criticality.values()}" field="criticality" label="${message(code:'work.order.criticality.label')}" /></li>
-			<li><g:selectFromEnum name="status" values="${OrderStatus.values()}" field="status" label="${message(code:'work.order.status.label')}" /></li>
+			<li><g:selectFromEnum name="criticality" values="${Criticality.values()}" field="criticality" label="${message(code:'work.order.criticality.label')}" bean="${filterCmd}"/></li>
+			<li><g:selectFromEnum name="status" values="${OrderStatus.values()}" field="status" label="${message(code:'work.order.status.label')}" bean="${filterCmd}"/></li>
 			<li><label><g:message code="work.order.assistance.request.label" /></label> 
 			<select name="assistaceRequested">
 					<option value=""> <g:message code="default.please.select" /> </option>
 					<option value="true" ${filterCmd?.assistaceRequested?.equals("true")? 'selected' : ''}> <g:message code="default.boolean.true" /> </option>
 					<option value="false" ${filterCmd?.assistaceRequested?.equals("false")? 'selected' : ''}> <g:message code="default.boolean.false" /> </option>
 			</select></li>
-			<li><g:input name="openOn" dateClass="date-picker" label="${message(code:'work.order.openOn.label')}" bean="${filterCmd}" field="openOn"/></li>
-			<li><g:input name="closedOn" dateClass="date-picker" label="${message(code:'work.order.closedOn.label')}" bean="${filterCmd}" field="closedOn"/></li>
+			<li><g:input name="openOn" dateClass="date-picker" label="${message(code:'work.order.openOn.label')}" bean="${filterCmd}" field="openOn" value="${filterCmd?.openOn}"/></li>
+			<li><g:input name="closedOn" dateClass="date-picker" label="${message(code:'work.order.closedOn.label')}" bean="${filterCmd}" field="closedOn" value="${filterCmd?.closedOn}"/></li>
 		</ul>
 		<button type="submit">Filter</button>
 		<input type="hidden" name="dataLocation.id" value="${dataLocation?.id}" />

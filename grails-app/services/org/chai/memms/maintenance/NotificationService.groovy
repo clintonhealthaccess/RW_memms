@@ -73,6 +73,16 @@ class NotificationService {
 		return sent
     }
 	
+	public int getUnreadNotifications(User user){
+		def criteria = Notification.createCriteria()
+		return  criteria.get{
+			and { 
+				eq('receiver',user)
+				eq('read',false)
+				}
+			projections{rowCount()}
+		}
+	}
 	public List<Notification> searchNotificition(String text,User user,WorkOrder workOrder, Boolean read,Map<String, String> params) {
 		def criteria = Notification.createCriteria()
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
@@ -88,7 +98,7 @@ class NotificationService {
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(workOrder != null) eq("workOrder",workOrder)
 			if(from != null) ge("writtenOn",Utils.getMinDateFromDateTime(from))
-			if(to != null) le("writtenOn",Utils.getMinDateFromDateTime(to))
+			if(to != null) le("writtenOn",Utils.getMaxDateFromDateTime(to))
 			if(receiver != null) eq("receiver",receiver)
 			if(read != null) eq("read",read)
 		}

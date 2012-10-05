@@ -71,9 +71,10 @@ class NotificationServiceSpec  extends IntegrationTests{
 		receiverMoHTwo.save(failOnError:true)
 		
 		def workOrder = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, sender, new Date())
-		when:
+		
 		notificationService.newNotification(workOrder, "Send for rapair",sender)
-		notificationService.newNotification(workOrder, "Send for rapair, higher",receiverFacilityOne)
+		when:
+		notificationService.newNotification(workOrder, "Send for rapair, higher",receiverFacilityOne,true)
 		then:
 		Notification.count() == 6
 		workOrder.notificationGroup.size() == 5
@@ -136,7 +137,7 @@ class NotificationServiceSpec  extends IntegrationTests{
 		def workOrderTwo = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderTwo, new Date())
 		
 		notificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne)
-		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility)
+		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility,true)
 		notificationService.newNotification(workOrderTwo, "Send for rapair, two",senderTwo)
 		def notifications = Notification.list()
 		notificationService.readNotification(notifications[0].id)
@@ -197,5 +198,38 @@ class NotificationServiceSpec  extends IntegrationTests{
 		then:
 		Notification.count() == 2
 		found.size() == 1
+	}
+	
+	def "get unread notifications count"() {
+		setup:
+		setupLocationTree()
+		setupEquipment()
+		def senderOne = newUser("senderOne", true,true)
+		senderOne.userType = UserType.DATACLERK
+		senderOne.location = DataLocation.findByCode(KIVUYE)
+		senderOne.save(failOnError:true)
+		
+		def senderTwo = newUser("senderTwo", true,true)
+		senderTwo.userType = UserType.DATACLERK
+		senderTwo.location = DataLocation.findByCode(KIVUYE)
+		senderTwo.save(failOnError:true)
+		
+		def receiverFacility = newUser("receiverFacility", true,true)
+		receiverFacility.userType = UserType.TECHNICIANFACILITY
+		receiverFacility.location = DataLocation.findByCode(KIVUYE)
+		receiverFacility.save(failOnError:true)
+		
+		def workOrderOne = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderOne, new Date())
+		def workOrderTwo = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderTwo, new Date())
+		
+		notificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne)
+		notificationService.newNotification(workOrderTwo, "Send for rapair, follow up",senderTwo)
+		def unreadNotifications = 0
+		
+		when:
+		unreadNotifications = notificationService.getUnreadNotifications(receiverFacility)
+		then:
+		Notification.count() == 2
+		unreadNotifications == 2
 	}
 }

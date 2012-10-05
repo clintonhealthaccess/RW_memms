@@ -223,8 +223,6 @@ class WorkOrderController extends AbstractEntityController{
 	//TODO not complete
 	def escalate ={
 		WorkOrder order = WorkOrder.get(params.int("order.id"))
-		log.debug(order)
-		def html =""
 		def content = "Please review work order on equipment serial number: ${order.equipment.serialNumber}"
 		def result = false
 		if (order == null)
