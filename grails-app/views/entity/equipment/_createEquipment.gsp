@@ -138,9 +138,6 @@
   	    	</a>
      		</g:if>
      	</fieldset>
-  	    <div class="form-aside">
-       	  
-       	</div>
       </div>
       <div class="form-section">
       	<fieldset class="form-content">
@@ -156,9 +153,6 @@
       	<g:address  bean="${equipment}" warranty="true" field="warranty.contact"/>
      	<g:i18nTextarea name="warranty.descriptions" bean="${equipment}" label="${message(code:'warranty.descriptions.label')}" field="descriptions" height="150" width="300" maxHeight="150" />	 			
   		</fieldset> 
-  		<div class="form-aside">
-       	  
-       	</div>
       </div>
   		<g:if test="${equipment.id != null}">
   			<input type="hidden" name="id" value="${equipment.id}"/>
