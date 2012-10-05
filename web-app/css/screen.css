@@ -781,7 +781,7 @@ form.search-form button { height: 23px; margin: 0 0 0 -1px; -moz-border-radius-t
 .checkbox .ajax-error { color: #d30000; display: inline-block; left: -50%; position: absolute; top: 12px; white-space: nowrap; }
 
 /* line 639, ../../src/stylesheets/partials/_forms.sass */
-.process-list-action, .process-list-material { border: 1px solid #47aef7; max-height: 200px; overflow-y: scroll; }
+.process-list-action, .process-list-material { border: 1px solid #47aef7; max-height: 188px; overflow-y: scroll; }
 
 /* line 645, ../../src/stylesheets/partials/_forms.sass */
 .hide-list { display: none; }
@@ -804,19 +804,21 @@ form.search-form button { height: 23px; margin: 0 0 0 -1px; -moz-border-radius-t
 .process .ajax-error { color: #d30000; font-size: 12px; padding: 0 0 0 3px; }
 /* line 674, ../../src/stylesheets/partials/_forms.sass */
 .process .ajax-error.alt { display: block; }
+/* line 676, ../../src/stylesheets/partials/_forms.sass */
+.process a.delete-row { float: none; position: absolute; right: 4px; top: 4px; }
 
-/* line 677, ../../src/stylesheets/partials/_forms.sass */
+/* line 682, ../../src/stylesheets/partials/_forms.sass */
 a.delete-row { background: #d30000; color: white; display: block; float: right; font-size: 10px; font-weight: bold; height: 18px; position: relative; z-index: 11; line-height: 18px; margin-left: 5px; opacity: 0.2; text-align: center; text-decoration: none; width: 18px; -webkit-border-radius: 50%; -moz-border-radius: 50%; -ms-border-radius: 50%; -o-border-radius: 50%; border-radius: 50%; }
-/* line 694, ../../src/stylesheets/partials/_forms.sass */
+/* line 699, ../../src/stylesheets/partials/_forms.sass */
 a.delete-row:hover, a.delete-row:focus { opacity: 1; }
 
-/* line 699, ../../src/stylesheets/partials/_forms.sass */
+/* line 704, ../../src/stylesheets/partials/_forms.sass */
 .filters .ui-datepicker-trigger { position: absolute; right: 13px; top: 17px; }
 
-/* line 703, ../../src/stylesheets/partials/_forms.sass */
+/* line 708, ../../src/stylesheets/partials/_forms.sass */
 .ui-datepicker-trigger { position: relative; right: 20px; top: 4px; }
 
-/* line 707, ../../src/stylesheets/partials/_forms.sass */
+/* line 712, ../../src/stylesheets/partials/_forms.sass */
 .ui-datepicker-title, .ui-datepicker-calendar { font-size: 12px !important; }
 
 /* line 1, ../../src/stylesheets/partials/_flashes.sass */
