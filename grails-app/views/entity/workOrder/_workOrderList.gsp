@@ -66,7 +66,7 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		escaletWorkOrder("${createLink(controller:'workOrder',action: 'escalate')}")
-		getDatePicker("${resource(dir:'images',file:'calendar.jpeg')}")
+		getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}")
 		$('a.clueTip').cluetip({
 			  //cluetipClass: 'jtip', for formating the output
 			  arrows: true,

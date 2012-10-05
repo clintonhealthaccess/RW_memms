@@ -34,11 +34,13 @@ import org.chai.location.DataLocation;
 import org.chai.location.Location;
 import org.chai.memms.AbstractEntityController;
 import org.chai.memms.equipment.Equipment;
+import org.chai.memms.equipment.EquipmentStatus;
 import org.chai.memms.equipment.EquipmentType;
 import org.chai.memms.equipment.Provider;
 import org.chai.memms.equipment.EquipmentStatus.Status;
 import org.chai.memms.maintenance.MaintenanceProcess.ProcessType;
 import org.chai.memms.maintenance.WorkOrder.Criticality;
+import org.chai.memms.maintenance.WorkOrder.FailureReason;
 import org.chai.memms.maintenance.WorkOrder.OrderStatus;
 import org.chai.memms.security.User;
 
@@ -51,6 +53,7 @@ class WorkOrderController extends AbstractEntityController{
 	def grailsApplication
 	def correctiveMaintenanceService
 	def locationService
+	def equipmentStatusService
 
 	def getEntity(def id) {
 		return WorkOrder.get(id)
@@ -77,9 +80,27 @@ class WorkOrderController extends AbstractEntityController{
 			entity.openOn = now
 			entity.assistaceRequested = false
 			entity.status = OrderStatus.OPEN
-		}else{
+			entity.failureReason = FailureReason.NOTSPECIFIED
 		}
 		entity.properties = params
+	}
+	
+	def saveEntity(def entity) {
+		def currentStatus
+		//Change Equipment Status when creating workorder
+		if(entity.id==null){
+			if(entity.status == OrderStatus.OPEN)
+				currentStatus = equipmentStatusService.createEquipmentStatus(now,user,Status.UNDERMAINTENANCE,entity.equipment,true,now,[:])
+		}else{
+			//Change Equipment Status When closing workorder
+			if(entity.status == OrderStatus.CLOSEDFIXED)
+				currentStatus = equipmentStatusService.createEquipmentStatus(now,user,Status.OPERATIONAL,entity.equipment,true,now,[:])	
+			if(entity.status == OrderStatus.CLOSEDFORDISPOSAL)
+				currentStatus = equipmentStatusService.createEquipmentStatus(now,user,Status.FORDISPOSAL,entity.equipment,true,now,[:])
+		}	
+		
+		entity.save(flush:true)
+		(!currentStatus)?:currentStatus.save(flush:true)
 	}
 
 	def getTemplate() {

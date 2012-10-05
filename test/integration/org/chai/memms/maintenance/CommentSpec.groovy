@@ -4,6 +4,7 @@ import org.chai.memms.Initializer;
 import org.chai.memms.IntegrationTests
 import org.chai.memms.equipment.Equipment;
 import org.chai.memms.maintenance.WorkOrder.Criticality;
+import org.chai.memms.maintenance.WorkOrder.FailureReason;
 import org.chai.memms.maintenance.WorkOrder.OrderStatus;
 
 class CommentSpec  extends IntegrationTests{
@@ -13,7 +14,7 @@ class CommentSpec  extends IntegrationTests{
 		setupEquipment()
 		def user = newUser("user", "user")
 		def workOrder = new WorkOrder(equipment:Equipment.findBySerialNumber(CODE(123)),description: "test work order",criticality:Criticality.NORMAL,status:OrderStatus.OPEN,
-				addedBy:user,openOn: new Date(),assistaceRequested:false).save(failOnError:true)
+				addedBy:user,openOn: new Date(),assistaceRequested:false,failureReason:FailureReason.NOTSPECIFIED).save(failOnError:true)
 		when:
 		new Comment(content:"comment test", writtenOn:new Date().previous(), writtenBy:user, workOrder:workOrder).save(failOnError:true)
 		then:
@@ -26,7 +27,7 @@ class CommentSpec  extends IntegrationTests{
 		setupEquipment()
 		def user = newUser("user", "user")
 		def workOrder = new WorkOrder(equipment:Equipment.findBySerialNumber(CODE(123)),description: "test work order",criticality:Criticality.NORMAL,status:OrderStatus.OPEN,
-				addedBy:user,openOn: new Date(),assistaceRequested:false).save(failOnError:true)
+				addedBy:user,openOn: new Date(),assistaceRequested:false,failureReason:FailureReason.NOTSPECIFIED).save(failOnError:true)
 		def commentWithErrors = new Comment()
 		def expectedFieldErrors = ["content","writtenOn","writtenBy","workOrder"]
 

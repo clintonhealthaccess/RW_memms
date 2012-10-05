@@ -35,7 +35,8 @@ import org.chai.memms.security.User;
  * @author Jean Kahigiso M.
  *
  */
-class WorkOrder {
+@i18nfields.I18nFields
+public class WorkOrder {
 
 	enum Criticality{
 		NONE("none"),
@@ -58,33 +59,69 @@ class WorkOrder {
 		OrderStatus(String name){ this.name=name }
 		String getKey() { return name() }
 	}
+	enum FailureReason{
+		NOTSPECIFIED("not.specified"),
+		MISUSE("misuse"),
+		SPAREPARTBROKEN("spare.part.broken"),
+		OTHER("other")
+		String messageCode = "work.failure.reason"
+		String name
+		FailureReason(String name){ this.name=name }
+		String getKey() { return name() }
+	}
 
 	String currency
 	String description
+	String failureReasonDetails
+	String testResultsDescriptions
+	String returnedTo
+	
 	User addedBy
 	User lastModifiedBy
-	Long estimatedCost
+	User receivedBy
+	User fixedBy
+	
 	Date openOn
 	Date lastModifiedOn
 	Date closedOn
+	Date returnedOn
 	Boolean assistaceRequested
+	
+	Long estimatedCost
+	Integer workTime
+	Integer travelTime
+	
 
 	Criticality criticality
 	OrderStatus status
-
+	FailureReason failureReason
+	
+	static i18nFields = ["failureReasonDetails","testResultsDescriptions"]
 	static belongsTo = [equipment: Equipment]
 	static hasMany = [comments: Comment,notifications: Notification,notificationGroup: User,processes: MaintenanceProcess]
 
 	static constraints = {
 		addedBy nullable: false
+		receivedBy nullable: true
+		fixedBy nullable: true
+		
 		assistaceRequested nullable: false
+		failureReasonDetails nullable: true
+		testResultsDescriptions nullable: true
+		workTime nullable: true, blank: true
+		travelTime nullable: true, blank: true
 		description nullable: false, blank: false
+		returnedTo nullable: true, blank: true
+		
 		openOn nullable: false, validation:{it <= new Date()}
+		returnedOn nullable: true, validation:{it <= new Date()}
+		
 		lastModifiedOn nullable: true, validator:{ val, obj ->
 			if(val!=null)
 				return ((val <= new Date()) && (val.after(obj.openOn) || (val.compareTo(obj.openOn)==0)))
 			else return true
 		}
+		
 		closedOn nullable: true, validation:{ val, obj ->
 			if(val!=null)
 				return ((val <= new Date()) && (val.after(obj.openOn) || (val.compareTo(obj.openOn)==0)))
@@ -97,6 +134,8 @@ class WorkOrder {
 			else if(val != OrderStatus.OPEN && obj.closedOn != null) return true
 			else return false
 		}
+		failureReason nullable:false, blank:false, inList:[FailureReason.NOTSPECIFIED,FailureReason.SPAREPARTBROKEN,FailureReason.MISUSE,FailureReason.OTHER]
+		
 		estimatedCost nullable: true, blank: true, validator:{ val, obj ->
 			if(val == null && obj.currency != null) return false
 		}

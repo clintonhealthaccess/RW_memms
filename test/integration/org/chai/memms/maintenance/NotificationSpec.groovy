@@ -6,6 +6,7 @@ import org.chai.memms.Initializer;
 import org.chai.memms.IntegrationTests
 import org.chai.memms.equipment.Equipment;
 import org.chai.memms.maintenance.WorkOrder.Criticality;
+import org.chai.memms.maintenance.WorkOrder.FailureReason;
 import org.chai.memms.maintenance.WorkOrder.OrderStatus;
 import org.chai.memms.security.User;
 
@@ -18,7 +19,7 @@ class NotificationSpec  extends IntegrationTests{
 		def receiver = newUser("receiver", "receiver")
 
 		def workOrder = new WorkOrder(equipment:Equipment.findBySerialNumber(CODE(123)),description: "test work order",criticality:Criticality.NORMAL,status:OrderStatus.OPEN,
-				addedBy:sender,openOn: new Date(),assistaceRequested:false).save(failOnError:true)
+				addedBy:sender,openOn: new Date(),assistaceRequested:false,failureReason:FailureReason.NOTSPECIFIED).save(failOnError:true)
 
 		when:
 		new Notification(sender:sender, receiver:receiver, writtenOn: new Date(), content:" check this out",read:true,workOrder:workOrder).save(failOnError:true)
@@ -34,7 +35,7 @@ class NotificationSpec  extends IntegrationTests{
 		def receiver = newUser("receiver", "receiver")
 
 		def workOrder = new WorkOrder(equipment:Equipment.findBySerialNumber(CODE(123)),description: "test work order",criticality:Criticality.NORMAL,status:OrderStatus.OPEN,
-				addedBy:sender,openOn: new Date(),assistaceRequested:false).save(failOnError:true)
+				addedBy:sender,openOn: new Date(),assistaceRequested:false,failureReason:FailureReason.NOTSPECIFIED).save(failOnError:true)
 		def notificationWithErrors = new Notification()
 		def expectedFieldErrors = ["sender","receiver","writtenOn","content","read","workOrder"]
 

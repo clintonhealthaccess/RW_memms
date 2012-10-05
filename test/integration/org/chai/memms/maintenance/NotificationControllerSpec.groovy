@@ -9,6 +9,7 @@ import org.chai.memms.Initializer;
 import org.chai.memms.IntegrationTests
 import org.chai.memms.equipment.Equipment;
 import org.chai.memms.maintenance.WorkOrder.Criticality;
+import org.chai.memms.maintenance.WorkOrder.FailureReason;
 import org.chai.memms.maintenance.WorkOrder.OrderStatus;
 import org.chai.memms.security.User;
 import org.chai.memms.security.User.UserType;
@@ -33,7 +34,7 @@ class NotificationControllerSpec  extends IntegrationTests{
 		receiverOne.save(failOnError:true)
 
 		def workOrder = new WorkOrder(equipment:Equipment.findBySerialNumber(CODE(123)),description: "test work order",criticality:Criticality.NORMAL,status:OrderStatus.OPEN,
-				addedBy:sender,openOn: new Date(),assistaceRequested:false).save(flush:true,failOnError:true)
+				addedBy:sender,openOn: new Date(),assistaceRequested:false ,failureReason :FailureReason.NOTSPECIFIED).save(flush:true,failOnError:true)
 		notificationController = new NotificationController()
 		setupSecurityManager(sender)
 		when:
@@ -94,8 +95,8 @@ class NotificationControllerSpec  extends IntegrationTests{
 		receiverMoH.save(failOnError:true)
 		
 		
-		def workOrderOne = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderOne, new Date())
-		def workOrderTwo = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderTwo, new Date())
+		def workOrderOne = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderOne, new Date(),FailureReason.NOTSPECIFIED)
+		def workOrderTwo = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderTwo, new Date(),FailureReason.NOTSPECIFIED)
 		
 		notificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne)
 		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility)
@@ -138,8 +139,8 @@ class NotificationControllerSpec  extends IntegrationTests{
 		receiverMoH.save(failOnError:true)
 		
 		
-		def workOrderOne = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderOne, new Date())
-		def workOrderTwo = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderTwo, new Date())
+		def workOrderOne = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderOne, new Date(),FailureReason.NOTSPECIFIED)
+		def workOrderTwo = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderTwo, new Date(),FailureReason.NOTSPECIFIED)
 		
 		notificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne)
 		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility,true)
@@ -184,8 +185,8 @@ class NotificationControllerSpec  extends IntegrationTests{
 		receiverMoH.save(failOnError:true)
 		
 		
-		def workOrderOne = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderOne, new Date())
-		def workOrderTwo = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderTwo, new Date())
+		def workOrderOne = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderOne, new Date(),FailureReason.NOTSPECIFIED)
+		def workOrderTwo = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderTwo, new Date(),FailureReason.NOTSPECIFIED)
 		
 		notificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne)
 		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility, true)
@@ -229,8 +230,8 @@ class NotificationControllerSpec  extends IntegrationTests{
 		receiverMoH.save(failOnError:true)
 		
 		
-		def workOrderOne = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderOne, new Date())
-		def workOrderTwo = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderTwo, new Date())
+		def workOrderOne = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderOne, new Date(),FailureReason.NOTSPECIFIED)
+		def workOrderTwo = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderTwo, new Date(),FailureReason.NOTSPECIFIED)
 		
 		notificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne)
 		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility)
@@ -272,8 +273,8 @@ class NotificationControllerSpec  extends IntegrationTests{
 		receiverMoH.save(failOnError:true)
 		
 		
-		def workOrderOne = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderOne, new Date())
-		def workOrderTwo = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderTwo, new Date())
+		def workOrderOne = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderOne, new Date(),FailureReason.NOTSPECIFIED)
+		def workOrderTwo = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderTwo, new Date(),FailureReason.NOTSPECIFIED)
 		
 		notificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne)
 		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility)

@@ -1,14 +1,19 @@
-
 .form-section
 	border-bottom: 1px solid #eee
 	+pie-clearfix
 	.form-content
 		float: left
-		width: 55%
+		width: 60%
 	.form-aside
+		background: url('../images/bg-body.png')
+		border: 1px solid #f6f6f6
 		float: right
-		padding: 10px 0 20px
-		width: 40%
+		margin-top: 15px
+		margin-bottom: 15px
+		padding: 10px 2% 20px 3%
+		width: 33%
+		.pulled
+			margin-top: -6px
 	h6
 		color: #888
 		font-size: 12px
@@ -117,6 +122,10 @@ button, input[type=submit], .next
 		font-size: 11px
 		padding: 5px 15px
 		+text-shadow(rgba(0, 0, 0, 0.2) 0 1px 0)
+	&.small
+		font-size: 11px
+		padding: 3px 10px
+		+text-shadow(rgba(0, 0, 0, 0.2) 0 1px 0)
 	&.gray
 		background: #d9d9d9
 		border: 1px solid #ddd
@@ -162,9 +171,10 @@ select
 		border-color: $primary
 		
 .focus-field
-	border: solid 1px $filler - #222
+	border: solid 1px $primary
 	background: $filler + #060606
 	color: #333
+	font: normal 12px Arial, sans-serif
 	padding: 3px
 	  
 .idle-field
@@ -177,10 +187,6 @@ select
 	&:hover, &:focus
 		background: $filler + #030303
 		border-color: $primary
-// jkahigiso start: added textare style	
-.date-picker
-	width: 200px
-// jkahigiso end
 	
 .completed-field
 	background: #ededed
@@ -483,10 +489,11 @@ form.search-form
 		color: $primary
 		display: inline-block
 		font-size: 11px
+		line-height: 1.4
 		margin-left: 7px
 		padding-top: 5px
 		vertical-align: top
-		width: 130px
+		width: 100px
 	.row
 		margin-bottom: 7px
 		vertical-align: middle
@@ -495,7 +502,7 @@ form.search-form
 			float: left
 		input[type=text]
 			margin: 0
-			width: 200px
+			width: 230px
 		select[name=currency]
 			height: 23px
 			margin-left: 3px
@@ -506,8 +513,10 @@ form.search-form
 	.date
 		select
 			min-width: 50px
+	.date-picker
+		width: 132px !important
 	input[type=text], textarea
-		width: 290px
+		width: 320px
 		
 .paginateButtons
 	padding: 0 15px 15px
@@ -625,17 +634,22 @@ form.search-form
 		position: absolute
 		top: 12px
 		white-space: nowrap
-.process-list-action
+.process-list-action, .process-list-material
 	border: 1px solid $primary + #222
-.process-list-material
-	border: 1px solid $primary + #222
+	max-height: 200px
+	overflow-y: scroll
+	
+// jkahigiso start: added textare style	
+.hide-list
+	display: none
+// jkahigiso end
 	
 .process
 	margin-bottom: 15px
 	fieldset
 		display: inline
 		padding: 3px 0 10px
-		width: 390px
+		width: 330px
 		ul
 			margin-bottom: 10px
 		li
@@ -650,7 +664,7 @@ form.search-form
 				right: 28px
 				top: 6px
 	input[type=text]
-		width: 200px
+		width: 264px
 	.ajax-error
 		color: $no
 		font-size: 12px
@@ -666,6 +680,8 @@ a.delete-row
 	font-size: 10px
 	font-weight: bold
 	height: 18px
+	position: relative
+	z-index: 11
 	line-height: 18px
 	margin-left: 5px
 	opacity: .2
@@ -675,3 +691,12 @@ a.delete-row
 	+border-radius(50%)
 	&:hover, &:focus
 		opacity: 1
+
+// ui-datepicker overrides
+		
+.ui-datepicker-trigger
+	position: relative
+	left: -20px
+	top: 4px
+.ui-datepicker-title, .ui-datepicker-calendar
+	font-size: 12px !important

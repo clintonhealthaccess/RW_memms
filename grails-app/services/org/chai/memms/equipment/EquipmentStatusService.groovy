@@ -27,19 +27,28 @@
  */
 package org.chai.memms.equipment
 
+import org.chai.memms.util.Utils;
 import org.grails.datastore.mapping.query.api.Criteria;
 
 /**
  * @author Jean Kahigiso M.
  *
  */
+
 class EquipmentStatusService {
 	static transactional = true
+	
 	List<Equipment> getEquipmentStatusByEquipment(Equipment equipment, Map<String,String> params){
 		def criteria = EquipmentStatus.createCriteria()
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"current",order: params.order ?:"desc"){
 			eq("equipment",equipment)
 		}
+	}
+	
+	def createEquipmentStatus(def statusChangeDate,def changedBy,def value, def equipment,def current,def dateOfEvent,def reasons){
+		def status = new EquipmentStatus(dateOfEvent:dateOfEvent,changedBy:changedBy,status:value,equipment:equipment,current:current,statusChangeDate:statusChangeDate)
+		Utils.setLocaleValueInMap(status,reasons,"Reasons")
+		return status
 	}
 }
 
