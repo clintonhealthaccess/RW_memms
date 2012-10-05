@@ -79,7 +79,6 @@ class NotificationController extends AbstractEntityController{
 	}
 	
 	def read={
-		if(log.isDebugEnabled()) log.debug("Params = " + params)
 		adaptParamsForList()
 		def notificationId
 		if(!params.id) redirect(uri: getTargetURI())
@@ -116,7 +115,7 @@ class NotificationController extends AbstractEntityController{
 			])
 	}
 	
-	def search = {log.debug("search = "+params)
+	def search = {
 		adaptParamsForList()
 		Boolean read = (params.read) ? params.boolean("read") : null;
 		WorkOrder workOrder = WorkOrder.get(params.workOrder)
@@ -176,7 +175,6 @@ class NotificationController extends AbstractEntityController{
 	}
 	
 	def filter = {FilterNotificationCommand cmd ->
-		if(log.isDebugEnabled()) log.debug("Params = " + params+", cmd="+cmd)
 		adaptParamsForList()
 		List<Notification> notifications = notificationService.filterNotifications(cmd.workOrder, user, cmd.from,cmd.to,cmd.getReadStatus(), params)
 		render(view:"/entity/list", model:[
