@@ -811,9 +811,12 @@ a.delete-row { background: #d30000; color: white; display: block; float: right; 
 a.delete-row:hover, a.delete-row:focus { opacity: 1; }
 
 /* line 699, ../../src/stylesheets/partials/_forms.sass */
-.ui-datepicker-trigger { position: absolute; right: 13px; top: 17px; }
+.filters .ui-datepicker-trigger { position: absolute; right: 13px; top: 17px; }
 
 /* line 703, ../../src/stylesheets/partials/_forms.sass */
+.ui-datepicker-trigger { position: relative; right: 20px; top: 4px; }
+
+/* line 707, ../../src/stylesheets/partials/_forms.sass */
 .ui-datepicker-title, .ui-datepicker-calendar { font-size: 12px !important; }
 
 /* line 1, ../../src/stylesheets/partials/_flashes.sass */
