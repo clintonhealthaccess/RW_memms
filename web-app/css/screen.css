@@ -163,34 +163,34 @@ ul.horizontal li.last { margin-right: 0; }
 .dropdown .dropdown-list li a:hover { color: #1f7cbd; }
 
 /* line 1, ../../src/stylesheets/partials/_layout.sass */
-.wrapper, .clearfix, .half, .full, .row { *zoom: 1; }
+.wrapper, .clearfix, .half, .full, .row { position: relative; *zoom: 1; }
 /* line 38, ../../../../../../usr/local/opt/rbenv/versions/1.9.3-p194/lib/ruby/gems/1.9.1/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .wrapper:after, .clearfix:after, .half:after, .full:after, .row:after { content: ""; display: table; clear: both; }
 
-/* line 4, ../../src/stylesheets/partials/_layout.sass */
+/* line 5, ../../src/stylesheets/partials/_layout.sass */
 .wrapper { margin: 0 auto; position: relative; width: 1000px; }
 
-/* line 9, ../../src/stylesheets/partials/_layout.sass */
+/* line 10, ../../src/stylesheets/partials/_layout.sass */
 .left { display: inline; float: left; }
 
-/* line 13, ../../src/stylesheets/partials/_layout.sass */
+/* line 14, ../../src/stylesheets/partials/_layout.sass */
 .right { display: inline; float: right; }
 
-/* line 17, ../../src/stylesheets/partials/_layout.sass */
+/* line 18, ../../src/stylesheets/partials/_layout.sass */
 .inline { display: inline; }
 
-/* line 20, ../../src/stylesheets/partials/_layout.sass */
+/* line 21, ../../src/stylesheets/partials/_layout.sass */
 #content { background: url("../images/bg-body.png") repeat-x top center; }
-/* line 23, ../../src/stylesheets/partials/_layout.sass */
+/* line 24, ../../src/stylesheets/partials/_layout.sass */
 #content .main { background: white; border: 1px solid rgba(0, 0, 0, 0.1); }
 
-/* line 27, ../../src/stylesheets/partials/_layout.sass */
+/* line 28, ../../src/stylesheets/partials/_layout.sass */
 .clearfix { clear: both; }
 
-/* line 30, ../../src/stylesheets/partials/_layout.sass */
+/* line 31, ../../src/stylesheets/partials/_layout.sass */
 .full { width: 100%; }
 
-/* line 33, ../../src/stylesheets/partials/_layout.sass */
+/* line 34, ../../src/stylesheets/partials/_layout.sass */
 .half { float: left; width: 50%; }
 
 /* line 1, ../../src/stylesheets/partials/_header.sass */
@@ -758,60 +758,62 @@ form.search-form button { height: 23px; margin: 0 0 0 -1px; -moz-border-radius-t
 .filters select { background: #faffff; border: 1px solid #47aef7; color: #258cd5; font-size: 11px; font-weight: bold; height: 24px; padding: 3px; width: 300px; -webkit-border-radius: 2px; -moz-border-radius: 2px; -ms-border-radius: 2px; -o-border-radius: 2px; border-radius: 2px; }
 /* line 606, ../../src/stylesheets/partials/_forms.sass */
 .filters button { margin: 5px 15px 15px; }
+/* line 608, ../../src/stylesheets/partials/_forms.sass */
+.filters .date-picker { width: 137px; }
 
-/* line 609, ../../src/stylesheets/partials/_forms.sass */
+/* line 611, ../../src/stylesheets/partials/_forms.sass */
 .filter-results { color: #aaaaaa; font: bold 14px Arial, sans-serif; padding: 5px 0; text-transform: uppercase; }
 
-/* line 615, ../../src/stylesheets/partials/_forms.sass */
+/* line 617, ../../src/stylesheets/partials/_forms.sass */
 .form-languages a { font-size: 10px; margin-left: 5px; text-transform: uppercase; }
 
-/* line 620, ../../src/stylesheets/partials/_forms.sass */
+/* line 622, ../../src/stylesheets/partials/_forms.sass */
 .checkbox { position: relative; *zoom: 1; }
 /* line 38, ../../../../../../usr/local/opt/rbenv/versions/1.9.3-p194/lib/ruby/gems/1.9.1/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .checkbox:after { content: ""; display: table; clear: both; }
-/* line 623, ../../src/stylesheets/partials/_forms.sass */
-.checkbox .ajax-spinner, .checkbox .list-check-box { position: absolute; }
 /* line 625, ../../src/stylesheets/partials/_forms.sass */
-.checkbox .ajax-spinner { top: -7px; }
+.checkbox .ajax-spinner, .checkbox .list-check-box { position: absolute; }
 /* line 627, ../../src/stylesheets/partials/_forms.sass */
+.checkbox .ajax-spinner { top: -7px; }
+/* line 629, ../../src/stylesheets/partials/_forms.sass */
 .checkbox .list-check-box { margin: 0; top: -5px; }
-/* line 630, ../../src/stylesheets/partials/_forms.sass */
+/* line 632, ../../src/stylesheets/partials/_forms.sass */
 .checkbox .ajax-error { color: #d30000; display: inline-block; left: -50%; position: absolute; top: 12px; white-space: nowrap; }
 
-/* line 637, ../../src/stylesheets/partials/_forms.sass */
+/* line 639, ../../src/stylesheets/partials/_forms.sass */
 .process-list-action, .process-list-material { border: 1px solid #47aef7; max-height: 200px; overflow-y: scroll; }
 
-/* line 643, ../../src/stylesheets/partials/_forms.sass */
+/* line 645, ../../src/stylesheets/partials/_forms.sass */
 .hide-list { display: none; }
 
-/* line 647, ../../src/stylesheets/partials/_forms.sass */
-.process { margin-bottom: 15px; }
 /* line 649, ../../src/stylesheets/partials/_forms.sass */
+.process { margin-bottom: 15px; }
+/* line 651, ../../src/stylesheets/partials/_forms.sass */
 .process fieldset { display: inline; padding: 3px 0 10px; width: 330px; }
-/* line 653, ../../src/stylesheets/partials/_forms.sass */
-.process fieldset ul { margin-bottom: 10px; }
 /* line 655, ../../src/stylesheets/partials/_forms.sass */
+.process fieldset ul { margin-bottom: 10px; }
+/* line 657, ../../src/stylesheets/partials/_forms.sass */
 .process fieldset li { border-bottom: 1px solid #eeeeee; line-height: 1.4; padding: 5px; position: relative; }
-/* line 660, ../../src/stylesheets/partials/_forms.sass */
-.process fieldset li:last-child { border-bottom: 0; }
 /* line 662, ../../src/stylesheets/partials/_forms.sass */
+.process fieldset li:last-child { border-bottom: 0; }
+/* line 664, ../../src/stylesheets/partials/_forms.sass */
 .process fieldset li .ajax-spinner { position: absolute; right: 28px; top: 6px; }
-/* line 666, ../../src/stylesheets/partials/_forms.sass */
-.process input[type=text] { width: 264px; }
 /* line 668, ../../src/stylesheets/partials/_forms.sass */
+.process input[type=text] { width: 264px; }
+/* line 670, ../../src/stylesheets/partials/_forms.sass */
 .process .ajax-error { color: #d30000; font-size: 12px; padding: 0 0 0 3px; }
-/* line 672, ../../src/stylesheets/partials/_forms.sass */
+/* line 674, ../../src/stylesheets/partials/_forms.sass */
 .process .ajax-error.alt { display: block; }
 
-/* line 675, ../../src/stylesheets/partials/_forms.sass */
+/* line 677, ../../src/stylesheets/partials/_forms.sass */
 a.delete-row { background: #d30000; color: white; display: block; float: right; font-size: 10px; font-weight: bold; height: 18px; position: relative; z-index: 11; line-height: 18px; margin-left: 5px; opacity: 0.2; text-align: center; text-decoration: none; width: 18px; -webkit-border-radius: 50%; -moz-border-radius: 50%; -ms-border-radius: 50%; -o-border-radius: 50%; border-radius: 50%; }
-/* line 692, ../../src/stylesheets/partials/_forms.sass */
+/* line 694, ../../src/stylesheets/partials/_forms.sass */
 a.delete-row:hover, a.delete-row:focus { opacity: 1; }
 
-/* line 697, ../../src/stylesheets/partials/_forms.sass */
-.ui-datepicker-trigger { position: relative; left: -20px; top: 4px; }
+/* line 699, ../../src/stylesheets/partials/_forms.sass */
+.ui-datepicker-trigger { position: absolute; right: 13px; top: 17px; }
 
-/* line 701, ../../src/stylesheets/partials/_forms.sass */
+/* line 703, ../../src/stylesheets/partials/_forms.sass */
 .ui-datepicker-title, .ui-datepicker-calendar { font-size: 12px !important; }
 
 /* line 1, ../../src/stylesheets/partials/_flashes.sass */
