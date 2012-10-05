@@ -53,8 +53,8 @@
 					${order.closedOn}
 				</td>
 				<td>
-	  			<button class="escalate" id="${order.id}"><g:message code="work.order.escalate.issue.link.label"/></button>
-	  			<img src="${resource(dir:'images',file:'spinner.gif')}" class="ajax-spinner"/>
+	  				<button class="escalate next medium gray" id="${order.id}"><g:message code="work.order.escalate.issue.link.label"/></button>
+	  				<img src="${resource(dir:'images',file:'spinner.gif')}" class="ajax-spinner"/>
 				</td>
 				<td>
 					<a href="${createLinkWithTargetURI(controller:'notification', action:'list', params:[id: order.id, read:false])}">${order.getUnReadNotificationsForUser(User.findByUuid(SecurityUtils.subject.principal, [cache: true])).size()}</a>
