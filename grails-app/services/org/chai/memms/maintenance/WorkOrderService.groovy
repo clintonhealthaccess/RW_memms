@@ -144,19 +144,19 @@ class WorkOrderService {
 	List<WorkOrder> getWorkOrdersByEquipment(Equipment equipment, Map<String, String> params){
 		def criteria = WorkOrder.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			if(equipment)
-				eq("equipment",equipment)
+			eq("equipment",equipment)
 		}
 	}
 	
-	List<WorkOrder> getWorkOrdersByCalculationLocation(CalculationLocation location,List<DataLocationType> types, Map<String, String> params){
+	List<WorkOrder> getWorkOrdersByCalculationLocation(CalculationLocation location, Map<String, String> params){
 		def equipments =[]
 		def criteria = WorkOrder.createCriteria();
 		
 		if(location instanceof DataLocation)
+			//log.
 			equipments = equipmentService.getEquipmentsByDataLocation(location, [:])
 		else{
-			def dataLocations = locationService.getDataLocations(null,(types)? types:null)
+			def dataLocations = location.getDataLocations(null,null)
 			for(DataLocation dataLocation: dataLocations)
 				equipments.addAll( equipmentService.getEquipmentsByDataLocation(dataLocation, [:]))
 		}

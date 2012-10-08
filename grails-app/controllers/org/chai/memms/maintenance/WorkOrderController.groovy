@@ -41,14 +41,18 @@ import org.chai.memms.equipment.EquipmentStatus.Status;
 import org.chai.memms.maintenance.MaintenanceProcess.ProcessType;
 import org.chai.memms.maintenance.WorkOrder.Criticality;
 import org.chai.memms.maintenance.WorkOrder.FailureReason;
-import org.chai.memms.maintenance.WorkOrder.OrderStatus;
+import org.chai.memms.maintenance.WorkOrderStatus.OrderStatus;
 import org.chai.memms.security.User;
+import org.chai.memms.maintenance.WorkOrderStatus
+import org.chai.memms.maintenance.WorkOrder
+
 
 /**
  * @author Jean Kahigiso M.
  *
  */
 class WorkOrderController extends AbstractEntityController{
+	
 	def workOrderService
 	def grailsApplication
 	def correctiveMaintenanceService
@@ -70,7 +74,7 @@ class WorkOrderController extends AbstractEntityController{
 			order:entity,
 			equipments: equipments,
 			currencies: grailsApplication.config.site.possible.currency,
-			closed:(entity.status==OrderStatus.CLOSEDFIXED || entity.status == OrderStatus.CLOSEDFORDISPOSAL)? true:false
+			orderClosed:(entity.status==OrderStatus.CLOSEDFIXED || entity.status == OrderStatus.CLOSEDFORDISPOSAL)? true:false
 		]
 	}
 
@@ -78,9 +82,13 @@ class WorkOrderController extends AbstractEntityController{
 		if(!entity.id){
 			entity.addedBy = user
 			entity.openOn = now
-			entity.assistaceRequested = false
-			entity.status = OrderStatus.OPEN
+			entity.status = OrderStatus.OPENATFOSA
 			entity.failureReason = FailureReason.NOTSPECIFIED
+		}else{
+			entity.lastModifiedBy = user
+			if(entity.status == OrderStatus.CLOSEDFIXED || entity.status == OrderStatus.CLOSEDFORDISPOSAL)
+				entity.closedOn = now
+			else entity.closedOn = null
 		}
 		entity.properties = params
 	}
@@ -89,7 +97,7 @@ class WorkOrderController extends AbstractEntityController{
 		def currentStatus
 		//Change Equipment Status when creating workorder
 		if(entity.id==null){
-			if(entity.status == OrderStatus.OPEN)
+			if(entity.status == OrderStatus.OPENATFOSA)
 				currentStatus = equipmentStatusService.createEquipmentStatus(now,user,Status.UNDERMAINTENANCE,entity.equipment,true,now,[:])
 		}else{
 			//Change Equipment Status When closing workorder
@@ -120,17 +128,13 @@ class WorkOrderController extends AbstractEntityController{
 		List<WorkOrder> orders= []
 		Equipment equipment = null
 		CalculationLocation  location = null
-		if(params["location"]) location = CalculationLocation.get(params.int("location.id"))
+		if(params["location"]) location = CalculationLocation.get(params.int("location"))
 		if(params["equipment"]) equipment = Equipment.get(params.int("equipment.id"))
 		
 		if(location)
-			orders = workOrderService.getWorkOrdersByCalculationLocation(location, orders, params)
-			
-		if(equipment){
+			orders = workOrderService.getWorkOrdersByCalculationLocation(location,params)	
+		if(equipment)
 		 	orders= workOrderService.getWorkOrdersByEquipment(equipment,params)
-		}else{
-			orders= workOrderService.getWorkOrdersByEquipment(null,params)
-		}
 
 		render(view:"/entity/list", model:[
 					template:"workorder/workOrderList",

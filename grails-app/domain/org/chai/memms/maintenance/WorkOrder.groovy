@@ -27,8 +27,12 @@
  */
 package org.chai.memms.maintenance
 
+import javax.persistence.Transient;
+
 import org.chai.memms.equipment.Equipment;
+import org.chai.memms.equipment.EquipmentStatus.Status;
 import org.chai.memms.maintenance.MaintenanceProcess.ProcessType;
+import org.chai.memms.maintenance.WorkOrderStatus.OrderStatus;
 import org.chai.memms.security.User;
 
 /**
@@ -47,17 +51,6 @@ public class WorkOrder {
 		String name
 		Criticality(String name){this.name=name}
 		String getKey(){ return name() }
-	}
-
-	enum OrderStatus{
-		NONE("none"),
-		OPEN("open"),
-		CLOSEDFIXED("closedfixed"),
-		CLOSEDFORDISPOSAL("closedfordisposal")
-		String messageCode = "work.order.status"
-		String name
-		OrderStatus(String name){ this.name=name }
-		String getKey() { return name() }
 	}
 	enum FailureReason{
 		NOTSPECIFIED("not.specified"),
@@ -85,27 +78,27 @@ public class WorkOrder {
 	Date lastModifiedOn
 	Date closedOn
 	Date returnedOn
-	Boolean assistaceRequested
+	Boolean escalate = false
 	
-	Long estimatedCost
+	Integer estimatedCost
 	Integer workTime
 	Integer travelTime
 	
 
 	Criticality criticality
-	OrderStatus status
 	FailureReason failureReason
 	
 	static i18nFields = ["failureReasonDetails","testResultsDescriptions"]
 	static belongsTo = [equipment: Equipment]
-	static hasMany = [comments: Comment,notifications: Notification,notificationGroup: User,processes: MaintenanceProcess]
+	static hasMany = [status: WorkOrderStatus, comments: Comment,notifications: Notification,notificationGroup: User,processes: MaintenanceProcess]
+	
 
 	static constraints = {
 		addedBy nullable: false
 		receivedBy nullable: true
 		fixedBy nullable: true
 		
-		assistaceRequested nullable: false
+		escalate nullable: false
 		failureReasonDetails nullable: true
 		testResultsDescriptions nullable: true
 		workTime nullable: true, blank: true
@@ -129,11 +122,6 @@ public class WorkOrder {
 		}
 		lastModifiedBy nullable: true
 		criticality nullable: false, blank: false, inList: [Criticality.LOW,Criticality.HIGH,Criticality.NORMAL]
-		status nullable: false, blank: false, inList:[OrderStatus.OPEN,OrderStatus.CLOSEDFIXED,OrderStatus.CLOSEDFORDISPOSAL], validator:{ val, obj ->
-			if(val == OrderStatus.OPEN && obj.closedOn == null) return true
-			else if(val != OrderStatus.OPEN && obj.closedOn != null) return true
-			else return false
-		}
 		failureReason nullable:false, blank:false, inList:[FailureReason.NOTSPECIFIED,FailureReason.SPAREPARTBROKEN,FailureReason.MISUSE,FailureReason.OTHER]
 		
 		estimatedCost nullable: true, blank: true, validator:{ val, obj ->
@@ -143,7 +131,8 @@ public class WorkOrder {
 			if(val == null && obj.estimatedCost != null) return false
 		}
 	}
-
+	
+	@Transient
 	def getActions(){
 		List<MaintenanceProcess> actions = []
 		for(MaintenanceProcess process: processes)
@@ -151,7 +140,7 @@ public class WorkOrder {
 				actions.add(process)
 		return actions;
 	}
-
+	@Transient
 	def getMaterials(){
 		List<MaintenanceProcess> materials = []
 		for(MaintenanceProcess process: processes)
@@ -159,6 +148,43 @@ public class WorkOrder {
 				materials.add(process)
 		return materials;
 	}
+	
+	@Transient
+	def getCurrentState() {
+		if(!status) return  null
+		def currentStatus=null
+		for(WorkOrderStatus state : status)
+			if(state.isCurrent()) currentStatus = state
+		if(currentStatus!=null && currentStatus.equals(getTimeBasedStatus()))
+			return currentStatus;
+		else{ 
+			setCurrentStatus()
+			return getTimeBasedStatus()
+		}
+	}
+	
+	@Transient
+	def setCurrentStatus(){
+		def state = getTimeBasedStatus()
+		status.each{ stat ->
+			if(!stat.is(state)){
+				stat.current = false
+				stat.save(flush:true)
+			}
+		}
+		state.current = true
+		state.save(flush:true)
+	}
+	
+	@Transient
+	def getTimeBasedStatus(){
+		WorkOrderStatus currentStatus = status.asList()[0]
+		for(WorkOrderStatus state : status)
+			if(state.changeOn.after(currentStatus.changeOn))
+				currentStatus= state;
+		return currentStatus
+	}
+
 
 	static mapping = {
 		table "memms_work_order"

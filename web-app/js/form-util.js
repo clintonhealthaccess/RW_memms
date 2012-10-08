@@ -14,6 +14,7 @@ function getDatePicker(iconPath){
 		});
 	});
 }
+
 /** 
  * Form-aside loader
  */
@@ -27,6 +28,10 @@ function getHtml(htmls,field){
 	$(attrId).append(html);
 	$(".form-aside-hidden").hide();
 }
+
+/**
+ * Escalate WorkOrder
+ */
 function escaletWorkOrder(baseUrl){
 	$(".ajax-spinner").hide();
 	$("tr").on("click",".escalate",function(e){

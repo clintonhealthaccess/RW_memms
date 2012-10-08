@@ -41,16 +41,16 @@
 					${order.equipment.type.names}
 				</td>
 				<td>
-					${order.status}
+					${message(code: order.currentState?.status?.messageCode+'.'+order.currentState?.status?.name)}
 				</td>
 				<td>
 					${order.criticality}
 				</td>
 				<td>
-					${order.openOn}
+					${Utils.formatDateWithTime(order.openOn)}
 				</td>
 				<td>
-					${order.closedOn}
+					${Utils.formatDateWithTime(order.closedOn)}
 				</td>
 				<td>
 	  				<button class="escalate next medium gray" id="${order.id}"><g:message code="work.order.escalate.issue.link.label"/></button>

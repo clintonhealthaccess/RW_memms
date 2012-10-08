@@ -66,7 +66,7 @@
         	<div class="form-content">
         		<g:input name="workTime" label="${message(code:'work.order.work.time.label')}" bean="${order}" field="workTime"/>
         		<g:input name="travelTime" label="${message(code:'work.order.travel.time.label')}" bean="${order}" field="travelTime"/>
-	        	<g:currency costName="estimatedCost" id="estimated-cost" costLabel="${message(code:'work.order.estimated.cost.label')}" bean="${equipment}" costField="estimatedCost"  currencyName="currency" values="${currencies}" currencyField="currency" currencyLabel="${message(code:'work.order.currency.label')}"/>
+	        	<g:currency costName="estimatedCost" id="estimated-cost" costLabel="${message(code:'work.order.estimated.cost.label')}" bean="${order}" costField="estimatedCost"  currencyName="currency" values="${currencies}" currencyField="currency" currencyLabel="${message(code:'work.order.currency.label')}"/>
 			</div>
 	        </fieldset>
 	      </div>

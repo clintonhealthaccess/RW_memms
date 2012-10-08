@@ -44,13 +44,15 @@ import org.chai.location.DataLocationType;
 import org.chai.location.Location;
 import org.chai.location.LocationLevel;
 import org.chai.memms.maintenance.Comment;
+import org.chai.memms.maintenance.EscalationLog;
 import org.chai.memms.maintenance.MaintenanceProcess;
 import org.chai.memms.maintenance.MaintenanceProcess.ProcessType;
 import org.chai.memms.maintenance.Notification;
 import org.chai.memms.maintenance.WorkOrder;
 import org.chai.memms.maintenance.WorkOrder.Criticality;
 import org.chai.memms.maintenance.WorkOrder.FailureReason;
-import org.chai.memms.maintenance.WorkOrder.OrderStatus;
+import org.chai.memms.maintenance.WorkOrderStatus;
+import org.chai.memms.maintenance.WorkOrderStatus.OrderStatus;
 import org.chai.memms.security.Role
 import org.chai.memms.security.User
 import org.chai.memms.security.User.UserType
@@ -138,46 +140,46 @@ public class Initializer {
 
 			//Defining User
 			//User with admin role
-			def admin = new User(userType: UserType.ADMIN,code:"admin", location: CalculationLocation.findByCode(RWANDA), username: "admin", 
+			def admin = new User(userType: UserType.ADMIN, location: CalculationLocation.findByCode(RWANDA), username: "admin", 
 				firstname: "memms", lastname: "memms", email:'memms@memms.org', passwordHash: new Sha256Hash("admin").toHex(), active: true, 
 				confirmed: true, uuid:'admin', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
 			admin.addToRoles(defaultAdminRole)
 			admin.save(failOnError: true)
 			
-			def userClerk= new User(userType: UserType.DATACLERK,code:"user", location: CalculationLocation.findByCode(KIVUYE), username: "user", 
+			def userClerk= new User(userType: UserType.DATACLERK, location: CalculationLocation.findByCode(KIVUYE), username: "user", 
 				firstname: "user", lastname: "user", email:'user@memms.org', passwordHash: new Sha256Hash("user").toHex(), active: true, 
 				confirmed: true, uuid:'user', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
 			userClerk.addToRoles(dataClerkRole)
 			userClerk.save(failOnError: true, flush:true)
 			
-			def userTechnicianFacility= new User(userType: UserType.TECHNICIANFACILITY,code:"techf", location: CalculationLocation.findByCode(KIVUYE), username: "techf",
+			def userTechnicianFacility= new User(userType: UserType.TECHNICIANFACILITY, location: CalculationLocation.findByCode(KIVUYE), username: "techf",
 				firstname: "technician", lastname: "facility", email:'techf@memms.org', passwordHash: new Sha256Hash("techf").toHex(), active: true,
 				confirmed: true, uuid:'techf', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
 			userTechnicianFacility.addToRoles(technicianFacilityRole)
 			userTechnicianFacility.save(failOnError: true, flush:true)
 			
-			def userTechnicianMoH= new User(userType: UserType.TECHNICIANMOH,code:"techMoH", location: CalculationLocation.findByCode(RWANDA), username: "techMoH",
+			def userTechnicianMoH= new User(userType: UserType.TECHNICIANMOH, location: CalculationLocation.findByCode(RWANDA), username: "techMoH",
 				firstname: "technician", lastname: "MoH", email:'techMoH@memms.org', passwordHash: new Sha256Hash("techMoH").toHex(), active: true,
 				confirmed: true, uuid:'techMoH', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
 			userTechnicianMoH.addToRoles(technicianMoHRole)
 			userTechnicianMoH.save(failOnError: true, flush:true)
 			
 			//User with default clerk role
-			def userClerkOne= new User(userType: UserType.OTHER,code:"userOne", location: CalculationLocation.findByCode(KIVUYE), username: "userOne", 
+			def userClerkOne= new User(userType: UserType.OTHER,location: CalculationLocation.findByCode(KIVUYE), username: "userOne", 
 				firstname: "user", lastname: "user", email:'user@memms.com', passwordHash: new Sha256Hash("user").toHex(), active: true, 
 				confirmed: true, uuid:'userOne', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
 			userClerkOne.addToRoles(defaultClercRole)
 			userClerkOne.save(failOnError: true)
 			
 			//User with faulty clerk role
-			def userClerkTwo= new User(userType: UserType.OTHER,code:"user1", location: CalculationLocation.findByCode(BURERA), username: "user1",
+			def userClerkTwo= new User(userType: UserType.OTHER, location: CalculationLocation.findByCode(BURERA), username: "user1",
 				firstname: "user1", lastname: "user1", email:'user1@memms.org', passwordHash: new Sha256Hash("user1").toHex(), active: true,
 				confirmed: true, uuid:'user1', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
 			userClerkTwo.addToRoles(faultyClercRole)
 			userClerkTwo.save(failOnError: true)
 			
 			//User with permission assigned directly
-			def userClerkThree= new User(userType: UserType.OTHER,code:"user2", location: CalculationLocation.findByCode(BURERA), username: "user2",
+			def userClerkThree= new User(userType: UserType.OTHER, location: CalculationLocation.findByCode(BURERA), username: "user2",
 				firstname: "user2", lastname: "user2", email:'user2@memms.org', passwordHash: new Sha256Hash("user2").toHex(), active: true,
 				confirmed: true, uuid:'user2', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
 			userClerkThree.addToPermissions("equipment:")
@@ -479,20 +481,50 @@ public class Initializer {
 		
 		def admin = User.findByUsername("admin")
 		def user = User.findByUsername("user")
+		def techMoH = User.findByUsername("techMoH")
+		
 		def equipment01 =Equipment.findBySerialNumber("SERIAL01")
 		def equipment09 =Equipment.findBySerialNumber("SERIAL09")
 		def equipment11 =Equipment.findBySerialNumber("SERIAL11")
 		
-		def workOrderOne =  newWorkOrder(equipment01,"First order", Criticality.NORMAL,OrderStatus.OPEN,admin,now(),FailureReason.NOTSPECIFIED)
-		workOrderOne.notificationGroup = [User.findByUsername("admin"),User.findByUsername("admin")]
-		newNotification(workOrderOne, User.findByUsername("admin"),User.findByUsername("admin"),new Date(), "Work on this please")
+		def workOrderOne =  newWorkOrder(equipment01,"First order",Criticality.NORMAL,user,now()-1,FailureReason.NOTSPECIFIED)
+		def statusOne =  newWorkOrderStatus(workOrderOne,OrderStatus.OPENATFOSA,now()-1,user,false)
+		def statusTwo =  newWorkOrderStatus(workOrderOne,OrderStatus.OPENATMMC,now(),user,true)
+		def escalte = newEscalateLog(workOrderOne,now(),user)
+		workOrderOne.addToStatus(statusOne)
+		workOrderOne.addToStatus(statusTwo)
+		workOrderOne.addToNotificationGroup(admin)
+		workOrderOne.addToNotificationGroup(user)		
 		workOrderOne.save(failOnError:true)
-		def workOrderTwo =  newWorkOrder(equipment01,"Second order", Criticality.LOW,OrderStatus.OPEN,admin,now(),FailureReason.NOTSPECIFIED)
-		def workOrderFive =  newWorkOrder(equipment01,"Closed order", Criticality.HIGH,OrderStatus.CLOSEDFIXED,user,now()-1,now(),true,,FailureReason.MISUSE)
+		
+		def workOrderTwo =  newWorkOrder(equipment01,"Second order",Criticality.LOW,admin,now(),FailureReason.NOTSPECIFIED)
+		def statusThree =  newWorkOrderStatus(workOrderTwo,OrderStatus.OPENATFOSA,now()-1,admin,false)
+		
+		def workOrderFive =  newWorkOrder(equipment01,"Closed order",Criticality.HIGH,user,now()-3,now(),false,FailureReason.MISUSE)
+		
+		def statusFour =  newWorkOrderStatus(workOrderFive,OrderStatus.OPENATFOSA,now()-3,user,false)
+		def statusFive =  newWorkOrderStatus(workOrderOne,OrderStatus.OPENATMMC,now()-2,user,false)
+		
+		def escalteOne = newEscalateLog(workOrderOne,now()-2,user)
+		
+		def statusSix =  newWorkOrderStatus(workOrderFive,OrderStatus.OPENATFOSA,now()-1,user,false)
+		def statusSeven =  newWorkOrderStatus(workOrderFive,OrderStatus.CLOSEDFIXED,now(),user,true)
+		
+		workOrderTwo.addToStatus(statusThree)
+		workOrderTwo.save(failOnError:true)
+		
+		workOrderFive.addToStatus(statusFour)
+		workOrderFive.addToStatus(statusFive)
+		workOrderFive.addToStatus(statusSix)
+		workOrderFive.addToStatus(statusSeven)
+		workOrderFive.save(failOnError:true)
+		
+		
 		
 		equipment01.addToWorkOrders(workOrderOne)
 		equipment01.addToWorkOrders(workOrderTwo)
 		equipment01.addToWorkOrders(workOrderFive)
+		
 		equipment01.save(failOnError:true)
 		
 		def processOne = newMaintenanceProcess(workOrderOne,ProcessType.ACTION,"cleaning material", now(), admin)
@@ -515,11 +547,11 @@ public class Initializer {
 		
 		workOrderOne.save(failOnError:true)
 		
-		def workOrderThree =  newWorkOrder(equipment09,"Third order", Criticality.NORMAL,OrderStatus.OPEN,user,now(),FailureReason.NOTSPECIFIED)
+		def workOrderThree =  newWorkOrder(equipment09,"Third order",Criticality.NORMAL,user,now(),FailureReason.NOTSPECIFIED)
 		equipment09.addToWorkOrders(workOrderThree)
 		equipment09.save(failOnError:true)
 		
-		def workOrderFour =  newWorkOrder(equipment11,"Fourth order", Criticality.HIGH,OrderStatus.OPEN,admin,now(),FailureReason.NOTSPECIFIED)
+		def workOrderFour =  newWorkOrder(equipment11,"Fourth order",Criticality.HIGH,admin,now(),FailureReason.NOTSPECIFIED)
 		equipment11.addToWorkOrders(workOrderFour)
 		equipment11.save(failOnError:true)	
 	}
@@ -529,25 +561,28 @@ public class Initializer {
 	
 	//Models definition
 	//Corrective Maintenance
-	public static def newWorkOrder(def equipment, def description, def criticality, def status, def addedBy, def openOn,def failureReason ){
-		return new WorkOrder(equipment:equipment,description: description,criticality:criticality,status:status,addedBy:addedBy,openOn: openOn,assistaceRequested:false, failureReason:failureReason).save(failOnError:true)
+	public static def newWorkOrder(def equipment, def description, def criticality, def addedBy, def openOn,def failureReason ){
+		return new WorkOrder(equipment:equipment,description: description,criticality:criticality,addedBy:addedBy,openOn: openOn,assistaceRequested:false, failureReason:failureReason).save(failOnError:true)
 	}
-	
-	public static def newWorkOrder(def equipment, def description, def criticality, def status, def addedBy, def openOn, def closedOn, def assistaceRequested,def failureReason){
-		return new WorkOrder(equipment:equipment, description:description, criticality:criticality, status:status, addedBy:addedBy, openOn: openOn, closedOn:closedOn, assistaceRequested:assistaceRequested,failureReason:failureReason).save(failOnError:true)
+	public static def newWorkOrder(def equipment, def description, def criticality,def addedBy, def openOn, def closedOn, def escalate,def failureReason){
+		return new WorkOrder(equipment:equipment, description:description, criticality:criticality,addedBy:addedBy, openOn: openOn, closedOn:closedOn, escalate:escalate,failureReason:failureReason).save(failOnError:true)
 	}
-	
 	public static newNotification(def workOrder, def sender, def receiver,def writtenOn, def content){
 		return new Notification(workOrder: workOrder, sender: sender, receiver: receiver, writtenOn: writtenOn, content: content,read:false).save(failOnError: true)
 	}
-	
 	public static newComment(def workOrder, def writtenBy, def writtenOn, def content){
 		return new Comment(workOrder: workOrder, writtenBy: writtenBy, writtenOn: writtenOn, content: content ).save(failOnError: true)
 	}
-	
 	public static newMaintenanceProcess(def workOrder,def type, def name, def addedOn, def addedBy){
 		return new MaintenanceProcess(workOrder: workOrder,type: type,name: name, addedOn: addedOn, addedBy: addedBy ).save(failOnError: true)
 	}
+	public static newWorkOrderStatus(def workOrder,def status,def changeOn,def changedBy,def current){
+		return new WorkOrderStatus(workOrder:workOrder,status:status,changeOn:changeOn,changedBy:changedBy,current:current).save(failOnError: true)
+	}
+	public static newEscalateLog(def workOrder,def escalatedOn,def escalatedBy){
+		return new EscalationLog(workOrder:workOrder,escalatedOn: escalatedOn,escalatedBy: escalatedBy).save(failOnError: true)
+	}
+	
 	//Inventory
 	public static def newEquipment(def serialNumber,def donation,def obsolete,def expectedLifeTime,def room,def purchaseCost,def descriptions,def manufactureDate, def purchaseDate,def currency,def registeredOn,def model,def dataLocation,def department, def type,def manufacture,def supplier){
 		def equipment = new Equipment(serialNumber:serialNumber,donation:donation,obsolete:obsolete,room:room,expectedLifeTime:expectedLifeTime,purchaseCost:purchaseCost,currency:currency,manufactureDate:manufactureDate,purchaseDate:purchaseDate,registeredOn:registeredOn,model:model,dataLocation:dataLocation,department:department,type:type,manufacturer:manufacture,supplier:supplier);

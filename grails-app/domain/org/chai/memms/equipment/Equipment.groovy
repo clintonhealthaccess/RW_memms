@@ -27,6 +27,8 @@
  */
 package org.chai.memms.equipment
 
+import javax.persistence.Transient;
+
 import org.chai.memms.Contact
 import org.chai.memms.Warranty;
 import org.chai.memms.equipment.EquipmentStatus.Status;
@@ -96,35 +98,32 @@ public class Equipment {
 	static mapping = {
 		table "memms_equipment"
 		version false
-		descriptions_en type: 'text'
-		descriptions_fr type: 'text'
-		
 	}
 	
+	@Transient
 	def getCurrentState() {
-		if(status){
-			for(EquipmentStatus state : status)
-				if(state.isCurrent().equals(getCurrentStatusBasedOnTime())) return state 
+		if(!status) return null
+		for(EquipmentStatus state : status)
+			if(state.isCurrent() && state.equals(getTimeBasedStatus())) return state 
 		 setCurrentStatus()
-		 return getCurrentStatusBasedOnTime();
-		}
-		return null
+		 return getTimeBasedStatus();
 	}
+	
+	@Transient
 	def setCurrentStatus(){
-		if(status){
-			def state = getCurrentStatusBasedOnTime()
-			status.each{ stat ->
-				if(!stat.is(state)){
-					stat.current = false
-					stat.save(flush:true)
-				}
+		def state = getTimeBasedStatus()
+		status.each{ stat ->
+			if(!stat.is(state)){
+				stat.current = false
+				stat.save(flush:true)
 			}
-			state.current = true
-			state.save(flush:true)
 		}
+		state.current = true
+		state.save(flush:true)
 	}
-
-	def getCurrentStatusBasedOnTime(){
+	
+	@Transient
+	def getTimeBasedStatus(){
 		EquipmentStatus currentStatus = status.asList()[0]
 		for(EquipmentStatus state : status){
 			if(state.dateOfEvent.after(currentStatus.dateOfEvent)){
