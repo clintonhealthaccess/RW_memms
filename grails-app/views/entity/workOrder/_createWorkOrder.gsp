@@ -114,7 +114,7 @@
   
   <g:if test="${order.id != null}">
     <div class="heading1-bar">
-  		<h1><g:message code="work.order.comment.label" args="${['s']}"/></h1>
+  		<h1><g:message code="work.order.comment.label.alt" args="${['s']}"/></h1>
   	</div>
     <div class="main">
   	
@@ -125,7 +125,7 @@
 		  		<textarea name="content" class="idle-field" id="comment-content" rows="2" cols="90"></textarea>
 	  		</div>
 	  		<div class="comment-button">
-	  			<button class="medium" id="add-comment"><g:message code="work.order.comment.label" args="${['']}"/></button>
+	  			<button class="medium" id="add-comment"><g:message code="work.order.comment.label.alt" args="${['']}"/></button>
 	  			<span class="ajax-error"><g:message code="entity.error.updating.try.again"/></span>
 	  			<img src="${resource(dir:'images',file:'spinner.gif')}" class="ajax-spinner"/>
 	  		</div> 
