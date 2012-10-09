@@ -169,8 +169,6 @@ class EquipmentController extends AbstractEntityController{
 				code: getLabel(),
 				entityClass: getEntityClass()
 				])
-
-
 	}
 
 	def search = {
@@ -193,7 +191,7 @@ class EquipmentController extends AbstractEntityController{
 	}
 	
 	def summaryPage = {
-		if(user.location instanceof DataLocation) redirect(uri: "/equipment/list/" + user.location.id)
+		if(user.location instanceof DataLocation) redirect(controler:"equipment",action:"list",params:['dataLocation.id':user.location.id])
 		
 		def location = Location.get(params.long('location'))
 		def dataLocationTypesFilter = getLocationTypes()

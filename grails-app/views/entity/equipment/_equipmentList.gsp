@@ -2,15 +2,15 @@
 	<thead>
 		<tr>
 			<th></th>
-			<g:sortableColumn property="serialNumber" defaultOrder="asc" title="${message(code: 'equipment.serial.number.label')}" params="[q:q,location:dataLocation.id]" />
-			<g:sortableColumn property="type" defaultOrder="asc" title="${message(code: 'equipment.type.label')}" params="[q:q,location:dataLocation.id]" />
-			<g:sortableColumn property="model" defaultOrder="asc" title="${message(code: 'equipment.model.label')}" params="[q:q,location:dataLocation.id]" />
-			<g:sortableColumn property="manufacturer" defaultOrder="asc" title="${message(code: 'provider.type.manufacturer')}" params="[q:q,location:dataLocation.id]" />
-			<g:sortableColumn property="supplier" defaultOrder="asc" title="${message(code: 'provider.type.supplier')}" params="[q:q,location:dataLocation.id]" />
+			<g:sortableColumn property="serialNumber" defaultOrder="asc" title="${message(code: 'equipment.serial.number.label')}" params="[q:q,'dataLocation.id':dataLocation.id]" />
+			<g:sortableColumn property="type" defaultOrder="asc" title="${message(code: 'equipment.type.label')}" params="[q:q,'dataLocation.id':dataLocation.id]" />
+			<g:sortableColumn property="model" defaultOrder="asc" title="${message(code: 'equipment.model.label')}" params="[q:q,'dataLocation.id':dataLocation.id]" />
+			<g:sortableColumn property="manufacturer" defaultOrder="asc" title="${message(code: 'provider.type.manufacturer')}" params="[q:q,'dataLocation.id':dataLocation.id]" />
+			<g:sortableColumn property="supplier" defaultOrder="asc" title="${message(code: 'provider.type.supplier')}" params="[q:q,'dataLocation.id':dataLocation.id]" />
 			<th><g:message code="location.label"/></th>
 			<th><g:message code="equipment.status.label"/></th>
-			<g:sortableColumn property="donation" defaultOrder="asc" title="${message(code: 'equipment.donation.label')}" params="[q:q,location:dataLocation.id]" />
-			<g:sortableColumn property="obsolete" defaultOrder="asc" title="${message(code: 'equipment.obsolete.label')}" params="[q:q,location:dataLocation.id]" />
+			<g:sortableColumn property="donation" defaultOrder="asc" title="${message(code: 'equipment.donation.label')}" params="[q:q,'dataLocation.id':dataLocation.id]" />
+			<g:sortableColumn property="obsolete" defaultOrder="asc" title="${message(code: 'equipment.obsolete.label')}" params="[q:q,'dataLocation.id':dataLocation.id]" />
 			<th><g:message code="work.order.label"/></th>
 		</tr>
 	</thead>

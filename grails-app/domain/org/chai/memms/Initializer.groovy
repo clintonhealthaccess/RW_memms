@@ -62,6 +62,7 @@ public class Initializer {
 		
 	static final String HEALTH_CENTER_GROUP = "Health Center"
 	static final String DISTRICT_HOSPITAL_GROUP = "District Hospital"
+	static final String MILITARY_HOSPITAL_GROUP = "Military Hospital"
 	
 	static final String NATIONAL = "National"
 	static final String PROVINCE = "Province"
@@ -92,10 +93,31 @@ public class Initializer {
 	
 	static def createUsers() {
 		if(!User.count()){
-			//Defining Role			
+			//Default roles
 			def defaultAdminRole = new Role(name: "Admin")
 			defaultAdminRole.addToPermissions("*")
 			defaultAdminRole.save(failOnError: true)
+			
+			def defaultDataClerkRole = new Role(name: "Data Clerk")
+			defaultDataClerkRole.addToPermissions("home:*;menu:home,inventory,correctivemaintenance;account:*;equipmentType:getAjaxData;provider:getAjaxData;department:getAjaxData")
+			defaultDataClerkRole.addToPermissions("equipment:filter,export,summaryPage,index,list,save,create,updateObsolete,edit")
+			defaultDataClerkRole.addToPermissions("workOrder:filter,summaryPage,index,list,save,create")
+			defaultDataClerkRole.addToPermissions("notification:*")
+			defaultDataClerkRole.addToPermissions("equipmentStatus:list,save,delete,edit,create")
+			defaultDataClerkRole.save(failOnError: true, flush:true)
+			
+			def defaultTechnicianFacilityRole = new Role(name: "Technician Facility")
+			defaultTechnicianFacilityRole.addToPermissions(defaultDataClerkRole.permissionString)
+			defaultTechnicianFacilityRole.addToPermissions("menu:preventivemaintenance,admin;equipment:*")
+			defaultTechnicianFacilityRole.addToPermissions("department:*;equipmentType:*;provider:*;equipment:*")
+			defaultTechnicianFacilityRole.save(failOnError: true, flush:true)
+			
+			def defaultTechnicianMoHRole = new Role(name: "Technician MoH")
+			defaultTechnicianMoHRole.addToPermissions(defaultDataClerkRole.permissionString)
+			defaultTechnicianMoHRole.addToPermissions("menu:preventivemaintenance,admin;equipment:*")
+			defaultTechnicianMoHRole.addToPermissions("department:*;equipmentType:*;provider:*;equipment:*")
+			defaultTechnicianMoHRole.save(failOnError: true, flush:true)
+			//End default roles
 			
 			def defaultClercRole = new Role(name: "Default Clerk")
 			defaultClercRole.addToPermissions("equipment:")
@@ -120,49 +142,35 @@ public class Initializer {
 			faultyClercRole.addToPermissions("equipmentStatus:list;equipmentStatus:save;equipmentStatus:delete;equipmentStatus:edit;equipment:updateObsolete")
 			faultyClercRole.save(failOnError: true)
 			
-			def dataClerkRole = new Role(name: "Data Clerk")
-			dataClerkRole.addToPermissions("home:*;menu:home,inventory,correctivemaintenance;account:*;equipmentType:getAjaxData;provider:getAjaxData;department:getAjaxData")
-			dataClerkRole.addToPermissions("equipment:filter,export,summaryPage,index,list,save,create,updateObsolete")
-			dataClerkRole.addToPermissions("workOrder:filter,summaryPage,index,list,save,create")
-			dataClerkRole.addToPermissions("notification:*")
-			dataClerkRole.addToPermissions("equipmentStatus:list,:save,delete,edit,create")
-			dataClerkRole.save(failOnError: true, flush:true)
 			
-			def technicianFacilityRole = new Role(name: "Technician Facility")
-			technicianFacilityRole.addToPermissions("home:*;menu:home,inventory,correctivemaintenance;account:*;equipment:*")
-			technicianFacilityRole.addToPermissions("")
-			technicianFacilityRole.save(failOnError: true, flush:true)
 			
-			def technicianMoHRole = new Role(name: "Technician MoH")
-			technicianMoHRole.addToPermissions("home:*;menu:home,inventory,correctivemaintenance;account:*;equipment:*")
-			technicianMoHRole.addToPermissions("")
-			technicianMoHRole.save(failOnError: true, flush:true)
 
 			//Defining User
-			//User with admin role
+			//Default users
 			def admin = new User(userType: UserType.ADMIN, location: CalculationLocation.findByCode(RWANDA), username: "admin", 
-				firstname: "memms", lastname: "memms", email:'memms@memms.org', passwordHash: new Sha256Hash("admin").toHex(), active: true, 
+				firstname: "admin", lastname: "admin", email:'memms@memms.org', passwordHash: new Sha256Hash("admin").toHex(), active: true, 
 				confirmed: true, uuid:'admin', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
 			admin.addToRoles(defaultAdminRole)
 			admin.save(failOnError: true)
 			
 			def userClerk= new User(userType: UserType.DATACLERK, location: CalculationLocation.findByCode(KIVUYE), username: "user", 
-				firstname: "user", lastname: "user", email:'user@memms.org', passwordHash: new Sha256Hash("user").toHex(), active: true, 
+				firstname: "Data", lastname: "Clerk", email:'user@memms.org', passwordHash: new Sha256Hash("user").toHex(), active: true, 
 				confirmed: true, uuid:'user', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
-			userClerk.addToRoles(dataClerkRole)
+			userClerk.addToRoles(defaultDataClerkRole)
 			userClerk.save(failOnError: true, flush:true)
 			
 			def userTechnicianFacility= new User(userType: UserType.TECHNICIANFACILITY, location: CalculationLocation.findByCode(KIVUYE), username: "techf",
 				firstname: "technician", lastname: "facility", email:'techf@memms.org', passwordHash: new Sha256Hash("techf").toHex(), active: true,
 				confirmed: true, uuid:'techf', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
-			userTechnicianFacility.addToRoles(technicianFacilityRole)
+			userTechnicianFacility.addToRoles(defaultTechnicianFacilityRole)
 			userTechnicianFacility.save(failOnError: true, flush:true)
 			
 			def userTechnicianMoH= new User(userType: UserType.TECHNICIANMOH, location: CalculationLocation.findByCode(RWANDA), username: "techMoH",
 				firstname: "technician", lastname: "MoH", email:'techMoH@memms.org', passwordHash: new Sha256Hash("techMoH").toHex(), active: true,
 				confirmed: true, uuid:'techMoH', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
-			userTechnicianMoH.addToRoles(technicianMoHRole)
+			userTechnicianMoH.addToRoles(defaultTechnicianMoHRole)
 			userTechnicianMoH.save(failOnError: true, flush:true)
+			//End default users
 			
 			//User with default clerk role
 			def userClerkOne= new User(userType: UserType.OTHER,location: CalculationLocation.findByCode(KIVUYE), username: "userOne", 
@@ -481,6 +489,7 @@ public class Initializer {
 		
 		def admin = User.findByUsername("admin")
 		def user = User.findByUsername("user")
+		def techFac = User.findByUsername("techf")
 		def techMoH = User.findByUsername("techMoH")
 		
 		def equipment01 =Equipment.findBySerialNumber("SERIAL01")
@@ -490,11 +499,15 @@ public class Initializer {
 		def workOrderOne =  newWorkOrder(equipment01,"First order",Criticality.NORMAL,user,now()-1,FailureReason.NOTSPECIFIED)
 		def statusOne =  newWorkOrderStatus(workOrderOne,OrderStatus.OPENATFOSA,now()-1,user,false)
 		def statusTwo =  newWorkOrderStatus(workOrderOne,OrderStatus.OPENATMMC,now(),user,true)
-		def escalte = newEscalateLog(workOrderOne,now(),user)
+		def escalate = newEscalateLog(workOrderOne,now(),user)
+		def notifationOne = newNotification(workOrderOne, user, techFac,now(), "notifationOne")
+		def notifationTwo = newNotification(workOrderOne, techFac, user,now(), "I am currentlly working on this, but needs further review. Am making this long to see how it fits when reading it.")
+		def notifationThree = newNotification(workOrderOne, techFac, techMoH,now(), "notifationThree")
 		workOrderOne.addToStatus(statusOne)
 		workOrderOne.addToStatus(statusTwo)
-		workOrderOne.addToNotificationGroup(admin)
-		workOrderOne.addToNotificationGroup(user)		
+		workOrderOne.addToNotificationGroup(user)
+		workOrderOne.addToNotificationGroup(techFac)
+		workOrderOne.addToNotificationGroup(techMoH)
 		workOrderOne.save(failOnError:true)
 		
 		def workOrderTwo =  newWorkOrder(equipment01,"Second order",Criticality.LOW,admin,now(),FailureReason.NOTSPECIFIED)
@@ -512,7 +525,8 @@ public class Initializer {
 		
 		workOrderTwo.addToStatus(statusThree)
 		workOrderTwo.save(failOnError:true)
-		
+		def notifationFour = newNotification(workOrderOne, user, techFac,now(), "Solve this for me")
+		def notifationFive = newNotification(workOrderOne, techFac, user,now(), "More information needed")
 		workOrderFive.addToStatus(statusFour)
 		workOrderFive.addToStatus(statusFive)
 		workOrderFive.addToStatus(statusSix)
