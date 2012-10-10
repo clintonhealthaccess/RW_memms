@@ -39,38 +39,17 @@ import org.chai.memms.security.User.UserType;
 import org.chai.memms.util.Utils;
 
 class NotificationService {
-
-	def userService
-	def newNotification(WorkOrder workOrder, String content,User currentUser,Boolean escalation = false){
-		List<User> noticationGroup = [currentUser]
-		if(!escalation){
-			noticationGroup += userService.filterByCriterias(UserType.TECHNICIANFACILITY, workOrder.equipment.dataLocation, [:])
-		}else{
-			noticationGroup += userService.filterByCriterias(UserType.TECHNICIANMOH, null, [:])
-		}
-		
-		if(workOrder.notificationGroup != null) workOrder.notificationGroup += (noticationGroup - workOrder.notificationGroup)
-		else workOrder.notificationGroup = (noticationGroup - workOrder.notificationGroup)
-		workOrder.save(flush:true,failOnError: true)
-		sendNotifications(workOrder,content,currentUser)
-	}
-	/**
-	 * Preferable to always call newNotification because it updates the notification group.
-	 * Call this when sure that there wont be new users to add to the notification group
-	 * @param workOrder
-	 * @param content
-	 * @param currentUser
-	 * @return
-	 */
-    def sendNotifications(WorkOrder workOrder, String content,User currentUser) {
-		int sent = 0
-		workOrder.notificationGroup.findAll{
-			if(it != currentUser){
-					new Notification(workOrder:workOrder,sender:currentUser,receiver:it,writtenOn:new Date(),content:content,read:false).save(flush:true,failOnError: true)
-					sent++
+	
+    public int sendNotifications(WorkOrder workOrder, String content,User sender,List<User> receivers) {
+		int numberOfNotificationSent = 0
+		receivers.each{ user ->
+			if(user.active){
+					def notification = new Notification(workOrder:workOrder,sender:sender,receiver:user,writtenOn:Utils.now(),content:content,read:false).save(failOnError: true)
+					if(notification)
+						numberOfNotificationSent++
 				}
 			}
-		return sent
+		return numberOfNotificationSent
     }
 	
 	public int getUnreadNotifications(User user){
@@ -104,12 +83,9 @@ class NotificationService {
 		}
 	}
 	
-	Notification readNotification(def notificationID){
-		def notification = Notification.get(notificationID)
-		if(notification != null){
-			notification.read = true
-			notification.save(failOnError:true)
-		}
+	public Notification readNotification(Notification notification){
+		notification.read = true
+		notification.save(failOnError:true)
 		return notification
 	}
 }

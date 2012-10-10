@@ -25,59 +25,24 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.maintenance
+package org.chai.memms
 
-import org.chai.memms.security.User;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import org.chai.memms.util.Utils;
+import org.springframework.beans.PropertyEditorRegistrar;
+import org.springframework.beans.PropertyEditorRegistry;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.context.i18n.LocaleContextHolder;
 /**
  * @author Jean Kahigiso M.
  *
  */
-public class EscalationLog {
-	
-	WorkOrder workOrder
-	Date escalatedOn
-	User escalatedBy
-	
-	static mapping = {
-		table "memms_escalate_log"
-		version false
-	}
-	
-	static constraints = {
-		workOrder nullable: false, blank: false
-		escalatedOn nullable: false, blank: false, validator:{it <= new Date()}
-		escalatedBy nullable: false, blank: false
-	}
+class YearMonthPropertyEditorRegistrar implements PropertyEditorRegistrar{
 	
 	@Override
-	public String toString() {
-		return "EscalationLog [id= " + id + " workOrder= "+workOrder+"]";
+	public void registerCustomEditors(PropertyEditorRegistry registry) {
+		registry.registerCustomEditor(YearMonthPropertyEditor.class, new YearMonthPropertyEditor());
 	}
-	
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this.is(obj))
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		WorkOrder other = (WorkOrder) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
-	}
-
 }

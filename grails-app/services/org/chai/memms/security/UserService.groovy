@@ -27,11 +27,13 @@
  */
 package org.chai.memms.security
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils
 import org.hibernate.Criteria;
 import org.chai.location.CalculationLocation;
+import org.chai.memms.maintenance.WorkOrder;
 import org.chai.memms.security.User.UserType;
 import org.chai.memms.util.Utils
 import org.hibernate.criterion.MatchMode
@@ -72,5 +74,12 @@ class UserService {
 					eq ("userType", userType)
 			}
 		}
+	}
+	
+	List<User> getNotificationGroup(WorkOrder workOrder,User sender,Boolean escalate){
+		def users =  User.findAllByUserTypeAndLocation(UserType.TECHNICIANFACILITY,workOrder.equipment.dataLocation);
+		if(escalate) users.addAll(User.findAllByUserType(UserType.TECHNICIANMOH))
+		users.remove(sender)
+		return users
 	}
 }

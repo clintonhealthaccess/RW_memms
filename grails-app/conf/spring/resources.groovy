@@ -1,4 +1,6 @@
 import org.chai.memms.DatePropertyEditorRegistrar;
+import org.chai.memms.YearMonthPropertyEditorRegistrar;
+import org.springframework.beans.PropertyEditorRegistrar;
 
 /**
  * Copyright (c) 2012, Clinton Health Access Initiative.
@@ -33,4 +35,5 @@ beans = {
 	datePropertyEditorRegistrar(DatePropertyEditorRegistrar) {
 		messageSource = ref('messageSource')
 	 }
+	propertyEditorRegistrar(YearMonthPropertyEditorRegistrar)
 }

@@ -30,7 +30,7 @@ package org.chai.memms.maintenance
 import org.chai.location.DataLocation
 import org.chai.memms.equipment.Equipment
 import org.chai.memms.maintenance.WorkOrder.Criticality
-import org.chai.memms.maintenance.WorkOrder.OrderStatus
+import org.chai.memms.maintenance.WorkOrderStatus.OrderStatus
 import org.chai.memms.security.User;
 import org.chai.memms.util.Utils;
 
@@ -132,12 +132,10 @@ class WorkOrderService {
 	}
 	
 	def escalateWorkOrder(WorkOrder workOrder,String content, User escalatedBy){
-		if(workOrder.assistaceRequested)
-			notificationService.sendNotifications(workOrder,"${content}\nPlease follow up on this work order.",escalatedBy)
+		if(workOrder.escalated)
+			notificationService.sendNotifications(workOrder,"${content}\n This is a reminder to follow up on this work order.",escalatedBy)
 		else{
-			workOrder.assistaceRequested = true
-			workOrder.save(flush:true,failOnError: true)
-			notificationService.newNotification(workOrder,"${content}\nPlease follow up on this work order.",escalatedBy,true)
+			notificationService.newNotification(workOrder,"${content}\n Please follow up on this work order.",escalatedBy,true)
 		}
 	}
 	
@@ -153,7 +151,6 @@ class WorkOrderService {
 		def criteria = WorkOrder.createCriteria();
 		
 		if(location instanceof DataLocation)
-			//log.
 			equipments = equipmentService.getEquipmentsByDataLocation(location, [:])
 		else{
 			def dataLocations = location.getDataLocations(null,null)

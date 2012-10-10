@@ -192,6 +192,9 @@ public class Utils {
 		date.clearTime()
 	}
 	
+	public static Date now(){
+		return new Date()
+	}
 	/**
 	 * fieldName has to start with capital letter as
 	 * it is used to create setter of the object field

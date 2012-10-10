@@ -20,7 +20,7 @@
   		<g:i18nInput name="names" label="${message(code:'entity.names.label')}" bean="${type}" field="names"/>
   		<g:i18nTextarea name="descriptions" bean="${type}" label="${message(code:'entity.descriptions.label')}" field="descriptions" height="150" width="300" maxHeight="150" />
   		<g:selectFromEnum name="observation" bean="${type}" values="${Observation.values()}" field="observation" label="${message(code:'entity.observation.label')}"/>
-  		<g:inputYearAndMonth year="year" labelYear="${message(code:'entity.year.label')}" month="month" labelMonth="${message(code:'entity.month.label')}" bean="${type}" field="expectedLifeTime"/>
+  		<g:inputYearMonth year="year" labelYear="${message(code:'entity.year.label')}" month="month" labelMonth="${message(code:'entity.month.label')}" bean="${type}" field="expectedLifeTime"/>
   		<g:if test="${type.id != null}">
   			<input type="hidden" name="id" value="${type.id}"></input>
   		</g:if>

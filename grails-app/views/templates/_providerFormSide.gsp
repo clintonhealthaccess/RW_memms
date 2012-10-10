@@ -8,8 +8,6 @@
 		<li><span class="label"><g:message code="contact.address.label"/>:</span></li>
 		<li><span class="label"><g:message code="contact.phone.label"/>:</span><span class="text">${provider?.contact?.phone}</span></li>
 		<li><span class="label"><g:message code="contact.pobox.label"/>:</span><span class="text">${provider?.contact?.poBox}</span></li>
-		<li><span class="label"><g:message code="contact.street.label"/>:</span><span class="text">${provider?.contact?.street}</span></li>
-		<li><span class="label"><g:message code="contact.city.label"/>:</span><span class="text">${provider?.contact?.city}</span></li>
-		<li><span class="label"><g:message code="contact.country.label"/>:</span><span class="text">${provider?.contact?.country}</span></li>
 	</ul>
 </div>
+	

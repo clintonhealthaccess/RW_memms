@@ -78,19 +78,18 @@ public class WorkOrder {
 	Date lastModifiedOn
 	Date closedOn
 	Date returnedOn
-	Boolean escalate = false
 	
 	Integer estimatedCost
 	Integer workTime
 	Integer travelTime
 	
-
+	OrderStatus currentStatus
 	Criticality criticality
 	FailureReason failureReason
 	
 	static i18nFields = ["failureReasonDetails","testResultsDescriptions"]
 	static belongsTo = [equipment: Equipment]
-	static hasMany = [status: WorkOrderStatus, comments: Comment,notifications: Notification,notificationGroup: User,processes: MaintenanceProcess]
+	static hasMany = [status: WorkOrderStatus, comments: Comment, notifications: Notification, processes: MaintenanceProcess]
 	
 
 	static constraints = {
@@ -98,7 +97,6 @@ public class WorkOrder {
 		receivedBy nullable: true
 		fixedBy nullable: true
 		
-		escalate nullable: false
 		failureReasonDetails nullable: true
 		testResultsDescriptions nullable: true
 		workTime nullable: true, blank: true
@@ -121,6 +119,7 @@ public class WorkOrder {
 			else return true
 		}
 		lastModifiedBy nullable: true
+		currentStatus nullable: true, inList:[OrderStatus.OPENATFOSA,OrderStatus.OPENATMMC,OrderStatus.CLOSEDFIXED,OrderStatus.CLOSEDFORDISPOSAL]
 		criticality nullable: false, blank: false, inList: [Criticality.LOW,Criticality.HIGH,Criticality.NORMAL]
 		failureReason nullable:false, blank:false, inList:[FailureReason.NOTSPECIFIED,FailureReason.SPAREPARTBROKEN,FailureReason.MISUSE,FailureReason.OTHER]
 		
@@ -148,41 +147,21 @@ public class WorkOrder {
 				materials.add(process)
 		return materials;
 	}
-	
+	//Return true if this order is currently escalated
 	@Transient
-	def getCurrentState() {
-		if(!status) return  null
-		def currentStatus=null
-		for(WorkOrderStatus state : status)
-			if(state.isCurrent()) currentStatus = state
-		if(currentStatus!=null && currentStatus.equals(getTimeBasedStatus()))
-			return currentStatus;
-		else{ 
-			setCurrentStatus()
-			return getTimeBasedStatus()
-		}
+	def getEscalated(){
+		if(currentStatus.equals(OrderStatus.OPENATMMC))
+			return true
+		return false
 	}
-	
-	@Transient
-	def setCurrentStatus(){
-		def state = getTimeBasedStatus()
-		status.each{ stat ->
-			if(!stat.is(state)){
-				stat.current = false
-				stat.save(flush:true)
-			}
-		}
-		state.current = true
-		state.save(flush:true)
-	}
-	
+		
 	@Transient
 	def getTimeBasedStatus(){
-		WorkOrderStatus currentStatus = status.asList()[0]
+		WorkOrderStatus currentState = status.asList()[0]
 		for(WorkOrderStatus state : status)
-			if(state.changeOn.after(currentStatus.changeOn))
-				currentStatus= state;
-		return currentStatus
+			if(state.changeOn.after(currentState.changeOn))
+				currentState= state;
+		return currentState
 	}
 
 
