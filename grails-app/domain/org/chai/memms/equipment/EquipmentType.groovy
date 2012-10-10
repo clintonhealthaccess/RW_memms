@@ -56,6 +56,7 @@ class EquipmentType {
 	String code
 	String names
 	String descriptions
+	Integer expectedLifeTime
 	Observation observation
 	
 	Date addedOn
@@ -70,6 +71,8 @@ class EquipmentType {
 		code nullable: false, blank: false,  unique: true
 		names nullable: true, blank: true
 		descriptions nullable: true, blank: true
+		
+		expectedLifeTime nullable: false, blank: false
 		
 		addedOn nullable: false, blank: false, validator:{it <= new Date()}
 		lastModifiedOn nullable: false, blank: false, validator:{it <= new Date()}

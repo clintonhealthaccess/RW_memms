@@ -50,6 +50,7 @@ public class Equipment {
 	String descriptions
 	String model
 	String room
+	String equipmentID
 	
 	Integer expectedLifeTime
 	Boolean donation
@@ -70,6 +71,7 @@ public class Equipment {
 	
 	static constraints = {
 		importFrom Contact
+		equipmentID nullable: true
 		supplier nullable: false
 		manufacturer nullable: false
 		warranty nullable: true
