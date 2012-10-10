@@ -490,11 +490,6 @@ public class Initializer {
 		def workOrderOne =  newWorkOrder(equipment01,"First order",Criticality.NORMAL,user,now()-1,FailureReason.NOTSPECIFIED)
 		def statusOne =  newWorkOrderStatus(workOrderOne,OrderStatus.OPENATFOSA,now()-1,user,false)
 		def statusTwo =  newWorkOrderStatus(workOrderOne,OrderStatus.OPENATMMC,now(),user,true)
-		def escalte = newEscalateLog(workOrderOne,now(),user)
-		workOrderOne.addToStatus(statusOne)
-		workOrderOne.addToStatus(statusTwo)
-		workOrderOne.addToNotificationGroup(admin)
-		workOrderOne.addToNotificationGroup(user)		
 		workOrderOne.save(failOnError:true)
 		
 		def workOrderTwo =  newWorkOrder(equipment01,"Second order",Criticality.LOW,admin,now(),FailureReason.NOTSPECIFIED)
@@ -503,20 +498,10 @@ public class Initializer {
 		def workOrderFive =  newWorkOrder(equipment01,"Closed order",Criticality.HIGH,user,now()-3,now(),false,FailureReason.MISUSE)
 		
 		def statusFour =  newWorkOrderStatus(workOrderFive,OrderStatus.OPENATFOSA,now()-3,user,false)
-		def statusFive =  newWorkOrderStatus(workOrderOne,OrderStatus.OPENATMMC,now()-2,user,false)
-		
-		def escalteOne = newEscalateLog(workOrderOne,now()-2,user)
-		
+		def statusFive =  newWorkOrderStatus(workOrderFive,OrderStatus.OPENATMMC,now()-2,user,true)		
 		def statusSix =  newWorkOrderStatus(workOrderFive,OrderStatus.OPENATFOSA,now()-1,user,false)
-		def statusSeven =  newWorkOrderStatus(workOrderFive,OrderStatus.CLOSEDFIXED,now(),user,true)
-		
-		workOrderTwo.addToStatus(statusThree)
+		def statusSeven =  newWorkOrderStatus(workOrderFive,OrderStatus.CLOSEDFIXED,now(),user,false)
 		workOrderTwo.save(failOnError:true)
-		
-		workOrderFive.addToStatus(statusFour)
-		workOrderFive.addToStatus(statusFive)
-		workOrderFive.addToStatus(statusSix)
-		workOrderFive.addToStatus(statusSeven)
 		workOrderFive.save(failOnError:true)
 		
 		
@@ -548,10 +533,12 @@ public class Initializer {
 		workOrderOne.save(failOnError:true)
 		
 		def workOrderThree =  newWorkOrder(equipment09,"Third order",Criticality.NORMAL,user,now(),FailureReason.NOTSPECIFIED)
+		def statusEight =  newWorkOrderStatus(workOrderThree,OrderStatus.OPENATFOSA,now(),admin,false)
 		equipment09.addToWorkOrders(workOrderThree)
 		equipment09.save(failOnError:true)
 		
 		def workOrderFour =  newWorkOrder(equipment11,"Fourth order",Criticality.HIGH,admin,now(),FailureReason.NOTSPECIFIED)
+		def statusNine =  newWorkOrderStatus(workOrderFour,OrderStatus.OPENATFOSA,now(),admin,false)
 		equipment11.addToWorkOrders(workOrderFour)
 		equipment11.save(failOnError:true)	
 	}
@@ -576,11 +563,11 @@ public class Initializer {
 	public static newMaintenanceProcess(def workOrder,def type, def name, def addedOn, def addedBy){
 		return new MaintenanceProcess(workOrder: workOrder,type: type,name: name, addedOn: addedOn, addedBy: addedBy ).save(failOnError: true)
 	}
-	public static newWorkOrderStatus(def workOrder,def status,def changeOn,def changedBy,def current){
-		return new WorkOrderStatus(workOrder:workOrder,status:status,changeOn:changeOn,changedBy:changedBy,current:current).save(failOnError: true)
-	}
-	public static newEscalateLog(def workOrder,def escalatedOn,def escalatedBy){
-		return new EscalationLog(workOrder:workOrder,escalatedOn: escalatedOn,escalatedBy: escalatedBy).save(failOnError: true)
+	public static newWorkOrderStatus(def workOrder,def status,def changeOn,def changedBy,def escalation){
+		def stat = new WorkOrderStatus(workOrder:workOrder,status:status,changeOn:changeOn,changedBy:changedBy,escalation:escalation).save(failOnError: true)
+		workOrder.currentStatus= status
+		workOrder.addToStatus(stat)
+		return stat;
 	}
 	
 	//Inventory

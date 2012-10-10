@@ -41,7 +41,7 @@
 					${order.equipment.type.names}
 				</td>
 				<td>
-					${message(code: order.currentState?.status?.messageCode+'.'+order.currentState?.status?.name)}
+					${message(code: order.currentStatus?.messageCode+'.'+order.currentStatus?.name)}
 				</td>
 				<td>
 					${order.criticality}

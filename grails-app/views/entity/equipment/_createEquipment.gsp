@@ -1,6 +1,5 @@
 <%@ page import="org.chai.memms.util.Utils" %>
 <%@ page import="org.chai.memms.equipment.EquipmentStatus.Status" %>
-
 <div  class="entity-form-container togglable">
   <div class="heading1-bar">
 		<h1>

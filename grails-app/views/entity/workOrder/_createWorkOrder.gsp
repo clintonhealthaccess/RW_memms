@@ -1,5 +1,5 @@
 <%@ page import="org.chai.memms.util.Utils" %>
-<%@ page import="org.chai.memms.maintenance.WorkOrder.OrderStatus" %>
+<%@ page import="org.chai.memms.maintenance.WorkOrderStatus.OrderStatus" %>
 <%@ page import="org.chai.memms.maintenance.WorkOrder.Criticality" %>
 <%@ page import="org.chai.memms.maintenance.WorkOrder.FailureReason" %>
 <r:require modules="tipsy"/>
@@ -41,7 +41,23 @@
    		<g:textarea name="description" rows="12" width="380" label="${message(code:'entity.description.label')}" readonly="${(closed)? true:false}" bean="${order}" field="description" value="${order.description}"/>
    		<g:selectFromEnum name="criticality" bean="${order}" values="${Criticality.values()}" field="criticality" readonly="${(closed)? true:false}" label="${message(code:'work.order.criticality.label')}"/>
    		<g:if test="${order.id != null}">
-   			<g:selectFromEnum name="status" bean="${order}" values="${OrderStatus.values()}" field="status" label="${message(code:'work.order.status.label')}"/>
+   			<g:selectFromEnum name="currentStatus" bean="${order}" values="${OrderStatus.values()}" field="currentStatus" label="${message(code:'work.order.status.label')}"/>
+   			<table class="items">
+	    		<tr>
+	    			<th>${message(code:'equipment.status.label')}</th>
+	    			<th>${message(code:'work.order.status.changed.on.label')}</th>
+	    			<th>${message(code:'work.order.status.changed.by.label')}</th>
+	    			<th>${message(code:'work.order.status.escalation.label')}</th>
+	    		</tr>
+	    		<g:each in="${order.status.sort{a,b -> (a.changeOn > b.changeOn) ? -1 : 1}}" status="i" var="status">
+			    		<tr>
+			    			<td>${message(code: status?.status?.messageCode+'.'+status?.status?.name)}</td>
+			    			<td>${Utils.formatDate(status?.changeOn)}</td>
+			    			<td>${status.changedBy}</td>
+			    			<td>${(status.escalation)? '\u2713':''}</td>
+			    		</tr>
+	    		</g:each>
+	    	</table>
    		</g:if>
     	</fieldset>	
    		<div id="form-aside-equipment" class="form-aside">
