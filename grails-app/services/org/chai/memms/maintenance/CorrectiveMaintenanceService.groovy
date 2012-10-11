@@ -39,7 +39,6 @@ import org.chai.memms.CorrectiveMaintenances;
 import org.chai.memms.Inventory
 import org.chai.memms.Inventories
 import org.chai.memms.maintenance.WorkOrder.Criticality;
-import org.chai.memms.maintenance.WorkOrder.OrderStatus;
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocationType;
 import org.chai.location.DataLocation

@@ -44,7 +44,6 @@ import org.chai.location.DataLocationType;
 import org.chai.location.Location;
 import org.chai.location.LocationLevel;
 import org.chai.memms.maintenance.Comment;
-import org.chai.memms.maintenance.EscalationLog;
 import org.chai.memms.maintenance.MaintenanceProcess;
 import org.chai.memms.maintenance.MaintenanceProcess.ProcessType;
 import org.chai.memms.maintenance.Notification;

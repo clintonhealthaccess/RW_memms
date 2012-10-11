@@ -13,6 +13,7 @@ import org.chai.memms.maintenance.WorkOrder.FailureReason;
 import org.chai.memms.maintenance.WorkOrderStatus.OrderStatus;
 import org.chai.memms.security.User;
 import org.chai.memms.security.User.UserType;
+import org.chai.memms.maintenance.NotificationController
 
 class NotificationControllerSpec  extends IntegrationTests{
 	
