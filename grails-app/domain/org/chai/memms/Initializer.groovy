@@ -256,16 +256,16 @@ public class Initializer {
 			
 		if(!EquipmentType.count()){
 			//Add equipment types as defined in ecri
-			def typeOne = newEquipmentType("15810", ["en":"Accelerometers","fr":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now())
-			def typeTwo = newEquipmentType("15819", ["en":"X-Ray Film Cutter"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now())
-			def typeThree = newEquipmentType("15966", ["en":"Video Systems"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now())
-			def typeFour = newEquipmentType("10035", ["en":"Adhesives, Aerosol"],["en":"not used in memms"],Observation.RETIRED,now(),now())
-			def typeFive = newEquipmentType("20760", ["en":"Pancreatic Drainage Tubes"],["en":"not used in memms"],Observation.RETIRED,now(),now())
-			def typeSix = newEquipmentType("20729", ["en":"PCR Test Tubes"],["en":"not used in memms"],Observation.RETIRED,now(),now())
-			def typeSeven = newEquipmentType("10026", ["en":"Adhesive Strips"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now())
-			def typeEight = newEquipmentType("10124", ["en":"Anesthesia Kits"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now())
-			def typeNine = newEquipmentType("10155", ["en":"Anklets"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now())
-			def typeTen = newEquipmentType("10426", ["en":"Blood Donor Sets"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now())
+			def typeOne = newEquipmentType("15810", ["en":"Accelerometers","fr":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now(),25)
+			def typeTwo = newEquipmentType("15819", ["en":"X-Ray Film Cutter"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now(),13)
+			def typeThree = newEquipmentType("15966", ["en":"Video Systems"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now(),12)
+			def typeFour = newEquipmentType("10035", ["en":"Adhesives, Aerosol"],["en":"not used in memms"],Observation.RETIRED,now(),now(),34)
+			def typeFive = newEquipmentType("20760", ["en":"Pancreatic Drainage Tubes"],["en":"not used in memms"],Observation.RETIRED,now(),now(),54)
+			def typeSix = newEquipmentType("20729", ["en":"PCR Test Tubes"],["en":"not used in memms"],Observation.RETIRED,now(),now(),67)
+			def typeSeven = newEquipmentType("10026", ["en":"Adhesive Strips"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now(),12)
+			def typeEight = newEquipmentType("10124", ["en":"Anesthesia Kits"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now(),7)
+			def typeNine = newEquipmentType("10155", ["en":"Anklets"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now(),60)
+			def typeTen = newEquipmentType("10426", ["en":"Blood Donor Sets"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now(),34)
 		}
 		
 		if(!Provider.count()){
@@ -499,15 +499,11 @@ public class Initializer {
 		def workOrderOne =  newWorkOrder(equipment01,"First order",Criticality.NORMAL,user,now()-1,FailureReason.NOTSPECIFIED)
 		def statusOne =  newWorkOrderStatus(workOrderOne,OrderStatus.OPENATFOSA,now()-1,user,false)
 		def statusTwo =  newWorkOrderStatus(workOrderOne,OrderStatus.OPENATMMC,now(),user,true)
-		def escalate = newEscalateLog(workOrderOne,now(),user)
 		def notifationOne = newNotification(workOrderOne, user, techFac,now(), "notifationOne")
 		def notifationTwo = newNotification(workOrderOne, techFac, user,now(), "I am currentlly working on this, but needs further review. Am making this long to see how it fits when reading it.")
 		def notifationThree = newNotification(workOrderOne, techFac, techMoH,now(), "notifationThree")
 		workOrderOne.addToStatus(statusOne)
 		workOrderOne.addToStatus(statusTwo)
-		workOrderOne.addToNotificationGroup(user)
-		workOrderOne.addToNotificationGroup(techFac)
-		workOrderOne.addToNotificationGroup(techMoH)
 		workOrderOne.save(failOnError:true)
 		
 		def workOrderTwo =  newWorkOrder(equipment01,"Second order",Criticality.LOW,admin,now(),FailureReason.NOTSPECIFIED)
@@ -599,7 +595,7 @@ public class Initializer {
 		def equipment = new Equipment(serialNumber:serialNumber,donation:donation,obsolete:obsolete,room:room,expectedLifeTime:expectedLifeTime,purchaseCost:purchaseCost,currency:currency,manufactureDate:manufactureDate,purchaseDate:purchaseDate,registeredOn:registeredOn,model:model,dataLocation:dataLocation,department:department,type:type,manufacturer:manufacture,supplier:supplier);
 		Utils.setLocaleValueInMap(equipment,descriptions,"Descriptions")
 		equipment.save(failOnError: true)
-		equipment.equipmentID = "${equipment.type.code}${equipment.id}${equipment.manufactureDate.month}${equipment.manufactureDate.year}"
+		equipment.equipmentID = equipment.getEquipmentId()
 		return equipment.save(failOnError: true)
 	}
 
@@ -636,8 +632,8 @@ public class Initializer {
 		return newWarranty(contact, startDate,numberOfMonth,sameAsSupplier,descriptions)
 	}
 		
-	public static def newEquipmentType(def code, def names,def descriptions, def observation, def addedOn, def lastModifiedOn){
-		def type = new EquipmentType(code:code,observation:observation,addedOn:addedOn,lastModifiedOn:lastModifiedOn,expectedLifeTime:12)
+	public static def newEquipmentType(def code, def names,def descriptions, def observation, def addedOn, def lastModifiedOn,def expectedLifeTime){
+		def type = new EquipmentType(code:code,observation:observation,addedOn:addedOn,lastModifiedOn:lastModifiedOn,expectedLifeTime:expectedLifeTime)
 		Utils.setLocaleValueInMap(type,names,"Names")
 		Utils.setLocaleValueInMap(type,descriptions,"Descriptions")
 		return type.save(failOnError: true)

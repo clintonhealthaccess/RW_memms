@@ -72,7 +72,7 @@ class EquipmentType {
 		names nullable: true, blank: true
 		descriptions nullable: true, blank: true
 		
-		expectedLifeTime nullable: false, blank: false
+		expectedLifeTime nullable: true
 		
 		addedOn nullable: false, blank: false, validator:{it <= new Date()}
 		lastModifiedOn nullable: false, blank: false, validator:{it <= new Date()}

@@ -35,5 +35,4 @@ beans = {
 	datePropertyEditorRegistrar(DatePropertyEditorRegistrar) {
 		messageSource = ref('messageSource')
 	 }
-	propertyEditorRegistrar(YearMonthPropertyEditorRegistrar)
 }

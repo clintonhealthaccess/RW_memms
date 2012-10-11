@@ -71,7 +71,7 @@ public class Equipment {
 	
 	static constraints = {
 		importFrom Contact
-		equipmentID nullable: true
+		equipmentID nullable: false, unique:true
 		supplier nullable: false
 		manufacturer nullable: false
 		warranty nullable: true
@@ -102,6 +102,10 @@ public class Equipment {
 		version false
 	}
 	
+	@Transient
+	def getEquipmentId() {
+		
+	}
 	@Transient
 	def getCurrentState() {
 		if(!status) return null

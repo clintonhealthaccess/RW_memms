@@ -52,12 +52,14 @@ public class Provider{
 	String code
 	Type type
 	Contact contact
+	Boolean active = false
 	
 	static embedded = ["contact"]
 	static mappedBy = [manufacturers: "manufacturer",suppliers: "supplier"]
 	static hasMany = [manufacturers: Equipment, suppliers: Equipment]
    
 	static constraints ={
+		active  nullable: false
 		code nullable: false, blank: false, unique: true
 		type nullable: false, inList: [Type.BOTH,Type.MANUFACTURER,Type.SUPPLIER]
 		contact nullable: false
