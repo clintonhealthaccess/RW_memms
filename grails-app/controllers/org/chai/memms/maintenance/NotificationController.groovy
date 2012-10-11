@@ -151,7 +151,7 @@ class NotificationController extends AbstractEntityController{
 		}
 		else {
 			log.debug("target url=" + targetURI)
-			def sent = notificationService.newNotification(cmd.workOrder,cmd.content, user)
+			def sent = notificationService.newNotification(cmd.workOrder,cmd.content, user,false)
 			flash.message = message(code: 'default.saved.message', args: [message(code: getLabel(), default: 'entity')],sent.toString())
 			redirect(action: "list", id: cmd.workOrder.id)
 		}

@@ -15,6 +15,7 @@ import org.chai.memms.security.User.UserType;
 
 class NotificationServiceSpec  extends IntegrationTests{
 	def notificationService
+	
 	def "can send notifications"() {
 		setup:
 		setupLocationTree()
@@ -39,7 +40,6 @@ class NotificationServiceSpec  extends IntegrationTests{
 		notificationService.newNotification(workOrder, "Send for rapair",sender)
 		then:
 		Notification.count() == 2
-		workOrder.notificationGroup.size() == 3
 	}
 	
 	def "can escalate notifications"() {
@@ -70,14 +70,14 @@ class NotificationServiceSpec  extends IntegrationTests{
 		receiverMoHTwo.userType = UserType.TECHNICIANMOH
 		receiverMoHTwo.location = Location.findByCode(RWANDA)
 		receiverMoHTwo.save(failOnError:true)
+		
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,sender,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		notificationService.newNotification(workOrder, "Send for rapair",sender)
 		when:
-		notificationService.newNotification(workOrder, "Send for rapair, higher",receiverFacilityOne,true)
+		notificationService.newNotification(workOrder, "Send for rapair, higher",receiverFacilityOne)
 		then:
 		Notification.count() == 6
-		workOrder.notificationGroup.size() == 5
 	}
 	
 	def "reading a notification sets it's read status to true"() {
@@ -104,7 +104,7 @@ class NotificationServiceSpec  extends IntegrationTests{
 		notificationService.newNotification(workOrder, "Send for rapair",sender)
 		def notificationToRead = Notification.list().first()
 		when:
-		notificationService.readNotification(notificationToRead.id)
+		notificationService.readNotification(notificationToRead)
 		then:
 		Notification.count() == 2
 		Notification.get(notificationToRead.id).read

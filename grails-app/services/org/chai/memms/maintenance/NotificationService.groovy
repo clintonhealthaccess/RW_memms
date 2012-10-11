@@ -41,6 +41,7 @@ import org.chai.memms.util.Utils;
 class NotificationService {
 	def userService
     public int sendNotifications(WorkOrder workOrder, String content,User sender,List<User> receivers) {
+		if(log.isDebugEnabled()) log.debug("Notification receivers group: "+receivers)
 		int numberOfNotificationSent = 0
 		receivers.each{ user ->
 			if(user.active){
@@ -52,8 +53,8 @@ class NotificationService {
 		return numberOfNotificationSent
     }
 	
-	public int newNotification(def workOrder,def content, def sender){
-		def receivers = userService.getNotificationGroup(workOrder,sender,false)
+	public int newNotification(def workOrder,def content, def sender,boolean escalate){
+		def receivers = userService.getNotificationGroup(workOrder,sender,escalate)
 		return sendNotifications(workOrder,content,sender,receivers)
 	}
 	
