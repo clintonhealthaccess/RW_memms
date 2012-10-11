@@ -9,7 +9,7 @@ import org.chai.memms.IntegrationTests
 import org.chai.memms.equipment.Equipment;
 import org.chai.memms.maintenance.WorkOrder.Criticality;
 import org.chai.memms.maintenance.WorkOrder.FailureReason;
-import org.chai.memms.maintenance.WorkOrder.OrderStatus;
+import org.chai.memms.maintenance.WorkOrderStatus.OrderStatus;
 import org.chai.memms.security.User;
 import org.chai.memms.security.User.UserType;
 
@@ -26,9 +26,9 @@ class WorkOrderServiceSpec  extends IntegrationTests{
 		setup:
 		setupLocationTree()
 		setupEquipment()
+		def equipment = Equipment.findBySerialNumber(CODE(123))
 		def senderOne = newUser("senderOne", true,true)
-		Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, User.findByUsername("senderOne"), new Date(),FailureReason.NOTSPECIFIED)
-
+		Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,senderOne, Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		
 		when:
 		
@@ -41,7 +41,7 @@ class WorkOrderServiceSpec  extends IntegrationTests{
 		def workOrdersFailsDataLocation = workOrderService.searchWorkOrder("Nothing",DataLocation.findByCode(BUTARO),null,[:])
 		
 		//Search by Equipment
-		def workOrdersPassesEquipment = workOrderService.searchWorkOrder("Nothing",null,Equipment.findBySerialNumber(CODE(123)),[:])
+		def workOrdersPassesEquipment = workOrderService.searchWorkOrder("Nothing",null,equipment,[:])
 		
 		//Search by equipment serial number
 		def workOrdersPassesEquipmentSerialnumber = workOrderService.searchWorkOrder(CODE(123),null,null,adaptParamsForList())
@@ -66,13 +66,10 @@ class WorkOrderServiceSpec  extends IntegrationTests{
 		setup:
 		setupLocationTree()
 		setupEquipment()
-		def senderOne = newUser("senderOne", true,true)
-		new WorkOrder(equipment:Equipment.findBySerialNumber(CODE(123)),description: "Nothing yet",criticality:Criticality.NORMAL,status:OrderStatus.OPEN,
-			addedBy:User.findByUsername("senderOne"),openOn: Initializer.getDate(12, 9,2012),assistaceRequested:true,failureReason:FailureReason.NOTSPECIFIED).save(failOnError:true)
-			
-			new WorkOrder(equipment:Equipment.findBySerialNumber(CODE(123)),description: "Nothing yet",criticality:Criticality.LOW,status:OrderStatus.CLOSEDFIXED,
-				addedBy:User.findByUsername("senderOne"),openOn: Initializer.getDate(12, 8,2012), closedOn:Initializer.getDate(12, 11,2012),assistaceRequested:false,failureReason:FailureReason.NOTSPECIFIED).save(failOnError:true)
-		
+		def equipment = Equipment.findBySerialNumber(CODE(123))
+		def senderOne = newUser("senderOne", true,true)		
+		Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,senderOne, Initializer.getDate(12, 9,2012),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,senderOne, Initializer.getDate(12, 9,2012),Initializer.getDate(18, 9,2012),FailureReason.NOTSPECIFIED,OrderStatus.CLOSEDFIXED)		
 		when:
 		
 		//Filter by DataLocation
@@ -80,7 +77,7 @@ class WorkOrderServiceSpec  extends IntegrationTests{
 		def workOrdersFailsDataLocation = workOrderService.filterWorkOrders(DataLocation.findByCode(BUTARO),null,null,null,null,null,null,adaptParamsForList())
 		
 		//Filter by Equipment
-		def workOrdersEquipment = workOrderService.filterWorkOrders(null,Equipment.findBySerialNumber(CODE(123)),null,null,null,null,null,adaptParamsForList())
+		def workOrdersEquipment = workOrderService.filterWorkOrders(null,equipment,null,null,null,null,null,adaptParamsForList())
 		
 		//Filter by openOn
 		def workOrdersopenOn = workOrderService.filterWorkOrders(null,null,Initializer.getDate(12, 9,2012),null,null,null,null,adaptParamsForList())
@@ -96,7 +93,7 @@ class WorkOrderServiceSpec  extends IntegrationTests{
 		def workOrdersCriticality = workOrderService.filterWorkOrders(null,null,null,null,null,Criticality.LOW,null,adaptParamsForList())
 		
 		//Filter by status
-		def workOrdersStatus = workOrderService.filterWorkOrders(null,null,null,null,null,null,OrderStatus.OPEN,adaptParamsForList())
+		def workOrdersStatus = workOrderService.filterWorkOrders(null,null,null,null,null,null,OrderStatus.OPENATFOSA,adaptParamsForList())
 		
 		then:
 		workOrdersPassesDataLocation.size() == 2
@@ -132,7 +129,7 @@ class WorkOrderServiceSpec  extends IntegrationTests{
 
 		def technicianFacilityTwo = newUser("technicianFacilityTwo", true,true)
 		technicianFacilityTwo.userType = UserType.TECHNICIANFACILITY
-		technicianFacilityTwo.location = DataLocation.findByCode(KIVUYE)
+		technicianFacilityTwo.location = DataLocation.findByCode(KIVUYE)	
 		technicianFacilityTwo.save(failOnError:true)
 		
 		def technicianMoHOne = newUser("technicianMoHOne", true,true)
@@ -144,8 +141,9 @@ class WorkOrderServiceSpec  extends IntegrationTests{
 		technicianMoHTwo.userType = UserType.TECHNICIANMOH
 		technicianMoHTwo.location = DataLocation.findByCode(KIVUYE)
 		technicianMoHTwo.save(failOnError:true)
-
-		def workOrder = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, clerk, new Date(),FailureReason.NOTSPECIFIED)
+		def equipment = Equipment.findBySerialNumber(CODE(123))
+		
+		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,clerk,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		notificationService.newNotification(workOrder, "Send for rapair",clerk)
 
 		when://Can escalate

@@ -122,8 +122,6 @@ class WorkOrderService {
 				ge("openOn",Utils.getMinDateFromDateTime(openOn))
 			if(closedOn)
 				le("closedOn",Utils.getMaxDateFromDateTime(closedOn))
-			if(assistaceRequested)
-				eq("assistaceRequested",assistaceRequested)
 			if(criticality && criticality != Criticality.NONE)
 				eq("criticality",criticality)
 			if(status && status != OrderStatus.NONE)

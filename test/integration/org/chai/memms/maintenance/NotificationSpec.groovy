@@ -7,7 +7,7 @@ import org.chai.memms.IntegrationTests
 import org.chai.memms.equipment.Equipment;
 import org.chai.memms.maintenance.WorkOrder.Criticality;
 import org.chai.memms.maintenance.WorkOrder.FailureReason;
-import org.chai.memms.maintenance.WorkOrder.OrderStatus;
+import org.chai.memms.maintenance.WorkOrderStatus.OrderStatus;
 import org.chai.memms.security.User;
 
 class NotificationSpec  extends IntegrationTests{
