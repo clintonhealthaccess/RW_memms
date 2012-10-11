@@ -33,7 +33,9 @@ import org.chai.memms.equipment.Equipment;
 import org.chai.memms.maintenance.MaintenanceProcess.ProcessType;
 import org.chai.memms.maintenance.WorkOrder.Criticality;
 import org.chai.memms.maintenance.WorkOrder.FailureReason;
-import org.chai.memms.maintenance.WorkOrder.OrderStatus;
+import org.chai.memms.maintenance.WorkOrderStatus.OrderStatus;
+import org.chai.memms.maintenance.WorkOrderStatus
+import org.chai.memms.maintenance.WorkOrder
 import org.chai.memms.security.User;
 
 
@@ -43,27 +45,42 @@ class WorkOrderSpec extends IntegrationTests{
 		setup:
 		setupLocationTree()
 		setupEquipment()
-		newUser("user", "user")
+		def user = newUser("user", "user")
+		def equipment = Equipment.findBySerialNumber(CODE(123))
 		when:
-		new WorkOrder(equipment:Equipment.findBySerialNumber(CODE(123)),description: "test work order",criticality:Criticality.NORMAL,status:OrderStatus.OPEN,
-			addedBy:User.findByUsername("user"),openOn: new Date(),assistaceRequested:false,failureReason:FailureReason.NOTSPECIFIED).save(failOnError:true)
+		def workOrder =  new WorkOrder(equipment:equipment,description:"test work order",criticality:Criticality.NORMAL,currentStatus:OrderStatus.OPENATFOSA,addedBy:user,openOn:Initializer.now(),failureReason:FailureReason.NOTSPECIFIED)
+		def workOrderStatus =  new WorkOrderStatus(workOrder:workOrder,status:OrderStatus.OPENATFOSA,changeOn:Initializer.now(),changedBy:user);
+		workOrder.addToStatus(workOrderStatus)
+		workOrder.save(failOnError:true)
 		then:
 		WorkOrder.count() == 1
+		WorkOrder.list()[0].status.status.equals([OrderStatus.OPENATFOSA])
+		WorkOrderStatus.count() == 1
 	}
-	def "if status is clossed closedOn should be set"(){
+	def "if status is clossed closedOn should be set and to newer that openOn"(){
 		setup:
 		setupLocationTree()
 		setupEquipment()
-		newUser("user", "user")
-		def workOrderWithError = new WorkOrder(equipment:Equipment.findBySerialNumber(CODE(123)), description: "test work order", criticality:Criticality.NORMAL, status:OrderStatus.CLOSEDFORDISPOSAL,
-				addedBy:User.findByUsername("user"), openOn:Initializer.getDate(12, 9, 2012), assistaceRequested:false,failureReason:FailureReason.NOTSPECIFIED)
+		def user = newUser("user", "user")
+		def equipment =  Equipment.findBySerialNumber(CODE(123))
 		when:
-		workOrderWithError.save()
+		def workOrder = new WorkOrder(equipment:equipment, description: "test work order", criticality:Criticality.NORMAL, currentStatus:OrderStatus.CLOSEDFORDISPOSAL,
+			addedBy:user,openOn:Initializer.now()-1,failureReason:FailureReason.NOTSPECIFIED)
+		workOrder.save()
 		then:
-		workOrderWithError.errors.hasFieldErrors("status") == true
+		workOrder.errors.hasFieldErrors("closedOn") == true
 		WorkOrder.count() == 0
+		
+		when:
+		def workOrderOne = new WorkOrder(equipment:equipment, description: "test work order", criticality:Criticality.NORMAL, currentStatus:OrderStatus.CLOSEDFORDISPOSAL,
+			addedBy:user,openOn:Initializer.now()-1,failureReason:FailureReason.NOTSPECIFIED)
+		workOrderOne.closedOn = Initializer.now()-2
+		workOrderOne.save()
+		then:
+		workOrderOne.errors.hasFieldErrors("closedOn") == true
+		workOrderOne.count() == 0
 	}
-	
+
 	def "retrieve notifications for a user"(){
 		setup:
 		setupLocationTree()
@@ -71,10 +88,11 @@ class WorkOrderSpec extends IntegrationTests{
 		def senderOne = newUser("senderOne", true,true)
 		def senderTwo = newUser("senderTwo", true,true)
 		def receiver = newUser("receiver", true,true)
-		def workOrder = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, User.findByUsername("senderOne"), new Date(),FailureReason.NOTSPECIFIED)
+		def equipment = Equipment.findBySerialNumber(CODE(123))
+		def workOrder = Initializer.newWorkOrder(equipment,"Nothing yet",Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		when:
-		workOrder.addToNotifications(Initializer.newNotification(workOrder, senderOne, receiver,new Date(), "test one"))
-		workOrder.addToNotifications(Initializer.newNotification(workOrder, senderTwo, receiver,new Date(), "test one"))
+		workOrder.addToNotifications(Initializer.newNotification(workOrder, senderOne, receiver,Initializer.now(), "test one"))
+		workOrder.addToNotifications(Initializer.newNotification(workOrder, senderTwo, receiver,Initializer.now(), "test one"))
 		workOrder.save(failOnError:true)
 		then:
 		workOrder.notifications.size() == 2
@@ -87,16 +105,21 @@ class WorkOrderSpec extends IntegrationTests{
 		setupEquipment()
 		def sender = newUser("sender", true,true)
 		def receiver = newUser("receiver", true,true)
-		def workOrder = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, User.findByUsername("sender"), new Date(),FailureReason.NOTSPECIFIED)
+		def equipment = Equipment.findBySerialNumber(CODE(123))
+		def workOrder = Initializer.newWorkOrder(equipment,"Nothing yet",Criticality.NORMAL,sender,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		when:
-		workOrder.notifications = [
-			Initializer.newNotification(workOrder, sender, receiver,new Date(), "test one"),
-			Initializer.newNotification(workOrder, sender, receiver,new Date(), "test one")
-		]
+		def notificationOne = Initializer.newNotification(workOrder, sender, receiver,Initializer.now(), "test one")
+		def notificationTwo = Initializer.newNotification(workOrder, sender, receiver,Initializer.now(), "test Two")
+		
+		workOrder.addToNotifications(notificationOne)
+		workOrder.addToNotifications(notificationTwo)
 		workOrder.save(failOnError:true)
+		
+		notificationTwo.read = true
+		notificationTwo.save(failOnError:true)
 		then:
 		workOrder.notifications.size() == 2
-		workOrder.getUnReadNotificationsForUser(sender).size() == 2
+		workOrder.getUnReadNotificationsForUser(sender).size() == 1
 	}
 	
 	def "get list of actions performed"(){
@@ -104,7 +127,8 @@ class WorkOrderSpec extends IntegrationTests{
 		setupLocationTree()
 		setupEquipment()
 		def user = newUser("user","user")
-		def workOrder = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, User.findByUsername("user"), new Date(),FailureReason.NOTSPECIFIED)
+		def equipment = Equipment.findBySerialNumber(CODE(123))
+		def workOrder = Initializer.newWorkOrder(equipment,"Nothing yet",Criticality.NORMAL,user,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		when:
 		def actionOne = Initializer.newMaintenanceProcess(workOrder,ProcessType.ACTION,"Action 1",Initializer.now(), user)
 		def actionTwo = Initializer.newMaintenanceProcess(workOrder,ProcessType.ACTION,"Action 2",Initializer.now(), user)
@@ -121,7 +145,8 @@ class WorkOrderSpec extends IntegrationTests{
 		setupLocationTree()
 		setupEquipment()
 		def user = newUser("user","user")
-		def workOrder = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, User.findByUsername("user"), new Date(),FailureReason.NOTSPECIFIED)
+		def equipment = Equipment.findBySerialNumber(CODE(123))
+		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,user, Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		when:
 		def materialOne = Initializer.newMaintenanceProcess(workOrder,ProcessType.MATERIAL,"Material 1",Initializer.now(), user)
 		def actionTwo = Initializer.newMaintenanceProcess(workOrder,ProcessType.ACTION,"Action 2",Initializer.now(), user)
@@ -132,5 +157,56 @@ class WorkOrderSpec extends IntegrationTests{
 		workOrder.materials.size() == 2
 		workOrder.materials.each{[materialOne,materialFour].contains(it) }
 		
+	}
+	def "can't have value on closedOn when it not a closed status workOrderStatus based on Time"(){
+		setup:
+		setupLocationTree()
+		setupEquipment()
+		def user = newUser("user", "user")
+		def equipment = Equipment.findBySerialNumber(CODE(123))
+		def workOrder =  new WorkOrder(equipment:equipment,description:"test work order",criticality:Criticality.NORMAL,addedBy:user,openOn:Initializer.now(),failureReason:FailureReason.NOTSPECIFIED)
+		def workOrderStatusOne =  Initializer.newWorkOrderStatus(workOrder,OrderStatus.OPENATFOSA,Initializer.now(),user,false);
+		workOrder.save(failOnError:true)
+		when:
+		workOrder.closedOn = Initializer.now()
+		workOrder.save()
+		then:
+		WorkOrder.count() == 1
+		workOrder.errors.hasFieldErrors("closedOn") == true
+	}
+	def "get current workOrderStatus based on Time"(){
+		setup:
+		setupLocationTree()
+		setupEquipment()
+		def user = newUser("user", "user")
+		def equipment = Equipment.findBySerialNumber(CODE(123))
+		def workOrder =  new WorkOrder(equipment:equipment,description:"test work order",criticality:Criticality.NORMAL,addedBy:user,openOn:Initializer.now(),failureReason:FailureReason.NOTSPECIFIED)
+		def workOrderStatusOne =  Initializer.newWorkOrderStatus(workOrder,OrderStatus.OPENATFOSA,Initializer.now(),user,false);
+		workOrder.save(failOnError:true)
+		when:
+		def workOrderStatusTwo =  Initializer.newWorkOrderStatus(workOrder,OrderStatus.CLOSEDFIXED,Initializer.now(),user,false);
+		workOrder.closedOn = Initializer.now()
+		workOrder.save(failOnError:true)
+		then:
+		WorkOrder.count() == 1
+		WorkOrderStatus.list().size()==2
+		WorkOrder.list()[0].status.size()==2
+		WorkOrder.list()[0].currentStatus==WorkOrder.list()[0].timeBasedStatus.status
+	}
+	def "get escalation status an escalted workOrder"(){
+		setup:
+		setupLocationTree()
+		setupEquipment()
+		def user = newUser("user", "user")
+		def equipment = Equipment.findBySerialNumber(CODE(123))
+		when:
+		def workOrder =  new WorkOrder(equipment:equipment,description:"test work order",criticality:Criticality.NORMAL,currentStatus:OrderStatus.OPENATFOSA,addedBy:user,openOn:Initializer.now(),failureReason:FailureReason.NOTSPECIFIED)
+		def workOrderStatus =  new WorkOrderStatus(workOrder:workOrder,status:OrderStatus.OPENATFOSA,changeOn:Initializer.now(),changedBy:user);
+		workOrder.addToStatus(workOrderStatus)
+		workOrder.save(failOnError:true)
+		then:
+		WorkOrder.count() == 1
+		WorkOrder.list()[0].status.status.equals([OrderStatus.OPENATFOSA])
+		WorkOrderStatus.count() == 1
 	}
 }

@@ -99,13 +99,17 @@ public class WorkOrder {
 		
 		failureReasonDetails nullable: true
 		testResultsDescriptions nullable: true
-		workTime nullable: true, blank: true
-		travelTime nullable: true, blank: true
+		workTime nullable: true, validator:{ 
+			if(it!=null && it<=0) return false		
+		}
+		travelTime nullable: true, validator:{ 
+			if(it!=null && it<=0) return false		
+		}
 		description nullable: false, blank: false
 		returnedTo nullable: true, blank: true
 		
-		openOn nullable: false, validation:{it <= new Date()}
-		returnedOn nullable: true, validation:{it <= new Date()}
+		openOn nullable: false, validator:{it <= new Date()}
+		returnedOn nullable: true, validator:{it <= new Date()}
 		
 		lastModifiedOn nullable: true, validator:{ val, obj ->
 			if(val!=null)
@@ -113,18 +117,27 @@ public class WorkOrder {
 			else return true
 		}
 		
-		closedOn nullable: true, validation:{ val, obj ->
-			if(val!=null)
-				return ((val <= new Date()) && (val.after(obj.openOn) || (val.compareTo(obj.openOn)==0)))
-			else return true
+		closedOn nullable: true, validator:{ val, obj ->
+			boolean valid = true
+			if(val==null){
+				if(obj.currentStatus==OrderStatus.CLOSEDFORDISPOSAL || obj.currentStatus==OrderStatus.CLOSEDFIXED)
+					valid = false
+			}else{
+				if(obj.currentStatus!=OrderStatus.CLOSEDFORDISPOSAL && obj.currentStatus!=OrderStatus.CLOSEDFIXED)
+					valid = false
+				if((val > new Date()) || val.before(obj.openOn) )
+				 	valid = false
+			}
+			return valid	
 		}
 		lastModifiedBy nullable: true
-		currentStatus nullable: true, inList:[OrderStatus.OPENATFOSA,OrderStatus.OPENATMMC,OrderStatus.CLOSEDFIXED,OrderStatus.CLOSEDFORDISPOSAL]
+		currentStatus nullable: false, inList:[OrderStatus.OPENATFOSA,OrderStatus.OPENATMMC,OrderStatus.CLOSEDFIXED,OrderStatus.CLOSEDFORDISPOSAL]
 		criticality nullable: false, blank: false, inList: [Criticality.LOW,Criticality.HIGH,Criticality.NORMAL]
 		failureReason nullable:false, blank:false, inList:[FailureReason.NOTSPECIFIED,FailureReason.SPAREPARTBROKEN,FailureReason.MISUSE,FailureReason.OTHER]
 		
 		estimatedCost nullable: true, blank: true, validator:{ val, obj ->
 			if(val == null && obj.currency != null) return false
+			if(val!=null && val<=0) return false
 		}
 		currency  nullable: true, blank: true, inList: ["RWF","USD","EUR"], validator:{ val, obj ->
 			if(val == null && obj.estimatedCost != null) return false
@@ -169,11 +182,11 @@ public class WorkOrder {
 		table "memms_work_order"
 		version false
 	}
-
+	@Transient
 	def getNotificationsForUser(def user){
 		notifications.findAll{it.sender == user}
 	}
-
+	@Transient
 	def getUnReadNotificationsForUser(def user){
 		getNotificationsForUser(user).findAll{!it.read}
 	}

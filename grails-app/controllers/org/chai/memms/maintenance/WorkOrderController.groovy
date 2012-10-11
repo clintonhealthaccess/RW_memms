@@ -89,6 +89,7 @@ class WorkOrderController extends AbstractEntityController{
 			entity.addedBy = user
 			entity.openOn = now
 			entity.failureReason = FailureReason.NOTSPECIFIED
+			entity.currentStatus = OrderStatus.OPENATFOSA
 		}else{
 			entity.lastModifiedOn = now
 			entity.lastModifiedBy = user
@@ -112,12 +113,12 @@ class WorkOrderController extends AbstractEntityController{
 		if(entity.id==null){
 			newEntity=true
 			currentEquipmentStatus = equipmentStatusService.createEquipmentStatus(now,user,Status.UNDERMAINTENANCE,entity.equipment,true,now,[:])
-			currentWorkOrderStatus = workOrderStatusService.createWorkOrderStatus(entity,OrderStatus.OPENATFOSA,user,now,null)
+			currentWorkOrderStatus = workOrderStatusService.createWorkOrderStatus(entity,OrderStatus.OPENATFOSA,user,now,escalation)
 		}else{
 			if(log.isDebugEnabled()) log.debug("Old status stored in params: "+params.oldStatus)
 			//If status has be changed
 			if(entity.currentStatus != params.oldStatus){
-				//De-escalate
+				//Escalate
 				if(entity.currentStatus == OrderStatus.OPENATMMC && params.oldStatus == OrderStatus.OPENATFOSA) escalation = true			
 				//Change Equipment Status When closing workorder
 				if(entity.currentStatus == OrderStatus.CLOSEDFIXED)
@@ -128,8 +129,8 @@ class WorkOrderController extends AbstractEntityController{
 			}
 		}
 		
-		
-		entity.save(flush:true)
+		entity.save(failOnError: true)
+		if(log.isDebugEnabled()) log.debug("Created WorkOrder: "+entity)
 		if(newEntity || escalation){ //TODO define default message
 			users = userService.getNotificationGroup(entity,user,escalation)
 			notificationService.sendNotifications(entity,message(code:"workorder.creation.default.message"),user,users)

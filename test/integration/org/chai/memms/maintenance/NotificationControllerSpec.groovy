@@ -10,7 +10,7 @@ import org.chai.memms.IntegrationTests
 import org.chai.memms.equipment.Equipment;
 import org.chai.memms.maintenance.WorkOrder.Criticality;
 import org.chai.memms.maintenance.WorkOrder.FailureReason;
-import org.chai.memms.maintenance.WorkOrder.OrderStatus;
+import org.chai.memms.maintenance.WorkOrderStatus.OrderStatus;
 import org.chai.memms.security.User;
 import org.chai.memms.security.User.UserType;
 
@@ -24,19 +24,18 @@ class NotificationControllerSpec  extends IntegrationTests{
 		setupLocationTree()
 		setupEquipment()
 		def sender = newUser("sender", true,true)
+		setupSecurityManager(sender)
 		sender.userType = UserType.DATACLERK
 		sender.location = DataLocation.findByCode(KIVUYE)
 		sender.save(failOnError:true)
-		
 		def receiverOne = newUser("receiverOne", true,true)
 		receiverOne.userType = UserType.TECHNICIANFACILITY
 		receiverOne.location = DataLocation.findByCode(KIVUYE)
 		receiverOne.save(failOnError:true)
-
-		def workOrder = new WorkOrder(equipment:Equipment.findBySerialNumber(CODE(123)),description: "test work order",criticality:Criticality.NORMAL,status:OrderStatus.OPEN,
-				addedBy:sender,openOn: new Date(),assistaceRequested:false ,failureReason :FailureReason.NOTSPECIFIED).save(flush:true,failOnError:true)
+		def equipment = Equipment.findBySerialNumber(CODE(123))
+		def workOrder = new WorkOrder(equipment:equipment,description: "test work order",criticality:Criticality.NORMAL,currentStatus:OrderStatus.OPENATFOSA,
+				addedBy:sender,openOn:Initializer.now(),failureReason :FailureReason.NOTSPECIFIED).save(failOnError:true)
 		notificationController = new NotificationController()
-		setupSecurityManager(sender)
 		when:
 		notificationController.params.content = " check this out"
 		notificationController.params.workOrder = workOrder
@@ -93,10 +92,10 @@ class NotificationControllerSpec  extends IntegrationTests{
 		receiverMoH.userType = UserType.TECHNICIANMOH
 		receiverMoH.location = Location.findByCode(RWANDA)
 		receiverMoH.save(failOnError:true)
+		def equipment = Equipment.findBySerialNumber(CODE(123))
 		
-		
-		def workOrderOne = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderOne, new Date(),FailureReason.NOTSPECIFIED)
-		def workOrderTwo = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderTwo, new Date(),FailureReason.NOTSPECIFIED)
+		def workOrderOne = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def workOrderTwo = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,senderTwo,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		
 		notificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne)
 		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility)
@@ -137,10 +136,10 @@ class NotificationControllerSpec  extends IntegrationTests{
 		receiverMoH.userType = UserType.TECHNICIANMOH
 		receiverMoH.location = Location.findByCode(RWANDA)
 		receiverMoH.save(failOnError:true)
+		def equipment = Equipment.findBySerialNumber(CODE(123))
 		
-		
-		def workOrderOne = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderOne, new Date(),FailureReason.NOTSPECIFIED)
-		def workOrderTwo = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderTwo, new Date(),FailureReason.NOTSPECIFIED)
+		def workOrderOne = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def workOrderTwo = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		
 		notificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne)
 		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility,true)
@@ -183,10 +182,10 @@ class NotificationControllerSpec  extends IntegrationTests{
 		receiverMoH.userType = UserType.TECHNICIANMOH
 		receiverMoH.location = Location.findByCode(RWANDA)
 		receiverMoH.save(failOnError:true)
+		def equipment = Equipment.findBySerialNumber(CODE(123))
 		
-		
-		def workOrderOne = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderOne, new Date(),FailureReason.NOTSPECIFIED)
-		def workOrderTwo = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderTwo, new Date(),FailureReason.NOTSPECIFIED)
+		def workOrderOne = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def workOrderTwo = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		
 		notificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne)
 		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility, true)
@@ -228,10 +227,10 @@ class NotificationControllerSpec  extends IntegrationTests{
 		receiverMoH.userType = UserType.TECHNICIANMOH
 		receiverMoH.location = Location.findByCode(RWANDA)
 		receiverMoH.save(failOnError:true)
+		def equipment = Equipment.findBySerialNumber(CODE(123))
 		
-		
-		def workOrderOne = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderOne, new Date(),FailureReason.NOTSPECIFIED)
-		def workOrderTwo = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderTwo, new Date(),FailureReason.NOTSPECIFIED)
+		def workOrderOne = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def workOrderTwo = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		
 		notificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne)
 		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility)
@@ -271,10 +270,10 @@ class NotificationControllerSpec  extends IntegrationTests{
 		receiverMoH.userType = UserType.TECHNICIANMOH
 		receiverMoH.location = Location.findByCode(RWANDA)
 		receiverMoH.save(failOnError:true)
+		def equipment = Equipment.findBySerialNumber(CODE(123))
 		
-		
-		def workOrderOne = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderOne, new Date(),FailureReason.NOTSPECIFIED)
-		def workOrderTwo = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderTwo, new Date(),FailureReason.NOTSPECIFIED)
+		def workOrderOne = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def workOrderTwo = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		
 		notificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne)
 		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility)

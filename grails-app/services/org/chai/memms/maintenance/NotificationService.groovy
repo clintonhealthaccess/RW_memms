@@ -39,7 +39,7 @@ import org.chai.memms.security.User.UserType;
 import org.chai.memms.util.Utils;
 
 class NotificationService {
-	
+	def userService
     public int sendNotifications(WorkOrder workOrder, String content,User sender,List<User> receivers) {
 		int numberOfNotificationSent = 0
 		receivers.each{ user ->
@@ -51,6 +51,11 @@ class NotificationService {
 			}
 		return numberOfNotificationSent
     }
+	
+	public int newNotification(def workOrder,def content, def sender){
+		def receivers = userService.getNotificationGroup(workOrder,sender,false)
+		return sendNotifications(workOrder,content,sender,receivers)
+	}
 	
 	public int getUnreadNotifications(User user){
 		def criteria = Notification.createCriteria()
