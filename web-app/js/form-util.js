@@ -113,7 +113,12 @@ function addProcess(baseUrl,order,spinnerImgSrc,errorMsg){
 		});
 	})
 }
-
+function addExpectedLifeYearMonth(expectedLifeTime){
+	if(expectedLifeTime != null){
+		$("#expectedLifeTime_years").val( expectedLifeTime >= 12 ? Math.floor( expectedLifeTime/12 ) : null);
+		$("#expectedLifeTime_months").val(expectedLifeTime % 12 != 0 ? expectedLifeTime % 12 : null);
+	}
+}
 /**
  * Remove Maintenance Process
  */

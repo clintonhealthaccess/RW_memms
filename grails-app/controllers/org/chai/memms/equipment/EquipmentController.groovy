@@ -373,6 +373,38 @@ class EquipmentController extends AbstractEntityController{
 	}
 }
 
+class ExpectedLifeTimeCommand {
+	Integer expectedLifeTime_months
+	Integer expectedLifeTime_years
+
+	public Integer getExpectedLifeTime(){
+		Integer lifeTime
+		if(expectedLifeTime_years){
+			lifeTime = expectedLifeTime_years * 12
+		}
+		if(expectedLifeTime_months){
+			lifeTime = lifeTime? expectedLifeTime_months + lifeTime : expectedLifeTime_months
+		}
+		return lifeTime
+	}
+
+	public void setExpectedLifeTime(Integer newExpectedLifeTime){
+		if(newExpectedLifeTime){
+			expectedLifeTime_years = newExpectedLifeTime >= 12 ? Math.floor( newExpectedLifeTime/12 ) : null
+			expectedLifeTime_months = newExpectedLifeTime % 12 != 0 ? newExpectedLifeTime % 12 : null
+		}
+	}
+
+	static constraints = {
+		expectedLifeTime_months nullable:true
+		expectedLifeTime_years nullable:true
+	}
+
+	String toString() {
+		return "ExpectedLifeTimeCommand[ Years="+expectedLifeTime_years+", Months="+expectedLifeTime_months+" , getExpectedLifeTime="+getExpectedLifeTime() + "]"
+	}
+}
+
 class StatusCommand {
 	Status status
 	Date dateOfEvent

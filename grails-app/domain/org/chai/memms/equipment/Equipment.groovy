@@ -34,6 +34,7 @@ import org.chai.memms.Warranty;
 import org.chai.memms.equipment.EquipmentStatus.Status;
 import org.chai.memms.maintenance.WorkOrder;
 import org.chai.location.DataLocation;
+import org.apache.commons.lang.math.RandomUtils;
 
 import i18nfields.I18nFields
 
@@ -104,7 +105,10 @@ public class Equipment {
 	
 	@Transient
 	def getEquipmentId() {
-		
+		def randomInt = RandomUtils.nextInt(9999)
+		def equipmentId = "${type.code}-${randomInt}-${purchaseDate.month}-${purchaseDate.year}"
+		if(Equipment.findByEquipmentID(equipmentId.toString()) == null) return equipmentId
+		else getEquipmentId()
 	}
 	@Transient
 	def getCurrentState() {

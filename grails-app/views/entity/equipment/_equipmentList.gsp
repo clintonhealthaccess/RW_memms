@@ -1,4 +1,4 @@
-<table class="items spaced">
+u<table class="items spaced">
 	<thead>
 		<tr>
 			<th></th>

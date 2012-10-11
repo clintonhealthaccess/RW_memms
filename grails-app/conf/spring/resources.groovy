@@ -1,5 +1,4 @@
 import org.chai.memms.DatePropertyEditorRegistrar;
-import org.chai.memms.YearMonthPropertyEditorRegistrar;
 import org.springframework.beans.PropertyEditorRegistrar;
 
 /**

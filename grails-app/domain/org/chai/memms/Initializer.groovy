@@ -594,7 +594,6 @@ public class Initializer {
 	public static def newEquipment(def serialNumber,def donation,def obsolete,def expectedLifeTime,def room,def purchaseCost,def descriptions,def manufactureDate, def purchaseDate,def currency,def registeredOn,def model,def dataLocation,def department, def type,def manufacture,def supplier){
 		def equipment = new Equipment(serialNumber:serialNumber,donation:donation,obsolete:obsolete,room:room,expectedLifeTime:expectedLifeTime,purchaseCost:purchaseCost,currency:currency,manufactureDate:manufactureDate,purchaseDate:purchaseDate,registeredOn:registeredOn,model:model,dataLocation:dataLocation,department:department,type:type,manufacturer:manufacture,supplier:supplier);
 		Utils.setLocaleValueInMap(equipment,descriptions,"Descriptions")
-		equipment.save(failOnError: true)
 		equipment.equipmentID = equipment.getEquipmentId()
 		return equipment.save(failOnError: true)
 	}

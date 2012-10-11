@@ -10,4 +10,3 @@
 		<li><span class="label"><g:message code="contact.pobox.label"/>:</span><span class="text">${provider?.contact?.poBox}</span></li>
 	</ul>
 </div>
-	
