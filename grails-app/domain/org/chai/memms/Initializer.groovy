@@ -44,7 +44,6 @@ import org.chai.location.DataLocationType;
 import org.chai.location.Location;
 import org.chai.location.LocationLevel;
 import org.chai.memms.maintenance.Comment;
-//import org.chai.memms.maintenance.EscalationLog;
 import org.chai.memms.maintenance.MaintenanceProcess;
 import org.chai.memms.maintenance.MaintenanceProcess.ProcessType;
 import org.chai.memms.maintenance.Notification;
@@ -496,7 +495,7 @@ public class Initializer {
 		def equipment09 =Equipment.findBySerialNumber("SERIAL09")
 		def equipment11 =Equipment.findBySerialNumber("SERIAL11")
 		
-		def workOrderOne =  newWorkOrder(equipment01,"First order",Criticality.NORMAL,user,now()-1,FailureReason.NOTSPECIFIED)
+		def workOrderOne =  newWorkOrder(equipment01,"First order",Criticality.NORMAL,user,now()-1,FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		def statusOne =  newWorkOrderStatus(workOrderOne,OrderStatus.OPENATFOSA,now()-1,user,false)
 		def statusTwo =  newWorkOrderStatus(workOrderOne,OrderStatus.OPENATMMC,now(),user,true)
 		def notifationOne = newNotification(workOrderOne, user, techFac,now(), "notifationOne")
@@ -506,15 +505,16 @@ public class Initializer {
 		workOrderOne.addToStatus(statusTwo)
 		workOrderOne.save(failOnError:true)
 		
-		def workOrderTwo =  newWorkOrder(equipment01,"Second order",Criticality.LOW,admin,now(),FailureReason.NOTSPECIFIED)
+		def workOrderTwo =  newWorkOrder(equipment01,"Second order",Criticality.LOW,admin,now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		def statusThree =  newWorkOrderStatus(workOrderTwo,OrderStatus.OPENATFOSA,now()-1,admin,false)
 		
-		def workOrderFive =  newWorkOrder(equipment01,"Closed order",Criticality.HIGH,user,now()-3,now(),false,FailureReason.MISUSE)
+		def workOrderFive =  newWorkOrder(equipment01,"Closed order",Criticality.HIGH,user,now()-3,FailureReason.MISUSE,OrderStatus.OPENATFOSA)
 		
 		def statusFour =  newWorkOrderStatus(workOrderFive,OrderStatus.OPENATFOSA,now()-3,user,false)
 		def statusFive =  newWorkOrderStatus(workOrderFive,OrderStatus.OPENATMMC,now()-2,user,true)		
 		def statusSix =  newWorkOrderStatus(workOrderFive,OrderStatus.OPENATFOSA,now()-1,user,false)
 		def statusSeven =  newWorkOrderStatus(workOrderFive,OrderStatus.CLOSEDFIXED,now(),user,false)
+		workOrderFive.closedOn = now()
 		workOrderTwo.save(failOnError:true)
 		def notifationFour = newNotification(workOrderOne, user, techFac,now(), "Solve this for me")
 		def notifationFive = newNotification(workOrderOne, techFac, user,now(), "More information needed")
@@ -552,12 +552,12 @@ public class Initializer {
 		
 		workOrderOne.save(failOnError:true)
 		
-		def workOrderThree =  newWorkOrder(equipment09,"Third order",Criticality.NORMAL,user,now(),FailureReason.NOTSPECIFIED)
+		def workOrderThree =  newWorkOrder(equipment09,"Third order",Criticality.NORMAL,user,now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		def statusEight =  newWorkOrderStatus(workOrderThree,OrderStatus.OPENATFOSA,now(),admin,false)
 		equipment09.addToWorkOrders(workOrderThree)
 		equipment09.save(failOnError:true)
 		
-		def workOrderFour =  newWorkOrder(equipment11,"Fourth order",Criticality.HIGH,admin,now(),FailureReason.NOTSPECIFIED)
+		def workOrderFour =  newWorkOrder(equipment11,"Fourth order",Criticality.HIGH,admin,now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		def statusNine =  newWorkOrderStatus(workOrderFour,OrderStatus.OPENATFOSA,now(),admin,false)
 		equipment11.addToWorkOrders(workOrderFour)
 		equipment11.save(failOnError:true)	
@@ -568,14 +568,14 @@ public class Initializer {
 	
 	//Models definition
 	//Corrective Maintenance
-	public static def newWorkOrder(def equipment, def description, def criticality, def addedBy, def openOn,def failureReason ){
-		return new WorkOrder(equipment:equipment,description: description,criticality:criticality,addedBy:addedBy,openOn: openOn,assistaceRequested:false, failureReason:failureReason).save(failOnError:true)
+	public static def newWorkOrder(def equipment, def description, def criticality, def addedBy, def openOn,def failureReason,def currentStatus){
+		return new WorkOrder(equipment:equipment,description: description,criticality:criticality,addedBy:addedBy,openOn: openOn,currentStatus:currentStatus,failureReason:failureReason).save(failOnError:true)
 	}
-	public static def newWorkOrder(def equipment, def description, def criticality,def addedBy, def openOn, def closedOn, def escalate,def failureReason){
-		return new WorkOrder(equipment:equipment, description:description, criticality:criticality,addedBy:addedBy, openOn: openOn, closedOn:closedOn, escalate:escalate,failureReason:failureReason).save(failOnError:true)
+	public static def newWorkOrder(def equipment, def description, def criticality,def addedBy, def openOn, def closedOn, def failureReason,def currentStatus){
+		return new WorkOrder(equipment:equipment, description:description, criticality:criticality,addedBy:addedBy, openOn: openOn, closedOn:closedOn, currentStatus:currentStatus,failureReason:failureReason).save(failOnError:true)
 	}
 	public static newNotification(def workOrder, def sender, def receiver,def writtenOn, def content){
-		return new Notification(workOrder: workOrder, sender: sender, receiver: receiver, writtenOn: writtenOn, content: content,read:false).save(failOnError: true)
+		return new Notification(workOrder: workOrder, sender: sender, receiver: receiver, writtenOn: writtenOn, content: content).save(failOnError: true)
 	}
 	public static newComment(def workOrder, def writtenBy, def writtenOn, def content){
 		return new Comment(workOrder: workOrder, writtenBy: writtenBy, writtenOn: writtenOn, content: content ).save(failOnError: true)
@@ -584,7 +584,7 @@ public class Initializer {
 		return new MaintenanceProcess(workOrder: workOrder,type: type,name: name, addedOn: addedOn, addedBy: addedBy ).save(failOnError: true)
 	}
 	public static newWorkOrderStatus(def workOrder,def status,def changeOn,def changedBy,def escalation){
-		def stat = new WorkOrderStatus(workOrder:workOrder,status:status,changeOn:changeOn,changedBy:changedBy,escalation:escalation).save(failOnError: true)
+		def stat = new WorkOrderStatus(workOrder:workOrder,status:status,changeOn:changeOn,changedBy:changedBy,escalation:escalation)
 		workOrder.currentStatus= status
 		workOrder.addToStatus(stat)
 		return stat;

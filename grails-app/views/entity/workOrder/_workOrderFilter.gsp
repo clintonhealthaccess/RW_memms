@@ -1,5 +1,5 @@
 <%@ page import="org.chai.memms.maintenance.WorkOrder.Criticality"%>
-<%@ page import="org.chai.memms.maintenance.WorkOrder.OrderStatus"%>
+<%@ page import="org.chai.memms.maintenance.WorkOrderStatus.OrderStatus"%>
 <%@ page import="java.util.Date" %>
 <div class="filters main">
 	<h2>
@@ -23,12 +23,6 @@
 		<ul class="filters-list">
 			<li><g:selectFromEnum name="criticality" values="${Criticality.values()}" field="criticality" label="${message(code:'work.order.criticality.label')}" bean="${filterCmd}"/></li>
 			<li><g:selectFromEnum name="status" values="${OrderStatus.values()}" field="status" label="${message(code:'work.order.status.label')}" bean="${filterCmd}"/></li>
-			<li><label><g:message code="work.order.assistance.request.label" /></label> 
-			<select name="assistaceRequested">
-					<option value=""> <g:message code="default.please.select" /> </option>
-					<option value="true" ${filterCmd?.assistaceRequested?.equals("true")? 'selected' : ''}> <g:message code="default.boolean.true" /> </option>
-					<option value="false" ${filterCmd?.assistaceRequested?.equals("false")? 'selected' : ''}> <g:message code="default.boolean.false" /> </option>
-			</select></li>
 			<li><div class="half"><g:input name="openOn" dateClass="date-picker" label="${message(code:'work.order.openOn.label')}" bean="${filterCmd}" field="openOn" value="${filterCmd?.openOn}"/></div><div class="half"><g:input name="closedOn" dateClass="date-picker" label="${message(code:'work.order.closedOn.label')}" bean="${filterCmd}" field="closedOn" value="${filterCmd?.closedOn}"/></div></li>
 		</ul>
 		<button type="submit">Filter</button>

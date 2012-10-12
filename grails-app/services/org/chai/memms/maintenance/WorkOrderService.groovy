@@ -107,27 +107,21 @@ class WorkOrderService {
 	 * @param params
 	 * @return
 	 */
-	List<WorkOrder> filterWorkOrders(DataLocation dataLocation,Equipment workOrdersEquipment, Date openOn, Date closedOn, Boolean assistaceRequested,
-	Criticality criticality, OrderStatus status,Map<String, String> params) {
+	List<WorkOrder> filterWorkOrders(def dataLocation,def workOrdersEquipment,def openOn,def closedOn,def criticality,def status,def params) {
 		def criteria = WorkOrder.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(dataLocation)
-				equipment{
-					eq('dataLocation',dataLocation)
-				}
-				
+				equipment{ eq('dataLocation',dataLocation)}
 			if(workOrdersEquipment)
 				eq("equipment",workOrdersEquipment)
 			if(openOn)
 				ge("openOn",Utils.getMinDateFromDateTime(openOn))
 			if(closedOn)
 				le("closedOn",Utils.getMaxDateFromDateTime(closedOn))
-			if(assistaceRequested)
-				eq("assistaceRequested",assistaceRequested)
 			if(criticality && criticality != Criticality.NONE)
 				eq("criticality",criticality)
 			if(status && status != OrderStatus.NONE)
-				eq("status",status)
+				eq("currentStatus",status)
 		}
 	}
 	

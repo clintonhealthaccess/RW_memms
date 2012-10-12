@@ -39,8 +39,10 @@ import org.chai.memms.security.User.UserType;
 import org.chai.memms.util.Utils;
 
 class NotificationService {
+	def userService
 	
     public int sendNotifications(WorkOrder workOrder, String content,User sender,List<User> receivers) {
+		if(log.isDebugEnabled()) log.debug("Notification receivers group: "+receivers)
 		int numberOfNotificationSent = 0
 		receivers.each{ user ->
 			if(user.active){
@@ -51,6 +53,11 @@ class NotificationService {
 			}
 		return numberOfNotificationSent
     }
+	
+	public int newNotification(def workOrder,def content, def sender,boolean escalate){
+		def receivers = userService.getNotificationGroup(workOrder,sender,escalate)
+		return sendNotifications(workOrder,content,sender,receivers)
+	}
 	
 	public int getUnreadNotifications(User user){
 		def criteria = Notification.createCriteria()
@@ -65,25 +72,34 @@ class NotificationService {
 	public List<Notification> searchNotificition(String text,User user,WorkOrder workOrder, Boolean read,Map<String, String> params) {
 		def criteria = Notification.createCriteria()
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			eq('receiver',user)
-			if(workOrder)  eq('workOrder',workOrder)
-			if(read)  eq('read',read)
-			if(text) ilike("content","%"+text+"%")
+			if(user)
+				eq('receiver',user)
+			if(workOrder)  
+				eq('workOrder',workOrder)
+			if(read)  
+				eq('read',read)
+			if(text) 
+				ilike("content","%"+text+"%")
 		}
 	}
 	
-	List<Notification> filterNotifications(WorkOrder workOrder,User receiver,Date from, Date to,Boolean read, Map<String, String> params){
+	public List<Notification> filterNotifications(WorkOrder workOrder,User receiver,Date from, Date to,Boolean read, Map<String, String> params){
 		def criteria = Notification.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			if(workOrder != null) eq("workOrder",workOrder)
-			if(from != null) ge("writtenOn",Utils.getMinDateFromDateTime(from))
-			if(to != null) le("writtenOn",Utils.getMaxDateFromDateTime(to))
-			if(receiver != null) eq("receiver",receiver)
-			if(read != null) eq("read",read)
+			if(workOrder) 
+				eq("workOrder",workOrder)
+			if(from) 
+				ge("writtenOn",Utils.getMinDateFromDateTime(from))
+			if(to) 
+				le("writtenOn",Utils.getMaxDateFromDateTime(to))
+			if(receiver) 
+				eq("receiver",receiver)
+			if(read!=null) 
+				eq("read",read)
 		}
 	}
 	
-	public Notification readNotification(Notification notification){
+	public Notification setNotificationRead(Notification notification){
 		notification.read = true
 		notification.save(failOnError:true)
 		return notification

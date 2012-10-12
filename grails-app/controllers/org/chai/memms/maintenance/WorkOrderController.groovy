@@ -89,6 +89,7 @@ class WorkOrderController extends AbstractEntityController{
 			entity.addedBy = user
 			entity.openOn = now
 			entity.failureReason = FailureReason.NOTSPECIFIED
+			entity.currentStatus = OrderStatus.OPENATFOSA
 		}else{
 			entity.lastModifiedOn = now
 			entity.lastModifiedBy = user
@@ -112,12 +113,12 @@ class WorkOrderController extends AbstractEntityController{
 		if(entity.id==null){
 			newEntity=true
 			currentEquipmentStatus = equipmentStatusService.createEquipmentStatus(now,user,Status.UNDERMAINTENANCE,entity.equipment,true,now,[:])
-			currentWorkOrderStatus = workOrderStatusService.createWorkOrderStatus(entity,OrderStatus.OPENATFOSA,user,now,null)
+			currentWorkOrderStatus = workOrderStatusService.createWorkOrderStatus(entity,OrderStatus.OPENATFOSA,user,now,escalation)
 		}else{
 			if(log.isDebugEnabled()) log.debug("Old status stored in params: "+params.oldStatus)
 			//If status has be changed
 			if(entity.currentStatus != params.oldStatus){
-				//De-escalate
+				//Escalate
 				if(entity.currentStatus == OrderStatus.OPENATMMC && params.oldStatus == OrderStatus.OPENATFOSA) escalation = true			
 				//Change Equipment Status When closing workorder
 				if(entity.currentStatus == OrderStatus.CLOSEDFIXED)
@@ -128,8 +129,8 @@ class WorkOrderController extends AbstractEntityController{
 			}
 		}
 		
-		
-		entity.save(flush:true)
+		entity.save(failOnError: true)
+		if(log.isDebugEnabled()) log.debug("Created WorkOrder: "+entity)
 		if(newEntity || escalation){ //TODO define default message
 			users = userService.getNotificationGroup(entity,user,escalation)
 			notificationService.sendNotifications(entity,message(code:"workorder.creation.default.message"),user,users)
@@ -346,7 +347,7 @@ class WorkOrderController extends AbstractEntityController{
 	def filter = { FilterWorkOrderCommand cmd ->
 		if(log.isDebugEnabled()) log.debug(cmd)
 		adaptParamsForList()
-		List<WorkOrder> orders = workOrderService.filterWorkOrders(cmd.dataLocation,cmd.equipment,cmd.openOn,cmd.closedOn,cmd.getAssistanceStatus(),cmd.criticality,cmd.status,params)
+		List<WorkOrder> orders = workOrderService.filterWorkOrders(cmd.dataLocation,cmd.equipment,cmd.openOn,cmd.closedOn,cmd.criticality,cmd.status,params)
 
 		render(view:"/entity/list", model:[
 					template:"workorder/workOrderList",
@@ -366,31 +367,24 @@ class FilterWorkOrderCommand {
 	
 	Date openOn
 	Date closedOn
-	String assistaceRequested
 	Criticality criticality
 	OrderStatus status
 	DataLocation dataLocation
 	Equipment equipment
 
-	public boolean getAssistanceStatus(){
-		if(assistaceRequested.equals("true")) return true
-		else if(assistaceRequested.equals("false")) return false
-		else return null
-	}
 
 	static constraints = {
 		dataLocation  nullable:true
 		equipment nullable:true
 		openOn nullable:true
 		closedOn nullable:true
-		assistaceRequested nullable:true
 		status nullable:true
 		criticality nullable:true
 	}
 
 	String toString() {
 		return "FilterCommand[OrderStatus="+status+", Criticality="+criticality+ 
-		", closedOn="+closedOn+", openOn="+openOn+", Assistance Status="+ getAssistanceStatus() + "]"
+		", closedOn="+closedOn+", openOn="+openOn+"]"
 	}
 }
 

@@ -44,7 +44,7 @@
    			<g:selectFromEnum name="currentStatus" bean="${order}" values="${OrderStatus.values()}" field="currentStatus" label="${message(code:'work.order.status.label')}"/>
    			<table class="items">
 	    		<tr>
-	    			<th>${message(code:'equipment.status.label')}</th>
+	    			<th>${message(code:'work.order.status.label')}</th>
 	    			<th>${message(code:'work.order.status.changed.on.label')}</th>
 	    			<th>${message(code:'work.order.status.changed.by.label')}</th>
 	    			<th>${message(code:'work.order.status.escalation.label')}</th>
@@ -53,7 +53,7 @@
 			    		<tr>
 			    			<td>${message(code: status?.status?.messageCode+'.'+status?.status?.name)}</td>
 			    			<td>${Utils.formatDate(status?.changeOn)}</td>
-			    			<td>${status.changedBy}</td>
+			    			<td>${status.changedBy.firstname} ${status.changedBy.lastname}</td>
 			    			<td>${(status.escalation)? '\u2713':''}</td>
 			    		</tr>
 	    		</g:each>

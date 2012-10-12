@@ -5,7 +5,7 @@ import org.chai.memms.IntegrationTests
 import org.chai.memms.equipment.Equipment;
 import org.chai.memms.maintenance.WorkOrder.Criticality;
 import org.chai.memms.maintenance.WorkOrder.FailureReason;
-import org.chai.memms.maintenance.WorkOrder.OrderStatus;
+import org.chai.memms.maintenance.WorkOrderStatus.OrderStatus;
 
 class CommentSpec  extends IntegrationTests{
 	def "can create a comment"(){
@@ -13,8 +13,8 @@ class CommentSpec  extends IntegrationTests{
 		setupLocationTree()
 		setupEquipment()
 		def user = newUser("user", "user")
-		def workOrder = new WorkOrder(equipment:Equipment.findBySerialNumber(CODE(123)),description: "test work order",criticality:Criticality.NORMAL,status:OrderStatus.OPEN,
-				addedBy:user,openOn: new Date(),assistaceRequested:false,failureReason:FailureReason.NOTSPECIFIED).save(failOnError:true)
+		def equipment = Equipment.findBySerialNumber(CODE(123))
+		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,user, Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		when:
 		new Comment(content:"comment test", writtenOn:new Date().previous(), writtenBy:user, workOrder:workOrder).save(failOnError:true)
 		then:
@@ -26,8 +26,8 @@ class CommentSpec  extends IntegrationTests{
 		setupLocationTree()
 		setupEquipment()
 		def user = newUser("user", "user")
-		def workOrder = new WorkOrder(equipment:Equipment.findBySerialNumber(CODE(123)),description: "test work order",criticality:Criticality.NORMAL,status:OrderStatus.OPEN,
-				addedBy:user,openOn: new Date(),assistaceRequested:false,failureReason:FailureReason.NOTSPECIFIED).save(failOnError:true)
+		def equipment = Equipment.findBySerialNumber(CODE(123))
+		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,user, Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		def commentWithErrors = new Comment()
 		def expectedFieldErrors = ["content","writtenOn","writtenBy","workOrder"]
 

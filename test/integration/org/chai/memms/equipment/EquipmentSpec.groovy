@@ -254,7 +254,7 @@ class EquipmentSpec extends IntegrationTests{
 		equipment.save(failOnError: true)
 		then:
 		Equipment.count() == 1
-		Equipment.list()[0].getCurrentStatusBasedOnTime().is(statusOne)
+		Equipment.list()[0].getTimeBasedStatus().is(statusOne)
 	}
 	
 	def "can set current status based on time"(){
@@ -290,7 +290,7 @@ class EquipmentSpec extends IntegrationTests{
 		Equipment.list()[0].setCurrentStatus()
 		then:
 		Equipment.count() == 1
-		Equipment.list()[0].getCurrentStatusBasedOnTime().is(statusOne)
+		Equipment.list()[0].getTimeBasedStatus().is(statusOne)
 		statusTwo.current == false
 	}
 	

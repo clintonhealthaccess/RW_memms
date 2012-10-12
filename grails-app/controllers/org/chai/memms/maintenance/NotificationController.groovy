@@ -29,13 +29,11 @@ package org.chai.memms.maintenance
 
 import java.util.Date;
 import java.util.Map;
-
 import org.apache.jasper.compiler.Node.ParamsAction;
 import org.chai.location.DataLocation;
 import org.chai.memms.AbstractEntityController;
 import org.chai.memms.equipment.Equipment;
 import org.chai.memms.maintenance.WorkOrder.Criticality;
-import org.chai.memms.maintenance.WorkOrderStatus.OrderStatus;
 import org.chai.memms.security.User;
 
 /**
@@ -83,7 +81,8 @@ class NotificationController extends AbstractEntityController{
 		def notificationId
 		if(!params.id) redirect(uri: getTargetURI())
 		else{
-			def notification = notificationService.readNotification(params.id)
+			
+			def notification = notificationService.setNotificationRead(Notification.get(params.int('id')))
 			if (log.isInfoEnabled()) log.info("reading notification: "+notification)
 
 			if (notification == null) {
@@ -152,7 +151,7 @@ class NotificationController extends AbstractEntityController{
 		}
 		else {
 			log.debug("target url=" + targetURI)
-			def sent = notificationService.newNotification(cmd.workOrder,cmd.content, user)
+			def sent = notificationService.newNotification(cmd.workOrder,cmd.content, user,false)
 			flash.message = message(code: 'default.saved.message', args: [message(code: getLabel(), default: 'entity')],sent.toString())
 			redirect(action: "list", id: cmd.workOrder.id)
 		}

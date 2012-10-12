@@ -62,8 +62,10 @@ public class WorkOrderStatus {
 		changeOn nullable: false, validator:{it <= new Date()}
 		status nullable: false, inList:[OrderStatus.OPENATFOSA,OrderStatus.OPENATMMC,OrderStatus.CLOSEDFIXED,OrderStatus.CLOSEDFORDISPOSAL]
 		escalation validator:{ val, obj ->
-			if(obj.status == OrderStatus.OPENATMMC &&  val == false) return false
-			else return true
+			def valid = true
+			if(val == true && (obj.status != OrderStatus.OPENATMMC)) valid = false
+			if(val == false && (obj.status == OrderStatus.OPENATMMC)) valid = false
+			return valid
 		}
 	}
 	
@@ -88,7 +90,7 @@ public class WorkOrderStatus {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		WorkOrder other = (WorkOrder) obj;
+		WorkOrderStatus other = (WorkOrderStatus) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

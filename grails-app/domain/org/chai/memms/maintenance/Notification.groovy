@@ -39,7 +39,7 @@ class Notification {
 	User receiver
 	Date writtenOn
 	String content
-	Boolean read
+	Boolean read = false
 	
 	static belongsTo = [workOrder: WorkOrder]
 	static constraints ={
@@ -47,7 +47,7 @@ class Notification {
 		receiver nullable: false 
 		writtenOn nullable: false, validator:{it <=new Date()}
 		content nullable:false, blank:false
-		read nullable: false, blank:false
+		read nullable: false
 	}
 	static mapping ={
 		table "memms_work_order_notification"

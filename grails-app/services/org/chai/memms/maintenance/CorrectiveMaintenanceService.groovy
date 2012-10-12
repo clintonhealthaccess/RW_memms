@@ -32,14 +32,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import org.chai.location.LocationLevel;
 import org.chai.memms.CorrectiveMaintenance;
 import org.chai.memms.CorrectiveMaintenances;
 import org.chai.memms.Inventory
 import org.chai.memms.Inventories
 import org.chai.memms.maintenance.WorkOrder.Criticality;
-import org.chai.memms.maintenance.WorkOrderStatus.OrderStatus;
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocationType;
 import org.chai.location.DataLocation
@@ -61,15 +59,15 @@ class CorrectiveMaintenanceService {
 	}
 	
 	public CorrectiveMaintenances getCorrectiveMaintenancesByLocation(Location location,Set<DataLocationType> types,Map<String, String> params) {
-		if(log.isDebugEnabled()) log.debug("params="+params)
+		if(log.isDebugEnabled()) log.debug("getCorrectiveMaintenancesByLocation url params: "+params)
 		List<CorrectiveMaintenance> correctiveMaintenances = []
 		Set<LocationLevel> skipLevels = getSkipLocationLevels()
 		for(DataLocation dataLocation : location.collectDataLocations(skipLevels,types)){
-			correctiveMaintenances.add(new CorrectiveMaintenance(dataLocation:dataLocation,workOrderCount:workOrderService.filterWorkOrders(dataLocation,null,null, null, null,null,null,[:]).size()))
+			correctiveMaintenances.add(new CorrectiveMaintenance(dataLocation:dataLocation,workOrderCount:workOrderService.filterWorkOrders(dataLocation,null,null, null, null,null,[:]).size()))
 		}
 		
 		CorrectiveMaintenances correctiveMaintenance = new CorrectiveMaintenances()
-		
+		//TODO fix this with Eugene
 		correctiveMaintenance.correctiveMaintenanceList = correctiveMaintenances[(params.offset) .. ((params.offset + params.max) > correctiveMaintenances.size() ? correctiveMaintenances.size() - 1 : (params.offset + params.max))]
 		correctiveMaintenance.totalCount = correctiveMaintenances.size()
 		return correctiveMaintenance

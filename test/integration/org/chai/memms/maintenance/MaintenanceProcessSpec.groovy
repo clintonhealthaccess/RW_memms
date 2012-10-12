@@ -8,7 +8,7 @@ import org.chai.memms.equipment.Equipment;
 import org.chai.memms.maintenance.MaintenanceProcess.ProcessType;
 import org.chai.memms.maintenance.WorkOrder.Criticality;
 import org.chai.memms.maintenance.WorkOrder.FailureReason;
-import org.chai.memms.maintenance.WorkOrder.OrderStatus;
+import org.chai.memms.maintenance.WorkOrderStatus.OrderStatus;
 import org.chai.memms.security.User;
 
 class MaintenanceProcessSpec  extends IntegrationTests{
@@ -17,8 +17,8 @@ class MaintenanceProcessSpec  extends IntegrationTests{
 		setupLocationTree()
 		setupEquipment()
 		def user = newUser("user", "user")
-		def workOrder = new WorkOrder(equipment:Equipment.findBySerialNumber(CODE(123)),description: "test work order",criticality:Criticality.NORMAL,status:OrderStatus.OPEN,
-				addedBy:user,openOn: new Date(),assistaceRequested:false,failureReason:FailureReason.NOTSPECIFIED).save(failOnError:true)
+		def equipment = Equipment.findBySerialNumber(CODE(123))
+		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,user, Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		when:
 		new MaintenanceProcess(name:"name test", addedOn:Initializer.now().previous(), addedBy:user, type:ProcessType.ACTION, workOrder:workOrder).save(failOnError:true)
 		then:
@@ -30,8 +30,8 @@ class MaintenanceProcessSpec  extends IntegrationTests{
 		setupLocationTree()
 		setupEquipment()
 		def user = newUser("user", "user")
-		def workOrder = new WorkOrder(equipment:Equipment.findBySerialNumber(CODE(123)),description: "test work order",criticality:Criticality.NORMAL,status:OrderStatus.OPEN,
-				addedBy:user,openOn: new Date(),assistaceRequested:false,failureReason:FailureReason.NOTSPECIFIED).save(failOnError:true)
+		def equipment = Equipment.findBySerialNumber(CODE(123))
+		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,user, Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		def maintenanceProcessWithErrors = new MaintenanceProcess()
 		def expectedFieldErrors = ["name","addedOn","addedBy","type","workOrder"]
 
@@ -48,8 +48,8 @@ class MaintenanceProcessSpec  extends IntegrationTests{
 		setupLocationTree()
 		setupEquipment()
 		def user = newUser("user", "user")
-		def workOrder = new WorkOrder(equipment:Equipment.findBySerialNumber(CODE(123)),description: "test work order",criticality:Criticality.NORMAL,status:OrderStatus.OPEN,
-				addedBy:user,openOn: new Date(),assistaceRequested:false,failureReason:FailureReason.NOTSPECIFIED).save(failOnError:true)
+		def equipment = Equipment.findBySerialNumber(CODE(123))
+		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,user, Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		def maintenanceProcessWithErrors
 		expect:
 		MaintenanceProcess.count() == 0
