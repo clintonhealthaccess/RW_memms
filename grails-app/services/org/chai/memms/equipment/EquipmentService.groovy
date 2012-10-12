@@ -61,7 +61,7 @@ import org.supercsv.prefs.CsvPreference;
 class EquipmentService {
 	static transactional = true
 	def languageService;
-		
+	
 	public List<Equipment> searchEquipment(String text,DataLocation dataLocation,Map<String, String> params) {
 		def dbFieldTypeNames = 'names_'+languageService.getCurrentLanguagePrefix();
 		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();

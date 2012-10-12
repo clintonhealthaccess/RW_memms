@@ -29,7 +29,7 @@
       	<g:selectFromList name="type.id" label="${message(code:'equipment.type.label')}" bean="${equipment}" field="type" optionKey="id" multiple="false"
   			ajaxLink="${createLink(controller:'equipmentType', action:'getAjaxData')}"
   			from="${types}" value="${equipment?.type?.id}" values="${types.collect{it.names}}" />
-    		<g:inputYearMonth name="expectedLifeTime" labelYear="${message(code:'entity.years.label')}" labelMonth="${message(code:'entity.months.label')}" bean="${cmd}"/>
+    		<g:inputYearMonth name="expectedLifeTime" labelYear="${message(code:'entity.years.label')}" labelMonth="${message(code:'entity.months.label')}" bean="${cmdLifeTime}"/>
     		
       		<g:input name="serialNumber" label="${message(code:'equipment.serial.number.label')}" bean="${equipment}" field="serialNumber"/>
       		<g:input name="model" label="${message(code:'equipment.model.label')}" bean="${equipment}" field="model"/>

@@ -150,8 +150,9 @@ class EquipmentTypeController extends AbstractEntityController{
 
 	def validateEntity(def entity) {
 		boolean valid = (!params.cmd.hasErrors())
-		if(log.isDebugEnabled()) log.debug("Rejecting expected life time: "+params.cmd.errors)
+		
 		if(valid) entity.expectedLifeTime = params.cmd.expectedLifeTime
+		else if(log.isDebugEnabled()) log.debug("Rejecting expected life time: "+params.cmd.errors)
 		return (valid & entity.validate())
 	}
 

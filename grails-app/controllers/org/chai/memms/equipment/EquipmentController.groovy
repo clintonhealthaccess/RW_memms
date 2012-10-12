@@ -52,19 +52,19 @@ import java.util.Set
  *
  */
 class EquipmentController extends AbstractEntityController{
-	
+
 	def providerService
 	def equipmentService
 	def inventoryService
 	def grailsApplication
 	def equipmentStatusService
-	
-	
+
+
 	def index = {
 		redirect(action: "summaryPage", params: params)
 	}
-	
-    def getEntity(def id) {
+
+	def getEntity(def id) {
 		return Equipment.get(id);
 	}
 
@@ -79,7 +79,7 @@ class EquipmentController extends AbstractEntityController{
 	def getLabel() {
 		return "equipment.label";
 	}
-		
+
 	def getEntityClass() {
 		return Equipment.class;
 	}
@@ -87,6 +87,7 @@ class EquipmentController extends AbstractEntityController{
 		if(log.isDebugEnabled()) log.debug("Equipment params: before bind "+params)
 		if(!entity.id){
 			entity.registeredOn=new Date()
+			
 		}else{
 			if(params["donation"]=="on"){
 				params["purchaseCost"] = ""
@@ -105,69 +106,79 @@ class EquipmentController extends AbstractEntityController{
 				entity.warranty.contact=null
 			}
 		}
-		bindData(entity,params,[exclude:["status","dateOfEvent"]])
+		bindData(entity,params,[exclude:["status","dateOfEvent","expectedLifeTime_years","expectedLifeTime_months"]])
 		if(log.isDebugEnabled()) log.debug("Equipment params: after bind  "+entity)
 	}
-	
+
 	def validateEntity(def entity) {
-		boolean valid = true
+		boolean validStatus = true
+		boolean validLifeTime = true
+		
 		if(entity.id==null){
-			valid = (!params.cmd.hasErrors())
+			validStatus = (!params.cmd.hasErrors())
 			if(log.isDebugEnabled()) log.debug("Rejecting status: "+params.cmd.errors)
 		}
-		return (valid & entity.validate())
+		
+		validLifeTime = (!params.cmdLifeTime.hasErrors())
+		if(log.isDebugEnabled()) log.debug("Rejecting expectedLifeTime: "+params.cmdLifeTime.errors)		
+		if(validLifeTime) entity.expectedLifeTime = params.cmdLifeTime.expectedLifeTime
+		entity.genarateAndSetEquipmentCode()
+		return (validStatus & validLifeTime & entity.validate())
 	}
-	
+
 	def saveEntity(def entity) {
-		def currentStatus 
+		def currentStatus
 		if(entity.id==null)
 			currentStatus = equipmentStatusService.createEquipmentStatus(now,user,params.cmd.status,entity,true,params.cmd.dateOfEvent,[:])
-		entity.save()
+		entity.save(failOnError:true)
 		(!currentStatus)?:currentStatus.save()
 	}
 
-	def save = { StatusCommand cmd ->
+	def save = { StatusCommand cmd, ExpectedLifeTimeEquipmentCommand cmdLifeTime ->
 		params.cmd = cmd
+		params.cmdLifeTime = cmdLifeTime
 		super.saveWithoutTokenCheck()
 	}
-	 
+
 	def getModel(def entity) {
+		def cmdLifeTime
 		def manufacturers = []; def suppliers = []; def departments = []; def types = []; def dataLocations = [];
 		if (entity.manufacturer != null) manufacturers << entity.manufacturer
 		if (entity.supplier != null) suppliers << entity.supplier
 		if (entity.department!=null) departments << entity.department
 		if (entity.type!=null) types << entity.type
 		if (entity.dataLocation!=null) dataLocations << entity.dataLocation
-		
+		if(entity.id) cmdLifeTime = new ExpectedLifeTimeEquipmentCommand(expectedLifeTime:entity.expectedLifeTime)
 		[
-			equipment: entity,
-			departments: departments,
-			manufacturers: manufacturers,
-			suppliers: suppliers,
-			types: types,
-			dataLocations: dataLocations,
-			numberOfStatusToDisplay: grailsApplication.config.status.to.display.on.equipment.form,
-			cmd:params.cmd,
-			currencies: grailsApplication.config.site.possible.currency
+					equipment: entity,
+					departments: departments,
+					manufacturers: manufacturers,
+					suppliers: suppliers,
+					types: types,
+					dataLocations: dataLocations,
+					numberOfStatusToDisplay: grailsApplication.config.status.to.display.on.equipment.form,
+					cmd:params.cmd,
+					cmdLifeTime:cmdLifeTime,
+					currencies: grailsApplication.config.site.possible.currency
 
-		]
+				]
 	}
-	
+
 	def list={
 		def dataLocation = DataLocation.get(params.int('dataLocation.id'))
 		if (dataLocation == null)
 			response.sendError(404)
-			
+
 		adaptParamsForList()
 		def equipments = equipmentService.getEquipmentsByDataLocation(dataLocation,params)
 		render(view:"/entity/list", model:[
-				template:"equipment/equipmentList",
-				filterTemplate:"equipment/equipmentFilter",
-				dataLocation:dataLocation,
-				entities: equipments,
-				entityCount: equipments.totalCount,
-				code: getLabel(),
-				entityClass: getEntityClass()
+					template:"equipment/equipmentList",
+					filterTemplate:"equipment/equipmentFilter",
+					dataLocation:dataLocation,
+					entities: equipments,
+					entityCount: equipments.totalCount,
+					code: getLabel(),
+					entityClass: getEntityClass()
 				])
 	}
 
@@ -177,48 +188,48 @@ class EquipmentController extends AbstractEntityController{
 		if (location == null)
 			response.sendError(404)
 		else{
-			List<Equipment> equipments = equipmentService.searchEquipment(params['q'],location,params)	
+			List<Equipment> equipments = equipmentService.searchEquipment(params['q'],location,params)
 			render (view: '/entity/list', model:[
-				template:"equipment/equipmentList",
-				filterTemplate:"equipment/equipmentFilter",
-				entities: equipments,
-				entityCount: equipments.totalCount,
-				code: getLabel(),
-				q:params['q'],
-				dataLocation:location
-			])
+						template:"equipment/equipmentList",
+						filterTemplate:"equipment/equipmentFilter",
+						entities: equipments,
+						entityCount: equipments.totalCount,
+						code: getLabel(),
+						q:params['q'],
+						dataLocation:location
+					])
 		}
 	}
-	
+
 	def summaryPage = {
 		if(user.location instanceof DataLocation) redirect(controler:"equipment",action:"list",params:['dataLocation.id':user.location.id])
-		
+
 		def location = Location.get(params.long('location'))
 		def dataLocationTypesFilter = getLocationTypes()
 		def template = null
 		def inventories = null
-		
+
 		adaptParamsForList()
-		
+
 		def locationSkipLevels = inventoryService.getSkipLocationLevels()
-		
-		
+
+
 		if (location != null) {
 			template = '/inventory/sectionTable'
 			inventories = inventoryService.getInventoryByLocation(location,dataLocationTypesFilter,params)
 		}
-		
+
 		render (view: '/inventory/summaryPage', model: [
-			inventories:inventories?.inventoryList,
-			currentLocation: location,
-			currentLocationTypes: dataLocationTypesFilter,
-			template: template,
-			entityCount: inventories?.totalCount,
-			locationSkipLevels: locationSkipLevels,
-			entityClass: getEntityClass()
-		])
+					inventories:inventories?.inventoryList,
+					currentLocation: location,
+					currentLocationTypes: dataLocationTypesFilter,
+					template: template,
+					entityCount: inventories?.totalCount,
+					locationSkipLevels: locationSkipLevels,
+					entityClass: getEntityClass()
+				])
 	}
-		
+
 	def generalExport = { ExportFilterCommand cmd ->
 
 		// we do this because automatic data binding does not work with polymorphic elements
@@ -269,11 +280,11 @@ class EquipmentController extends AbstractEntityController{
 
 		if (log.isDebugEnabled()) log.debug("equipments.export, command="+cmd+", params"+params)
 
-		
+
 		if(params.exported != null){
 			def equipmentExportTask = new EquipmentExportFilter(calculationLocations:cmd.calculationLocations,dataLocationTypes:cmd.dataLocationTypes,
-				equipmentTypes:cmd.equipmentTypes,manufacturers:cmd.manufacturers,suppliers:cmd.suppliers,equipmentStatus:cmd.equipmentStatus,
-				donated:cmd.donated,obsolete:cmd.obsolete).save(failOnError: true,flush: true)
+					equipmentTypes:cmd.equipmentTypes,manufacturers:cmd.manufacturers,suppliers:cmd.suppliers,equipmentStatus:cmd.equipmentStatus,
+					donated:cmd.donated,obsolete:cmd.obsolete).save(failOnError: true,flush: true)
 			params.exportFilterId = equipmentExportTask.id
 			params.class = "EquipmentExportTask"
 			params.targetURI = "/equipment/generalExport"
@@ -281,10 +292,10 @@ class EquipmentController extends AbstractEntityController{
 		}
 		adaptParamsForList()
 		render(view:"/entity/equipment/equipmentExportPage", model:[
-				template:"/entity/equipment/equipmentExportFilter",
-				filterCmd:cmd,
-				dataLocationTypes:DataLocationType.list(),
-				code: getLabel()
+					template:"/entity/equipment/equipmentExportFilter",
+					filterCmd:cmd,
+					dataLocationTypes:DataLocationType.list(),
+					code: getLabel()
 				])
 	}
 
@@ -308,23 +319,23 @@ class EquipmentController extends AbstractEntityController{
 				])
 
 	}
-	
+
 	def export = { FilterCommand cmd ->
 		if (log.isDebugEnabled()) log.debug("equipments.export, command "+cmd)
 		def dataLocation = DataLocation.get(params.int('dataLocation.id'))
 		if (dataLocation == null)
 			response.sendError(404)
 		adaptParamsForList()
-		
-		def equipments = equipmentService.filterEquipment(dataLocation,cmd.supplier,cmd.manufacturer,cmd.equipmentType,cmd.donated,cmd.obsolete,cmd.status,params)	
+
+		def equipments = equipmentService.filterEquipment(dataLocation,cmd.supplier,cmd.manufacturer,cmd.equipmentType,cmd.donated,cmd.obsolete,cmd.status,params)
 		File file = equipmentService.exporter(dataLocation,equipments)
-		
+
 		response.setHeader "Content-disposition", "attachment; filename=${file.name}.csv"
 		response.contentType = 'text/csv'
 		response.outputStream << file.text
 		response.outputStream.flush()
 	}
-	
+
 	def updateObsolete = {
 		if (log.isDebugEnabled()) log.debug("updateObsolete equipment.obsolete "+params['equipment.id'])
 		Equipment equipment = Equipment.get(params.int(['equipment.id']))
@@ -337,15 +348,15 @@ class EquipmentController extends AbstractEntityController{
 				if(equipment.obsolete) equipment.obsolete = false
 				else equipment.obsolete = true
 				entity = equipment.save(flush:true)
-				
-			}			
-			if(entity!=null) value=true 
+
+			}
+			if(entity!=null) value=true
 			render(contentType:"text/json") { results = [value]}
 		}
 	}
-	
+
 	def getAjaxData = {
-		
+
 		DataLocation dataLocation = null
 		if(params['dataLocation']) dataLocation = DataLocation.get(params.int("dataLocation.id"))
 		List<Equipment> equipments =[]
@@ -355,25 +366,25 @@ class EquipmentController extends AbstractEntityController{
 			elements = array {
 				equipments.each { equipment ->
 					elem (
-						key: equipment.id,
-						value: equipment.serialNumber
-					)
+							key: equipment.id,
+							value: equipment.serialNumber
+							)
 				}
 			}
 			htmls = array {
 				equipments.each { equipment ->
 					elem (
-						key: equipment.id,
-						html: g.render(template:"/templates/equipmentFormSide",model:[equipment:equipment,cssClass:"form-aside-hidden",field:"equipment"])
-					)
+							key: equipment.id,
+							html: g.render(template:"/templates/equipmentFormSide",model:[equipment:equipment,cssClass:"form-aside-hidden",field:"equipment"])
+							)
 				}
 			}
 		}
-		
+
 	}
 }
 
-class ExpectedLifeTimeCommand {
+class ExpectedLifeTimeEquipmentCommand {
 	Integer expectedLifeTime_months
 	Integer expectedLifeTime_years
 
@@ -401,19 +412,19 @@ class ExpectedLifeTimeCommand {
 	}
 
 	String toString() {
-		return "ExpectedLifeTimeCommand[ Years="+expectedLifeTime_years+", Months="+expectedLifeTime_months+" , getExpectedLifeTime="+getExpectedLifeTime() + "]"
+		return "ExpectedLifeTimeCommand[ Years="+expectedLifeTime_years+", Months="+expectedLifeTime_months+" , ExpectedLifeTime="+expectedLifeTime + "]"
 	}
 }
 
 class StatusCommand {
 	Status status
 	Date dateOfEvent
-	
+
 	static constraints = {
 		status nullable: false, inList: [Status.DISPOSED,Status.FORDISPOSAL,Status.PARTIALLYOPERATIONAL,Status.INSTOCK,Status.OPERATIONAL,Status.UNDERMAINTENANCE]
-		dateOfEvent nullable: false 
+		dateOfEvent nullable: false
 	}
-	
+
 	String toString(){
 		return "StatusCommand [Status "+status+" dateOfEvent: "+dateOfEvent+"]";
 	}
@@ -427,13 +438,13 @@ class FilterCommand {
 	Status status = Status.NONE
 	String donated
 	String obsolete
-	
+
 	public boolean getDonationStatus(){
 		if(donated) return null
 		else if(donated.equals("true")) return true
 		else if(donated.equals("false")) return false
 	}
-	
+
 	public boolean getObsoleteStatus(){
 		if(obsolete) return null
 		else if(obsolete.equals("true")) return true
@@ -441,19 +452,19 @@ class FilterCommand {
 	}
 
 	static constraints = {
-		
+
 		equipmentType nullable:true
-		manufacturer nullable:true 
-		supplier nullable:true 
-		status nullable:true 
-		donated nullable:true 
+		manufacturer nullable:true
+		supplier nullable:true
+		status nullable:true
+		donated nullable:true
 		obsolete nullable:true
-		
+
 		dataLocation nullable:false, validator:{val, obj ->
 			return (obj.equipmentType != null || obj.manufacturer != null || obj.supplier != null || (obj.status != null && obj.status != Status.NONE) || obj.donated || obj.obsolete)?true:"select.atleast.one.value.text"
-			}
+		}
 	}
-	
+
 	String toString() {
 		return "FilterCommand[DataLocation="+dataLocation+", EquipmentType="+equipmentType+
 		", Manufacturer="+manufacturer+", Supplier="+supplier+", Status="+status+", donated="+donated+", obsolete="+obsolete+
@@ -470,13 +481,13 @@ class ExportFilterCommand {
 	Status equipmentStatus
 	String donated
 	String obsolete
-	
+
 	public boolean getDonationStatus(){
 		if(donated) return null
 		else if(donated.equals("true")) return true
 		else if(donated.equals("false")) return false
 	}
-	
+
 	public boolean getObsoleteStatus(){
 		if(obsolete) return null
 		else if(obsolete.equals("true")) return true
@@ -493,7 +504,7 @@ class ExportFilterCommand {
 		donated nullable:true
 		obsolete nullable:true
 	}
-	
+
 	String toString() {
 		return "ExportFilterCommand[ CalculationLocations="+calculationLocations+", DataLocationTypes="+dataLocationTypes+" , EquipmentTypes="+equipmentTypes+
 		", Manufacturers="+manufacturers+", Suppliers="+suppliers+", Status="+equipmentStatus+", donated="+donated+", obsolete="+obsolete+

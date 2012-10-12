@@ -1,4 +1,4 @@
-u<table class="items spaced">
+<table class="items spaced">
 	<thead>
 		<tr>
 			<th></th>
@@ -33,7 +33,7 @@ u<table class="items spaced">
 					</ul>
 				</td>
 				<td>${equipment.serialNumber}</td>
-				<td>${equipment.equipmentID}</td>
+				<td>${equipment.code}</td>
 				<td>${equipment.type.names}</td>
 				<td>${equipment.model}</td>
 				<td>${equipment.manufacturer.contact.contactName}</td>

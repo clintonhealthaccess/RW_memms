@@ -299,7 +299,7 @@ public class Initializer {
 				'MODEL1',
 				DataLocation.findByCode(KIVUYE),
 				Department.findByCode('SURGERY'),
-				EquipmentType.findByCode("15819"),
+				EquipmentType.findByCode("15810"),
 				Provider.findByCode("ONE"),
 				Provider.findByCode("FIVE")
 				)
@@ -317,7 +317,7 @@ public class Initializer {
 				'MODEL2',
 				DataLocation.findByCode(KIVUYE),
 				Department.findByCode('PEDIATRY'),
-				EquipmentType.findByCode("15810"),
+				EquipmentType.findByCode("15819"),
 				Provider.findByCode("TWO"),
 				Provider.findByCode("FIVE")
 				)
@@ -349,7 +349,7 @@ public class Initializer {
 				'MODEL2',
 				DataLocation.findByCode(KIVUYE),
 				Department.findByCode('CARDIOLOGY'),
-				EquipmentType.findByCode("15819"),
+				EquipmentType.findByCode("10035"),
 				Provider.findByCode("THREE"),
 				Provider.findByCode("SEVEN")
 				)
@@ -367,7 +367,7 @@ public class Initializer {
 				'MODEL1',
 				DataLocation.findByCode(BUNGWE),
 				Department.findByCode('CONSULTATION'),
-				EquipmentType.findByCode("10026"),
+				EquipmentType.findByCode("20760"),
 				Provider.findByCode("FOUR"),
 				Provider.findByCode("SIX")
 				)
@@ -387,7 +387,7 @@ public class Initializer {
 				'MODEL3',
 				DataLocation.findByCode(BUTARO),
 				Department.findByCode('ANAESTHETICS'),
-				EquipmentType.findByCode("15819"),
+				EquipmentType.findByCode("20729"),
 				Provider.findByCode("TWO"),
 				Provider.findByCode("SIX")
 				)
@@ -407,7 +407,7 @@ public class Initializer {
 				'MODEL3',
 				DataLocation.findByCode(BUTARO),
 				Department.findByCode('ANAESTHETICS'),
-				EquipmentType.findByCode("15819"),
+				EquipmentType.findByCode("10026"),
 				Provider.findByCode("TWO"),
 				Provider.findByCode("SIX")
 				)
@@ -427,7 +427,7 @@ public class Initializer {
 				'MODEL8',
 				DataLocation.findByCode(BUTARO),
 				Department.findByCode('ANAESTHETICS'),
-				EquipmentType.findByCode("15819"),
+				EquipmentType.findByCode("10155"),
 				Provider.findByCode("EIGHT"),
 				Provider.findByCode("EIGHT")
 				)
@@ -447,7 +447,7 @@ public class Initializer {
 				'MODEL3',
 				DataLocation.findByCode(BUTARO),
 				Department.findByCode('ANAESTHETICS'),
-				EquipmentType.findByCode("15819"),
+				EquipmentType.findByCode("10124"),
 				Provider.findByCode("TWO"),
 				Provider.findByCode("SIX")
 				)
@@ -467,7 +467,7 @@ public class Initializer {
 				'MODELTen3',
 				DataLocation.findByCode(BUTARO),
 				Department.findByCode('ANAESTHETICS'),
-				EquipmentType.findByCode("15819"),
+				EquipmentType.findByCode("10426"),
 				Provider.findByCode("TWO"),
 				Provider.findByCode("SIX")
 				)
@@ -592,9 +592,9 @@ public class Initializer {
 	
 	//Inventory
 	public static def newEquipment(def serialNumber,def donation,def obsolete,def expectedLifeTime,def room,def purchaseCost,def descriptions,def manufactureDate, def purchaseDate,def currency,def registeredOn,def model,def dataLocation,def department, def type,def manufacture,def supplier){
-		def equipment = new Equipment(serialNumber:serialNumber,donation:donation,obsolete:obsolete,room:room,expectedLifeTime:expectedLifeTime,purchaseCost:purchaseCost,currency:currency,manufactureDate:manufactureDate,purchaseDate:purchaseDate,registeredOn:registeredOn,model:model,dataLocation:dataLocation,department:department,type:type,manufacturer:manufacture,supplier:supplier);
+		def equipment = new Equipment(serialNumber:serialNumber,donation:donation,obsolete:obsolete,room:room,purchaseCost:purchaseCost,currency:currency,manufactureDate:manufactureDate,purchaseDate:purchaseDate,registeredOn:registeredOn,model:model,dataLocation:dataLocation,expectedLifeTime:expectedLifeTime,department:department,type:type,manufacturer:manufacture,supplier:supplier);
 		Utils.setLocaleValueInMap(equipment,descriptions,"Descriptions")
-		equipment.equipmentID = equipment.getEquipmentId()
+		equipment.genarateAndSetEquipmentCode()
 		return equipment.save(failOnError: true)
 	}
 

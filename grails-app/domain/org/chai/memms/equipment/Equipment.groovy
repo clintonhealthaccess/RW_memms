@@ -51,7 +51,7 @@ public class Equipment {
 	String descriptions
 	String model
 	String room
-	String equipmentID
+	String code
 	
 	Integer expectedLifeTime
 	Boolean donation
@@ -72,7 +72,7 @@ public class Equipment {
 	
 	static constraints = {
 		importFrom Contact
-		equipmentID nullable: false, unique:true
+		code nullable: false, unique:true
 		supplier nullable: false
 		manufacturer nullable: false
 		warranty nullable: true
@@ -103,13 +103,17 @@ public class Equipment {
 		version false
 	}
 	
-	@Transient
-	def getEquipmentId() {
-		def randomInt = RandomUtils.nextInt(9999)
-		def equipmentId = "${type.code}-${randomInt}-${purchaseDate.month}-${purchaseDate.year}"
-		if(Equipment.findByEquipmentID(equipmentId.toString()) == null) return equipmentId
-		else getEquipmentId()
+	def genarateAndSetEquipmentCode() {
+		if(!code){
+			def randomInt = RandomUtils.nextInt(99999)
+			def now = new Date()
+			def equipmentCode = "${dataLocation.code}-${randomInt}-${now.month}-${now.year+1900}"
+			if(log.isDebugEnabled()) log.debug("Generated code:" + equipmentCode)
+			if(Equipment.findByCode(equipmentCode.toString()) == null) code = equipmentCode 
+			else genarateEquipmentCode()
+		}
 	}
+	
 	@Transient
 	def getCurrentState() {
 		if(!status) return null
