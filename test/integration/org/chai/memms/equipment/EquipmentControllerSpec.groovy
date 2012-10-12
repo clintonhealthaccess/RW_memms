@@ -159,7 +159,7 @@ class EquipmentControllerSpec extends IntegrationTests{
 		equipmentController.summaryPage()
 		
 		then:
-		equipmentController.response.redirectedUrl == '/equipment/list/' + User.findByUsername('user').location.id
+		equipmentController.response.redirectedUrl == '/equipment/list?dataLocation.id=' + User.findByUsername('user').location.id
 	}
 	
 	def "does not redirects to listing when accessing summary page by a user with a location"(){
