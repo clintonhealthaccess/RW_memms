@@ -60,7 +60,7 @@ class CorrectiveMaintenanceServiceSpec extends IntegrationTests{
 		when:
 		def correctiveMaintenances = correctiveMaintenanceService.getCorrectiveMaintenancesByLocation(burera,types,[:])
 		then:
-		correctiveMaintenances.totalCount == 2
 		correctiveMaintenances.correctiveMaintenanceList.size() == 2
+		correctiveMaintenances.totalCount == 2
 	}
 }

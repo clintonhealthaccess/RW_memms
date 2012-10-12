@@ -67,8 +67,12 @@ class CorrectiveMaintenanceService {
 		}
 		
 		CorrectiveMaintenances correctiveMaintenance = new CorrectiveMaintenances()
-		//TODO fix this with Eugene
-		correctiveMaintenance.correctiveMaintenanceList = correctiveMaintenances[(params.offset) .. ((params.offset + params.max) > correctiveMaintenances.size() ? correctiveMaintenances.size() - 1 : (params.offset + params.max))]
+		//If user tries to access elements outside the range, return empty list
+		if(params.offset != null && params.max != null && params.max > params.offset) return correctiveMaintenance
+		
+		//If user specifies the pagination params, use them. Else return the whole list
+		if(params.offset != null && params.offset > 0  && params.max != null && params.max > 0) correctiveMaintenance.correctiveMaintenanceList = correctiveMaintenances[(params.offset) .. ((params.offset + params.max) > correctiveMaintenances.size() ? correctiveMaintenances.size() - 1 : (params.offset + params.max))]
+		else correctiveMaintenance.correctiveMaintenanceList = correctiveMaintenances
 		correctiveMaintenance.totalCount = correctiveMaintenances.size()
 		return correctiveMaintenance
 	}

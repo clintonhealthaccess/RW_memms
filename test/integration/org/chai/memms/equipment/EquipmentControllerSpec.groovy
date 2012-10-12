@@ -46,6 +46,8 @@ class EquipmentControllerSpec extends IntegrationTests{
 		equipmentController.params.type = equipmentType
 		equipmentController.params.manufacturer = manufacture
 		equipmentController.params.supplier = supplier
+		equipmentController.params.expectedLifeTime_years = 1
+		equipmentController.params.expectedLifeTime_months = 3
 		equipmentController.params.dataLocation = DataLocation.list().first()
 		equipmentController.params.status="DISPOSED"
 		equipmentController.params.dateOfEvent=Initializer.now()
@@ -54,6 +56,7 @@ class EquipmentControllerSpec extends IntegrationTests{
 		then:
 		Equipment.count() == 1;
 		Equipment.findBySerialNumber("SERIAL12129").serialNumber.equals("SERIAL12129")
+		Equipment.findBySerialNumber("SERIAL12129").expectedLifeTime == 15
 		Equipment.findByDescriptions_en("test_english_descriptions").getDescriptions(new Locale("en")).equals("test_english_descriptions")
 	}
 	
@@ -90,6 +93,8 @@ class EquipmentControllerSpec extends IntegrationTests{
 		equipmentController.params.department = department
 		equipmentController.params.type = equipmentType
 		equipmentController.params.manufacturer = manufacture
+		equipmentController.params.expectedLifeTime_years = 1
+		equipmentController.params.expectedLifeTime_months = 3
 		equipmentController.params.supplier = supplier
 		equipmentController.params.dataLocation = DataLocation.list().first()
 		equipmentController.params.status="FORDISPOSAL"
@@ -99,6 +104,7 @@ class EquipmentControllerSpec extends IntegrationTests{
 		then:
 		Equipment.count() == 1;
 		Equipment.findBySerialNumber("SERIAL129").serialNumber.equals("SERIAL129")
+		Equipment.findBySerialNumber("SERIAL129").expectedLifeTime == 15
 		grailsApplication.config.i18nFields.locales.each{
 			Equipment."findByDescriptions_$it"("test descriptions $it").getDescriptions(new Locale("$it")).equals("test descriptions $it")
 		}
