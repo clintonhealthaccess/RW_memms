@@ -79,7 +79,9 @@ class UserService {
 	List<User> getNotificationGroup(WorkOrder workOrder,User sender,Boolean escalate){
 		def users =  User.findAllByUserTypeAndLocation(UserType.TECHNICIANFACILITY,workOrder.equipment.dataLocation);
 		if(escalate) users.addAll(User.findAllByUserType(UserType.TECHNICIANMOH))
+		if(!users.contains( workOrder.addedBy )) users.add(workOrder.addedBy)
 		users.remove(sender)
+		if(log.isDebugEnabled()) log.debug("Users in notification group: " + users)
 		return users
 	}
 }

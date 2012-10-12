@@ -42,7 +42,7 @@ class NotificationService {
 	def userService
 	
     public int sendNotifications(WorkOrder workOrder, String content,User sender,List<User> receivers) {
-		if(log.isDebugEnabled()) log.debug("Notification receivers group: "+receivers)
+		if(log.isDebugEnabled()) log.debug("Notification receivers group: "+receivers+" , for workorder " +  workOrder)
 		int numberOfNotificationSent = 0
 		receivers.each{ user ->
 			if(user.active){

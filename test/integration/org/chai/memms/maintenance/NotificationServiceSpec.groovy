@@ -77,7 +77,7 @@ class NotificationServiceSpec  extends IntegrationTests{
 		when:
 		notificationService.newNotification(workOrder, "Send for rapair, higher",receiverFacilityOne,true)
 		then:
-		Notification.count() == 5
+		Notification.count() == 6
 	}
 	
 	def "reading a notification sets it's read status to true"() {
@@ -138,8 +138,9 @@ class NotificationServiceSpec  extends IntegrationTests{
 		def workOrderTwo = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,senderTwo,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		
 		notificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne,false)
-		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility,false)
+		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility,true)
 		notificationService.newNotification(workOrderTwo, "Send for rapair, two",senderTwo,false)
+		
 		def notifications = Notification.list()
 		notificationService.setNotificationRead(notifications[0])
 		notificationService.setNotificationRead(notifications[1])
@@ -153,7 +154,7 @@ class NotificationServiceSpec  extends IntegrationTests{
 		def madeBeforeToday = notificationService.filterNotifications(null,null, null,Initializer.now(),null, [:])
 		def madeBetweenYesterdayAndTomorrow = notificationService.filterNotifications(null,null, Initializer.now()-1,Initializer.now()+1,null, [:])
 		then:
-		//allNotifications.size() == 4
+		allNotifications.size() == 4
 		readNotifications.size() == 2
 		notificationsByWorkOrder.size() == 3
 		notificationsByreceiver.size() == 1

@@ -139,10 +139,10 @@ class NotificationControllerSpec  extends IntegrationTests{
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		
 		def workOrderOne = Initializer.newWorkOrder(equipment, "Nothing yet",Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-		def workOrderTwo = Initializer.newWorkOrder(equipment, "Nothing yet",Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def workOrderTwo = Initializer.newWorkOrder(equipment, "Nothing yet",Criticality.NORMAL,senderTwo,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		
 		notificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne,false)
-		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility,false)
+		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility,true)
 		notificationService.newNotification(workOrderTwo, "Send for rapair, two",senderTwo,false)
 		setupSecurityManager(receiverFacility)
 		def notifications = notificationService.searchNotificition("one",receiverFacility,workOrderOne,null,[:])
@@ -185,7 +185,7 @@ class NotificationControllerSpec  extends IntegrationTests{
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		
 		def workOrderOne = Initializer.newWorkOrder(equipment, "Nothing yet",Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-		def workOrderTwo = Initializer.newWorkOrder(equipment, "Nothing yet",Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def workOrderTwo = Initializer.newWorkOrder(equipment, "Nothing yet",Criticality.NORMAL,senderTwo,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		
 		notificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne,false)
 		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility, false)
@@ -201,7 +201,7 @@ class NotificationControllerSpec  extends IntegrationTests{
 		
 		then:
 		notificationController.modelAndView.model.entities.size() == 2
-		Notification.count() == 2
+		Notification.count() == 3
 	}
 	
 	def "can filter notifications"(){
