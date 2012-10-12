@@ -82,7 +82,8 @@ class NotificationController extends AbstractEntityController{
 		def notificationId
 		if(!params.id) redirect(uri: getTargetURI())
 		else{
-			def notification = notificationService.readNotification(params.id)
+			
+			def notification = notificationService.setNotificationRead(Notification.get(params.int('id')))
 			if (log.isInfoEnabled()) log.info("reading notification: "+notification)
 
 			if (notification == null) {

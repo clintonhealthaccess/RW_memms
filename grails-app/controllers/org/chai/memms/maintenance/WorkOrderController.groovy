@@ -347,7 +347,7 @@ class WorkOrderController extends AbstractEntityController{
 	def filter = { FilterWorkOrderCommand cmd ->
 		if(log.isDebugEnabled()) log.debug(cmd)
 		adaptParamsForList()
-		List<WorkOrder> orders = workOrderService.filterWorkOrders(cmd.dataLocation,cmd.equipment,cmd.openOn,cmd.closedOn,cmd.getAssistanceStatus(),cmd.criticality,cmd.status,params)
+		List<WorkOrder> orders = workOrderService.filterWorkOrders(cmd.dataLocation,cmd.equipment,cmd.openOn,cmd.closedOn,cmd.criticality,cmd.status,params)
 
 		render(view:"/entity/list", model:[
 					template:"workorder/workOrderList",
@@ -367,31 +367,24 @@ class FilterWorkOrderCommand {
 	
 	Date openOn
 	Date closedOn
-	String assistaceRequested
 	Criticality criticality
 	OrderStatus status
 	DataLocation dataLocation
 	Equipment equipment
 
-	public boolean getAssistanceStatus(){
-		if(assistaceRequested.equals("true")) return true
-		else if(assistaceRequested.equals("false")) return false
-		else return null
-	}
 
 	static constraints = {
 		dataLocation  nullable:true
 		equipment nullable:true
 		openOn nullable:true
 		closedOn nullable:true
-		assistaceRequested nullable:true
 		status nullable:true
 		criticality nullable:true
 	}
 
 	String toString() {
 		return "FilterCommand[OrderStatus="+status+", Criticality="+criticality+ 
-		", closedOn="+closedOn+", openOn="+openOn+", Assistance Status="+ getAssistanceStatus() + "]"
+		", closedOn="+closedOn+", openOn="+openOn+"]"
 	}
 }
 

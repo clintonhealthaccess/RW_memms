@@ -54,10 +54,11 @@ class CorrectiveMaintenanceServiceSpec extends IntegrationTests{
 		setupEquipment()
 		def user = newUser("user", "user")
 		def equipment = Equipment.findBySerialNumber(CODE(123))
+		def burera= Location.findByCode(BURERA)
 		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,user,Initializer.now(),FailureReason.NOTSPECIFIED, OrderStatus.OPENATFOSA)		
 		def types = grailsApplication.config.site.datalocationtype.checked.collect{ DataLocationType.findByCode(it) }.toSet()
 		when:
-		def correctiveMaintenances = correctiveMaintenanceService.getCorrectiveMaintenancesByLocation(Location.findByCode(BURERA),types,adaptParamsForList())
+		def correctiveMaintenances = correctiveMaintenanceService.getCorrectiveMaintenancesByLocation(burera,types,[:])
 		then:
 		correctiveMaintenances.totalCount == 2
 		correctiveMaintenances.correctiveMaintenanceList.size() == 2

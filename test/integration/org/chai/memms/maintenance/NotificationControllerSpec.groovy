@@ -34,8 +34,7 @@ class NotificationControllerSpec  extends IntegrationTests{
 		receiverOne.location = DataLocation.findByCode(KIVUYE)
 		receiverOne.save(failOnError:true)
 		def equipment = Equipment.findBySerialNumber(CODE(123))
-		def workOrder = new WorkOrder(equipment:equipment,description: "test work order",criticality:Criticality.NORMAL,currentStatus:OrderStatus.OPENATFOSA,
-				addedBy:sender,openOn:Initializer.now(),failureReason :FailureReason.NOTSPECIFIED).save(failOnError:true)
+		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,sender, Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		notificationController = new NotificationController()
 		when:
 		notificationController.params.content = " check this out"
@@ -98,9 +97,9 @@ class NotificationControllerSpec  extends IntegrationTests{
 		def workOrderOne = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		def workOrderTwo = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,senderTwo,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		
-		notificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne)
-		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility)
-		notificationService.newNotification(workOrderTwo, "Send for rapair, two",senderTwo)
+		notificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne,false)
+		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility,false)
+		notificationService.newNotification(workOrderTwo, "Send for rapair, two",senderTwo,false)
 		setupSecurityManager(receiverFacility)
 		def notification = notificationService.searchNotificition("one",receiverFacility,workOrderOne,null,[:])[0]
 		notificationController = new NotificationController()
@@ -139,15 +138,15 @@ class NotificationControllerSpec  extends IntegrationTests{
 		receiverMoH.save(failOnError:true)
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		
-		def workOrderOne = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-		def workOrderTwo = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def workOrderOne = Initializer.newWorkOrder(equipment, "Nothing yet",Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def workOrderTwo = Initializer.newWorkOrder(equipment, "Nothing yet",Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		
-		notificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne)
-		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility,true)
-		notificationService.newNotification(workOrderTwo, "Send for rapair, two",senderTwo)
+		notificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne,false)
+		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility,false)
+		notificationService.newNotification(workOrderTwo, "Send for rapair, two",senderTwo,false)
 		setupSecurityManager(receiverFacility)
 		def notifications = notificationService.searchNotificition("one",receiverFacility,workOrderOne,null,[:])
-		notificationService.readNotification(notifications[0].id)
+		notificationService.setNotificationRead(notifications[0])
 		notificationController = new NotificationController()
 		
 		when://Get only those that are unread
@@ -185,15 +184,15 @@ class NotificationControllerSpec  extends IntegrationTests{
 		receiverMoH.save(failOnError:true)
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		
-		def workOrderOne = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-		def workOrderTwo = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def workOrderOne = Initializer.newWorkOrder(equipment, "Nothing yet",Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def workOrderTwo = Initializer.newWorkOrder(equipment, "Nothing yet",Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		
-		notificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne)
-		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility, true)
-		notificationService.newNotification(workOrderTwo, "Send for rapair, two",senderTwo)
+		notificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne,false)
+		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility, false)
+		notificationService.newNotification(workOrderTwo, "Send for rapair, two",senderTwo,false)
 		setupSecurityManager(receiverFacility)
 		def notifications = notificationService.searchNotificition("one",receiverFacility,workOrderOne,null,[:])
-		notificationService.readNotification(notifications[0].id)
+		notificationService.setNotificationRead(notifications[0])
 		notificationController = new NotificationController()
 		
 		when://list all for a given user
@@ -202,7 +201,7 @@ class NotificationControllerSpec  extends IntegrationTests{
 		
 		then:
 		notificationController.modelAndView.model.entities.size() == 2
-		Notification.count() == 4
+		Notification.count() == 2
 	}
 	
 	def "can filter notifications"(){
@@ -230,12 +229,12 @@ class NotificationControllerSpec  extends IntegrationTests{
 		receiverMoH.save(failOnError:true)
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		
-		def workOrderOne = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-		def workOrderTwo = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def workOrderOne = Initializer.newWorkOrder(equipment, "Nothing yet",Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def workOrderTwo = Initializer.newWorkOrder(equipment, "Nothing yet",Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		
-		notificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne)
-		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility)
-		notificationService.newNotification(workOrderTwo, "Send for rapair, two",senderTwo)
+		notificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne,false)
+		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility,false)
+		notificationService.newNotification(workOrderTwo, "Send for rapair, two",senderTwo,false)
 		setupSecurityManager(receiverFacility)
 		notificationController = new NotificationController()
 		
@@ -273,12 +272,12 @@ class NotificationControllerSpec  extends IntegrationTests{
 		receiverMoH.save(failOnError:true)
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		
-		def workOrderOne = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-		def workOrderTwo = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def workOrderOne = Initializer.newWorkOrder(equipment, "Nothing yet",Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def workOrderTwo = Initializer.newWorkOrder(equipment, "Nothing yet",Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		
-		notificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne)
-		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility)
-		notificationService.newNotification(workOrderTwo, "Send for rapair, two",senderTwo)
+		notificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne,false)
+		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility,false)
+		notificationService.newNotification(workOrderTwo, "Send for rapair, two",senderTwo,false)
 		setupSecurityManager(receiverFacility)
 		notificationController = new NotificationController()
 		
