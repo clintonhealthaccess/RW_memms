@@ -60,7 +60,7 @@ class MaintenanceProcess {
 	
 	static mapping = {
 		table "memms_work_order_maintenance_process"
-		version:  false
+		version  false
 	}
 
 	@Override

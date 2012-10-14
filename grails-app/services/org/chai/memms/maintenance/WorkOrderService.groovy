@@ -103,11 +103,11 @@ class WorkOrderService {
 	 * @param assistaceRequested
 	 * @param open
 	 * @param criticality
-	 * @param status
+	 * @param currentStatus
 	 * @param params
 	 * @return
 	 */
-	List<WorkOrder> filterWorkOrders(def dataLocation,def workOrdersEquipment,def openOn,def closedOn,def criticality,def status,def params) {
+	List<WorkOrder> filterWorkOrders(def dataLocation,def workOrdersEquipment,def openOn,def closedOn,def criticality,def currentStatus,def params) {
 		def criteria = WorkOrder.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(dataLocation)
@@ -120,8 +120,8 @@ class WorkOrderService {
 				le("closedOn",Utils.getMaxDateFromDateTime(closedOn))
 			if(criticality && criticality != Criticality.NONE)
 				eq("criticality",criticality)
-			if(status && status != OrderStatus.NONE)
-				eq("currentStatus",status)
+			if(currentStatus && currentStatus != OrderStatus.NONE)
+				eq("currentStatus",currentStatus)
 		}
 	}
 	

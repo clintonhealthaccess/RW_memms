@@ -41,6 +41,8 @@ import org.chai.location.DataLocationType
 import org.chai.location.Location
 import org.chai.location.LocationLevel
 import org.chai.memms.equipment.Equipment
+import org.chai.memms.equipment.Equipment.Donor;
+import org.chai.memms.equipment.Equipment.PurchasedBy;
 import org.chai.memms.equipment.EquipmentType
 import org.chai.memms.equipment.EquipmentType.Observation
 import org.chai.memms.equipment.Provider.Type
@@ -110,7 +112,7 @@ abstract class IntegrationTests extends IntegrationSpec {
 
 		def equipment = new Equipment(serialNumber:CODE(123),manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),
 				registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,dataLocation:DataLocation.findByCode(KIVUYE),
-				donation:true,obsolete:false,expectedLifeTime:20,descriptions:['en':'Equipment Descriptions'], type:equipmentType)
+				purchaser:PurchasedBy.BYFACILITY,obsolete:false,expectedLifeTime:20,descriptions:['en':'Equipment Descriptions'], type:equipmentType)
 		equipment.genarateAndSetEquipmentCode()
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")

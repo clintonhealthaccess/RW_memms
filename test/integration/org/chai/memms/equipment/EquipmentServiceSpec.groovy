@@ -33,6 +33,8 @@ import java.util.Map;
 
 import org.chai.memms.Initializer;
 import org.chai.memms.IntegrationTests;
+import org.chai.memms.equipment.Equipment.Donor;
+import org.chai.memms.equipment.Equipment.PurchasedBy;
 import org.chai.memms.equipment.EquipmentStatus.Status;
 import org.chai.memms.equipment.EquipmentType.Observation;
 import org.chai.location.DataLocation;
@@ -58,10 +60,10 @@ class EquipmentServiceSpec extends IntegrationTests{
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 
-		Initializer.newEquipment("SERIAL10",true,false,32,"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),'',new Date(),"equipmentModel",DataLocation.list().first(),department,equipmentType,manufacture,supplier)
-		Initializer.newEquipment("SERIAL11",false,false,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),"RWF",new Date(),"equipmentModel",DataLocation.list().first(),department,equipmentType,manufacture,supplier)
+		Initializer.newEquipment("SERIAL10",PurchasedBy.BYDONOR,Donor.OTHERNGO,"Internews",false,32,"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),'',Initializer.now(),"equipmentModel",DataLocation.list().first(),department,equipmentType,manufacture,supplier)
+		Initializer.newEquipment("SERIAL11",PurchasedBy.BYMOH,null,null,false,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),"RWF",Initializer.now(),"equipmentModel",DataLocation.list().first(),department,equipmentType,manufacture,supplier)
 		def List<Equipment> equipments
 
 		when://Searching by serial number
@@ -99,10 +101,10 @@ class EquipmentServiceSpec extends IntegrationTests{
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 
-		Initializer.newEquipment("SERIAL10",true,false,32,"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),"",new Date(),"equipmentModel",DataLocation.findByCode('Kivuye HC'),department,equipmentType,manufacture,supplier)
-		Initializer.newEquipment("SERIAL11",false,false,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),"USD",new Date(),"equipmentModel",DataLocation.findByCode('Butaro DH'),department,equipmentType,manufacture,supplier)
+		Initializer.newEquipment("SERIAL10",PurchasedBy.BYDONOR,Donor.MOHPARTNER,"CHAI",,false,32,"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),"",Initializer.now(),"equipmentModel",DataLocation.findByCode('Kivuye HC'),department,equipmentType,manufacture,supplier)
+		Initializer.newEquipment("SERIAL11",PurchasedBy.BYFACILITY,null,null,false,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),"USD",Initializer.now(),"equipmentModel",DataLocation.findByCode('Butaro DH'),department,equipmentType,manufacture,supplier)
 		def List<Equipment> equipments
 
 		when:
@@ -126,10 +128,10 @@ class EquipmentServiceSpec extends IntegrationTests{
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 
-		def equipmentOne = Initializer.newEquipment("SERIAL10",true,false,32,"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),"",new Date(),"equipmentModel",DataLocation.findByCode('Kivuye HC'),department,equipmentType,manufacture,supplier)
-		def equipmentTwo = Initializer.newEquipment("SERIAL11",false,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),"USD",new Date(),"equipmentModel",DataLocation.findByCode('Butaro DH'),department,equipmentType,manufacture,supplier)
+		def equipmentOne = Initializer.newEquipment("SERIAL10",PurchasedBy.BYDONOR,Donor.MOHPARTNER,"Intra-health",false,32,"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),"",Initializer.now(),"equipmentModel",DataLocation.findByCode('Kivuye HC'),department,equipmentType,manufacture,supplier)
+		def equipmentTwo = Initializer.newEquipment("SERIAL11",PurchasedBy.BYFACILITY,null,null,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),"USD",Initializer.now(),"equipmentModel",DataLocation.findByCode('Butaro DH'),department,equipmentType,manufacture,supplier)
 		
 		
 		def List<Equipment> equipmentsOne, equipmentsTwo, equipmentsThree
@@ -144,7 +146,7 @@ class EquipmentServiceSpec extends IntegrationTests{
 		when://Search by defaults
 		
 		equipmentsOne = equipmentService.filterEquipment(DataLocation.findByCode('Butaro DH'),
-			supplier, manufacture,equipmentType,'false','true',Status.DISPOSED,adaptParamsForList())
+			supplier, manufacture,equipmentType,PurchasedBy.NONE,Donor.NONE,'true',Status.DISPOSED,[:])
 
 		then:
 		Equipment.count() == 2
@@ -154,15 +156,24 @@ class EquipmentServiceSpec extends IntegrationTests{
 		when://Search by active status
 		
 		equipmentsTwo = equipmentService.filterEquipment(DataLocation.findByCode('Kivuye HC'),
-			supplier, manufacture,equipmentType,'true','false',Status.OPERATIONAL,adaptParamsForList())
+			supplier, manufacture,equipmentType,PurchasedBy.BYDONOR,Donor.NONE,'false',Status.OPERATIONAL,[:])
 		equipmentsThree = equipmentService.filterEquipment(DataLocation.findByCode('Kivuye HC'),
-			supplier, manufacture,equipmentType,'true','false',Status.INSTOCK,adaptParamsForList())
+			supplier, manufacture,equipmentType,PurchasedBy.BYDONOR,Donor.NONE,'false',Status.INSTOCK,[:])
 
 		then:
 		Equipment.count() == 2
 		equipmentsTwo.size() == 1
 		equipmentsThree.size() == 0
 		equipmentsTwo[0].getDescriptions(new Locale("en")).equals('Equipment Descriptions one')
+		equipmentsTwo[0].status.size() == 2
+		
+		when://Search by donor
+		equipmentsTwo = equipmentService.filterEquipment(DataLocation.findByCode('Kivuye HC'),
+			supplier, manufacture,equipmentType,null,Donor.MOHPARTNER,'false',Status.OPERATIONAL,[:])
+
+		then:
+		Equipment.count() == 2
+		equipmentsTwo.size() == 1
 		equipmentsTwo[0].status.size() == 2
 	}
 
@@ -182,14 +193,14 @@ class EquipmentServiceSpec extends IntegrationTests{
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 
-		def equipmentOne = Initializer.newEquipment("SERIAL10",false,true,32,"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),"",new Date(),"equipmentModel",DataLocation.findByCode(KIVUYE),department,equipmentType,manufacture,supplier)
-		def equipmentTwo = Initializer.newEquipment("SERIAL11",false,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),"EUR",new Date(),"equipmentModel",DataLocation.findByCode(KIVUYE),department,equipmentType,manufacture,supplier)
-		def equipmentThree = Initializer.newEquipment("SERIAL12",false,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
-			,Initializer.getDate(10,10,2010),"EUR",new Date(),"equipmentModel",DataLocation.findByCode(KIVUYE),department,equipmentType,manufacture,supplier)
-		def equipmentFour = Initializer.newEquipment("SERIAL13",false,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
-			,Initializer.getDate(10,10,2010),"EUR",new Date(),"equipmentModel",DataLocation.findByCode(BUTARO),department,equipmentType,manufacture,supplier)
+		def equipmentOne = Initializer.newEquipment("SERIAL10",PurchasedBy.BYFACILITY,null,null,true,32,"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),"",Initializer.now(),"equipmentModel",DataLocation.findByCode(KIVUYE),department,equipmentType,manufacture,supplier)
+		def equipmentTwo = Initializer.newEquipment("SERIAL11",PurchasedBy.BYFACILITY,null,null,,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),"EUR",Initializer.now(),"equipmentModel",DataLocation.findByCode(KIVUYE),department,equipmentType,manufacture,supplier)
+		def equipmentThree = Initializer.newEquipment("SERIAL12",PurchasedBy.BYFACILITY,null,null,,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+			,Initializer.getDate(10,10,2010),"EUR",Initializer.now(),"equipmentModel",DataLocation.findByCode(KIVUYE),department,equipmentType,manufacture,supplier)
+		def equipmentFour = Initializer.newEquipment("SERIAL13",PurchasedBy.BYFACILITY,null,null,,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+			,Initializer.getDate(10,10,2010),"EUR",Initializer.now(),"equipmentModel",DataLocation.findByCode(BUTARO),department,equipmentType,manufacture,supplier)
 	
 		
 		def List<Equipment> equipmentsOne, equipmentsTwo, equipmentsThree

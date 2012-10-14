@@ -44,9 +44,9 @@ class NotificationService {
     public int sendNotifications(WorkOrder workOrder, String content,User sender,List<User> receivers) {
 		if(log.isDebugEnabled()) log.debug("Notification receivers group: "+receivers+" , for workorder " +  workOrder)
 		int numberOfNotificationSent = 0
-		receivers.each{ user ->
-			if(user.active){
-					def notification = new Notification(workOrder:workOrder,sender:sender,receiver:user,writtenOn:Utils.now(),content:content,read:false).save(failOnError: true)
+		receivers.each{ receiver ->
+			if(receiver.active){
+					def notification = new Notification(workOrder:workOrder,sender:sender,receiver:receiver,writtenOn:Utils.now(),content:content,read:false).save(failOnError: true)
 					if(notification)
 						numberOfNotificationSent++
 				}

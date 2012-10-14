@@ -45,21 +45,55 @@ import i18nfields.I18nFields
 @i18nfields.I18nFields
 public class Equipment {
 	
+	enum PurchasedBy{
+		
+		NONE('none'),
+		BYMOH("by.moh"),
+		BYFACILITY("by.facility"),
+		BYDONOR("by.donor")
+		
+		String messageCode = "equipment.purchased"
+		
+		final String name
+		PurchasedBy(String name){ this.name=name }
+		String getKey() { return name() }
+		
+	}
+	
+	enum Donor{
+		
+		NONE('none'),
+		MOHPARTNER("moh.partner"),
+		OTHERNGO("other.ngo"),
+		INDIVIDUAL("individual"),
+		OTHERS("others")
+		
+		String messageCode = "equipment.donor"
+		
+		final String name
+		Donor(String name){ this.name=name }
+		String getKey() { return name() }
+		
+	}
+	
 	String serialNumber
-	Long purchaseCost
+	Double purchaseCost
 	String currency
 	String descriptions
 	String model
 	String room
 	String code
+	String donorName
 	
 	Integer expectedLifeTime
-	Boolean donation
 	Boolean obsolete
 	
 	Provider manufacturer
 	Provider supplier
 	Warranty warranty
+	
+	PurchasedBy purchaser
+	Donor donor
 	
 	Date manufactureDate
 	Date purchaseDate
@@ -72,18 +106,22 @@ public class Equipment {
 	
 	static constraints = {
 		importFrom Contact
-		code nullable: false, unique:true
+		code nullable: false, blank:false, unique:true
 		supplier nullable: false
 		manufacturer nullable: false
 		warranty nullable: true
 		
 		serialNumber nullable: false, blank: false,  unique: true
-		purchaseCost nullable: true, blank: true, validator:{ val, obj ->
-			if(val == null && obj.donation == null) return false
-			if(obj.donation == true) return ((val == null) && (obj.currency==null))
+		purchaseCost nullable: true, blank: true, validator:{ if(it!=null) return (it>0) }
+		purchaser nullable: false, inList:[PurchasedBy.BYFACILITY,PurchasedBy.BYMOH,PurchasedBy.BYDONOR]
+		donor nullable:true,inList:[Donor.OTHERNGO,Donor.MOHPARTNER,Donor.OTHERS,Donor.INDIVIDUAL], validator:{ val, obj ->
+			if(obj.purchaser == PurchasedBy.BYDONOR) return (val!=null)
+		}
+		donorName nullable:true,blank:true, validator:{val, obj ->
+			if(obj.purchaser == PurchasedBy.BYDONOR || obj.donor !=null) return (val!=null && val!="")
 		}
 		currency  nullable: true, blank: true, inList: ["RWF","USD","EUR"], validator:{ val, obj ->
-			if(val == null && obj.donation == null) return false
+			if(obj.purchaseCost != null) return (val != null)
 		}
 		expectedLifeTime nullable: false, blank: false
 		room nullable: true, blank: true
@@ -91,10 +129,9 @@ public class Equipment {
 		manufactureDate nullable: false, blank: false, validator:{it <= new Date()}
 		purchaseDate nullable: false, blank: false, validator:{ val, obj ->
 			return  ((val <= new Date()) && val.after(obj.manufactureDate) || (val.compareTo(obj.manufactureDate)==0))
-			}
+		}
 		registeredOn nullable: false, blank:false
 		descriptions nullable: true, blank: true
-		donation nullable: false
 		obsolete nullable: false
 	}
 	

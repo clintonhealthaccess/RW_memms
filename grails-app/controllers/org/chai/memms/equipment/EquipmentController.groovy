@@ -31,6 +31,8 @@ import org.apache.shiro.SecurityUtils;
 import org.chai.memms.AbstractEntityController;
 import org.chai.memms.Contact
 import org.chai.memms.Initializer;
+import org.chai.memms.equipment.Equipment.Donor;
+import org.chai.memms.equipment.Equipment.PurchasedBy;
 import org.chai.memms.equipment.EquipmentStatus.Status;
 import org.chai.memms.security.User;
 import org.chai.memms.security.User.UserType;
@@ -89,9 +91,9 @@ class EquipmentController extends AbstractEntityController{
 			entity.registeredOn=new Date()
 			
 		}else{
-			if(params["donation"]=="on"){
-				params["purchaseCost"] = ""
-				params["currency"] = ""
+			if(params["purchaser"]!="BYDONOR"){
+				params["donor"] =""
+				params["donorName"] = ""
 			}
 			if(params["warranty.sameAsSupplier"]=="on"){
 				params["warranty.contact.contactName"]=""
@@ -284,7 +286,7 @@ class EquipmentController extends AbstractEntityController{
 		if(params.exported != null){
 			def equipmentExportTask = new EquipmentExportFilter(calculationLocations:cmd.calculationLocations,dataLocationTypes:cmd.dataLocationTypes,
 					equipmentTypes:cmd.equipmentTypes,manufacturers:cmd.manufacturers,suppliers:cmd.suppliers,equipmentStatus:cmd.equipmentStatus,
-					donated:cmd.donated,obsolete:cmd.obsolete).save(failOnError: true,flush: true)
+					purchaser:cmd.purchaser,obsolete:cmd.obsolete).save(failOnError: true,flush: true)
 			params.exportFilterId = equipmentExportTask.id
 			params.class = "EquipmentExportTask"
 			params.targetURI = "/equipment/generalExport"
@@ -305,7 +307,7 @@ class EquipmentController extends AbstractEntityController{
 			response.sendError(404)
 
 		adaptParamsForList()
-		def equipments = equipmentService.filterEquipment(cmd.dataLocation,cmd.supplier,cmd.manufacturer,cmd.equipmentType,cmd.donated,cmd.obsolete,cmd.status,params)
+		def equipments = equipmentService.filterEquipment(cmd.dataLocation,cmd.supplier,cmd.manufacturer,cmd.equipmentType,cmd.purchaser,cmd.donor,cmd.obsolete,cmd.status,params)
 		render (view: '/entity/list', model:[
 					template:"equipment/equipmentList",
 					filterTemplate:"equipment/equipmentFilter",
@@ -327,7 +329,7 @@ class EquipmentController extends AbstractEntityController{
 			response.sendError(404)
 		adaptParamsForList()
 
-		def equipments = equipmentService.filterEquipment(dataLocation,cmd.supplier,cmd.manufacturer,cmd.equipmentType,cmd.donated,cmd.obsolete,cmd.status,params)
+		def equipments = equipmentService.filterEquipment(dataLocation,cmd.supplier,cmd.manufacturer,cmd.equipmentType,cmd.purchaser,cmd.donor,cmd.obsolete,cmd.status,params)
 		File file = equipmentService.exporter(dataLocation,equipments)
 
 		response.setHeader "Content-disposition", "attachment; filename=${file.name}.csv"
@@ -436,14 +438,9 @@ class FilterCommand {
 	Provider manufacturer
 	Provider supplier
 	Status status = Status.NONE
-	String donated
+	PurchasedBy purchaser
 	String obsolete
-
-	public boolean getDonationStatus(){
-		if(donated) return null
-		else if(donated.equals("true")) return true
-		else if(donated.equals("false")) return false
-	}
+	Donor donor
 
 	public boolean getObsoleteStatus(){
 		if(obsolete) return null
@@ -457,18 +454,19 @@ class FilterCommand {
 		manufacturer nullable:true
 		supplier nullable:true
 		status nullable:true
-		donated nullable:true
+		purchaser nullable:true
 		obsolete nullable:true
+		donor nullable:true
 
 		dataLocation nullable:false, validator:{val, obj ->
-			return (obj.equipmentType != null || obj.manufacturer != null || obj.supplier != null || (obj.status != null && obj.status != Status.NONE) || obj.donated || obj.obsolete)?true:"select.atleast.one.value.text"
+			return (obj.equipmentType != null || obj.manufacturer != null || obj.supplier != null || (obj.status != null && obj.status != Status.NONE) || obj.purchaser || obj.obsolete)?true:"select.atleast.one.value.text"
 		}
 	}
 
 	String toString() {
 		return "FilterCommand[DataLocation="+dataLocation+", EquipmentType="+equipmentType+
-		", Manufacturer="+manufacturer+", Supplier="+supplier+", Status="+status+", donated="+donated+", obsolete="+obsolete+
-		", Absolote status=" + getObsoleteStatus() + ", Donation status=" + getDonationStatus() + "]"
+		", Manufacturer="+manufacturer+", Supplier="+supplier+", Status="+status+", donated="+purchaser+", obsolete="+obsolete+
+		", donor=" + donor + "]"
 	}
 }
 
@@ -479,14 +477,9 @@ class ExportFilterCommand {
 	Set<Provider> manufacturers
 	Set<Provider> suppliers
 	Status equipmentStatus
-	String donated
+	PurchasedBy purchaser
 	String obsolete
-
-	public boolean getDonationStatus(){
-		if(donated) return null
-		else if(donated.equals("true")) return true
-		else if(donated.equals("false")) return false
-	}
+	Donor donor
 
 	public boolean getObsoleteStatus(){
 		if(obsolete) return null
@@ -501,13 +494,14 @@ class ExportFilterCommand {
 		manufacturers nullable:true
 		suppliers nullable:true
 		equipmentStatus nullable:true
-		donated nullable:true
+		purchaser nullable:true
 		obsolete nullable:true
+		donor nullable:true
 	}
 
 	String toString() {
 		return "ExportFilterCommand[ CalculationLocations="+calculationLocations+", DataLocationTypes="+dataLocationTypes+" , EquipmentTypes="+equipmentTypes+
-		", Manufacturers="+manufacturers+", Suppliers="+suppliers+", Status="+equipmentStatus+", donated="+donated+", obsolete="+obsolete+
-		", Absolote status=" + getObsoleteStatus() + ", Donation status=" + getDonationStatus() + "]"
+		", Manufacturers="+manufacturers+", Suppliers="+suppliers+", Status="+equipmentStatus+", donated="+purchaser+", obsolete="+obsolete+
+		", donor=" + donor + "]"
 	}
 }
