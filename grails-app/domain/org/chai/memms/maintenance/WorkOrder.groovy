@@ -79,7 +79,7 @@ public class WorkOrder {
 	Date closedOn
 	Date returnedOn
 	
-	Integer estimatedCost
+	Double estimatedCost
 	Integer workTime
 	Integer travelTime
 	
@@ -181,6 +181,7 @@ public class WorkOrder {
 	static mapping = {
 		table "memms_work_order"
 		version false
+		description type:"text"
 	}
 	@Transient
 	def getNotificationsForUser(def user){

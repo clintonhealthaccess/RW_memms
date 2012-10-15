@@ -60,8 +60,6 @@ public class Contact {
 	}
 	static mapping = {
 		version false
-		addressDescriptions_en type: "text"
-		addressDescriptions_fr type: "text"
 	}
 	
 }

@@ -30,6 +30,7 @@ package org.chai.memms.security
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocation;
 import org.chai.location.Location;
+import org.chai.memms.maintenance.Notification;
 import org.chai.memms.util.Utils
 
 class User {
@@ -52,7 +53,7 @@ class User {
     static String PERMISSION_DELIMITER = ";"
 	
 	//Needed to enable cascading deletes, these fields should not be collections since
-	//some code has been writen assuming its a one to many relationship
+	//some code has been written assuming its a one to many relationship
 	RegistrationToken registrationToken
 	PasswordToken passwordToken
 	
@@ -69,7 +70,7 @@ class User {
 	CalculationLocation location
 	UserType userType
 	
-	static hasMany = [ roles: Role ]
+	static hasMany = [roles: Role]
 	
 	User() {
 		roles = []

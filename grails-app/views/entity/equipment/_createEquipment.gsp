@@ -1,5 +1,7 @@
 <%@ page import="org.chai.memms.util.Utils" %>
 <%@ page import="org.chai.memms.equipment.EquipmentStatus.Status" %>
+<%@ page import="org.chai.memms.equipment.Equipment.PurchasedBy" %>
+<%@ page import="org.chai.memms.equipment.Equipment.Donor" %>
 <div  class="entity-form-container togglable">
   <div class="heading1-bar">
 		<h1>
@@ -59,7 +61,7 @@
       	<g:selectFromList name="manufacturer.id" label="${message(code:'provider.type.manufacturer')}" bean="${equipment}" field="manufacturer" optionKey="id" multiple="false"
   			ajaxLink="${createLink(controller:'provider', action:'getAjaxData', params: [type:'MANUFACTURER'])}"
   			from="${manufacturers}" value="${equipment?.manufacturer?.id}" values="${manufacturers.collect{it.contact.contactName}}" />	
-  			<g:input name="manufactureDate" dateClass="date-picker" label="${message(code:'equipment.manufacture.date.label')}" bean="${equipment}" field="manufactureDate"/>
+  			<g:inputDate name="manufactureDate" precision="month" label="${message(code:'equipment.manufacture.date.label')}" value="${equipment?.manufactureDate}" bean="${equipment}" field="manufactureDate"/>
      	</fieldset>
     	  <div id="form-aside-manufacturer" class="form-aside">
 	    	  <g:if test="${equipment.id != null}">
@@ -79,7 +81,11 @@
   			ajaxLink="${createLink(controller:'provider', action:'getAjaxData', params: [type:'SUPPLIER'])}"
   			from="${suppliers}" value="${equipment?.supplier?.id}" values="${suppliers.collect{it.contact.contactName}}" />		
   			<g:input name="purchaseDate" dateClass="date-picker" label="${message(code:'equipment.purchase.date.label')}" bean="${equipment}" field="purchaseDate"/>
-    		<g:inputBox name="donation"  label="${message(code:'equipment.donation.label')}" bean="${equipment}" field="donation" value="${equipment.donation}" checked="${(equipment.donation)? true:false}"/>
+    		<g:selectFromEnum name="purchaser" bean="${equipment}" values="${PurchasedBy.values()}" field="purchaser" label="${message(code:'equipment.purchaser.label')}"/>
+    		<div class="donor-information">
+	    		<g:selectFromEnum name="donor" bean="${equipment}" values="${Donor.values()}" field="donor" label="${message(code:'equipment.donor.label')}"/>
+	    		<g:input name="donorName"  label="${message(code:'equipment.donor.name.label')}" bean="${equipment}" field="donorName"/>
+    		</div>
     		<g:currency costName="purchaseCost" id="purchase-cost" costLabel="${message(code:'equipment.purchase.cost.label')}" bean="${equipment}" costField="purchaseCost"  currencyName="currency" values="${currencies}" currencyField="currency" currencyLabel="${message(code:'equipment.currency.label')}"/>
      	</fieldset>
      	 <div id="form-aside-supplier" class="form-aside">
@@ -124,7 +130,7 @@
 			    			<td>${message(code: status?.status?.messageCode+'.'+status?.status?.name)}</td>
 			    			<td>${Utils.formatDate(status?.dateOfEvent)}</td>
 			    			<td>${Utils.formatDateWithTime(status?.statusChangeDate)}</td>
-			    			<td>${(status.current)? '\u2713':'X'}</td>
+			    			<td>${(status.current)? '\u2713':''}</td>
 			    		</tr>
 		    		</g:if>
 	    		</g:each>
@@ -167,7 +173,7 @@
 </div>
 <script type="text/javascript">
 	$(document).ready(function() {
-		getToHide("${equipment.donation}","${equipment.warranty?.sameAsSupplier}");
+		getToHide();
 		getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}")
 	});
 </script>

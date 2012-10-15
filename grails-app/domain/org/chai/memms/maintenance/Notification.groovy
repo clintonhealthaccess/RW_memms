@@ -29,13 +29,13 @@ package org.chai.memms.maintenance
 
 import org.chai.memms.security.User;
 
+
 /**
  * @author Jean Kahigiso M.
  *
  */
-class Notification {
-	
- 	User sender
+public class Notification {
+	User sender
 	User receiver
 	Date writtenOn
 	String content
@@ -52,12 +52,15 @@ class Notification {
 	static mapping ={
 		table "memms_work_order_notification"
 		version false
+		content type:"text"
+		//Do not remove this as read is reserved keyword in MySQL
+		read column:"notification_read"
 	}
 
 	@Override
 	public String toString() {
 		return "Notification [id=" + id + ", workOrder=" + workOrder
-				+ ", sender=" + sender + "]";
+				+ ", sender=" + sender + ", receiver=" + receiver + "]";
 	}
 	@Override
 	public int hashCode() {

@@ -55,7 +55,5 @@ class Warranty{
 	
 	static mapping = {
 		version false
-		descriptions_en type: "text"
-		descriptions_fr type: "text"
 	}
 }

@@ -1,4 +1,4 @@
-	package org.chai.memms.maintenance
+package org.chai.memms.maintenance
 
 import java.util.Date;
 import java.util.Map;
@@ -240,10 +240,12 @@ class NotificationControllerSpec  extends IntegrationTests{
 		
 		when://Get only those that are unread
 		notificationController.params.read = "false"
-		notificationController.params.to = new Date()
+		notificationController.params.to = Initializer.now()+1
 		notificationController.filter()
 		
 		then:
+		//There are 4 notifications because the creator of a workorder always gets a copy
+		Notification.count() == 4
 		notificationController.modelAndView.model.entities.size() == 2
 	}
 	

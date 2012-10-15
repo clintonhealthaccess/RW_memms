@@ -211,19 +211,19 @@ function refreshList(html,cssClass){
 }
 
 /**
- * Hide set of fields if an option is selected (donation - supplier is same as warranty provider)
+ * Hide set of fields if an option is selected (purchaser==donor - supplier==warranty provider)
  */
-function getToHide(donation,sameAsSupplier){
-	if(donation=="true")
-		$("#purchase-cost").addClass("hidden").hide()
-	if(sameAsSupplier=="true")
-		$("#address").addClass("hidden").hide()
-		
-	$(".add-equipment-form :input").change(function(event){
-		var currentDiv = $(event.target).parents("div.row");
-		if(currentDiv.nextAll("div.can-be-hidden").is(":visible"))
-			currentDiv.nextAll("div.can-be-hidden").slideUp()
-		else
-			currentDiv.nextAll("div.can-be-hidden").slideDown()
+function getToHide(){
+	if($("select[name=purchaser]").val()!="BYDONOR") $(".donor-information").hide()	
+	if($("input[name='warranty.sameAsSupplier']").is(":checked")) $("#address").hide()		
+	$("input[name='warranty.sameAsSupplier']").change(function(e){
+		if($(this).is(":checked")) $("#address").slideUp()
+		else $("#address").slideDown()
+	})
+	$("select[name=purchaser]").change(function(e){
+		if($(this).val()=="BYDONOR") $(".donor-information").slideDown()
+		else{
+			if($(".donor-information").is(":visible")) $(".donor-information").slideUp()
+		}
 	})
 }

@@ -1,4 +1,6 @@
 <%@ page import="org.chai.memms.equipment.EquipmentStatus.Status" %>
+<%@ page import="org.chai.memms.equipment.Equipment.PurchasedBy" %>
+<%@ page import="org.chai.memms.equipment.Equipment.Donor" %>
 <div class="filters main">
 		  <h2>Filter inventory<a href="#" class="right"><img src="${resource(dir:'images/icons',file:'icon_close_flash.png')}" alt="Section"/></a></h2>
 
@@ -42,14 +44,8 @@
 						</select>
 					</li>
 					<li><g:selectFromEnum name="status" values="${Status.values()}" field="status" label="${message(code:'equipment.status.label')}" /></li>
-					<li>
-						<label><g:message code="equipment.donate.label" /></label> 
-						<select name="donated">
-								<option value=""><g:message code="default.please.select" /></option>
-								<option value="true" ${filterCmd?.donated?.equals("true")? 'selected' : ''}><g:message code="default.boolean.true" /></option>
-								<option value="false" ${filterCmd?.donated?.equals("false")? 'selected' : ''}><g:message code="default.boolean.false" /></option>
-						</select>
-					</li>
+					<li><g:selectFromEnum name="purchaser" values="${PurchasedBy.values()}" field="purchaser" label="${message(code:'equipment.purchaser.label')}" /></li>
+					<li><g:selectFromEnum name="donor" values="${Donor.values()}" field="donor" label="${message(code:'equipment.donor.label')}" /></li>
 				</ul>
 				<button type="submit">Filter</button>
 				<input type="hidden" name="dataLocation.id" value="${dataLocation.id}"/>

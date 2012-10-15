@@ -184,12 +184,12 @@ public class Utils {
 	public static Date getMaxDateFromDateTime(Date date){
 		Integer.metaClass.mixin TimeCategory
 		Date.metaClass.mixin TimeCategory
-		
 		Date cleanedDate = date.clearTime()
 		cleanedDate + 23.hours + 59.minutes + 59.minutes
+		return cleanedDate
 	}
 	public static Date getMinDateFromDateTime(Date date){
-		date.clearTime()
+		return date.clearTime()
 	}
 	
 	public static Date now(){

@@ -34,7 +34,8 @@ import org.chai.memms.security.User;
  * @author Jean Kahigiso M.
  *
  */
-class Comment {
+@i18nfields.I18nFields
+public class Comment {
 	User writtenBy
 	Date writtenOn
 	String content

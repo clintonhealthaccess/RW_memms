@@ -32,10 +32,12 @@ import org.apache.shiro.crypto.hash.Sha256Hash
 import org.chai.memms.Contact;
 import org.chai.memms.equipment.Department;
 import org.chai.memms.equipment.Equipment;
+import org.chai.memms.equipment.Equipment.Donor;
 import org.chai.memms.equipment.EquipmentStatus;
 import org.chai.memms.equipment.EquipmentType
 import org.chai.memms.equipment.EquipmentType.Observation;
 import org.chai.memms.equipment.Provider
+import org.chai.memms.equipment.Equipment.PurchasedBy;
 import org.chai.memms.equipment.EquipmentStatus.Status;
 import org.chai.memms.equipment.Provider.Type;
 import org.chai.location.CalculationLocation;
@@ -102,6 +104,7 @@ public class Initializer {
 			defaultDataClerkRole.addToPermissions("equipment:filter,export,summaryPage,index,list,save,create,updateObsolete,edit")
 			defaultDataClerkRole.addToPermissions("workOrder:*")
 			defaultDataClerkRole.addToPermissions("notification:*")
+			defaultDataClerkRole.addToPermissions("Usercation:*")
 			defaultDataClerkRole.addToPermissions("equipmentStatus:list,save,delete,edit,create")
 			defaultDataClerkRole.save(failOnError: true, flush:true)
 			
@@ -293,7 +296,7 @@ public class Initializer {
 		
 		
 		if(!Equipment.count()){
-			def equipmentOne = newEquipment("SERIAL01",true,false,24,"Room A1","",['en':'Equipment Descriptions'],
+			def equipmentOne = newEquipment("SERIAL01",PurchasedBy.BYDONOR,Donor.MOHPARTNER,"CHAI",false,24,"Room A1","",['en':'Equipment Descriptions'],
 				getDate(22,07,2010),getDate(10,10,2010),"",now(),
 				'MODEL1',
 				DataLocation.findByCode(KIVUYE),
@@ -311,7 +314,7 @@ public class Initializer {
 			equipmentOne.addToStatus(statusOne)
 			equipmentOne.save(failOnError:true)
 
-			def equipmentTwo = newEquipment("SERIAL11",false,false,12,"Room A34","34900",['en':'Equipment Descriptions two'],
+			def equipmentTwo = newEquipment("SERIAL11",PurchasedBy.BYFACILITY,null,null,false,12,"Room A34","34900",['en':'Equipment Descriptions two'],
 				getDate(12,01,2009),getDate(10,10,2009),"USD",now(),
 				'MODEL2',
 				DataLocation.findByCode(KIVUYE),
@@ -327,7 +330,7 @@ public class Initializer {
 			equipmentTwo.addToStatus(statusTwo)
 			equipmentTwo.save(failOnError:true)
 			
-			def equipmentThree = newEquipment("SERIAL12",false,true,34,"Room A1","98700",['en':'Equipment Descriptions three'],
+			def equipmentThree = newEquipment("SERIAL12",PurchasedBy.BYFACILITY,null,null,true,34,"Room A1","98700",['en':'Equipment Descriptions three'],
 				getDate(14,8,2008),getDate(10,01,2009),"EUR",now(),
 				'MODEL3',
 				DataLocation.findByCode(BUNGWE),
@@ -343,7 +346,7 @@ public class Initializer {
 			equipmentThree.addToStatus(statusThree)
 			equipmentThree.save(failOnError:true)
 			
-			def equipmentFour = newEquipment("SERIAL13",true,false,12,"Room A1","",['en':'Equipment Descriptions four'],
+			def equipmentFour = newEquipment("SERIAL13",PurchasedBy.BYDONOR,Donor.MOHPARTNER,"Voxiva",false,12,"Room A1","",['en':'Equipment Descriptions four'],
 				getDate(18,2,2011),getDate(10,10,2011),"",now(),
 				'MODEL2',
 				DataLocation.findByCode(KIVUYE),
@@ -361,7 +364,7 @@ public class Initializer {
 			equipmentFour.addToStatus(statusFourOne)
 			equipmentFour.save(failOnError:true)
 			
-			def equipmentFive = newEquipment("SERIAL14",true,true,34,"Room A1","",['en':'Equipment Descriptions five'],
+			def equipmentFive = newEquipment("SERIAL14",PurchasedBy.BYDONOR,Donor.MOHPARTNER,"Voxiva",true,34,"Room A1","",['en':'Equipment Descriptions five'],
 				getDate(11,8,2008),getDate(11,10,2009),"",now(),
 				'MODEL1',
 				DataLocation.findByCode(BUNGWE),
@@ -381,7 +384,7 @@ public class Initializer {
 			equipmentFive.addToStatus(statusFiveTwo)
 			equipmentFive.save(failOnError:true)
 			
-			def equipmentSix = newEquipment("SERIAL15",false,true,4,"Room A1","290540",['en':'Equipment Descriptions six'],
+			def equipmentSix = newEquipment("SERIAL15",PurchasedBy.BYFACILITY,null,null,true,4,"Room A1","290540",['en':'Equipment Descriptions six'],
 				getDate(1,7,2000),getDate(12,7,2001),"RWF",now(),
 				'MODEL3',
 				DataLocation.findByCode(BUTARO),
@@ -401,7 +404,7 @@ public class Initializer {
 			equipmentSix.addToStatus(statusSixTwo)
 			equipmentSix.save(failOnError:true)
 			
-			def equipmentSeven = newEquipment("SERIAL07",false,true,4,"Room A1","290540",['en':'Equipment Descriptions seven'],
+			def equipmentSeven = newEquipment("SERIAL07",PurchasedBy.BYFACILITY,null,null,true,4,"Room A1","290540",['en':'Equipment Descriptions seven'],
 				getDate(1,7,2000),getDate(12,7,2001),"USD",now(),
 				'MODEL3',
 				DataLocation.findByCode(BUTARO),
@@ -421,7 +424,7 @@ public class Initializer {
 			equipmentSeven.addToStatus(statusSevenTwo)
 			equipmentSeven.save(failOnError:true)
 			
-			def equipmentEight = newEquipment("SERIAL08",false,true,4,"Room A3","290540",['en':'Equipment Descriptions eight'],
+			def equipmentEight = newEquipment("SERIAL08",PurchasedBy.BYFACILITY,null,null,true,4,"Room A3","290540",['en':'Equipment Descriptions eight'],
 				getDate(1,7,2000),getDate(12,7,2001),"EUR",now(),
 				'MODEL8',
 				DataLocation.findByCode(BUTARO),
@@ -441,7 +444,7 @@ public class Initializer {
 			equipmentEight.addToStatus(statusEightTwo)
 			equipmentEight.save(failOnError:true)
 			
-			def equipmentNine = newEquipment("SERIAL09",false,true,4,"Room 9A1","290540",['en':'Equipment Descriptions Nine'],
+			def equipmentNine = newEquipment("SERIAL09",PurchasedBy.BYFACILITY,null,null,true,4,"Room 9A1","290540",['en':'Equipment Descriptions Nine'],
 				getDate(1,7,2000),getDate(12,7,2001),"RWF",now(),
 				'MODEL3',
 				DataLocation.findByCode(BUTARO),
@@ -461,7 +464,7 @@ public class Initializer {
 			equipmentNine.addToStatus(statusNineTwo)
 			equipmentNine.save(failOnError:true)
 			
-			def equipmentTen = newEquipment("SERIAL10",false,true,4,"Room 10A1","290540",['en':'Equipment Descriptions Ten'],
+			def equipmentTen = newEquipment("SERIAL10",PurchasedBy.BYFACILITY,null,null,true,4,"Room 10A1","290540",['en':'Equipment Descriptions Ten'],
 				getDate(1,7,2000),getDate(12,7,2001),"RWF",now(),
 				'MODELTen3',
 				DataLocation.findByCode(BUTARO),
@@ -563,9 +566,6 @@ public class Initializer {
 		equipment11.save(failOnError:true)	
 	}
 	
-	
-	
-	
 	//Models definition
 	//Corrective Maintenance
 	public static def newWorkOrder(def equipment, def description, def criticality, def addedBy, def openOn,def failureReason,def currentStatus){
@@ -591,8 +591,8 @@ public class Initializer {
 	}
 	
 	//Inventory
-	public static def newEquipment(def serialNumber,def donation,def obsolete,def expectedLifeTime,def room,def purchaseCost,def descriptions,def manufactureDate, def purchaseDate,def currency,def registeredOn,def model,def dataLocation,def department, def type,def manufacture,def supplier){
-		def equipment = new Equipment(serialNumber:serialNumber,donation:donation,obsolete:obsolete,room:room,purchaseCost:purchaseCost,currency:currency,manufactureDate:manufactureDate,purchaseDate:purchaseDate,registeredOn:registeredOn,model:model,dataLocation:dataLocation,expectedLifeTime:expectedLifeTime,department:department,type:type,manufacturer:manufacture,supplier:supplier);
+	public static def newEquipment(def serialNumber,def purchaser,def donor,def donorName,def obsolete,def expectedLifeTime,def room,def purchaseCost,def descriptions,def manufactureDate, def purchaseDate,def currency,def registeredOn,def model,def dataLocation,def department, def type,def manufacture,def supplier){
+		def equipment = new Equipment(serialNumber:serialNumber,purchaser:purchaser,donor:donor,donorName:donorName,obsolete:obsolete,room:room,purchaseCost:purchaseCost,currency:currency,manufactureDate:manufactureDate,purchaseDate:purchaseDate,registeredOn:registeredOn,model:model,dataLocation:dataLocation,expectedLifeTime:expectedLifeTime,department:department,type:type,manufacturer:manufacture,supplier:supplier);
 		Utils.setLocaleValueInMap(equipment,descriptions,"Descriptions")
 		equipment.genarateAndSetEquipmentCode()
 		return equipment.save(failOnError: true)

@@ -2,6 +2,7 @@ package org.chai.memms.equipment
 
 import org.chai.memms.IntegrationTests;
 import org.chai.memms.Initializer
+import org.chai.memms.equipment.Equipment.PurchasedBy;
 import org.chai.memms.equipment.EquipmentType.Observation;
 import org.chai.location.DataLocation;
 import org.chai.memms.equipment.EquipmentStatus.Status;
@@ -25,7 +26,8 @@ class EquipmentStatusSpec extends IntegrationTests{
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 		def equipment = Initializer.newEquipment(
-					"SERIAL10",false,false,32,"ROOM A1"
+					"SERIAL10",PurchasedBy.BYFACILITY,null,null
+					,false,32,"ROOM A1"
 					,"2900.23",
 					['en':'Equipment Descriptions'],
 					Initializer.getDate(22,07,2010),

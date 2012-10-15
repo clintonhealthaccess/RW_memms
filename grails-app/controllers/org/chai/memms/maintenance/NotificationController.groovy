@@ -97,10 +97,8 @@ class NotificationController extends AbstractEntityController{
 	
 	def list={
 		adaptParamsForList()
-		log.debug("params : "+params)
 		Boolean read = (params.read) ? params.boolean("read") : null;
 		WorkOrder workOrder = WorkOrder.get(params.id)
-		log.debug("read : " + read)
 		List<Notification> notifications = notificationService.filterNotifications(workOrder, user, null,null,read, params)
 		
 		render(view:"/entity/list", model:[
@@ -150,7 +148,6 @@ class NotificationController extends AbstractEntityController{
 			render(view: '/entity/edit', model: model)
 		}
 		else {
-			log.debug("target url=" + targetURI)
 			def sent = notificationService.newNotification(cmd.workOrder,cmd.content, user,false)
 			flash.message = message(code: 'default.saved.message', args: [message(code: getLabel(), default: 'entity')],sent.toString())
 			redirect(action: "list", id: cmd.workOrder.id)

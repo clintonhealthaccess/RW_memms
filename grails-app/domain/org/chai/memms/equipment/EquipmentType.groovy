@@ -83,11 +83,6 @@ class EquipmentType {
 	static mapping = {
 		table "memms_equipment_type"
 		version false
-		descriptions_en type: 'text'
-		descriptions_fr type: 'text'
-		names_en type: 'text'
-		names_fr type: 'text'
-		
 	}
 	
 	String toString() {
