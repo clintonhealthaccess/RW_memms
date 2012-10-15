@@ -113,6 +113,7 @@ class EquipmentController extends AbstractEntityController{
 	def validateEntity(def entity) {
 		boolean validStatus = true
 		boolean validLifeTime = true
+		boolean validWarranty = true
 		
 		if(entity.id==null){
 			validStatus = (!params.cmd.hasErrors())
@@ -120,8 +121,11 @@ class EquipmentController extends AbstractEntityController{
 		}
 		
 		validLifeTime = (!params.cmdLifeTime.hasErrors())
+		validWarranty = (!params.cmdMonths.hasErrors())
 		if(log.isDebugEnabled()) log.debug("Rejecting expectedLifeTime: "+params.cmdLifeTime.errors)		
 		if(validLifeTime) entity.expectedLifeTime = params.cmdLifeTime.expectedLifeTime
+		if(validWarranty) entity.warranty.numberOfMonth = params.cmdMonths.numberOfMonths
+		log.debug("params after injecting in new warranty information " + params)
 		entity.genarateAndSetEquipmentCode()
 		return (validStatus & validLifeTime & entity.validate())
 	}
@@ -134,21 +138,27 @@ class EquipmentController extends AbstractEntityController{
 		(!currentStatus)?:currentStatus.save()
 	}
 
-	def save = { StatusCommand cmd, ExpectedLifeTimeEquipmentCommand cmdLifeTime ->
+	def save = { StatusCommand cmd, ExpectedLifeTimeEquipmentCommand cmdLifeTime, WarrantyNumberOfMonthsEquipmentCommand cmdMonths->
 		params.cmd = cmd
 		params.cmdLifeTime = cmdLifeTime
+		params.cmdMonths = cmdMonths
 		super.saveWithoutTokenCheck()
 	}
 
 	def getModel(def entity) {
-		def cmdLifeTime
+		def cmdLifeTime,cmdMonths
 		def manufacturers = []; def suppliers = []; def departments = []; def types = []; def dataLocations = [];
 		if (entity.manufacturer != null) manufacturers << entity.manufacturer
 		if (entity.supplier != null) suppliers << entity.supplier
 		if (entity.department!=null) departments << entity.department
 		if (entity.type!=null) types << entity.type
 		if (entity.dataLocation!=null) dataLocations << entity.dataLocation
-		if(entity.id) cmdLifeTime = new ExpectedLifeTimeEquipmentCommand(expectedLifeTime:entity.expectedLifeTime)
+		
+		if(params.cmdLifeTime) cmdLifeTime = params.cmdLifeTime
+		else if(entity.id) cmdLifeTime = new ExpectedLifeTimeEquipmentCommand(expectedLifeTime:entity.expectedLifeTime)
+		
+		if(params.cmdMonths) cmdMonths = params.cmdMonths
+		else if(entity.id) cmdMonths = new WarrantyNumberOfMonthsEquipmentCommand(numberOfMonths:entity.warranty?.numberOfMonth)
 		[
 					equipment: entity,
 					departments: departments,
@@ -159,6 +169,7 @@ class EquipmentController extends AbstractEntityController{
 					numberOfStatusToDisplay: grailsApplication.config.status.to.display.on.equipment.form,
 					cmd:params.cmd,
 					cmdLifeTime:cmdLifeTime,
+					cmdMonths:cmdMonths,
 					currencies: grailsApplication.config.site.possible.currency
 
 				]
@@ -381,6 +392,38 @@ class EquipmentController extends AbstractEntityController{
 			}
 		}
 
+	}
+}
+
+class WarrantyNumberOfMonthsEquipmentCommand {
+	Integer numberOfMonths_months
+	Integer numberOfMonths_years
+
+	public Integer getNumberOfMonths(){
+		Integer months
+		if(numberOfMonths_years){
+			months = numberOfMonths_years * 12
+		}
+		if(numberOfMonths_months){
+			months = months? numberOfMonths_months + months : numberOfMonths_months
+		}
+		return months
+	}
+
+	public void setNumberOfMonths(Integer newNumberOfMonths){
+		if(newNumberOfMonths){
+			numberOfMonths_years = newNumberOfMonths >= 12 ? Math.floor( newNumberOfMonths/12 ) : null
+			numberOfMonths_months = newNumberOfMonths % 12 != 0 ? newNumberOfMonths % 12 : null
+		}
+	}
+
+	static constraints = {
+		numberOfMonths_months nullable:true
+		numberOfMonths_years nullable:true
+	}
+
+	String toString() {
+		return "WarrantyNumberOfMonthsEquipmentCommand[ Years="+numberOfMonths_years+", Months="+numberOfMonths_months+" , NumberOfMonths="+numberOfMonths + "]"
 	}
 }
 

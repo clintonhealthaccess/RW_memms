@@ -1,6 +1,7 @@
 <div class="row ${hasErrors(bean:bean,field:field,'errors')}">
-	<label>${message(code:'entity.expectedLifeTime.label')}</label>
-	<div>
+	<label>${message(code:label)}</label><%--
+	'entity.expectedLifeTime.label'
+	--%><div>
 	<label for="${year}">${labelYear}</label>
 	<input type="text" class="idle-field ${dateClass}" id="${name +'_years'}" name="${name +'_years'}" value="${fieldValue(bean:bean,field:name +'_years')}" ${active} ${readonly?'readonly="readonly"':''}></input>
 	<div class="error-list"><g:renderErrors bean="${bean}" field="${name +'_years'}" /></div>

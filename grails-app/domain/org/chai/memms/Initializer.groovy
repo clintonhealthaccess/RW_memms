@@ -100,7 +100,7 @@ public class Initializer {
 			def defaultDataClerkRole = new Role(name: "Data Clerk")
 			defaultDataClerkRole.addToPermissions("home:*;menu:home,inventory,correctivemaintenance;account:*;equipmentType:getAjaxData;provider:getAjaxData;department:getAjaxData")
 			defaultDataClerkRole.addToPermissions("equipment:filter,export,summaryPage,index,list,save,create,updateObsolete,edit")
-			defaultDataClerkRole.addToPermissions("workOrder:filter,summaryPage,index,list,save,create")
+			defaultDataClerkRole.addToPermissions("workOrder:*")
 			defaultDataClerkRole.addToPermissions("notification:*")
 			defaultDataClerkRole.addToPermissions("equipmentStatus:list,save,delete,edit,create")
 			defaultDataClerkRole.save(failOnError: true, flush:true)

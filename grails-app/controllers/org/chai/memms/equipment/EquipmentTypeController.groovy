@@ -85,7 +85,8 @@ class EquipmentTypeController extends AbstractEntityController{
 
 	def getModel(def entity) {
 		def cmd
-		if(entity.id) cmd = new ExpectedLifeTimeCommand(expectedLifeTime:entity.expectedLifeTime)
+		if(params.cmd) cmd = params.cmd
+		else if(entity.id) cmd =  new ExpectedLifeTimeCommand(expectedLifeTime:entity.expectedLifeTime)
 		[
 			type: entity,
 			cmd:cmd,
