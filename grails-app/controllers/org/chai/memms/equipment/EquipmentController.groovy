@@ -86,6 +86,7 @@ class EquipmentController extends AbstractEntityController{
 		return Equipment.class;
 	}
 	def bindParams(def entity) {
+		if(log.isDebugEnabled()) log.debug("Equipment params: before bind "+params)
 		if(!entity.id){
 			entity.registeredOn=new Date()
 			
@@ -108,6 +109,7 @@ class EquipmentController extends AbstractEntityController{
 			}
 		}
 		bindData(entity,params,[exclude:["status","dateOfEvent","expectedLifeTime_years","expectedLifeTime_months"]])
+		if(log.isDebugEnabled()) log.debug("Equipment params: after bind  "+entity)
 	}
 
 	def validateEntity(def entity) {

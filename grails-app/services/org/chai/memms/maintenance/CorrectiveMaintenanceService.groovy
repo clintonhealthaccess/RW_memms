@@ -59,6 +59,7 @@ class CorrectiveMaintenanceService {
 	}   
 	
 	public CorrectiveMaintenances getCorrectiveMaintenancesByLocation(Location location,Set<DataLocationType> types,Map<String, String> params) {
+		if(log.isDebugEnabled()) log.debug("getCorrectiveMaintenancesByLocation url params: "+params)
 		List<CorrectiveMaintenance> correctiveMaintenances = []
 		Set<LocationLevel> skipLevels = getSkipLocationLevels()
 		for(DataLocation dataLocation : location.collectDataLocations(skipLevels,types)){

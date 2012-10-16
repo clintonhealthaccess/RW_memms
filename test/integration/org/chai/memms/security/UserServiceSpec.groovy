@@ -100,8 +100,8 @@ class UserServiceSpec extends IntegrationTests{
 		Initializer.createInventoryStructure()
 
 		when:
-		def usersOne = userService.getActiveByTypeAndLocation(UserType.TECHNICIANFACILITY, CalculationLocation.findByCode(KIVUYE), [:])
-		def usersTwo = userService.getActiveByTypeAndLocation(UserType.TECHNICIANMOH, null, [:])
+		def usersOne = userService.getActiveUserByTypeAndLocation(UserType.TECHNICIANFACILITY, CalculationLocation.findByCode(KIVUYE), [:])
+		def usersTwo = userService.getActiveUserByTypeAndLocation(UserType.TECHNICIANMOH, null, [:])
 		then:
 		usersOne.size()==1
 		usersTwo.size()==1
