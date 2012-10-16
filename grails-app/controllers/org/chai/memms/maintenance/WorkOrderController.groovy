@@ -160,7 +160,7 @@ class WorkOrderController extends AbstractEntityController{
 		Equipment equipment = null
 		CalculationLocation  location = null
 		if(params["dataLocation.id"]) location = CalculationLocation.get(params.int("dataLocation.id"))
-		if(params["equipment"]) equipment = Equipment.get(params.int("equipment"))
+		if(params["equipment.id"]) equipment = Equipment.get(params.int("equipment.id"))
 		
 		if(location)
 			orders = workOrderService.getWorkOrdersByCalculationLocation(location,params)	
