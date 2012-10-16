@@ -62,7 +62,6 @@ class WorkOrderController extends AbstractEntityController{
 	def workOrderStatusService
 	def commentService
 	def maintenanceProcessService
-	def escalationLogService
 	def notificationService
 	def userService
 
@@ -218,12 +217,8 @@ class WorkOrderController extends AbstractEntityController{
 			response.sendError(404)
 		else {
 				if (log.isDebugEnabled()) log.debug("addProcess params: "+params)
-				def process = maintenanceProcessService.createProcess(order,type,value,now,user)	
-				if(process!=null){
-					order.addToProcesses(process)
-					order.lastModifiedOn = now
-					order.lastModifiedBy = user
-					order.save(flush:true)
+				maintenanceProcessService.addProcess(order,type,value,now,user)	
+				if(order!=null){
 					result=true
 					def processes = (type==ProcessType.ACTION)? order.actions:order.materials
 					html = g.render(template:"/templates/processList",model:[processes:processes,type:type.name])
@@ -240,13 +235,8 @@ class WorkOrderController extends AbstractEntityController{
 		if(!process) response.sendError(404)
 		else{
 			type = process.type
-			WorkOrder order = process.workOrder
+			WorkOrder order = maintenanceProcessService.deleteProcess(process,now,user)
 			result = true
-			order.processes.remove(process)
-			process.delete()
-			order.lastModifiedOn = now
-			order.lastModifiedBy = user
-			order.save(flush:true)
 			def processes = (type==ProcessType.ACTION)? order.actions:order.materials
 			html = g.render(template:"/templates/processList",model:[processes:processes,type:type.name])
 		}
@@ -277,24 +267,21 @@ class WorkOrderController extends AbstractEntityController{
 
 	
 	def escalate = {
-		WorkOrder order = WorkOrder.get(params.int("order.id"))
-		def content = "Please review work order on equipment serial number: ${order.equipment.serialNumber}"
-		def escalationLog 
+		WorkOrder order = WorkOrder.get(params.int("order"))
 		def result = false
+		def html = ""
 		if (order == null)
 			response.sendError(404)
 		else {
-			WorkOrderStatus currenetStatus = order.currentState
-			//Escalate if not escalated
-			if(currenetStatus.status == OrderStatus.OPENATFOSA)
-				escalationLog = escalationLogService.createEscalationLog(currenetStatus, now, user, null)
-			if(escalationLog){
-				workOrderService.escalateWorkOrder(order,content, user)
-				escalationLog.save(flush:true)
-			}
+			def equipment = order.equipment
+			//TODO define default escalation message
+			def content = "Please review work order on equipment serial number: ${order.equipment.code}"
+			workOrderService.escalateWorkOrder(order, content, user)
 			result=true 
+			def orders= workOrderService.getWorkOrdersByEquipment(equipment,[:])
+			html = g.render(template:"/entity/workorder/workOrderList",model:[equipment:equipment,entities:orders])
 		}
-		render(contentType:"text/json") { results = [result] }
+		render(contentType:"text/json") { results = [result,html] }
 	}
 
 	def getWorkOrderClueTipsAjaxData = {
@@ -326,9 +313,9 @@ class WorkOrderController extends AbstractEntityController{
 		adaptParamsForList()
 		Equipment equipment = null
 		DataLocation dataLocation = null
-		if(params["equipment"]){
+		if(params["equipment.id"]){
 			equipment = Equipment.get(params.long("equipment.id"))
-		}else if(params["dataLocation"]){
+		}else if(params["dataLocation.id"]){
 			dataLocation = DataLocation.get(params.long('dataLocation.id'))
 		}
 		List<WorkOrder> workOrders = workOrderService.searchWorkOrder(params['q'],dataLocation,equipment,params)

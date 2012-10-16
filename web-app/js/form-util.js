@@ -39,12 +39,10 @@ function escaletWorkOrder(baseUrl){
 		$(this).nextAll(".ajax-spinner").show();
 		$.ajax({
 			type :'GET',dataType: 'json',
-			data:{"order.id":event.target.id},
+			data:{"order":event.target.id},
 			url:baseUrl,
 			success: function(data) {
-				$(e.target).nextAll(".ajax-error").hide();
-				$(e.target).nextAll(".ajax-spinner").hide();
-				$(e.target).fadeIn("slow");
+				refreshList(data.results[1],".items")
 			}
 		});
 		$(this).ajaxError(function(){

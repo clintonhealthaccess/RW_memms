@@ -62,7 +62,7 @@ class WorkOrderService {
 	 * @param params
 	 * @return
 	 */
-	public List<WorkOrder> searchWorkOrder(String text,DataLocation location,Equipment workOrdersEquipment,Map<String, String> params) {
+	public List<WorkOrder> searchWorkOrder(String text,DataLocation dataLocation,Equipment workOrdersEquipment,Map<String, String> params) {
 		def dbFieldTypeNames = 'names_'+languageService.getCurrentLanguagePrefix();
 		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
 		def criteria = WorkOrder.createCriteria()
@@ -70,12 +70,13 @@ class WorkOrderService {
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(workOrdersEquipment)  
 				eq('equipment',workOrdersEquipment)
-			if(location) 
-				equipment{eq('dataLocation',location)}
+			if(dataLocation) 
+				equipment{eq('dataLocation',dataLocation)}
 			or{
 				ilike("description","%"+text+"%")
 				equipment{
 					or{
+						ilike("code","%"+text+"%")
 						ilike("serialNumber","%"+text+"%")
 						ilike(dbFieldDescriptions,"%"+text+"%")
 						type{
@@ -115,9 +116,9 @@ class WorkOrderService {
 			if(workOrdersEquipment)
 				eq("equipment",workOrdersEquipment)
 			if(openOn)
-				ge("openOn",Utils.getMinDateFromDateTime(openOn))
+				between("openOn",Utils.getMinDateFromDateTime(openOn),Utils.getMaxDateFromDateTime(openOn))
 			if(closedOn)
-				le("closedOn",Utils.getMaxDateFromDateTime(closedOn))
+				between("closedOn",Utils.getMinDateFromDateTime(closedOn),Utils.getMaxDateFromDateTime(closedOn))
 			if(criticality && criticality != Criticality.NONE)
 				eq("criticality",criticality)
 			if(currentStatus && currentStatus != OrderStatus.NONE)
@@ -126,11 +127,12 @@ class WorkOrderService {
 	}
 	
 	def escalateWorkOrder(WorkOrder workOrder,String content, User escalatedBy){
-		if(workOrder.escalated)
-			notificationService.sendNotifications(workOrder,"${content}\n This is a reminder to follow up on this work order.",escalatedBy)
-		else{
-			notificationService.newNotification(workOrder,"${content}\n Please follow up on this work order.",escalatedBy,true)
-		}
+		workOrder.currentStatus = OrderStatus.OPENATMMC
+		WorkOrderStatus status = new WorkOrderStatus(workOrder:workOrder,status:OrderStatus.OPENATMMC,escalation:true,changedBy:escalatedBy,changeOn:new Date())
+		workOrder.addToStatus(status)
+		workOrder.save(failOnError:true)
+		if(status)
+			notificationService.newNotification(workOrder,content,escalatedBy,true)
 	}
 	
 	List<WorkOrder> getWorkOrdersByEquipment(Equipment equipment, Map<String, String> params){

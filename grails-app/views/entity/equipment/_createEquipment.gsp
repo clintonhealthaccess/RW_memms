@@ -28,7 +28,7 @@
 			<input type="hidden" name="dataLocation.id" value="${equipment.dataLocation.id}" />
 			<label><g:message code="datalocation.label"/>:</label> ${equipment.dataLocation.names}
 		</div>				
-      	<g:selectFromList name="type.id" label="${message(code:'equipment.type.label')}" bean="${equipment}" field="type" optionKey="id" multiple="false"
+      	<g:selectFromList name="type" label="${message(code:'equipment.type.label')}" bean="${equipment}" field="type" optionKey="id" multiple="false"
   			ajaxLink="${createLink(controller:'equipmentType', action:'getAjaxData')}"
   			from="${types}" value="${equipment?.type?.id}" values="${types.collect{it.names}}" />
     		<g:inputYearMonth label='entity.expectedLifeTime.label' name="expectedLifeTime" labelYear="${message(code:'entity.years.label')}" labelMonth="${message(code:'entity.months.label')}" bean="${cmdLifeTime}"/>
@@ -37,7 +37,7 @@
       		<g:input name="model" label="${message(code:'equipment.model.label')}" bean="${equipment}" field="model"/>
       		<g:i18nTextarea name="descriptions" bean="${equipment}" label="${message(code:'entity.descriptions.label')}" field="descriptions" height="150" width="300" maxHeight="150" />
 		
-      		<g:selectFromList name="department.id" label="${message(code:'department.label')}" bean="${equipment}" field="department" optionKey="id" multiple="false"
+      		<g:selectFromList name="department" label="${message(code:'department.label')}" bean="${equipment}" field="department" optionKey="id" multiple="false"
     			ajaxLink="${createLink(controller:'department', action:'getAjaxData')}"
     			from="${departments}" value="${equipment?.department?.id}" values="${departments.collect{it.names}}" />
 			
@@ -58,7 +58,7 @@
           </span>
           <g:message code="equipment.section.manufacturer.information.label" default="Manufacturer Information"/>
         </h4>
-      	<g:selectFromList name="manufacturer.id" label="${message(code:'provider.type.manufacturer')}" bean="${equipment}" field="manufacturer" optionKey="id" multiple="false"
+      	<g:selectFromList name="manufacturer" label="${message(code:'provider.type.manufacturer')}" bean="${equipment}" field="manufacturer" optionKey="id" multiple="false"
   			ajaxLink="${createLink(controller:'provider', action:'getAjaxData', params: [type:'MANUFACTURER'])}"
   			from="${manufacturers}" value="${equipment?.manufacturer?.id}" values="${manufacturers.collect{it.contact.contactName}}" />	
   			<g:inputDate name="manufactureDate" precision="month" label="${message(code:'equipment.manufacture.date.label')}" value="${equipment?.manufactureDate}" bean="${equipment}" field="manufactureDate"/>
@@ -77,7 +77,7 @@
           </span>
           <g:message code="equipment.section.supplier.information.label" default="Supplier Information"/>
         </h4>
-      	<g:selectFromList name="supplier.id" label="${message(code:'provider.type.supplier')}" bean="${equipment}" field="supplier" optionKey="id" multiple="false"
+      	<g:selectFromList name="supplier" label="${message(code:'provider.type.supplier')}" bean="${equipment}" field="supplier" optionKey="id" multiple="false"
   			ajaxLink="${createLink(controller:'provider', action:'getAjaxData', params: [type:'SUPPLIER'])}"
   			from="${suppliers}" value="${equipment?.supplier?.id}" values="${suppliers.collect{it.contact.contactName}}" />		
   			<g:input name="purchaseDate" dateClass="date-picker" label="${message(code:'equipment.purchase.date.label')}" bean="${equipment}" field="purchaseDate"/>
