@@ -54,43 +54,72 @@ class BootStrap {
 			break;
 			case "production":
 			if (!Role.count()) {
-				//Defining Role			
-				def defaultAdminRole = new Role(name: "Admin")
+								
+				//Default roles
+				def defaultAdminRole 
+				if(Role.findByName("Admin")) defaultAdminRole = Role.findByName("Admin") 
+				else defaultAdminRole = new Role(name: "Admin")
 				defaultAdminRole.addToPermissions("*")
 				defaultAdminRole.save(failOnError: true)
 				
-				def defaultClercRole = new Role(name: "Clerk")
-				defaultClercRole.addToPermissions("equipment:")
-				defaultClercRole.addToPermissions("equipmentStatus:*")
-				defaultClercRole.addToPermissions("home:*")
-				defaultClercRole.addToPermissions("menu:home")
-				defaultClercRole.addToPermissions("menu:inventory")
-				defaultClercRole.addToPermissions("provider:getAjaxData")
-				defaultClercRole.addToPermissions("equipmentType:getAjaxData")
-				defaultClercRole.addToPermissions("department:getAjaxData")
-				defaultClercRole.addToPermissions("account:editAccount")
-				defaultClercRole.addToPermissions("account:saveAccount")
-				defaultClercRole.addToPermissions("auth:newPassword")
-				defaultClercRole.addToPermissions("auth:saveAccount")
-				defaultClercRole.addToPermissions("auth:setPassword")
-				defaultClercRole.addToPermissions("auth:retrievePassword")
-				defaultClercRole.save(failOnError: true)
-			}
-			if (!User.count()) {
-				//Defining User
-				//User with admin role
-				def admin = new User(userType: UserType.ADMIN,code:"admin", location: CalculationLocation.findByCode(0), username: "admin", 
-					firstname: "memms", lastname: "memms", email:'memms@memms.org', passwordHash: new Sha256Hash("admin").toHex(), active: true, 
-					confirmed: true, uuid:'admin', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
-				admin.addToRoles(Role.findByName("Admin"))
-				admin.save(failOnError: true)
+				def defaultDataClerkRole
+				if(Role.findByName("Data Clerk")) defaultDataClerkRole = Role.findByName("Data Clerk") 
+				else defaultDataClerkRole = new Role(name: "Data Clerk")
+				defaultDataClerkRole.addToPermissions("home:*")
+				defaultDataClerkRole.addToPermissions("menu:home,inventory,correctivemaintenance")
+				defaultDataClerkRole.addToPermissions("equipmentType:getAjaxData")
+				defaultDataClerkRole.addToPermissions("provider:getAjaxData")
+				defaultDataClerkRole.addToPermissions("department:getAjaxData")
+				defaultDataClerkRole.addToPermissions("department:getAjaxData")
+				defaultDataClerkRole.addToPermissions("equipment:filter,export,summaryPage,index,list,save,create,updateObsolete,edit")
+				defaultDataClerkRole.addToPermissions("workOrder:*")
+				defaultDataClerkRole.addToPermissions("notification:*")
+				defaultDataClerkRole.addToPermissions("equipmentStatus:list,save,delete,edit,create")
+				//Default user permission
+				defaultDataClerkRole.addToPermissions("account:editAccount")
+				defaultDataClerkRole.addToPermissions("account:saveAccount")
+				defaultDataClerkRole.addToPermissions("auth:newPassword")
+				defaultDataClerkRole.addToPermissions("auth:saveAccount")
+				defaultDataClerkRole.addToPermissions("auth:setPassword")
+				defaultDataClerkRole.addToPermissions("auth:retrievePassword")
+				defaultDataClerkRole.save(failOnError: true)
 				
-				//User with default clerk role
-				def userClerkOne= new User(userType: UserType.OTHER,code:"user", location: CalculationLocation.findByCode(040403), username: "user", 
-					firstname: "user", lastname: "user", email:'user@memms.org', passwordHash: new Sha256Hash("user").toHex(), active: true, 
+				
+				def defaultTechnicianFacilityRole
+				if(Role.findByName("Technician Facility")) defaultTechnicianFacilityRole = Role.findByName("Technician Facility") 
+				else defaultTechnicianFacilityRole = new Role(name: "Technician Facility")
+				
+				defaultTechnicianFacilityRole.addToPermissions(defaultDataClerkRole.permissionString)
+				defaultTechnicianFacilityRole.addToPermissions("menu:preventivemaintenance,admin;equipment:*")
+				defaultTechnicianFacilityRole.addToPermissions("department:*;equipmentType:*;provider:*;equipment:*")
+				defaultTechnicianFacilityRole.save(failOnError: true, flush:true)
+				
+				def defaultTechnicianMoHRole 
+				if(Role.findByName("Technician MoH")) defaultTechnicianMoHRole = Role.findByName("Technician MoH")
+				else defaultTechnicianMoHRole =  new Role(name: "Technician MoH")
+				
+				defaultTechnicianMoHRole.addToPermissions(defaultDataClerkRole.permissionString)
+				defaultTechnicianMoHRole.addToPermissions("menu:preventivemaintenance,admin,advanced;equipment:*")
+				defaultTechnicianMoHRole.addToPermissions("department:*;equipmentType:*;provider:*;equipment:*")
+				defaultTechnicianMoHRole.save(failOnError: true)
+						
+				def userClerk= new User(userType: UserType.DATACLERK, location: CalculationLocation.findByCode(327), username: "user",
+					firstname: "Data", lastname: "Clerk", email:'user@memms.org', passwordHash: new Sha256Hash("user").toHex(), active: true,
 					confirmed: true, uuid:'user', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
-				userClerkOne.addToRoles(Role.findByName("Clerk"))
-				userClerkOne.save(failOnError: true)
+				userClerk.addToRoles(defaultDataClerkRole)
+				userClerk.save(failOnError: true)
+				
+				def userTechnicianFacility= new User(userType: UserType.TECHNICIANFACILITY, location: CalculationLocation.findByCode(327), username: "techf",
+					firstname: "technician", lastname: "facility", email:'techf@memms.org', passwordHash: new Sha256Hash("techf").toHex(), active: true,
+					confirmed: true, uuid:'techf', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
+				userTechnicianFacility.addToRoles(defaultTechnicianFacilityRole)
+				userTechnicianFacility.save(failOnError: true)
+				
+				def userTechnicianMoH= new User(userType: UserType.TECHNICIANMOH, location: CalculationLocation.findByCode(0), username: "techMoH",
+					firstname: "technician", lastname: "MoH", email:'techMoH@memms.org', passwordHash: new Sha256Hash("techMoH").toHex(), active: true,
+					confirmed: true, uuid:'techMoH', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
+				userTechnicianMoH.addToRoles(defaultTechnicianMoHRole)
+				userTechnicianMoH.save(failOnError: true)
 			}
 			break;
 		}

@@ -92,10 +92,10 @@ abstract class IntegrationTests extends IntegrationSpec {
 		def hc = Initializer.newDataLocationType(['en':HEALTH_CENTER_GROUP], HEALTH_CENTER_GROUP);
 		def dh = Initializer.newDataLocationType(['en':DISTRICT_HOSPITAL_GROUP], DISTRICT_HOSPITAL_GROUP);
 
-		def country = Initializer.newLocationLevel(['en':NATIONAL], NATIONAL)
-		def province = Initializer.newLocationLevel(['en':PROVINCE], PROVINCE)
-		def district = Initializer.newLocationLevel(['en':DISTRICT], DISTRICT)
-		def sector = Initializer.newLocationLevel(['en':SECTOR], SECTOR)
+		def country = Initializer.newLocationLevel(['en':NATIONAL], NATIONAL,1)
+		def province = Initializer.newLocationLevel(['en':PROVINCE], PROVINCE,2)
+		def district = Initializer.newLocationLevel(['en':DISTRICT], DISTRICT,3)
+		def sector = Initializer.newLocationLevel(['en':SECTOR], SECTOR,4)
 
 		def rwanda = Initializer.newLocation(['en':RWANDA], RWANDA,null,country)
 		def north = Initializer.newLocation(['en':NORTH], NORTH, rwanda, province)

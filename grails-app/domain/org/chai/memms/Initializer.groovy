@@ -104,7 +104,6 @@ public class Initializer {
 			defaultDataClerkRole.addToPermissions("equipment:filter,export,summaryPage,index,list,save,create,updateObsolete,edit")
 			defaultDataClerkRole.addToPermissions("workOrder:*")
 			defaultDataClerkRole.addToPermissions("notification:*")
-			defaultDataClerkRole.addToPermissions("Usercation:*")
 			defaultDataClerkRole.addToPermissions("equipmentStatus:list,save,delete,edit,create")
 			defaultDataClerkRole.save(failOnError: true, flush:true)
 			
@@ -217,10 +216,10 @@ public class Initializer {
 			def hc = newDataLocationType(['en':HEALTH_CENTER_GROUP], HEALTH_CENTER_GROUP);
 			def dh = newDataLocationType(['en':DISTRICT_HOSPITAL_GROUP], DISTRICT_HOSPITAL_GROUP);
 			//Add Location Level
-			def country = newLocationLevel(['en':NATIONAL], NATIONAL)
-			def province = newLocationLevel(['en':PROVINCE], PROVINCE)
-			def district = newLocationLevel(['en':DISTRICT], DISTRICT)
-			def sector = newLocationLevel(['en':SECTOR], SECTOR)
+			def country = newLocationLevel(['en':NATIONAL], NATIONAL,1)
+			def province = newLocationLevel(['en':PROVINCE], PROVINCE,2)
+			def district = newLocationLevel(['en':DISTRICT], DISTRICT,3)
+			def sector = newLocationLevel(['en':SECTOR], SECTOR,4)
 			//Add Location
 			def rwanda = newLocation(['en':RWANDA], RWANDA,null,country)
 			def kigali = newLocation(['en':KIGALI_CITY],KIGALI_CITY,rwanda,province)
@@ -652,8 +651,8 @@ public class Initializer {
 		return dataLocationType.save(failOnError: true)
 	}
 	
-	public static def newLocationLevel(def names, def code) {
-		def locationLevel = new LocationLevel(code: code)
+	public static def newLocationLevel(def names, def code, def order) {
+		def locationLevel = new LocationLevel(code: code,order:order)
 		Utils.setLocaleValueInMap(locationLevel,names,"Names")
 		return locationLevel.save(failOnError: true)
 	}

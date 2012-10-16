@@ -94,11 +94,14 @@ grails.project.dependency.resolution = {
 		compile ":yui-minify-resources:0.1.5"
         build ":tomcat:$grailsVersion"
 		compile ":rabbitmq:1.0.0.RC1"
-		compile ":locations:0.2.2-CHAI"
+		compile ":chai-locations:0.2.3-CHAI"
 		//compile ':cloud-foundry:1.2.3'
 		
 		test (":spock:0.6") {changing = false}
 		//		test ":geb:0.7.1"
 		compile ":csv:0.3.1"
     }
+	
 }
+//Comment this when deploying
+//grails.plugin.location.'locations' = "../location"
