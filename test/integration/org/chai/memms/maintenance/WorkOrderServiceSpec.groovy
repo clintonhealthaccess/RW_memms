@@ -83,7 +83,7 @@ class WorkOrderServiceSpec  extends IntegrationTests{
 		def workOrdersopenOn = workOrderService.filterWorkOrders(null,null,Initializer.getDate(12, 9,2012),null,null,null,[:])
 		
 		//Filter by closedOn
-		def workOrdersclosedOn = workOrderService.filterWorkOrders(null,null,null,Initializer.getDate(12, 11,2012),null,null,[:])
+		def workOrdersclosedOn = workOrderService.filterWorkOrders(null,null,null,Initializer.getDate(18, 9,2012),null,null,[:])
 		
 		//Filter by criticality
 		def workOrdersCriticality = workOrderService.filterWorkOrders(null,null,null,null,Criticality.LOW,null,[:])
