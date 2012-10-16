@@ -1,3 +1,4 @@
+<%@ page import="org.chai.memms.util.Utils" %>
 <table class="items">
 	<thead>
 		<tr>
@@ -14,12 +15,16 @@
 					${notification?.sender?.firstname +" "+ notification?.sender?.lastname}
 				</td>
 				<td>
-					${notification?.writtenOn}
+					${Utils.formatDateWithTime(notification.writtenOn)}
 				</td>
 				<td><g:stripHtml field="${notification?.content}" chars="30"/></td>
-				<td><a href="${createLinkWithTargetURI(controller:'notification', action:'read', params:[id: notification.id])}">
-								<g:message code="notification.read.label" />
-							</a></td>
+				<td>
+					<g:if test="${!notification.read}">
+						<a href="${createLinkWithTargetURI(controller:'notification', action:'read', params:[id: notification.id])}">
+							<g:message code="notification.read.label" />
+						</a>
+					</g:if>
+				</td>
 			</tr>
 		</g:each>
 	</tbody>

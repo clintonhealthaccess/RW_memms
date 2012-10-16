@@ -51,7 +51,7 @@
 					<g:listCheckBox name="obsolete" id="${equipment.id}" checked="${(!equipment.obsolete)?:'checked'}"/>
 				</td>
 				<td>
-					<a href="${createLinkWithTargetURI(controller:'workOrder', action:'list', params:['equipment': equipment?.id])}" title="${message(code: 'work.order.see.list.label')}" class="tooltip">
+					<a href="${createLinkWithTargetURI(controller:'workOrder', action:'list', params:['equipment.id': equipment?.id])}" title="${message(code: 'work.order.see.list.label')}" class="tooltip">
   	    				${equipment.workOrders.size()}
   	    			</a>
 				</td>

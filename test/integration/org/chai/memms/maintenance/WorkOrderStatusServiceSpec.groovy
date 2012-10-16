@@ -27,35 +27,32 @@
  */
 package org.chai.memms.maintenance
 
-import org.chai.memms.maintenance.MaintenanceProcess
-import org.chai.memms.maintenance.MaintenanceProcess.ProcessType;
-import org.chai.memms.security.User;
+import java.util.Date;
 
-/**
- * @author Jean Kahigiso M.
- *
- */
-class MaintenanceProcessService {
-	static transactional = true	
-	
-	def createProcess(WorkOrder workOrder,ProcessType type,String name,Date addedOn,User addedBy){
-		return new MaintenanceProcess(workOrder:workOrder,type: type,name:name,addedOn:addedOn,addedBy:addedBy);
-	}
-	
-	def addProcess(WorkOrder workOrder,ProcessType type,String name,Date addedOn,User addedBy){
-		MaintenanceProcess process = createProcess(workOrder,type,name,addedOn,addedBy)
-		workOrder.addToProcesses(process)
-		workOrder.lastModifiedOn = addedOn
-		workOrder.lastModifiedBy = addedBy
-		return workOrder.save(failOnError:true)
-	}
-	def deleteProcess(MaintenanceProcess process,Date deletedOn,User deletedBy){
-		WorkOrder workOrder = process.workOrder		
-		workOrder.removeFromProcesses(process)
-		workOrder.lastModifiedOn = deletedOn
-		workOrder.lastModifiedBy = deletedBy
-		process.delete()
-		return workOrder.save(failOnError:true)
-	}
+import org.chai.memms.Initializer;
+import org.chai.memms.IntegrationTests;
+import org.chai.memms.equipment.Equipment;
+import org.chai.memms.maintenance.WorkOrder.Criticality;
+import org.chai.memms.maintenance.WorkOrder.FailureReason;
+import org.chai.memms.maintenance.WorkOrder
+import org.chai.memms.maintenance.WorkOrderStatus.OrderStatus;
 
+
+class WorkOrderStatusServiceSpec extends IntegrationTests{
+	def workOrderStatusService
+	def "can create using  createWorkOrderStatus method"(){
+		setup:
+		setupLocationTree()
+		setupEquipment()
+		def user = newUser("user", "user")
+		def equipment = Equipment.findBySerialNumber(CODE(123))
+		def workOrder =  new WorkOrder(equipment:equipment,description:"test work order",criticality:Criticality.NORMAL,currentStatus:OrderStatus.OPENATFOSA,addedBy:user,openOn:Initializer.now(),failureReason:FailureReason.NOTSPECIFIED)
+		when:
+		def workOrderStatus = workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATFOSA,user,Initializer.now(),false);
+		workOrder.save(failOnError:true)
+		then:
+		WorkOrder.count() == 1
+		WorkOrder.list()[0].status.status.equals([OrderStatus.OPENATFOSA])
+		WorkOrderStatus.count() == 1
+	}
 }
