@@ -14,6 +14,11 @@ class FormTagLib {
 		out << render(template:"/tags/form/file", model: attrs)
 	}
 	
+	def inputYearMonth = { attrs, body ->
+		if (attrs["type"] == null) attrs["type"] = 'text'
+		out << render(template:"/tags/form/inputYearMonth", model: attrs)
+	}
+	
 	def input = { attrs, body ->
 		if (attrs["type"] == null) attrs["type"] = 'text'
 		out << render(template:"/tags/form/input", model: attrs)

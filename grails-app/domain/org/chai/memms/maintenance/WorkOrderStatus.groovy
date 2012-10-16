@@ -27,37 +27,53 @@
  */
 package org.chai.memms.maintenance
 
-import java.util.Date;
 import org.chai.memms.security.User;
 
 /**
  * @author Jean Kahigiso M.
  *
  */
-@i18nfields.I18nFields
-public class Comment {
-	User writtenBy
-	Date writtenOn
-	String content
+public class WorkOrderStatus {
 	
-   static belongsTo = [workOrder: WorkOrder]
-   
-   static constraints ={
-	   writtenBy nullable: false
-	   writtenOn nullable: false, validator:{it <=new Date()}
-	   content nullable:false, blank:false
-   }
-   static mapping ={
-	   table "memms_work_order_comment"
-	   version false
-	   content type:"text"
-	   
-   }
-
+	enum OrderStatus{
+		NONE("none"),
+		OPENATFOSA("open.at.fosa"),
+		OPENATMMC("open.at.mmc"),
+		CLOSEDFIXED("closed.fixed"),
+		CLOSEDFORDISPOSAL("closed.for.disposal")
+		String messageCode = "work.order.status"
+		String name
+		OrderStatus(String name){ this.name=name }
+		String getKey() { return name() }
+	}
+	
+	Date changeOn
+	User changedBy
+	OrderStatus status
+	Boolean escalation = false
+	
+	static belongsTo = [workOrder: WorkOrder]
+	static mapping = {
+		table "memms_work_order_status"
+		version false
+	}
+	
+	static constraints = {
+		changeOn nullable: false, validator:{it <= new Date()}
+		status nullable: false, inList:[OrderStatus.OPENATFOSA,OrderStatus.OPENATMMC,OrderStatus.CLOSEDFIXED,OrderStatus.CLOSEDFORDISPOSAL]
+		escalation validator:{ val, obj ->
+			def valid = true
+			if(val == true && (obj.status != OrderStatus.OPENATMMC)) valid = false
+			if(val == false && (obj.status == OrderStatus.OPENATMMC)) valid = false
+			return valid
+		}
+	}
+	
 	@Override
 	public String toString() {
-		return "Comment [id=" + id + ", writtenBy=" + writtenBy + "]";
-	}  
+		return "WorkOrderStatus [id= " + id + " status= "+status+"]";
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -65,6 +81,7 @@ public class Comment {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this.is(obj))
@@ -73,7 +90,7 @@ public class Comment {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Comment other = (Comment) obj;
+		WorkOrderStatus other = (WorkOrderStatus) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

@@ -44,6 +44,7 @@
 				var selectedValue = "#form-aside-${field}-"+$('#options-${random} option:selected').val();
 				$("#form-aside-${field} .current").hide(200).removeClass("current").addClass("form-aside-hidden")
 				$(selectedValue).show(400).addClass("current").removeClass("form-aside-hidden")
+				if("${field}" == "type") addExpectedLifeYearMonth( $('#form-aside-type .current').children('#expectedLifeTime').val() )
 			});
 		});
 	</script>

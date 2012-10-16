@@ -7,6 +7,7 @@
 			<g:sortableColumn property="${names}" params="[q:q]" title="${message(code: 'entity.name.label')}" />
 			<th><g:message code="entity.description.label"/></th>
 			<g:sortableColumn property="observation" params="[q:q]" title="${message(code: 'entity.observation.label')}" />
+			<th><g:message code="equipmentType.expectedLifeTime.label"/></th>
 			<g:sortableColumn property="addedOn" params="[q:q]" title="${message(code: 'equipment.type.added.on.label')}" />
 			<g:sortableColumn property="lastModifiedOn" params="[q:q]" title="${message(code: 'equipment.type.last.modified.on.label')}" />
 		</tr>
@@ -38,6 +39,9 @@
 				</td>
 				<td>
 					<g:message code="${type.observation.messageCode}.${type.observation.name}"/>
+				</td>
+				<td>
+					${type.expectedLifeTime}
 				</td>
 				<td>
 					${Utils.formatDateWithTime(type?.addedOn)}

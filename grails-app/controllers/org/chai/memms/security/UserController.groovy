@@ -61,6 +61,10 @@ class UserController  extends  AbstractEntityController{
 		return User.class;
 	}
 	
+	def deleteEntity(def entity) {
+		//TODO Check if there are no record associate to this user before deleting
+	}
+	
 	def getTemplate() {
 		return "/entity/user/createUser"
 	}

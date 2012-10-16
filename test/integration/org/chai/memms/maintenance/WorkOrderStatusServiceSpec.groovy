@@ -28,57 +28,31 @@
 package org.chai.memms.maintenance
 
 import java.util.Date;
-import org.chai.memms.security.User;
 
-/**
- * @author Jean Kahigiso M.
- *
- */
-@i18nfields.I18nFields
-public class Comment {
-	User writtenBy
-	Date writtenOn
-	String content
-	
-   static belongsTo = [workOrder: WorkOrder]
-   
-   static constraints ={
-	   writtenBy nullable: false
-	   writtenOn nullable: false, validator:{it <=new Date()}
-	   content nullable:false, blank:false
-   }
-   static mapping ={
-	   table "memms_work_order_comment"
-	   version false
-	   content type:"text"
-	   
-   }
+import org.chai.memms.Initializer;
+import org.chai.memms.IntegrationTests;
+import org.chai.memms.equipment.Equipment;
+import org.chai.memms.maintenance.WorkOrder.Criticality;
+import org.chai.memms.maintenance.WorkOrder.FailureReason;
+import org.chai.memms.maintenance.WorkOrder
+import org.chai.memms.maintenance.WorkOrderStatus.OrderStatus;
 
-	@Override
-	public String toString() {
-		return "Comment [id=" + id + ", writtenBy=" + writtenBy + "]";
-	}  
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this.is(obj))
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Comment other = (Comment) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
+
+class WorkOrderStatusServiceSpec extends IntegrationTests{
+	def workOrderStatusService
+	def "can create using  createWorkOrderStatus method"(){
+		setup:
+		setupLocationTree()
+		setupEquipment()
+		def user = newUser("user", "user")
+		def equipment = Equipment.findBySerialNumber(CODE(123))
+		def workOrder =  new WorkOrder(equipment:equipment,description:"test work order",criticality:Criticality.NORMAL,currentStatus:OrderStatus.OPENATFOSA,addedBy:user,openOn:Initializer.now(),failureReason:FailureReason.NOTSPECIFIED)
+		when:
+		def workOrderStatus = workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATFOSA,user,Initializer.now(),false);
+		workOrder.save(failOnError:true)
+		then:
+		WorkOrder.count() == 1
+		WorkOrder.list()[0].status.status.equals([OrderStatus.OPENATFOSA])
+		WorkOrderStatus.count() == 1
 	}
 }

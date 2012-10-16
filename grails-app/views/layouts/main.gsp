@@ -113,13 +113,16 @@
 					<li><a href="${createLink(controller: 'department', action:'list')}"><g:message code="department.label"/></a></li>
 					<li><a href="${createLink(controller: 'equipmentType', action:'list')}"><g:message code="equipment.type.label"/></a></li>
 					<li><a href="${createLink(controller: 'provider', action:'list')}"><g:message code="header.navigation.manufacturer.and.supplier"/></a></li>
+					<li><a href="${createLink(controller: 'equipment', action:'generalExport')}"><g:message code="equipment.export.label"/></a></li>
+					<li><a href="${createLink(controller: 'role', action:'list')}"><g:message code="role.manage.label"/></a></li>
+					<shiro:hasPermission permission="menu:advanced">
 					<li><a href="${createLink(controller: 'dataLocation', action:'list')}"><g:message code="datalocation.label"/></a></li>
 					<li><a href="${createLink(controller: 'dataLocationType', action:'list')}"><g:message code="datalocation.type.label"/></a></li>
 					<li><a href="${createLink(controller: 'location', action:'list')}"><g:message code="location.label"/></a></li>
 					<li><a href="${createLink(controller: 'locationLevel', action:'list')}"><g:message code="location.level.label"/></a></li>
 					<li><a href="${createLink(controller: 'user', action:'list')}"><g:message code="user.label"/></a></li>
-					<li><a href="${createLink(controller: 'equipment', action:'generalExport')}"><g:message code="equipment.export.label"/></a></li>
-					<li><a href="${createLink(controller: 'role', action:'list')}"><g:message code="role.manage.label"/></a></li>
+					</shiro:hasPermission>
+					
 	         	</ul>
         	 </li>
 		</shiro:hasPermission>

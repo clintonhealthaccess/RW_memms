@@ -25,7 +25,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-import org.codehaus.groovy.grails.resolve.GrailsRepoResolver;
+import org.codehaus.groovy.grails.resolve.GrailsRepoResolver
 
 grails.servlet.version = "2.5" // Change depending on target container compliance (2.5 or 3.0)
 grails.project.class.dir = "target/classes"
@@ -95,6 +95,7 @@ grails.project.dependency.resolution = {
         build ":tomcat:$grailsVersion"
 		compile ":rabbitmq:1.0.0.RC1"
 		compile ":locations:0.2.2-CHAI"
+		//compile ':cloud-foundry:1.2.3'
 		
 		test (":spock:0.6") {changing = false}
 		//		test ":geb:0.7.1"

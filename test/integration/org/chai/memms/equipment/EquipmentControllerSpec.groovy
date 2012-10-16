@@ -2,6 +2,8 @@ package org.chai.memms.equipment
 
 import org.chai.memms.IntegrationTests;
 import org.chai.memms.Initializer;
+import org.chai.memms.equipment.Equipment.Donor;
+import org.chai.memms.equipment.Equipment.PurchasedBy;
 import org.chai.memms.equipment.EquipmentStatus.Status;
 import org.chai.memms.equipment.EquipmentType.Observation;
 import org.chai.location.DataLocation;
@@ -36,7 +38,7 @@ class EquipmentControllerSpec extends IntegrationTests{
 		equipmentController.params.model = "model one"
 		equipmentController.params.room = "ROOM A1"
 		equipmentController.params.expectedLifeTime = 32
-		equipmentController.params.donation = false
+		equipmentController.params.purchaser = PurchasedBy.BYFACILITY
 		equipmentController.params.obsolete = false
 		equipmentController.params.descriptions_en = "test_english_descriptions"
 		equipmentController.params.manufactureDate = Initializer.getDate(1,1,2012)
@@ -46,6 +48,8 @@ class EquipmentControllerSpec extends IntegrationTests{
 		equipmentController.params.type = equipmentType
 		equipmentController.params.manufacturer = manufacture
 		equipmentController.params.supplier = supplier
+		equipmentController.params.expectedLifeTime_years = 1
+		equipmentController.params.expectedLifeTime_months = 3
 		equipmentController.params.dataLocation = DataLocation.list().first()
 		equipmentController.params.status="DISPOSED"
 		equipmentController.params.dateOfEvent=Initializer.now()
@@ -54,6 +58,7 @@ class EquipmentControllerSpec extends IntegrationTests{
 		then:
 		Equipment.count() == 1;
 		Equipment.findBySerialNumber("SERIAL12129").serialNumber.equals("SERIAL12129")
+		Equipment.findBySerialNumber("SERIAL12129").expectedLifeTime == 15
 		Equipment.findByDescriptions_en("test_english_descriptions").getDescriptions(new Locale("en")).equals("test_english_descriptions")
 	}
 	
@@ -79,7 +84,7 @@ class EquipmentControllerSpec extends IntegrationTests{
 		equipmentController.params.model = "model one"
 		equipmentController.params.room = "ROOM A1"
 		equipmentController.params.expectedLifeTime = 32
-		equipmentController.params.donation = true
+		equipmentController.params.purchaser = PurchasedBy.BYFACILITY
 		equipmentController.params.obsolete = false
 		grailsApplication.config.i18nFields.locales.each{
 			equipmentController.params."descriptions_$it" = "test descriptions $it"
@@ -90,6 +95,8 @@ class EquipmentControllerSpec extends IntegrationTests{
 		equipmentController.params.department = department
 		equipmentController.params.type = equipmentType
 		equipmentController.params.manufacturer = manufacture
+		equipmentController.params.expectedLifeTime_years = 1
+		equipmentController.params.expectedLifeTime_months = 3
 		equipmentController.params.supplier = supplier
 		equipmentController.params.dataLocation = DataLocation.list().first()
 		equipmentController.params.status="FORDISPOSAL"
@@ -99,6 +106,7 @@ class EquipmentControllerSpec extends IntegrationTests{
 		then:
 		Equipment.count() == 1;
 		Equipment.findBySerialNumber("SERIAL129").serialNumber.equals("SERIAL129")
+		Equipment.findBySerialNumber("SERIAL129").expectedLifeTime == 15
 		grailsApplication.config.i18nFields.locales.each{
 			Equipment."findByDescriptions_$it"("test descriptions $it").getDescriptions(new Locale("$it")).equals("test descriptions $it")
 		}
@@ -117,15 +125,15 @@ class EquipmentControllerSpec extends IntegrationTests{
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 
-		def equipmentOne = Initializer.newEquipment("SERIAL10",false,false,32,"ROOM A1","2900.23",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),"USD",new Date(),"equipmentModel",DataLocation.findByCode('Kivuye HC'),department,equipmentType,manufacture,supplier)
-		def equipmentTwo = Initializer.newEquipment("SERIAL11",false,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),"EUR",new Date(),"equipmentModel",DataLocation.findByCode('Butaro DH'),department,equipmentType,manufacture,supplier)
+		def equipmentOne = Initializer.newEquipment("SERIAL10",PurchasedBy.BYFACILITY,null,null,false,32,"ROOM A1","2900.23",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),"USD",Initializer.now(),"equipmentModel",DataLocation.findByCode('Kivuye HC'),department,equipmentType,manufacture,supplier)
+		def equipmentTwo = Initializer.newEquipment("SERIAL11",PurchasedBy.BYFACILITY,null,null,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),"EUR",Initializer.now(),"equipmentModel",DataLocation.findByCode('Butaro DH'),department,equipmentType,manufacture,supplier)
 		
-		Initializer.newEquipment("SERIAL12",false,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
-			,Initializer.getDate(10,10,2010),"RWF",new Date(),"equipmentModel",DataLocation.findByCode('Butaro DH'),department,equipmentType,manufacture,supplier)
-		Initializer.newEquipment("SERIAL13",false,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
-			,Initializer.getDate(10,10,2010),"RWF",new Date(),"equipmentModel",DataLocation.findByCode('Butaro DH'),department,equipmentType,manufacture,supplier)
+		Initializer.newEquipment("SERIAL12",PurchasedBy.BYFACILITY,null,null,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+			,Initializer.getDate(10,10,2010),"RWF",Initializer.now(),"equipmentModel",DataLocation.findByCode('Butaro DH'),department,equipmentType,manufacture,supplier)
+		Initializer.newEquipment("SERIAL13",PurchasedBy.BYFACILITY,null,null,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+			,Initializer.getDate(10,10,2010),"RWF",Initializer.now(),"equipmentModel",DataLocation.findByCode('Butaro DH'),department,equipmentType,manufacture,supplier)
 	
 		
 		def List<Equipment> equipmentsOne, equipmentsTwo, equipmentsThree
@@ -159,7 +167,7 @@ class EquipmentControllerSpec extends IntegrationTests{
 		equipmentController.summaryPage()
 		
 		then:
-		equipmentController.response.redirectedUrl == '/equipment/list/' + User.findByUsername('user').location.id
+		equipmentController.response.redirectedUrl == '/equipment/list?dataLocation.id=' + User.findByUsername('user').location.id
 	}
 	
 	def "does not redirects to listing when accessing summary page by a user with a location"(){
@@ -191,20 +199,20 @@ class EquipmentControllerSpec extends IntegrationTests{
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 
-		def equipmentOne = Initializer.newEquipment("SERIAL10",true,false,32,"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),"",new Date(),"equipmentModel",DataLocation.findByCode('Kivuye HC'),department,equipmentType,manufacture,supplier)
-		def equipmentTwo = Initializer.newEquipment("SERIAL11",false,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),"EUR",new Date(),"equipmentModel",DataLocation.findByCode('Butaro DH'),department,equipmentType,manufacture,supplier)
-		Initializer.newEquipment("SERIAL12",false,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
-			,Initializer.getDate(10,10,2010),"EUR",new Date(),"equipmentModel",DataLocation.findByCode('Butaro DH'),department,equipmentType,manufacture,supplier)
-		Initializer.newEquipment("SERIAL13",false,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
-			,Initializer.getDate(10,10,2010),"EUR",new Date(),"equipmentModel",DataLocation.findByCode('Butaro DH'),department,equipmentType,manufacture,supplier)
+		def equipmentOne = Initializer.newEquipment("SERIAL10",PurchasedBy.BYDONOR,Donor.MOHPARTNER,"CHAI",false,32,"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),"",Initializer.now(),"equipmentModel",DataLocation.findByCode('Kivuye HC'),department,equipmentType,manufacture,supplier)
+		def equipmentTwo = Initializer.newEquipment("SERIAL11",PurchasedBy.BYFACILITY,null,null,false,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),"EUR",Initializer.now(),"equipmentModel",DataLocation.findByCode('Kivuye HC'),department,equipmentType,manufacture,supplier)
+		Initializer.newEquipment("SERIAL12",PurchasedBy.BYMOH,null,null,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+			,Initializer.getDate(10,10,2010),"EUR",Initializer.now(),"equipmentModel",DataLocation.findByCode('Butaro DH'),department,equipmentType,manufacture,supplier)
+		Initializer.newEquipment("SERIAL13",PurchasedBy.BYMOH,null,null,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+			,Initializer.getDate(10,10,2010),"EUR",Initializer.now(),"equipmentModel",DataLocation.findByCode('Butaro DH'),department,equipmentType,manufacture,supplier)
 	
 		
 		def List<Equipment> equipmentsOne, equipmentsTwo, equipmentsThree
 		def equipmentStatusOneActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("admin"),Status.INSTOCK,equipmentOne,false,[:])
-		def equipmentStatusOneInActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentOne,true,[:])
-		def equipmentStatusTwo = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("admin"),Status.DISPOSED,equipmentOne,true,[:])
+		def equipmentStatusOneInActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("admin"),Status.DISPOSED,equipmentOne,true,[:])
+		def equipmentStatusTwo = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentOne,true,[:])
 		
 		equipmentOne.addToStatus(equipmentStatusOneInActive).save(failOnError:true,flush: true)
 		equipmentOne.addToStatus(equipmentStatusOneActive).save(failOnError:true,flush: true)
@@ -217,7 +225,7 @@ class EquipmentControllerSpec extends IntegrationTests{
 		equipmentController.params.manufacturer = manufacture
 		equipmentController.params.supplier = supplier
 		equipmentController.params.obsolete = "false"
-		equipmentController.params.donated = "true"
+		equipmentController.params.purchaser = PurchasedBy.BYFACILITY
 		equipmentController.params.status = Status.OPERATIONAL
 		equipmentController.filter()
 		
@@ -242,7 +250,7 @@ class EquipmentControllerSpec extends IntegrationTests{
 		commandFilter.manufacturer = manufacture
 		commandFilter.supplier = supplier
 		commandFilter.status = Status.DISPOSED
-		commandFilter.donated = "false"
+		commandFilter.purchaser = PurchasedBy.BYFACILITY
 		commandFilter.obsolete = "true"
 		
 		commandFilter.validate()
@@ -289,10 +297,10 @@ class EquipmentControllerSpec extends IntegrationTests{
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 
-		def equipmentOne = Initializer.newEquipment("SERIAL10",true,false,32,"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),"",new Date(),"equipmentModel",DataLocation.findByCode('Kivuye HC'),department,equipmentType,manufacture,supplier)
-		def equipmentTwo = Initializer.newEquipment("SERIAL11",true,false,32,"ROOM A1","",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),"",new Date(),"equipmentModel",DataLocation.findByCode('Butaro DH'),department,equipmentType,manufacture,supplier)		
+		def equipmentOne = Initializer.newEquipment("SERIAL10",PurchasedBy.BYDONOR,Donor.MOHPARTNER,"CHAI",false,32,"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),"",Initializer.now(),"equipmentModel",DataLocation.findByCode('Kivuye HC'),department,equipmentType,manufacture,supplier)
+		def equipmentTwo = Initializer.newEquipment("SERIAL11",PurchasedBy.BYDONOR,Donor.MOHPARTNER,"CHAI",false,32,"ROOM A1","",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),"",Initializer.now(),"equipmentModel",DataLocation.findByCode('Butaro DH'),department,equipmentType,manufacture,supplier)		
 		equipmentOne.save(flush: true)
 		equipmentTwo.save(flush: true)
 			
@@ -321,14 +329,14 @@ class EquipmentControllerSpec extends IntegrationTests{
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 
-		def equipmentOne = Initializer.newEquipment("SERIAL10",false,true,32,"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),"",new Date(),"equipmentModel",DataLocation.findByCode(KIVUYE),department,equipmentType,manufacture,supplier)
-		def equipmentTwo = Initializer.newEquipment("SERIAL11",false,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),"EUR",new Date(),"equipmentModel",DataLocation.findByCode(KIVUYE),department,equipmentType,manufacture,supplier)
-		def equipmentThree = Initializer.newEquipment("SERIAL12",false,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
-			,Initializer.getDate(10,10,2010),"EUR",new Date(),"equipmentModel",DataLocation.findByCode(KIVUYE),department,equipmentType,manufacture,supplier)
-		def equipmentFour = Initializer.newEquipment("SERIAL13",false,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
-			,Initializer.getDate(10,10,2010),"EUR",new Date(),"equipmentModel",DataLocation.findByCode(BUTARO),department,equipmentType,manufacture,supplier)
+		def equipmentOne = Initializer.newEquipment("SERIAL10",PurchasedBy.BYFACILITY,null,null,true,32,"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),"",Initializer.now(),"equipmentModel",DataLocation.findByCode(KIVUYE),department,equipmentType,manufacture,supplier)
+		def equipmentTwo = Initializer.newEquipment("SERIAL11",PurchasedBy.BYMOH,null,null,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),"EUR",Initializer.now(),"equipmentModel",DataLocation.findByCode(KIVUYE),department,equipmentType,manufacture,supplier)
+		def equipmentThree = Initializer.newEquipment("SERIAL12",PurchasedBy.BYFACILITY,null,null,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+			,Initializer.getDate(10,10,2010),"EUR",Initializer.now(),"equipmentModel",DataLocation.findByCode(KIVUYE),department,equipmentType,manufacture,supplier)
+		def equipmentFour = Initializer.newEquipment("SERIAL13",PurchasedBy.BYFACILITY,null,null,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+			,Initializer.getDate(10,10,2010),"EUR",Initializer.now(),"equipmentModel",DataLocation.findByCode(BUTARO),department,equipmentType,manufacture,supplier)
 	
 		
 		def List<Equipment> equipmentsOne, equipmentsTwo, equipmentsThree
@@ -344,8 +352,6 @@ class EquipmentControllerSpec extends IntegrationTests{
 		equipmentThree.addToStatus(equipmentStatusOneActive).save(failOnError:true,flush: true)
 		equipmentFour.warranty=warranty
 		equipmentFour.addToStatus(equipmentStatusTwo).save(failOnError:true,flush: true)
-		
-		
 
 		equipmentController = new EquipmentController();
 		when:
@@ -355,7 +361,7 @@ class EquipmentControllerSpec extends IntegrationTests{
 		equipmentController.params.manufacturer = manufacture
 		equipmentController.params.supplier = supplier
 		equipmentController.params.obsolete = "true"
-		equipmentController.params.donated = "fasle"
+		equipmentController.params.purchaser = PurchasedBy.BYFACILITY
 		equipmentController.params.status = Status.OPERATIONAL
 		equipmentController.export()
 		

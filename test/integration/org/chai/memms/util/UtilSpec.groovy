@@ -17,7 +17,7 @@ class UtilSpec extends IntegrationTests{
 	
 	def "get maximum date"() {
 		setup:
-		Date now = new Date()
+		def newDate = Initializer.getDate(1, 1, 2010)
 		Date cleanedMaximumDate
 		when:
 		cleanedMaximumDate = Utils.getMaxDateFromDateTime(now)

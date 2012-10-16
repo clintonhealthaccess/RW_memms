@@ -56,6 +56,7 @@ class EquipmentType {
 	String code
 	String names
 	String descriptions
+	Integer expectedLifeTime
 	Observation observation
 	
 	Date addedOn
@@ -71,6 +72,8 @@ class EquipmentType {
 		names nullable: true, blank: true
 		descriptions nullable: true, blank: true
 		
+		expectedLifeTime nullable: true
+		
 		addedOn nullable: false, blank: false, validator:{it <= new Date()}
 		lastModifiedOn nullable: false, blank: false, validator:{it <= new Date()}
 		
@@ -80,11 +83,6 @@ class EquipmentType {
 	static mapping = {
 		table "memms_equipment_type"
 		version false
-		descriptions_en type: 'text'
-		descriptions_fr type: 'text'
-		names_en type: 'text'
-		names_fr type: 'text'
-		
 	}
 	
 	String toString() {

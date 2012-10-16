@@ -30,7 +30,7 @@ package org.chai.memms.maintenance
 import org.chai.location.DataLocation
 import org.chai.memms.equipment.Equipment
 import org.chai.memms.maintenance.WorkOrder.Criticality
-import org.chai.memms.maintenance.WorkOrder.OrderStatus
+import org.chai.memms.maintenance.WorkOrderStatus.OrderStatus
 import org.chai.memms.security.User;
 import org.chai.memms.util.Utils;
 
@@ -62,7 +62,7 @@ class WorkOrderService {
 	 * @param params
 	 * @return
 	 */
-	public List<WorkOrder> searchWorkOrder(String text,DataLocation location,Equipment workOrdersEquipment,Map<String, String> params) {
+	public List<WorkOrder> searchWorkOrder(String text,DataLocation dataLocation,Equipment workOrdersEquipment,Map<String, String> params) {
 		def dbFieldTypeNames = 'names_'+languageService.getCurrentLanguagePrefix();
 		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
 		def criteria = WorkOrder.createCriteria()
@@ -70,12 +70,13 @@ class WorkOrderService {
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(workOrdersEquipment)  
 				eq('equipment',workOrdersEquipment)
-			if(location) 
-				equipment{eq('dataLocation',location)}
+			if(dataLocation) 
+				equipment{eq('dataLocation',dataLocation)}
 			or{
 				ilike("description","%"+text+"%")
 				equipment{
 					or{
+						ilike("code","%"+text+"%")
 						ilike("serialNumber","%"+text+"%")
 						ilike(dbFieldDescriptions,"%"+text+"%")
 						type{
@@ -103,60 +104,52 @@ class WorkOrderService {
 	 * @param assistaceRequested
 	 * @param open
 	 * @param criticality
-	 * @param status
+	 * @param currentStatus
 	 * @param params
 	 * @return
 	 */
-	List<WorkOrder> filterWorkOrders(DataLocation dataLocation,Equipment workOrdersEquipment, Date openOn, Date closedOn, Boolean assistaceRequested,
-	Criticality criticality, OrderStatus status,Map<String, String> params) {
+	List<WorkOrder> filterWorkOrders(def dataLocation,def workOrdersEquipment,def openOn,def closedOn,def criticality,def currentStatus,def params) {
 		def criteria = WorkOrder.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(dataLocation)
-				equipment{
-					eq('dataLocation',dataLocation)
-				}
-				
+				equipment{ eq('dataLocation',dataLocation)}
 			if(workOrdersEquipment)
 				eq("equipment",workOrdersEquipment)
 			if(openOn)
-				ge("openOn",Utils.getMinDateFromDateTime(openOn))
+				between("openOn",Utils.getMinDateFromDateTime(openOn),Utils.getMaxDateFromDateTime(openOn))
 			if(closedOn)
-				le("closedOn",Utils.getMaxDateFromDateTime(closedOn))
-			if(assistaceRequested)
-				eq("assistaceRequested",assistaceRequested)
+				between("closedOn",Utils.getMinDateFromDateTime(closedOn),Utils.getMaxDateFromDateTime(closedOn))
 			if(criticality && criticality != Criticality.NONE)
 				eq("criticality",criticality)
-			if(status && status != OrderStatus.NONE)
-				eq("status",status)
+			if(currentStatus && currentStatus != OrderStatus.NONE)
+				eq("currentStatus",currentStatus)
 		}
 	}
 	
 	def escalateWorkOrder(WorkOrder workOrder,String content, User escalatedBy){
-		if(workOrder.assistaceRequested)
-			notificationService.sendNotifications(workOrder,"${content}\nPlease follow up on this work order.",escalatedBy)
-		else{
-			workOrder.assistaceRequested = true
-			workOrder.save(flush:true,failOnError: true)
-			notificationService.newNotification(workOrder,"${content}\nPlease follow up on this work order.",escalatedBy,true)
-		}
+		workOrder.currentStatus = OrderStatus.OPENATMMC
+		WorkOrderStatus status = new WorkOrderStatus(workOrder:workOrder,status:OrderStatus.OPENATMMC,escalation:true,changedBy:escalatedBy,changeOn:new Date())
+		workOrder.addToStatus(status)
+		workOrder.save(failOnError:true)
+		if(status)
+			notificationService.newNotification(workOrder,content,escalatedBy,true)
 	}
 	
 	List<WorkOrder> getWorkOrdersByEquipment(Equipment equipment, Map<String, String> params){
 		def criteria = WorkOrder.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			if(equipment)
-				eq("equipment",equipment)
+			eq("equipment",equipment)
 		}
 	}
 	
-	List<WorkOrder> getWorkOrdersByCalculationLocation(CalculationLocation location,List<DataLocationType> types, Map<String, String> params){
+	List<WorkOrder> getWorkOrdersByCalculationLocation(CalculationLocation location, Map<String, String> params){
 		def equipments =[]
 		def criteria = WorkOrder.createCriteria();
 		
 		if(location instanceof DataLocation)
 			equipments = equipmentService.getEquipmentsByDataLocation(location, [:])
 		else{
-			def dataLocations = locationService.getDataLocations(null,(types)? types:null)
+			def dataLocations = location.getDataLocations(null,null)
 			for(DataLocation dataLocation: dataLocations)
 				equipments.addAll( equipmentService.getEquipmentsByDataLocation(dataLocation, [:]))
 		}

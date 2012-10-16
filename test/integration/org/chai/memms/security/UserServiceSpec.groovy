@@ -31,9 +31,15 @@ import java.util.Map;
 
 import org.chai.memms.Initializer;
 import org.chai.memms.IntegrationTests;
+import org.chai.memms.equipment.Equipment;
+import org.chai.memms.maintenance.WorkOrder;
+import org.chai.memms.maintenance.WorkOrder.Criticality;
+import org.chai.memms.maintenance.WorkOrder.FailureReason;
+import org.chai.memms.maintenance.WorkOrderStatus.OrderStatus;
 import org.chai.memms.security.User.UserType;
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocation;
+import org.chai.location.Location;
 
 /**
  * @author Jean Kahigiso M.
@@ -99,5 +105,53 @@ class UserServiceSpec extends IntegrationTests{
 		then:
 		usersOne.size()==1
 		usersTwo.size()==1
+	}
+	
+	def "get notification group"(){
+		setup:
+		setupLocationTree()
+		setupEquipment()
+		def sender = newUser("sender", true,true)
+		sender.userType = UserType.DATACLERK
+		sender.location = DataLocation.findByCode(KIVUYE)
+		sender.save(failOnError:true)
+		
+		def receiverFacilityOne = newUser("receiverFacilityOne", true,true)
+		receiverFacilityOne.userType = UserType.TECHNICIANFACILITY
+		receiverFacilityOne.location = DataLocation.findByCode(KIVUYE)
+		receiverFacilityOne.save(failOnError:true)
+		
+		def receiverFacilityTwo = newUser("receiverFacilityTwo", true,true)
+		receiverFacilityTwo.userType = UserType.TECHNICIANFACILITY
+		receiverFacilityTwo.location = DataLocation.findByCode(KIVUYE)
+		receiverFacilityTwo.save(failOnError:true)
+		
+		def receiverMoHOne = newUser("receiverMoHOne", true,true)
+		receiverMoHOne.userType = UserType.TECHNICIANMOH
+		receiverMoHOne.location = Location.findByCode(RWANDA)
+		receiverMoHOne.save(failOnError:true)
+		
+		def receiverMoHTwo = newUser("receiverMoHTwo", true,true)
+		receiverMoHTwo.userType = UserType.TECHNICIANMOH
+		receiverMoHTwo.location = Location.findByCode(RWANDA)
+		receiverMoHTwo.save(failOnError:true)
+		
+		def equipment = Equipment.findBySerialNumber(CODE(123))
+		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,sender,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def userGroupOne,userGroupTwo,userGroupThree,userGroupFour
+//		notificationService.newNotification(workOrderOne, "Send for rapair, one",sender,false)
+//		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacilityOne,false)
+//		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacilityTwo,true)
+
+		when:
+		userGroupOne = userService.getNotificationGroup(workOrder,sender,false)
+		userGroupTwo = userService.getNotificationGroup(workOrder,receiverFacilityOne,false)
+		userGroupThree = userService.getNotificationGroup(workOrder,receiverFacilityTwo,true)
+		userGroupFour = userService.getNotificationGroup(workOrder,receiverMoHTwo,false)
+		then:
+		userGroupOne.size() == 2
+		userGroupTwo.size() == 2
+		userGroupThree.size() == 4
+		userGroupFour.size() == 3
 	}
 }

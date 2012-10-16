@@ -1,4 +1,4 @@
-/**
+/** 
  * Copyright (c) 2012, Clinton Health Access Initiative.
  *
  * All rights reserved.
@@ -13,7 +13,7 @@
  *     * Neither the name of the <organization> nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -25,42 +25,66 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 package org.chai.memms.maintenance
 
 import org.chai.memms.Initializer;
 import org.chai.memms.IntegrationTests;
 import org.chai.memms.equipment.Equipment;
+import org.chai.memms.maintenance.MaintenanceProcess.ProcessType;
 import org.chai.memms.maintenance.WorkOrder.Criticality;
 import org.chai.memms.maintenance.WorkOrder.FailureReason;
 import org.chai.memms.maintenance.WorkOrderStatus.OrderStatus;
+import org.chai.memms.maintenance.WorkOrderStatus
+import org.chai.memms.maintenance.WorkOrder
 import org.chai.memms.security.User;
-import org.chai.location.DataLocationType
-import org.chai.location.Location
 
-class CorrectiveMaintenanceServiceSpec extends IntegrationTests{
-	def correctiveMaintenanceService
-	def "can retrieve all location levels to skip"() {
-		when:
-		def skipLevels = correctiveMaintenanceService.getSkipLocationLevels()
 
-		then:
-		skipLevels.size() == grailsApplication.config.location.sector.skip.level.size()
-	}
+class WorkOrderStatusSpec extends IntegrationTests{
 	
-	def "can retrieve CorrectiveMaintenances from a location, given a DataLocationType to filter on"() {
+	def "can create a workOrderStatus"(){
 		setup:
 		setupLocationTree()
 		setupEquipment()
 		def user = newUser("user", "user")
 		def equipment = Equipment.findBySerialNumber(CODE(123))
-		def burera= Location.findByCode(BURERA)
-		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,user,Initializer.now(),FailureReason.NOTSPECIFIED, OrderStatus.OPENATFOSA)		
-		def types = grailsApplication.config.site.datalocationtype.checked.collect{ DataLocationType.findByCode(it) }.toSet()
+		def workOrder =  new WorkOrder(equipment:equipment,description:"test work order",criticality:Criticality.NORMAL,currentStatus:OrderStatus.OPENATFOSA,addedBy:user,openOn:Initializer.now(),failureReason:FailureReason.NOTSPECIFIED)
 		when:
-		def correctiveMaintenances = correctiveMaintenanceService.getCorrectiveMaintenancesByLocation(burera,types,[:])
+		def workOrderStatus =  new WorkOrderStatus(workOrder:workOrder,status:OrderStatus.OPENATFOSA,changeOn:Initializer.now(),changedBy:user);
+		workOrder.addToStatus(workOrderStatus)
+		workOrder.save(failOnError:true)
 		then:
-		correctiveMaintenances.correctiveMaintenanceList.size() == 2
-		correctiveMaintenances.totalCount == 2
+		WorkOrder.count() == 1
+		WorkOrder.list()[0].status.status.equals([OrderStatus.OPENATFOSA])
+		WorkOrderStatus.count() == 1
 	}
+	def "escalate only when OrderStatus is OPENATMMC"(){
+		setup:
+		setupLocationTree()
+		setupEquipment()
+		def user = newUser("user", "user")
+		def equipment =  Equipment.findBySerialNumber(CODE(123))
+		def workOrder =  new WorkOrder(equipment:equipment,description:"test work order",criticality:Criticality.NORMAL,currentStatus:OrderStatus.OPENATFOSA,addedBy:user,openOn:Initializer.now(),failureReason:FailureReason.NOTSPECIFIED)
+		when:
+		def workOrderStatus =  new WorkOrderStatus(workOrder:workOrder,status:OrderStatus.OPENATFOSA,changeOn:Initializer.now(),changedBy:user);
+		workOrder.addToStatus(workOrderStatus)
+		workOrder.save(failOnError:true)
+		workOrderStatus.escalation =  true
+		workOrderStatus.save()
+		then:
+		WorkOrderStatus.count() == 1
+		workOrderStatus.errors.hasFieldErrors("escalation") == true
+		
+		
+		when:
+		def workOrderStatusOne =  new WorkOrderStatus(workOrder:workOrder,status:OrderStatus.OPENATMMC,changeOn:Initializer.now(),changedBy:user);
+		workOrder.addToStatus(workOrderStatusOne)
+		workOrder.save()
+		workOrderStatusOne.escalation =  false
+		workOrderStatusOne.save()
+		then:
+		WorkOrderStatus.count() == 1
+		workOrderStatusOne.errors.hasFieldErrors("escalation") == true
+		
+	}
+
 }

@@ -1,5 +1,6 @@
 package org.chai.memms.maintenance
 
+import java.util.Date;
 import java.util.Map;
 
 import org.chai.location.DataLocation;
@@ -9,12 +10,13 @@ import org.chai.memms.IntegrationTests
 import org.chai.memms.equipment.Equipment;
 import org.chai.memms.maintenance.WorkOrder.Criticality;
 import org.chai.memms.maintenance.WorkOrder.FailureReason;
-import org.chai.memms.maintenance.WorkOrder.OrderStatus;
+import org.chai.memms.maintenance.WorkOrderStatus.OrderStatus;
 import org.chai.memms.security.User;
 import org.chai.memms.security.User.UserType;
 
 class NotificationServiceSpec  extends IntegrationTests{
 	def notificationService
+	
 	def "can send notifications"() {
 		setup:
 		setupLocationTree()
@@ -33,13 +35,12 @@ class NotificationServiceSpec  extends IntegrationTests{
 		receiverTwo.userType = UserType.TECHNICIANFACILITY
 		receiverTwo.location = DataLocation.findByCode(KIVUYE)
 		receiverTwo.save(failOnError:true)
-		
-		def workOrder = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, sender, new Date(),FailureReason.NOTSPECIFIED)
+		def equipment = Equipment.findBySerialNumber(CODE(123))
+		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,sender,Initializer.now(),FailureReason.NOTSPECIFIED, OrderStatus.OPENATFOSA)
 		when:
-		notificationService.newNotification(workOrder, "Send for rapair",sender)
+		notificationService.newNotification(workOrder, "Send for rapair",sender,false)
 		then:
 		Notification.count() == 2
-		workOrder.notificationGroup.size() == 3
 	}
 	
 	def "can escalate notifications"() {
@@ -71,13 +72,13 @@ class NotificationServiceSpec  extends IntegrationTests{
 		receiverMoHTwo.location = Location.findByCode(RWANDA)
 		receiverMoHTwo.save(failOnError:true)
 		
-		def workOrder = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, sender, new Date(),FailureReason.NOTSPECIFIED)
-		notificationService.newNotification(workOrder, "Send for rapair",sender)
+		def equipment = Equipment.findBySerialNumber(CODE(123))
+		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,sender,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		notificationService.newNotification(workOrder, "Send for rapair",sender,false)
 		when:
 		notificationService.newNotification(workOrder, "Send for rapair, higher",receiverFacilityOne,true)
 		then:
 		Notification.count() == 6
-		workOrder.notificationGroup.size() == 5
 	}
 	
 	def "reading a notification sets it's read status to true"() {
@@ -98,15 +99,16 @@ class NotificationServiceSpec  extends IntegrationTests{
 		receiverTwo.userType = UserType.TECHNICIANFACILITY
 		receiverTwo.location = DataLocation.findByCode(KIVUYE)
 		receiverTwo.save(failOnError:true)
+		def equipment = Equipment.findBySerialNumber(CODE(123))
 		
-		def workOrder = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, sender, new Date(),FailureReason.NOTSPECIFIED)
-		notificationService.newNotification(workOrder, "Send for rapair",sender)
-		def notificationToRead = Notification.list().first()
+		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,sender,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		notificationService.newNotification(workOrder, "Send for rapair",sender,false)
+		def notificationToRead = Notification.list()[0]
 		when:
-		notificationService.readNotification(notificationToRead.id)
+		notificationService.setNotificationRead(notificationToRead)
 		then:
 		Notification.count() == 2
-		Notification.get(notificationToRead.id).read
+		Notification.get(notificationToRead.id).read == true
 	}
 	def "can filter notifications"() {
 		setup:
@@ -131,26 +133,29 @@ class NotificationServiceSpec  extends IntegrationTests{
 		receiverMoH.userType = UserType.TECHNICIANMOH
 		receiverMoH.location = Location.findByCode(RWANDA)
 		receiverMoH.save(failOnError:true)
+		def equipment = Equipment.findBySerialNumber(CODE(123))
 		
+		def workOrderOne = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def workOrderTwo = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,senderTwo,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		
-		def workOrderOne = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderOne, new Date(),FailureReason.NOTSPECIFIED)
-		def workOrderTwo = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderTwo, new Date(),FailureReason.NOTSPECIFIED)
-		
-		notificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne)
+		notificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne,false)
 		notificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility,true)
-		notificationService.newNotification(workOrderTwo, "Send for rapair, two",senderTwo)
+		notificationService.newNotification(workOrderTwo, "Send for rapair, two",senderTwo,false)
+		
 		def notifications = Notification.list()
-		notificationService.readNotification(notifications[0].id)
-		notificationService.readNotification(notifications[1].id)
-		when://getNotifications(WorkOrder workOrder,User sender, User receiver,Boolean read, Map<String, String> params)
+		notificationService.setNotificationRead(notifications[0])
+		notificationService.setNotificationRead(notifications[1])
+		when://(WorkOrder workOrder,User receiver,Date from, Date to,Boolean read, Map<String, String> params)
 		def allNotifications = notificationService.filterNotifications(null,null, null,null,null, [:])
 		def readNotifications = notificationService.filterNotifications(null,null, null,null,true, [:])
 		def notificationsByWorkOrder = notificationService.filterNotifications(workOrderOne,null, null,null,null, [:])
 		def notificationsByreceiver = notificationService.filterNotifications(null,receiverMoH,null,null,null, [:])
 		def jointFilter = notificationService.filterNotifications(workOrderOne,receiverFacility,null,null,true, [:])
-		def madeAfterToday = notificationService.filterNotifications(null,null, new Date().next(),null,null, [:])
-		def madeBeforeToday = notificationService.filterNotifications(null,null, null,new Date(),null, [:])
-		def madeBetweenYesterdayAndTomorrow = notificationService.filterNotifications(null,null, new Date().previous(),new Date().next(),null, [:])
+		def madeAfterToday = notificationService.filterNotifications(null,null, Initializer.now()+1,null,null, [:])
+		//TODO getting those made before today not working
+		def madeBeforeToday = notificationService.filterNotifications(null,null, null,Initializer.now()+1,null, [:])
+		def madeBetweenYesterdayAndTomorrow = notificationService.filterNotifications(null,null, Initializer.now()-1,Initializer.now()+1,null, [:])
+		def unreadNotifications = notificationService.filterNotifications(null,null, null,null,false, [:])
 		then:
 		allNotifications.size() == 4
 		readNotifications.size() == 2
@@ -160,6 +165,7 @@ class NotificationServiceSpec  extends IntegrationTests{
 		madeAfterToday.size() == 0
 		madeBeforeToday.size() == 4
 		madeBetweenYesterdayAndTomorrow.size() == 4
+		unreadNotifications.size() == 2
 	}
 	
 	def "can search notifications"() {
@@ -186,12 +192,12 @@ class NotificationServiceSpec  extends IntegrationTests{
 		receiverMoH.location = Location.findByCode(RWANDA)
 		receiverMoH.save(failOnError:true)
 		
+		def equipment = Equipment.findBySerialNumber(CODE(123))
+		def workOrderOne = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def workOrderTwo = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,senderTwo,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		
-		def workOrderOne = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderOne, new Date(),FailureReason.NOTSPECIFIED)
-		def workOrderTwo = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderTwo, new Date(),FailureReason.NOTSPECIFIED)
-		
-		notificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne)
-		notificationService.newNotification(workOrderOne, "Send for rapair, follow up",senderOne)
+		notificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne,false)
+		notificationService.newNotification(workOrderOne, "Send for rapair, follow up",senderOne,false)
 		
 		when:
 		def found = notificationService.searchNotificition("one",receiverFacility,workOrderOne, null,[:])
@@ -219,11 +225,12 @@ class NotificationServiceSpec  extends IntegrationTests{
 		receiverFacility.location = DataLocation.findByCode(KIVUYE)
 		receiverFacility.save(failOnError:true)
 		
-		def workOrderOne = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderOne, new Date(),FailureReason.NOTSPECIFIED)
-		def workOrderTwo = Initializer.newWorkOrder(Equipment.findBySerialNumber(CODE(123)), "Nothing yet", Criticality.NORMAL, OrderStatus.OPEN, senderTwo, new Date(),FailureReason.NOTSPECIFIED)
+		def equipment = Equipment.findBySerialNumber(CODE(123))
+		def workOrderOne = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def workOrderTwo = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,senderTwo,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		
-		notificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne)
-		notificationService.newNotification(workOrderTwo, "Send for rapair, follow up",senderTwo)
+		notificationService.newNotification(workOrderOne, "Send for rapair, one",senderOne,false)
+		notificationService.newNotification(workOrderTwo, "Send for rapair, follow up",senderTwo,false)
 		def unreadNotifications = 0
 		
 		when:

@@ -27,7 +27,12 @@
  */
 package org.chai.memms.equipment
 
+import java.util.Set;
+
+import org.chai.location.CalculationLocation;
+import org.chai.location.DataLocationType;
 import org.chai.memms.AbstractEntityController;
+import org.chai.memms.equipment.EquipmentStatus.Status;
 import org.chai.memms.task.EquipmentTypeExportFilter;
 
 /**
@@ -36,7 +41,7 @@ import org.chai.memms.task.EquipmentTypeExportFilter;
  */
 class EquipmentTypeController extends AbstractEntityController{
 	def equipmentTypeService
-	
+
 	def getEntity(def id) {
 		return EquipmentType.get(id);
 	}
@@ -62,83 +67,96 @@ class EquipmentTypeController extends AbstractEntityController{
 		else
 			super.deleteEntity(entity);
 	}
-	
-	def bindParams(def entity) {		
+
+	def bindParams(def entity) {
+		log.debug("Saving type with params:" + params)
 		if(!entity.id){
 			entity.addedOn= new Date()
 			entity.lastModifiedOn= new Date()
 		}else{
 			entity.lastModifiedOn= new Date()
 		}
-		entity.properties = params		
+		entity.properties = params
 	}
 
 	def getExportClass() {
 		return "EquipmentTypeExportTask"
 	}
-	
+
 	def getModel(def entity) {
+		def cmd
+		if(params.cmd) cmd = params.cmd
+		else if(entity.id) cmd =  new ExpectedLifeTimeCommand(expectedLifeTime:entity.expectedLifeTime)
 		[
 			type: entity,
+			cmd:cmd,
 		]
 	}
 	def list = {
 		adaptParamsForList()
 		List<EquipmentType> types = EquipmentType.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc");
 		render(view:"/entity/list",model:[
-			template: "equipmentType/equipmentTypeList",
-			entities: types,
-			entityCount: types.totalCount,
-			code: getLabel(),
-			entityClass: getEntityClass(),
-			names:names,
-			importTask:'EquipmentTypeImportTask',
-			exportTask:'EquipmentTypeExportTask'
-			])
+					template: "equipmentType/equipmentTypeList",
+					entities: types,
+					entityCount: types.totalCount,
+					code: getLabel(),
+					entityClass: getEntityClass(),
+					names:names,
+					importTask:'EquipmentTypeImportTask',
+					exportTask:'EquipmentTypeExportTask'
+				])
 	}
-	
+
 	def search = {
 		adaptParamsForList()
-		List<EquipmentType> types = equipmentTypeService.searchEquipmentType(params['q'], params)	
+		List<EquipmentType> types = equipmentTypeService.searchEquipmentType(params['q'], params)
 		render (view: '/entity/list', model:[
-			template:"equipmentType/equipmentTypeList",
-			entities: types,
-			entityClass: getEntityClass(),
-			entityCount: types.totalCount,,
-			code: getLabel(),
-			q:params['q'],
-			names:names,
-			importTask:'EquipmentTypeImportTask'
-		])
-		
+					template:"equipmentType/equipmentTypeList",
+					entities: types,
+					entityClass: getEntityClass(),
+					entityCount: types.totalCount,,
+					code: getLabel(),
+					q:params['q'],
+					names:names,
+					importTask:'EquipmentTypeImportTask'
+				])
+
 	}
-	
+
 	def getAjaxData = {
 		List<EquipmentType> types = equipmentTypeService.searchEquipmentType(params['term'], [:])
 		render(contentType:"text/json") {
 			elements = array {
 				types.each { type ->
 					elem (
-						key: type.id,
-						value: type.getNames(languageService.getCurrentLanguage()) + ' ['+type.code+']'
-					)
+							key: type.id,
+							value: type.getNames(languageService.getCurrentLanguage()) + ' ['+type.code+']'
+							)
 				}
 			}
 			htmls = array {
 				types.each { type ->
 					elem (
-						key: type.id,
-						html: g.render(template:"/templates/typeFormSide",model:[type:type,label:label,cssClass:"form-aside-hidden",field:'type'])
-					)
+							key: type.id,
+							html: g.render(template:"/templates/typeFormSide",model:[type:type,label:label,cssClass:"form-aside-hidden",field:'type'])
+							)
 				}
 			}
 		}
 	}
-	
+
 	def importer ={
-	
+
 	}
-	
+
+	def validateEntity(def entity) {
+		boolean valid = (!params.cmd.hasErrors())
+		
+		if(valid) entity.expectedLifeTime = params.cmd.expectedLifeTime
+		else if(log.isDebugEnabled()) log.debug("Rejecting expected life time: "+params.cmd.errors)
+		return (valid & entity.validate())
+	}
+
 	def export = {
 		def equipmentTypeExportTask = new EquipmentTypeExportFilter().save(failOnError: true,flush: true)
 		params.exportFilterId = equipmentTypeExportTask.id
@@ -146,4 +164,40 @@ class EquipmentTypeController extends AbstractEntityController{
 		redirect(controller: "task", action: "create", params: params)
 	}
 
+	def save = {ExpectedLifeTimeCommand cmd ->
+		params.cmd = cmd
+		super.save()
+	}
+}
+
+class ExpectedLifeTimeCommand {
+	Integer expectedLifeTime_months
+	Integer expectedLifeTime_years
+
+	public Integer getExpectedLifeTime(){
+		Integer lifeTime
+		if(expectedLifeTime_years){
+			lifeTime = expectedLifeTime_years * 12
+		}
+		if(expectedLifeTime_months){
+			lifeTime = lifeTime? expectedLifeTime_months + lifeTime : expectedLifeTime_months
+		}
+		return lifeTime
+	}
+
+	public void setExpectedLifeTime(Integer newExpectedLifeTime){
+		if(newExpectedLifeTime){
+			expectedLifeTime_years = newExpectedLifeTime >= 12 ? Math.floor( newExpectedLifeTime/12 ) : null
+			expectedLifeTime_months = newExpectedLifeTime % 12 != 0 ? newExpectedLifeTime % 12 : null
+		}
+	}
+
+	static constraints = {
+		expectedLifeTime_months nullable:true
+		expectedLifeTime_years nullable:true
+	}
+
+	String toString() {
+		return "ExpectedLifeTimeCommand[ Years="+expectedLifeTime_years+", Months="+expectedLifeTime_months+" , getExpectedLifeTime="+getExpectedLifeTime() + "]"
+	}
 }

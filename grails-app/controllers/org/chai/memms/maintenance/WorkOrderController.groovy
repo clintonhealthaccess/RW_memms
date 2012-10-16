@@ -41,19 +41,28 @@ import org.chai.memms.equipment.EquipmentStatus.Status;
 import org.chai.memms.maintenance.MaintenanceProcess.ProcessType;
 import org.chai.memms.maintenance.WorkOrder.Criticality;
 import org.chai.memms.maintenance.WorkOrder.FailureReason;
-import org.chai.memms.maintenance.WorkOrder.OrderStatus;
+import org.chai.memms.maintenance.WorkOrderStatus.OrderStatus;
 import org.chai.memms.security.User;
+import org.chai.memms.maintenance.WorkOrderStatus
+import org.chai.memms.maintenance.WorkOrder
+
 
 /**
  * @author Jean Kahigiso M.
  *
  */
 class WorkOrderController extends AbstractEntityController{
+	
 	def workOrderService
 	def grailsApplication
 	def correctiveMaintenanceService
 	def locationService
 	def equipmentStatusService
+	def workOrderStatusService
+	def commentService
+	def maintenanceProcessService
+	def notificationService
+	def userService
 
 	def getEntity(def id) {
 		return WorkOrder.get(id)
@@ -70,7 +79,7 @@ class WorkOrderController extends AbstractEntityController{
 			order:entity,
 			equipments: equipments,
 			currencies: grailsApplication.config.site.possible.currency,
-			closed:(entity.status==OrderStatus.CLOSEDFIXED || entity.status == OrderStatus.CLOSEDFORDISPOSAL)? true:false
+			orderClosed:(entity.currentStatus == OrderStatus.CLOSEDFIXED || entity.currentStatus == OrderStatus.CLOSEDFORDISPOSAL)? true:false
 		]
 	}
 
@@ -78,29 +87,56 @@ class WorkOrderController extends AbstractEntityController{
 		if(!entity.id){
 			entity.addedBy = user
 			entity.openOn = now
-			entity.assistaceRequested = false
-			entity.status = OrderStatus.OPEN
 			entity.failureReason = FailureReason.NOTSPECIFIED
+			entity.currentStatus = OrderStatus.OPENATFOSA
+		}else{
+			entity.lastModifiedOn = now
+			entity.lastModifiedBy = user
+			if(entity.currentStatus == OrderStatus.CLOSEDFIXED || entity.currentStatus == OrderStatus.CLOSEDFORDISPOSAL)
+				entity.closedOn = now
+			else entity.closedOn = null
+			
 		}
+		params.oldStatus = entity.currentStatus
 		entity.properties = params
 	}
-	
-	def saveEntity(def entity) {
-		def currentStatus
-		//Change Equipment Status when creating workorder
-		if(entity.id==null){
-			if(entity.status == OrderStatus.OPEN)
-				currentStatus = equipmentStatusService.createEquipmentStatus(now,user,Status.UNDERMAINTENANCE,entity.equipment,true,now,[:])
-		}else{
-			//Change Equipment Status When closing workorder
-			if(entity.status == OrderStatus.CLOSEDFIXED)
-				currentStatus = equipmentStatusService.createEquipmentStatus(now,user,Status.OPERATIONAL,entity.equipment,true,now,[:])	
-			if(entity.status == OrderStatus.CLOSEDFORDISPOSAL)
-				currentStatus = equipmentStatusService.createEquipmentStatus(now,user,Status.FORDISPOSAL,entity.equipment,true,now,[:])
-		}	
 		
-		entity.save(flush:true)
-		(!currentStatus)?:currentStatus.save(flush:true)
+	def saveEntity(def entity) {
+		def currentEquipmentStatus
+		def currentWorkOrderStatus
+		def newEntity = false
+		def escalation = false
+		def users = []
+		
+		//Change Equipment Status and Create first workOrderStatus to the new workOrder
+		if(entity.id==null){
+			newEntity=true
+			currentEquipmentStatus = equipmentStatusService.createEquipmentStatus(now,user,Status.UNDERMAINTENANCE,entity.equipment,true,now,[:])
+			currentWorkOrderStatus = workOrderStatusService.createWorkOrderStatus(entity,OrderStatus.OPENATFOSA,user,now,escalation)
+		}else{
+			if(log.isDebugEnabled()) log.debug("Old status stored in params: "+params.oldStatus)
+			//If status has be changed
+			if(entity.currentStatus != params.oldStatus){
+				//Escalate
+				if(entity.currentStatus == OrderStatus.OPENATMMC && params.oldStatus == OrderStatus.OPENATFOSA) escalation = true			
+				//Change Equipment Status When closing workorder
+				if(entity.currentStatus == OrderStatus.CLOSEDFIXED)
+					currentEquipmentStatus = equipmentStatusService.createEquipmentStatus(now,user,Status.OPERATIONAL,entity.equipment,true,now,[:])
+				if(entity.currentStatus == OrderStatus.CLOSEDFORDISPOSAL)
+					currentEquipmentStatus = equipmentStatusService.createEquipmentStatus(now,user,Status.FORDISPOSAL,entity.equipment,true,now,[:])
+				currentWorkOrderStatus = workOrderStatusService.createWorkOrderStatus(entity,entity.currentStatus,user,now,escalation)
+			}
+		}
+		
+		entity.save(failOnError: true)
+		if(log.isDebugEnabled()) log.debug("Created WorkOrder: "+entity)
+		if(newEntity || escalation){ //TODO define default message
+			users = userService.getNotificationGroup(entity,user,escalation)
+			notificationService.sendNotifications(entity,message(code:"workorder.creation.default.message"),user,users)
+		}
+		(!currentEquipmentStatus)?:currentEquipmentStatus.save(flush:true)
+		(!currentWorkOrderStatus)?:currentWorkOrderStatus.save(flush:true)
+		
 	}
 
 	def getTemplate() {
@@ -120,17 +156,13 @@ class WorkOrderController extends AbstractEntityController{
 		List<WorkOrder> orders= []
 		Equipment equipment = null
 		CalculationLocation  location = null
-		if(params["location"]) location = CalculationLocation.get(params.int("location.id"))
-		if(params["equipment"]) equipment = Equipment.get(params.int("equipment.id"))
+		if(params["dataLocation.id"]) location = CalculationLocation.get(params.int("dataLocation.id"))
+		if(params["equipment.id"]) equipment = Equipment.get(params.int("equipment.id"))
 		
 		if(location)
-			orders = workOrderService.getWorkOrdersByCalculationLocation(location, orders, params)
-			
-		if(equipment){
+			orders = workOrderService.getWorkOrdersByCalculationLocation(location,params)	
+		if(equipment)
 		 	orders= workOrderService.getWorkOrdersByEquipment(equipment,params)
-		}else{
-			orders= workOrderService.getWorkOrdersByEquipment(null,params)
-		}
 
 		render(view:"/entity/list", model:[
 					template:"workorder/workOrderList",
@@ -145,7 +177,7 @@ class WorkOrderController extends AbstractEntityController{
 	}
 
 	def summaryPage = {
-		if(user.location instanceof DataLocation) redirect(uri: "/workOrder/list/" + user.location.id)
+		if(user.location instanceof DataLocation) redirect (controller: "workOrder", action: "list",params:['dataLocation.id':user.location.id])
 
 		def location = Location.get(params.int('location'))
 		def dataLocationTypesFilter = getLocationTypes()
@@ -185,12 +217,8 @@ class WorkOrderController extends AbstractEntityController{
 			response.sendError(404)
 		else {
 				if (log.isDebugEnabled()) log.debug("addProcess params: "+params)
-				def process = newProcess(order,type,value,now,user)	
-				if(process!=null){
-					order.addToProcesses(process)
-					order.lastModifiedOn = now
-					order.lastModifiedBy = user
-					order.save(flush:true)
+				maintenanceProcessService.addProcess(order,type,value,now,user)	
+				if(order!=null){
 					result=true
 					def processes = (type==ProcessType.ACTION)? order.actions:order.materials
 					html = g.render(template:"/templates/processList",model:[processes:processes,type:type.name])
@@ -207,13 +235,8 @@ class WorkOrderController extends AbstractEntityController{
 		if(!process) response.sendError(404)
 		else{
 			type = process.type
-			WorkOrder order = process.workOrder
+			WorkOrder order = maintenanceProcessService.deleteProcess(process,now,user)
 			result = true
-			order.processes.remove(process)
-			process.delete()
-			order.lastModifiedOn = now
-			order.lastModifiedBy = user
-			order.save(flush:true)
 			def processes = (type==ProcessType.ACTION)? order.actions:order.materials
 			html = g.render(template:"/templates/processList",model:[processes:processes,type:type.name])
 		}
@@ -228,7 +251,7 @@ class WorkOrderController extends AbstractEntityController{
 		if (order == null || content.equals("") )
 			response.sendError(404)
 		else {
-			def comment = newComment(order,user, now,content)
+			def comment = commentService.createComment(order,user, now,content)
 			if(comment==null) response.sendError(404)
 			else{ 
 				order.addToComments(comment)
@@ -241,18 +264,24 @@ class WorkOrderController extends AbstractEntityController{
 		}
 		render(contentType:"text/json") { results = [result,html] }
 	}
-	//TODO not complete
-	def escalate ={
-		WorkOrder order = WorkOrder.get(params.int("order.id"))
-		def content = "Please review work order on equipment serial number: ${order.equipment.serialNumber}"
+
+	
+	def escalate = {
+		WorkOrder order = WorkOrder.get(params.int("order"))
 		def result = false
+		def html = ""
 		if (order == null)
 			response.sendError(404)
 		else {
-			def sent = workOrderService.escalateWorkOrder(order,content, user)
+			def equipment = order.equipment
+			//TODO define default escalation message
+			def content = "Please review work order on equipment serial number: ${order.equipment.code}"
+			workOrderService.escalateWorkOrder(order, content, user)
 			result=true 
+			def orders= workOrderService.getWorkOrdersByEquipment(equipment,[:])
+			html = g.render(template:"/entity/workorder/workOrderList",model:[equipment:equipment,entities:orders])
 		}
-		render(contentType:"text/json") { results = [result] }
+		render(contentType:"text/json") { results = [result,html] }
 	}
 
 	def getWorkOrderClueTipsAjaxData = {
@@ -280,20 +309,13 @@ class WorkOrderController extends AbstractEntityController{
 		render(contentType:"text/json") { results = [result,html] }
 	}
 	
-	def newProcess(def workOrder,def type,def name,def addedOn,def addedBy){
-		return new MaintenanceProcess(workOrder:workOrder,type: type,name:name,addedOn:addedOn,addedBy:addedBy).save(failOnError:true, flush:true);
-	}
-	def newComment(def workOrder, def writtenBy, def writtenOn, def content){
-		return new Comment(workOrder: workOrder, writtenBy: writtenBy, writtenOn: writtenOn, content: content ).save(failOnError: true, flush:true)
-	}
-
 	def search = {
 		adaptParamsForList()
 		Equipment equipment = null
 		DataLocation dataLocation = null
-		if(params["equipment"]){
+		if(params["equipment.id"]){
 			equipment = Equipment.get(params.long("equipment.id"))
-		}else if(params["dataLocation"]){
+		}else if(params["dataLocation.id"]){
 			dataLocation = DataLocation.get(params.long('dataLocation.id'))
 		}
 		List<WorkOrder> workOrders = workOrderService.searchWorkOrder(params['q'],dataLocation,equipment,params)
@@ -312,7 +334,7 @@ class WorkOrderController extends AbstractEntityController{
 	def filter = { FilterWorkOrderCommand cmd ->
 		if(log.isDebugEnabled()) log.debug(cmd)
 		adaptParamsForList()
-		List<WorkOrder> orders = workOrderService.filterWorkOrders(cmd.dataLocation,cmd.equipment,cmd.openOn,cmd.closedOn,cmd.getAssistanceStatus(),cmd.criticality,cmd.status,params)
+		List<WorkOrder> orders = workOrderService.filterWorkOrders(cmd.dataLocation,cmd.equipment,cmd.openOn,cmd.closedOn,cmd.criticality,cmd.currentStatus,params)
 
 		render(view:"/entity/list", model:[
 					template:"workorder/workOrderList",
@@ -332,31 +354,24 @@ class FilterWorkOrderCommand {
 	
 	Date openOn
 	Date closedOn
-	String assistaceRequested
 	Criticality criticality
-	OrderStatus status
+	OrderStatus currentStatus
 	DataLocation dataLocation
 	Equipment equipment
 
-	public boolean getAssistanceStatus(){
-		if(assistaceRequested.equals("true")) return true
-		else if(assistaceRequested.equals("false")) return false
-		else return null
-	}
 
 	static constraints = {
 		dataLocation  nullable:true
 		equipment nullable:true
 		openOn nullable:true
 		closedOn nullable:true
-		assistaceRequested nullable:true
-		status nullable:true
+		currentStatus nullable:true
 		criticality nullable:true
 	}
 
 	String toString() {
-		return "FilterCommand[OrderStatus="+status+", Criticality="+criticality+ 
-		", closedOn="+closedOn+", openOn="+openOn+", Assistance Status="+ getAssistanceStatus() + "]"
+		return "FilterCommand[OrderStatus="+currentStatus+", Criticality="+criticality+ 
+		", closedOn="+closedOn+", openOn="+openOn+"]"
 	}
 }
 

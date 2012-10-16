@@ -30,6 +30,8 @@ package org.chai.memms.equipment
 
 import org.chai.memms.Initializer;
 import org.chai.memms.IntegrationTests;
+import org.chai.memms.equipment.Equipment.Donor;
+import org.chai.memms.equipment.Equipment.PurchasedBy;
 import org.chai.memms.equipment.EquipmentStatus.Status;
 import org.chai.memms.equipment.EquipmentType.Observation;
 import org.chai.location.DataLocation;
@@ -48,12 +50,13 @@ class EquipmentSpec extends IntegrationTests{
 		setup:
 		setupLocationTree()
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
-		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
+		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now(),34)
 		when:
 		def equipment = new Equipment(serialNumber:"test123",manufactureDate:Initializer.getDate(22,07,2010),
 			purchaseDate:Initializer.getDate(22,07,2010),registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,
-			 dataLocation:DataLocation.list().first(),donation:true,obsolete:false,expectedLifeTime:20,
+			 dataLocation:DataLocation.list().first(),purchaser:PurchasedBy.BYDONOR,donor:Donor.MOHPARTNER,donorName:"CHAI",obsolete:false,expectedLifeTime:20,
 			 descriptions:['en':'Equipment Descriptions'], type:equipmentType)
+		equipment.genarateAndSetEquipmentCode()
 
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
@@ -74,15 +77,15 @@ class EquipmentSpec extends IntegrationTests{
 		Equipment.count() == 1
 	}
 
-	def "can't create and save an equipment without a serial number"() {
+	def "can't create and save an equipment without needed fields -  serialNumber, expectedLifeTime, code"() {
 
 		setup:
 		setupLocationTree()
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
-		def equipmentType = Initializer.newEquipmentType(CODE(15810), ["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
-		when:
+		def equipmentType = Initializer.newEquipmentType(CODE(15810), ["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now(),27)
+		when://SerialNumber
 		def equipment = new Equipment(purchaseCost:"1,200",manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),
-				registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,donation:false,obsolete:false,expectedLifeTime:20,
+				registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,purchaser:PurchasedBy.BYFACILITY,obsolete:false,
 				dataLocation:DataLocation.list().first(),descriptions:['en':'Equipment Descriptions'], type:equipmentType)
 
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
@@ -100,18 +103,24 @@ class EquipmentSpec extends IntegrationTests{
 		equipment.save()
 		then:
 		Equipment.count() == 0
+		
 		equipment.errors.hasFieldErrors('serialNumber') == true
+		equipment.errors.hasFieldErrors('expectedLifeTime') == true
+		equipment.errors.hasFieldErrors('code') == true
+		equipment.errors.hasFieldErrors('currency') == true
+		
+		equipment.errors.fieldErrorCount== 4
 	}
 
-	def "can't create and save an equipment with a purchase cost and donation both have value"() {
+	def "can't create and save an equipment with a purchaser is donor not specifying the donor and his name"() {
 
 		setup:
 		setupLocationTree()
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
-		def equipmentType = Initializer.newEquipmentType(CODE(15810), ["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
+		def equipmentType = Initializer.newEquipmentType(CODE(15810), ["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now(),13)
 		when:
 		def equipment = new Equipment(purchaseCost:"200455.8",serialNumber:"test123",manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),
-				registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,donation:true,obsolete:false,expectedLifeTime:20,
+				registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,purchaser:PurchasedBy.BYDONOR,obsolete:false,expectedLifeTime:20,
 				dataLocation:DataLocation.list().first(),descriptions:['en':'Equipment Descriptions'],type:equipmentType)
 
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
@@ -129,7 +138,8 @@ class EquipmentSpec extends IntegrationTests{
 		equipment.save()
 		then:
 		Equipment.count() == 0
-		equipment.errors.hasFieldErrors('purchaseCost') == true
+		equipment.errors.hasFieldErrors('donor') == true
+		equipment.errors.hasFieldErrors('donorName') == true
 	}
 
 	def "can't create and save an equipment with a duplicate serial number"() {
@@ -139,15 +149,15 @@ class EquipmentSpec extends IntegrationTests{
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
-		def equipmentType = Initializer.newEquipmentType(CODE(15810), ["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
+		def equipmentType = Initializer.newEquipmentType(CODE(15810), ["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now(),12)
 		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
-		Initializer.newEquipment("test123",false,false,30,"ROOM A1","16677",['en':"testDescription"],Initializer.getDate(22,07,2010), Initializer.getDate(22,07,2010),"RWF",
+		Initializer.newEquipment("test123",PurchasedBy.BYFACILITY,null,null,false,30,"ROOM A1","16677",['en':"testDescription"],Initializer.getDate(22,07,2010), Initializer.getDate(22,07,2010),"RWF",
 				Initializer.getDate(22,07,2010),"equipmentModel",DataLocation.list().first(),department, equipmentType,manufacture,supplier)
 			
 		when:
 		def equipment = new Equipment(serialNumber:"test123",purchaseCost:"1,200",currency:"USD",manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),
-				registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department, donation:false,obsolete:false,expectedLifeTime:20,
+				registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,purchaser:PurchasedBy.BYMOH,obsolete:false,expectedLifeTime:20,
 				dataLocation:DataLocation.list().first(),descriptions:['en':'Equipment Descriptions'],type:equipmentType)
 
 		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
@@ -162,16 +172,47 @@ class EquipmentSpec extends IntegrationTests{
 		Equipment.count() == 1
 		equipment.errors.hasFieldErrors('serialNumber') == true
 	}
+	
+	def "can't create and save an equipment with a duplicate code"() {
+		
+				setup:
+				setupLocationTree()
+				def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+				def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+				def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
+				def equipmentType = Initializer.newEquipmentType(CODE(15810), ["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now(),12)
+				def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
+				def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
+				def equipmentOne = Initializer.newEquipment("test123",PurchasedBy.BYFACILITY,null,null,false,30,"ROOM A1","16677",['en':"testDescription"],Initializer.getDate(22,07,2010), Initializer.getDate(22,07,2010),"RWF",
+						Initializer.getDate(22,07,2010),"equipmentModel",DataLocation.list().first(),department, equipmentType,manufacture,supplier)
+					
+				when:
+				def equipment = new Equipment(serialNumber:"test123",purchaseCost:"1,200",currency:"USD",manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),
+						registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,purchaser:PurchasedBy.BYMOH,obsolete:false,expectedLifeTime:20,
+						dataLocation:DataLocation.list().first(),descriptions:['en':'Equipment Descriptions'],type:equipmentType,code:equipmentOne.code)
+		
+				def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
+				def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),21,false,[:])
+		
+				equipment.manufacturer=manufacture
+				equipment.supplier=supplier
+				equipment.warranty=warranty
+		
+				equipment.save()
+				then:
+				Equipment.count() == 1
+				equipment.errors.hasFieldErrors('code') == true
+			}
 
 	def "manufacture date must be after today"() {
 
 		setup:
 		setupLocationTree()
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
-		def equipmentType = Initializer.newEquipmentType("15810", ["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
+		def equipmentType = Initializer.newEquipmentType("15810", ["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now(),9)
 		when:
 		def equipment = new Equipment(serialNumber:"test123", purchaseCost:"1,200",currency:"EURO",manufactureDate:Initializer.now().next(),purchaseDate:Initializer.getDate(22,07,2010),
-				registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department, donation:false,obsolete:false,expectedLifeTime:20,
+				registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,purchaser:PurchasedBy.BYFACILITY,obsolete:false,expectedLifeTime:20,
 				dataLocation:DataLocation.list().first(),descriptions:['en':'Equipment Descriptions'],type:equipmentType)
 
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
@@ -197,10 +238,10 @@ class EquipmentSpec extends IntegrationTests{
 		setup:
 		setupLocationTree()
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
-		def equipmentType = Initializer.newEquipmentType("15810", ["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
+		def equipmentType = Initializer.newEquipmentType("15810", ["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now(),56)
 		when:
 		def equipment = new Equipment(serialNumber:"test123", purchaseCost:"1,200",currency:"USD",manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.now().next(),
-				registeredOn:Initializer.getDate(22,07,2010), model:"equipmentModel", department:department, donation:false,obsolete:false,expectedLifeTime:20,
+				registeredOn:Initializer.getDate(22,07,2010), model:"equipmentModel", department:department,purchaser:PurchasedBy.BYMOH,obsolete:false,expectedLifeTime:20,
 				dataLocation:DataLocation.list().first(),descriptions:['en':'Equipment Descriptions'],type:equipmentType)
 
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
@@ -225,12 +266,13 @@ class EquipmentSpec extends IntegrationTests{
 		setup:
 		setupLocationTree()
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
-		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
+		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now(),10)
 		def user  = newUser("admin", "Admin UID")
 		def equipment = new Equipment(serialNumber:"test123",manufactureDate:Initializer.getDate(22,07,2010),
 			purchaseDate:Initializer.getDate(22,07,2010),registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,
-			 dataLocation:DataLocation.list().first(),donation:true,obsolete:false,expectedLifeTime:20,
+			 dataLocation:DataLocation.list().first(),purchaser:PurchasedBy.BYDONOR,donor:Donor.OTHERS,donorName:"Personel",obsolete:false,expectedLifeTime:20,
 			 descriptions:['en':'Equipment Descriptions'], type:equipmentType)
+		equipment.genarateAndSetEquipmentCode()
 
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
@@ -254,19 +296,20 @@ class EquipmentSpec extends IntegrationTests{
 		equipment.save(failOnError: true)
 		then:
 		Equipment.count() == 1
-		Equipment.list()[0].getCurrentStatusBasedOnTime().is(statusOne)
+		Equipment.list()[0].getTimeBasedStatus().is(statusOne)
 	}
 	
 	def "can set current status based on time"(){
 		setup:
 		setupLocationTree()
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
-		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
+		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now(),2)
 		def user  = newUser("admin", "Admin UID")
 		def equipment = new Equipment(serialNumber:"test123", purchaseCost:"1,200",currency:"RWF",manufactureDate:Initializer.getDate(22,07,2010),
 			purchaseDate:Initializer.getDate(22,07,2010),registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,
-			 dataLocation:DataLocation.list().first(),donation:false,obsolete:false,expectedLifeTime:20,
+			 dataLocation:DataLocation.list().first(),purchaser:PurchasedBy.BYFACILITY,obsolete:false,expectedLifeTime:20,
 			 descriptions:['en':'Equipment Descriptions'], type:equipmentType)
+		equipment.genarateAndSetEquipmentCode()
 
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
@@ -290,7 +333,7 @@ class EquipmentSpec extends IntegrationTests{
 		Equipment.list()[0].setCurrentStatus()
 		then:
 		Equipment.count() == 1
-		Equipment.list()[0].getCurrentStatusBasedOnTime().is(statusOne)
+		Equipment.list()[0].getTimeBasedStatus().is(statusOne)
 		statusTwo.current == false
 	}
 	
@@ -298,12 +341,13 @@ class EquipmentSpec extends IntegrationTests{
 		setup:
 		setupLocationTree()
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
-		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
+		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now(),45)
 		def user  = newUser("admin", "Admin UID")
 		def equipment = new Equipment(serialNumber:"test123", purchaseCost:"1,200",currency:"RWF",manufactureDate:Initializer.getDate(22,07,2010),
 			purchaseDate:Initializer.getDate(22,07,2010),registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,
-			 dataLocation:DataLocation.list().first(),donation:false,obsolete:false,expectedLifeTime:20,
+			 dataLocation:DataLocation.list().first(),purchaser:PurchasedBy.BYMOH,obsolete:false,expectedLifeTime:20,
 			 descriptions:['en':'Equipment Descriptions'], type:equipmentType)
+		equipment.genarateAndSetEquipmentCode()
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
 		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)

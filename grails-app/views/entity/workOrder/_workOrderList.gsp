@@ -1,17 +1,18 @@
 <%@ page import="org.chai.memms.util.Utils" %>
 <%@ page import="org.apache.shiro.SecurityUtils" %>
 <%@ page import="org.chai.memms.security.User" %>
+<%@ page import="org.chai.memms.maintenance.WorkOrderStatus.OrderStatus" %>
 <table class="items">
 	<thead>
 		<tr>
 			<th/>
-			<th><g:message code="equipment.serial.number.label"/></th>
-			<th><g:message code="equipment.type.label"/></th>
-			<th><g:message code="work.order.status.label"/></th>
-			<th><g:message code="work.order.criticality.label"/></th>
-			<th><g:message code="work.order.openOn.label"/></th>
-			<th><g:message code="work.order.closedOn.label"/></th>
+			<th><g:message code="equipment.label"/></th>
+			<g:sortableColumn property="currentStatus" defaultOrder="asc" title="${message(code: 'work.order.status.label')}" params="[q:q,'equipment.id':equipment?.id]" />
+			<g:sortableColumn property="criticality" defaultOrder="asc" title="${message(code: 'work.order.criticality.label')}" params="[q:q,'equipment.id':equipment?.id]" />
+			<g:sortableColumn property="openOn" defaultOrder="asc" title="${message(code: 'work.order.openOn.label')}" params="[q:q,'equipment.id':equipment?.id]" />
+			<g:sortableColumn property="closedOn" defaultOrder="asc" title="${message(code: 'work.order.closedOn.label')}" params="[q:q,'equipment.id':equipment?.id]" />
 			<th><g:message code="work.order.description.label"/></th>
+			<th><g:message code="work.order.status.escalation.label"/></th>
 			<th><g:message code="work.order.messages.label"/></th>
 		</tr>
 	</thead>
@@ -32,29 +33,31 @@
 					</ul>
 				</td>
 				<td>
-				<a rel="${createLinkWithTargetURI(controller:'workOrder', action:'getWorkOrderClueTipsAjaxData', params:[id: order.id])}" class="clueTip">
-								${order.equipment.serialNumber}
-							</a>
+					<a rel="${createLinkWithTargetURI(controller:'workOrder', action:'getWorkOrderClueTipsAjaxData', params:[id: order.id])}" class="clueTip">
+						${order.equipment.code}
+					</a>
 					
 				</td>
 				<td>
-					${order.equipment.type.names}
-				</td>
-				<td>
-					${order.status}
+					${message(code: order.currentStatus?.messageCode+'.'+order.currentStatus?.name)}
 				</td>
 				<td>
 					${order.criticality}
 				</td>
 				<td>
-					${order.openOn}
+					${Utils.formatDateWithTime(order.openOn)}
 				</td>
 				<td>
-					${order.closedOn}
+					${Utils.formatDateWithTime(order.closedOn)}
 				</td>
 				<td>
-	  				<button class="escalate next medium gray" id="${order.id}"><g:message code="work.order.escalate.issue.link.label"/></button>
-	  				<img src="${resource(dir:'images',file:'spinner.gif')}" class="ajax-spinner"/>
+					<g:stripHtml field="${order.description}" chars="30"/>
+				</td>
+				<td>
+					<g:if test="${order.currentStatus==OrderStatus.OPENATFOSA}">
+		  				<button class="escalate next medium gray" id="${order.id}"><g:message code="work.order.escalate.issue.link.label"/></button>
+		  				<img src="${resource(dir:'images',file:'spinner.gif')}" class="ajax-spinner"/>
+		  			</g:if>
 				</td>
 				<td>
 					<a href="${createLinkWithTargetURI(controller:'notification', action:'list', params:[id: order.id, read:false])}">${order.getUnReadNotificationsForUser(User.findByUuid(SecurityUtils.subject.principal, [cache: true])).size()}</a>

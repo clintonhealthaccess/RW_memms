@@ -92,7 +92,6 @@ abstract class AbstractEntityController extends AbstractController {
 		def model = getModel(entity)
 		model << [template: getTemplate()]
 		model << [targetURI: getTargetURI()]
-		log.debug("abstract entity model : " + model.each{it})
 		render(view: '/entity/edit', model: model)
 	}
 	
@@ -114,7 +113,7 @@ abstract class AbstractEntityController extends AbstractController {
 		}
 		
 		bindParams(entity)
-		if (log.isDebugEnabled()) log.debug('bound params, entity: '+entity)
+		if (log.isDebugEnabled()) log.debug('bound params, entity: '+entity+" new params = " + params)
 		
 		// TODO this should be not necessary once the unique 
 		// validation constraints is fixed in grails
@@ -139,6 +138,7 @@ abstract class AbstractEntityController extends AbstractController {
 			saveEntity(entity);
 			
 			flash.message = message(code: 'default.saved.message', args: [message(code: getLabel(), default: 'entity'), params.id])
+			log.info ("getTargetURI() ${targetURI}")
 			redirect(url: getTargetURI())
 		}
 	}	

@@ -16,7 +16,7 @@
 		<g:form url="[controller:'provider', action:'save', params:[targetURI: targetURI]]" useToken="true" class="simple-list">
 			<g:input name="code" label="${message(code:'entity.code.label')}" bean="${provider}" field="code"/>
 			<g:selectFromEnum name="type" bean="${provider}" values="${Type.values()}" field="type" label="${message(code:'entity.type.label')}"/>
-			<g:address  bean="${provider}" field="contact"/>	
+			<g:address  bean="${provider}" field="contact"/>
 			<g:if test="${provider.id != null}">
 				<input type="hidden" name="id" value="${provider.id}"></input>
 			</g:if>

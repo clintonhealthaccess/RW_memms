@@ -11,8 +11,10 @@ import org.chai.memms.maintenance.WorkOrder.FailureReason;
 import org.chai.memms.maintenance.WorkOrderStatus.OrderStatus;
 import org.chai.memms.security.User;
 
-class MaintenanceProcessSpec  extends IntegrationTests{
-	def "can create a maintenance process"(){
+class MaintenanceProcessServiceSpec  extends IntegrationTests{
+	def maintenanceProcessService
+	
+	def "can create a maintenance process using create maintenance method"(){
 		setup:
 		setupLocationTree()
 		setupEquipment()
@@ -20,44 +22,35 @@ class MaintenanceProcessSpec  extends IntegrationTests{
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,user, Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		when:
-		new MaintenanceProcess(name:"name test", addedOn:Initializer.now().previous(), addedBy:user, type:ProcessType.ACTION, workOrder:workOrder).save(failOnError:true)
+		def process = maintenanceProcessService.createProcess(workOrder,ProcessType.ACTION,"name test",Initializer.now(),user)
+		process.save()
 		then:
 		MaintenanceProcess.count() == 1
 	}
-
-	def "all required fields needed on maintenance process"(){
+	def "can create a add maintenance process using create process method"(){
 		setup:
 		setupLocationTree()
 		setupEquipment()
 		def user = newUser("user", "user")
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,user, Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-		def maintenanceProcessWithErrors = new MaintenanceProcess()
-		def expectedFieldErrors = ["name","addedOn","addedBy","type","workOrder"]
-
-		when://All required fields in
-		maintenanceProcessWithErrors.save()
+		when:
+		maintenanceProcessService.addProcess(workOrder,ProcessType.ACTION,"name test",Initializer.now(),user)
 		then:
-		maintenanceProcessWithErrors.errors.fieldErrorCount == 5
-		expectedFieldErrors.each{maintenanceProcessWithErrors.errors.hasFieldErrors(it)}
-		MaintenanceProcess.count() == 0
+		MaintenanceProcess.count() == 1
 	}
 	
-	def "maintenance process date should be before or equal to today"(){
+	def "can delete  a maintenance process using delete process method"(){
 		setup:
 		setupLocationTree()
 		setupEquipment()
 		def user = newUser("user", "user")
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,user, Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-		def maintenanceProcessWithErrors
-		expect:
-		MaintenanceProcess.count() == 0
+		maintenanceProcessService.addProcess(workOrder,ProcessType.ACTION,"name test",Initializer.now(),user)
 		when:
-		maintenanceProcessWithErrors = new MaintenanceProcess(name:"name test date error", addedOn:new Date().next(), addedBy:user, type:ProcessType.ACTION, workOrder:workOrder)
-		maintenanceProcessWithErrors.save()
+		maintenanceProcessService.deleteProcess(workOrder.processes.asList()[0],Initializer.now(),user)
 		then:
 		MaintenanceProcess.count() == 0
-		maintenanceProcessWithErrors.errors.hasFieldErrors("addedOn") == true
 	}
 }

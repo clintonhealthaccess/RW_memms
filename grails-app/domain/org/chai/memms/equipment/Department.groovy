@@ -52,10 +52,6 @@ class Department {
 	static mapping = {
 		table "memms_department"
 		version false
-		names_en type: "text"
-		names_fr type: "text"
-		descriptions_en type: "text"
-		descriptions_fr type: "text"
 	}
 	
 	@Override

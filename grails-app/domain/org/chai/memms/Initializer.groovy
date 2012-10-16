@@ -32,10 +32,12 @@ import org.apache.shiro.crypto.hash.Sha256Hash
 import org.chai.memms.Contact;
 import org.chai.memms.equipment.Department;
 import org.chai.memms.equipment.Equipment;
+import org.chai.memms.equipment.Equipment.Donor;
 import org.chai.memms.equipment.EquipmentStatus;
 import org.chai.memms.equipment.EquipmentType
 import org.chai.memms.equipment.EquipmentType.Observation;
 import org.chai.memms.equipment.Provider
+import org.chai.memms.equipment.Equipment.PurchasedBy;
 import org.chai.memms.equipment.EquipmentStatus.Status;
 import org.chai.memms.equipment.Provider.Type;
 import org.chai.location.CalculationLocation;
@@ -50,7 +52,8 @@ import org.chai.memms.maintenance.Notification;
 import org.chai.memms.maintenance.WorkOrder;
 import org.chai.memms.maintenance.WorkOrder.Criticality;
 import org.chai.memms.maintenance.WorkOrder.FailureReason;
-import org.chai.memms.maintenance.WorkOrder.OrderStatus;
+import org.chai.memms.maintenance.WorkOrderStatus;
+import org.chai.memms.maintenance.WorkOrderStatus.OrderStatus;
 import org.chai.memms.security.Role
 import org.chai.memms.security.User
 import org.chai.memms.security.User.UserType
@@ -60,6 +63,7 @@ public class Initializer {
 		
 	static final String HEALTH_CENTER_GROUP = "Health Center"
 	static final String DISTRICT_HOSPITAL_GROUP = "District Hospital"
+	static final String MILITARY_HOSPITAL_GROUP = "Military Hospital"
 	
 	static final String NATIONAL = "National"
 	static final String PROVINCE = "Province"
@@ -90,10 +94,32 @@ public class Initializer {
 	
 	static def createUsers() {
 		if(!User.count()){
-			//Defining Role			
+			//Default roles
 			def defaultAdminRole = new Role(name: "Admin")
 			defaultAdminRole.addToPermissions("*")
 			defaultAdminRole.save(failOnError: true)
+			
+			def defaultDataClerkRole = new Role(name: "Data Clerk")
+			defaultDataClerkRole.addToPermissions("home:*;menu:home,inventory,correctivemaintenance;account:*;equipmentType:getAjaxData;provider:getAjaxData;department:getAjaxData")
+			defaultDataClerkRole.addToPermissions("equipment:filter,export,summaryPage,index,list,save,create,updateObsolete,edit")
+			defaultDataClerkRole.addToPermissions("workOrder:*")
+			defaultDataClerkRole.addToPermissions("notification:*")
+			defaultDataClerkRole.addToPermissions("Usercation:*")
+			defaultDataClerkRole.addToPermissions("equipmentStatus:list,save,delete,edit,create")
+			defaultDataClerkRole.save(failOnError: true, flush:true)
+			
+			def defaultTechnicianFacilityRole = new Role(name: "Technician Facility")
+			defaultTechnicianFacilityRole.addToPermissions(defaultDataClerkRole.permissionString)
+			defaultTechnicianFacilityRole.addToPermissions("menu:preventivemaintenance,admin;equipment:*")
+			defaultTechnicianFacilityRole.addToPermissions("department:*;equipmentType:*;provider:*;equipment:*")
+			defaultTechnicianFacilityRole.save(failOnError: true, flush:true)
+			
+			def defaultTechnicianMoHRole = new Role(name: "Technician MoH")
+			defaultTechnicianMoHRole.addToPermissions(defaultDataClerkRole.permissionString)
+			defaultTechnicianMoHRole.addToPermissions("menu:preventivemaintenance,admin;equipment:*")
+			defaultTechnicianMoHRole.addToPermissions("department:*;equipmentType:*;provider:*;equipment:*")
+			defaultTechnicianMoHRole.save(failOnError: true, flush:true)
+			//End default roles
 			
 			def defaultClercRole = new Role(name: "Default Clerk")
 			defaultClercRole.addToPermissions("equipment:")
@@ -118,66 +144,52 @@ public class Initializer {
 			faultyClercRole.addToPermissions("equipmentStatus:list;equipmentStatus:save;equipmentStatus:delete;equipmentStatus:edit;equipment:updateObsolete")
 			faultyClercRole.save(failOnError: true)
 			
-			def dataClerkRole = new Role(name: "Data Clerk")
-			dataClerkRole.addToPermissions("home:*;menu:home,inventory,correctivemaintenance;account:*;equipmentType:getAjaxData;provider:getAjaxData;department:getAjaxData")
-			dataClerkRole.addToPermissions("equipment:filter,export,summaryPage,index,list,save,create,updateObsolete")
-			dataClerkRole.addToPermissions("workOrder:filter,summaryPage,index,list,save,create")
-			dataClerkRole.addToPermissions("notification:*")
-			dataClerkRole.addToPermissions("equipmentStatus:list,:save,delete,edit,create")
-			dataClerkRole.save(failOnError: true, flush:true)
 			
-			def technicianFacilityRole = new Role(name: "Technician Facility")
-			technicianFacilityRole.addToPermissions("home:*;menu:home,inventory,correctivemaintenance;account:*;equipment:*")
-			technicianFacilityRole.addToPermissions("")
-			technicianFacilityRole.save(failOnError: true, flush:true)
 			
-			def technicianMoHRole = new Role(name: "Technician MoH")
-			technicianMoHRole.addToPermissions("home:*;menu:home,inventory,correctivemaintenance;account:*;equipment:*")
-			technicianMoHRole.addToPermissions("")
-			technicianMoHRole.save(failOnError: true, flush:true)
 
 			//Defining User
-			//User with admin role
-			def admin = new User(userType: UserType.ADMIN,code:"admin", location: CalculationLocation.findByCode(RWANDA), username: "admin", 
-				firstname: "memms", lastname: "memms", email:'memms@memms.org', passwordHash: new Sha256Hash("admin").toHex(), active: true, 
+			//Default users
+			def admin = new User(userType: UserType.ADMIN, location: CalculationLocation.findByCode(RWANDA), username: "admin", 
+				firstname: "admin", lastname: "admin", email:'memms@memms.org', passwordHash: new Sha256Hash("admin").toHex(), active: true, 
 				confirmed: true, uuid:'admin', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
 			admin.addToRoles(defaultAdminRole)
 			admin.save(failOnError: true)
 			
-			def userClerk= new User(userType: UserType.DATACLERK,code:"user", location: CalculationLocation.findByCode(KIVUYE), username: "user", 
-				firstname: "user", lastname: "user", email:'user@memms.org', passwordHash: new Sha256Hash("user").toHex(), active: true, 
+			def userClerk= new User(userType: UserType.DATACLERK, location: CalculationLocation.findByCode(KIVUYE), username: "user", 
+				firstname: "Data", lastname: "Clerk", email:'user@memms.org', passwordHash: new Sha256Hash("user").toHex(), active: true, 
 				confirmed: true, uuid:'user', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
-			userClerk.addToRoles(dataClerkRole)
+			userClerk.addToRoles(defaultDataClerkRole)
 			userClerk.save(failOnError: true, flush:true)
 			
-			def userTechnicianFacility= new User(userType: UserType.TECHNICIANFACILITY,code:"techf", location: CalculationLocation.findByCode(KIVUYE), username: "techf",
+			def userTechnicianFacility= new User(userType: UserType.TECHNICIANFACILITY, location: CalculationLocation.findByCode(KIVUYE), username: "techf",
 				firstname: "technician", lastname: "facility", email:'techf@memms.org', passwordHash: new Sha256Hash("techf").toHex(), active: true,
 				confirmed: true, uuid:'techf', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
-			userTechnicianFacility.addToRoles(technicianFacilityRole)
+			userTechnicianFacility.addToRoles(defaultTechnicianFacilityRole)
 			userTechnicianFacility.save(failOnError: true, flush:true)
 			
-			def userTechnicianMoH= new User(userType: UserType.TECHNICIANMOH,code:"techMoH", location: CalculationLocation.findByCode(RWANDA), username: "techMoH",
+			def userTechnicianMoH= new User(userType: UserType.TECHNICIANMOH, location: CalculationLocation.findByCode(RWANDA), username: "techMoH",
 				firstname: "technician", lastname: "MoH", email:'techMoH@memms.org', passwordHash: new Sha256Hash("techMoH").toHex(), active: true,
 				confirmed: true, uuid:'techMoH', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
-			userTechnicianMoH.addToRoles(technicianMoHRole)
+			userTechnicianMoH.addToRoles(defaultTechnicianMoHRole)
 			userTechnicianMoH.save(failOnError: true, flush:true)
+			//End default users
 			
 			//User with default clerk role
-			def userClerkOne= new User(userType: UserType.OTHER,code:"userOne", location: CalculationLocation.findByCode(KIVUYE), username: "userOne", 
+			def userClerkOne= new User(userType: UserType.OTHER,location: CalculationLocation.findByCode(KIVUYE), username: "userOne", 
 				firstname: "user", lastname: "user", email:'user@memms.com', passwordHash: new Sha256Hash("user").toHex(), active: true, 
 				confirmed: true, uuid:'userOne', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
 			userClerkOne.addToRoles(defaultClercRole)
 			userClerkOne.save(failOnError: true)
 			
 			//User with faulty clerk role
-			def userClerkTwo= new User(userType: UserType.OTHER,code:"user1", location: CalculationLocation.findByCode(BURERA), username: "user1",
+			def userClerkTwo= new User(userType: UserType.OTHER, location: CalculationLocation.findByCode(BURERA), username: "user1",
 				firstname: "user1", lastname: "user1", email:'user1@memms.org', passwordHash: new Sha256Hash("user1").toHex(), active: true,
 				confirmed: true, uuid:'user1', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
 			userClerkTwo.addToRoles(faultyClercRole)
 			userClerkTwo.save(failOnError: true)
 			
 			//User with permission assigned directly
-			def userClerkThree= new User(userType: UserType.OTHER,code:"user2", location: CalculationLocation.findByCode(BURERA), username: "user2",
+			def userClerkThree= new User(userType: UserType.OTHER, location: CalculationLocation.findByCode(BURERA), username: "user2",
 				firstname: "user2", lastname: "user2", email:'user2@memms.org', passwordHash: new Sha256Hash("user2").toHex(), active: true,
 				confirmed: true, uuid:'user2', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
 			userClerkThree.addToPermissions("equipment:")
@@ -246,16 +258,16 @@ public class Initializer {
 			
 		if(!EquipmentType.count()){
 			//Add equipment types as defined in ecri
-			def typeOne = newEquipmentType("15810", ["en":"Accelerometers","fr":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now())
-			def typeTwo = newEquipmentType("15819", ["en":"X-Ray Film Cutter"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now())
-			def typeThree = newEquipmentType("15966", ["en":"Video Systems"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now())
-			def typeFour = newEquipmentType("10035", ["en":"Adhesives, Aerosol"],["en":"not used in memms"],Observation.RETIRED,now(),now())
-			def typeFive = newEquipmentType("20760", ["en":"Pancreatic Drainage Tubes"],["en":"not used in memms"],Observation.RETIRED,now(),now())
-			def typeSix = newEquipmentType("20729", ["en":"PCR Test Tubes"],["en":"not used in memms"],Observation.RETIRED,now(),now())
-			def typeSeven = newEquipmentType("10026", ["en":"Adhesive Strips"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now())
-			def typeEight = newEquipmentType("10124", ["en":"Anesthesia Kits"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now())
-			def typeNine = newEquipmentType("10155", ["en":"Anklets"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now())
-			def typeTen = newEquipmentType("10426", ["en":"Blood Donor Sets"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now())
+			def typeOne = newEquipmentType("15810", ["en":"Accelerometers","fr":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now(),25)
+			def typeTwo = newEquipmentType("15819", ["en":"X-Ray Film Cutter"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now(),13)
+			def typeThree = newEquipmentType("15966", ["en":"Video Systems"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now(),12)
+			def typeFour = newEquipmentType("10035", ["en":"Adhesives, Aerosol"],["en":"not used in memms"],Observation.RETIRED,now(),now(),34)
+			def typeFive = newEquipmentType("20760", ["en":"Pancreatic Drainage Tubes"],["en":"not used in memms"],Observation.RETIRED,now(),now(),54)
+			def typeSix = newEquipmentType("20729", ["en":"PCR Test Tubes"],["en":"not used in memms"],Observation.RETIRED,now(),now(),67)
+			def typeSeven = newEquipmentType("10026", ["en":"Adhesive Strips"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now(),12)
+			def typeEight = newEquipmentType("10124", ["en":"Anesthesia Kits"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now(),7)
+			def typeNine = newEquipmentType("10155", ["en":"Anklets"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now(),60)
+			def typeTen = newEquipmentType("10426", ["en":"Blood Donor Sets"],["en":"used in memms"],Observation.USEDINMEMMS,now(),now(),34)
 		}
 		
 		if(!Provider.count()){
@@ -284,12 +296,12 @@ public class Initializer {
 		
 		
 		if(!Equipment.count()){
-			def equipmentOne = newEquipment("SERIAL01",true,false,24,"Room A1","",['en':'Equipment Descriptions'],
+			def equipmentOne = newEquipment("SERIAL01",PurchasedBy.BYDONOR,Donor.MOHPARTNER,"CHAI",false,24,"Room A1","",['en':'Equipment Descriptions'],
 				getDate(22,07,2010),getDate(10,10,2010),"",now(),
 				'MODEL1',
 				DataLocation.findByCode(KIVUYE),
 				Department.findByCode('SURGERY'),
-				EquipmentType.findByCode("15819"),
+				EquipmentType.findByCode("15810"),
 				Provider.findByCode("ONE"),
 				Provider.findByCode("FIVE")
 				)
@@ -302,12 +314,12 @@ public class Initializer {
 			equipmentOne.addToStatus(statusOne)
 			equipmentOne.save(failOnError:true)
 
-			def equipmentTwo = newEquipment("SERIAL11",false,false,12,"Room A34","34900",['en':'Equipment Descriptions two'],
+			def equipmentTwo = newEquipment("SERIAL11",PurchasedBy.BYFACILITY,null,null,false,12,"Room A34","34900",['en':'Equipment Descriptions two'],
 				getDate(12,01,2009),getDate(10,10,2009),"USD",now(),
 				'MODEL2',
 				DataLocation.findByCode(KIVUYE),
 				Department.findByCode('PEDIATRY'),
-				EquipmentType.findByCode("15810"),
+				EquipmentType.findByCode("15819"),
 				Provider.findByCode("TWO"),
 				Provider.findByCode("FIVE")
 				)
@@ -318,7 +330,7 @@ public class Initializer {
 			equipmentTwo.addToStatus(statusTwo)
 			equipmentTwo.save(failOnError:true)
 			
-			def equipmentThree = newEquipment("SERIAL12",false,true,34,"Room A1","98700",['en':'Equipment Descriptions three'],
+			def equipmentThree = newEquipment("SERIAL12",PurchasedBy.BYFACILITY,null,null,true,34,"Room A1","98700",['en':'Equipment Descriptions three'],
 				getDate(14,8,2008),getDate(10,01,2009),"EUR",now(),
 				'MODEL3',
 				DataLocation.findByCode(BUNGWE),
@@ -334,12 +346,12 @@ public class Initializer {
 			equipmentThree.addToStatus(statusThree)
 			equipmentThree.save(failOnError:true)
 			
-			def equipmentFour = newEquipment("SERIAL13",true,false,12,"Room A1","",['en':'Equipment Descriptions four'],
+			def equipmentFour = newEquipment("SERIAL13",PurchasedBy.BYDONOR,Donor.MOHPARTNER,"Voxiva",false,12,"Room A1","",['en':'Equipment Descriptions four'],
 				getDate(18,2,2011),getDate(10,10,2011),"",now(),
 				'MODEL2',
 				DataLocation.findByCode(KIVUYE),
 				Department.findByCode('CARDIOLOGY'),
-				EquipmentType.findByCode("15819"),
+				EquipmentType.findByCode("10035"),
 				Provider.findByCode("THREE"),
 				Provider.findByCode("SEVEN")
 				)
@@ -352,12 +364,12 @@ public class Initializer {
 			equipmentFour.addToStatus(statusFourOne)
 			equipmentFour.save(failOnError:true)
 			
-			def equipmentFive = newEquipment("SERIAL14",true,true,34,"Room A1","",['en':'Equipment Descriptions five'],
+			def equipmentFive = newEquipment("SERIAL14",PurchasedBy.BYDONOR,Donor.MOHPARTNER,"Voxiva",true,34,"Room A1","",['en':'Equipment Descriptions five'],
 				getDate(11,8,2008),getDate(11,10,2009),"",now(),
 				'MODEL1',
 				DataLocation.findByCode(BUNGWE),
 				Department.findByCode('CONSULTATION'),
-				EquipmentType.findByCode("10026"),
+				EquipmentType.findByCode("20760"),
 				Provider.findByCode("FOUR"),
 				Provider.findByCode("SIX")
 				)
@@ -372,12 +384,12 @@ public class Initializer {
 			equipmentFive.addToStatus(statusFiveTwo)
 			equipmentFive.save(failOnError:true)
 			
-			def equipmentSix = newEquipment("SERIAL15",false,true,4,"Room A1","290540",['en':'Equipment Descriptions six'],
+			def equipmentSix = newEquipment("SERIAL15",PurchasedBy.BYFACILITY,null,null,true,4,"Room A1","290540",['en':'Equipment Descriptions six'],
 				getDate(1,7,2000),getDate(12,7,2001),"RWF",now(),
 				'MODEL3',
 				DataLocation.findByCode(BUTARO),
 				Department.findByCode('ANAESTHETICS'),
-				EquipmentType.findByCode("15819"),
+				EquipmentType.findByCode("20729"),
 				Provider.findByCode("TWO"),
 				Provider.findByCode("SIX")
 				)
@@ -392,12 +404,12 @@ public class Initializer {
 			equipmentSix.addToStatus(statusSixTwo)
 			equipmentSix.save(failOnError:true)
 			
-			def equipmentSeven = newEquipment("SERIAL07",false,true,4,"Room A1","290540",['en':'Equipment Descriptions seven'],
+			def equipmentSeven = newEquipment("SERIAL07",PurchasedBy.BYFACILITY,null,null,true,4,"Room A1","290540",['en':'Equipment Descriptions seven'],
 				getDate(1,7,2000),getDate(12,7,2001),"USD",now(),
 				'MODEL3',
 				DataLocation.findByCode(BUTARO),
 				Department.findByCode('ANAESTHETICS'),
-				EquipmentType.findByCode("15819"),
+				EquipmentType.findByCode("10026"),
 				Provider.findByCode("TWO"),
 				Provider.findByCode("SIX")
 				)
@@ -412,12 +424,12 @@ public class Initializer {
 			equipmentSeven.addToStatus(statusSevenTwo)
 			equipmentSeven.save(failOnError:true)
 			
-			def equipmentEight = newEquipment("SERIAL08",false,true,4,"Room A3","290540",['en':'Equipment Descriptions eight'],
+			def equipmentEight = newEquipment("SERIAL08",PurchasedBy.BYFACILITY,null,null,true,4,"Room A3","290540",['en':'Equipment Descriptions eight'],
 				getDate(1,7,2000),getDate(12,7,2001),"EUR",now(),
 				'MODEL8',
 				DataLocation.findByCode(BUTARO),
 				Department.findByCode('ANAESTHETICS'),
-				EquipmentType.findByCode("15819"),
+				EquipmentType.findByCode("10155"),
 				Provider.findByCode("EIGHT"),
 				Provider.findByCode("EIGHT")
 				)
@@ -432,12 +444,12 @@ public class Initializer {
 			equipmentEight.addToStatus(statusEightTwo)
 			equipmentEight.save(failOnError:true)
 			
-			def equipmentNine = newEquipment("SERIAL09",false,true,4,"Room 9A1","290540",['en':'Equipment Descriptions Nine'],
+			def equipmentNine = newEquipment("SERIAL09",PurchasedBy.BYFACILITY,null,null,true,4,"Room 9A1","290540",['en':'Equipment Descriptions Nine'],
 				getDate(1,7,2000),getDate(12,7,2001),"RWF",now(),
 				'MODEL3',
 				DataLocation.findByCode(BUTARO),
 				Department.findByCode('ANAESTHETICS'),
-				EquipmentType.findByCode("15819"),
+				EquipmentType.findByCode("10124"),
 				Provider.findByCode("TWO"),
 				Provider.findByCode("SIX")
 				)
@@ -452,12 +464,12 @@ public class Initializer {
 			equipmentNine.addToStatus(statusNineTwo)
 			equipmentNine.save(failOnError:true)
 			
-			def equipmentTen = newEquipment("SERIAL10",false,true,4,"Room 10A1","290540",['en':'Equipment Descriptions Ten'],
+			def equipmentTen = newEquipment("SERIAL10",PurchasedBy.BYFACILITY,null,null,true,4,"Room 10A1","290540",['en':'Equipment Descriptions Ten'],
 				getDate(1,7,2000),getDate(12,7,2001),"RWF",now(),
 				'MODELTen3',
 				DataLocation.findByCode(BUTARO),
 				Department.findByCode('ANAESTHETICS'),
-				EquipmentType.findByCode("15819"),
+				EquipmentType.findByCode("10426"),
 				Provider.findByCode("TWO"),
 				Provider.findByCode("SIX")
 				)
@@ -479,20 +491,48 @@ public class Initializer {
 		
 		def admin = User.findByUsername("admin")
 		def user = User.findByUsername("user")
+		def techFac = User.findByUsername("techf")
+		def techMoH = User.findByUsername("techMoH")
+		
 		def equipment01 =Equipment.findBySerialNumber("SERIAL01")
 		def equipment09 =Equipment.findBySerialNumber("SERIAL09")
 		def equipment11 =Equipment.findBySerialNumber("SERIAL11")
 		
-		def workOrderOne =  newWorkOrder(equipment01,"First order", Criticality.NORMAL,OrderStatus.OPEN,admin,now(),FailureReason.NOTSPECIFIED)
-		workOrderOne.notificationGroup = [User.findByUsername("admin"),User.findByUsername("admin")]
-		newNotification(workOrderOne, User.findByUsername("admin"),User.findByUsername("admin"),new Date(), "Work on this please")
+		def workOrderOne =  newWorkOrder(equipment01,"First order",Criticality.NORMAL,user,now()-1,FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def statusOne =  newWorkOrderStatus(workOrderOne,OrderStatus.OPENATFOSA,now()-1,user,false)
+		def statusTwo =  newWorkOrderStatus(workOrderOne,OrderStatus.OPENATMMC,now(),user,true)
+		def notifationOne = newNotification(workOrderOne, user, techFac,now(), "notifationOne")
+		def notifationTwo = newNotification(workOrderOne, techFac, user,now(), "I am currentlly working on this, but needs further review. Am making this long to see how it fits when reading it.")
+		def notifationThree = newNotification(workOrderOne, techFac, techMoH,now(), "notifationThree")
+		workOrderOne.addToStatus(statusOne)
+		workOrderOne.addToStatus(statusTwo)
 		workOrderOne.save(failOnError:true)
-		def workOrderTwo =  newWorkOrder(equipment01,"Second order", Criticality.LOW,OrderStatus.OPEN,admin,now(),FailureReason.NOTSPECIFIED)
-		def workOrderFive =  newWorkOrder(equipment01,"Closed order", Criticality.HIGH,OrderStatus.CLOSEDFIXED,user,now()-1,now(),true,,FailureReason.MISUSE)
+		
+		def workOrderTwo =  newWorkOrder(equipment01,"Second order",Criticality.LOW,admin,now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def statusThree =  newWorkOrderStatus(workOrderTwo,OrderStatus.OPENATFOSA,now()-1,admin,false)
+		
+		def workOrderFive =  newWorkOrder(equipment01,"Closed order",Criticality.HIGH,user,now()-3,FailureReason.MISUSE,OrderStatus.OPENATFOSA)
+		
+		def statusFour =  newWorkOrderStatus(workOrderFive,OrderStatus.OPENATFOSA,now()-3,user,false)
+		def statusFive =  newWorkOrderStatus(workOrderFive,OrderStatus.OPENATMMC,now()-2,user,true)		
+		def statusSix =  newWorkOrderStatus(workOrderFive,OrderStatus.OPENATFOSA,now()-1,user,false)
+		def statusSeven =  newWorkOrderStatus(workOrderFive,OrderStatus.CLOSEDFIXED,now(),user,false)
+		workOrderFive.closedOn = now()
+		workOrderTwo.save(failOnError:true)
+		def notifationFour = newNotification(workOrderOne, user, techFac,now(), "Solve this for me")
+		def notifationFive = newNotification(workOrderOne, techFac, user,now(), "More information needed")
+		workOrderFive.addToStatus(statusFour)
+		workOrderFive.addToStatus(statusFive)
+		workOrderFive.addToStatus(statusSix)
+		workOrderFive.addToStatus(statusSeven)
+		workOrderFive.save(failOnError:true)
+		
+		
 		
 		equipment01.addToWorkOrders(workOrderOne)
 		equipment01.addToWorkOrders(workOrderTwo)
 		equipment01.addToWorkOrders(workOrderFive)
+		
 		equipment01.save(failOnError:true)
 		
 		def processOne = newMaintenanceProcess(workOrderOne,ProcessType.ACTION,"cleaning material", now(), admin)
@@ -515,43 +555,46 @@ public class Initializer {
 		
 		workOrderOne.save(failOnError:true)
 		
-		def workOrderThree =  newWorkOrder(equipment09,"Third order", Criticality.NORMAL,OrderStatus.OPEN,user,now(),FailureReason.NOTSPECIFIED)
+		def workOrderThree =  newWorkOrder(equipment09,"Third order",Criticality.NORMAL,user,now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def statusEight =  newWorkOrderStatus(workOrderThree,OrderStatus.OPENATFOSA,now(),admin,false)
 		equipment09.addToWorkOrders(workOrderThree)
 		equipment09.save(failOnError:true)
 		
-		def workOrderFour =  newWorkOrder(equipment11,"Fourth order", Criticality.HIGH,OrderStatus.OPEN,admin,now(),FailureReason.NOTSPECIFIED)
+		def workOrderFour =  newWorkOrder(equipment11,"Fourth order",Criticality.HIGH,admin,now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def statusNine =  newWorkOrderStatus(workOrderFour,OrderStatus.OPENATFOSA,now(),admin,false)
 		equipment11.addToWorkOrders(workOrderFour)
 		equipment11.save(failOnError:true)	
 	}
 	
-	
-	
-	
 	//Models definition
 	//Corrective Maintenance
-	public static def newWorkOrder(def equipment, def description, def criticality, def status, def addedBy, def openOn,def failureReason ){
-		return new WorkOrder(equipment:equipment,description: description,criticality:criticality,status:status,addedBy:addedBy,openOn: openOn,assistaceRequested:false, failureReason:failureReason).save(failOnError:true)
+	public static def newWorkOrder(def equipment, def description, def criticality, def addedBy, def openOn,def failureReason,def currentStatus){
+		return new WorkOrder(equipment:equipment,description: description,criticality:criticality,addedBy:addedBy,openOn: openOn,currentStatus:currentStatus,failureReason:failureReason).save(failOnError:true)
 	}
-	
-	public static def newWorkOrder(def equipment, def description, def criticality, def status, def addedBy, def openOn, def closedOn, def assistaceRequested,def failureReason){
-		return new WorkOrder(equipment:equipment, description:description, criticality:criticality, status:status, addedBy:addedBy, openOn: openOn, closedOn:closedOn, assistaceRequested:assistaceRequested,failureReason:failureReason).save(failOnError:true)
+	public static def newWorkOrder(def equipment, def description, def criticality,def addedBy, def openOn, def closedOn, def failureReason,def currentStatus){
+		return new WorkOrder(equipment:equipment, description:description, criticality:criticality,addedBy:addedBy, openOn: openOn, closedOn:closedOn, currentStatus:currentStatus,failureReason:failureReason).save(failOnError:true)
 	}
-	
 	public static newNotification(def workOrder, def sender, def receiver,def writtenOn, def content){
-		return new Notification(workOrder: workOrder, sender: sender, receiver: receiver, writtenOn: writtenOn, content: content,read:false).save(failOnError: true)
+		return new Notification(workOrder: workOrder, sender: sender, receiver: receiver, writtenOn: writtenOn, content: content).save(failOnError: true)
 	}
-	
 	public static newComment(def workOrder, def writtenBy, def writtenOn, def content){
 		return new Comment(workOrder: workOrder, writtenBy: writtenBy, writtenOn: writtenOn, content: content ).save(failOnError: true)
 	}
-	
 	public static newMaintenanceProcess(def workOrder,def type, def name, def addedOn, def addedBy){
 		return new MaintenanceProcess(workOrder: workOrder,type: type,name: name, addedOn: addedOn, addedBy: addedBy ).save(failOnError: true)
 	}
+	public static newWorkOrderStatus(def workOrder,def status,def changeOn,def changedBy,def escalation){
+		def stat = new WorkOrderStatus(workOrder:workOrder,status:status,changeOn:changeOn,changedBy:changedBy,escalation:escalation)
+		workOrder.currentStatus= status
+		workOrder.addToStatus(stat)
+		return stat;
+	}
+	
 	//Inventory
-	public static def newEquipment(def serialNumber,def donation,def obsolete,def expectedLifeTime,def room,def purchaseCost,def descriptions,def manufactureDate, def purchaseDate,def currency,def registeredOn,def model,def dataLocation,def department, def type,def manufacture,def supplier){
-		def equipment = new Equipment(serialNumber:serialNumber,donation:donation,obsolete:obsolete,room:room,expectedLifeTime:expectedLifeTime,purchaseCost:purchaseCost,currency:currency,manufactureDate:manufactureDate,purchaseDate:purchaseDate,registeredOn:registeredOn,model:model,dataLocation:dataLocation,department:department,type:type,manufacturer:manufacture,supplier:supplier);
+	public static def newEquipment(def serialNumber,def purchaser,def donor,def donorName,def obsolete,def expectedLifeTime,def room,def purchaseCost,def descriptions,def manufactureDate, def purchaseDate,def currency,def registeredOn,def model,def dataLocation,def department, def type,def manufacture,def supplier){
+		def equipment = new Equipment(serialNumber:serialNumber,purchaser:purchaser,donor:donor,donorName:donorName,obsolete:obsolete,room:room,purchaseCost:purchaseCost,currency:currency,manufactureDate:manufactureDate,purchaseDate:purchaseDate,registeredOn:registeredOn,model:model,dataLocation:dataLocation,expectedLifeTime:expectedLifeTime,department:department,type:type,manufacturer:manufacture,supplier:supplier);
 		Utils.setLocaleValueInMap(equipment,descriptions,"Descriptions")
+		equipment.genarateAndSetEquipmentCode()
 		return equipment.save(failOnError: true)
 	}
 
@@ -588,8 +631,8 @@ public class Initializer {
 		return newWarranty(contact, startDate,numberOfMonth,sameAsSupplier,descriptions)
 	}
 		
-	public static def newEquipmentType(def code, def names,def descriptions, def observation, def addedOn, def lastModifiedOn){
-		def type = new EquipmentType(code:code,observation:observation,addedOn:addedOn,lastModifiedOn:lastModifiedOn)
+	public static def newEquipmentType(def code, def names,def descriptions, def observation, def addedOn, def lastModifiedOn,def expectedLifeTime = 12){
+		def type = new EquipmentType(code:code,observation:observation,addedOn:addedOn,lastModifiedOn:lastModifiedOn,expectedLifeTime:expectedLifeTime)
 		Utils.setLocaleValueInMap(type,names,"Names")
 		Utils.setLocaleValueInMap(type,descriptions,"Descriptions")
 		return type.save(failOnError: true)

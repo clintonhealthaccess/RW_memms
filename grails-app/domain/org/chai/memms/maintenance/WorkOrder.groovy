@@ -27,8 +27,12 @@
  */
 package org.chai.memms.maintenance
 
+import javax.persistence.Transient;
+
 import org.chai.memms.equipment.Equipment;
+import org.chai.memms.equipment.EquipmentStatus.Status;
 import org.chai.memms.maintenance.MaintenanceProcess.ProcessType;
+import org.chai.memms.maintenance.WorkOrderStatus.OrderStatus;
 import org.chai.memms.security.User;
 
 /**
@@ -47,17 +51,6 @@ public class WorkOrder {
 		String name
 		Criticality(String name){this.name=name}
 		String getKey(){ return name() }
-	}
-
-	enum OrderStatus{
-		NONE("none"),
-		OPEN("open"),
-		CLOSEDFIXED("closedfixed"),
-		CLOSEDFORDISPOSAL("closedfordisposal")
-		String messageCode = "work.order.status"
-		String name
-		OrderStatus(String name){ this.name=name }
-		String getKey() { return name() }
 	}
 	enum FailureReason{
 		NOTSPECIFIED("not.specified"),
@@ -85,36 +78,38 @@ public class WorkOrder {
 	Date lastModifiedOn
 	Date closedOn
 	Date returnedOn
-	Boolean assistaceRequested
 	
-	Long estimatedCost
+	Double estimatedCost
 	Integer workTime
 	Integer travelTime
 	
-
+	OrderStatus currentStatus
 	Criticality criticality
-	OrderStatus status
 	FailureReason failureReason
 	
 	static i18nFields = ["failureReasonDetails","testResultsDescriptions"]
 	static belongsTo = [equipment: Equipment]
-	static hasMany = [comments: Comment,notifications: Notification,notificationGroup: User,processes: MaintenanceProcess]
+	static hasMany = [status: WorkOrderStatus, comments: Comment, notifications: Notification, processes: MaintenanceProcess]
+	
 
 	static constraints = {
 		addedBy nullable: false
 		receivedBy nullable: true
 		fixedBy nullable: true
 		
-		assistaceRequested nullable: false
 		failureReasonDetails nullable: true
 		testResultsDescriptions nullable: true
-		workTime nullable: true, blank: true
-		travelTime nullable: true, blank: true
+		workTime nullable: true, validator:{ 
+			if(it!=null && it<=0) return false		
+		}
+		travelTime nullable: true, validator:{ 
+			if(it!=null && it<=0) return false		
+		}
 		description nullable: false, blank: false
 		returnedTo nullable: true, blank: true
 		
-		openOn nullable: false, validation:{it <= new Date()}
-		returnedOn nullable: true, validation:{it <= new Date()}
+		openOn nullable: false, validator:{it <= new Date()}
+		returnedOn nullable: true, validator:{it <= new Date()}
 		
 		lastModifiedOn nullable: true, validator:{ val, obj ->
 			if(val!=null)
@@ -122,28 +117,34 @@ public class WorkOrder {
 			else return true
 		}
 		
-		closedOn nullable: true, validation:{ val, obj ->
-			if(val!=null)
-				return ((val <= new Date()) && (val.after(obj.openOn) || (val.compareTo(obj.openOn)==0)))
-			else return true
+		closedOn nullable: true, validator:{ val, obj ->
+			boolean valid = true
+			if(val==null){
+				if(obj.currentStatus==OrderStatus.CLOSEDFORDISPOSAL || obj.currentStatus==OrderStatus.CLOSEDFIXED)
+					valid = false
+			}else{
+				if(obj.currentStatus!=OrderStatus.CLOSEDFORDISPOSAL && obj.currentStatus!=OrderStatus.CLOSEDFIXED)
+					valid = false
+				if((val > new Date()) || val.before(obj.openOn) )
+				 	valid = false
+			}
+			return valid	
 		}
 		lastModifiedBy nullable: true
+		currentStatus nullable: false, inList:[OrderStatus.OPENATFOSA,OrderStatus.OPENATMMC,OrderStatus.CLOSEDFIXED,OrderStatus.CLOSEDFORDISPOSAL]
 		criticality nullable: false, blank: false, inList: [Criticality.LOW,Criticality.HIGH,Criticality.NORMAL]
-		status nullable: false, blank: false, inList:[OrderStatus.OPEN,OrderStatus.CLOSEDFIXED,OrderStatus.CLOSEDFORDISPOSAL], validator:{ val, obj ->
-			if(val == OrderStatus.OPEN && obj.closedOn == null) return true
-			else if(val != OrderStatus.OPEN && obj.closedOn != null) return true
-			else return false
-		}
 		failureReason nullable:false, blank:false, inList:[FailureReason.NOTSPECIFIED,FailureReason.SPAREPARTBROKEN,FailureReason.MISUSE,FailureReason.OTHER]
 		
 		estimatedCost nullable: true, blank: true, validator:{ val, obj ->
 			if(val == null && obj.currency != null) return false
+			if(val!=null && val<=0) return false
 		}
 		currency  nullable: true, blank: true, inList: ["RWF","USD","EUR"], validator:{ val, obj ->
 			if(val == null && obj.estimatedCost != null) return false
 		}
 	}
-
+	
+	@Transient
 	def getActions(){
 		List<MaintenanceProcess> actions = []
 		for(MaintenanceProcess process: processes)
@@ -151,7 +152,7 @@ public class WorkOrder {
 				actions.add(process)
 		return actions;
 	}
-
+	@Transient
 	def getMaterials(){
 		List<MaintenanceProcess> materials = []
 		for(MaintenanceProcess process: processes)
@@ -159,16 +160,34 @@ public class WorkOrder {
 				materials.add(process)
 		return materials;
 	}
+	//Return true if this order is currently escalated
+	@Transient
+	def getEscalated(){
+		if(currentStatus.equals(OrderStatus.OPENATMMC))
+			return true
+		return false
+	}
+		
+	@Transient
+	def getTimeBasedStatus(){
+		WorkOrderStatus currentState = status.asList()[0]
+		for(WorkOrderStatus state : status)
+			if(state.changeOn.after(currentState.changeOn))
+				currentState= state;
+		return currentState
+	}
+
 
 	static mapping = {
 		table "memms_work_order"
 		version false
+		description type:"text"
 	}
-
+	@Transient
 	def getNotificationsForUser(def user){
 		notifications.findAll{it.sender == user}
 	}
-
+	@Transient
 	def getUnReadNotificationsForUser(def user){
 		getNotificationsForUser(user).findAll{!it.read}
 	}

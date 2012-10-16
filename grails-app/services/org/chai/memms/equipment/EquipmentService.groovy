@@ -31,6 +31,8 @@ import grails.gorm.DetachedCriteria
 import java.util.List;
 import java.util.Map;
 import org.chai.memms.equipment.Equipment
+import org.chai.memms.equipment.Equipment.Donor;
+import org.chai.memms.equipment.Equipment.PurchasedBy;
 import org.chai.memms.equipment.EquipmentStatus.Status;
 import org.chai.memms.exports.EquipmentExport;
 import org.chai.location.CalculationLocation;
@@ -61,7 +63,7 @@ import org.supercsv.prefs.CsvPreference;
 class EquipmentService {
 	static transactional = true
 	def languageService;
-		
+	
 	public List<Equipment> searchEquipment(String text,DataLocation dataLocation,Map<String, String> params) {
 		def dbFieldTypeNames = 'names_'+languageService.getCurrentLanguagePrefix();
 		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
@@ -88,7 +90,7 @@ class EquipmentService {
 	
 
 	public List<Equipment> filterEquipment(def dataLocation, def supplier, def manufacturer, def equipmentType, 
-		def donation, def obsolete,def status,Map<String, String> params){
+		def purchaser,def donor,def obsolete,def status,Map<String, String> params){
 		
 		def criteria = Equipment.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
@@ -100,8 +102,10 @@ class EquipmentService {
 				eq ("manufacturer", manufacturer)
 			if(equipmentType != null)
 				eq ("type", equipmentType)
-			if(donation)
-				eq ("donation", (donation.equals('true'))?true:false)
+			if(purchaser && !purchaser.equals(PurchasedBy.NONE))
+				eq ("purchaser",purchaser)
+			if(donor && !donor.equals(Donor.NONE))
+				eq ("donor",donor)
 			if(obsolete)
 				eq ("obsolete", (obsolete.equals('true'))?true:false)
 			if(!status.equals(Status.NONE)){
@@ -137,7 +141,7 @@ class EquipmentService {
 					equipment.getCurrentState()?.status,equipment.dataLocation?.code,equipment.dataLocation?.getNames(new Locale("en")),equipment.dataLocation?.getNames(new Locale("fr")),
 					equipment.department?.code,equipment.department?.getNames(new Locale("en")),equipment.department?.getNames(new Locale("fr")),equipment.room,
 					equipment.manufacturer?.code,equipment.manufacturer?.contact?.contactName,equipment.manufactureDate,equipment.supplier?.code,equipment.supplier?.contact?.contactName,
-					equipment.purchaseDate,equipment.purchaseCost?:"n/a",equipment.currency?:"n/a",equipment.donation,equipment.obsolete,equipment.warranty?.startDate,equipment.warranty?.numberOfMonth
+					equipment.purchaseDate,equipment.purchaseCost?:"n/a",equipment.currency?:"n/a",equipment.purchaser.name(),equipment.obsolete,equipment.warranty?.startDate,equipment.warranty?.numberOfMonth
 					]
 				writer.write(line)
 			}

@@ -32,14 +32,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import org.chai.location.LocationLevel;
 import org.chai.memms.CorrectiveMaintenance;
 import org.chai.memms.CorrectiveMaintenances;
 import org.chai.memms.Inventory
 import org.chai.memms.Inventories
 import org.chai.memms.maintenance.WorkOrder.Criticality;
-import org.chai.memms.maintenance.WorkOrder.OrderStatus;
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocationType;
 import org.chai.location.DataLocation
@@ -61,16 +59,20 @@ class CorrectiveMaintenanceService {
 	}
 	
 	public CorrectiveMaintenances getCorrectiveMaintenancesByLocation(Location location,Set<DataLocationType> types,Map<String, String> params) {
-		if(log.isDebugEnabled()) log.debug("params="+params)
+		if(log.isDebugEnabled()) log.debug("getCorrectiveMaintenancesByLocation url params: "+params)
 		List<CorrectiveMaintenance> correctiveMaintenances = []
 		Set<LocationLevel> skipLevels = getSkipLocationLevels()
 		for(DataLocation dataLocation : location.collectDataLocations(skipLevels,types)){
-			correctiveMaintenances.add(new CorrectiveMaintenance(dataLocation:dataLocation,workOrderCount:workOrderService.filterWorkOrders(dataLocation,null,null, null, null,null,null,[:]).size()))
+			correctiveMaintenances.add(new CorrectiveMaintenance(dataLocation:dataLocation,workOrderCount:workOrderService.filterWorkOrders(dataLocation,null,null, null, null,null,[:]).size()))
 		}
 		
 		CorrectiveMaintenances correctiveMaintenance = new CorrectiveMaintenances()
+		//If user tries to access elements outside the range, return empty list
+		if(params.offset != null && params.max != null && params.max > params.offset) return correctiveMaintenance
 		
-		correctiveMaintenance.correctiveMaintenanceList = correctiveMaintenances[(params.offset) .. ((params.offset + params.max) > correctiveMaintenances.size() ? correctiveMaintenances.size() - 1 : (params.offset + params.max))]
+		//If user specifies the pagination params, use them. Else return the whole list
+		if(params.offset != null && params.offset > 0  && params.max != null && params.max > 0) correctiveMaintenance.correctiveMaintenanceList = correctiveMaintenances[(params.offset) .. ((params.offset + params.max) > correctiveMaintenances.size() ? correctiveMaintenances.size() - 1 : (params.offset + params.max))]
+		else correctiveMaintenance.correctiveMaintenanceList = correctiveMaintenances
 		correctiveMaintenance.totalCount = correctiveMaintenances.size()
 		return correctiveMaintenance
 	}

@@ -1,5 +1,5 @@
 <%@ page import="org.chai.memms.util.Utils" %>
-<%@ page import="org.chai.memms.maintenance.WorkOrder.OrderStatus" %>
+<%@ page import="org.chai.memms.maintenance.WorkOrderStatus.OrderStatus" %>
 <%@ page import="org.chai.memms.maintenance.WorkOrder.Criticality" %>
 <%@ page import="org.chai.memms.maintenance.WorkOrder.FailureReason" %>
 <r:require modules="tipsy"/>
@@ -25,9 +25,9 @@
           </span>
           <g:message code="work.order.section.basic.information.label"/>
         </h4> 
-      	<g:selectFromList name="equipment.id" readonly="${(closed)? true:false}" label="${message(code:'equipment.label')}" bean="${order}" field="equipment" optionKey="id" multiple="false"
+      	<g:selectFromList name="equipment.id" readonly="${(closed)? true:false}" label="${message(code:'equipment.label')}" bean="${order}" field="equipment.id" optionKey="id" multiple="false"
   			ajaxLink="${createLink(controller:'equipment', action:'getAjaxData')}"
-  			from="${equipments}" value="${order?.equipment?.id}" values="${equipments.collect{it.serialNumber}}" />	
+  			from="${equipments}" value="${order?.equipment?.id}" values="${equipments.collect{it.code}}" />	
   		<g:if test="${order.id != null}">
 	  		<div class="row">
 		  		 <label><g:message code="work.order.reported.by.label"/> :</label>
@@ -41,7 +41,23 @@
    		<g:textarea name="description" rows="12" width="380" label="${message(code:'entity.description.label')}" readonly="${(closed)? true:false}" bean="${order}" field="description" value="${order.description}"/>
    		<g:selectFromEnum name="criticality" bean="${order}" values="${Criticality.values()}" field="criticality" readonly="${(closed)? true:false}" label="${message(code:'work.order.criticality.label')}"/>
    		<g:if test="${order.id != null}">
-   			<g:selectFromEnum name="status" bean="${order}" values="${OrderStatus.values()}" field="status" label="${message(code:'work.order.status.label')}"/>
+   			<g:selectFromEnum name="currentStatus" bean="${order}" values="${OrderStatus.values()}" field="currentStatus" label="${message(code:'work.order.status.label')}"/>
+   			<table class="items">
+	    		<tr>
+	    			<th>${message(code:'work.order.status.label')}</th>
+	    			<th>${message(code:'work.order.status.changed.on.label')}</th>
+	    			<th>${message(code:'work.order.status.changed.by.label')}</th>
+	    			<th>${message(code:'work.order.status.escalation.label')}</th>
+	    		</tr>
+	    		<g:each in="${order.status.sort{a,b -> (a.changeOn > b.changeOn) ? -1 : 1}}" status="i" var="status">
+			    		<tr>
+			    			<td>${message(code: status?.status?.messageCode+'.'+status?.status?.name)}</td>
+			    			<td>${Utils.formatDate(status?.changeOn)}</td>
+			    			<td>${status.changedBy.firstname} ${status.changedBy.lastname}</td>
+			    			<td>${(status.escalation)? '\u2713':''}</td>
+			    		</tr>
+	    		</g:each>
+	    	</table>
    		</g:if>
     	</fieldset>	
    		<div id="form-aside-equipment" class="form-aside">
@@ -66,7 +82,7 @@
         	<div class="form-content">
         		<g:input name="workTime" label="${message(code:'work.order.work.time.label')}" bean="${order}" field="workTime"/>
         		<g:input name="travelTime" label="${message(code:'work.order.travel.time.label')}" bean="${order}" field="travelTime"/>
-	        	<g:currency costName="estimatedCost" id="estimated-cost" costLabel="${message(code:'work.order.estimated.cost.label')}" bean="${equipment}" costField="estimatedCost"  currencyName="currency" values="${currencies}" currencyField="currency" currencyLabel="${message(code:'work.order.currency.label')}"/>
+	        	<g:currency costName="estimatedCost" id="estimated-cost" costLabel="${message(code:'work.order.estimated.cost.label')}" bean="${order}" costField="estimatedCost"  currencyName="currency" values="${currencies}" currencyField="currency" currencyLabel="${message(code:'work.order.currency.label')}"/>
 			</div>
 	        </fieldset>
 	      </div>

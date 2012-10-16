@@ -27,58 +27,35 @@
  */
 package org.chai.memms.maintenance
 
-import java.util.Date;
+import org.chai.memms.maintenance.MaintenanceProcess
+import org.chai.memms.maintenance.MaintenanceProcess.ProcessType;
 import org.chai.memms.security.User;
 
 /**
  * @author Jean Kahigiso M.
  *
  */
-@i18nfields.I18nFields
-public class Comment {
-	User writtenBy
-	Date writtenOn
-	String content
+class MaintenanceProcessService {
+	static transactional = true	
 	
-   static belongsTo = [workOrder: WorkOrder]
-   
-   static constraints ={
-	   writtenBy nullable: false
-	   writtenOn nullable: false, validator:{it <=new Date()}
-	   content nullable:false, blank:false
-   }
-   static mapping ={
-	   table "memms_work_order_comment"
-	   version false
-	   content type:"text"
-	   
-   }
+	def createProcess(WorkOrder workOrder,ProcessType type,String name,Date addedOn,User addedBy){
+		return new MaintenanceProcess(workOrder:workOrder,type: type,name:name,addedOn:addedOn,addedBy:addedBy);
+	}
+	
+	def addProcess(WorkOrder workOrder,ProcessType type,String name,Date addedOn,User addedBy){
+		MaintenanceProcess process = createProcess(workOrder,type,name,addedOn,addedBy)
+		workOrder.addToProcesses(process)
+		workOrder.lastModifiedOn = addedOn
+		workOrder.lastModifiedBy = addedBy
+		return workOrder.save(failOnError:true)
+	}
+	def deleteProcess(MaintenanceProcess process,Date deletedOn,User deletedBy){
+		WorkOrder workOrder = process.workOrder		
+		workOrder.removeFromProcesses(process)
+		workOrder.lastModifiedOn = deletedOn
+		workOrder.lastModifiedBy = deletedBy
+		process.delete()
+		return workOrder.save(failOnError:true)
+	}
 
-	@Override
-	public String toString() {
-		return "Comment [id=" + id + ", writtenBy=" + writtenBy + "]";
-	}  
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this.is(obj))
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Comment other = (Comment) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
-	}
 }
