@@ -86,7 +86,6 @@ class EquipmentController extends AbstractEntityController{
 		return Equipment.class;
 	}
 	def bindParams(def entity) {
-		if(log.isDebugEnabled()) log.debug("Equipment params: before bind "+params)
 		if(!entity.id){
 			entity.registeredOn=new Date()
 			
@@ -109,7 +108,6 @@ class EquipmentController extends AbstractEntityController{
 			}
 		}
 		bindData(entity,params,[exclude:["status","dateOfEvent","expectedLifeTime_years","expectedLifeTime_months"]])
-		if(log.isDebugEnabled()) log.debug("Equipment params: after bind  "+entity)
 	}
 
 	def validateEntity(def entity) {
@@ -126,8 +124,7 @@ class EquipmentController extends AbstractEntityController{
 		validWarranty = (!params.cmdMonths.hasErrors())
 		if(log.isDebugEnabled()) log.debug("Rejecting expectedLifeTime: "+params.cmdLifeTime.errors)		
 		if(validLifeTime) entity.expectedLifeTime = params.cmdLifeTime.expectedLifeTime
-		if(validWarranty) entity.warranty.numberOfMonth = params.cmdMonths.numberOfMonths
-		log.debug("params after injecting in new warranty information " + params)
+		if(validWarranty) bindData(entity,["warranty.numberOfMonth":params.cmdMonths.numberOfMonths])
 		entity.genarateAndSetEquipmentCode()
 		return (validStatus & validLifeTime & entity.validate())
 	}

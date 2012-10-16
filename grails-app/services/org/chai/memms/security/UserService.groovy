@@ -64,7 +64,7 @@ class UserService {
 		}
 	}
 	
-	List<User> filterByCriterias(UserType userType, CalculationLocation location, Map<String, String> params){
+	List<User> getActiveByTypeAndLocation(UserType userType, CalculationLocation location, Map<String, String> params){
 		def criteria = User.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			eq ("active", true)
@@ -77,8 +77,8 @@ class UserService {
 	}
 	
 	List<User> getNotificationGroup(WorkOrder workOrder,User sender,Boolean escalate){
-		def users =  User.findAllByUserTypeAndLocation(UserType.TECHNICIANFACILITY,workOrder.equipment.dataLocation);
-		if(escalate) users.addAll(User.findAllByUserType(UserType.TECHNICIANMOH))
+		def users =  getActiveByTypeAndLocation(UserType.TECHNICIANFACILITY,workOrder.equipment.dataLocation, [:])
+		if(escalate) users.addAll(getActiveByTypeAndLocation(UserType.TECHNICIANMOH,null, [:]))
 		if(!users.contains( workOrder.addedBy )) users.add(workOrder.addedBy)
 		users.remove(sender)
 		if(log.isDebugEnabled()) log.debug("Users in notification group: " + users)
