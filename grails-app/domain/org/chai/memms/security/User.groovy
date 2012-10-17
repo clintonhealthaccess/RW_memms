@@ -30,11 +30,12 @@ package org.chai.memms.security
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocation;
 import org.chai.location.Location;
+import org.chai.location.LocationLevel;
 import org.chai.memms.maintenance.Notification;
 import org.chai.memms.util.Utils
 
 class User {
-	
+	def locationService
 	enum UserType{
 		
 		ADMIN("admin"),
@@ -96,6 +97,13 @@ class User {
 		this.permissionString = Utils.unsplit(permissions, User.PERMISSION_DELIMITER)
 	}
 	
+	public boolean canAccessCalculationLocation(CalculationLocation calculationLocation){
+		if(calculationLocation instanceof Location && location instanceof DataLocation) return false
+		if(calculationLocation instanceof DataLocation && location instanceof DataLocation) return calculationLocation == location
+		if(calculationLocation instanceof Location && location instanceof Location && calculationLocation.level == location.level) return calculationLocation == location
+		if(calculationLocation instanceof DataLocation && location instanceof Location && calculationLocation.location.level == location.level) return calculationLocation.location == location
+		return locationService.getParentOfLevel(calculationLocation instanceof Location ? calculationLocation : calculationLocation.location, location.level) == location
+	}
 	
 	def canActivate() {
 		return confirmed == true && active == false

@@ -63,4 +63,20 @@ class CorrectiveMaintenanceServiceSpec extends IntegrationTests{
 		correctiveMaintenances.correctiveMaintenanceList.size() == 2
 		correctiveMaintenances.totalCount == 2
 	}
+	
+	def "can't access elements outside range"() {
+		setup:
+		setupLocationTree()
+		setupEquipment()
+		def user = newUser("user", "user")
+		def equipment = Equipment.findBySerialNumber(CODE(123))
+		def burera= Location.findByCode(BURERA)
+		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,user,Initializer.now(),FailureReason.NOTSPECIFIED, OrderStatus.OPENATFOSA)
+		def types = grailsApplication.config.site.datalocationtype.checked.collect{ DataLocationType.findByCode(it) }.toSet()
+		when:
+		def correctiveMaintenances = correctiveMaintenanceService.getCorrectiveMaintenancesByLocation(burera,types,["offset":1,"max":0 ])
+		then:
+		correctiveMaintenances.correctiveMaintenanceList.size() == 0
+		correctiveMaintenances.totalCount == 0
+	}
 }

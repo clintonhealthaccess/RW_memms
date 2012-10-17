@@ -52,7 +52,7 @@ class FilterTagLib {
 			def locationFilterTree = null
 			if(user.location instanceof Location){
 				location = attrs['selected']
-				locationFilterRoot = user.location//locationService.getRootLocation()
+				locationFilterRoot = user.location
 				locationFilterTree = locationFilterRoot.collectTreeWithDataLocations(attrs['skipLevels'], attrs['selectedTypes'])
 			}
 			model << 

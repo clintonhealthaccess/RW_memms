@@ -132,6 +132,7 @@ class EquipmentController extends AbstractEntityController{
 	}
 
 	def saveEntity(def entity) {
+		if(entity.dataLocation) hasAccess(entity.dataLocation)
 		def currentStatus
 		if(entity.id==null)
 			currentStatus = equipmentStatusService.createEquipmentStatus(now,user,params.cmd.status,entity,true,params.cmd.dateOfEvent,[:])
@@ -181,6 +182,8 @@ class EquipmentController extends AbstractEntityController{
 		if (dataLocation == null)
 			response.sendError(404)
 
+		hasAccess(dataLocation)
+		
 		adaptParamsForList()
 		def equipments = equipmentService.getEquipmentsByDataLocation(dataLocation,params)
 		render(view:"/entity/list", model:[

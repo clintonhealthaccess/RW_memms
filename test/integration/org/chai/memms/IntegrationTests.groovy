@@ -70,6 +70,8 @@ abstract class IntegrationTests extends IntegrationSpec {
 	static final String RWANDA = "Rwanda"
 	static final String KIGALI_CITY = "Kigali City"
 	static final String NORTH = "North"
+	static final String SOUTH = "South"
+	static final String GITARAMA = "Gitarama"
 	static final String BURERA = "Burera"
 	static final String BUTARO = "Butaro DH"
 	static final String KIVUYE = "Kivuye HC"
@@ -98,11 +100,14 @@ abstract class IntegrationTests extends IntegrationSpec {
 		def sector = Initializer.newLocationLevel(['en':SECTOR], SECTOR)
 
 		def rwanda = Initializer.newLocation(['en':RWANDA], RWANDA,null,country)
+		
 		def north = Initializer.newLocation(['en':NORTH], NORTH, rwanda, province)
+		def south = Initializer.newLocation(['en':SOUTH], SOUTH, rwanda, province)
+		
 		def burera = Initializer.newLocation(['en':BURERA], BURERA, north, district)
+		def gitarama = Initializer.newLocation(['en':GITARAMA], GITARAMA, south, district)
 
-
-		def butaro = Initializer.newDataLocation(['en':BUTARO], BUTARO, burera, dh)
+		def butaro = Initializer.newDataLocation(['en':BUTARO], BUTARO, gitarama, dh)
 		def kivuye = Initializer.newDataLocation(['en':KIVUYE], KIVUYE, burera, hc)
 	}
 
