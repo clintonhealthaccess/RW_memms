@@ -52,9 +52,7 @@ class BootStrap {
 			Initializer.createInventoryStructure()
 			Initializer.createCorrectiveMaintenanceStructure()
 			break;
-			case "production":
-			if (!Role.count()) {
-								
+			case "production":					
 				//Default roles
 				def defaultAdminRole 
 				if(Role.findByName("Admin")) defaultAdminRole = Role.findByName("Admin") 
@@ -120,7 +118,6 @@ class BootStrap {
 					confirmed: true, uuid:'techMoH', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
 				userTechnicianMoH.addToRoles(defaultTechnicianMoHRole)
 				userTechnicianMoH.save(failOnError: true)
-			}
 			break;
 		}
     }
