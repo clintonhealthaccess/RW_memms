@@ -155,7 +155,9 @@
       <a href="#"><g:message code="footer.labels.helpdesk"/></a>
     </div>
   </div>
-	
+	<div class="build-info">
+        <build:buildInfo/>
+    </div>
 <r:layoutResources/>
 
 </body>

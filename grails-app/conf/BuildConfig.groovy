@@ -95,6 +95,7 @@ grails.project.dependency.resolution = {
         build ":tomcat:$grailsVersion"
 		compile ":rabbitmq:1.0.0.RC1"
 		compile ":chai-locations:0.2.3-CHAI"
+		compile ":build-info-tag:0.3.1"
 		//compile ':cloud-foundry:1.2.3'
 		
 		test (":spock:0.6") {changing = false}
