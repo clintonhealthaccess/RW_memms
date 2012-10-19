@@ -2,7 +2,7 @@
 <%@ page import="org.chai.memms.equipment.Equipment.PurchasedBy" %>
 <%@ page import="org.chai.memms.equipment.Equipment.Donor" %>
 <div class="filters main">
-		  <h2>Filter inventory<a href="#" class="right"><img src="${resource(dir:'images/icons',file:'icon_close_flash.png')}" alt="Section"/></a></h2>
+		  <h2>Filter inventory<a href="#" id="showhide" class="right">show / hide filters</a></h2>
 
 			<g:hasErrors bean="${filterCmd}">
 				<ul>
