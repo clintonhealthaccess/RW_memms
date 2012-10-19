@@ -184,12 +184,16 @@ public class WorkOrder {
 		description type:"text"
 	}
 	@Transient
-	def getNotificationsForUser(def user){
-		notifications.findAll{it.sender == user}
+	def getNotificationsReceivedByUser(def user){
+		return notifications.findAll{it.receiver == user}
+	}
+	@Transient
+	def getNotificationsSentByUser(def user){
+		return notifications.findAll{it.sender == user}
 	}
 	@Transient
 	def getUnReadNotificationsForUser(def user){
-		getNotificationsForUser(user).findAll{!it.read}
+		return getNotificationsReceivedByUser(user).findAll{!it.read}
 	}
 
 	@Override

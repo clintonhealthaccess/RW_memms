@@ -40,9 +40,10 @@ class User {
 		
 		ADMIN("admin"),
 		SYSTEM("system"),
-		DATACLERK("dataclerk"),
-		TECHNICIANFACILITY("technician.facility"),
-		TECHNICIANMOH("technician.moh"),
+		TECHNICIANDH("technician.dh"),
+		TECHNICIANMMC("technician.mmc"),
+		TITULAIREHC("titulaire.hc"),
+		HOSPITALDEPARTMENT("department.hospital"),
 		OTHER("other");
 		
 		String messageCode = "user.type";

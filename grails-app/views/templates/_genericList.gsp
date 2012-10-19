@@ -6,7 +6,7 @@
 		     	<span class="right">
 		     	<shiro:hasPermission permission="${controllerName}:create">
 					<g:if test="${!addTemplate}">
-		  				<a href="${createLinkWithTargetURI(controller: controllerName, action:'create', params:[location: dataLocation?.id,'equipment.id':equipment?.id,workOrder:workOrder?.id])}" class="next medium left push-r">
+		  				<a href="${createLinkWithTargetURI(controller: controllerName, action:'create', params:['location.id': location?.id,'dataLocation.id': dataLocation?.id,'equipment.id':equipment?.id,'workOrder.id':workOrder?.id])}" class="next medium left push-r">
 		  					<g:message code="default.new.label" args="[entityName]"/>
 		  				</a>
 		  			</g:if>

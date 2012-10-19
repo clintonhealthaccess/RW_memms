@@ -99,26 +99,27 @@ public class Initializer {
 			defaultAdminRole.addToPermissions("*")
 			defaultAdminRole.save(failOnError: true)
 			
-			def defaultDataClerkRole = new Role(name: "Data Clerk")
-			defaultDataClerkRole.addToPermissions("home:*;menu:home,inventory,correctivemaintenance;account:*;equipmentType:getAjaxData;provider:getAjaxData;department:getAjaxData")
-			defaultDataClerkRole.addToPermissions("equipment:filter,export,summaryPage,index,list,save,create,updateObsolete,edit")
-			defaultDataClerkRole.addToPermissions("workOrder:*")
-			defaultDataClerkRole.addToPermissions("notification:*")
-			defaultDataClerkRole.addToPermissions("Usercation:*")
-			defaultDataClerkRole.addToPermissions("equipmentStatus:list,save,delete,edit,create")
-			defaultDataClerkRole.save(failOnError: true, flush:true)
+			def defaultSystemRole = new Role(name: "System")
+			defaultSystemRole.addToPermissions("*")
+			defaultSystemRole.save(failOnError: true, flush:true)
 			
-			def defaultTechnicianFacilityRole = new Role(name: "Technician Facility")
-			defaultTechnicianFacilityRole.addToPermissions(defaultDataClerkRole.permissionString)
-			defaultTechnicianFacilityRole.addToPermissions("menu:preventivemaintenance,admin;equipment:*")
-			defaultTechnicianFacilityRole.addToPermissions("department:*;equipmentType:*;provider:*;equipment:*")
-			defaultTechnicianFacilityRole.save(failOnError: true, flush:true)
+			def defaultTechnicianDHRole = new Role(name: "Technician DH")
+			defaultTechnicianDHRole.addToPermissions("*")
+			defaultTechnicianDHRole.save(failOnError: true, flush:true)
 			
-			def defaultTechnicianMoHRole = new Role(name: "Technician MoH")
-			defaultTechnicianMoHRole.addToPermissions(defaultDataClerkRole.permissionString)
-			defaultTechnicianMoHRole.addToPermissions("menu:preventivemaintenance,admin,advanced;equipment:*")
-			defaultTechnicianMoHRole.addToPermissions("department:*;equipmentType:*;provider:*;equipment:*")
-			defaultTechnicianMoHRole.save(failOnError: true, flush:true)
+			def defaultTechnicianMMCRole = new Role(name: "Technician MMC")
+			defaultTechnicianMMCRole.addToPermissions("*")
+			defaultTechnicianMMCRole.save(failOnError: true, flush:true)
+			
+			def defaultTitulaireHCRole = new Role(name: "Titulaire HC")
+			defaultTitulaireHCRole.addToPermissions("*")
+			defaultTitulaireHCRole.save(failOnError: true, flush:true)
+			
+			def defaultHospitalDepartmentRole = new Role(name: "Hospital Department")
+			defaultHospitalDepartmentRole.addToPermissions("*")
+			defaultHospitalDepartmentRole.save(failOnError: true, flush:true)
+			
+			
 			//End default roles
 			
 			def defaultClercRole = new Role(name: "Default Clerk")
@@ -144,9 +145,6 @@ public class Initializer {
 			faultyClercRole.addToPermissions("equipmentStatus:list;equipmentStatus:save;equipmentStatus:delete;equipmentStatus:edit;equipment:updateObsolete")
 			faultyClercRole.save(failOnError: true)
 			
-			
-			
-
 			//Defining User
 			//Default users
 			def admin = new User(userType: UserType.ADMIN, location: CalculationLocation.findByCode(RWANDA), username: "admin", 
@@ -155,23 +153,29 @@ public class Initializer {
 			admin.addToRoles(defaultAdminRole)
 			admin.save(failOnError: true)
 			
-			def userClerk= new User(userType: UserType.DATACLERK, location: CalculationLocation.findByCode(KIVUYE), username: "user", 
-				firstname: "Data", lastname: "Clerk", email:'user@memms.org', passwordHash: new Sha256Hash("user").toHex(), active: true, 
-				confirmed: true, uuid:'user', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
-			userClerk.addToRoles(defaultDataClerkRole)
-			userClerk.save(failOnError: true, flush:true)
+			def techDH= new User(userType: UserType.TECHNICIANDH, location: Location.findByCode(KIBUYE), username: "techDH", 
+				firstname: "Technician", lastname: "DH", email:'techDH@memms.org', passwordHash: new Sha256Hash("techDH").toHex(), active: true, 
+				confirmed: true, uuid:'techDH', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
+			techDH.addToRoles(defaultTechnicianDHRole)
+			techDH.save(failOnError: true, flush:true)
 			
-			def userTechnicianFacility= new User(userType: UserType.TECHNICIANFACILITY, location: CalculationLocation.findByCode(KIVUYE), username: "techf",
-				firstname: "technician", lastname: "facility", email:'techf@memms.org', passwordHash: new Sha256Hash("techf").toHex(), active: true,
-				confirmed: true, uuid:'techf', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
-			userTechnicianFacility.addToRoles(defaultTechnicianFacilityRole)
-			userTechnicianFacility.save(failOnError: true, flush:true)
+			def techMMC= new User(userType: UserType.TECHNICIANMMC, location: Location.findByCode(RWANDA), username: "techMMC",
+				firstname: "Technician", lastname: "MMC", email:'techMMC@memms.org', passwordHash: new Sha256Hash("techMMC").toHex(), active: true,
+				confirmed: true, uuid:'techMMC', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
+			techMMC.addToRoles(defaultTechnicianMMCRole)
+			techMMC.save(failOnError: true, flush:true)
 			
-			def userTechnicianMoH= new User(userType: UserType.TECHNICIANMOH, location: CalculationLocation.findByCode(RWANDA), username: "techMoH",
-				firstname: "technician", lastname: "MoH", email:'techMoH@memms.org', passwordHash: new Sha256Hash("techMoH").toHex(), active: true,
+			def titulaireHC= new User(userType: UserType.TITULAIREHC, location: CalculationLocation.findByCode(RWANDA), username: "titulaireHC",
+				firstname: "Titulaire", lastname: "HC", email:'titulaireHC@memms.org', passwordHash: new Sha256Hash("titulaireHC").toHex(), active: true,
 				confirmed: true, uuid:'techMoH', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
-			userTechnicianMoH.addToRoles(defaultTechnicianMoHRole)
-			userTechnicianMoH.save(failOnError: true, flush:true)
+			titulaireHC.addToRoles(defaultTitulaireHCRole)
+			titulaireHC.save(failOnError: true, flush:true)
+			
+			def hospitalDepartment= new User(userType: UserType.HOSPITALDEPARTMENT, location: CalculationLocation.findByCode(RWANDA), username: "hospitalDepartment",
+				firstname: "Hospital", lastname: "Department", email:'hospitalDepartment@memms.org', passwordHash: new Sha256Hash("hospitalDepartment").toHex(), active: true,
+				confirmed: true, uuid:'hospitalDepartment', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
+			hospitalDepartment.addToRoles(defaultHospitalDepartmentRole)
+			hospitalDepartment.save(failOnError: true, flush:true)
 			//End default users
 			
 			//User with default clerk role
@@ -217,10 +221,10 @@ public class Initializer {
 			def hc = newDataLocationType(['en':HEALTH_CENTER_GROUP], HEALTH_CENTER_GROUP);
 			def dh = newDataLocationType(['en':DISTRICT_HOSPITAL_GROUP], DISTRICT_HOSPITAL_GROUP);
 			//Add Location Level
-			def country = newLocationLevel(['en':NATIONAL], NATIONAL)
-			def province = newLocationLevel(['en':PROVINCE], PROVINCE)
-			def district = newLocationLevel(['en':DISTRICT], DISTRICT)
-			def sector = newLocationLevel(['en':SECTOR], SECTOR)
+			def country = newLocationLevel(['en':NATIONAL], NATIONAL,1)
+			def province = newLocationLevel(['en':PROVINCE], PROVINCE,2)
+			def district = newLocationLevel(['en':DISTRICT], DISTRICT,3)
+			def sector = newLocationLevel(['en':SECTOR], SECTOR,4)
 			//Add Location
 			def rwanda = newLocation(['en':RWANDA], RWANDA,null,country)
 			def kigali = newLocation(['en':KIGALI_CITY],KIGALI_CITY,rwanda,province)
@@ -488,22 +492,22 @@ public class Initializer {
 	}
 	
 	static def createCorrectiveMaintenanceStructure(){
-		
+		//TODO the users and what they can 
 		def admin = User.findByUsername("admin")
-		def user = User.findByUsername("user")
-		def techFac = User.findByUsername("techf")
-		def techMoH = User.findByUsername("techMoH")
+		def titulaireHC = User.findByUsername("titulaireHC") //hospitalDepartment can do the same job too
+		def techDH = User.findByUsername("techDH")
+		def techMMC = User.findByUsername("techMMC")
 		
 		def equipment01 =Equipment.findBySerialNumber("SERIAL01")
 		def equipment09 =Equipment.findBySerialNumber("SERIAL09")
 		def equipment11 =Equipment.findBySerialNumber("SERIAL11")
 		
-		def workOrderOne =  newWorkOrder(equipment01,"First order",Criticality.NORMAL,user,now()-1,FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-		def statusOne =  newWorkOrderStatus(workOrderOne,OrderStatus.OPENATFOSA,now()-1,user,false)
-		def statusTwo =  newWorkOrderStatus(workOrderOne,OrderStatus.OPENATMMC,now(),user,true)
-		def notifationOne = newNotification(workOrderOne, user, techFac,now(), "notifationOne")
-		def notifationTwo = newNotification(workOrderOne, techFac, user,now(), "I am currentlly working on this, but needs further review. Am making this long to see how it fits when reading it.")
-		def notifationThree = newNotification(workOrderOne, techFac, techMoH,now(), "notifationThree")
+		def workOrderOne =  newWorkOrder(equipment01,"First order",Criticality.NORMAL,titulaireHC,now()-1,FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def statusOne =  newWorkOrderStatus(workOrderOne,OrderStatus.OPENATFOSA,now()-1,titulaireHC,false)
+		def statusTwo =  newWorkOrderStatus(workOrderOne,OrderStatus.OPENATMMC,now(),titulaireHC,true)
+		def notifationOne = newNotification(workOrderOne, titulaireHC, techDH,now(), "notifationOne")
+		def notifationTwo = newNotification(workOrderOne, techDH, titulaireHC,now(), "I am currentlly working on this, but needs further review. Am making this long to see how it fits when reading it.")
+		def notifationThree = newNotification(workOrderOne, techDH, techMMC,now(), "notifationThree")
 		workOrderOne.addToStatus(statusOne)
 		workOrderOne.addToStatus(statusTwo)
 		workOrderOne.save(failOnError:true)
@@ -511,16 +515,16 @@ public class Initializer {
 		def workOrderTwo =  newWorkOrder(equipment01,"Second order",Criticality.LOW,admin,now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		def statusThree =  newWorkOrderStatus(workOrderTwo,OrderStatus.OPENATFOSA,now()-1,admin,false)
 		
-		def workOrderFive =  newWorkOrder(equipment01,"Closed order",Criticality.HIGH,user,now()-3,FailureReason.MISUSE,OrderStatus.OPENATFOSA)
+		def workOrderFive =  newWorkOrder(equipment01,"Closed order",Criticality.HIGH,titulaireHC,now()-3,FailureReason.MISUSE,OrderStatus.OPENATFOSA)
 		
-		def statusFour =  newWorkOrderStatus(workOrderFive,OrderStatus.OPENATFOSA,now()-3,user,false)
-		def statusFive =  newWorkOrderStatus(workOrderFive,OrderStatus.OPENATMMC,now()-2,user,true)		
-		def statusSix =  newWorkOrderStatus(workOrderFive,OrderStatus.OPENATFOSA,now()-1,user,false)
-		def statusSeven =  newWorkOrderStatus(workOrderFive,OrderStatus.CLOSEDFIXED,now(),user,false)
+		def statusFour =  newWorkOrderStatus(workOrderFive,OrderStatus.OPENATFOSA,now()-3,titulaireHC,false)
+		def statusFive =  newWorkOrderStatus(workOrderFive,OrderStatus.OPENATMMC,now()-2,titulaireHC,true)		
+		def statusSix =  newWorkOrderStatus(workOrderFive,OrderStatus.OPENATFOSA,now()-1,titulaireHC,false)
+		def statusSeven =  newWorkOrderStatus(workOrderFive,OrderStatus.CLOSEDFIXED,now(),titulaireHC,false)
 		workOrderFive.closedOn = now()
 		workOrderTwo.save(failOnError:true)
-		def notifationFour = newNotification(workOrderOne, user, techFac,now(), "Solve this for me")
-		def notifationFive = newNotification(workOrderOne, techFac, user,now(), "More information needed")
+		def notifationFour = newNotification(workOrderOne, titulaireHC, techDH,now(), "Solve this for me")
+		def notifationFive = newNotification(workOrderOne, techDH, titulaireHC,now(), "More information needed")
 		workOrderFive.addToStatus(statusFour)
 		workOrderFive.addToStatus(statusFive)
 		workOrderFive.addToStatus(statusSix)
@@ -555,7 +559,7 @@ public class Initializer {
 		
 		workOrderOne.save(failOnError:true)
 		
-		def workOrderThree =  newWorkOrder(equipment09,"Third order",Criticality.NORMAL,user,now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def workOrderThree =  newWorkOrder(equipment09,"Third order",Criticality.NORMAL,titulaireHC,now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		def statusEight =  newWorkOrderStatus(workOrderThree,OrderStatus.OPENATFOSA,now(),admin,false)
 		equipment09.addToWorkOrders(workOrderThree)
 		equipment09.save(failOnError:true)
@@ -652,8 +656,8 @@ public class Initializer {
 		return dataLocationType.save(failOnError: true)
 	}
 	
-	public static def newLocationLevel(def names, def code) {
-		def locationLevel = new LocationLevel(code: code)
+	public static def newLocationLevel(def names, def code, def order) {
+		def locationLevel = new LocationLevel(code: code,order:order)
 		Utils.setLocaleValueInMap(locationLevel,names,"Names")
 		return locationLevel.save(failOnError: true)
 	}

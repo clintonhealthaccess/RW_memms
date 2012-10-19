@@ -89,12 +89,7 @@ class EquipmentController extends AbstractEntityController{
 		if(log.isDebugEnabled()) log.debug("Equipment params: before bind "+params)
 		if(!entity.id){
 			entity.registeredOn=new Date()
-			
 		}else{
-			if(params["purchaser"]!="BYDONOR"){
-				params["donor"] =""
-				params["donorName"] = ""
-			}
 			if(params["warranty.sameAsSupplier"]=="on"){
 				params["warranty.contact.contactName"]=""
 				params["warranty.contact.email"]=""
@@ -108,7 +103,11 @@ class EquipmentController extends AbstractEntityController{
 				entity.warranty.contact=null
 			}
 		}
-		bindData(entity,params,[exclude:["status","dateOfEvent","expectedLifeTime_years","expectedLifeTime_months"]])
+		if(params["purchaser"]!="BYDONOR"){
+			params["donor"] =""
+			params["donorName"] = ""
+		}
+		bindData(entity,params,[exclude:["status","dateOfEvent"]])
 		if(log.isDebugEnabled()) log.debug("Equipment params: after bind  "+entity)
 	}
 

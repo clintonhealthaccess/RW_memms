@@ -60,8 +60,8 @@ class CorrectiveMaintenanceServiceSpec extends IntegrationTests{
 		when:
 		def correctiveMaintenances = correctiveMaintenanceService.getCorrectiveMaintenancesByLocation(burera,types,[:])
 		then:
-		correctiveMaintenances.correctiveMaintenanceList.size() == 2
-		correctiveMaintenances.totalCount == 2
+		correctiveMaintenances.correctiveMaintenanceList.size() == 1
+		correctiveMaintenances.totalCount == 1
 	}
 	
 	def "can't access elements outside range"() {

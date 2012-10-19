@@ -81,7 +81,7 @@ class WorkOrderSpec extends IntegrationTests{
 		workOrderOne.count() == 0
 	}
 
-	def "retrieve notifications for a user"(){
+	def "retrieve notifications received by user"(){
 		setup:
 		setupLocationTree()
 		setupEquipment()
@@ -96,7 +96,7 @@ class WorkOrderSpec extends IntegrationTests{
 		workOrder.save(failOnError:true)
 		then:
 		workOrder.notifications.size() == 2
-		workOrder.getNotificationsForUser(senderOne).size() == 1
+		workOrder.getNotificationsReceivedByUser(receiver).size() == 2
 	}
 	
 	def "retrieve unread notifications for a user"(){
@@ -119,7 +119,30 @@ class WorkOrderSpec extends IntegrationTests{
 		notificationTwo.save(failOnError:true)
 		then:
 		workOrder.notifications.size() == 2
-		workOrder.getUnReadNotificationsForUser(sender).size() == 1
+		workOrder.getUnReadNotificationsForUser(receiver).size() == 1
+	}
+	
+	def "retrieve notifications sent by user"(){
+		setup:
+		setupLocationTree()
+		setupEquipment()
+		def sender = newUser("sender", true,true)
+		def receiver = newUser("receiver", true,true)
+		def equipment = Equipment.findBySerialNumber(CODE(123))
+		def workOrder = Initializer.newWorkOrder(equipment,"Nothing yet",Criticality.NORMAL,sender,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		when:
+		def notificationOne = Initializer.newNotification(workOrder, sender, receiver,Initializer.now(), "test one")
+		def notificationTwo = Initializer.newNotification(workOrder, receiver, sender,Initializer.now(), "test Two")
+		
+		workOrder.addToNotifications(notificationOne)
+		workOrder.addToNotifications(notificationTwo)
+		workOrder.save(failOnError:true)
+		
+		notificationTwo.read = true
+		notificationTwo.save(failOnError:true)
+		then:
+		workOrder.notifications.size() == 2
+		workOrder.getNotificationsSentByUser(sender).size() == 1
 	}
 	
 	def "get list of actions performed"(){
