@@ -14,41 +14,42 @@
 		</h1>
 		<g:locales/>
 	</div>
+	
 	<div class="main">
   	<g:form url="[controller:'equipment', action:'save', params:[targetURI: targetURI]]" useToken="true" class="simple-list">
+  	
   	  <div class="form-section">
-    	<fieldset class="form-content">
-      	<h4 class="section-title">
-          <span class="question-default">
-            <img src="${resource(dir:'images/icons',file:'star_small.png')}">
-          </span>
-          <g:message code="equipment.section.basic.information.label" default="Basic Information"/>
-        </h4>  			  		
-  		<div class="row">
-			<input type="hidden" name="dataLocation.id" value="${equipment.dataLocation.id}" />
-			<label><g:message code="datalocation.label"/>:</label> ${equipment.dataLocation.names}
-		</div>				
-      	<g:selectFromList name="type.id" label="${message(code:'equipment.type.label')}" bean="${equipment}" field="type" optionKey="id" multiple="false"
-  			ajaxLink="${createLink(controller:'equipmentType', action:'getAjaxData')}"
-  			from="${types}" value="${equipment?.type?.id}" values="${types.collect{it.names}}" />
-    		<g:inputYearMonth label='entity.expectedLifeTime.label' name="expectedLifeTime" labelYear="${message(code:'entity.years.label')}" labelMonth="${message(code:'entity.months.label')}" bean="${cmdLifeTime}"/>
-    		
+      	<fieldset class="form-content">
+        	<h4 class="section-title">
+            <span class="question-default">
+              <img src="${resource(dir:'images/icons',file:'star_small.png')}">
+            </span>
+            <g:message code="equipment.section.basic.information.label" default="Basic Information"/>
+          </h4>  			  		
+      		<div class="row">
+    			  <input type="hidden" name="dataLocation.id" value="${equipment.dataLocation.id}" />
+    			  <label><g:message code="datalocation.label"/>:</label> ${equipment.dataLocation.names}
+    		  </div>				
+        	<g:selectFromList name="type.id" label="${message(code:'equipment.type.label')}" bean="${equipment}" field="type" optionKey="id" multiple="false"
+    			ajaxLink="${createLink(controller:'equipmentType', action:'getAjaxData')}"
+    			from="${types}" value="${equipment?.type?.id}" values="${types.collect{it.names}}" />
+      		<g:inputYearMonth label='entity.expectedLifeTime.label' name="expectedLifeTime" labelYear="${message(code:'entity.years.label')}" labelMonth="${message(code:'entity.months.label')}" bean="${cmdLifeTime}"/>
       		<g:input name="serialNumber" label="${message(code:'equipment.serial.number.label')}" bean="${equipment}" field="serialNumber"/>
       		<g:input name="model" label="${message(code:'equipment.model.label')}" bean="${equipment}" field="model"/>
       		<g:i18nTextarea name="descriptions" bean="${equipment}" label="${message(code:'entity.descriptions.label')}" field="descriptions" height="150" width="300" maxHeight="150" />
-		
       		<g:selectFromList name="department.id" label="${message(code:'department.label')}" bean="${equipment}" field="department" optionKey="id" multiple="false"
     			ajaxLink="${createLink(controller:'department', action:'getAjaxData')}"
     			from="${departments}" value="${equipment?.department?.id}" values="${departments.collect{it.names}}" />
-			
       		<g:input name="room" label="${message(code:'equipment.room.label')}" bean="${equipment}" field="room"/>
-    	</fieldset>	
-   		<div id="form-aside-type" class="form-aside">
-    	  <g:if test="${equipment.id != null}">
-    	 	 <g:render template="/templates/typeFormSide" model="['type':equipment?.type,'cssClass':'current','field':'type' ]" />
+      	</fieldset>
+      	
+     		<div id="form-aside-type" class="form-aside">
+      	  <g:if test="${equipment.id != null}">
+      	 	  <g:render template="/templates/typeFormSide" model="['type':equipment?.type,'cssClass':'current','field':'type' ]" />
           </g:if>
-      	</div>
+        </div>
       </div>   
+      
       <div class="form-section">
       	<fieldset class="form-content">
       	<h4 class="section-title">
