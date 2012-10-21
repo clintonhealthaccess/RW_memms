@@ -48,8 +48,59 @@
       	 	  <g:render template="/templates/typeFormSide" model="['type':equipment?.type,'cssClass':'current','field':'type' ]" />
           </g:if>
         </div>
+      </div>
+      <div class="form-section">
+      	<fieldset class="form-content">
+      	<h4 class="section-title">
+          <span class="question-default">
+            <img src="${resource(dir:'images/icons',file:'star_small.png')}" alt="Section"/>
+          </span>
+          <g:message code="equipment.section.status.information.label" default="Status Information"/> 
+        </h4>
+      	<g:if test="${equipment.id == null}">
+      			<g:selectFromEnum name="status" bean="${cmd}" values="${Status.values()}" field="status" label="${message(code:'equipment.status.label')}"/>
+      			<g:input name="dateOfEvent" dateClass="date-picker" label="${message(code:'equipment.status.date.of.event.label')}" bean="${cmd}" field="dateOfEvent"/>
+      			<g:inputBox name="obsolete"  label="${message(code:'equipment.obsolete.label')}" bean="${equipment}" field="obsolete" value="${equipment.obsolete}" checked="${(equipment.obsolete)? true:false}"/>
+      	</g:if>
+      	<g:if test="${equipment?.status!=null}">
+	    	<table class="items">
+	    		<tr>
+	    			<th></th>
+	    			<th>${message(code:'equipment.status.label')}</th>
+	    			<th>${message(code:'equipment.status.date.of.event.label')}</th>
+	    			<th>${message(code:'equipment.status.recordedon.label')}</th>
+	    			<th>${message(code:'equipment.status.current.label')}</th>
+	    		</tr>
+	    		<g:each in="${equipment.status.sort{a,b -> (a.current > b.current) ? -1 : 1}}" status="i" var="status">
+		    		<g:if test="${i+1<numberOfStatusToDisplay}">
+			    		<tr>
+			    			<td>
+				    		<ul>
+								<li>
+									<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'delete', params:[id: status.id,'equipment': equipment?.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');" class="delete-button"><g:message code="default.link.delete.label" /></a>
+								</li>
+							</ul>
+			    			</td>
+			    			<td>${message(code: status?.status?.messageCode+'.'+status?.status?.name)}</td>
+			    			<td>${Utils.formatDate(status?.dateOfEvent)}</td>
+			    			<td>${Utils.formatDateWithTime(status?.statusChangeDate)}</td>
+			    			<td>${(status.current)? '\u2713':''}</td>
+			    		</tr>
+		    		</g:if>
+	    		</g:each>
+	    	</table>
+	    	<br />
+	  	    	<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'create', params:['equipment.id': equipment?.id])}" class="next medium gray">
+	  	    		<g:message code="equipment.change.status.label" default="Change Status"/>
+	  	    	</a>
+	  	    	<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'list', params:['equipment.id': equipment?.id])}">
+	  	    		<g:message code="equipment.see.all.status.label" default="See all status"/>
+	  	    	</a>
+  	    	<br />
+  	    	<g:inputBox name="obsolete"  label="${message(code:'equipment.obsolete.label')}" bean="${equipment}" field="obsolete" value="${equipment.obsolete}" checked="${(equipment.obsolete)? true:false}"/>
+     		</g:if>
+     	</fieldset>
       </div>   
-      
       <div class="form-section">
       	<fieldset class="form-content">
       	<h4 class="section-title">
@@ -62,7 +113,7 @@
       	<g:selectFromList name="manufacturer.id" label="${message(code:'provider.type.manufacturer')}" bean="${equipment}" field="manufacturer" optionKey="id" multiple="false"
   			ajaxLink="${createLink(controller:'provider', action:'getAjaxData', params: [type:'MANUFACTURER'])}"
   			from="${manufacturers}" value="${equipment?.manufacturer?.id}" values="${manufacturers.collect{it.contact?.contactName}}" />	
-  			<g:inputDate name="manufactureDate" precision="month" label="${message(code:'equipment.manufacture.date.label')}" value="${equipment?.manufactureDate}" bean="${equipment}" field="manufactureDate"/>
+  			<g:inputDate name="manufactureDate" yearsRange="${Utils.getYearRange()}" precision="month" label="${message(code:'equipment.manufacture.date.label')}" value="${equipment?.manufactureDate}" bean="${equipment}" field="manufactureDate"/>
      	</fieldset>
     	  <div id="form-aside-manufacturer" class="form-aside">
 	    	  <g:if test="${equipment.id != null}">
@@ -101,57 +152,6 @@
           <span class="question-default">
             <img src="${resource(dir:'images/icons',file:'star_small.png')}" alt="Section"/>
           </span>
-          <g:message code="equipment.section.status.information.label" default="Status Information"/> 
-        </h4>
-      	<g:if test="${equipment.id == null}">
-      			<g:inputBox name="obsolete"  label="${message(code:'equipment.obsolete.label')}" bean="${equipment}" field="obsolete" value="${equipment.obsolete}" checked="${(equipment.obsolete)? true:false}"/>
-      			<g:selectFromEnum name="status" bean="${cmd}" values="${Status.values()}" field="status" label="${message(code:'equipment.status.label')}"/>
-      			<g:input name="dateOfEvent" dateClass="date-picker" label="${message(code:'equipment.status.date.of.event.label')}" bean="${cmd}" field="dateOfEvent"/>
-      	</g:if>
-      	<g:if test="${equipment?.status!=null}">
-      	<g:inputBox name="obsolete"  label="${message(code:'equipment.obsolete.label')}" bean="${equipment}" field="obsolete" value="${equipment.obsolete}" checked="${(equipment.obsolete)? true:false}"/>
-	    	<table class="items">
-	    		<tr>
-	    			<th></th>
-	    			<th>${message(code:'equipment.status.label')}</th>
-	    			<th>${message(code:'equipment.status.date.of.event.label')}</th>
-	    			<th>${message(code:'equipment.status.recordedon.label')}</th>
-	    			<th>${message(code:'equipment.status.current.label')}</th>
-	    		</tr>
-	    		<g:each in="${equipment.status.sort{a,b -> (a.current > b.current) ? -1 : 1}}" status="i" var="status">
-		    		<g:if test="${i+1<numberOfStatusToDisplay}">
-			    		<tr>
-			    			<td>
-				    		<ul>
-								<li>
-									<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'delete', params:[id: status.id,'equipment': equipment?.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');" class="delete-button"><g:message code="default.link.delete.label" /></a>
-								</li>
-							</ul>
-			    			</td>
-			    			<td>${message(code: status?.status?.messageCode+'.'+status?.status?.name)}</td>
-			    			<td>${Utils.formatDate(status?.dateOfEvent)}</td>
-			    			<td>${Utils.formatDateWithTime(status?.statusChangeDate)}</td>
-			    			<td>${(status.current)? '\u2713':''}</td>
-			    		</tr>
-		    		</g:if>
-	    		</g:each>
-	    	</table>
-	    	<br />
-  	    	<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'create', params:['equipment.id': equipment?.id])}" class="next medium gray">
-  	    		<g:message code="equipment.change.status.label" default="Change Status"/>
-  	    	</a>
-  	    	<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'list', params:['equipment.id': equipment?.id])}">
-  	    		<g:message code="equipment.see.all.status.label" default="See all status"/>
-  	    	</a>
-     		</g:if>
-     	</fieldset>
-      </div>
-      <div class="form-section">
-      	<fieldset class="form-content">
-      	<h4 class="section-title">
-          <span class="question-default">
-            <img src="${resource(dir:'images/icons',file:'star_small.png')}" alt="Section"/>
-          </span>
           <g:message code="equipment.section.warranty.information.label" default="Warranty Information"/>
         </h4>
         <g:inputBox name="warranty.sameAsSupplier"  label="${message(code:'equipment.same.as.supplier.label')}" bean="${equipment}" field="warranty.sameAsSupplier" checked="${(equipment.warranty?.sameAsSupplier)? true:false}"/>
@@ -174,7 +174,7 @@
 </div>
 <script type="text/javascript">
 	$(document).ready(function() {
-		getToHide();
+		getToHide("${message(code:'equipment.purchase.cost.label')}","${message(code:'equipment.estimated.cost.label')}");
 		getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}")
 	});
 </script>

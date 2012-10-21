@@ -47,6 +47,6 @@ $(document).delegate('.togglable a.toggle-link', 'click', function(){
  */
 $(document).ready(function() {
 	$('#showhide').click(function(){
-  	$('.filters-box').toggle();
+  	$('.filters-box').toggle(500);
   });
 });
