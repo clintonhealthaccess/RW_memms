@@ -26,7 +26,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.chai.memms.task
+package org.chai.task
 
 import java.util.Map;
 import java.util.Set;
@@ -41,17 +41,22 @@ import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocationType;
 import org.chai.memms.util.Utils;
 
-class ExportFilter {
-
-	static hasMany = [calculationLocations:CalculationLocation,dataLocationTypes:DataLocationType]
+class EquipmentExportFilter extends ExportFilter{
+	Status equipmentStatus
+	String donated
+	String obsolete
 	
+	static hasMany = [equipmentTypes:EquipmentType,manufacturers:Provider,suppliers:Provider]
 	static constraints = {
-		calculationLocations nullable: true, blank: true
-		dataLocationTypes nullable: true, blank: true
-		
+		equipmentTypes nullable: true, blank: true
+		manufacturers nullable: true, blank: true
+		suppliers nullable: true, blank: true
+		equipmentStatus nullable: true
+		donated nullable: true, blank: true
+		obsolete nullable: true, blank: true
 	}
 	static mapping = {
-		table "memms_export_filter"
+		table "memms_equipment_export_filter"
 		version false
 	}
 }

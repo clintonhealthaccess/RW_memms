@@ -6,7 +6,7 @@
 	<title><g:message code="default.list.label" args="[entityName]" /></title>
 	
 	<!-- for admin forms -->
-	<r:require modules="richeditor,datepicker,list,progressbar"/>
+	<r:require modules="datepicker,list,progressbar"/>
 	
 </head>
 <body>

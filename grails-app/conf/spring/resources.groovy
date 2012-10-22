@@ -34,4 +34,7 @@ beans = {
 	datePropertyEditorRegistrar(DatePropertyEditorRegistrar) {
 		messageSource = ref('messageSource')
 	 }
+	
+	grailsSecurityBridge(org.chai.task.ShiroSecurityBridge) {
+	}
 }

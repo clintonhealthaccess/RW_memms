@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012, Clinton Health Access Initiative.
+	 * Copyright (c) 2012, Clinton Health Access Initiative.
  *
  * All rights reserved.
  *
@@ -26,30 +26,35 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.chai.memms.task
+package org.chai.task
 
 import java.util.Map;
-import java.util.Set;
 
-import org.chai.memms.equipment.EquipmentType;
-import org.chai.memms.equipment.Provider;
-import org.chai.memms.equipment.EquipmentStatus.Status;
-import org.chai.memms.exports.EquipmentExport;
+import org.chai.memms.imports.EquipmentTypeImporter
+import org.chai.memms.equipment.EquipmentTypeService;
 import org.chai.memms.exports.EquipmentTypeExport;
-import org.chai.memms.task.Exporter;
-import org.chai.location.CalculationLocation;
-import org.chai.location.DataLocationType;
+import org.chai.memms.imports.FileImporter;
+import org.chai.memms.imports.ImporterErrorManager;
 import org.chai.memms.util.Utils;
 
-class EquipmentExportTask extends DataExportTask{
+class EquipmentTypeImportTask extends ImportTask {
+
+	def equipmentTypeService
+	def sessionFactory;
+	def messageSource
+	
 	String getInformation() {
-		//TODO find out why the message is not working
-		return "export equipment"//message(code: 'equipment.type.label') + '<br/>'+message(code:'import.file.label')+': '+getOutputFilename()
-	}
-	Exporter getExporter() {
-		return new EquipmentExport()
+		return messageSource.getMessage(code: 'equipment.type.label') + '<br/>'+ message(code:'import.file.label')+': '+getInputFilename()
 	}
 	
+	FileImporter getImporter(ImporterErrorManager errorManager) {
+		
+		return new EquipmentTypeImporter(sessionFactory,equipmentTypeService,errorManager)
+	}
+	
+	String getFormView() {
+		return 'equipmentTypeImport'	
+	}
 	
 	Map getFormModel() {
 		return [

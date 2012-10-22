@@ -33,7 +33,7 @@ import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocationType;
 import org.chai.memms.AbstractEntityController;
 import org.chai.memms.equipment.EquipmentStatus.Status;
-import org.chai.memms.task.EquipmentTypeExportFilter;
+import org.chai.task.EquipmentTypeExportFilter;
 
 /**
  * @author Eugene Munyaneza

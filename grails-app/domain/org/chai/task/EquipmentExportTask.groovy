@@ -26,7 +26,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.chai.memms.task
+package org.chai.task
 
 import java.util.Map;
 import java.util.Set;
@@ -41,10 +41,19 @@ import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocationType;
 import org.chai.memms.util.Utils;
 
-class EquipmentTypeExportFilter extends ExportFilter{
-	//TODO This class is empty but needed in the hierachy find way to eliminate it
-	static mapping = {
-		table "memms_equipment_type_export_filter"
-		version false
+class EquipmentExportTask extends DataExportTask{
+	String getInformation() {
+		//TODO find out why the message is not working
+		return "export equipment"//message(code: 'equipment.type.label') + '<br/>'+message(code:'import.file.label')+': '+getOutputFilename()
+	}
+	Exporter getExporter() {
+		return new EquipmentExport()
+	}
+	
+	
+	Map getFormModel() {
+		return [
+			task: this
+		]
 	}
 }

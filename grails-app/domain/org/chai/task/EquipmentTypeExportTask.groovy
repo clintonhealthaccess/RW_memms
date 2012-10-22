@@ -26,37 +26,29 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.chai.memms.task
+package org.chai.task
 
 import java.util.Map;
-import java.util.Set;
 
-import org.chai.memms.equipment.EquipmentType;
-import org.chai.memms.equipment.Provider;
-import org.chai.memms.equipment.EquipmentStatus.Status;
-import org.chai.memms.exports.EquipmentExport;
 import org.chai.memms.exports.EquipmentTypeExport;
 import org.chai.memms.task.Exporter;
-import org.chai.location.CalculationLocation;
-import org.chai.location.DataLocationType;
 import org.chai.memms.util.Utils;
 
-class EquipmentExportFilter extends ExportFilter{
-	Status equipmentStatus
-	String donated
-	String obsolete
+class EquipmentTypeExportTask extends DataExportTask {
 	
-	static hasMany = [equipmentTypes:EquipmentType,manufacturers:Provider,suppliers:Provider]
-	static constraints = {
-		equipmentTypes nullable: true, blank: true
-		manufacturers nullable: true, blank: true
-		suppliers nullable: true, blank: true
-		equipmentStatus nullable: true
-		donated nullable: true, blank: true
-		obsolete nullable: true, blank: true
+	String getInformation() {
+		//TODO find out why the message is not working
+		return "EquipmentTypeExport"//message(code: 'equipment.type.label') + '<br/>'+message(code:'import.file.label')+': '+getOutputFilename()
 	}
-	static mapping = {
-		table "memms_equipment_export_filter"
-		version false
+	
+	Exporter getExporter() {
+		return new EquipmentTypeExport()
+	}
+	
+	
+	Map getFormModel() {
+		return [
+			task: this
+		]
 	}
 }

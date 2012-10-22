@@ -38,8 +38,8 @@ import java.util.Set;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.chai.memms.equipment.EquipmentType
-import org.chai.memms.task.DataExportTask
-import org.chai.memms.task.Progress
+import org.chai.task.DataExportTask
+import org.chai.task.Progress
 import org.chai.memms.util.ImportExportConstant;
 import org.chai.memms.util.Utils;
 import org.supercsv.io.CsvListWriter;

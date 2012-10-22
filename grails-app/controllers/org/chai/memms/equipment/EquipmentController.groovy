@@ -36,7 +36,7 @@ import org.chai.memms.equipment.Equipment.PurchasedBy;
 import org.chai.memms.equipment.EquipmentStatus.Status;
 import org.chai.memms.security.User;
 import org.chai.memms.security.User.UserType;
-import org.chai.memms.task.EquipmentExportFilter;
+import org.chai.task.EquipmentExportFilter;
 import org.chai.memms.util.Utils;
 import org.chai.memms.equipment.Provider
 import org.chai.location.DataLocation;
