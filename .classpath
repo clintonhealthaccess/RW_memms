@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src/java"/>
+	<classpathentry kind="src" path=".plugin-src-i18n-fields-0.6.1-CHAI-src-groovy"/>
+	<classpathentry kind="src" path=".plugin-src-rabbitmq-1.0.0.RC2-src-groovy"/>
+	<classpathentry kind="src" path=".plugin-src-chai-locations-0.3-CHAI-grails-app-services"/>
+	<classpathentry kind="src" path=".plugin-src-rabbitmq-1.0.0.RC2-grails-app-conf"/>
+	<classpathentry kind="src" path=".plugin-src-build-info-tag-0.3.1-grails-app-views"/>
+	<classpathentry kind="src" path=".plugin-src-build-info-tag-0.3.1-grails-app-taglib"/>
+	<classpathentry kind="src" path=".plugin-src-chai-locations-0.3-CHAI-grails-app-domain"/>
 	<classpathentry kind="src" path="src/groovy"/>
 	<classpathentry kind="src" path="grails-app/conf"/>
 	<classpathentry kind="src" path="grails-app/controllers"/>
@@ -21,20 +28,20 @@
 	<classpathentry kind="src" path=".plugin-src-shiro-1.1.5-grails-app-taglib"/>
 	<classpathentry kind="src" path=".plugin-src-shiro-1.1.5-src-java"/>
 	<classpathentry kind="src" path=".plugin-src-shiro-1.1.5-src-groovy"/>
+	<classpathentry kind="src" path=".plugin-src-rest-client-builder-1.0.2-src-groovy"/>
 	<classpathentry kind="src" path=".plugin-src-resources-1.2-RC1-grails-app-conf"/>
 	<classpathentry kind="src" path=".plugin-src-resources-1.2-RC1-grails-app-i18n"/>
 	<classpathentry kind="src" path=".plugin-src-resources-1.2-RC1-grails-app-resourceMappers"/>
 	<classpathentry kind="src" path=".plugin-src-resources-1.2-RC1-grails-app-taglib"/>
 	<classpathentry kind="src" path=".plugin-src-resources-1.2-RC1-src-java"/>
 	<classpathentry kind="src" path=".plugin-src-resources-1.2-RC1-src-groovy"/>
+	<classpathentry kind="src" path=".plugin-src-release-2.0.3-src-java"/>
+	<classpathentry kind="src" path=".plugin-src-release-2.0.3-src-groovy"/>
 	<classpathentry kind="src" path=".plugin-src-rabbitmq-tasks-0.5.3-SNAPSHOT-grails-app-controllers"/>
 	<classpathentry kind="src" path=".plugin-src-rabbitmq-tasks-0.5.3-SNAPSHOT-grails-app-domain"/>
-	<classpathentry kind="src" path=".plugin-src-rabbitmq-tasks-0.5.3-SNAPSHOT-grails-app-i18n"/>
 	<classpathentry kind="src" path=".plugin-src-rabbitmq-tasks-0.5.3-SNAPSHOT-grails-app-jobs"/>
 	<classpathentry kind="src" path=".plugin-src-rabbitmq-tasks-0.5.3-SNAPSHOT-grails-app-services"/>
 	<classpathentry kind="src" path=".plugin-src-rabbitmq-tasks-0.5.3-SNAPSHOT-src-java"/>
-	<classpathentry kind="src" path=".plugin-src-rabbitmq-1.0.0.RC2-grails-app-conf"/>
-	<classpathentry kind="src" path=".plugin-src-rabbitmq-1.0.0.RC2-src-groovy"/>
 	<classpathentry kind="src" path=".plugin-src-quartz-1.0-RC2-grails-app-conf"/>
 	<classpathentry kind="src" path=".plugin-src-quartz-1.0-RC2-grails-app-services"/>
 	<classpathentry kind="src" path=".plugin-src-quartz-1.0-RC2-src-java"/>
@@ -56,7 +63,6 @@
 	<classpathentry kind="src" path=".plugin-src-jquery-1.7.1-grails-app-services"/>
 	<classpathentry kind="src" path=".plugin-src-jquery-1.7.1-grails-app-taglib"/>
 	<classpathentry kind="src" path=".plugin-src-jquery-1.7.1-src-groovy"/>
-	<classpathentry kind="src" path=".plugin-src-i18n-fields-0.6.1-CHAI-src-groovy"/>
 	<classpathentry kind="src" path=".plugin-src-hibernate-2.1.0-grails-app-i18n"/>
 	<classpathentry kind="src" path=".plugin-src-csv-0.3.1-grails-app-i18n"/>
 	<classpathentry kind="src" path=".plugin-src-csv-0.3.1-src-groovy"/>
@@ -64,15 +70,12 @@
 	<classpathentry kind="src" path=".plugin-src-compass-sass-0.7-grails-app-i18n"/>
 	<classpathentry kind="src" path=".plugin-src-compass-sass-0.7-grails-app-resourceMappers"/>
 	<classpathentry kind="src" path=".plugin-src-compass-sass-0.7-src-groovy"/>
-	<classpathentry kind="src" path=".plugin-src-chai-locations-0.2.3-CHAI-grails-app-domain"/>
-	<classpathentry kind="src" path=".plugin-src-chai-locations-0.2.3-CHAI-grails-app-services"/>
 	<classpathentry kind="src" path=".plugin-src-cached-resources-1.0-grails-app-i18n"/>
 	<classpathentry kind="src" path=".plugin-src-cached-resources-1.0-grails-app-resourceMappers"/>
 	<classpathentry kind="src" path=".plugin-src-cached-resources-1.0-grails-app-views"/>
 	<classpathentry kind="src" path=".plugin-src-cached-resources-1.0-src-groovy"/>
 	<classpathentry kind="src" path=".plugin-src-cache-headers-1.1.5-grails-app-i18n"/>
 	<classpathentry kind="src" path=".plugin-src-cache-headers-1.1.5-grails-app-services"/>
-	<classpathentry kind="src" path="grails-app/realms"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="var" path="GRAILS_IVYCACHE/org.codehaus.groovy/groovy-all/jars/groovy-all-1.8.6.jar"/>
 	<classpathentry kind="var" path="GRAILS_IVYCACHE/commons-beanutils/commons-beanutils/jars/commons-beanutils-1.8.3.jar"/>

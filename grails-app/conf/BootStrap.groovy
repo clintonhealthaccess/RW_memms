@@ -83,6 +83,7 @@ class BootStrap {
 				defaultDataClerkRole.save(failOnError: true)
 				
 				
+				
 				def defaultTechnicianFacilityRole
 				if(Role.findByName("Technician Facility")) defaultTechnicianFacilityRole = Role.findByName("Technician Facility") 
 				else defaultTechnicianFacilityRole = new Role(name: "Technician Facility")
