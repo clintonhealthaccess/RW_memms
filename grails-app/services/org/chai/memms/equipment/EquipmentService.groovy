@@ -74,6 +74,7 @@ class EquipmentService {
 				if(dataLocation!=null)
 					eq('dataLocation',dataLocation)
 				or{
+					ilike("code","%"+text+"%")
 					ilike("serialNumber","%"+text+"%")
 					ilike(dbFieldDescriptions,"%"+text+"%") 
 					ilike("t."+dbFieldTypeNames,"%"+text+"%")

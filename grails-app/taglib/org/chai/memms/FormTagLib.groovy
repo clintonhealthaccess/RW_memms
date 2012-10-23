@@ -18,8 +18,7 @@ class FormTagLib {
 	
 	def inputYearMonth = { attrs, body ->
 		if (attrs["type"] == null) attrs["type"] = 'text'
-		//TODO find why this is not working
-		if (attrs["yearsRange"] == null) attrs["yearsRange"] = Utils.getYearRange()
+		if (attrs["maxlength"] == null) attrs["maxlength"] = 3
 		out << render(template:"/tags/form/inputYearMonth", model: attrs)
 	}
 	
@@ -56,6 +55,8 @@ class FormTagLib {
 	def inputDate = { attrs, body ->
 		if (attrs["type"] == null) attrs["type"] = 'text'
 		if (attrs["id"] == null) attrs["id"] = 'date-field-one'
+		if (attrs["maxRangeYear"] == null) attrs["maxRangeYear"] = now.year+1900
+		if (attrs["minRangeYear"] == null) attrs["minRangeYear"] = 1970
 		out << render(template:"/tags/form/inputDate", model: attrs)
 	}
 	

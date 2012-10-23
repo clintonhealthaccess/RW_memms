@@ -30,6 +30,7 @@ package org.chai.memms.equipment
 import javax.persistence.Transient;
 
 import org.chai.memms.Contact
+import org.chai.memms.Period;
 import org.chai.memms.Warranty;
 import org.chai.memms.equipment.EquipmentStatus.Status;
 import org.chai.memms.maintenance.WorkOrder;
@@ -85,11 +86,13 @@ public class Equipment {
 	String code
 	String donorName
 	
-	Integer expectedLifeTime
+	Period expectedLifeTime
+	Period serviceContractPeriod
 	Boolean obsolete
 	
 	Provider manufacturer
 	Provider supplier
+	Provider serviceProvider
 	Warranty warranty
 	
 	PurchasedBy purchaser
@@ -97,18 +100,22 @@ public class Equipment {
 	
 	Date manufactureDate
 	Date purchaseDate
+	Date serviceContractStartDate
 	Date registeredOn
 	
 	static hasMany = [status: EquipmentStatus, workOrders: WorkOrder]
 	static belongsTo = [dataLocation: DataLocation, department: Department, type: EquipmentType]
 	static i18nFields = ["observations","descriptions"]
-	static embedded = ["warranty"]
+	static embedded = ["warranty","serviceContractPeriod","expectedLifeTime"]
 	
 	static constraints = {
 		importFrom Contact
 		code nullable: false, blank:false, unique:true
 		supplier nullable: false
 		manufacturer nullable: false
+		serviceProvider nullable: true, validator:{val, obj ->
+			if(val == null) return (obj.serviceContractStartDate==null && obj.serviceContractPeriod==null)
+		}
 		warranty nullable: true
 		
 		serialNumber nullable: false, blank: false,  unique: true
@@ -123,7 +130,14 @@ public class Equipment {
 		currency  nullable: true, blank: true, inList: ["RWF","USD","EUR"], validator:{ val, obj ->
 			if(obj.purchaseCost != null) return (val != null)
 		}
-		expectedLifeTime nullable: false, blank: false
+		expectedLifeTime nullable: false
+		serviceContractPeriod nullable: true, validator:{ val, obj ->
+			if(val==null) return (obj.serviceContractStartDate==null && obj.serviceProvider==null)
+		}
+		serviceContractStartDate nullable: true, blank: true, validator:{ val, obj ->
+			if(val!=null) return (val<=new Date()) 
+			if(val==null) return (obj.serviceContractPeriod==null && obj.serviceProvider==null)
+		}
 		room nullable: true, blank: true
 		
 		manufactureDate nullable: false, blank: false, validator:{it <= new Date()}

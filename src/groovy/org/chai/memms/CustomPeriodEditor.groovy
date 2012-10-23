@@ -1,4 +1,4 @@
-/**
+/** 
  * Copyright (c) 2012, Clinton Health Access Initiative.
  *
  * All rights reserved.
@@ -13,7 +13,7 @@
  *     * Neither the name of the <organization> nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -25,75 +25,53 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.equipment
+package org.chai.memms
 
-import org.chai.memms.Contact;
+import java.beans.PropertyEditorSupport;
+import java.util.List;
+import java.util.Map;
 
-import i18nfields.I18nFields
+import org.codehaus.groovy.grails.web.binding.StructuredPropertyEditor;
+import org.springframework.util.NumberUtils;
+import org.springframework.util.StringUtils;
+
+
 /**
  * @author Jean Kahigiso M.
  *
  */
-@i18nfields.I18nFields
-public class Provider{
+class CustomPeriodEditor extends PropertyEditorSupport implements StructuredPropertyEditor{
+	private Integer months
+	private Integer years
 	
-	enum Type{
-		NONE("none"),
-		BOTH("both"),
-		MANUFACTURER("manufacturer"),
-		SUPPLIER("supplier"),
-		SERVICEPROVIDER("serviceProvider")
-		
-		String messageCode = "provider.type"
-		final String name
-		Type(String name){ this.name = name }
-		String getKey() { return name() }
+	@Override
+	public List getOptionalFields() {
+		List optionalFilds =  new ArrayList();
+		optionalFilds.add("months")
+		optionalFilds.add("years")
+		return optionalFilds;
 	}
-	
-	String code
-	Type type
-	Contact contact
-	
-	static embedded = ["contact"]
-	static mappedBy = [manufacturers: "manufacturer",suppliers: "supplier",serviceProviders: "serviceProvider"]
-	static hasMany = [manufacturers: Equipment, suppliers: Equipment,serviceProviders: Equipment]
-   
-	static constraints ={
-		code nullable: false, blank: false, unique: true
-		type nullable: false, inList: [Type.BOTH,Type.MANUFACTURER,Type.SUPPLIER,Type.SERVICEPROVIDER]
-		contact nullable: false
-	}
-	static mapping = {
-	    version false
-	    table "memms_provider"
+
+	@Override
+	public List getRequiredFields() {
+		return new ArrayList();
 	}
 	
 	@Override
-	public String toString() {
-		return "Provider [code=" + code + ", type=" + type + "]";
+	public Object assemble(Class type, Map fieldValues) throws IllegalArgumentException {
+		if(log.isDebugEnabled()) log.debug("period fieldValues to be bind "+fieldValues)
+		def month = fieldValues.get("months");
+		def year = fieldValues.get("years");
+		try{ 
+			months = Integer.parseInt(month[0]) 
+			} catch (Exception nfe){
+			throw new IllegalArgumentException("Months has to be a number",nfe)
+		}
+		try{
+			years = Integer.parseInt(year[0])
+		} catch (Exception nfe){
+			throw new IllegalArgumentException("Years has to be a number",nfe)
+		}
+		return new Period(years,months);
 	}
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((code == null) ? 0 : code.hashCode());
-		return result;
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this.is(obj))
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Provider other = (Provider) obj;
-		if (code == null) {
-			if (other.code != null)
-				return false;
-		} else if (!code.equals(other.code))
-			return false;
-		return true;
-	}	
-   
 }

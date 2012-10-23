@@ -11,7 +11,7 @@
 	<div class="form-box wide">
   	<ul class="todo">
   	<shiro:hasPermission permission="menu:inventory">
-  		<li><a href="${createLink(controller: 'Equipment', action:'summaryPage')}"><g:message code="header.navigation.inventory"/></a></li>
+  		<li><a href="${createLink(controller: 'equipmentView', action:'summaryPage')}"><g:message code="header.navigation.inventory"/></a></li>
   		</shiro:hasPermission>
   		<shiro:hasPermission permission="menu:correctivemaintenance">
   		<li><a href="${createLink(controller: 'workOrder', action:'summaryPage')}"><g:message code="header.navigation.corrective.maintenance"/></a></li>

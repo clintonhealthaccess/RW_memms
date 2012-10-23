@@ -21,7 +21,7 @@
 				</td>
 				<td>
 					<shiro:hasPermission permission="equipment:list">
-						<a href="${createLink(controller: 'equipment', action: 'list', params:['dataLocation.id': inventory.dataLocation.id] )}"><g:message code="inventory.manage.equipment.label" /></a>
+						<a href="${createLink(controller: 'equipmentView', action: 'list', params:['dataLocation.id': inventory.dataLocation.id] )}"><g:message code="inventory.manage.equipment.label" /></a>
 					</shiro:hasPermission>
 				</td>
 			</tr>

@@ -1,4 +1,5 @@
 import org.chai.memms.DatePropertyEditorRegistrar;
+import org.chai.memms.PeriodPropertyEditorRegistrar;
 import org.springframework.beans.PropertyEditorRegistrar;
 
 /**
@@ -33,5 +34,8 @@ beans = {
 	
 	datePropertyEditorRegistrar(DatePropertyEditorRegistrar) {
 		messageSource = ref('messageSource')
+	 }
+	periodPropertyEditorRegistrar(PeriodPropertyEditorRegistrar) {
+		//messageSource = ref('messageSource')
 	 }
 }
