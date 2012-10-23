@@ -100,7 +100,6 @@ class WorkOrderNotificationController extends AbstractEntityController{
 		Boolean read = (params.read) ? params.boolean("read") : null;
 		WorkOrder workOrder = WorkOrder.get(params.id)
 		List<WorkOrderNotification> workOrderNotifications = workOrderNotificationService.filterNotifications(workOrder, user, null,null,read, params)
-		log.debug("listing work orders notifications")
 		render(view:"/entity/list", model:[
 			template:"notification/workOrderNotificationList",
 			filterTemplate:"notification/workOrderNotificationFilter",
