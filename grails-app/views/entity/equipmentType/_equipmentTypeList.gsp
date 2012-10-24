@@ -41,7 +41,7 @@
 					<g:message code="${type.observation.messageCode}.${type.observation.name}"/>
 				</td>
 				<td>
-					${type.expectedLifeTime.numberOfMonths}
+					${type.expectedLifeTime?.numberOfMonths}
 				</td>
 				<td>
 					${Utils.formatDateWithTime(type?.addedOn)}
