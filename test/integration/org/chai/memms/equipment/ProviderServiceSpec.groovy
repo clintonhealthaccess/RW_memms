@@ -21,10 +21,13 @@ class ProviderServiceSpec extends IntegrationTests{
 		supplier.save(failOnError: true)
 		def both = new Provider(code:CODE(125), type: Type.BOTH, contact:othersContact)
 		both.save()
+		def servicePro = new Provider(code:CODE(126), type: Type.SERVICEPROVIDER, contact:othersContact)
+		servicePro.save()
 		when:
 		List<Provider> providers = providerService.searchProvider(null,"Manu",["":""])
 		
 		then:
+		Provider.count()==4
 		providers.size()==1
 		providers[0].code.equals("CODE123")
 	}
@@ -41,12 +44,15 @@ class ProviderServiceSpec extends IntegrationTests{
 		supplier.save(failOnError: true)
 		def both = new Provider(code:CODE(125), type: Type.BOTH, contact:othersContact)
 		both.save()
+		def servicePro = new Provider(code:CODE(126), type: Type.SERVICEPROVIDER, contact:othersContact)
+		servicePro.save()
 		when:
-		List<Provider> providers = providerService.searchProvider(Type.BOTH,"",["":""])
+		List<Provider> providers = providerService.searchProvider(Type.SERVICEPROVIDER,"",["":""])
 		
 		then:
+		Provider.count()==4
 		providers.size()==1
-		providers[0].code.equals("CODE125")
+		providers[0].code.equals("CODE126")
 	}
 	
 	def "test search provider"(){
@@ -61,12 +67,15 @@ class ProviderServiceSpec extends IntegrationTests{
 		supplier.save(failOnError: true)
 		def both = new Provider(code:CODE(125), type: Type.BOTH, contact:othersContact)
 		both.save()
+		def servicePro = new Provider(code:CODE(126), type: Type.SERVICEPROVIDER, contact:othersContact)
+		servicePro.save()
 		when:
 		List<Provider> providers = providerService.searchProvider(null,"address",["":""])
 		
 		then:
-		providers.size()==3
-		providers.equals([both,supplier,manufacturer])
+		Provider.count()==4
+		providers.size()==4
+		providers.equals([servicePro,both,supplier,manufacturer])
 	}
 
 

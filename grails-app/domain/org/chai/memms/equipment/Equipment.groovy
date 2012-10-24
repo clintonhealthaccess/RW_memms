@@ -88,6 +88,7 @@ public class Equipment {
 	
 	Period expectedLifeTime
 	Period serviceContractPeriod
+	Period warrantyPeriod
 	Boolean obsolete
 	
 	Provider manufacturer
@@ -106,7 +107,7 @@ public class Equipment {
 	static hasMany = [status: EquipmentStatus, workOrders: WorkOrder]
 	static belongsTo = [dataLocation: DataLocation, department: Department, type: EquipmentType]
 	static i18nFields = ["observations","descriptions"]
-	static embedded = ["warranty","serviceContractPeriod","expectedLifeTime"]
+	static embedded = ["warranty","serviceContractPeriod","expectedLifeTime","warrantyPeriod"]
 	
 	static constraints = {
 		importFrom Contact
@@ -117,6 +118,9 @@ public class Equipment {
 			if(val == null) return (obj.serviceContractStartDate==null && obj.serviceContractPeriod==null)
 		}
 		warranty nullable: true
+		warrantyPeriod nullable: true, validator:{val, obj ->
+			if (obj.warranty!=null) return (val!=null)
+		}
 		
 		serialNumber nullable: false, blank: false,  unique: true
 		purchaseCost nullable: true, blank: true, validator:{ if(it!=null) return (it>0) }
@@ -135,7 +139,7 @@ public class Equipment {
 			if(val==null) return (obj.serviceContractStartDate==null && obj.serviceProvider==null)
 		}
 		serviceContractStartDate nullable: true, blank: true, validator:{ val, obj ->
-			if(val!=null) return (val<=new Date()) 
+			if(val!=null) return (val<=new Date() && (val.after(obj.purchaseDate) || (val.compareTo(obj.purchaseDate)==0)))
 			if(val==null) return (obj.serviceContractPeriod==null && obj.serviceProvider==null)
 		}
 		room nullable: true, blank: true

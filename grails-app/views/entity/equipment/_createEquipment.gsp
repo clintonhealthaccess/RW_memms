@@ -44,7 +44,7 @@
       	</fieldset>
       	
      		<div id="form-aside-type" class="form-aside">
-      	  <g:if test="${equipment.id != null}">
+      	  <g:if test="${equipment?.type != null}">
       	 	  <g:render template="/templates/typeFormSide" model="['type':equipment?.type,'cssClass':'current','field':'type' ]" />
           </g:if>
         </div>
@@ -116,7 +116,7 @@
   			<g:inputDate name="manufactureDate"  precision="month" label="${message(code:'equipment.manufacture.date.label')}" value="${equipment?.manufactureDate}" bean="${equipment}" field="manufactureDate"/>
      	</fieldset>
     	  <div id="form-aside-manufacturer" class="form-aside">
-	    	  <g:if test="${equipment.id != null}">
+	    	  <g:if test="${equipment?.manufacturer != null}">
 	    	 	 <g:render template="/templates/providerFormSide" model="['provider':equipment?.manufacturer,'type':equipment?.manufacturer?.type,'label':'provider.manufacturer.details','cssClass':'current','field':'manufacturer' ]" />
 	          </g:if>
        	</div>
@@ -141,7 +141,7 @@
     		<g:currency costName="purchaseCost" id="purchase-cost" costLabel="${message(code:'equipment.purchase.cost.label')}" bean="${equipment}" costField="purchaseCost"  currencyName="currency" values="${currencies}" currencyField="currency" currencyLabel="${message(code:'equipment.currency.label')}"/>
      	</fieldset>
      	 <div id="form-aside-supplier" class="form-aside">
-     		<g:if test="${equipment.id != null}">
+     		<g:if test="${equipment?.supplier != null}">
      	  		<g:render template="/templates/providerFormSide" model="['provider':equipment?.supplier,'type':equipment?.supplier?.type,'label':'provider.supplier.details','cssClass':'current','field':'supplier']" />
        		</g:if>
        	</div>
@@ -156,7 +156,7 @@
         </h4>
         <g:inputBox name="warranty.sameAsSupplier"  label="${message(code:'equipment.same.as.supplier.label')}" bean="${equipment}" field="warranty.sameAsSupplier" checked="${(equipment.warranty?.sameAsSupplier)? true:false}"/>
       	<g:input name="warranty.startDate" dateClass="date-picker" label="${message(code:'warranty.start.date.label')}" bean="${equipment}" field="warranty.startDate"/>
-    	<g:inputYearMonth name="warranty.numberOfMonth" field="warranty.numberOfMonth" years="${equipment.warranty?.numberOfMonth?.years}" months="${equipment.warranty?.numberOfMonth?.months}" bean="${equipment}" label='equipment.warranty.period.label'/>
+    	<g:inputYearMonth name="warrantyPeriod" field="warrantyPeriod" years="${equipment.warrantyPeriod?.years}" months="${equipment.warrantyPeriod?.months}" bean="${equipment}" label='equipment.warranty.period.label'/>
       	<g:address  bean="${equipment}" warranty="true" field="warranty.contact"/>
      	<g:i18nTextarea name="warranty.descriptions" bean="${equipment}" label="${message(code:'warranty.descriptions.label')}" field="descriptions" height="150" width="300" maxHeight="150" />	 			
   		</fieldset> 
@@ -171,12 +171,12 @@
         </h4>
         <g:selectFromList name="serviceProvider.id" label="${message(code:'provider.type.serviceProvider')}" bean="${equipment}" field="serviceProvider" optionKey="id" multiple="false"
   			ajaxLink="${createLink(controller:'provider', action:'getAjaxData', params: [type:'SERVICEPROVIDER'])}"
-  			from="${serviceProviders}" value="${equipment.serviceProvider?.id}" values="${suppliers.collect{it.contact?.contactName}}" />
+  			from="${serviceProviders}" value="${equipment.serviceProvider?.id}" values="${serviceProviders.collect{it.contact?.contactName}}" />
   			<g:input name="serviceContractStartDate" dateClass="date-picker" label="${message(code:'equipment.provider.startDate.label')}" bean="${equipment}" field="serviceContractStartDate"/>
   			<g:inputYearMonth name="serviceContractPeriod" field="serviceContractPeriod" years="${equipment.serviceContractPeriod?.years}" months="${equipment.serviceContractPeriod?.months}" bean="${equipment}" label='equipment.provider.period.label'/>
   		</fieldset> 
   		<div id="form-aside-serviceProvider" class="form-aside">
-	    	  <g:if test="${equipment.id != null}">
+	    	  <g:if test="${equipment?.serviceProvider != null}">
 	    	 	 <g:render template="/templates/providerFormSide" model="['provider':equipment.serviceProvider,'type':equipment.serviceProvider?.type,'label':'provider.service.provider.details','cssClass':'current','field':'serviceProvider' ]" />
 	          </g:if>
        	</div>

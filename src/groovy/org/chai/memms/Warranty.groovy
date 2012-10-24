@@ -36,7 +36,6 @@ import i18nfields.I18nFields
 class Warranty{
 	
 	Date startDate
-	Period numberOfMonth
 	Boolean sameAsSupplier
 	String descriptions
 	Contact contact
@@ -51,9 +50,7 @@ class Warranty{
 			 if(obj.sameAsSupplier==true) return (val==null)
 			}
 		sameAsSupplier nullable: true
-		numberOfMonth nullable: true, validator:{ val, obj ->
-			if(val==null) return (obj.startDate==null)
-		}
+		
 	}
 	
 	static mapping = {

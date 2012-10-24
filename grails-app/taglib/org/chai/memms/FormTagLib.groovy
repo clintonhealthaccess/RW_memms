@@ -18,7 +18,7 @@ class FormTagLib {
 	
 	def inputYearMonth = { attrs, body ->
 		if (attrs["type"] == null) attrs["type"] = 'text'
-		if (attrs["maxlength"] == null) attrs["maxlength"] = 3
+		if (attrs["maxlength"] == null) attrs["maxlength"] = 2
 		out << render(template:"/tags/form/inputYearMonth", model: attrs)
 	}
 	

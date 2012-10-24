@@ -54,7 +54,7 @@ class EquipmentSpec extends IntegrationTests{
 		when:
 		def equipment = new Equipment(serialNumber:"test123",manufactureDate:Initializer.getDate(22,07,2010),
 			purchaseDate:Initializer.getDate(22,07,2010),registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,
-			 dataLocation:DataLocation.list().first(),purchaser:PurchasedBy.BYDONOR,donor:Donor.MOHPARTNER,donorName:"CHAI",obsolete:false,expectedLifeTime:20,
+			 dataLocation:DataLocation.list().first(),purchaser:PurchasedBy.BYDONOR,donor:Donor.MOHPARTNER,donorName:"CHAI",obsolete:false,expectedLifeTime:Initializer.newPeriod(20),
 			 descriptions:['en':'Equipment Descriptions'], type:equipmentType)
 		equipment.genarateAndSetEquipmentCode()
 
@@ -65,12 +65,13 @@ class EquipmentSpec extends IntegrationTests{
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
 		
 		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
-		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),4,false,[:])
+		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),false,[:])
 
 		equipment.manufacturer=manufacture
 		equipment.supplier=supplier
 		
-		equipment.warranty=warranty
+		equipment.warranty = warranty
+		equipment.warrantyPeriod = Initializer.newPeriod(4)
 
 		equipment.save(failOnError: true)
 		then:
@@ -94,11 +95,12 @@ class EquipmentSpec extends IntegrationTests{
 		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
 		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
-		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),12,false,[:])
+		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),false,[:])
 
 		equipment.manufacturer=manufacture
 		equipment.supplier=supplier
 		equipment.warranty=warranty
+		equipment.warrantyPeriod = Initializer.newPeriod(12)
 
 		equipment.save()
 		then:
@@ -120,7 +122,7 @@ class EquipmentSpec extends IntegrationTests{
 		def equipmentType = Initializer.newEquipmentType(CODE(15810), ["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now(),13)
 		when:
 		def equipment = new Equipment(purchaseCost:"200455.8",serialNumber:"test123",manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),
-				registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,purchaser:PurchasedBy.BYDONOR,obsolete:false,expectedLifeTime:20,
+				registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,purchaser:PurchasedBy.BYDONOR,obsolete:false,expectedLifeTime:Initializer.newPeriod(20),
 				dataLocation:DataLocation.list().first(),descriptions:['en':'Equipment Descriptions'],type:equipmentType)
 
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
@@ -129,11 +131,12 @@ class EquipmentSpec extends IntegrationTests{
 		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
 		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
-		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),11,false,[:])
+		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),false,[:])
 
 		equipment.manufacturer=manufacture
 		equipment.supplier=supplier
 		equipment.warranty=warranty
+		equipment.warrantyPeriod = Initializer.newPeriod(11)
 
 		equipment.save()
 		then:
@@ -152,20 +155,21 @@ class EquipmentSpec extends IntegrationTests{
 		def equipmentType = Initializer.newEquipmentType(CODE(15810), ["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now(),12)
 		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
-		Initializer.newEquipment("test123",PurchasedBy.BYFACILITY,null,null,false,30,"ROOM A1","16677",['en':"testDescription"],Initializer.getDate(22,07,2010), Initializer.getDate(22,07,2010),"RWF",
+		Initializer.newEquipment("test123",PurchasedBy.BYFACILITY,null,null,false,Initializer.newPeriod(30),"ROOM A1","16677",['en':"testDescription"],Initializer.getDate(22,07,2010), Initializer.getDate(22,07,2010),"RWF",
 				Initializer.getDate(22,07,2010),"equipmentModel",DataLocation.list().first(),department, equipmentType,manufacture,supplier)
 			
 		when:
 		def equipment = new Equipment(serialNumber:"test123",purchaseCost:"1,200",currency:"USD",manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),
-				registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,purchaser:PurchasedBy.BYMOH,obsolete:false,expectedLifeTime:20,
+				registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,purchaser:PurchasedBy.BYMOH,obsolete:false,expectedLifeTime:Initializer.newPeriod(20),
 				dataLocation:DataLocation.list().first(),descriptions:['en':'Equipment Descriptions'],type:equipmentType)
 
 		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
-		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),21,false,[:])
+		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),false,[:])
 
 		equipment.manufacturer=manufacture
 		equipment.supplier=supplier
 		equipment.warranty=warranty
+		equipment.warrantyPeriod = Initializer.newPeriod(21)
 
 		equipment.save()
 		then:
@@ -183,20 +187,21 @@ class EquipmentSpec extends IntegrationTests{
 				def equipmentType = Initializer.newEquipmentType(CODE(15810), ["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now(),12)
 				def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
 				def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
-				def equipmentOne = Initializer.newEquipment("test123",PurchasedBy.BYFACILITY,null,null,false,30,"ROOM A1","16677",['en':"testDescription"],Initializer.getDate(22,07,2010), Initializer.getDate(22,07,2010),"RWF",
+				def equipmentOne = Initializer.newEquipment("test123",PurchasedBy.BYFACILITY,null,null,false,Initializer.newPeriod(30),"ROOM A1","16677",['en':"testDescription"],Initializer.getDate(22,07,2010), Initializer.getDate(22,07,2010),"RWF",
 						Initializer.getDate(22,07,2010),"equipmentModel",DataLocation.list().first(),department, equipmentType,manufacture,supplier)
 					
 				when:
 				def equipment = new Equipment(serialNumber:"test123",purchaseCost:"1,200",currency:"USD",manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),
-						registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,purchaser:PurchasedBy.BYMOH,obsolete:false,expectedLifeTime:20,
+						registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,purchaser:PurchasedBy.BYMOH,obsolete:false,expectedLifeTime:Initializer.newPeriod(20),
 						dataLocation:DataLocation.list().first(),descriptions:['en':'Equipment Descriptions'],type:equipmentType,code:equipmentOne.code)
 		
 				def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
-				def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),21,false,[:])
+				def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),false,[:])
 		
 				equipment.manufacturer=manufacture
 				equipment.supplier=supplier
 				equipment.warranty=warranty
+				equipment.warrantyPeriod = Initializer.newPeriod(21)
 		
 				equipment.save()
 				then:
@@ -204,7 +209,7 @@ class EquipmentSpec extends IntegrationTests{
 				equipment.errors.hasFieldErrors('code') == true
 			}
 
-	def "manufacture date must be after today"() {
+	def "manufacture date must be before today"() {
 
 		setup:
 		setupLocationTree()
@@ -212,7 +217,7 @@ class EquipmentSpec extends IntegrationTests{
 		def equipmentType = Initializer.newEquipmentType("15810", ["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now(),9)
 		when:
 		def equipment = new Equipment(serialNumber:"test123", purchaseCost:"1,200",currency:"EURO",manufactureDate:Initializer.now().next(),purchaseDate:Initializer.getDate(22,07,2010),
-				registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,purchaser:PurchasedBy.BYFACILITY,obsolete:false,expectedLifeTime:20,
+				registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,purchaser:PurchasedBy.BYFACILITY,obsolete:false,expectedLifeTime:Initializer.newPeriod(20),
 				dataLocation:DataLocation.list().first(),descriptions:['en':'Equipment Descriptions'],type:equipmentType)
 
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
@@ -221,11 +226,12 @@ class EquipmentSpec extends IntegrationTests{
 		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
 		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
-		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),12,false,[:])
+		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),false,[:])
 
 		equipment.manufacturer=manufacture
 		equipment.supplier=supplier
 		equipment.warranty=warranty
+		equipment.warrantyPeriod = Initializer.newPeriod(12)
 
 		equipment.save()
 		then:
@@ -241,7 +247,7 @@ class EquipmentSpec extends IntegrationTests{
 		def equipmentType = Initializer.newEquipmentType("15810", ["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now(),56)
 		when:
 		def equipment = new Equipment(serialNumber:"test123", purchaseCost:"1,200",currency:"USD",manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.now().next(),
-				registeredOn:Initializer.getDate(22,07,2010), model:"equipmentModel", department:department,purchaser:PurchasedBy.BYMOH,obsolete:false,expectedLifeTime:20,
+				registeredOn:Initializer.getDate(22,07,2010), model:"equipmentModel", department:department,purchaser:PurchasedBy.BYMOH,obsolete:false,expectedLifeTime:Initializer.newPeriod(20),
 				dataLocation:DataLocation.list().first(),descriptions:['en':'Equipment Descriptions'],type:equipmentType)
 
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
@@ -250,11 +256,12 @@ class EquipmentSpec extends IntegrationTests{
 		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
 		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
-		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),22,false,[:])
+		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),false,[:])
 
 		equipment.manufacturer=manufacture
 		equipment.supplier=supplier
 		equipment.warranty=warranty
+		equipment.warrantyPeriod = Initializer.newPeriod(22)
 
 		equipment.save()
 		then:
@@ -270,7 +277,7 @@ class EquipmentSpec extends IntegrationTests{
 		def user  = newUser("admin", "Admin UID")
 		def equipment = new Equipment(serialNumber:"test123",manufactureDate:Initializer.getDate(22,07,2010),
 			purchaseDate:Initializer.getDate(22,07,2010),registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,
-			 dataLocation:DataLocation.list().first(),purchaser:PurchasedBy.BYDONOR,donor:Donor.OTHERS,donorName:"Personel",obsolete:false,expectedLifeTime:20,
+			 dataLocation:DataLocation.list().first(),purchaser:PurchasedBy.BYDONOR,donor:Donor.OTHERS,donorName:"Personel",obsolete:false,expectedLifeTime:Initializer.newPeriod(20),
 			 descriptions:['en':'Equipment Descriptions'], type:equipmentType)
 		equipment.genarateAndSetEquipmentCode()
 
@@ -281,11 +288,12 @@ class EquipmentSpec extends IntegrationTests{
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
 		
 		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
-		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),22,false,[:])
+		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),false,[:])
 
 		equipment.manufacturer=manufacture
 		equipment.supplier=supplier
 		equipment.warranty=warranty
+		equipment.warrantyPeriod = Initializer.newPeriod(22)
 		equipment.save(failOnError: true)
 		
 		when:
@@ -307,7 +315,7 @@ class EquipmentSpec extends IntegrationTests{
 		def user  = newUser("admin", "Admin UID")
 		def equipment = new Equipment(serialNumber:"test123", purchaseCost:"1,200",currency:"RWF",manufactureDate:Initializer.getDate(22,07,2010),
 			purchaseDate:Initializer.getDate(22,07,2010),registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,
-			 dataLocation:DataLocation.list().first(),purchaser:PurchasedBy.BYFACILITY,obsolete:false,expectedLifeTime:20,
+			 dataLocation:DataLocation.list().first(),purchaser:PurchasedBy.BYFACILITY,obsolete:false,expectedLifeTime:Initializer.newPeriod(20),
 			 descriptions:['en':'Equipment Descriptions'], type:equipmentType)
 		equipment.genarateAndSetEquipmentCode()
 
@@ -318,11 +326,12 @@ class EquipmentSpec extends IntegrationTests{
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
 		
 		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
-		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),3,false,[:])
+		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),false,[:])
 
 		equipment.manufacturer=manufacture
 		equipment.supplier=supplier
 		equipment.warranty=warranty
+		equipment.warrantyPeriod = Initializer.newPeriod(3)
 		equipment.save(failOnError: true)
 		when:
 		def statusThree= Initializer.newEquipmentStatus(Initializer.getDate(10, 12, 2010),User.findByUsername("admin"),Status.INSTOCK,equipment,false,[:])
@@ -345,7 +354,7 @@ class EquipmentSpec extends IntegrationTests{
 		def user  = newUser("admin", "Admin UID")
 		def equipment = new Equipment(serialNumber:"test123", purchaseCost:"1,200",currency:"RWF",manufactureDate:Initializer.getDate(22,07,2010),
 			purchaseDate:Initializer.getDate(22,07,2010),registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,
-			 dataLocation:DataLocation.list().first(),purchaser:PurchasedBy.BYMOH,obsolete:false,expectedLifeTime:20,
+			 dataLocation:DataLocation.list().first(),purchaser:PurchasedBy.BYMOH,obsolete:false,expectedLifeTime:Initializer.newPeriod(20),
 			 descriptions:['en':'Equipment Descriptions'], type:equipmentType)
 		equipment.genarateAndSetEquipmentCode()
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
@@ -353,10 +362,11 @@ class EquipmentSpec extends IntegrationTests{
 		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
 		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
-		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),5,false,[:])
+		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),false,[:])
 		equipment.manufacturer=manufacture
 		equipment.supplier=supplier
 		equipment.warranty=warranty
+		equipment.warrantyPeriod = Initializer.newPeriod(5)
 		equipment.save(failOnError: true)
 		
 		
@@ -398,5 +408,148 @@ class EquipmentSpec extends IntegrationTests{
 		Equipment.list()[0].getCurrentState().is(statusS)
 		statusH.current == false
 	}
+	
+	def "test serviceProvider exist serviceContractPeriod and serviceContractStartDate must exist"() {
+		
+				setup:
+				setupLocationTree()
+				def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
+				def equipmentType = Initializer.newEquipmentType("15810", ["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now(),9)
+				
+				when:
+				def equipment = new Equipment(serialNumber:"test123", purchaseCost:"1,200",currency:"EURO",
+					manufactureDate:Initializer.now(),purchaseDate:Initializer.getDate(22,07,2010),
+					registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,
+					purchaser:PurchasedBy.BYFACILITY,obsolete:false,expectedLifeTime:Initializer.newPeriod(20),
+					dataLocation:DataLocation.list().first(),descriptions:['en':'Equipment Descriptions'],type:equipmentType
+				)
+				def serviceProContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+				def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+				def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+				def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
+				def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
+				def servicePro = Initializer.newProvider(CODE(125), Type.SERVICEPROVIDER,serviceProContact)
+				def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
+				def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),false,[:])
+		
+				equipment.manufacturer=manufacture
+				equipment.supplier=supplier
+				equipment.warranty=warranty
+				equipment.warrantyPeriod = Initializer.newPeriod(12)
+				equipment.serviceProvider=servicePro
+		
+				equipment.save()
+				then:
+				Equipment.count() == 0
+				equipment.errors.hasFieldErrors('serviceContractPeriod') == true
+				equipment.errors.hasFieldErrors('serviceContractStartDate') == true
+				
+		}
+	    def "test serviceContractPeriod  exist serviceProvider and serviceContractStartDate must exist"() {
+		
+				setup:
+				setupLocationTree()
+				def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
+				def equipmentType = Initializer.newEquipmentType("15810", ["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now(),9)
+				
+				when:
+				def equipment = new Equipment(serialNumber:"test123", purchaseCost:"1,200",currency:"EURO",
+					manufactureDate:Initializer.now(),purchaseDate:Initializer.getDate(22,07,2010),
+					registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,
+					purchaser:PurchasedBy.BYFACILITY,obsolete:false,expectedLifeTime:Initializer.newPeriod(20),
+					dataLocation:DataLocation.list().first(),descriptions:['en':'Equipment Descriptions'],type:equipmentType
+				)
+				def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+				def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+				def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
+				def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
+				def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
+				def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),false,[:])
+		
+				equipment.manufacturer=manufacture
+				equipment.supplier=supplier
+				equipment.warranty=warranty
+				equipment.warrantyPeriod = Initializer.newPeriod(12)
+				equipment.serviceContractPeriod=Initializer.newPeriod(6)
+		
+				equipment.save()
+				then:
+				Equipment.count() == 0
+				equipment.errors.hasFieldErrors('serviceProvider') == true
+				equipment.errors.hasFieldErrors('serviceContractStartDate') == true
+				
+			}
+			def "test serviceContractStartDate exist serviceProvider and serviceContractPeriod must exist"() {
+			
+					setup:
+					setupLocationTree()
+					def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
+					def equipmentType = Initializer.newEquipmentType("15810", ["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now(),9)
+					
+					when:
+					def equipment = new Equipment(serialNumber:"test123", purchaseCost:"1,200",currency:"EURO",
+						manufactureDate:Initializer.now(),purchaseDate:Initializer.getDate(22,07,2010),
+						registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,
+						purchaser:PurchasedBy.BYFACILITY,obsolete:false,expectedLifeTime:Initializer.newPeriod(20),
+						dataLocation:DataLocation.list().first(),descriptions:['en':'Equipment Descriptions'],type:equipmentType
+					)
+					def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+					def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+					def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
+					def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
+					def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
+					def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),false,[:])
+			
+					equipment.manufacturer=manufacture
+					equipment.supplier=supplier
+					equipment.warranty=warranty
+					equipment.warrantyPeriod = Initializer.newPeriod(12)
+					equipment.serviceContractStartDate=Initializer.getDate(22,07,2010)
+			
+					equipment.save()
+					then:
+					Equipment.count() == 0
+					equipment.errors.hasFieldErrors('serviceProvider') == true
+					equipment.errors.hasFieldErrors('serviceContractPeriod') == true
+					
+			}
+			def "test serviceContractStartDate has to come after purchase date"() {
+				
+					setup:
+					setupLocationTree()
+					def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
+					def equipmentType = Initializer.newEquipmentType("15810", ["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now(),9)
+					
+					when:
+					def equipment = new Equipment(serialNumber:"test123", purchaseCost:"1,200",currency:"EURO",
+						manufactureDate:Initializer.now(),purchaseDate:Initializer.getDate(22,07,2010),
+						registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,
+						purchaser:PurchasedBy.BYFACILITY,obsolete:false,expectedLifeTime:Initializer.newPeriod(20),
+						dataLocation:DataLocation.list().first(),descriptions:['en':'Equipment Descriptions'],type:equipmentType
+					)
+					def serviceProContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+					def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+					def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+					def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
+					def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
+					def servicePro = Initializer.newProvider(CODE(125), Type.SERVICEPROVIDER,serviceProContact)
+					def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
+					def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),false,[:])
+			
+					equipment.manufacturer=manufacture
+					equipment.supplier=supplier
+					equipment.warranty=warranty
+					equipment.warrantyPeriod = Initializer.newPeriod(12)
+					equipment.serviceProvider=servicePro
+					equipment.serviceContractPeriod=Initializer.newPeriod(6)
+					equipment.serviceContractStartDate=Initializer.getDate(22,07,2010)-1
+			
+					equipment.save()
+					then:
+					Equipment.count() == 0
+					equipment.errors.hasFieldErrors('serviceContractStartDate') == true
+			
+						
+				}
 	
 }

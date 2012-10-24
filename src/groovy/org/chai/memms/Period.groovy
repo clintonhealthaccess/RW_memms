@@ -67,4 +67,10 @@ class Period {
 		}
 		return months
 	}
+	
+	@Override
+	public String toString() {
+		return "Period [numberOfMonths= " + numberOfMonths + "]";
+	}
+	
 }

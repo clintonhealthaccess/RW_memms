@@ -41,8 +41,6 @@ import org.springframework.util.StringUtils;
  *
  */
 class CustomPeriodEditor extends PropertyEditorSupport implements StructuredPropertyEditor{
-	private Integer months
-	private Integer years
 	
 	@Override
 	public List getOptionalFields() {
@@ -59,19 +57,38 @@ class CustomPeriodEditor extends PropertyEditorSupport implements StructuredProp
 	
 	@Override
 	public Object assemble(Class type, Map fieldValues) throws IllegalArgumentException {
+		Integer months
+		Integer years
+		
 		if(log.isDebugEnabled()) log.debug("period fieldValues to be bind "+fieldValues)
-		def month = fieldValues.get("months");
-		def year = fieldValues.get("years");
-		try{ 
-			months = Integer.parseInt(month[0]) 
+		
+		String monthField = (String) fieldValues.get("months");
+		String yearField =  (String) fieldValues.get("years");
+		
+		if(monthField && !monthField.isEmpty()){
+			try{ 
+				months = Integer.parseInt(monthField) 
+				} catch (Exception nfe){
+				if(log.isDebugEnabled()) log.debug("exception while parsing integer: period:months",nfe)
+				throw new IllegalArgumentException("Months has to be a number",nfe)
+			}
+		}
+		
+		if(yearField && !yearField.isEmpty()){
+			try{
+				years = Integer.parseInt(yearField)
 			} catch (Exception nfe){
-			throw new IllegalArgumentException("Months has to be a number",nfe)
+				if(log.isDebugEnabled()) log.debug("exception while parsing integer: period:years",nfe)
+				throw new IllegalArgumentException("Years has to be a number",nfe)
+			}
 		}
-		try{
-			years = Integer.parseInt(year[0])
-		} catch (Exception nfe){
-			throw new IllegalArgumentException("Years has to be a number",nfe)
+		
+		if(years==null && months==null ) {
+			return null
 		}
-		return new Period(years,months);
+		if(log.isDebugEnabled()) log.debug("Years and Months before creating period Years: "+years+" Months: "+months)
+		Period period = new Period(years,months);
+		if(log.isDebugEnabled()) log.debug("Created period: "+period)
+		return period
 	}
 }

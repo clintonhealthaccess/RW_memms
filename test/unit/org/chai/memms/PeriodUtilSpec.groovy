@@ -45,5 +45,15 @@ class PeriodUtilSpec extends UnitSpec {
 		period.numberOfMonths == 60
 		
 	}
+	def "test can set months only when less than a year"() {
+		when:
+		Period period = new Period(null,3)
+		then:
+		period.years == null
+		period.months == 3
+		period.numberOfMonths == 3
+		
+	}
 	
 }
+	

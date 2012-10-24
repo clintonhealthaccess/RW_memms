@@ -145,6 +145,7 @@ class EquipmentController extends AbstractEntityController{
 					departments: departments,
 					manufacturers: manufacturers,
 					suppliers: suppliers,
+					serviceProviders:serviceProviders,
 					types: types,
 					dataLocations: dataLocations,
 					numberOfStatusToDisplay: grailsApplication.config.status.to.display.on.equipment.form,
