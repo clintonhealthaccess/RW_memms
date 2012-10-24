@@ -7,6 +7,7 @@ import org.chai.location.DataLocation;
 import org.chai.location.Location;
 import org.chai.memms.Initializer;
 import org.chai.memms.IntegrationTests
+import org.chai.memms.Notification;
 import org.chai.memms.equipment.Equipment;
 import org.chai.memms.maintenance.WorkOrder.Criticality;
 import org.chai.memms.maintenance.WorkOrder.FailureReason;

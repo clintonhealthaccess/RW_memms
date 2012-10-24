@@ -29,6 +29,7 @@ package org.chai.memms.maintenance
 
 import javax.persistence.Transient;
 
+import org.chai.memms.Notification;
 import org.chai.memms.equipment.Equipment;
 import org.chai.memms.equipment.EquipmentStatus.Status;
 import org.chai.memms.maintenance.MaintenanceProcess.ProcessType;

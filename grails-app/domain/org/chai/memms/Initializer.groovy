@@ -52,7 +52,6 @@ import org.chai.memms.maintenance.MaintenanceProcess;
 import org.chai.memms.maintenance.NewEquipmentNotification
 import org.chai.memms.maintenance.WorkOrderNotification
 import org.chai.memms.maintenance.MaintenanceProcess.ProcessType;
-import org.chai.memms.maintenance.Notification;
 import org.chai.memms.maintenance.WorkOrder;
 import org.chai.memms.maintenance.WorkOrder.Criticality;
 import org.chai.memms.maintenance.WorkOrder.FailureReason;

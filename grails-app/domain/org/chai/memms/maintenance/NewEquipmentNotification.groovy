@@ -1,5 +1,6 @@
 package org.chai.memms.maintenance
 
+import org.chai.memms.Notification;
 import org.chai.memms.equipment.Department
 import org.chai.location.DataLocation;
 

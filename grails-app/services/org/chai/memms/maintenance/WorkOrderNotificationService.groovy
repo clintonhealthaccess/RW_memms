@@ -33,6 +33,7 @@ import java.util.Map;
 
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocation;
+import org.chai.memms.Notification;
 import org.chai.memms.equipment.Equipment;
 import org.chai.memms.security.User
 import org.chai.memms.security.User.UserType;

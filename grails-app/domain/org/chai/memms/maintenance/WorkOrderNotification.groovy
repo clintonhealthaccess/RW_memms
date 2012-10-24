@@ -1,5 +1,7 @@
 package org.chai.memms.maintenance
 
+import org.chai.memms.Notification;
+
 /**
  * Copyright (c) 2012, Clinton Health Access Initiative.
  *
