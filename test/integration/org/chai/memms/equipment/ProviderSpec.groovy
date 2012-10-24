@@ -49,9 +49,11 @@ class ProviderSpec extends IntegrationTests{
 		supplier.save(failOnError: true)
 		def both = new Provider(code:CODE(125), type: Type.BOTH, contact:othersContact)
 		both.save()
+		def servicePro = new Provider(code:CODE(126), type: Type.SERVICEPROVIDER, contact:othersContact)
+		servicePro.save()
 		
 		then:
-		Provider.count() == 3
+		Provider.count() == 4
 	}
 	
 	

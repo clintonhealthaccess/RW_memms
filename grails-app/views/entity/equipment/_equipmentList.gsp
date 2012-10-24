@@ -61,6 +61,6 @@
 </table>
 <script type="text/javascript">
 	$(document).ready(function() {
-		updateEquipment("${createLink(controller:'equipment',action: 'updateObsolete')}");
+		updateEquipment("${createLink(controller:'equipmentView',action: 'updateObsolete')}");
 	});
 </script>

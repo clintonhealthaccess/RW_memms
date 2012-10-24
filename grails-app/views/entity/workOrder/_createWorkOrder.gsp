@@ -25,8 +25,8 @@
           </span>
           <g:message code="work.order.section.basic.information.label"/>
         </h4> 
-      	<g:selectFromList name="equipment.id" readonly="${(closed)? true:false}" label="${message(code:'equipment.label')}" bean="${order}" field="equipment.id" optionKey="id" multiple="false"
-  			ajaxLink="${createLink(controller:'equipment', action:'getAjaxData')}"
+      	<g:selectFromList name="equipment.id" readonly="${(closed)? true:false}" label="${message(code:'equipment.label')}" bean="${order}" field="equipment" optionKey="id" multiple="false"
+  			ajaxLink="${createLink(controller:'equipmentView', action:'getAjaxData')}"
   			from="${equipments}" value="${order?.equipment?.id}" values="${equipments.collect{it.code}}" />	
   		<g:if test="${order.id != null}">
 	  		<div class="row">

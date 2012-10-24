@@ -74,6 +74,7 @@ class EquipmentService {
 				if(dataLocation!=null)
 					eq('dataLocation',dataLocation)
 				or{
+					ilike("code","%"+text+"%")
 					ilike("serialNumber","%"+text+"%")
 					ilike(dbFieldDescriptions,"%"+text+"%") 
 					ilike("t."+dbFieldTypeNames,"%"+text+"%")
@@ -137,11 +138,15 @@ class EquipmentService {
 			}
 			for(Equipment equipment: equipments){
 				List<String> line = [
-					equipment.serialNumber,equipment.type.code,equipment.type?.getNames(new Locale("en")),equipment.type?.getNames(new Locale("fr")),equipment.model,
-					equipment.getCurrentState()?.status,equipment.dataLocation?.code,equipment.dataLocation?.getNames(new Locale("en")),equipment.dataLocation?.getNames(new Locale("fr")),
-					equipment.department?.code,equipment.department?.getNames(new Locale("en")),equipment.department?.getNames(new Locale("fr")),equipment.room,
-					equipment.manufacturer?.code,equipment.manufacturer?.contact?.contactName,equipment.manufactureDate,equipment.supplier?.code,equipment.supplier?.contact?.contactName,
-					equipment.purchaseDate,equipment.purchaseCost?:"n/a",equipment.currency?:"n/a",equipment.purchaser.name(),equipment.obsolete,equipment.warranty?.startDate,equipment.warranty?.numberOfMonth
+					equipment.serialNumber,equipment.type.code,equipment.type?.getNames(new Locale("en")),
+					equipment.type?.getNames(new Locale("fr")),equipment.model,equipment.getCurrentState()?.status,
+					equipment.dataLocation?.code,equipment.dataLocation?.getNames(new Locale("en")),equipment.dataLocation?.getNames(new Locale("fr")),
+					equipment.department?.code,equipment.department?.getNames(new Locale("en")),equipment.department?.getNames(new Locale("fr")),
+					equipment.room,equipment.manufacturer?.code,equipment.manufacturer?.contact?.contactName,
+					equipment.manufactureDate,equipment.supplier?.code,equipment.supplier?.contact?.contactName,
+					equipment.purchaseDate,equipment.purchaseCost?:"n/a",equipment.currency?:"n/a",
+					equipment.purchaser.name(),equipment.obsolete,equipment.warranty?.startDate,
+					equipment.warrantyPeriod?.numberOfMonths
 					]
 				writer.write(line)
 			}

@@ -21,5 +21,5 @@
 			<span class="text">${Utils.formatDate(type?.lastModifiedOn)}</span>
 		</li>
 	</ul>
-	<input type="hidden" id="expectedLifeTime" value="${type?.expectedLifeTime}"/> 
+	<input type="hidden" id="expectedLifeTime" value="${type?.expectedLifeTime?.numberOfMonths}"/> 
 </div>

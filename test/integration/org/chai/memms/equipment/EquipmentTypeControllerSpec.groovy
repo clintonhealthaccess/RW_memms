@@ -23,8 +23,9 @@ class EquipmentTypeControllerSpec extends IntegrationTests{
 		equipmentTypeController.params.observation = "USEDINMEMMS"
 		equipmentTypeController.params.addedOn = new Date()
 		equipmentTypeController.params.lastModifiedOn = new Date()
-		equipmentTypeController.params.expectedLifeTime_years = 1
-		equipmentTypeController.params.expectedLifeTime_months = 3
+		equipmentTypeController.params.expectedLifeTime = "struct"
+		equipmentTypeController.params.expectedLifeTime_years = "1"
+		equipmentTypeController.params.expectedLifeTime_months = "3"
 		equipmentTypeController.save()
 		
 		equipmentType = equipmentTypeService.searchEquipmentType(CODE(123),["":""])[0]
@@ -32,7 +33,7 @@ class EquipmentTypeControllerSpec extends IntegrationTests{
 		then:
 
 		equipmentType.code.equals(CODE(123))
-		equipmentType.expectedLifeTime == 15
+		equipmentType.expectedLifeTime.numberOfMonths == 15
 
 		grailsApplication.config.i18nFields.locales.each{
 			equipmentType.getNames(new Locale("$it")).equals("X-Ray Film Cutter $it")

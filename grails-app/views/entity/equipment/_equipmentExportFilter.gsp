@@ -12,7 +12,7 @@
 				</ul>
 			</g:hasErrors>
 
-			<g:form url="[controller:'equipment', action:'generalExport']" method="get" useToken="false" class="filters-box">
+			<g:form url="[controller:'equipmentView', action:'generalExport']" method="get" useToken="false" class="filters-box">
 				<ul class="filters-list">
 					<li><g:selectFromList name="equipmentTypeids"
 							label="${message(code:'equipment.type.label')}" bean="${filterCmd}"
