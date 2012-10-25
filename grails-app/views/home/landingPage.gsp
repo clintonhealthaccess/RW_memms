@@ -14,7 +14,7 @@
   		<li><a href="${createLink(controller: 'equipmentView', action:'summaryPage')}"><g:message code="header.navigation.inventory"/></a></li>
   		</shiro:hasPermission>
   		<shiro:hasPermission permission="menu:correctivemaintenance">
-  		<li><a href="${createLink(controller: 'workOrder', action:'summaryPage')}"><g:message code="header.navigation.corrective.maintenance"/></a></li>
+  		<li><a href="${createLink(controller: 'workOrderView', action:'summaryPage')}"><g:message code="header.navigation.corrective.maintenance"/></a></li>
   		</shiro:hasPermission>
   		<shiro:hasPermission permission="menu:preventivemaintenance">
   		<li><a href="#"><g:message code="header.navigation.preventive.maintenance"/></a></li>

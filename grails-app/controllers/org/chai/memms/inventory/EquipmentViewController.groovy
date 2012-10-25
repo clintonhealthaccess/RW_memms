@@ -119,19 +119,18 @@ class EquipmentViewController extends AbstractController {
 
 
 		if (location != null) {
-			template = '/inventory/sectionTable'
+			template = '/inventorySummaryPage/sectionTable'
 			inventories = inventoryService.getInventoryByLocation(location,dataLocationTypesFilter,params)
 		}
 
-		render (view: '/inventory/summaryPage', model: [
+		render (view: '/inventorySummaryPage/summaryPage', model: [
 					inventories:inventories?.inventoryList,
 					currentLocation: location,
 					currentLocationTypes: dataLocationTypesFilter,
 					template: template,
 					entityCount: inventories?.totalCount,
 					locationSkipLevels: locationSkipLevels,
-					entityClass: getEntityClass(),
-					controller:"equipment"
+					entityClass: getEntityClass()
 				])
 	}
 
