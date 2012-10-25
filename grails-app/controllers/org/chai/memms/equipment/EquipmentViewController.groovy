@@ -179,13 +179,22 @@ class EquipmentViewController extends AbstractController {
 			}
 		}
 		cmd.suppliers = suppliers
+		
+		Set<Provider> serviceProviders = new HashSet<Provider>()
+		params.list('serviceProviderids').each { id ->
+			if (NumberUtils.isDigits(id)) {
+				def serviceProvider = Provider.get(id)
+				if (serviceProvider != null && !serviceProviders.contains(serviceProvider)) serviceProviders.add(serviceProvider);
+			}
+		}
+		cmd.serviceProviders = serviceProviders
 
 		if (log.isDebugEnabled()) log.debug("equipments.export, command="+cmd+", params"+params)
 
 
 		if(params.exported != null){
 			def equipmentExportTask = new EquipmentExportFilter(calculationLocations:cmd.calculationLocations,dataLocationTypes:cmd.dataLocationTypes,
-					equipmentTypes:cmd.equipmentTypes,manufacturers:cmd.manufacturers,suppliers:cmd.suppliers,equipmentStatus:cmd.equipmentStatus,
+					equipmentTypes:cmd.equipmentTypes,serviceProviders:cmd.serviceProviders,manufacturers:cmd.manufacturers,suppliers:cmd.suppliers,equipmentStatus:cmd.equipmentStatus,
 					purchaser:cmd.purchaser,obsolete:cmd.obsolete).save(failOnError: true,flush: true)
 			params.exportFilterId = equipmentExportTask.id
 			params.class = "EquipmentExportTask"
@@ -207,7 +216,7 @@ class EquipmentViewController extends AbstractController {
 			response.sendError(404)
 
 		adaptParamsForList()
-		def equipments = equipmentService.filterEquipment(cmd.dataLocation,cmd.supplier,cmd.manufacturer,cmd.equipmentType,cmd.purchaser,cmd.donor,cmd.obsolete,cmd.status,params)
+		def equipments = equipmentService.filterEquipment(cmd.dataLocation,cmd.supplier,cmd.manufacturer,cmd.serviceProvider,cmd.equipmentType,cmd.purchaser,cmd.donor,cmd.obsolete,cmd.status,params)
 		render (view: '/entity/list', model:[
 					template:"equipment/equipmentList",
 					filterTemplate:"equipment/equipmentFilter",
@@ -229,7 +238,7 @@ class EquipmentViewController extends AbstractController {
 			response.sendError(404)
 		adaptParamsForList()
 
-		def equipments = equipmentService.filterEquipment(dataLocation,cmd.supplier,cmd.manufacturer,cmd.equipmentType,cmd.purchaser,cmd.donor,cmd.obsolete,cmd.status,params)
+		def equipments = equipmentService.filterEquipment(dataLocation,cmd.supplier,cmd.manufacturer,cmd.serviceProvider,cmd.equipmentType,cmd.purchaser,cmd.donor,cmd.obsolete,cmd.status,params)
 		File file = equipmentService.exporter(dataLocation,equipments)
 
 		response.setHeader "Content-disposition", "attachment; filename=${file.name}.csv"
@@ -291,6 +300,7 @@ class FilterCommand {
 	EquipmentType equipmentType
 	Provider manufacturer
 	Provider supplier
+	Provider serviceProvider
 	Status status = Status.NONE
 	PurchasedBy purchaser
 	String obsolete
@@ -306,6 +316,7 @@ class FilterCommand {
 
 		equipmentType nullable:true
 		manufacturer nullable:true
+		serviceProvider nullable: true
 		supplier nullable:true
 		status nullable:true
 		purchaser nullable:true
@@ -313,13 +324,13 @@ class FilterCommand {
 		donor nullable:true
 
 		dataLocation nullable:false, validator:{val, obj ->
-			return (obj.equipmentType != null || obj.manufacturer != null || obj.supplier != null || (obj.status != null && obj.status != Status.NONE) || obj.purchaser || obj.obsolete)?true:"select.atleast.one.value.text"
+			return (obj.equipmentType != null || obj.manufacturer != null || obj.serviceProvider != null || obj.supplier != null || (obj.status != null && obj.status != Status.NONE) || obj.purchaser || obj.obsolete)?true:"select.atleast.one.value.text"
 		}
 	}
 
 	String toString() {
 		return "FilterCommand[DataLocation="+dataLocation+", EquipmentType="+equipmentType+
-		", Manufacturer="+manufacturer+", Supplier="+supplier+", Status="+status+", donated="+purchaser+", obsolete="+obsolete+
+		", Manufacturer="+manufacturer+", Supplier="+supplier+", ServiceProvider="+serviceProvider+", Status="+status+", donated="+purchaser+", obsolete="+obsolete+
 		", donor=" + donor + "]"
 	}
 }
@@ -330,6 +341,7 @@ class ExportFilterCommand {
 	Set<EquipmentType> equipmentTypes
 	Set<Provider> manufacturers
 	Set<Provider> suppliers
+	Set<Provider> serviceProviders
 	Status equipmentStatus
 	PurchasedBy purchaser
 	String obsolete
@@ -347,6 +359,7 @@ class ExportFilterCommand {
 		equipmentTypes nullable:true
 		manufacturers nullable:true
 		suppliers nullable:true
+		serviceProviders nullable:true
 		equipmentStatus nullable:true
 		purchaser nullable:true
 		obsolete nullable:true
@@ -355,7 +368,7 @@ class ExportFilterCommand {
 
 	String toString() {
 		return "ExportFilterCommand[ CalculationLocations="+calculationLocations+", DataLocationTypes="+dataLocationTypes+" , EquipmentTypes="+equipmentTypes+
-		", Manufacturers="+manufacturers+", Suppliers="+suppliers+", Status="+equipmentStatus+", donated="+purchaser+", obsolete="+obsolete+
+		", Manufacturers="+manufacturers+", Suppliers="+suppliers+", ServiceProviders="+serviceProviders+", Status="+equipmentStatus+", donated="+purchaser+", obsolete="+obsolete+
 		", donor=" + donor + "]"
 	}
 }

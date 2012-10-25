@@ -33,7 +33,14 @@
 							field="supplier" optionKey="id" multiple="false"
 							ajaxLink="${createLink(controller:'Provider', action:'getAjaxData', params:[class: 'Provider',type:'SUPPLIER'])}"
 							from="${filterCmd?.supplier}" value="${filterCmd?.supplier?.id}"
-							values="${filterCmd?.manufacturer.collect{it.contact.contactName + ' ['+ it.code +']'}}"
+							values="${filterCmd?.supplier.collect{it.contact.contactName + ' ['+ it.code +']'}}"
+							/></li>
+					<li><g:selectFromList name="serviceProvider.id"
+							label="${message(code:'provider.type.serviceProvider')}" bean="${filterCmd}"
+							field="serviceProvider" optionKey="id" multiple="false"
+							ajaxLink="${createLink(controller:'Provider', action:'getAjaxData', params:[class: 'Provider',type:'SERVICEPROVIDER'])}"
+							from="${filterCmd?.serviceProvider}" value="${filterCmd?.serviceProvider?.id}"
+							values="${filterCmd?.serviceProvider.collect{it.contact.contactName + ' ['+ it.code +']'}}"
 							/></li>
 					<li>
 						<label><g:message code="equipment.obsolete.label" /></label> 

@@ -1,6 +1,7 @@
-package org.chai.memms.maintenance
+package org.chai.memms.equipment
 
 import org.chai.memms.Notification;
+import org.chai.location.DataLocation;
 
 /**
  * Copyright (c) 2012, Clinton Health Access Initiative.
@@ -30,15 +31,15 @@ import org.chai.memms.Notification;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-public class WorkOrderNotification extends Notification {
+public class NotificationEquipment extends Notification {
 	
-	static belongsTo = [workOrder: WorkOrder]
+	static belongsTo = [dataLocation: DataLocation, department: Department]
 	
 	static mapping = {
-		table "memms_work_order_notification"
+		table "memms_notification_new_equipment"
 	}
 	
 	String toString() {
-		return "WorkOrderNotification [id=" + id + ", sender=" + sender + ", receiver=" + receiver + ", workOrder=" + workOrder + "]";
+		return "NotificationEquipment [id=" + id + ", sender=" + sender + ", receiver=" + receiver + ", dataLocation=" + dataLocation + ", department=" + department + "]";
 	}
 }

@@ -47,7 +47,7 @@ class WorkOrderNotificationService {
 		int numberOfNotificationSent = 0
 		receivers.each{ receiver ->
 			if(receiver.active){
-					def notification = new WorkOrderNotification(workOrder:workOrder,sender:sender,receiver:receiver,writtenOn:Utils.now(),content:content,read:false).save(failOnError: true)
+					def notification = new NotificationWorkOrder(workOrder:workOrder,sender:sender,receiver:receiver,writtenOn:Utils.now(),content:content,read:false).save(failOnError: true)
 					if(notification)
 						numberOfNotificationSent++
 				}
@@ -61,7 +61,7 @@ class WorkOrderNotificationService {
 	}
 	
 	public int getUnreadNotifications(User user){
-		def criteria = WorkOrderNotification.createCriteria()
+		def criteria = NotificationWorkOrder.createCriteria()
 		return  criteria.get{
 			and { 
 				eq('receiver',user)
@@ -70,8 +70,8 @@ class WorkOrderNotificationService {
 			projections{rowCount()}
 		}
 	}
-	public List<WorkOrderNotification> searchNotificition(String text,User user,WorkOrder workOrder, Boolean read,Map<String, String> params) {
-		def criteria = WorkOrderNotification.createCriteria()
+	public List<NotificationWorkOrder> searchNotificition(String text,User user,WorkOrder workOrder, Boolean read,Map<String, String> params) {
+		def criteria = NotificationWorkOrder.createCriteria()
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(user)
 				eq('receiver',user)
@@ -85,7 +85,7 @@ class WorkOrderNotificationService {
 	}
 	
 	public List<Notification> filterNotifications(WorkOrder workOrder,User receiver,Date from, Date to,Boolean read, Map<String, String> params){
-		def criteria = WorkOrderNotification.createCriteria();
+		def criteria = NotificationWorkOrder.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(workOrder) 
 				eq("workOrder",workOrder)
@@ -100,7 +100,7 @@ class WorkOrderNotificationService {
 		}
 	}
 	
-	public Notification setNotificationRead(WorkOrderNotification notification){
+	public Notification setNotificationRead(NotificationWorkOrder notification){
 		notification.read = true
 		notification.save(failOnError:true)
 		return notification

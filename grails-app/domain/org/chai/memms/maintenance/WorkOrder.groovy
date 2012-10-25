@@ -90,7 +90,7 @@ public class WorkOrder {
 	
 	static i18nFields = ["failureReasonDetails","testResultsDescriptions"]
 	static belongsTo = [equipment: Equipment]
-	static hasMany = [status: WorkOrderStatus, comments: Comment, notifications: Notification, processes: MaintenanceProcess]
+	static hasMany = [status: WorkOrderStatus, comments: Comment, notifications: NotificationWorkOrder, processes: MaintenanceProcess]
 	
 
 	static constraints = {

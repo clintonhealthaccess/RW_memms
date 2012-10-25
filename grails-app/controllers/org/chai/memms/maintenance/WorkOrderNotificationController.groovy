@@ -65,7 +65,7 @@ class WorkOrderNotificationController extends AbstractEntityController{
 	}
 	
 	def getEntityClass() {
-		return WorkOrderNotification.class;
+		return NotificationWorkOrder.class;
 	}
 	def bindParams(def entity) {
 		entity.properties = params
@@ -100,7 +100,7 @@ class WorkOrderNotificationController extends AbstractEntityController{
 		adaptParamsForList()
 		Boolean read = (params.read) ? params.boolean("read") : null;
 		WorkOrder workOrder = WorkOrder.get(params.id)
-		List<WorkOrderNotification> workOrderNotifications = workOrderNotificationService.filterNotifications(workOrder, user, null,null,read, params)
+		List<NotificationWorkOrder> workOrderNotifications = workOrderNotificationService.filterNotifications(workOrder, user, null,null,read, params)
 		render(view:"/entity/list", model:[
 			template:"notification/workOrderNotificationList",
 			filterTemplate:"notification/workOrderNotificationFilter",
@@ -116,7 +116,7 @@ class WorkOrderNotificationController extends AbstractEntityController{
 		adaptParamsForList()
 		Boolean read = (params.read) ? params.boolean("read") : null;
 		WorkOrder workOrder = WorkOrder.get(params.workOrder)
-		List<WorkOrderNotification> workOrderNotifications = workOrderNotificationService.searchNotificition(params['q'],user,workOrder, read,params)
+		List<NotificationWorkOrder> workOrderNotifications = workOrderNotificationService.searchNotificition(params['q'],user,workOrder, read,params)
 		
 		render(view:"/entity/list", model:[
 			template:"notification/workOrderNotificationList",
@@ -172,7 +172,7 @@ class WorkOrderNotificationController extends AbstractEntityController{
 	
 	def filter = {FilterWorkOrderNotificationCommand cmd ->
 		adaptParamsForList()
-		List<WorkOrderNotification> workOrderNotifications = workOrderNotificationService.filterNotifications(cmd.workOrder, user, cmd.from,cmd.to,cmd.getReadStatus(), params)
+		List<NotificationWorkOrder> workOrderNotifications = workOrderNotificationService.filterNotifications(cmd.workOrder, user, cmd.from,cmd.to,cmd.getReadStatus(), params)
 		render(view:"/entity/list", model:[
 			template:"notification/workOrderNotificationList",
 			filterTemplate:"notification/workOrderNotificationFilter",

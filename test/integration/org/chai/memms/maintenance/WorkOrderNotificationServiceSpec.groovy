@@ -108,8 +108,8 @@ class WorkOrderNotificationServiceSpec  extends IntegrationTests{
 		when:
 		workOrderNotificationService.setNotificationRead(notificationToRead)
 		then:
-		WorkOrderNotification.count() == 2
-		WorkOrderNotification.get(notificationToRead.id).read == true
+		NotificationWorkOrder.count() == 2
+		NotificationWorkOrder.get(notificationToRead.id).read == true
 	}
 	def "can filter notifications"() {
 		setup:
@@ -143,7 +143,7 @@ class WorkOrderNotificationServiceSpec  extends IntegrationTests{
 		workOrderNotificationService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility,true)
 		workOrderNotificationService.newNotification(workOrderTwo, "Send for rapair, two",senderTwo,false)
 		
-		def workOrderNotifications = WorkOrderNotification.list()
+		def workOrderNotifications = NotificationWorkOrder.list()
 		workOrderNotificationService.setNotificationRead(workOrderNotifications[0])
 		workOrderNotificationService.setNotificationRead(workOrderNotifications[1])
 		when://(WorkOrder workOrder,User receiver,Date from, Date to,Boolean read, Map<String, String> params)
@@ -202,7 +202,7 @@ class WorkOrderNotificationServiceSpec  extends IntegrationTests{
 		when:
 		def found = workOrderNotificationService.searchNotificition("one",receiverFacility,workOrderOne, null,[:])
 		then:
-		WorkOrderNotification.count() == 2
+		NotificationWorkOrder.count() == 2
 		found.size() == 1
 	}
 	
@@ -236,7 +236,7 @@ class WorkOrderNotificationServiceSpec  extends IntegrationTests{
 		when:
 		unreadNotifications = workOrderNotificationService.getUnreadNotifications(receiverFacility)
 		then:
-		WorkOrderNotification.count() == 2
+		NotificationWorkOrder.count() == 2
 		unreadNotifications == 2
 	}
 }

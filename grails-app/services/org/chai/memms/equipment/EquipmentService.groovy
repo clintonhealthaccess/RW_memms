@@ -90,7 +90,7 @@ class EquipmentService {
 	}
 	
 
-	public List<Equipment> filterEquipment(def dataLocation, def supplier, def manufacturer, def equipmentType, 
+	public List<Equipment> filterEquipment(def dataLocation, def supplier, def manufacturer,def serviceProvider, def equipmentType, 
 		def purchaser,def donor,def obsolete,def status,Map<String, String> params){
 		
 		def criteria = Equipment.createCriteria();
@@ -101,6 +101,8 @@ class EquipmentService {
 				eq ("supplier", supplier)
 			if(manufacturer != null)
 				eq ("manufacturer", manufacturer)
+			if(serviceProvider != null)
+				eq ("serviceProvider", serviceProvider)
 			if(equipmentType != null)
 				eq ("type", equipmentType)
 			if(purchaser && !purchaser.equals(PurchasedBy.NONE))
@@ -143,10 +145,10 @@ class EquipmentService {
 					equipment.dataLocation?.code,equipment.dataLocation?.getNames(new Locale("en")),equipment.dataLocation?.getNames(new Locale("fr")),
 					equipment.department?.code,equipment.department?.getNames(new Locale("en")),equipment.department?.getNames(new Locale("fr")),
 					equipment.room,equipment.manufacturer?.code,equipment.manufacturer?.contact?.contactName,
-					equipment.manufactureDate,equipment.supplier?.code,equipment.supplier?.contact?.contactName,
-					equipment.purchaseDate,equipment.purchaseCost?:"n/a",equipment.currency?:"n/a",
-					equipment.purchaser.name(),equipment.obsolete,equipment.warranty?.startDate,
-					equipment.warrantyPeriod?.numberOfMonths
+					equipment.manufactureDate,equipment.supplier?.code,equipment.supplier?.contact?.contactName,equipment.purchaseDate,
+					equipment?.serviceProvider?.code?:"",equipment?.serviceProvider?.contact?.contactName?:"",equipment?.serviceContractStartDate?:"",
+					equipment?.serviceContractPeriod?.numberOfMonths?:"",equipment.purchaseCost?:"n/a",equipment.currency?:"n/a",
+					equipment.purchaser.name(),equipment.obsolete,equipment?.warranty?.startDate,equipment?.warrantyPeriod?.numberOfMonths?:""
 					]
 				writer.write(line)
 			}
@@ -188,6 +190,10 @@ class EquipmentService {
 		headers.add(ImportExportConstant.SUPPLIER_CODE)
 		headers.add(ImportExportConstant.SUPPLIER_CONTACT_NAME)
 		headers.add(ImportExportConstant.SUPPLIER_DATE)
+		headers.add(ImportExportConstant.SERVICEPROVIDER_CODE)
+		headers.add(ImportExportConstant.SERVICEPROVIDER_CONTACT_NAME)
+		headers.add(ImportExportConstant.SERVICEPROVIDER_DATE)
+		headers.add(ImportExportConstant.SERVICEPROVIDER_PERIOD)
 		headers.add(ImportExportConstant.EQUIPMENT_PURCHASE_COST)
 		headers.add(ImportExportConstant.EQUIPMENT_PURCHASE_COST_CURRENCY)
 		headers.add(ImportExportConstant.EQUIPMENT_DONATION)

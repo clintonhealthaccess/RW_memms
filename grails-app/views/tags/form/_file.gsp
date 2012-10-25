@@ -14,7 +14,7 @@
 	</li>
 	<li>
 		<label for="delimiter">${message(code:'import.delimiter.label')}</label>
-		<input type="text" name="delimiter" value="${bean==null?delimiter:fieldValue(bean:bean,field:'delimiter')}" style="width: 30px"></input>
+		<input type="text" name="delimiter" class="idle-field" value="${bean==null?delimiter:fieldValue(bean:bean,field:'delimiter')}" style="width: 30px"></input>
 	</li>
 	
 	<div class="error-list"><g:renderErrors bean="${bean}" field="file" /></div>

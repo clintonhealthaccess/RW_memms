@@ -44,6 +44,10 @@ import org.chai.location.DataLocation;
 import org.chai.memms.equipment.Provider.Type;
 import java.io.File;
 
+/**
+ * @author Jean Kahigiso M.
+ *
+ */
 class EquipmentServiceSpec extends IntegrationTests{
 
 	def equipmentService
@@ -121,8 +125,10 @@ class EquipmentServiceSpec extends IntegrationTests{
 
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+		def serviceProContact = Initializer.newContact([:],"Service Provider","jk@yahoo.com","0768-888-787","Street 1654","6353")
 		def manufacture = Initializer.newProvider(CODE(111), Type.MANUFACTURER,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(222), Type.SUPPLIER,supplierContact)
+		def servicePro = Initializer.newProvider(CODE(221), Type.SERVICEPROVIDER,serviceProContact)
 		
 		def user  = newUser("admin", "Admin UID")
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
@@ -133,6 +139,14 @@ class EquipmentServiceSpec extends IntegrationTests{
 		def equipmentTwo = Initializer.newEquipment("SERIAL11",PurchasedBy.BYFACILITY,null,null,true,Initializer.newPeriod(32),"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
 				,Initializer.getDate(10,10,2010),"USD",Initializer.now(),"equipmentModel",DataLocation.findByCode('Butaro DH'),department,equipmentType,manufacture,supplier)
 		
+		equipmentOne.serviceProvider=servicePro
+		equipmentOne.serviceContractPeriod = Initializer.newPeriod(2)
+		equipmentOne.serviceContractStartDate = Initializer.getDate(11,10,2010)
+		equipmentTwo.serviceProvider=servicePro
+		equipmentTwo.serviceContractPeriod = Initializer.newPeriod(21)
+		equipmentTwo.serviceContractStartDate = Initializer.getDate(11,10,2010)
+		equipmentOne.save(failOnError:true)
+		equipmentTwo.save(failOnError:true)
 		
 		def List<Equipment> equipmentsOne, equipmentsTwo, equipmentsThree
 		def equipmentStatusOneActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("admin"),Status.INSTOCK,equipmentOne,false,[:])
@@ -146,7 +160,7 @@ class EquipmentServiceSpec extends IntegrationTests{
 		when://Search by defaults
 		
 		equipmentsOne = equipmentService.filterEquipment(DataLocation.findByCode('Butaro DH'),
-			supplier, manufacture,equipmentType,PurchasedBy.NONE,Donor.NONE,'true',Status.DISPOSED,[:])
+			supplier,manufacture,servicePro,equipmentType,PurchasedBy.NONE,Donor.NONE,'true',Status.DISPOSED,[:])
 
 		then:
 		Equipment.count() == 2
@@ -156,9 +170,9 @@ class EquipmentServiceSpec extends IntegrationTests{
 		when://Search by active status
 		
 		equipmentsTwo = equipmentService.filterEquipment(DataLocation.findByCode('Kivuye HC'),
-			supplier, manufacture,equipmentType,PurchasedBy.BYDONOR,Donor.NONE,'false',Status.OPERATIONAL,[:])
+			supplier, manufacture,servicePro,equipmentType,PurchasedBy.BYDONOR,Donor.NONE,'false',Status.OPERATIONAL,[:])
 		equipmentsThree = equipmentService.filterEquipment(DataLocation.findByCode('Kivuye HC'),
-			supplier, manufacture,equipmentType,PurchasedBy.BYDONOR,Donor.NONE,'false',Status.INSTOCK,[:])
+			supplier, manufacture,servicePro,equipmentType,PurchasedBy.BYDONOR,Donor.NONE,'false',Status.INSTOCK,[:])
 
 		then:
 		Equipment.count() == 2
@@ -169,7 +183,7 @@ class EquipmentServiceSpec extends IntegrationTests{
 		
 		when://Search by donor
 		equipmentsTwo = equipmentService.filterEquipment(DataLocation.findByCode('Kivuye HC'),
-			supplier, manufacture,equipmentType,null,Donor.MOHPARTNER,'false',Status.OPERATIONAL,[:])
+			supplier, manufacture,servicePro,equipmentType,null,Donor.MOHPARTNER,'false',Status.OPERATIONAL,[:])
 
 		then:
 		Equipment.count() == 2

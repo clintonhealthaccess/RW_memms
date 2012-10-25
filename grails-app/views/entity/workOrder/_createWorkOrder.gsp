@@ -152,11 +152,12 @@
 </div>
 <script type="text/javascript">
 	$(document).ready(function() {
-		addProcess("${createLink(controller:'workOrder',action: 'addProcess')}","${order.id}")
-		removeProcess("${createLink(controller:'workOrder',action: 'removeProcess')}")
-		addComment("${createLink(controller:'workOrder',action: 'addComment')}","${order.id}")
-		removeComment("${createLink(controller:'workOrder',action: 'removeComment')}")
-		getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}")
+		numberOnlyField();
+		addProcess("${createLink(controller:'workOrder',action: 'addProcess')}","${order.id}");
+		removeProcess("${createLink(controller:'workOrder',action: 'removeProcess')}");
+		addComment("${createLink(controller:'workOrder',action: 'addComment')}","${order.id}");
+		removeComment("${createLink(controller:'workOrder',action: 'removeComment')}");
+		getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}");
 	});
 </script>
 

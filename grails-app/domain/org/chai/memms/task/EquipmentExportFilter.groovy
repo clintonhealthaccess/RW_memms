@@ -41,16 +41,21 @@ import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocationType;
 import org.chai.memms.util.Utils;
 
+/**
+ * @author Jean Kahigiso M.
+ *
+ */
 class EquipmentExportFilter extends ExportFilter{
 	Status equipmentStatus
 	String donated
 	String obsolete
 	
-	static hasMany = [equipmentTypes:EquipmentType,manufacturers:Provider,suppliers:Provider]
+	static hasMany = [equipmentTypes:EquipmentType,manufacturers:Provider,suppliers:Provider,serviceProviders:Provider]
 	static constraints = {
 		equipmentTypes nullable: true, blank: true
 		manufacturers nullable: true, blank: true
 		suppliers nullable: true, blank: true
+		serviceProviders nullable: true, blank: true
 		equipmentStatus nullable: true
 		donated nullable: true, blank: true
 		obsolete nullable: true, blank: true
@@ -58,5 +63,9 @@ class EquipmentExportFilter extends ExportFilter{
 	static mapping = {
 		table "memms_equipment_export_filter"
 		version false
+		equipmentTypes joinTable:[name:"memms_equipment_equipment_type_export_filter",key:"type_id",column:"equipment_export_filter_id"]
+		manufacturers joinTable:[name:"memms_equipment_manufacturer_export_filter",key:"manufacturer_id",column:"equipment_export_filter_id"]
+		suppliers joinTable:[name:"memms_equipment_supplier_export_filter",key:"supplier_id",column:"equipment_export_filter_id"]
+		serviceProviders joinTable:[name:"memms_equipment_service_provider_export_filter",key:"service_provider_id",column:"equipment_export_filter_id"]
 	}
 }

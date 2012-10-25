@@ -51,7 +51,9 @@ class ExportFilter {
 		
 	}
 	static mapping = {
-		table "memms_export_filter"
+		table "memms_equipment_export_filter"
 		version false
+		calculationLocations joinTable:[name:"memms_equipment_calc_location_export_filter",key:"calc_location_id",column:"export_filter_id"]
+		dataLocationTypes joinTable:[name:"memms_equipment_location_type_export_filter",key:"location_type_id",column:"export_filter_id"]
 	}
 }
