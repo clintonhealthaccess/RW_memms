@@ -5,8 +5,8 @@ import grails.validation.ValidationException
 import org.apache.commons.io.FileUtils;
 import org.chai.memms.Initializer;
 import org.chai.memms.IntegrationTests
-import org.chai.memms.equipment.Equipment;
-import org.chai.memms.equipment.EquipmentStatus;
+import org.chai.memms.inventory.Equipment;
+import org.chai.memms.inventory.EquipmentStatus;
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocation
 import org.chai.location.DataLocationType

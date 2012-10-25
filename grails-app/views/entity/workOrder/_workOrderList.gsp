@@ -1,7 +1,7 @@
 <%@ page import="org.chai.memms.util.Utils" %>
 <%@ page import="org.apache.shiro.SecurityUtils" %>
 <%@ page import="org.chai.memms.security.User" %>
-<%@ page import="org.chai.memms.maintenance.WorkOrderStatus.OrderStatus" %>
+<%@ page import="org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus" %>
 <table class="items">
 	<thead>
 		<tr>

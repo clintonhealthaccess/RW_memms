@@ -30,7 +30,7 @@ package org.chai.memms.location;
 import org.chai.location.DataLocation;
 import org.chai.location.DataLocationType;
 import org.chai.memms.AbstractEntityController;
-import org.chai.memms.equipment.Equipment;
+import org.chai.memms.inventory.Equipment;
 
 class DataLocationController extends AbstractEntityController {
 	def locationService	

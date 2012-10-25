@@ -38,9 +38,9 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.chai.memms.equipment.Equipment;
-import org.chai.memms.equipment.EquipmentStatus.Status;
-import org.chai.memms.equipment.EquipmentType
+import org.chai.memms.inventory.Equipment;
+import org.chai.memms.inventory.EquipmentStatus.Status;
+import org.chai.memms.inventory.EquipmentType
 import org.chai.memms.task.DataExportTask;
 import org.chai.memms.task.EquipmentExportFilter;
 import org.chai.memms.task.Progress;

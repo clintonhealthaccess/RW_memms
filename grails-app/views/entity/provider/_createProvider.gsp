@@ -1,4 +1,4 @@
-<%@ page import="org.chai.memms.equipment.Provider.Type" %>
+<%@ page import="org.chai.memms.inventory.Provider.Type" %>
 <div class="entity-form-container togglable">
 	<div class="heading1-bar">
 	  <g:locales />

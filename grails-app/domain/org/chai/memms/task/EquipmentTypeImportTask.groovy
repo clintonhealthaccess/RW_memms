@@ -31,7 +31,7 @@ package org.chai.memms.task
 import java.util.Map;
 
 import org.chai.memms.imports.EquipmentTypeImporter
-import org.chai.memms.equipment.EquipmentTypeService;
+import org.chai.memms.inventory.EquipmentTypeService;
 import org.chai.memms.exports.EquipmentTypeExport;
 import org.chai.memms.imports.FileImporter;
 import org.chai.memms.imports.ImporterErrorManager;

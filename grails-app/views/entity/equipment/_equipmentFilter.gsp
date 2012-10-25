@@ -1,6 +1,6 @@
-<%@ page import="org.chai.memms.equipment.EquipmentStatus.Status" %>
-<%@ page import="org.chai.memms.equipment.Equipment.PurchasedBy" %>
-<%@ page import="org.chai.memms.equipment.Equipment.Donor" %>
+<%@ page import="org.chai.memms.inventory.EquipmentStatus.Status" %>
+<%@ page import="org.chai.memms.inventory.Equipment.PurchasedBy" %>
+<%@ page import="org.chai.memms.inventory.Equipment.Donor" %>
 <div class="filters main">
 		  <h2><g:message code="equipment.filter.label" /><a href="#" id="showhide" class="right"><g:message code="entity.show.hide.filter.label" /></a></h2>
 

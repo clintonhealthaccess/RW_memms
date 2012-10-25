@@ -1,7 +1,7 @@
 <%@ page import="org.chai.memms.util.Utils" %>
-<%@ page import="org.chai.memms.maintenance.WorkOrderStatus.OrderStatus" %>
-<%@ page import="org.chai.memms.maintenance.WorkOrder.Criticality" %>
-<%@ page import="org.chai.memms.maintenance.WorkOrder.FailureReason" %>
+<%@ page import="org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus" %>
+<%@ page import="org.chai.memms.corrective.maintenance.WorkOrder.Criticality" %>
+<%@ page import="org.chai.memms.corrective.maintenance.WorkOrder.FailureReason" %>
 <r:require modules="tipsy"/>
 <div  class="entity-form-container togglable">
     <div class="heading1-bar">

@@ -31,11 +31,11 @@ import java.util.Map;
 
 import org.chai.memms.Initializer;
 import org.chai.memms.IntegrationTests;
-import org.chai.memms.equipment.Equipment;
-import org.chai.memms.maintenance.WorkOrder;
-import org.chai.memms.maintenance.WorkOrder.Criticality;
-import org.chai.memms.maintenance.WorkOrder.FailureReason;
-import org.chai.memms.maintenance.WorkOrderStatus.OrderStatus;
+import org.chai.memms.inventory.Equipment;
+import org.chai.memms.corrective.maintenance.WorkOrder;
+import org.chai.memms.corrective.maintenance.WorkOrder.Criticality;
+import org.chai.memms.corrective.maintenance.WorkOrder.FailureReason;
+import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
 import org.chai.memms.security.User.UserType;
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocation;

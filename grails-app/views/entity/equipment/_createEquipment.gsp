@@ -1,7 +1,7 @@
 <%@ page import="org.chai.memms.util.Utils" %>
-<%@ page import="org.chai.memms.equipment.EquipmentStatus.Status" %>
-<%@ page import="org.chai.memms.equipment.Equipment.PurchasedBy" %>
-<%@ page import="org.chai.memms.equipment.Equipment.Donor" %>
+<%@ page import="org.chai.memms.inventory.EquipmentStatus.Status" %>
+<%@ page import="org.chai.memms.inventory.Equipment.PurchasedBy" %>
+<%@ page import="org.chai.memms.inventory.Equipment.Donor" %>
 <div  class="entity-form-container togglable">
   <div class="heading1-bar">
 		<h1>
