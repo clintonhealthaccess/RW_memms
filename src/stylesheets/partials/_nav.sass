@@ -66,7 +66,7 @@
         +box-shadow($primary - #131313 0 -2px 6px 4px inset)
       &:active
         +box-shadow($primary - #292929 0 -2px 8px 6px inset)
-      
+   
 // Submenu
 
 .submenu
@@ -75,8 +75,11 @@
   top: 42px
   left: 0
   min-width: 100%
+  .sub-submenu
+    display: none
   li
     display: block
+    height: 26px
     float: none
   a
     background: $primary - #151515
@@ -90,6 +93,11 @@
     +text-shadow(rgba(0, 0, 0, 0.2) 0 1px 0)
     &:hover, &:focus
       background: $primary
+  > li:hover > .sub-submenu
+    position: relative
+    left: 158px
+    top: -68px
+    display: block
 
 // Logout navigation
 #logout
