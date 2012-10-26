@@ -97,7 +97,7 @@
 						def user = User.findByUuid(SecurityUtils.subject.principal, [cache: true])
 					%>
 					<li><a class="${controllerName=='workOrder'?'active':''}" href="${createLink(controller:'workOrderView', action:'summaryPage')}"><g:message code="header.navigation.corrective.maintenance"/></a></li>
-					<li><a href="${createLink(controller: 'workOrderNotification', action:'list')}"><g:message code="notification.label"/> (<g:notificationCount user="${user}" />)</a></li>
+					<li><a href="${createLink(controller: 'notificationWorkOrder', action:'list')}"><g:message code="notification.label"/> ()</a></li>
 	         	</ul>
 	         	</li>
 		</shiro:hasPermission>

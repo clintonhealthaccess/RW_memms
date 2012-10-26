@@ -41,7 +41,7 @@ import org.chai.memms.security.User
 import org.chai.memms.security.User.UserType;
 import org.chai.memms.util.Utils;
 
-class WorkOrderNotificationService {
+class NotificationWorkOrderService {
 	def userService
 	
     public int sendNotifications(WorkOrder workOrder, String content,User sender,List<User> receivers) {

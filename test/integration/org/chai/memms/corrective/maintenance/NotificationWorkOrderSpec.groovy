@@ -11,7 +11,7 @@ import org.chai.memms.corrective.maintenance.WorkOrder.FailureReason;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
 import org.chai.memms.security.User;
 
-class WorkOrderNotificationSpec  extends IntegrationTests{
+class NotificationWorkOrderSpec  extends IntegrationTests{
 	def "can create a notification"(){
 		setup:
 		setupLocationTree()
