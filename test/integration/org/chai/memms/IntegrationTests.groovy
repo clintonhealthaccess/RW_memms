@@ -119,21 +119,24 @@ abstract class IntegrationTests extends IntegrationSpec {
 
 		def equipment = new Equipment(serialNumber:CODE(123),manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),
 				registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,dataLocation:DataLocation.findByCode(KIVUYE),
-				purchaser:PurchasedBy.BYFACILITY,obsolete:false,expectedLifeTime:20,descriptions:['en':'Equipment Descriptions'], type:equipmentType)
+				purchaser:PurchasedBy.BYFACILITY,obsolete:false,expectedLifeTime:Initializer.newPeriod(20),descriptions:['en':'Equipment Descriptions'], type:equipmentType)
 		equipment.genarateAndSetEquipmentCode()
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+		def servicePro = Initializer.newContact([:],"Service Provider","sp@yahoo.com","0768-888-787","Street 1654","6353")
 
 		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
+		def serviceProvider = Initializer.newProvider(CODE(126), Type.SERVICEPROVIDER,servicePro)
 
 		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
-		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),4,false,[:])
+		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),false,[:])
 
 		equipment.manufacturer=manufacture
 		equipment.supplier=supplier
 
 		equipment.warranty=warranty
+		equipment.warrantyPeriod=Initializer.newPeriod(4)
 
 		equipment.save(failOnError: true)
 	}

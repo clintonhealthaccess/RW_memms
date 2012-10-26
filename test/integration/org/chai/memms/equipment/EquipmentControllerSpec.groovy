@@ -13,6 +13,7 @@ import org.chai.memms.equipment.Provider.Type;
 class EquipmentControllerSpec extends IntegrationTests{
 
 	def equipmentController
+	def equipmentViewController
 	
 	def "create equipment with correct required data in fields - for english input"(){
 		
@@ -25,9 +26,11 @@ class EquipmentControllerSpec extends IntegrationTests{
 		
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact(['en':'Address Descriptions '],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+		def serviceProvider = Initializer.newContact(['en':'Address Descriptions '],"service Provider","jk@yahoo.com","0768-888-787","Street 1654","6353")
 		
 		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
+		def servicePr = Initializer.newProvider(CODE(125), Type.SERVICEPROVIDER,serviceProvider)
 	
 		
 		equipmentController = new EquipmentController();
@@ -49,14 +52,21 @@ class EquipmentControllerSpec extends IntegrationTests{
 		equipmentController.params."warranty.startDate" = Initializer.getDate(1,1,2012)
 		equipmentController.params."warranty.sameAsSupplier" = true
 		equipmentController.params."warranty.descriptions_en" = "new warranty for testing"
+		equipmentController.params.warrantyPeriod = "struct"
+		equipmentController.params.warrantyPeriod_years = "1"
+		equipmentController.params.warrantyPeriod_months = "4"
 		
-		equipmentController.params.numberOfMonths_years = 1
-		equipmentController.params.numberOfMonths_months = 3
+		equipmentController.params."serviceProvider.id" = servicePr.id
+		equipmentController.params.serviceContractStartDate = Initializer.getDate(2,1,2012)
+		equipmentController.params.serviceContractPeriod = "struct"
+		equipmentController.params.serviceContractPeriod_years = ""
+		equipmentController.params.serviceContractPeriod_months = "3"
 		
-		equipmentController.params.manufacturer = manufacture
-		equipmentController.params.supplier = supplier
-		equipmentController.params.expectedLifeTime_years = 1
-		equipmentController.params.expectedLifeTime_months = 3
+		equipmentController.params."manufacturer.id" = manufacture.id
+		equipmentController.params."supplier.id" = supplier.id
+		equipmentController.params.expectedLifeTime = "struct"
+		equipmentController.params.expectedLifeTime_years = "1"
+		equipmentController.params.expectedLifeTime_months = "3"
 		equipmentController.params.dataLocation = DataLocation.list().first()
 		equipmentController.params.status="DISPOSED"
 		equipmentController.params.dateOfEvent=Initializer.now()
@@ -65,7 +75,9 @@ class EquipmentControllerSpec extends IntegrationTests{
 		then:
 		Equipment.count() == 1;
 		Equipment.findBySerialNumber("SERIAL12129").serialNumber.equals("SERIAL12129")
-		Equipment.findBySerialNumber("SERIAL12129").expectedLifeTime == 15
+		Equipment.findBySerialNumber("SERIAL12129").expectedLifeTime.numberOfMonths == 15
+		Equipment.findBySerialNumber("SERIAL12129").warrantyPeriod.numberOfMonths == 16
+		Equipment.findBySerialNumber("SERIAL12129").serviceContractPeriod.numberOfMonths == 3
 		Equipment.findByDescriptions_en("test_english_descriptions").getDescriptions(new Locale("en")).equals("test_english_descriptions")
 	}
 	
@@ -77,9 +89,13 @@ class EquipmentControllerSpec extends IntegrationTests{
 		
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact(['en':'Address Descriptions '],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+		def serviceProvider = Initializer.newContact(['en':'Address Descriptions '],"service Provider","jk@yahoo.com","0768-888-787","Street 1654","6353")
+		
 		
 		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
+		def servicePr = Initializer.newProvider(CODE(125), Type.SERVICEPROVIDER,serviceProvider)
+		
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 		
@@ -95,14 +111,19 @@ class EquipmentControllerSpec extends IntegrationTests{
 		
 		equipmentController.params."warranty.startDate" = Initializer.getDate(1,1,2012)
 		equipmentController.params."warranty.sameAsSupplier" = true
-		
+		equipmentController.params.warrantyPeriod = "struct"
+		equipmentController.params.warrantyPeriod_years = "1"
+		equipmentController.params.warrantyPeriod_months = "4"
 		grailsApplication.config.i18nFields.locales.each{
 			equipmentController.params."warranty.descriptions_$it" = "new warranty for testing $it"
 		}
 		
-		equipmentController.params.numberOfMonths_years = 1
-		equipmentController.params.numberOfMonths_months = 3
-		
+		equipmentController.params."serviceProvider.id" = servicePr.id
+		equipmentController.params.serviceContractStartDate = Initializer.getDate(1,1,2012)
+		equipmentController.params.serviceContractPeriod = "struct"
+		equipmentController.params.serviceContractPeriod_years = "2"
+		equipmentController.params.serviceContractPeriod_months = "3"
+	
 		grailsApplication.config.i18nFields.locales.each{
 			equipmentController.params."descriptions_$it" = "test descriptions $it"
 		}
@@ -111,10 +132,11 @@ class EquipmentControllerSpec extends IntegrationTests{
 		equipmentController.params.registeredOn = Initializer.getDate(1,1,2012)
 		equipmentController.params.department = department
 		equipmentController.params.type = equipmentType
-		equipmentController.params.manufacturer = manufacture
-		equipmentController.params.expectedLifeTime_years = 1
-		equipmentController.params.expectedLifeTime_months = 3
-		equipmentController.params.supplier = supplier
+		equipmentController.params.expectedLifeTime = "struct"
+		equipmentController.params.expectedLifeTime_years = "1"
+		equipmentController.params.expectedLifeTime_months = "3"
+		equipmentController.params."manufacturer.id" = manufacture.id
+		equipmentController.params."supplier.id" = supplier.id
 		equipmentController.params.dataLocation = DataLocation.list().first()
 		equipmentController.params.status="FORDISPOSAL"
 		equipmentController.params.dateOfEvent=Initializer.now()
@@ -123,7 +145,9 @@ class EquipmentControllerSpec extends IntegrationTests{
 		then:
 		Equipment.count() == 1;
 		Equipment.findBySerialNumber("SERIAL129").serialNumber.equals("SERIAL129")
-		Equipment.findBySerialNumber("SERIAL129").expectedLifeTime == 15
+		Equipment.findBySerialNumber("SERIAL129").expectedLifeTime.numberOfMonths == 15
+		Equipment.findBySerialNumber("SERIAL129").warrantyPeriod.numberOfMonths == 16
+		Equipment.findBySerialNumber("SERIAL129").serviceContractPeriod.numberOfMonths == 27
 		grailsApplication.config.i18nFields.locales.each{
 			Equipment."findByDescriptions_$it"("test descriptions $it").getDescriptions(new Locale("$it")).equals("test descriptions $it")
 		}
@@ -145,14 +169,14 @@ class EquipmentControllerSpec extends IntegrationTests{
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 
-		def equipmentOne = Initializer.newEquipment("SERIAL10",PurchasedBy.BYFACILITY,null,null,false,32,"ROOM A1","2900.23",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
+		def equipmentOne = Initializer.newEquipment("SERIAL10",PurchasedBy.BYFACILITY,null,null,false,Initializer.newPeriod(32),"ROOM A1","2900.23",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
 				,Initializer.getDate(10,10,2010),"USD",Initializer.now(),"equipmentModel",DataLocation.findByCode('Kivuye HC'),department,equipmentType,manufacture,supplier)
-		def equipmentTwo = Initializer.newEquipment("SERIAL11",PurchasedBy.BYFACILITY,null,null,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+		def equipmentTwo = Initializer.newEquipment("SERIAL11",PurchasedBy.BYFACILITY,null,null,true,Initializer.newPeriod(32),"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
 				,Initializer.getDate(10,10,2010),"EUR",Initializer.now(),"equipmentModel",DataLocation.findByCode('Butaro DH'),department,equipmentType,manufacture,supplier)
 		
-		Initializer.newEquipment("SERIAL12",PurchasedBy.BYFACILITY,null,null,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+		Initializer.newEquipment("SERIAL12",PurchasedBy.BYFACILITY,null,null,true,Initializer.newPeriod(32),"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
 			,Initializer.getDate(10,10,2010),"RWF",Initializer.now(),"equipmentModel",DataLocation.findByCode('Butaro DH'),department,equipmentType,manufacture,supplier)
-		Initializer.newEquipment("SERIAL13",PurchasedBy.BYFACILITY,null,null,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+		Initializer.newEquipment("SERIAL13",PurchasedBy.BYFACILITY,null,null,true,Initializer.newPeriod(32),"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
 			,Initializer.getDate(10,10,2010),"RWF",Initializer.now(),"equipmentModel",DataLocation.findByCode('Butaro DH'),department,equipmentType,manufacture,supplier)
 	
 		
@@ -165,13 +189,13 @@ class EquipmentControllerSpec extends IntegrationTests{
 		equipmentOne.addToStatus(equipmentStatusOneActive).save(failOnError:true,flush: true)
 		equipmentTwo.addToStatus(equipmentStatusTwo).save(failOnError:true,flush: true)
 
-		equipmentController = new EquipmentController();
+		equipmentViewController = new EquipmentViewController();
 		when:
-		equipmentController.params.'dataLocation.id' = DataLocation.findByCode('Butaro DH').id
-		equipmentController.list()
+		equipmentViewController.params.'dataLocation.id' = DataLocation.findByCode('Butaro DH').id
+		equipmentViewController.list()
 		
 		then:
-		equipmentController.modelAndView.model.entities.size() == 3
+		equipmentViewController.modelAndView.model.entities.size() == 3
 	}
 	
 	def "redirects to listing when accessing summary page by a user with a datalocation"(){
@@ -180,14 +204,14 @@ class EquipmentControllerSpec extends IntegrationTests{
 
 		Initializer.createDummyStructure()
 		Initializer.createUsers()
-		setupSecurityManager(User.findByUsername('user'))//data location
+		setupSecurityManager(User.findByUsername('titulaireHC'))//data location
 
-		equipmentController = new EquipmentController();
+		equipmentViewController = new EquipmentViewController();
 		when:
-		equipmentController.summaryPage()
+		equipmentViewController.summaryPage()
 		
 		then:
-		equipmentController.response.redirectedUrl == '/equipment/list?dataLocation.id=' + User.findByUsername('user').location.id
+		equipmentViewController.response.redirectedUrl == '/equipmentView/list?dataLocation.id=' + User.findByUsername('titulaireHC').location.id
 	}
 	
 	def "does not redirects to listing when accessing summary page by a user with a location"(){
@@ -198,12 +222,12 @@ class EquipmentControllerSpec extends IntegrationTests{
 		Initializer.createUsers()
 		setupSecurityManager(User.findByUsername('user1'))
 
-		equipmentController = new EquipmentController();
+		equipmentViewController = new EquipmentViewController();
 		when:
-		equipmentController.summaryPage()
+		equipmentViewController.summaryPage()
 		
 		then:
-		equipmentController.response.redirectedUrl != '/equipment/list/' + User.findByUsername('user1').location.id
+		equipmentViewController.response.redirectedUrl != '/equipment/list/' + User.findByUsername('user1').location.id
 	}
 	
 	def "can filter equipments"(){
@@ -219,13 +243,13 @@ class EquipmentControllerSpec extends IntegrationTests{
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 
-		def equipmentOne = Initializer.newEquipment("SERIAL10",PurchasedBy.BYDONOR,Donor.MOHPARTNER,"CHAI",false,32,"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
+		def equipmentOne = Initializer.newEquipment("SERIAL10",PurchasedBy.BYDONOR,Donor.MOHPARTNER,"CHAI",false,Initializer.newPeriod(32),"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
 				,Initializer.getDate(10,10,2010),"",Initializer.now(),"equipmentModel",DataLocation.findByCode('Kivuye HC'),department,equipmentType,manufacture,supplier)
-		def equipmentTwo = Initializer.newEquipment("SERIAL11",PurchasedBy.BYFACILITY,null,null,false,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+		def equipmentTwo = Initializer.newEquipment("SERIAL11",PurchasedBy.BYFACILITY,null,null,false,Initializer.newPeriod(32),"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
 				,Initializer.getDate(10,10,2010),"EUR",Initializer.now(),"equipmentModel",DataLocation.findByCode('Kivuye HC'),department,equipmentType,manufacture,supplier)
-		Initializer.newEquipment("SERIAL12",PurchasedBy.BYMOH,null,null,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+		Initializer.newEquipment("SERIAL12",PurchasedBy.BYMOH,null,null,true,Initializer.newPeriod(32),"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
 			,Initializer.getDate(10,10,2010),"EUR",Initializer.now(),"equipmentModel",DataLocation.findByCode('Butaro DH'),department,equipmentType,manufacture,supplier)
-		Initializer.newEquipment("SERIAL13",PurchasedBy.BYMOH,null,null,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+		Initializer.newEquipment("SERIAL13",PurchasedBy.BYMOH,null,null,true,Initializer.newPeriod(32),"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
 			,Initializer.getDate(10,10,2010),"EUR",Initializer.now(),"equipmentModel",DataLocation.findByCode('Butaro DH'),department,equipmentType,manufacture,supplier)
 	
 		
@@ -238,19 +262,19 @@ class EquipmentControllerSpec extends IntegrationTests{
 		equipmentOne.addToStatus(equipmentStatusOneActive).save(failOnError:true,flush: true)
 		equipmentTwo.addToStatus(equipmentStatusTwo).save(failOnError:true,flush: true)
 
-		equipmentController = new EquipmentController();
+		equipmentViewController = new EquipmentViewController();
 		when:
-		equipmentController.params.dataLocation = DataLocation.findByCode('Kivuye HC')
-		equipmentController.params.equipmentType = equipmentType
-		equipmentController.params.manufacturer = manufacture
-		equipmentController.params.supplier = supplier
-		equipmentController.params.obsolete = "false"
-		equipmentController.params.purchaser = PurchasedBy.BYFACILITY
-		equipmentController.params.status = Status.OPERATIONAL
-		equipmentController.filter()
+		equipmentViewController.params.dataLocation = DataLocation.findByCode('Kivuye HC')
+		equipmentViewController.params.equipmentType = equipmentType
+		equipmentViewController.params.manufacturer = manufacture
+		equipmentViewController.params.supplier = supplier
+		equipmentViewController.params.obsolete = "false"
+		equipmentViewController.params.purchaser = PurchasedBy.BYFACILITY
+		equipmentViewController.params.status = Status.OPERATIONAL
+		equipmentViewController.filter()
 		
 		then:
-		equipmentController.modelAndView.model.entities.size() == 1
+		equipmentViewController.modelAndView.model.entities.size() == 1
 	}
 	
 	def "filter command validation passes"(){
@@ -317,18 +341,18 @@ class EquipmentControllerSpec extends IntegrationTests{
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 
-		def equipmentOne = Initializer.newEquipment("SERIAL10",PurchasedBy.BYDONOR,Donor.MOHPARTNER,"CHAI",false,32,"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
+		def equipmentOne = Initializer.newEquipment("SERIAL10",PurchasedBy.BYDONOR,Donor.MOHPARTNER,"CHAI",false,Initializer.newPeriod(32),"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
 				,Initializer.getDate(10,10,2010),"",Initializer.now(),"equipmentModel",DataLocation.findByCode('Kivuye HC'),department,equipmentType,manufacture,supplier)
-		def equipmentTwo = Initializer.newEquipment("SERIAL11",PurchasedBy.BYDONOR,Donor.MOHPARTNER,"CHAI",false,32,"ROOM A1","",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+		def equipmentTwo = Initializer.newEquipment("SERIAL11",PurchasedBy.BYDONOR,Donor.MOHPARTNER,"CHAI",false,Initializer.newPeriod(32),"ROOM A1","",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
 				,Initializer.getDate(10,10,2010),"",Initializer.now(),"equipmentModel",DataLocation.findByCode('Butaro DH'),department,equipmentType,manufacture,supplier)		
 		equipmentOne.save(flush: true)
 		equipmentTwo.save(flush: true)
 			
 		when:
-		equipmentController = new EquipmentController();
-		equipmentController.params.field = "obsolete"
-		equipmentController.params['equipment.id'] = equipmentTwo.id
-		equipmentController.updateObsolete()
+		equipmentViewController = new EquipmentViewController();
+		equipmentViewController.params.field = "obsolete"
+		equipmentViewController.params['equipment.id'] = equipmentTwo.id
+		equipmentViewController.updateObsolete()
 		then:
 		equipmentTwo.obsolete == true		
 	}
@@ -342,20 +366,20 @@ class EquipmentControllerSpec extends IntegrationTests{
 		def manufacture = Initializer.newProvider(CODE(111), Type.MANUFACTURER,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(222), Type.SUPPLIER,supplierContact)
 		def warrantyContact = Initializer.newContact(['fr':'Warranty Address Descriptions One'],"Warranty","jk@yahoo.com","0768-888-787","Street 654","8988")
-		def warranty = Initializer.newWarranty(warrantyContact,Initializer.getDate(10, 12, 2010),22,false,[:])
+		def warranty = Initializer.newWarranty(warrantyContact,Initializer.getDate(10, 12, 2010),false,[:])
 		
 		def user  = newUser("user", "user", true, true)
 		setupSecurityManager(user)
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 
-		def equipmentOne = Initializer.newEquipment("SERIAL10",PurchasedBy.BYFACILITY,null,null,true,32,"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
+		def equipmentOne = Initializer.newEquipment("SERIAL10",PurchasedBy.BYFACILITY,null,null,true,Initializer.newPeriod(32),"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
 				,Initializer.getDate(10,10,2010),"",Initializer.now(),"equipmentModel",DataLocation.findByCode(KIVUYE),department,equipmentType,manufacture,supplier)
-		def equipmentTwo = Initializer.newEquipment("SERIAL11",PurchasedBy.BYMOH,null,null,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+		def equipmentTwo = Initializer.newEquipment("SERIAL11",PurchasedBy.BYMOH,null,null,true,Initializer.newPeriod(32),"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
 				,Initializer.getDate(10,10,2010),"EUR",Initializer.now(),"equipmentModel",DataLocation.findByCode(KIVUYE),department,equipmentType,manufacture,supplier)
-		def equipmentThree = Initializer.newEquipment("SERIAL12",PurchasedBy.BYFACILITY,null,null,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+		def equipmentThree = Initializer.newEquipment("SERIAL12",PurchasedBy.BYFACILITY,null,null,true,Initializer.newPeriod(32),"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
 			,Initializer.getDate(10,10,2010),"EUR",Initializer.now(),"equipmentModel",DataLocation.findByCode(KIVUYE),department,equipmentType,manufacture,supplier)
-		def equipmentFour = Initializer.newEquipment("SERIAL13",PurchasedBy.BYFACILITY,null,null,true,32,"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+		def equipmentFour = Initializer.newEquipment("SERIAL13",PurchasedBy.BYFACILITY,null,null,true,Initializer.newPeriod(32),"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
 			,Initializer.getDate(10,10,2010),"EUR",Initializer.now(),"equipmentModel",DataLocation.findByCode(BUTARO),department,equipmentType,manufacture,supplier)
 	
 		
@@ -365,29 +389,33 @@ class EquipmentControllerSpec extends IntegrationTests{
 		def equipmentStatusTwo = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("user"),Status.DISPOSED,equipmentOne,false,[:])
 		
 		equipmentOne.warranty=warranty
+		equipmentOne.warrantyPeriod=Initializer.newPeriod(21)
 		equipmentOne.addToStatus(equipmentStatusOneActive).save(failOnError:true,flush: true)
 		equipmentTwo.warranty=warranty
+		equipmentTwo.warrantyPeriod=Initializer.newPeriod(22)
 		equipmentTwo.addToStatus(equipmentStatusOneActive).save(failOnError:true,flush: true)
 		equipmentThree.warranty=warranty
+		equipmentThree.warrantyPeriod=Initializer.newPeriod(23)
 		equipmentThree.addToStatus(equipmentStatusOneActive).save(failOnError:true,flush: true)
 		equipmentFour.warranty=warranty
+		equipmentFour.warrantyPeriod=Initializer.newPeriod(20)
 		equipmentFour.addToStatus(equipmentStatusTwo).save(failOnError:true,flush: true)
 
-		equipmentController = new EquipmentController();
+		equipmentViewController = new EquipmentViewController();
 		when:
-		equipmentController.params.'dataLocation.id' = DataLocation.findByCode(KIVUYE).id
-		equipmentController.params.'location.id' = DataLocation.findByCode(KIVUYE).id
-		equipmentController.params.equipmentType = equipmentType
-		equipmentController.params.manufacturer = manufacture
-		equipmentController.params.supplier = supplier
-		equipmentController.params.obsolete = "true"
-		equipmentController.params.purchaser = PurchasedBy.BYFACILITY
-		equipmentController.params.status = Status.OPERATIONAL
-		equipmentController.export()
+		equipmentViewController.params.'dataLocation.id' = DataLocation.findByCode(KIVUYE).id
+		equipmentViewController.params.'location.id' = DataLocation.findByCode(KIVUYE).id
+		equipmentViewController.params.equipmentType = equipmentType
+		equipmentViewController.params.manufacturer = manufacture
+		equipmentViewController.params.supplier = supplier
+		equipmentViewController.params.obsolete = "true"
+		equipmentViewController.params.purchaser = PurchasedBy.BYFACILITY
+		equipmentViewController.params.status = Status.OPERATIONAL
+		equipmentViewController.export()
 		
 		then:
-		equipmentController.flash.message == null
-		equipmentController.response.outputStream != null
-		equipmentController.response.contentType == "text/csv";
+		equipmentViewController.flash.message == null
+		equipmentViewController.response.outputStream != null
+		equipmentViewController.response.contentType == "text/csv";
 	}
 }

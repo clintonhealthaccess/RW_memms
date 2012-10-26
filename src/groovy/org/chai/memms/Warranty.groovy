@@ -36,13 +36,12 @@ import i18nfields.I18nFields
 class Warranty{
 	
 	Date startDate
-	Integer numberOfMonth
 	Boolean sameAsSupplier
 	String descriptions
 	Contact contact
 	
 	static i18nFields = ["descriptions"]
-	static embedded = ["contact"]
+	static embedded = ["contact","numberOfMonth"]
 	
 	static constraints = {
 		startDate nullable:false, validator:{it <= new Date()} 
@@ -51,6 +50,7 @@ class Warranty{
 			 if(obj.sameAsSupplier==true) return (val==null)
 			}
 		sameAsSupplier nullable: true
+		
 	}
 	
 	static mapping = {

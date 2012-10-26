@@ -29,6 +29,9 @@
 package org.chai.memms.equipment
 
 import java.util.Date;
+
+import org.chai.memms.Period;
+
 import i18nfields.I18nFields
 
 /**
@@ -56,13 +59,13 @@ class EquipmentType {
 	String code
 	String names
 	String descriptions
-	Integer expectedLifeTime
+	Period expectedLifeTime
 	Observation observation
 	
 	Date addedOn
 	Date lastModifiedOn
 	
-	
+	static embedded = ["expectedLifeTime"]
 	static i18nFields = ["descriptions","names"]
 	static hasMany = [equipments: Equipment]
 	

@@ -46,9 +46,13 @@ class ProviderService {
 		
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(type!=null){
-				or{
+				if(type==Type.SERVICEPROVIDER){
 					eq('type',type)
-					eq('type',Type.BOTH)
+				}else{
+					or{
+						eq('type',type)
+						eq('type',Type.BOTH)
+					}
 				}
 			}
 			or{

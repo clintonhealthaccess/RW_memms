@@ -34,14 +34,13 @@ import org.chai.memms.security.User;
  * @author Jean Kahigiso M.
  *
  */
-public class Notification {
+abstract class Notification {
 	User sender
 	User receiver
 	Date writtenOn
 	String content
 	Boolean read = false
 	
-	static belongsTo = [workOrder: WorkOrder]
 	static constraints ={
 		sender nullable: false
 		receiver nullable: false 
@@ -50,17 +49,18 @@ public class Notification {
 		read nullable: false
 	}
 	static mapping ={
-		table "memms_work_order_notification"
+		table "memms_notification_abstract"
 		version false
 		content type:"text"
+		tablePerSubclass true
+		cache true
 		//Do not remove this as read is reserved keyword in MySQL
 		read column:"notification_read"
 	}
 
 	@Override
 	public String toString() {
-		return "Notification [id=" + id + ", workOrder=" + workOrder
-				+ ", sender=" + sender + ", receiver=" + receiver + "]";
+		return "Notification [id=" + id + ", sender=" + sender + ", receiver=" + receiver + "]";
 	}
 	@Override
 	public int hashCode() {

@@ -1,3 +1,8 @@
+package org.chai.memms.maintenance
+
+import org.chai.memms.equipment.Department
+import org.chai.location.DataLocation;
+
 /**
  * Copyright (c) 2012, Clinton Health Access Initiative.
  *
@@ -25,75 +30,16 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.equipment
 
-import org.chai.memms.Contact;
-
-import i18nfields.I18nFields
-/**
- * @author Jean Kahigiso M.
- *
- */
-@i18nfields.I18nFields
-public class Provider{
+public class NewEquipmentNotification extends Notification {
 	
-	enum Type{
-		NONE("none"),
-		BOTH("both"),
-		MANUFACTURER("manufacturer"),
-		SUPPLIER("supplier"),
-		SERVICEPROVIDER("serviceProvider")
-		
-		String messageCode = "provider.type"
-		final String name
-		Type(String name){ this.name = name }
-		String getKey() { return name() }
-	}
+	static belongsTo = [dataLocation: DataLocation, department: Department]
 	
-	String code
-	Type type
-	Contact contact
-	
-	static embedded = ["contact"]
-	static mappedBy = [manufacturers: "manufacturer",suppliers: "supplier",serviceProviders: "serviceProvider"]
-	static hasMany = [manufacturers: Equipment, suppliers: Equipment,serviceProviders: Equipment]
-   
-	static constraints ={
-		code nullable: false, blank: false, unique: true
-		type nullable: false, inList: [Type.BOTH,Type.MANUFACTURER,Type.SUPPLIER,Type.SERVICEPROVIDER]
-		contact nullable: false
-	}
 	static mapping = {
-	    version false
-	    table "memms_provider"
+		table "memms_new_equipment_notification"
 	}
 	
-	@Override
-	public String toString() {
-		return "Provider [code=" + code + ", type=" + type + "]";
+	String toString() {
+		return "NewEquipmentNotification [id=" + id + ", sender=" + sender + ", receiver=" + receiver + ", dataLocation=" + dataLocation + ", department=" + department + "]";
 	}
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((code == null) ? 0 : code.hashCode());
-		return result;
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this.is(obj))
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Provider other = (Provider) obj;
-		if (code == null) {
-			if (other.code != null)
-				return false;
-		} else if (!code.equals(other.code))
-			return false;
-		return true;
-	}	
-   
 }

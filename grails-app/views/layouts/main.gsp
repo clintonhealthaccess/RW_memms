@@ -88,7 +88,7 @@
 			<li><a class="${controllerName=='home'?'active':''}" href="${createLink(controller:'home', action:'index')}"><g:message code="header.navigation.home"/></a></li>
 		</shiro:hasPermission>
 		<shiro:hasPermission permission="menu:inventory">
-			<li><a class="${controllerName=='equipment'?'active':''}" href="${createLink(controller:'equipment', action:'summaryPage')}"><g:message code="header.navigation.inventory"/></a></li>
+			<li><a class="${controllerName=='equipment'?'active':''}" href="${createLink(controller:'equipmentView', action:'summaryPage')}"><g:message code="header.navigation.inventory"/></a></li>
 		</shiro:hasPermission>
 		<shiro:hasPermission permission="menu:correctivemaintenance">
 			<li><a href="#"><g:message code="header.navigation.corrective.maintenance"/></a>
@@ -97,7 +97,7 @@
 						def user = User.findByUuid(SecurityUtils.subject.principal, [cache: true])
 					%>
 					<li><a class="${controllerName=='workOrder'?'active':''}" href="${createLink(controller:'workOrder', action:'summaryPage')}"><g:message code="header.navigation.corrective.maintenance"/></a></li>
-					<li><a href="${createLink(controller: 'notification', action:'list')}"><g:message code="notification.label"/> (<g:notificationCount user="${user}" />)</a></li>
+					<li><a href="${createLink(controller: 'workOrderNotification', action:'list')}"><g:message code="notification.label"/> (<g:notificationCount user="${user}" />)</a></li>
 	         	</ul>
 	         	</li>
 		</shiro:hasPermission>
@@ -111,14 +111,22 @@
 			<li><a href="#"><g:message code="header.navigation.administration"/></a>
 	         	<ul class="submenu">
 					<li><a href="${createLink(controller: 'equipmentType', action:'list')}"><g:message code="equipment.type.label"/></a></li>
-					<li><a href="${createLink(controller: 'equipment', action:'generalExport')}"><g:message code="equipment.export.label"/></a></li>
+					<li><a href="${createLink(controller: 'equipmentView', action:'generalExport')}"><g:message code="equipment.export.label"/></a></li>
 					<shiro:hasPermission permission="menu:advanced">
-					<li><a href="${createLink(controller: 'dataLocation', action:'list')}"><g:message code="datalocation.label"/></a></li>
-					<li><a href="${createLink(controller: 'dataLocationType', action:'list')}"><g:message code="datalocation.type.label"/></a></li>
-					<li><a href="${createLink(controller: 'location', action:'list')}"><g:message code="location.label"/></a></li>
-					<li><a href="${createLink(controller: 'locationLevel', action:'list')}"><g:message code="location.level.label"/></a></li>
-					<li><a href="${createLink(controller: 'department', action:'list')}"><g:message code="department.label"/></a></li>
-					<li><a href="${createLink(controller: 'provider', action:'list')}"><g:message code="header.navigation.manufacturer.and.supplier"/></a></li>
+					<li><a href="#"><g:message code="location.label"/></a>
+						<div class="sub-submenu">
+							<ul class="submenu">
+								<li><a href="${createLink(controller: 'location', action:'list')}"><g:message code="location.label"/></a></li>
+								<li><a href="${createLink(controller: 'locationLevel', action:'list')}"><g:message code="location.level.label"/></a></li>
+								<li><a href="${createLink(controller: 'dataLocation', action:'list')}"><g:message code="datalocation.label"/></a></li>
+								<li><a href="${createLink(controller: 'dataLocationType', action:'list')}"><g:message code="datalocation.type.label"/></a></li>
+							</ul>
+						</div>
+					</li>
+					</shiro:hasPermission>
+					<shiro:hasPermission permission="menu:advanced">
+						<li><a href="${createLink(controller: 'department', action:'list')}"><g:message code="department.label"/></a></li>
+						<li><a href="${createLink(controller: 'provider', action:'list')}"><g:message code="header.navigation.manufacturer.and.supplier"/></a></li>
 					</shiro:hasPermission>
 					<shiro:hasPermission permission="menu:advanced:admin">
 					<li><a href="${createLink(controller: 'role', action:'list')}"><g:message code="role.manage.label"/></a></li>

@@ -194,16 +194,6 @@ public class Utils {
 		return date.clearTime()
 	}
 	
-	public static List<Integer> getYearRange(){
-		def yearsRange = []
-		int i= MAX_YEAR
-		while(i>=MIN_YEAR){
-			yearsRange.add(i)
-			i--
-		}
-		return yearsRange
-	}
-	
 	public static Date now(){
 		return new Date()
 	}

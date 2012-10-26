@@ -11,7 +11,6 @@
 			<g:sortableColumn property="contact.street" title="${message(code: 'contact.street.label', default: 'Street')}" params="[q:q]" />
 			<g:sortableColumn property="contact.city" title="${message(code: 'contact.city.label', default: 'City')}" params="[q:q]" />
 			<g:sortableColumn property="contact.country" title="${message(code: 'contact.country.label', default: 'Country')}" params="[q:q]" />
-			<g:sortableColumn property="active" title="${message(code: 'provider.active.label', default: 'Active')}" params="[q:q]" />
 			<th><g:message code="contact.address.descriptions.label"/></th>
 		</tr>
 	</thead>
@@ -57,9 +56,6 @@
 				</td>
 				<td>
 					${provider.contact.country}
-				</td>
-				<td>
-					${provider.active}
 				</td>
 				<td>
 					${provider.contact.addressDescriptions}

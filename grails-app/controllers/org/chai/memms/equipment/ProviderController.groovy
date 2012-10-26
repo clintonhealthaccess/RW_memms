@@ -104,7 +104,8 @@ class ProviderController  extends AbstractEntityController {
 		def detailsLabel='';
 		def type =params['type']
 		type = Type."$type";
-		if(type.equals(Type.MANUFACTURER)) detailsLabel="provider.manufacturer.details" else detailsLabel="provider.supplier.details"
+		if(type.equals(Type.MANUFACTURER)) detailsLabel="provider.manufacturer.details"
+		else if(type.equals(Type.SUPPLIER)) detailsLabel="provider.supplier.details" else detailsLabel="provider.serviceProvider.details"
 		List<Provider> providers = providerService.searchProvider(type, params['term'], [:])
 		if(log.isDebugEnabled()) log.debug("Providers : " + providers)
 		render(contentType:"text/json") {

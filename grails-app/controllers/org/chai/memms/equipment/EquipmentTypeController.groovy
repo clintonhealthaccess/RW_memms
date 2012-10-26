@@ -84,12 +84,8 @@ class EquipmentTypeController extends AbstractEntityController{
 	}
 
 	def getModel(def entity) {
-		def cmd
-		if(params.cmd) cmd = params.cmd
-		else if(entity.id) cmd =  new ExpectedLifeTimeCommand(expectedLifeTime:entity.expectedLifeTime)
 		[
-			type: entity,
-			cmd:cmd,
+			type: entity
 		]
 	}
 	def list = {
@@ -144,17 +140,9 @@ class EquipmentTypeController extends AbstractEntityController{
 			}
 		}
 	}
-
+	//TODO implement this method
 	def importer ={
 
-	}
-
-	def validateEntity(def entity) {
-		boolean valid = (!params.cmd.hasErrors())
-		
-		if(valid) entity.expectedLifeTime = params.cmd.expectedLifeTime
-		else if(log.isDebugEnabled()) log.debug("Rejecting expected life time: "+params.cmd.errors)
-		return (valid & entity.validate())
 	}
 
 	def export = {
@@ -162,42 +150,5 @@ class EquipmentTypeController extends AbstractEntityController{
 		params.exportFilterId = equipmentTypeExportTask.id
 		params.class = "EquipmentTypeExportTask"
 		redirect(controller: "task", action: "create", params: params)
-	}
-
-	def save = {ExpectedLifeTimeCommand cmd ->
-		params.cmd = cmd
-		super.save()
-	}
-}
-
-class ExpectedLifeTimeCommand {
-	Integer expectedLifeTime_months
-	Integer expectedLifeTime_years
-
-	public Integer getExpectedLifeTime(){
-		Integer lifeTime
-		if(expectedLifeTime_years){
-			lifeTime = expectedLifeTime_years * 12
-		}
-		if(expectedLifeTime_months){
-			lifeTime = lifeTime? expectedLifeTime_months + lifeTime : expectedLifeTime_months
-		}
-		return lifeTime
-	}
-
-	public void setExpectedLifeTime(Integer newExpectedLifeTime){
-		if(newExpectedLifeTime){
-			expectedLifeTime_years = newExpectedLifeTime >= 12 ? Math.floor( newExpectedLifeTime/12 ) : null
-			expectedLifeTime_months = newExpectedLifeTime % 12 != 0 ? newExpectedLifeTime % 12 : null
-		}
-	}
-
-	static constraints = {
-		expectedLifeTime_months nullable:true
-		expectedLifeTime_years nullable:true
-	}
-
-	String toString() {
-		return "ExpectedLifeTimeCommand[ Years="+expectedLifeTime_years+", Months="+expectedLifeTime_months+" , getExpectedLifeTime="+getExpectedLifeTime() + "]"
 	}
 }
