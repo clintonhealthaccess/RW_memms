@@ -58,6 +58,7 @@ class WorkOrderController extends AbstractEntityController{
 	
 	def grailsApplication
 	def locationService
+	def equipmentService
 	def equipmentStatusService
 	def workOrderStatusService
 	def notificationWorkOrderService
@@ -103,8 +104,8 @@ class WorkOrderController extends AbstractEntityController{
 	}
 		
 	def saveEntity(def entity) {
-		def currentEquipmentStatus
-		def currentWorkOrderStatus
+		def equipmentStatus
+		def workOrderStatus
 		def newEntity = false
 		def escalation = false
 		def users = []
@@ -112,8 +113,8 @@ class WorkOrderController extends AbstractEntityController{
 		//Change Equipment Status and Create first workOrderStatus to the new workOrder
 		if(entity.id==null){
 			newEntity=true
-			currentEquipmentStatus = equipmentStatusService.createEquipmentStatus(now,user,Status.UNDERMAINTENANCE,entity.equipment,true,now,[:])
-			currentWorkOrderStatus = workOrderStatusService.createWorkOrderStatus(entity,OrderStatus.OPENATFOSA,user,now,escalation)
+			equipmentStatus = equipmentStatusService.createEquipmentStatus(now,user,Status.UNDERMAINTENANCE,entity.equipment,now,[:])
+			workOrderStatus = workOrderStatusService.createWorkOrderStatus(entity,OrderStatus.OPENATFOSA,user,now,escalation)
 		}else{
 			if(log.isDebugEnabled()) log.debug("Old status stored in params: "+params.oldStatus)
 			//If status has be changed
@@ -122,21 +123,25 @@ class WorkOrderController extends AbstractEntityController{
 				if(entity.currentStatus == OrderStatus.OPENATMMC && params.oldStatus == OrderStatus.OPENATFOSA) escalation = true			
 				//Change Equipment Status When closing workorder
 				if(entity.currentStatus == OrderStatus.CLOSEDFIXED)
-					currentEquipmentStatus = equipmentStatusService.createEquipmentStatus(now,user,Status.OPERATIONAL,entity.equipment,true,now,[:])
+					equipmentStatus = equipmentStatusService.createEquipmentStatus(now,user,Status.OPERATIONAL,entity.equipment,now,[:])
 				if(entity.currentStatus == OrderStatus.CLOSEDFORDISPOSAL)
-					currentEquipmentStatus = equipmentStatusService.createEquipmentStatus(now,user,Status.FORDISPOSAL,entity.equipment,true,now,[:])
-				currentWorkOrderStatus = workOrderStatusService.createWorkOrderStatus(entity,entity.currentStatus,user,now,escalation)
+					equipmentStatus = equipmentStatusService.createEquipmentStatus(now,user,Status.FORDISPOSAL,entity.equipment,now,[:])
+				workOrderStatus = workOrderStatusService.createWorkOrderStatus(entity,entity.currentStatus,user,now,escalation)
 			}
 		}
 		
 		entity.save(failOnError: true)
-		if(log.isDebugEnabled()) log.debug("Created WorkOrder: "+entity)
+		if(log.isDebugEnabled()) log.debug("Created or updated workOrder: "+entity)
 		if(newEntity || escalation){ //TODO define default message
 			users = userService.getNotificationGroup(entity,user,escalation)
 			notificationWorkOrderService.sendNotifications(entity,message(code:"workorder.creation.default.message"),user,users)
 		}
-		(!currentEquipmentStatus)?:currentEquipmentStatus.save(flush:true)
-		(!currentWorkOrderStatus)?:currentWorkOrderStatus.save(flush:true)
+		(!workOrderStatus)?:workOrderStatus.save(failOnError: true)
+		//Update equipmentStatus information
+		if(equipmentStatus){
+			equipmentStatus.save(failOnError: true)
+			equipmentService.updateCurrentEquipmentStatus(entity.equipment)
+		}
 		
 	}
 

@@ -63,6 +63,7 @@
       			<g:inputBox name="obsolete"  label="${message(code:'equipment.obsolete.label')}" bean="${equipment}" field="obsolete" value="${equipment.obsolete}" checked="${(equipment.obsolete)? true:false}"/>
       	</g:if>
       	<g:if test="${equipment?.status!=null}">
+      	 	<g:inputBox name="obsolete"  label="${message(code:'equipment.obsolete.label')}" bean="${equipment}" field="obsolete" value="${equipment.obsolete}" checked="${(equipment.obsolete)? true:false}"/>
 	    	<table class="items">
 	    		<tr>
 	    			<th></th>
@@ -71,7 +72,7 @@
 	    			<th>${message(code:'equipment.status.recordedon.label')}</th>
 	    			<th>${message(code:'equipment.status.current.label')}</th>
 	    		</tr>
-	    		<g:each in="${equipment.status.sort{a,b -> (a.current > b.current) ? -1 : 1}}" status="i" var="status">
+	    		<g:each in="${equipment.status.sort{a,b -> (a.statusChangeDate > b.statusChangeDate) ? -1 : 1}}" status="i" var="status">
 		    		<g:if test="${i+1<numberOfStatusToDisplay}">
 			    		<tr>
 			    			<td>
@@ -83,8 +84,8 @@
 			    			</td>
 			    			<td>${message(code: status?.status?.messageCode+'.'+status?.status?.name)}</td>
 			    			<td>${Utils.formatDate(status?.dateOfEvent)}</td>
-			    			<td>${Utils.formatDateWithTime(status?.statusChangeDate)}</td>
-			    			<td>${(status.current)? '\u2713':''}</td>
+			    			<td>${Utils.formatDateWithTime(status?.statusChangeDate)+""+equipment.currentStatus}</td>
+			    			<td>${(status==equipment.timeBasedStatus)? '\u2713':''}</td>
 			    		</tr>
 		    		</g:if>
 	    		</g:each>
@@ -97,7 +98,6 @@
 	  	    		<g:message code="equipment.see.all.status.label" default="See all status"/>
 	  	    	</a>
   	    	<br />
-  	    	<g:inputBox name="obsolete"  label="${message(code:'equipment.obsolete.label')}" bean="${equipment}" field="obsolete" value="${equipment.obsolete}" checked="${(equipment.obsolete)? true:false}"/>
      		</g:if>
      	</fieldset>
       </div>   

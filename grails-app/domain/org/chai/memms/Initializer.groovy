@@ -315,11 +315,12 @@ public class Initializer {
 						
 			def warrantyContactOne = newContact(['fr':'Warranty Address Descriptions One'],"Warranty","jk@yahoo.com","0768-888-787","Street 654","8988")
 			def warrantyOne = newWarranty(warrantyContactOne,getDate(10, 12, 2010),false,[:])
-			def statusOne= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentOne,true,[:])
+			def statusOne= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentOne,[:])
 			
 			equipmentOne.warranty = warrantyOne
 			equipmentOne.warrantyPeriod = newPeriod(22)
 			equipmentOne.addToStatus(statusOne)
+			equipmentOne.currentStatus = statusOne.status
 			equipmentOne.save(failOnError:true)
 
 			def equipmentTwo = newEquipment("SERIAL11",PurchasedBy.BYFACILITY,null,null,false,newPeriod(12),"Room A34","34900",['en':'Equipment Descriptions two'],
@@ -333,10 +334,11 @@ public class Initializer {
 				)
 			
 			def warrantyTwo = newWarranty(['en':'warranty one'],'warranty name1','email1@gmail.com',"0768-111-787","Street 154","898",getDate(10, 12, 2010),false,[:])
-			def statusTwo= newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentTwo,true,[:])
+			def statusTwo= newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentTwo,[:])
 			equipmentTwo.warranty=warrantyTwo
 			equipmentTwo.warrantyPeriod = newPeriod(14)
 			equipmentTwo.addToStatus(statusTwo)
+			equipmentTwo.currentStatus = statusTwo.status
 			equipmentTwo.save(failOnError:true)
 			
 			def equipmentThree = newEquipment("SERIAL12",PurchasedBy.BYFACILITY,null,null,true,newPeriod(34),"Room A1","98700",['en':'Equipment Descriptions three'],
@@ -350,10 +352,11 @@ public class Initializer {
 				)
 			
 			def warrantyThree = newWarranty(['en':'warranty two'],'warranty name2','email2@gmail.com',"0768-222-787","Street 154","88",getDate(10, 12, 2010),false,[:])
-			def statusThree= newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentThree,true,[:])
+			def statusThree= newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentThree,[:])
 			equipmentThree.warranty=warrantyTwo
 			equipmentThree.warrantyPeriod = newPeriod(12)
 			equipmentThree.addToStatus(statusThree)
+			equipmentThree.currentStatus = statusThree.status
 			equipmentThree.save(failOnError:true)
 			
 			def equipmentFour = newEquipment("SERIAL13",PurchasedBy.BYDONOR,Donor.MOHPARTNER,"Voxiva",false,newPeriod(12),"Room A1","",['en':'Equipment Descriptions four'],
@@ -367,12 +370,13 @@ public class Initializer {
 				)
 			
 			def warrantyFour = newWarranty(['en':'warranty two'],'warranty name2','email2@gmail.com',"0768-222-787","Street 154","888",getDate(10, 12, 2010),false,[:])
-			def statusFour = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentFour,false,[:])
-			def statusFourOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentFour,true,[:])
+			def statusFour = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentFour,[:])
+			def statusFourOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentFour,[:])
 			equipmentFour.warranty=warrantyFour
 			equipmentFour.warrantyPeriod = newPeriod(24)
 			equipmentFour.addToStatus(statusFour)
 			equipmentFour.addToStatus(statusFourOne)
+			equipmentFour.currentStatus = statusFourOne.status
 			equipmentFour.save(failOnError:true)
 			
 			def equipmentFive = newEquipment("SERIAL14",PurchasedBy.BYDONOR,Donor.MOHPARTNER,"Voxiva",true,newPeriod(34),"Room A1","",['en':'Equipment Descriptions five'],
@@ -386,14 +390,15 @@ public class Initializer {
 				)
 			
 			def warrantyFive = newWarranty(['en':'warranty Five'],'warranty name3','email3@gmail.com',"0768-333-787","Street 154","988",getDate(10, 12, 2010),false,[:])
-			def statusFive= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentFive,false,[:])
-			def statusFiveOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentFive,false,[:])
-			def statusFiveTwo = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentFive,true,[:])
+			def statusFive= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentFive,[:])
+			def statusFiveOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentFive,[:])
+			def statusFiveTwo = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentFive,[:])
 			equipmentFive.warranty=warrantyFour
 			equipmentFive.warrantyPeriod = newPeriod(8)
 			equipmentFive.addToStatus(statusFive)
 			equipmentFive.addToStatus(statusFiveOne)
 			equipmentFive.addToStatus(statusFiveTwo)
+			equipmentFive.currentStatus = statusFiveTwo.status
 			equipmentFive.save(failOnError:true)
 			
 			def equipmentSix = newEquipment("SERIAL15",PurchasedBy.BYFACILITY,null,null,true,newPeriod(4),"Room A1","290540",['en':'Equipment Descriptions six'],
@@ -407,14 +412,15 @@ public class Initializer {
 				)
 			
 			def warrantySix = newWarranty(['en':'warranty four'],'warranty name4','email4@gmail.com',"0768-444-787","Street 154","8988",getDate(10, 12, 2010),false,[:])
-			def statusSix= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentSix,false,[:])
-			def statusSixOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentSix,false,[:])
-			def statusSixTwo = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentSix,true,[:])
+			def statusSix= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentSix,[:])
+			def statusSixOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentSix,[:])
+			def statusSixTwo = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentSix,[:])
 			equipmentSix.warranty=warrantySix
 			equipmentSix.warrantyPeriod = newPeriod(48)
 			equipmentSix.addToStatus(statusSix)
 			equipmentSix.addToStatus(statusSixOne)
 			equipmentSix.addToStatus(statusSixTwo)
+			equipmentSix.currentStatus = statusSixTwo.status
 			equipmentSix.save(failOnError:true)
 			
 			def equipmentSeven = newEquipment("SERIAL07",PurchasedBy.BYFACILITY,null,null,true,newPeriod(4),"Room A1","290540",['en':'Equipment Descriptions seven'],
@@ -428,14 +434,15 @@ public class Initializer {
 				)
 			
 			def warrantySeven = newWarranty(['en':'warranty seven'],'warranty name7','email7@gmail.com',"0768-777-787","Street 174","8988",getDate(1, 12, 2010),false,[:])
-			def statusSeven= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentSeven,false,[:])
-			def statusSevenOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentSeven,false,[:])
-			def statusSevenTwo = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentSeven,true,[:])
+			def statusSeven= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentSeven,[:])
+			def statusSevenOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentSeven,[:])
+			def statusSevenTwo = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentSeven,[:])
 			equipmentSeven.warranty=warrantySeven
 			equipmentSeven.warrantyPeriod = newPeriod(4)
 			equipmentSeven.addToStatus(statusSeven)
 			equipmentSeven.addToStatus(statusSevenOne)
 			equipmentSeven.addToStatus(statusSevenTwo)
+			equipmentSeven.currentStatus = statusSevenTwo.status
 			equipmentSeven.save(failOnError:true)
 			
 			def equipmentEight = newEquipment("SERIAL08",PurchasedBy.BYFACILITY,null,null,true,newPeriod(24),"Room A3","290540",['en':'Equipment Descriptions eight'],
@@ -449,14 +456,15 @@ public class Initializer {
 				)
 			
 			def warrantyEight = newWarranty(['en':'warranty four'],'warranty name4','email4@gmail.com',"0768-444-787","Street 154","8988",getDate(10, 12, 2010),false,[:])
-			def statusEight= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentEight,false,[:])
-			def statusEightOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentEight,false,[:])
-			def statusEightTwo = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentEight,true,[:])
+			def statusEight= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentEight,[:])
+			def statusEightOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentEight,[:])
+			def statusEightTwo = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentEight,[:])
 			equipmentEight.warranty=warrantyEight
 			equipmentEight.warrantyPeriod = newPeriod(17)
 			equipmentEight.addToStatus(statusEight)
 			equipmentEight.addToStatus(statusEightOne)
 			equipmentEight.addToStatus(statusEightTwo)
+			equipmentEight.currentStatus = statusEightTwo.status
 			equipmentEight.save(failOnError:true)
 			
 			def equipmentNine = newEquipment("SERIAL09",PurchasedBy.BYFACILITY,null,null,true,newPeriod(4),"Room 9A1","290540",['en':'Equipment Descriptions Nine'],
@@ -470,14 +478,15 @@ public class Initializer {
 				)
 			
 			def warrantyNine = newWarranty(['en':'warranty Nine'],'warranty name9','email94@gmail.com',"0768-999-787","Street 954","8989",getDate(10, 12, 2010),false,[:])
-			def statusNine= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentNine,false,[:])
-			def statusNineOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentNine,false,[:])
-			def statusNineTwo = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentNine,true,[:])
+			def statusNine= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentNine,[:])
+			def statusNineOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentNine,[:])
+			def statusNineTwo = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentNine,[:])
 			equipmentNine.warranty=warrantyNine
 			equipmentNine.warrantyPeriod = newPeriod(9)
 			equipmentNine.addToStatus(statusNine)
 			equipmentNine.addToStatus(statusNineOne)
 			equipmentNine.addToStatus(statusNineTwo)
+			equipmentNine.currentStatus = statusNineTwo.status
 			equipmentNine.save(failOnError:true)
 			
 			def equipmentTen = newEquipment("SERIAL10",PurchasedBy.BYFACILITY,null,null,true,newPeriod(4),"Room 10A1","290540",['en':'Equipment Descriptions Ten'],
@@ -491,14 +500,15 @@ public class Initializer {
 				)
 			
 			def warrantyTen = newWarranty(['en':'warranty Ten'],'warranty name10','email410@gmail.com',"0768-100-787","Street 154","8988",getDate(10, 12, 2010),false,[:])
-			def statusTen= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentTen,false,[:])
-			def statusTenOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentTen,false,[:])
-			def statusTenTwo = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentTen,true,[:])
+			def statusTen= newEquipmentStatus(now(),User.findByUsername("admin"),Status.INSTOCK,equipmentTen,[:])
+			def statusTenOne = newEquipmentStatus(now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentTen,[:])
+			def statusTenTwo = newEquipmentStatus(now(),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipmentTen,[:])
 			equipmentTen.warranty=warrantyTen
 			equipmentTen.warrantyPeriod = newPeriod(28)
 			equipmentTen.addToStatus(statusTen)
 			equipmentTen.addToStatus(statusTenOne)
 			equipmentTen.addToStatus(statusTenTwo)
+			equipmentTen.currentStatus = statusTenTwo.status
 			equipmentTen.save(failOnError:true)
 
 		}
@@ -605,8 +615,26 @@ public class Initializer {
 	public static newMaintenanceProcess(def workOrder,def type, def name, def addedOn, def addedBy){
 		return new MaintenanceProcess(workOrder: workOrder,type: type,name: name, addedOn: addedOn, addedBy: addedBy ).save(failOnError: true)
 	}
+	
+	
 	public static newWorkOrderStatus(def workOrder,def status,def changeOn,def changedBy,def escalation){
+		def equipment = workOrder.equipment
 		def stat = new WorkOrderStatus(workOrder:workOrder,status:status,changeOn:changeOn,changedBy:changedBy,escalation:escalation)
+		
+		//Create First Work Order
+		if(status == OrderStatus.OPENATFOSA){
+			 equipment.currentStatus = Status.UNDERMAINTENANCE
+			 newEquipmentStatus(now(), changedBy, Status.UNDERMAINTENANCE, equipment, [:])
+		}
+		//Change Equipment Status When closing workorder
+		if(status == OrderStatus.CLOSEDFIXED){
+			 equipment.currentStatus = Status.OPERATIONAL
+			 newEquipmentStatus(now(), changedBy, Status.OPERATIONAL, equipment, [:])
+		}
+		if(status == OrderStatus.CLOSEDFORDISPOSAL){
+			equipment.currentStatus = Status.FORDISPOSAL
+			newEquipmentStatus(now(), changedBy, Status.FORDISPOSAL, equipment, [:])
+		}		
 		workOrder.currentStatus= status
 		workOrder.addToStatus(stat)
 		return stat;
@@ -620,9 +648,9 @@ public class Initializer {
 		return equipment.save(failOnError: true)
 	}
 
-	public static def newEquipmentStatus(def dateOfEvent,def changedBy,def value, def equipment,def current,def reasons){
+	public static def newEquipmentStatus(def dateOfEvent,def changedBy,def value, def equipment,def reasons){
 		def statusChangeDate = now()
-		def status = new EquipmentStatus(dateOfEvent:dateOfEvent,changedBy:changedBy,status:value,equipment:equipment,current:current,statusChangeDate:statusChangeDate)
+		def status = new EquipmentStatus(dateOfEvent:dateOfEvent,changedBy:changedBy,status:value,equipment:equipment,statusChangeDate:statusChangeDate)
 		Utils.setLocaleValueInMap(status,reasons,"Reasons")
 		return status.save(failOnError: true)
 	}

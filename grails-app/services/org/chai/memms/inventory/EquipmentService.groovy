@@ -61,9 +61,17 @@ import org.supercsv.prefs.CsvPreference;
  *
  */
 class EquipmentService {
+	
 	static transactional = true
 	def languageService;
 	
+	public void updateCurrentEquipmentStatus(Equipment equipment){
+		EquipmentStatus status =  equipment.timeBasedStatus
+		if(!status) equipment.currentStatus = null
+		else equipment.currentStatus = status.status
+		if(log.isDebugEnabled()) log.debug("Updating Equipment status params: "+equipment)
+		equipment.save(failOnError:true)
+	}
 	public List<Equipment> searchEquipment(String text,DataLocation dataLocation,Map<String, String> params) {
 		def dbFieldTypeNames = 'names_'+languageService.getCurrentLanguagePrefix();
 		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
@@ -111,13 +119,8 @@ class EquipmentService {
 				eq ("donor",donor)
 			if(obsolete)
 				eq ("obsolete", (obsolete.equals('true'))?true:false)
-			if(!status.equals(Status.NONE)){
-				createAlias("status","t")
-				and{
-					eq ("t.status", status)
-					eq ("t.current", true)
-				}
-			}
+			if(status && !status.equals(Status.NONE))
+				eq ("currentStatus",status)
 		}
 	}
 	

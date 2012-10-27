@@ -29,6 +29,8 @@ package org.chai.memms.inventory
 
 import org.chai.memms.inventory.Equipment;
 import org.chai.memms.inventory.EquipmentStatus;
+import org.chai.memms.inventory.EquipmentStatus.Status;
+import org.chai.memms.security.User;
 import org.chai.memms.util.Utils;
 import org.grails.datastore.mapping.query.api.Criteria;
 
@@ -42,14 +44,15 @@ class EquipmentStatusService {
 	
 	List<Equipment> getEquipmentStatusByEquipment(Equipment equipment, Map<String,String> params){
 		def criteria = EquipmentStatus.createCriteria()
-		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"current",order: params.order ?:"desc"){
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"statusChangeDate",order: params.order ?:"desc"){
 			eq("equipment",equipment)
 		}
 	}
 	
-	def createEquipmentStatus(def statusChangeDate,def changedBy,def value, def equipment,def current,def dateOfEvent,def reasons){
-		def status = new EquipmentStatus(dateOfEvent:dateOfEvent,changedBy:changedBy,status:value,equipment:equipment,current:current,statusChangeDate:statusChangeDate)
+	def createEquipmentStatus(Date statusChangeDate,User changedBy,Status value, Equipment equipment,Date dateOfEvent,String reasons){
+		def status = new EquipmentStatus(dateOfEvent:dateOfEvent,changedBy:changedBy,status:value,equipment:equipment,statusChangeDate:statusChangeDate)
 		Utils.setLocaleValueInMap(status,reasons,"Reasons")
+		equipment.addToStatus(status)
 		return status
 	}
 }

@@ -340,7 +340,7 @@ class EquipmentSpec extends IntegrationTests{
 		def statusOne= Initializer.newEquipmentStatus(Initializer.getDate(10, 07, 2012),User.findByUsername("admin"),Status.UNDERMAINTENANCE,equipment,false,[:])
 		equipment.status =[statusThree,statusTwo,statusOne]
 		equipment.save(failOnError: true)
-		Equipment.list()[0].setCurrentStatus()
+		Equipment.list()[0].setCurrentState()
 		then:
 		Equipment.count() == 1
 		Equipment.list()[0].getTimeBasedStatus().is(statusOne)

@@ -38,7 +38,10 @@ import org.chai.memms.inventory.EquipmentStatus;
  */
 
 class EquipmentStatusController extends AbstractEntityController{
+	
 	def equipmentStatusService
+	def equipmentService
+	
     def getEntity(def id) {
 		return EquipmentStatus.get(id);
 	}
@@ -61,28 +64,33 @@ class EquipmentStatusController extends AbstractEntityController{
 	}
 	def deleteEntity(def entity) {
 		Equipment equipment = entity.equipment
-		equipment.status.remove(entity)
-		super.deleteEntity(entity);
-		equipment.setCurrentStatus();
+		if(equipment.status && equipment.status.size()==1)
+			flash.message = message(code: "equipment.without.status", args: [message(code: getLabel(), default: 'entity'), params.id], default: 'Status {0} cannot be deleted')
+		else{
+			equipment.status.remove(entity)
+			super.deleteEntity(entity);
+			equipmentService.updateCurrentEquipmentStatus(equipment)
+		}
 	}
 	
 	def bindParams(def entity) {
 		if(log.isDebugEnabled()) log.debug("Equipment status params: "+params)
 		def equipment = Equipment.get(params.int("equipment.id"))
+		//Make sure we cannot update a status
 		if (equipment == null || entity.id != null) 
 			response.sendError(404)
 		else{
 			entity.changedBy= getUser()
 			entity.statusChangeDate=new Date()
-			def status = EquipmentStatus.findByCurrentAndEquipment(true,equipment)
-			if(status!=null && (status.dateOfEvent < entity.dateOfEvent || status.statusChangeDate < new Date())) {
-				entity.current = true
-				status.current=false
-				status.save(flush:true)
-			}else{
-				entity.current = true
-			}
-			entity.properties = params
+		}
+		entity.properties = params
+	}
+	
+	def saveEntity(def entity) {
+		entity.save(failOnError:true)
+		if(equipment){
+			equipment.addToStatus(entity)
+			equipmentService.updateCurrentEquipmentStatus(entity.equipment)
 		}
 	}
 	
