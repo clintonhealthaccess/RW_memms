@@ -113,50 +113,50 @@ class BootStrap {
 				defaultDataClerkRole.save(failOnError: true)
 				
 				
-				def userClerk
-				if(User.findByUsername("user")){ 
-					userClerk = User.findByUsername("user")
-					userClerk.userType=UserType.TITULAIREHC
-					userClerk.save(failOnError: true)
-					}
-				else
-				{
-					userClerk = new User(userType: UserType.TITULAIREHC, location: CalculationLocation.findByCode(327), username: "user",
-					firstname: "Data", lastname: "Clerk", email:'user@memms.org', passwordHash: new Sha256Hash("user").toHex(), active: true,
-					confirmed: true, uuid:'user', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
-				userClerk.addToRoles(defaultDataClerkRole)
-				userClerk.save(failOnError: true)
-				}
-				
-				def userTechnicianFacility
-				if(User.findByUsername("techf")){ 
-					userTechnicianFacility = User.findByUsername("techf")
-					userTechnicianFacility.userType = UserType.TECHNICIANDH
-					userTechnicianFacility.save(failOnError: true)
-				}
-				else
-				{
-					userTechnicianFacility = new User(userType: UserType.TECHNICIANDH, location: CalculationLocation.findByCode(327), username: "techf",
-					firstname: "technician", lastname: "facility", email:'techf@memms.org', passwordHash: new Sha256Hash("techf").toHex(), active: true,
-					confirmed: true, uuid:'techf', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
-					userTechnicianFacility.addToRoles(defaultTechnicianDHRole)
-					userTechnicianFacility.save(failOnError: true)
-				}
-				
-				def userTechnicianMoH
-				if(User.findByUsername("techMoH")){
-					 userTechnicianMoH = User.findByUsername("techMoH")
-					 userTechnicianMoH.userType=UserType.TECHNICIANMMC
-					 userTechnicianMoH.save(failOnError: true)
-				}
-				else
-				{
-					userTechnicianMoH= new User(userType: UserType.TECHNICIANMMC, location: CalculationLocation.findByCode(0), username: "techMoH",
-					firstname: "technician", lastname: "MoH", email:'techMoH@memms.org', passwordHash: new Sha256Hash("techMoH").toHex(), active: true,
-					confirmed: true, uuid:'techMoH', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
-					userTechnicianMoH.addToRoles(defaultTechnicianMMCRole)
-					userTechnicianMoH.save(failOnError: true)
-				}
+//				def userClerk
+//				if(User.findByUsername("user")){ 
+//					userClerk = User.findByUsername("user")
+//					userClerk.userType=UserType.TITULAIREHC
+//					userClerk.save(failOnError: true)
+//					}
+//				else
+//				{
+//					userClerk = new User(userType: UserType.TITULAIREHC, location: CalculationLocation.findByCode(327), username: "user",
+//					firstname: "Data", lastname: "Clerk", email:'user@memms.org', passwordHash: new Sha256Hash("user").toHex(), active: true,
+//					confirmed: true, uuid:'user', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
+//				userClerk.addToRoles(defaultDataClerkRole)
+//				userClerk.save(failOnError: true)
+//				}
+//				
+//				def userTechnicianFacility
+//				if(User.findByUsername("techf")){ 
+//					userTechnicianFacility = User.findByUsername("techf")
+//					userTechnicianFacility.userType = UserType.TECHNICIANDH
+//					userTechnicianFacility.save(failOnError: true)
+//				}
+//				else
+//				{
+//					userTechnicianFacility = new User(userType: UserType.TECHNICIANDH, location: CalculationLocation.findByCode(327), username: "techf",
+//					firstname: "technician", lastname: "facility", email:'techf@memms.org', passwordHash: new Sha256Hash("techf").toHex(), active: true,
+//					confirmed: true, uuid:'techf', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
+//					userTechnicianFacility.addToRoles(defaultTechnicianDHRole)
+//					userTechnicianFacility.save(failOnError: true)
+//				}
+//				
+//				def userTechnicianMoH
+//				if(User.findByUsername("techMoH")){
+//					 userTechnicianMoH = User.findByUsername("techMoH")
+//					 userTechnicianMoH.userType=UserType.TECHNICIANMMC
+//					 userTechnicianMoH.save(failOnError: true)
+//				}
+//				else
+//				{
+//					userTechnicianMoH= new User(userType: UserType.TECHNICIANMMC, location: CalculationLocation.findByCode(0), username: "techMoH",
+//					firstname: "technician", lastname: "MoH", email:'techMoH@memms.org', passwordHash: new Sha256Hash("techMoH").toHex(), active: true,
+//					confirmed: true, uuid:'techMoH', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
+//					userTechnicianMoH.addToRoles(defaultTechnicianMMCRole)
+//					userTechnicianMoH.save(failOnError: true)
+//				}
 			break;
 		}
     }
