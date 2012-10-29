@@ -69,6 +69,14 @@ class WorkOrderViewController extends AbstractController{
 	def getEntityClass() {
 		return WorkOrder.class;
 	}
+	def view  = {
+		WorkOrder workOrder = WorkOrder.get(params.int('workOrder'))
+		if(workOrder==null)
+			response.sendError(404)
+		else{
+			render(view:"/entity/summary", model:[entities: workOrder])
+		}
+	}
 
 	def list = {
 		adaptParamsForList()

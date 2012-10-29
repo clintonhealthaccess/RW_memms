@@ -71,6 +71,19 @@ class WorkOrderController extends AbstractEntityController{
 	def createEntity() {
 		return new WorkOrder();
 	}
+	
+	
+	def getTemplate() {
+		return "/entity/workOrder/createWorkOrder";
+	}
+
+	def getLabel() {
+		return "work.order.label";
+	}
+
+	def getEntityClass() {
+		return WorkOrder.class;
+	}
 
 	def getModel(entity) {
 		def equipments =  []
@@ -92,15 +105,30 @@ class WorkOrderController extends AbstractEntityController{
 			entity.failureReason = FailureReason.NOTSPECIFIED
 			entity.currentStatus = OrderStatus.OPENATFOSA
 		}else{
+			params.oldStatus = entity.currentStatus
+			entity.currentStatus = OrderStatus."$params.currentStatus"
 			entity.lastModifiedOn = now
 			entity.lastModifiedBy = user
-			if(entity.currentStatus == OrderStatus.CLOSEDFIXED || entity.currentStatus == OrderStatus.CLOSEDFORDISPOSAL)
+			if(entity.currentStatus.equals(OrderStatus.CLOSEDFIXED) || entity.currentStatus.equals(OrderStatus.CLOSEDFORDISPOSAL))
 				entity.closedOn = now
 			else entity.closedOn = null
-			
 		}
-		params.oldStatus = entity.currentStatus
+		if(log.isDebugEnabled()) log.debug("oldStatus= "+params.oldStatus+" newStatus= "+entity.currentStatus)
 		entity.properties = params
+	}
+	
+	def validateEntity(def entity) {
+		if(entity.id!=null){
+			//Making sure we cannot modify a closed workOrder
+			if(entity.currentStatus.equals(OrderStatus.OPENATMMC) || entity.currentStatus.equals(OrderStatus.OPENATFOSA))
+				if(params.oldStatus.equals(OrderStatus.CLOSEDFIXED) || params.oldStatus.equals(OrderStatus.CLOSEDFIXED)){
+					entity.errors.rejectValue('currentStatus','error.escalate.closed.work.order')
+					flash.message = "error.escalate.closed.work.order"
+					if(log.isDebugEnabled()) log.debug("Rejecting workOrderStatus: "+entity.currentStatus)
+					entity.currentStatus = params.oldStatus
+				}
+		}
+		return ( entity.validate() & !entity.hasErrors())
 	}
 		
 	def saveEntity(def entity) {
@@ -126,6 +154,7 @@ class WorkOrderController extends AbstractEntityController{
 					equipmentStatus = equipmentStatusService.createEquipmentStatus(now,user,Status.OPERATIONAL,entity.equipment,now,[:])
 				if(entity.currentStatus == OrderStatus.CLOSEDFORDISPOSAL)
 					equipmentStatus = equipmentStatusService.createEquipmentStatus(now,user,Status.FORDISPOSAL,entity.equipment,now,[:])
+					
 				workOrderStatus = workOrderStatusService.createWorkOrderStatus(entity,entity.currentStatus,user,now,escalation)
 			}
 		}
@@ -145,17 +174,6 @@ class WorkOrderController extends AbstractEntityController{
 		
 	}
 
-	def getTemplate() {
-		return "/entity/workOrder/createWorkOrder";
-	}
-
-	def getLabel() {
-		return "work.order.label";
-	}
-
-	def getEntityClass() {
-		return WorkOrder.class;
-	}
 
 }
 

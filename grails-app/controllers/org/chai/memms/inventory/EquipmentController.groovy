@@ -113,7 +113,7 @@ class EquipmentController extends AbstractEntityController{
 		boolean validStatus = true
 		if(entity.id==null){
 			validStatus = (!params.cmd.hasErrors())
-			if(log.isDebugEnabled()) log.debug("Rejecting status: "+params.cmd.errors)
+			if(log.isDebugEnabled()) log.debug("Rejecting EquipmentStatus: "+params.cmd.errors)
 		}
 		entity.genarateAndSetEquipmentCode()
 		return (validStatus & entity.validate())

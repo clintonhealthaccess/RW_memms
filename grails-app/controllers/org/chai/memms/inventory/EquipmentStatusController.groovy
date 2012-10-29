@@ -76,7 +76,7 @@ class EquipmentStatusController extends AbstractEntityController{
 	def bindParams(def entity) {
 		if(log.isDebugEnabled()) log.debug("Equipment status params: "+params)
 		def equipment = Equipment.get(params.int("equipment.id"))
-		//Make sure we cannot update a status
+		//Make sure we cannot edit a status
 		if (equipment == null || entity.id != null) 
 			response.sendError(404)
 		else{

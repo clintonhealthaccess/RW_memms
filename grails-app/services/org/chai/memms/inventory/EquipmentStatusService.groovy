@@ -49,7 +49,7 @@ class EquipmentStatusService {
 		}
 	}
 	
-	def createEquipmentStatus(Date statusChangeDate,User changedBy,Status value, Equipment equipment,Date dateOfEvent,String reasons){
+	def createEquipmentStatus(Date statusChangeDate,User changedBy,Status value, Equipment equipment,Date dateOfEvent, Map<String,String> reasons){
 		def status = new EquipmentStatus(dateOfEvent:dateOfEvent,changedBy:changedBy,status:value,equipment:equipment,statusChangeDate:statusChangeDate)
 		Utils.setLocaleValueInMap(status,reasons,"Reasons")
 		equipment.addToStatus(status)
