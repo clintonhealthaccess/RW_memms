@@ -36,6 +36,7 @@ import org.chai.memms.inventory.Equipment.PurchasedBy;
 import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.security.User;
 import org.chai.memms.security.User.UserType;
+import org.chai.task.EquipmentExportFilter;
 import org.chai.memms.util.Utils;
 import org.chai.memms.inventory.Equipment;
 import org.chai.memms.inventory.Provider;
@@ -121,6 +122,7 @@ class EquipmentController extends AbstractEntityController{
 
 	def saveEntity(def entity) {
 		EquipmentStatus status
+		if(entity.dataLocation) hasAccess(entity.dataLocation)
 		if(entity.id==null)
 			status = equipmentStatusService.createEquipmentStatus(now,user,params.cmd.status,entity,params.cmd.dateOfEvent,[:])
 		entity.save(failOnError:true)

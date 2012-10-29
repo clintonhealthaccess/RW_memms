@@ -94,7 +94,7 @@ class WorkOrderController extends AbstractEntityController{
 			currencies: grailsApplication.config.site.possible.currency,
 			orderClosed:(entity.currentStatus == OrderStatus.CLOSEDFIXED || entity.currentStatus == OrderStatus.CLOSEDFORDISPOSAL)? true:false,
 			//entity can be null
-			technicians : userService.getActiveUserByTypeAndLocation(UserType.TECHNICIANFACILITY,entity.equipment?.dataLocation, [:])
+			technicians : userService.getActiveUserByTypeAndLocation(UserType.TECHNICIANDH,entity.equipment?.dataLocation, [:])
 		]
 	}
 
