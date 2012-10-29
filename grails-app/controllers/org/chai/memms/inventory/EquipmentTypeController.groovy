@@ -32,9 +32,10 @@ import java.util.Set;
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocationType;
 import org.chai.memms.AbstractEntityController;
+import org.chai.task.EquipmentTypeExportFilter;
 import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.inventory.EquipmentType;
-import org.chai.memms.task.EquipmentTypeExportFilter;
+import org.chai.memms.inventory.EquipmentType.Observation;
 
 /**
  * @author Eugene Munyaneza
@@ -106,7 +107,7 @@ class EquipmentTypeController extends AbstractEntityController{
 
 	def search = {
 		adaptParamsForList()
-		List<EquipmentType> types = equipmentTypeService.searchEquipmentType(params['q'], params)
+		List<EquipmentType> types = equipmentTypeService.searchEquipmentType(params['q'],null,params)
 		render (view: '/entity/list', model:[
 					template:"equipmentType/equipmentTypeList",
 					entities: types,
@@ -121,7 +122,7 @@ class EquipmentTypeController extends AbstractEntityController{
 	}
 
 	def getAjaxData = {
-		List<EquipmentType> types = equipmentTypeService.searchEquipmentType(params['term'], [:])
+		List<EquipmentType> types = equipmentTypeService.searchEquipmentType(params['term'],Observation."$params.observation",[:])
 		render(contentType:"text/json") {
 			elements = array {
 				types.each { type ->

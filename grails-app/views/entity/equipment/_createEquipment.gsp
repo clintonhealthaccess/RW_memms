@@ -31,7 +31,7 @@
     			  <label><g:message code="datalocation.label"/>:</label> ${equipment.dataLocation.names}
     		  </div>				
         	<g:selectFromList name="type.id" label="${message(code:'equipment.type.label')}" bean="${equipment}" field="type" optionKey="id" multiple="false"
-    			ajaxLink="${createLink(controller:'equipmentType', action:'getAjaxData')}"
+    			ajaxLink="${createLink(controller:'equipmentType', action:'getAjaxData', params: [observation:'USEDINMEMMS'])}"
     			from="${types}" value="${equipment?.type?.id}" values="${types.collect{it.names}}" />
       		<g:inputYearMonth name="expectedLifeTime" field="expectedLifeTime" years="${equipment.expectedLifeTime?.years}" months="${equipment.expectedLifeTime?.months}" label='entity.expectedLifeTime.label' bean="${equipment}"/>
       		<g:input name="serialNumber" label="${message(code:'equipment.serial.number.label')}" bean="${equipment}" field="serialNumber"/>

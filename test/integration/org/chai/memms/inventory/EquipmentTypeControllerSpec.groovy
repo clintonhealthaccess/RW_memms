@@ -29,7 +29,7 @@ class EquipmentTypeControllerSpec extends IntegrationTests{
 		equipmentTypeController.params.expectedLifeTime_months = "3"
 		equipmentTypeController.save()
 		
-		equipmentType = equipmentTypeService.searchEquipmentType(CODE(123),["":""])[0]
+		equipmentType = equipmentTypeService.searchEquipmentType(CODE(123),null,[:])[0]
 
 		then:
 

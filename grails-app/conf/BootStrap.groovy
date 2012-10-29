@@ -60,6 +60,36 @@ class BootStrap {
 				defaultAdminRole.addToPermissions("*")
 				defaultAdminRole.save(failOnError: true)
 				
+				def defaultSystemRole
+				if(Role.findByName("System")) defaultSystemRole = Role.findByName("System")
+				else defaultSystemRole = new Role(name:"System")
+				defaultSystemRole.addToPermissions("*")
+				defaultSystemRole.save(failOnError: true)
+				
+				def defaultTechnicianDHRole
+				if(Role.findByName("Technician DH")) defaultTechnicianDHRole = Role.findByName("Technician DH")
+				else defaultTechnicianDHRole = new Role(name:"Technician DH")
+				defaultTechnicianDHRole.addToPermissions("*")
+				defaultTechnicianDHRole.save(failOnError: true)
+				
+				def defaultTechnicianMMCRole
+				if(Role.findByName("Technician MMC")) defaultTechnicianMMCRole = Role.findByName("Technician MMC")
+				else defaultTechnicianMMCRole = new Role(name: "Technician MMC")
+				defaultTechnicianMMCRole.addToPermissions("*")
+				defaultTechnicianMMCRole.save(failOnError: true)
+				
+				def defaultTitulaireHCRole
+				if(Role.findByName("Titulaire HC")) defaultTitulaireHCRole = Role.findByName("Titulaire HC")
+				else defaultTitulaireHCRole = new Role(name: "Titulaire HC")
+				defaultTitulaireHCRole.addToPermissions("*")
+				defaultTitulaireHCRole.save(failOnError: true)
+				
+				def defaultHospitalDepartmentRole 
+				if(Role.findByName("Hospital Department")) defaultHospitalDepartmentRole = Role.findByName("Hospital Department")
+				else defaultHospitalDepartmentRole = new Role(name: "Hospital Department")
+				defaultHospitalDepartmentRole.addToPermissions("*")
+				defaultHospitalDepartmentRole.save(failOnError: true)
+				
 				def defaultDataClerkRole
 				if(Role.findByName("Data Clerk")) defaultDataClerkRole = Role.findByName("Data Clerk") 
 				else defaultDataClerkRole = new Role(name: "Data Clerk")
@@ -79,104 +109,54 @@ class BootStrap {
 				defaultDataClerkRole.addToPermissions("auth:newPassword")
 				defaultDataClerkRole.addToPermissions("auth:saveAccount")
 				defaultDataClerkRole.addToPermissions("auth:setPassword")
-				defaultDataClerkRole.addToPermissions("auth:retrievePassword")
+				defaultDataClerkRole.addToPermissions("auth:retrievePassword")				
 				defaultDataClerkRole.save(failOnError: true)
 				
 				
-				
-				def defaultTechnicianFacilityRole
-				if(Role.findByName("Technician Facility")) defaultTechnicianFacilityRole = Role.findByName("Technician Facility") 
-				else defaultTechnicianFacilityRole = new Role(name: "Technician Facility")
-				
-				defaultTechnicianFacilityRole.addToPermissions(defaultDataClerkRole.permissionString)
-				defaultTechnicianFacilityRole.addToPermissions("menu:preventivemaintenance,admin;equipment:*")
-				defaultTechnicianFacilityRole.addToPermissions("department:*;equipmentType:*;provider:*;equipment:*")
-				defaultTechnicianFacilityRole.save(failOnError: true, flush:true)
-				
-				def defaultTechnicianMoHRole 
-				if(Role.findByName("Technician MoH")) defaultTechnicianMoHRole = Role.findByName("Technician MoH")
-				else defaultTechnicianMoHRole =  new Role(name: "Technician MoH")
-				
-				defaultTechnicianMoHRole.addToPermissions(defaultDataClerkRole.permissionString)
-				defaultTechnicianMoHRole.addToPermissions("menu:preventivemaintenance,admin,advanced;equipment:*")
-				defaultTechnicianMoHRole.addToPermissions("department:*;equipmentType:*;provider:*;equipment:*")
-				defaultTechnicianMoHRole.save(failOnError: true)
-				
-				def admin 
-				if(User.findByUsername("admin")) admin = User.findByUsername("admin")
-				else admin = new User();
-					admin.userType= UserType.ADMIN
-					admin.location= CalculationLocation.findByCode(0)
-					admin.username= "admin"
-					admin.firstname= "admin" 
-					admin.lastname= "admin"
-					admin.email='memms@memms.org' 
-					admin.passwordHash= new Sha256Hash("admin").toHex()
-					admin.active= true 
-					admin.confirmed= true 
-					admin.uuid='admin' 
-					admin.defaultLanguage='en'
-					admin.phoneNumber= '+250 11 111 11 11'
-					admin.organisation='org'
-				admin.addToRoles(defaultAdminRole)
-				admin.save(failOnError: true)
-				
 				def userClerk
-				if(User.findByUsername("user")) userClerk = User.findByUsername("user")
-				else userClerk = new User();
-					userClerk.userType= UserType.DATACLERK
-					userClerk.location= CalculationLocation.findByCode(327)
-					userClerk.username="user"
-					userClerk.firstname= "Data"
-					userClerk.lastname= "Clerk"
-					userClerk.email='user@memms.org'
-					userClerk.passwordHash= new Sha256Hash("user").toHex()
-					userClerk.active= true
-					userClerk.confirmed= true
-					userClerk.uuid='user'
-					userClerk.defaultLanguage='en'
-					userClerk.phoneNumber='+250 11 111 11 11'
-					userClerk.organisation='org'
+				if(User.findByUsername("user")){ 
+					userClerk = User.findByUsername("user")
+					userClerk.userType=UserType.TITULAIREHC
+					userClerk.save(failOnError: true)
+					}
+				else
+				{
+					userClerk = new User(userType: UserType.TITULAIREHC, location: CalculationLocation.findByCode(327), username: "user",
+					firstname: "Data", lastname: "Clerk", email:'user@memms.org', passwordHash: new Sha256Hash("user").toHex(), active: true,
+					confirmed: true, uuid:'user', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
 				userClerk.addToRoles(defaultDataClerkRole)
 				userClerk.save(failOnError: true)
+				}
 				
 				def userTechnicianFacility
-				if(User.findByUsername("techf")) userTechnicianFacility = User.findByUsername("techf")
-				else userTechnicianFacility = new User();
-				userTechnicianFacility.userType =UserType.TECHNICIANFACILITY
-				userTechnicianFacility.location =CalculationLocation.findByCode(327)
-				userTechnicianFacility.username ="techf"
-				userTechnicianFacility.firstname ="technician"
-				userTechnicianFacility.lastname ="facility"
-				userTechnicianFacility.email='techf@memms.org'
-				userTechnicianFacility.passwordHash = new Sha256Hash("techf").toHex()
-				userTechnicianFacility.active = true
-				userTechnicianFacility.confirmed = true 
-				userTechnicianFacility.uuid= 'techf'
-				userTechnicianFacility.defaultLanguage='en' 
-				userTechnicianFacility.phoneNumber='+250 11 111 11 11'
-				userTechnicianFacility.organisation='org'
-				userTechnicianFacility.addToRoles(defaultTechnicianFacilityRole)
-				userTechnicianFacility.save(failOnError: true)
+				if(User.findByUsername("techf")){ 
+					userTechnicianFacility = User.findByUsername("techf")
+					userTechnicianFacility.userType = UserType.TECHNICIANDH
+					userTechnicianFacility.save(failOnError: true)
+				}
+				else
+				{
+					userTechnicianFacility = new User(userType: UserType.TECHNICIANDH, location: CalculationLocation.findByCode(327), username: "techf",
+					firstname: "technician", lastname: "facility", email:'techf@memms.org', passwordHash: new Sha256Hash("techf").toHex(), active: true,
+					confirmed: true, uuid:'techf', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
+					userTechnicianFacility.addToRoles(defaultTechnicianDHRole)
+					userTechnicianFacility.save(failOnError: true)
+				}
 				
 				def userTechnicianMoH
-				if(User.findByUsername("techMoH")) userTechnicianMoH = User.findByUsername("techMoH")
-				else userTechnicianMoH = new User();
-				userTechnicianMoH.userType = UserType.TECHNICIANMOH
-				userTechnicianMoH.location = CalculationLocation.findByCode(0)
-				userTechnicianMoH.username = "techMoH"
-				userTechnicianMoH.firstname = "technician"  
-				userTechnicianMoH.lastname ="MoH"
-				userTechnicianMoH.email ='techMoH@memms.org'
-				userTechnicianMoH.passwordHash= new Sha256Hash("techMoH").toHex()
-				userTechnicianMoH.active =true
-				userTechnicianMoH.confirmed = true
-				userTechnicianMoH.uuid='techMoH' 
-				userTechnicianMoH.defaultLanguage ='en'
-				userTechnicianMoH.phoneNumber = '+250 11 111 11 11'
-				userTechnicianMoH.organisation='org'
-				userTechnicianMoH.addToRoles(defaultTechnicianMoHRole)
-				userTechnicianMoH.save(failOnError: true)
+				if(User.findByUsername("techMoH")){
+					 userTechnicianMoH = User.findByUsername("techMoH")
+					 userTechnicianMoH.userType=UserType.TECHNICIANMMC
+					 userTechnicianMoH.save(failOnError: true)
+				}
+				else
+				{
+					userTechnicianMoH= new User(userType: UserType.TECHNICIANMMC, location: CalculationLocation.findByCode(0), username: "techMoH",
+					firstname: "technician", lastname: "MoH", email:'techMoH@memms.org', passwordHash: new Sha256Hash("techMoH").toHex(), active: true,
+					confirmed: true, uuid:'techMoH', defaultLanguage:'en', phoneNumber: '+250 11 111 11 11', organisation:'org')
+					userTechnicianMoH.addToRoles(defaultTechnicianMMCRole)
+					userTechnicianMoH.save(failOnError: true)
+				}
 			break;
 		}
     }
