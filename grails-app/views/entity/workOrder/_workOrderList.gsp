@@ -1,7 +1,7 @@
 <%@ page import="org.chai.memms.util.Utils" %>
 <%@ page import="org.apache.shiro.SecurityUtils" %>
 <%@ page import="org.chai.memms.security.User" %>
-<%@ page import="org.chai.memms.maintenance.WorkOrderStatus.OrderStatus" %>
+<%@ page import="org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus" %>
 <table class="items">
 	<thead>
 		<tr>
@@ -33,7 +33,7 @@
 					</ul>
 				</td>
 				<td>
-					<a rel="${createLinkWithTargetURI(controller:'workOrder', action:'getWorkOrderClueTipsAjaxData', params:[id: order.id])}" class="clueTip">
+					<a rel="${createLinkWithTargetURI(controller:'workOrderView', action:'getWorkOrderClueTipsAjaxData', params:[id: order.id])}" class="clueTip">
 						${order.equipment.code}
 					</a>
 					

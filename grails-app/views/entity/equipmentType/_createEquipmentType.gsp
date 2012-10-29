@@ -1,4 +1,4 @@
-<%@ page import="org.chai.memms.equipment.EquipmentType.Observation" %>
+<%@ page import="org.chai.memms.inventory.EquipmentType.Observation" %>
 <div  class="entity-form-container togglable">
 	<div class="heading1-bar">
 		<g:locales/>

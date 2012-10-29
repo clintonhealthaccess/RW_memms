@@ -1,6 +1,6 @@
-<%@ page import="org.chai.memms.equipment.EquipmentStatus.Status" %>
-<%@ page import="org.chai.memms.equipment.Equipment.PurchasedBy" %>
-<%@ page import="org.chai.memms.equipment.Equipment.Donor" %>
+<%@ page import="org.chai.memms.inventory.EquipmentStatus.Status" %>
+<%@ page import="org.chai.memms.inventory.Equipment.PurchasedBy" %>
+<%@ page import="org.chai.memms.inventory.Equipment.Donor" %>
 <div class="filters main">
 		  <h2><g:message code="equipment.filter.label" /><a href="#" id="showhide" class="right"><g:message code="entity.show.hide.filter.label" /></a></h2>
 
@@ -35,6 +35,13 @@
 							from="${filterCmd?.suppliers}" value="${filterCmd?.suppliers?.id}"
 							values="${filterCmd?.suppliers.collect{it.contact.contactName + ' ['+ it.code +']'}}"
 							/></li>
+					<li><g:selectFromList name="serviceProviders.id"
+							label="${message(code:'provider.type.serviceProvider')}" bean="${filterCmd}"
+							field="serviceProviders" optionKey="${filterCmd?.suppliers? 'id' : null}" multiple="true"
+							ajaxLink="${createLink(controller:'Provider', action:'getAjaxData', params:[class: 'Provider',type:'SERVICEPROVIDER'])}"
+							from="${filterCmd?.serviceProviders}" value="${filterCmd?.serviceProviders?.id}"
+							values="${filterCmd?.serviceProviders.collect{it.contact.contactName + ' ['+ it.code +']'}}"
+							/></li>
 					<li><g:selectFromList name="calculationLocationids"
 							label="${message(code:'calculation.location.display.label')}" bean="${filterCmd}"
 							field="calculationLocations" optionKey="id" multiple="true"
@@ -48,8 +55,6 @@
 							ajaxLink="${createLink(controller:'Equipment', action:'getAjaxData', params:[class: 'DataLocationType'])}"
 							from="${dataLocationTypes}" value="${filterCmd?.dataLocationTypes*.id}" 
 							values="${dataLocationTypes*.names}"/></li>
-
-					<li></li>
 					<li>
 						<label><g:message code="equipment.obsolete.label" /></label> 
 						<select name="obsolete">

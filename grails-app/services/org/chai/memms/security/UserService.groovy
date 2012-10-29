@@ -33,7 +33,7 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils
 import org.hibernate.Criteria;
 import org.chai.location.CalculationLocation;
-import org.chai.memms.maintenance.WorkOrder;
+import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.memms.security.User.UserType;
 import org.chai.memms.util.Utils
 import org.hibernate.criterion.MatchMode

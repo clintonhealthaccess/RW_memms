@@ -40,6 +40,11 @@ class ImportExportConstant {
 	public final static String SUPPLIER_DATE = "Supply date"
 	public final static String SUPPLIER_CONTACT_NAME = "Manufacturer_code"
 	
+	public final static String SERVICEPROVIDER_CODE = "Service Code"
+	public final static String SERVICEPROVIDER_CONTACT_NAME= "Service Provider"
+	public final static String SERVICEPROVIDER_DATE = "Contract Start Date"
+	public final static String SERVICEPROVIDER_PERIOD = "Contract Start Number of Months"
+	
 	public final static String LOCATION_CODE = "Facility_code"
 	public final static String LOCATION_NAME_EN = "Facility_name_en"
 	public final static String LOCATION_NAME_FR = "Facility_name_fr"

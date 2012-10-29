@@ -1,5 +1,5 @@
-<%@ page import="org.chai.memms.maintenance.WorkOrder.Criticality"%>
-<%@ page import="org.chai.memms.maintenance.WorkOrderStatus.OrderStatus"%>
+<%@ page import="org.chai.memms.corrective.maintenance.WorkOrder.Criticality"%>
+<%@ page import="org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus"%>
 <%@ page import="java.util.Date" %>
 <div class="filters main">
 	<h2><g:message code="work.order.filter.label" /><a href="#" id="showhide" class="right"><g:message code="entity.show.hide.filter.label" /></a></h2>

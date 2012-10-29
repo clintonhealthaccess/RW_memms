@@ -1,4 +1,4 @@
-<%@ page import="org.chai.memms.equipment.EquipmentStatus.Status" %>
+<%@ page import="org.chai.memms.inventory.EquipmentStatus.Status" %>
 <%@ page import="org.chai.memms.util.Utils" %>
 <div  class="entity-form-container togglable">
 <div class="heading1-bar">

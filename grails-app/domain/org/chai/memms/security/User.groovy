@@ -31,7 +31,6 @@ import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocation;
 import org.chai.location.Location;
 import org.chai.location.LocationLevel;
-import org.chai.memms.maintenance.Notification;
 import org.chai.memms.util.Utils
 
 class User {

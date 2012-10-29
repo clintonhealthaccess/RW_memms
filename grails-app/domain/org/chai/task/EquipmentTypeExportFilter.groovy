@@ -31,9 +31,9 @@ package org.chai.task
 import java.util.Map;
 import java.util.Set;
 
-import org.chai.memms.equipment.EquipmentType;
-import org.chai.memms.equipment.Provider;
-import org.chai.memms.equipment.EquipmentStatus.Status;
+import org.chai.memms.inventory.EquipmentType;
+import org.chai.memms.inventory.Provider;
+import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.exports.EquipmentExport;
 import org.chai.memms.exports.EquipmentTypeExport;
 import org.chai.memms.task.Exporter;

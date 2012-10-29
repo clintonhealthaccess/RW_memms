@@ -9,7 +9,7 @@
 <body>
 	<div>
 		<div class="heading1-bar">
-			<h1>Equipment Export</h1>
+			<h1><g:message code="equipment.export.label"/></h1>
 		</div>
 		<g:render template="${template}" />
 	</div>

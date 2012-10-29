@@ -28,8 +28,8 @@
 
 package org.chai.memms.imports
 
-import org.chai.memms.equipment.EquipmentType
-import org.chai.memms.equipment.EquipmentTypeService;
+import org.chai.memms.inventory.EquipmentType
+import org.chai.memms.inventory.EquipmentTypeService;
 import org.chai.memms.imports.ImporterErrorManager
 import org.chai.memms.imports.ImporterError
 import org.chai.task.ImportTask

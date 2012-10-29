@@ -1,5 +1,5 @@
 <%@ page import="org.chai.memms.util.Utils" %>
-<%@ page import="org.chai.memms.equipment.EquipmentStatus.Status" %>
+<%@ page import="org.chai.memms.inventory.EquipmentStatus.Status" %>
 <table class="items">
 	<thead>
 		<tr>

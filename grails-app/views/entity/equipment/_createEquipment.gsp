@@ -1,7 +1,7 @@
 <%@ page import="org.chai.memms.util.Utils" %>
-<%@ page import="org.chai.memms.equipment.EquipmentStatus.Status" %>
-<%@ page import="org.chai.memms.equipment.Equipment.PurchasedBy" %>
-<%@ page import="org.chai.memms.equipment.Equipment.Donor" %>
+<%@ page import="org.chai.memms.inventory.EquipmentStatus.Status" %>
+<%@ page import="org.chai.memms.inventory.Equipment.PurchasedBy" %>
+<%@ page import="org.chai.memms.inventory.Equipment.Donor" %>
 <div  class="entity-form-container togglable">
   <div class="heading1-bar">
 		<h1>
@@ -158,7 +158,7 @@
       	<g:input name="warranty.startDate" dateClass="date-picker" label="${message(code:'warranty.start.date.label')}" bean="${equipment}" field="warranty.startDate"/>
     	<g:inputYearMonth name="warrantyPeriod" field="warrantyPeriod" years="${equipment.warrantyPeriod?.years}" months="${equipment.warrantyPeriod?.months}" bean="${equipment}" label='equipment.warranty.period.label'/>
       	<g:address  bean="${equipment}" warranty="true" field="warranty.contact"/>
-     	<g:i18nTextarea name="warranty.descriptions" bean="${equipment}" label="${message(code:'warranty.descriptions.label')}" field="descriptions" height="150" width="300" maxHeight="150" />	 			
+     	<g:i18nTextarea name="warranty.descriptions" bean="${equipment}" label="${message(code:'warranty.descriptions.label')}" field="warranty.descriptions" height="150" width="300" maxHeight="150" />	 			
   		</fieldset> 
       </div>
       <div class="form-section">

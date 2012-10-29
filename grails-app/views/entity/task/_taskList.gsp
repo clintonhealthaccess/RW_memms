@@ -11,7 +11,7 @@
 			<th><g:message code="task.numberoftries.label"/></th>
 			<g:sortableColumn property="status" params="[q:q]" title="${message(code: 'task.status.label')}" />
 			<g:sortableColumn property="added" params="[q:q]" title="${message(code: 'task.added.label')}" defaultOrder="desc" />
-			<th>Progress</th>
+			<th><g:message code="task.progress.bar.label"/></th>
 			<th><g:message code="entity.list.manage.label"/></th>
 		</tr>
 	</thead>

@@ -32,32 +32,31 @@ import org.apache.shiro.crypto.hash.Sha256Hash
 import org.chai.memms.Contact;
 import org.chai.memms.Period;
 import org.chai.memms.Warranty;
-import org.chai.memms.equipment.Department;
-import org.chai.memms.equipment.Equipment;
-import org.chai.memms.equipment.Equipment.Donor;
-import org.chai.memms.equipment.EquipmentStatus;
-import org.chai.memms.equipment.EquipmentType
-import org.chai.memms.equipment.EquipmentType.Observation;
-import org.chai.memms.equipment.Provider
-import org.chai.memms.equipment.Equipment.PurchasedBy;
-import org.chai.memms.equipment.EquipmentStatus.Status;
-import org.chai.memms.equipment.Provider.Type;
+import org.chai.memms.inventory.Department;
+import org.chai.memms.inventory.Equipment;
+import org.chai.memms.inventory.NotificationEquipment;
+import org.chai.memms.inventory.Equipment.Donor;
+import org.chai.memms.inventory.EquipmentStatus;
+import org.chai.memms.inventory.EquipmentType
+import org.chai.memms.inventory.EquipmentType.Observation;
+import org.chai.memms.inventory.Provider
+import org.chai.memms.inventory.Equipment.PurchasedBy;
+import org.chai.memms.inventory.EquipmentStatus.Status;
+import org.chai.memms.inventory.Provider.Type;
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocation;
 import org.chai.location.DataLocationType;
 import org.chai.location.Location;
 import org.chai.location.LocationLevel;
-import org.chai.memms.maintenance.Comment;
-import org.chai.memms.maintenance.MaintenanceProcess;
-import org.chai.memms.maintenance.NewEquipmentNotification
-import org.chai.memms.maintenance.WorkOrderNotification
-import org.chai.memms.maintenance.MaintenanceProcess.ProcessType;
-import org.chai.memms.maintenance.Notification;
-import org.chai.memms.maintenance.WorkOrder;
-import org.chai.memms.maintenance.WorkOrder.Criticality;
-import org.chai.memms.maintenance.WorkOrder.FailureReason;
-import org.chai.memms.maintenance.WorkOrderStatus;
-import org.chai.memms.maintenance.WorkOrderStatus.OrderStatus;
+import org.chai.memms.corrective.maintenance.Comment;
+import org.chai.memms.corrective.maintenance.MaintenanceProcess;
+import org.chai.memms.corrective.maintenance.NotificationWorkOrder
+import org.chai.memms.corrective.maintenance.MaintenanceProcess.ProcessType;
+import org.chai.memms.corrective.maintenance.WorkOrder;
+import org.chai.memms.corrective.maintenance.WorkOrder.Criticality;
+import org.chai.memms.corrective.maintenance.WorkOrder.FailureReason;
+import org.chai.memms.corrective.maintenance.WorkOrderStatus;
+import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
 import org.chai.memms.security.Role
 import org.chai.memms.security.User
 import org.chai.memms.security.User.UserType
@@ -620,11 +619,11 @@ public class Initializer {
 		return new WorkOrder(equipment:equipment, description:description, criticality:criticality,addedBy:addedBy, openOn: openOn, closedOn:closedOn, currentStatus:currentStatus,failureReason:failureReason).save(failOnError:true)
 	}
 	public static newWorkOrderNotification(def workOrder, def sender, def receiver,def writtenOn, def content){
-		return new WorkOrderNotification(workOrder: workOrder, sender: sender, receiver: receiver, writtenOn: writtenOn, content: content).save(failOnError: true)
+		return new NotificationWorkOrder(workOrder: workOrder, sender: sender, receiver: receiver, writtenOn: writtenOn, content: content).save(failOnError: true)
 	}
 	
 	public static newNewEquipmentNotification(def dataLocation, def department, def sender, def receiver,def writtenOn, def content){
-		return new NewEquipmentNotification(dataLocation:dataLocation, department:department, sender: sender, receiver: receiver, writtenOn: writtenOn, content: content).save(failOnError: true)
+		return new NotificationEquipment(dataLocation:dataLocation, department:department, sender: sender, receiver: receiver, writtenOn: writtenOn, content: content).save(failOnError: true)
 	}
 	
 	public static newComment(def workOrder, def writtenBy, def writtenOn, def content){

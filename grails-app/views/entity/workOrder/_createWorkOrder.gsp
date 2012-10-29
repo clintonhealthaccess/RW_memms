@@ -1,7 +1,7 @@
 <%@ page import="org.chai.memms.util.Utils" %>
-<%@ page import="org.chai.memms.maintenance.WorkOrderStatus.OrderStatus" %>
-<%@ page import="org.chai.memms.maintenance.WorkOrder.Criticality" %>
-<%@ page import="org.chai.memms.maintenance.WorkOrder.FailureReason" %>
+<%@ page import="org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus" %>
+<%@ page import="org.chai.memms.corrective.maintenance.WorkOrder.Criticality" %>
+<%@ page import="org.chai.memms.corrective.maintenance.WorkOrder.FailureReason" %>
 <r:require modules="tipsy"/>
 <div  class="entity-form-container togglable">
     <div class="heading1-bar">
@@ -152,11 +152,12 @@
 </div>
 <script type="text/javascript">
 	$(document).ready(function() {
-		addProcess("${createLink(controller:'workOrder',action: 'addProcess')}","${order.id}")
-		removeProcess("${createLink(controller:'workOrder',action: 'removeProcess')}")
-		addComment("${createLink(controller:'workOrder',action: 'addComment')}","${order.id}")
-		removeComment("${createLink(controller:'workOrder',action: 'removeComment')}")
-		getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}")
+		numberOnlyField();
+		addProcess("${createLink(controller:'workOrderView',action: 'addProcess')}","${order.id}");
+		removeProcess("${createLink(controller:'workOrderView',action: 'removeProcess')}");
+		addComment("${createLink(controller:'workOrderView',action: 'addComment')}","${order.id}");
+		removeComment("${createLink(controller:'workOrderView',action: 'removeComment')}");
+		getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}");
 	});
 </script>
 
