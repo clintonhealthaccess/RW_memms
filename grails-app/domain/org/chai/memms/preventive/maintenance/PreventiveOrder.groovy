@@ -25,78 +25,78 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package org.chai.memms.preventive.maintenance
 
-package org.chai.memms.inventory
-
-import java.util.Date;
-
-import org.chai.memms.Period;
-
-import i18nfields.I18nFields
+import org.chai.memms.inventory.Equipment;
 
 /**
- * @author Eugene Munyaneza
+ * @author Jean Kahigiso M.
  *
  */
-
 @i18nfields.I18nFields
-class EquipmentType {
-
-	enum Observation{
-		NONE("none"),
-		USEDINMEMMS("used.in.memms"),
-		RETIRED("retired"),
-		TOODETAILED("too.detailed"),
-		NOTINSCOPE("not.in.scope")
+public abstract class PreventiveOrder {
+	enum PreventiveOrderType{
 		
-		String messageCode = "equipment.type"	
-
+		NONE("none"),
+		DURATIONBASED("duration.based"),
+		WORKBASED("work.based")
+		
+		String messageCode = "preventive.order.type"
 		String name
-		Observation(String name){ this.name=name }
-		String getKey() { return name() }
+		PreventiveOrderType(String name){this.name=name}
+		String getKey(){ return name() }
 	}
 	
-	String code
-	String names
+	enum PreventiveOrderStatus{
+		
+		OPEN("open"),
+		CLOSED("closed")
+		
+		String messageCode = "preventive.order.status"
+		String name
+		PreventiveOrderStatus(String name){this.name=name}
+		String getKey(){ return name() }
+	}
+	
 	String descriptions
-	Period expectedLifeTime
-	Observation observation
-	
+	Date startDate
+	Date untilDate
 	Date addedOn
-	Date lastModifiedOn
 	
-	static embedded = ["expectedLifeTime"]
-	static i18nFields = ["descriptions","names"]
-	static hasMany = [equipments: Equipment]
+	PreventiveOrderType type
+	PreventiveOrderStatus status
 	
-    static constraints = {
-		
-		code nullable: false, blank: false,  unique: true
-		names nullable: true, blank: true
-		descriptions nullable: true, blank: true
-		
-		expectedLifeTime nullable: true
-		
-		addedOn nullable: false, blank: false, validator:{it <= new Date()}
-		lastModifiedOn nullable: false, blank: false, validator:{it <= new Date()}
-		
-		observation nullable: false, inLIst:[Observation.USEDINMEMMS,Observation.RETIRED,Observation.TOODETAILED,Observation.NOTINSCOPE]
-    }
+	static i18nFields = ["descriptions"]
+	static belongsTo = [equipment: Equipment]
+	static hasMany = [preventions: Prevention]
 	
 	static mapping = {
-		table "memms_equipment_type"
+		table "memms_preventive_order_abstract"
+		tablePerSubclass true
+		cache true
 		version false
+
 	}
 	
-	String toString() {
-		return "EquipmentType[Id=" + id + "code="+code+"]";
+	static constraints = {
+		
+		type nullable: false, inList:[PreventiveOrderType.DURATIONBASED,PreventiveOrderType.WORKBASED]
+		status nullable:false, inList:[PreventiveOrderStatus.OPEN,PreventiveOrderStatus.CLOSED]
+		startDate nullable: false, validator:{ it <= new Date()}
+		addedOn nullable:false, validator:{ it <= new Date()}
+		untilDate nullable:true, validator:{ val, obj ->
+			if(val!=null) return (val<=new Date() && obj.status.equals(PreventiveOrderStatus.CLOSED))
+		}
+		
 	}
 	
+	abstract Integer getPlannedPrevention();
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((code == null) ? 0 : code.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
 	@Override
@@ -107,11 +107,11 @@ class EquipmentType {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		EquipmentType other = (EquipmentType) obj;
-		if (code == null) {
-			if (other.code != null)
+		PreventiveOrder other = (PreventiveOrder) obj;
+		if (id == null) {
+			if (other.id != null)
 				return false;
-		} else if (!code.equals(other.code))
+		} else if (!id.equals(other.id))
 			return false;
 		return true;
 	}

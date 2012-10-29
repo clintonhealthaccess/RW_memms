@@ -25,19 +25,62 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms
+package org.chai.memms.preventive.maintenance
 
-import org.springframework.beans.PropertyEditorRegistrar;
-import org.springframework.beans.PropertyEditorRegistry;
+import java.util.Date;
+
+import org.chai.memms.security.User;
+
 /**
  * @author Jean Kahigiso M.
  *
  */
-class PeriodPropertyEditorRegistrar implements PropertyEditorRegistrar{
+public class PreventiveAction {
 	
-	@Override
-	public void registerCustomEditors(PropertyEditorRegistry registry) {
-		registry.registerCustomEditor(Period.class,new CustomPeriodEditor());
+	String name
+	Date addedOn
+	User addedBy
+	
+	static belongsTo = [prevention: Prevention]
+	
+	static constraints = {
+		name nullable:false, blank: false
+		addedOn nullable:false, validator:{it <= new Date()}
+		addedBy nullable:false
 	}
 	
+	static mapping = {
+		table "memms_preventive_order_action"
+		version  false
+	}
+
+	@Override
+	public String toString() {
+		return "PreventiveAction [id="+id+" name=" + name + "]";
+	}
+		
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this.is(obj))
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PreventiveAction other = (PreventiveAction) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
 }

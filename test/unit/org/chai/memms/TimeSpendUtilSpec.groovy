@@ -26,18 +26,63 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package org.chai.memms
-
-import org.springframework.beans.PropertyEditorRegistrar;
-import org.springframework.beans.PropertyEditorRegistry;
 /**
  * @author Jean Kahigiso M.
  *
  */
-class PeriodPropertyEditorRegistrar implements PropertyEditorRegistrar{
+
+import grails.plugin.spock.UnitSpec;
+import org.chai.memms.TimeSpend
+
+class TimeSpendUtilSpec extends UnitSpec {
+
+	def "test getHours and getMinutes"() {
+		when:
+		TimeSpend timeSpend = new TimeSpend(3,8)
+		then:
+		timeSpend.hours == 3
+		timeSpend.minutes == 8
+		timeSpend.numberOfMinutes == 188
+		
+	}
 	
-	@Override
-	public void registerCustomEditors(PropertyEditorRegistry registry) {
-		registry.registerCustomEditor(Period.class,new CustomPeriodEditor());
+	def "test numberOfMinutes can be null"() {
+		when:
+		TimeSpend timeSpend = new TimeSpend(null,null)
+		then:
+		timeSpend.hours == null
+		timeSpend.minutes == null
+		timeSpend.numberOfMinutes == null
+	}
+	
+	def "test can set minutes only"() {
+		when:
+		TimeSpend timeSpend = new TimeSpend(null,70)
+		then:
+		timeSpend.hours == 1
+		timeSpend.minutes == 10
+		timeSpend.numberOfMinutes == 70
+	}
+	
+	def "test can set hours only"() {
+		
+		when:
+		TimeSpend timeSpend = new TimeSpend(5,null)
+		then:
+		timeSpend.hours == 5
+		timeSpend.minutes == null
+		timeSpend.numberOfMinutes == 300
+		
+	}
+	def "test can set minutes only when less than a hours"() {
+		
+		when:
+		TimeSpend timeSpend = new TimeSpend(null,35)
+		then:
+		timeSpend.hours == null
+		timeSpend.minutes == 35
+		timeSpend.numberOfMinutes == 35		
 	}
 	
 }
+	

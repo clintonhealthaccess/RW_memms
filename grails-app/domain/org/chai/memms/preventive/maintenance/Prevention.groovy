@@ -25,19 +25,80 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms
+package org.chai.memms.preventive.maintenance
 
-import org.springframework.beans.PropertyEditorRegistrar;
-import org.springframework.beans.PropertyEditorRegistry;
+import org.chai.memms.TimeSpend;
+import org.chai.memms.security.User;
+
 /**
  * @author Jean Kahigiso M.
  *
  */
-class PeriodPropertyEditorRegistrar implements PropertyEditorRegistrar{
+@i18nfields.I18nFields
+public class Prevention {
 	
-	@Override
-	public void registerCustomEditors(PropertyEditorRegistry registry) {
-		registry.registerCustomEditor(Period.class,new CustomPeriodEditor());
+	Date scheduledOn
+	Date eventDate
+	Date addedOn
+	Boolean happenAsScheduled = false
+	TimeSpend timeSpend
+	User addedBy
+	
+	
+	String descriptions
+	
+	
+	static i18nFields = ["descriptions"]
+	static belongsTo = [order:  PreventiveOrder]
+	static hasMany = [actions: PreventiveAction]
+	static embedded = ["timeSpend"]
+	
+
+	static mapping = {
+		
+		table "memms_prevention"
+		version false
 	}
 	
+	static constraints = {
+		
+		addedBy nullable: false
+		timeSpend nullable: true
+		scheduledOn nullable: false, validator:{it <= new Date()}
+		eventDate nullable: false, validator:{it <= new Date()}
+		addedOn nullable: false, validator:{it <= new Date()}
+		
+	}
+	
+	
+	@Override
+	public String toString() {
+		return "Prevention [id="+id+" addedBy=" + addedBy + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this.is(obj))
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Prevention other = (Prevention) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}	
+
 }

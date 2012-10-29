@@ -33,11 +33,10 @@ import org.springframework.beans.PropertyEditorRegistry;
  * @author Jean Kahigiso M.
  *
  */
-class PeriodPropertyEditorRegistrar implements PropertyEditorRegistrar{
+class TimeSpendPropertyEditorRegistrar implements PropertyEditorRegistrar{
 	
 	@Override
 	public void registerCustomEditors(PropertyEditorRegistry registry) {
-		registry.registerCustomEditor(Period.class,new CustomPeriodEditor());
+		registry.registerCustomEditor(TimeSpend.class,new CustomTimeSpendEditor());
 	}
-	
 }

@@ -27,17 +27,50 @@
  */
 package org.chai.memms
 
-import org.springframework.beans.PropertyEditorRegistrar;
-import org.springframework.beans.PropertyEditorRegistry;
 /**
  * @author Jean Kahigiso M.
  *
  */
-class PeriodPropertyEditorRegistrar implements PropertyEditorRegistrar{
+class TimeSpend {
+	
+	Integer numberOfMinutes
+	
+	public TimeSpend(){}
+	public TimeSpend(Integer hours,Integer minutes){
+		if(hours!=null || minutes!=null){
+			numberOfMinutes = (hours)?hours*60:0
+			numberOfMinutes = (minutes)?numberOfMinutes+minutes:numberOfMinutes
+		}
+	}
+	
+	static constraints = {
+		numberOfMinutes nullable:false
+	}
+	
+	static mapping = {
+		version false
+	}
+	
+	static transients =["hours","minutes"]
+	
+	public Integer getHours(){
+		Integer hours
+		if(numberOfMinutes){
+			hours = numberOfMinutes >= 60 ? Math.floor(numberOfMinutes/60 ) : null
+		}
+		return hours
+	}
+	public Integer getMinutes(){
+		Integer minutes
+		if(numberOfMinutes){
+			minutes =  numberOfMinutes % 60 != 0 ? numberOfMinutes % 60 : null
+		}
+		return minutes
+	}
 	
 	@Override
-	public void registerCustomEditors(PropertyEditorRegistry registry) {
-		registry.registerCustomEditor(Period.class,new CustomPeriodEditor());
+	public String toString() {
+		return "TimeSpend [numberOfMinutes= " + numberOfMinutes + "]";
 	}
 	
 }

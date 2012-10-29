@@ -33,6 +33,7 @@ import org.chai.memms.Contact;
 import org.chai.memms.Period;
 import org.chai.memms.Warranty;
 import org.chai.memms.inventory.EquipmentStatus.Status;
+import org.chai.memms.preventive.maintenance.PreventiveOrder;
 import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.location.DataLocation;
 import org.apache.commons.lang.math.RandomUtils;
@@ -104,7 +105,7 @@ public class Equipment {
 	Date serviceContractStartDate
 	Date registeredOn
 	
-	static hasMany = [status: EquipmentStatus, workOrders: WorkOrder]
+	static hasMany = [status: EquipmentStatus, workOrders: WorkOrder,preventiveOrders: PreventiveOrder]
 	static belongsTo = [dataLocation: DataLocation, department: Department, type: EquipmentType]
 	static i18nFields = ["observations","descriptions"]
 	static embedded = ["warranty","serviceContractPeriod","expectedLifeTime","warrantyPeriod"]
