@@ -53,7 +53,7 @@ class BootStrap {
 			Initializer.createCorrectiveMaintenanceStructure()
 			break;
 			case "production":					
-				//Default roles
+//				//Default roles
 				def defaultAdminRole 
 				if(Role.findByName("Admin")) defaultAdminRole = Role.findByName("Admin") 
 				else defaultAdminRole = new Role(name: "Admin")
