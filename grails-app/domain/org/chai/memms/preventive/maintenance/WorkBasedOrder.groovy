@@ -62,7 +62,7 @@ class WorkBasedOrder extends PreventiveOrder{
 		importFrom PreventiveOrder
 	}
 	
-	def getPlannedPrevention(){
+	Integer getPlannedPrevention(){
 		//TODO
 		return null
 	}

@@ -28,7 +28,6 @@
 package org.chai.memms.preventive.maintenance
 
 import java.util.Date;
-
 import org.chai.memms.security.User;
 
 /**

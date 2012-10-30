@@ -57,6 +57,10 @@ import org.chai.memms.corrective.maintenance.WorkOrder.Criticality;
 import org.chai.memms.corrective.maintenance.WorkOrder.FailureReason;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
+import org.chai.memms.preventive.maintenance.DurationBasedOrder;
+import org.chai.memms.preventive.maintenance.Prevention;
+import org.chai.memms.preventive.maintenance.PreventiveAction;
+import org.chai.memms.preventive.maintenance.WorkBasedOrder;
 import org.chai.memms.security.Role
 import org.chai.memms.security.User
 import org.chai.memms.security.User.UserType
@@ -610,7 +614,27 @@ public class Initializer {
 		equipment10.save(failOnError:true)	
 	}
 	
+	
 	//Models definition
+	//Preventive Maintenance
+	public static def newDurationBasedOrder(def equipment){
+		return new DurationBasedOrder(equipment:equipment).save(failOnError:true)
+	}
+	public static def newWorkBasedOrder(def equipment){
+		return new WorkBasedOrder(equipment:equipment).save(failOnError:true)
+	}	
+	public static def newPrevention(def order,def addedBy,def scheduledOn,def happenAsScheduled,def eventDate,def addedOn,def timeSpend,def descriptions){
+		return new Prevention(order:order,addedBy:addedBy,scheduledOn:scheduledOn,happenAsScheduled:happenAsScheduled,eventDate:eventDate,addedOn:addedOn,timeSpend:timeSpend,descriptions:descriptions).save(failOnError:true)
+	}
+	public static def newPreventionAction(def prevention, def name, def addedOn, def addedBy){
+		return new PreventiveAction(prevention:prevention,name:name,addedOn:addedOn,addedBy:addedBy).save(failOnError:true)
+	}
+	public static def newTimeSpend(def hours,def minutes){
+		return new TimeSpend(hours,minutes)
+	}
+	public static def newTimeSpend(def numberOfMinutes){
+		return new TimeSpend(numberOfMinutes:numberOfMinutes)
+	}
 	//Corrective Maintenance
 	public static def newWorkOrder(def equipment, def description, def criticality, def addedBy, def openOn,def failureReason,def currentStatus){
 		return new WorkOrder(equipment:equipment,description: description,criticality:criticality,addedBy:addedBy,openOn: openOn,currentStatus:currentStatus,failureReason:failureReason).save(failOnError:true)

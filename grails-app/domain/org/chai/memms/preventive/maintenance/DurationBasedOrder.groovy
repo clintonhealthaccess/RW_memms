@@ -84,7 +84,7 @@ class DurationBasedOrder extends PreventiveOrder {
 		}
 	}
 	
-	def getPlannedPrevention(){
+	Integer getPlannedPrevention(){
 		//TODO
 		return null
 	}
