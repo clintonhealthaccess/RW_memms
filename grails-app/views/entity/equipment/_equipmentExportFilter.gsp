@@ -35,7 +35,7 @@
 							from="${filterCmd?.suppliers}" value="${filterCmd?.suppliers?.id}"
 							values="${filterCmd?.suppliers.collect{it.contact.contactName + ' ['+ it.code +']'}}"
 							/></li>
-					<li><g:selectFromList name="serviceProviders.id"
+					<li><g:selectFromList name="serviceProvidersIds"
 							label="${message(code:'provider.type.serviceProvider')}" bean="${filterCmd}"
 							field="serviceProviders" optionKey="${filterCmd?.suppliers? 'id' : null}" multiple="true"
 							ajaxLink="${createLink(controller:'Provider', action:'getAjaxData', params:[class: 'Provider',type:'SERVICEPROVIDER'])}"

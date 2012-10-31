@@ -27,27 +27,62 @@
  */
 package org.chai.memms.location;
 
+import java.util.Set;
+
+import org.apache.commons.lang.math.NumberUtils;
 import org.chai.location.DataLocation;
 import org.chai.location.DataLocationType;
+import org.chai.location.Location;
+import org.chai.location.LocationLevel;
 import org.chai.memms.AbstractEntityController;
 import org.chai.memms.inventory.Equipment;
 
 class DataLocationController extends AbstractEntityController {
 	def locationService	
+	def grailsApplication
 	
-	def bindParams(def entity) {
-		entity.properties = params
-	}
-
 	def getModel(def entity) {
 		def locations = []
+		def manages = []
+		if(entity.manages!= null)  manages = new ArrayList(entity.manages)
 		if (entity.location != null) locations << entity.location
 		[	
 			location: entity, 
 			types: DataLocationType.list([cache: true]), 
-			locations: locations
+			locations: locations,
+			manages:manages
 			]
 	}
+	
+	def bindParams(def entity) {
+		params.oldManages = entity.manages
+		if(log.isDebugEnabled()) log.debug("oldManages: "+entity.manages)
+		Set<DataLocation> manages = new HashSet<DataLocation>()
+		params.list('managesIds').each { id ->
+			if (NumberUtils.isDigits(id)) {
+				def managed = DataLocation.get(id)
+				if (managed && !manages.contains(managed)) manages.add(managed);
+			}
+		}
+		entity.manages = manages
+		if(log.isDebugEnabled()) log.debug("newManages: "+entity.manages)
+		bindData(entity,params,[exclude:["managesIds"]])
+	}
+	
+	def saveEntity(def entity) {
+		entity.save(failOnError:true)
+		def removedManaged = (params.oldManages)?(params.oldManages - entity.manages):[]
+		entity.manages.each{
+			it.managedBy= entity
+			it.save(failOnError:true)
+		}
+		removedManaged.each{
+			it.managedBy = null
+			it.save(failOnError:true)
+		}
+		if(log.isDebugEnabled()) log.debug("newManages after save: "+entity.manages)
+	}
+
 
 	def getEntityClass(){
 		return DataLocation.class;
@@ -74,7 +109,9 @@ class DataLocationController extends AbstractEntityController {
 			flash.message = message(code: 'datalocation.hasequipment', args: [message(code: getLabel(), default: 'entity'), params.id], default: '{0} still has associated equipment.')
 		else entity.delete()
 	}
-
+	
+	
+	
 	def list = {
 		adaptParamsForList()
 		List<DataLocation> locations = DataLocation.list(offset:params.offset,max:params.max,sort:params.sort ?:names,order: params.order ?:"asc");
@@ -111,7 +148,7 @@ class DataLocationController extends AbstractEntityController {
 				dataLocations.each { dataLocation ->
 					elem (
 						key: dataLocation.id,
-						value: dataLocation.getNames(languageService.getCurrentLanguage()) + ' ['+dataLocation.location.getNames(languageService.getCurrentLanguage())+']'
+						value: dataLocation.names + ' ['+dataLocation.location.names+']'
 					)
 				}
 			}

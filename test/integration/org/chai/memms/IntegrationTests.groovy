@@ -75,6 +75,8 @@ abstract class IntegrationTests extends IntegrationSpec {
 	static final String BURERA = "Burera"
 	static final String BUTARO = "Butaro DH"
 	static final String KIVUYE = "Kivuye HC"
+	static final String GITWE ="Gitwe HC"
+	static final String MUVUNA ="Muvuna HC"
 
 
 	def setup() {
@@ -111,6 +113,9 @@ abstract class IntegrationTests extends IntegrationSpec {
 
 		def butaro = Initializer.newDataLocation(['en':BUTARO], BUTARO, gitarama, dh)
 		def kivuye = Initializer.newDataLocation(['en':KIVUYE], KIVUYE, burera, hc)
+		
+		def gitwe = Initializer.newDataLocation(['en':GITWE], GITWE, burera, hc)
+		def muvuna = Initializer.newDataLocation(['en':MUVUNA], MUVUNA, burera, hc)
 	}
 
 	static def setupEquipment(){

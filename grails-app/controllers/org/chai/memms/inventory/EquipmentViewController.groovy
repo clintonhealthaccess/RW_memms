@@ -183,7 +183,7 @@ class EquipmentViewController extends AbstractController {
 		cmd.suppliers = suppliers
 		
 		Set<Provider> serviceProviders = new HashSet<Provider>()
-		params.list('serviceProviderids').each { id ->
+		params.list('serviceProvidersIds').each { id ->
 			if (NumberUtils.isDigits(id)) {
 				def serviceProvider = Provider.get(id)
 				if (serviceProvider != null && !serviceProviders.contains(serviceProvider)) serviceProviders.add(serviceProvider);
