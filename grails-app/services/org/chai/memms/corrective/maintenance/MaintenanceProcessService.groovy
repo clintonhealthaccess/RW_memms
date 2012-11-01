@@ -27,9 +27,9 @@
  */
 package org.chai.memms.corrective.maintenance
 
-import org.chai.memms.corrective.maintenance.MaintenanceProcess;
+import org.chai.memms.corrective.maintenance.CorrectiveProcess;
+import org.chai.memms.corrective.maintenance.CorrectiveProcess.ProcessType;
 import org.chai.memms.corrective.maintenance.WorkOrder;
-import org.chai.memms.corrective.maintenance.MaintenanceProcess.ProcessType;
 import org.chai.memms.security.User;
 
 /**
@@ -40,17 +40,17 @@ class MaintenanceProcessService {
 	static transactional = true	
 	
 	def createProcess(WorkOrder workOrder,ProcessType type,String name,Date addedOn,User addedBy){
-		return new MaintenanceProcess(workOrder:workOrder,type: type,name:name,addedOn:addedOn,addedBy:addedBy);
+		return new CorrectiveProcess(workOrder:workOrder,type: type,name:name,addedOn:addedOn,addedBy:addedBy);
 	}
 	
 	def addProcess(WorkOrder workOrder,ProcessType type,String name,Date addedOn,User addedBy){
-		MaintenanceProcess process = createProcess(workOrder,type,name,addedOn,addedBy)
+		CorrectiveProcess process = createProcess(workOrder,type,name,addedOn,addedBy)
 		workOrder.addToProcesses(process)
 		workOrder.lastModifiedOn = addedOn
 		workOrder.lastModifiedBy = addedBy
 		return workOrder.save(failOnError:true)
 	}
-	def deleteProcess(MaintenanceProcess process,Date deletedOn,User deletedBy){
+	def deleteProcess(CorrectiveProcess process,Date deletedOn,User deletedBy){
 		WorkOrder workOrder = process.workOrder		
 		workOrder.removeFromProcesses(process)
 		workOrder.lastModifiedOn = deletedOn

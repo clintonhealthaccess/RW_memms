@@ -41,7 +41,6 @@ import org.chai.location.Location;
 import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus;
 import org.chai.memms.inventory.Equipment;
-import org.chai.memms.corrective.maintenance.MaintenanceProcess.ProcessType;
 
 /**
  * @author Jean Kahigiso M.

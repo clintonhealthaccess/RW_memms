@@ -27,12 +27,15 @@
  */
 package org.chai.memms.security
 
+import groovy.transform.EqualsAndHashCode;
+
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocation;
 import org.chai.location.Location;
 import org.chai.location.LocationLevel;
 import org.chai.memms.util.Utils
 
+@EqualsAndHashCode(includes='username')
 class User {
 	def locationService
 	enum UserType{
@@ -98,6 +101,7 @@ class User {
 	}
 	
 	public boolean canAccessCalculationLocation(CalculationLocation calculationLocation){
+		//TODO what does the first condition means
 		if(calculationLocation instanceof Location && location instanceof DataLocation) return false
 		if(calculationLocation instanceof DataLocation && location instanceof DataLocation) return calculationLocation == location
 		if(calculationLocation instanceof Location && location instanceof Location && calculationLocation.level == location.level) return calculationLocation == location
@@ -124,6 +128,7 @@ class User {
 		registrationToken(nullable: true)
 		passwordToken(nullable: true)
 		active(validator: {val, obj ->
+			//TODO fix this
 			//return val ? obj.location != null && (obj.permissionString || obj.roles.size() > 0) : true
 		})
     }

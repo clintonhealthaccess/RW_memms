@@ -27,6 +27,7 @@
  */
 package org.chai.memms.preventive.maintenance
 
+
 /**
  * @author Jean Kahigiso M.
  *
@@ -72,7 +73,7 @@ class DurationBasedOrder extends PreventiveOrder {
 	
 	
 	static mapping = {
-		table "memms_preventive_order_duration_based"
+		table "memms_preventive_order_based_on_duration"
 		version false
 	}
 	

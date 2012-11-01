@@ -4,9 +4,9 @@ import java.util.Date;
 
 import org.chai.memms.Initializer;
 import org.chai.memms.IntegrationTests
-import org.chai.memms.corrective.maintenance.MaintenanceProcess;
+import org.chai.memms.corrective.maintenance.CorrectiveProcess;
 import org.chai.memms.inventory.Equipment;
-import org.chai.memms.corrective.maintenance.MaintenanceProcess.ProcessType;
+import org.chai.memms.corrective.maintenance.CorrectiveProcess.ProcessType;
 import org.chai.memms.corrective.maintenance.WorkOrder.Criticality;
 import org.chai.memms.corrective.maintenance.WorkOrder.FailureReason;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
@@ -26,7 +26,7 @@ class MaintenanceProcessServiceSpec  extends IntegrationTests{
 		def process = maintenanceProcessService.createProcess(workOrder,ProcessType.ACTION,"name test",Initializer.now(),user)
 		process.save()
 		then:
-		MaintenanceProcess.count() == 1
+		CorrectiveProcess.count() == 1
 	}
 	def "can create a add maintenance process using create process method"(){
 		setup:
@@ -38,7 +38,7 @@ class MaintenanceProcessServiceSpec  extends IntegrationTests{
 		when:
 		maintenanceProcessService.addProcess(workOrder,ProcessType.ACTION,"name test",Initializer.now(),user)
 		then:
-		MaintenanceProcess.count() == 1
+		CorrectiveProcess.count() == 1
 	}
 	
 	def "can delete  a maintenance process using delete process method"(){
@@ -52,6 +52,6 @@ class MaintenanceProcessServiceSpec  extends IntegrationTests{
 		when:
 		maintenanceProcessService.deleteProcess(workOrder.processes.asList()[0],Initializer.now(),user)
 		then:
-		MaintenanceProcess.count() == 0
+		CorrectiveProcess.count() == 0
 	}
 }

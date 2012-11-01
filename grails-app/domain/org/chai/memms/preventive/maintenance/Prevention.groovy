@@ -27,6 +27,8 @@
  */
 package org.chai.memms.preventive.maintenance
 
+import groovy.transform.EqualsAndHashCode;
+
 import org.chai.memms.TimeSpend;
 import org.chai.memms.security.User;
 
@@ -35,12 +37,12 @@ import org.chai.memms.security.User;
  *
  */
 @i18nfields.I18nFields
+@EqualsAndHashCode(includes='id')
 public class Prevention {
 	
 	Date scheduledOn
 	Date eventDate
 	Date addedOn
-	Boolean happenAsScheduled = false
 	TimeSpend timeSpend
 	User addedBy
 	
@@ -50,7 +52,7 @@ public class Prevention {
 	
 	static i18nFields = ["descriptions"]
 	static belongsTo = [order:  PreventiveOrder]
-	static hasMany = [actions: PreventiveAction]
+	static hasMany = [processes: PreventiveProcess]
 	static embedded = ["timeSpend"]
 	
 
@@ -75,30 +77,4 @@ public class Prevention {
 	public String toString() {
 		return "Prevention [id="+id+" addedBy=" + addedBy + "]";
 	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this.is(obj))
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Prevention other = (Prevention) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
-	}	
-
 }

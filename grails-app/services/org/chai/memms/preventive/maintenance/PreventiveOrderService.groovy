@@ -27,10 +27,42 @@
  */
 package org.chai.memms.preventive.maintenance
 
+import java.util.Map;
+
+import org.chai.location.DataLocation;
+import org.chai.location.Location;
+import org.chai.memms.inventory.Equipment;
+
 /**
  * @author Jean Kahigiso M.
  *
  */
 class PreventiveOrderService {
-
+	
+	def equipmentService
+	def grailsApplication
+	
+	List<PreventiveOrder> getPreventiveOrderByDataLocation(DataLocation dataLocation,Map<String,String> params){
+		List<Equipment> equipments = equipmentService.getEquipmentsByDataLocation(dataLocation,[:])
+		def criteria =  PreventiveOrder.createCriteria()
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			or{
+				for(Equipment equipment: equipments)
+					eq("equipment",equipment)
+			}
+		}
+		
+	}
+	
+	List<PreventiveOrder> getPreventiveOrderByDataLocationManages(DataLocation dataLocation,Map<String,String> params){
+		List<Equipment> equipments = equipmentService.getEquipmentsByDataLocationAndManages(dataLocation,[:])
+		def criteria =  PreventiveOrder.createCriteria()			
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			or{
+				for(Equipment equipment: equipments)
+					eq("equipment",equipment)
+			}
+		}
+		
+	}
 }

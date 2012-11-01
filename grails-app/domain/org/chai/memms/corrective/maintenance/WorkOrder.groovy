@@ -30,10 +30,11 @@ package org.chai.memms.corrective.maintenance
 import javax.persistence.Transient;
 
 import org.chai.memms.Notification;
-import org.chai.memms.inventory.Equipment;
-import org.chai.memms.inventory.EquipmentStatus.Status;
-import org.chai.memms.corrective.maintenance.MaintenanceProcess.ProcessType;
+import org.chai.memms.TimeSpend;
+import org.chai.memms.corrective.maintenance.CorrectiveProcess.ProcessType;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
+import org.chai.memms.inventory.Equipment;
+import org.chai.memms.maintenance.MaintenanceOrder;
 import org.chai.memms.security.User;
 
 /**
@@ -41,7 +42,7 @@ import org.chai.memms.security.User;
  *
  */
 @i18nfields.I18nFields
-public class WorkOrder {
+public class WorkOrder extends MaintenanceOrder{
 
 	enum Criticality{
 		NONE("none"),
@@ -70,53 +71,44 @@ public class WorkOrder {
 	String testResultsDescriptions
 	String returnedTo
 	
-	User addedBy
-	User lastModifiedBy
+	
 	User receivedBy
 	User fixedBy
 	
-	Date openOn
-	Date lastModifiedOn
-	Date closedOn
 	Date returnedOn
 	
 	Double estimatedCost
-	Integer workTime
-	Integer travelTime
+	TimeSpend workTime
+	TimeSpend travelTime
 	
 	OrderStatus currentStatus
 	Criticality criticality
 	FailureReason failureReason
 	
-	static i18nFields = ["failureReasonDetails","testResultsDescriptions"]
-	static belongsTo = [equipment: Equipment]
-	static hasMany = [status: WorkOrderStatus, comments: Comment, notifications: NotificationWorkOrder, processes: MaintenanceProcess]
 	
+	static belongsTo = [equipment: Equipment]
+	static i18nFields = ["failureReasonDetails","testResultsDescriptions"]
+	static hasMany = [status: WorkOrderStatus, comments: Comment, notifications: NotificationWorkOrder, processes: CorrectiveProcess]
+	static embedded = ["workTime","travelTime"]
 
 	static constraints = {
-		addedBy nullable: false
+		importFrom MaintenanceOrder, exclude:["closedOn"]
+		
 		receivedBy nullable: true
 		fixedBy nullable: true
 		
 		failureReasonDetails nullable: true
 		testResultsDescriptions nullable: true
 		workTime nullable: true, validator:{ 
-			if(it!=null && it<=0) return false		
+			if(it!=null && it.numberOfMinutes <=0) return false		
 		}
 		travelTime nullable: true, validator:{ 
-			if(it!=null && it<=0) return false		
+			if(it!=null && it.numberOfMinutes <=0) return false		
 		}
 		description nullable: false, blank: false
 		returnedTo nullable: true, blank: true
 		
-		openOn nullable: false, validator:{it <= new Date()}
 		returnedOn nullable: true, validator:{it <= new Date()}
-		
-		lastModifiedOn nullable: true, validator:{ val, obj ->
-			if(val!=null)
-				return ((val <= new Date()) && (val.after(obj.openOn) || (val.compareTo(obj.openOn)==0)))
-			else return true
-		}
 		
 		closedOn nullable: true, validator:{ val, obj ->
 			boolean valid = true
@@ -131,7 +123,7 @@ public class WorkOrder {
 			}
 			return valid	
 		}
-		lastModifiedBy nullable: true
+		
 		currentStatus nullable: false, inList:[OrderStatus.OPENATFOSA,OrderStatus.OPENATMMC,OrderStatus.CLOSEDFIXED,OrderStatus.CLOSEDFORDISPOSAL]
 		criticality nullable: false, blank: false, inList: [Criticality.LOW,Criticality.HIGH,Criticality.NORMAL]
 		failureReason nullable:false, blank:false, inList:[FailureReason.NOTSPECIFIED,FailureReason.SPAREPARTBROKEN,FailureReason.MISUSE,FailureReason.OTHER]
@@ -147,16 +139,16 @@ public class WorkOrder {
 	
 	@Transient
 	def getActions(){
-		List<MaintenanceProcess> actions = []
-		for(MaintenanceProcess process: processes)
+		List<CorrectiveProcess> actions = []
+		for(CorrectiveProcess process: processes)
 			if(process.type.equals(ProcessType.ACTION))
 				actions.add(process)
 		return actions;
 	}
 	@Transient
 	def getMaterials(){
-		List<MaintenanceProcess> materials = []
-		for(MaintenanceProcess process: processes)
+		List<CorrectiveProcess> materials = []
+		for(CorrectiveProcess process: processes)
 			if(process.type.equals(ProcessType.MATERIAL))
 				materials.add(process)
 		return materials;
@@ -199,32 +191,7 @@ public class WorkOrder {
 
 	@Override
 	public String toString() {
-		return "WorkOrder [id=" + id + "]";
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this.is(obj))
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		WorkOrder other = (WorkOrder) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
+		return "WorkOrder [id= " + id + "currentStatus= "+currentStatus+"]";
 	}
 
 }

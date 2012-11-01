@@ -21,6 +21,11 @@ class FormTagLib {
 		if (attrs["maxlength"] == null) attrs["maxlength"] = 2
 		out << render(template:"/tags/form/inputYearMonth", model: attrs)
 	}
+	def inputHourMinute = { attrs, body ->
+		if (attrs["type"] == null) attrs["type"] = 'text'
+		if (attrs["maxlength"] == null) attrs["maxlength"] = 2
+		out << render(template:"/tags/form/inputHourMinute", model: attrs)
+	}
 	
 	def input = { attrs, body ->
 		if (attrs["type"] == null) attrs["type"] = 'text'

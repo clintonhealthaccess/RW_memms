@@ -35,7 +35,8 @@ import org.chai.location.Location;
 import org.chai.memms.AbstractController;
 import org.chai.memms.AbstractEntityController;
 import org.chai.memms.corrective.maintenance.Comment;
-import org.chai.memms.corrective.maintenance.MaintenanceProcess;
+import org.chai.memms.corrective.maintenance.CorrectiveProcess;
+import org.chai.memms.corrective.maintenance.CorrectiveProcess.ProcessType;
 import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus;
 import org.chai.memms.inventory.Equipment;
@@ -43,7 +44,6 @@ import org.chai.memms.inventory.EquipmentStatus;
 import org.chai.memms.inventory.EquipmentType;
 import org.chai.memms.inventory.Provider;
 import org.chai.memms.inventory.EquipmentStatus.Status;
-import org.chai.memms.corrective.maintenance.MaintenanceProcess.ProcessType;
 import org.chai.memms.corrective.maintenance.WorkOrder.Criticality;
 import org.chai.memms.corrective.maintenance.WorkOrder.FailureReason;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
@@ -146,7 +146,7 @@ class WorkOrderViewController extends AbstractController{
 	}
 
 	def removeProcess = {
-		MaintenanceProcess  process = MaintenanceProcess.get(params.int("process.id"))
+		CorrectiveProcess  process = CorrectiveProcess.get(params.int("process.id"))
 		def result = false
 		def html =""
 		def type =null

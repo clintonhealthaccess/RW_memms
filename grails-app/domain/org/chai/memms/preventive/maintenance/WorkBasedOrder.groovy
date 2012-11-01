@@ -54,7 +54,7 @@ class WorkBasedOrder extends PreventiveOrder{
 	Integer occurInterval
 	
 	static mapping = {
-		table "memms_preventive_order_work_based"
+		table "memms_preventive_order_based_on_work"
 		version false
 	}
 	

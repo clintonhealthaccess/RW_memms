@@ -32,6 +32,7 @@ import java.util.Date;
 
 import org.chai.memms.Period;
 
+import groovy.transform.EqualsAndHashCode;
 import i18nfields.I18nFields
 
 /**
@@ -40,6 +41,7 @@ import i18nfields.I18nFields
  */
 
 @i18nfields.I18nFields
+@EqualsAndHashCode(includes='code')
 class EquipmentType {
 
 	enum Observation{
@@ -86,34 +88,10 @@ class EquipmentType {
 	static mapping = {
 		table "memms_equipment_type"
 		version false
+		cache true
 	}
 	
 	String toString() {
 		return "EquipmentType[Id=" + id + "code="+code+"]";
 	}
-	
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((code == null) ? 0 : code.hashCode());
-		return result;
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this.is(obj))
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		EquipmentType other = (EquipmentType) obj;
-		if (code == null) {
-			if (other.code != null)
-				return false;
-		} else if (!code.equals(other.code))
-			return false;
-		return true;
-	}
-	
 }

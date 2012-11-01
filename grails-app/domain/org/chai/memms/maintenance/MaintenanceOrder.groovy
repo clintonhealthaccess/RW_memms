@@ -1,4 +1,4 @@
-/**
+/** 
  * Copyright (c) 2012, Clinton Health Access Initiative.
  *
  * All rights reserved.
@@ -13,7 +13,7 @@
  *     * Neither the name of the <organization> nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -24,54 +24,54 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * 
  */
-package org.chai.memms.inventory
-
-import org.chai.memms.Contact;
+package org.chai.memms.maintenance
 
 import groovy.transform.EqualsAndHashCode;
-import i18nfields.I18nFields
+
+import java.util.Date;
+
+import org.chai.memms.corrective.maintenance.CorrectiveProcess;
+import org.chai.memms.inventory.Equipment;
+import org.chai.memms.security.User;
+
 /**
  * @author Jean Kahigiso M.
- *
+ * 
  */
-@i18nfields.I18nFields
-@EqualsAndHashCode(includes='code')
-public class Provider{
+@EqualsAndHashCode(includes='id')
+public abstract class MaintenanceOrder {
 	
-	enum Type{
-		NONE("none"),
-		BOTH("both"),
-		MANUFACTURER("manufacturer"),
-		SUPPLIER("supplier"),
-		SERVICEPROVIDER("serviceProvider")
+	Date openOn
+	Date closedOn
+	Date addedOn
+	Date lastModifiedOn
+	
+	User addedBy
+	User lastModifiedBy
+	
 		
-		String messageCode = "provider.type"
-		final String name
-		Type(String name){ this.name = name }
-		String getKey() { return name() }
+	static constraints = {
+		
+		openOn nullable: false, validator:{it <= new Date()}
+		addedOn nullable: false, validator:{ it <= new Date()}
+		closedOn nullable: true
+		addedBy nullable: false
+		
+		lastModifiedOn nullable: true, validator:{ val, obj ->
+			if(val!=null) return ((val <= new Date()) && (val.after(obj.openOn) || (val.compareTo(obj.openOn)==0)))
+		}
+		lastModifiedBy nullable: true, validator:{ val, obj ->
+			if(val!=null) return (obj.lastModifiedOn!=null)
+		}
+		
 	}
 	
-	String code
-	Type type
-	Contact contact
-	
-	static embedded = ["contact"]
-	static mappedBy = [manufacturers: "manufacturer",suppliers: "supplier",serviceProviders: "serviceProvider"]
-	static hasMany = [manufacturers: Equipment, suppliers: Equipment,serviceProviders: Equipment]
-   
-	static constraints ={
-		code nullable: false, blank: false, unique: true
-		type nullable: false, inList: [Type.BOTH,Type.MANUFACTURER,Type.SUPPLIER,Type.SERVICEPROVIDER]
-		contact nullable: false
-	}
 	static mapping = {
-	    version false
-	    table "memms_provider"
-	}
-	
-	@Override
-	public String toString() {
-		return "Provider [code=" + code + ", type=" + type + "]";
+		table "memms_maintenance_order_abstract"
+		tablePerHierarchy false
+		version false
+		cache true
 	}
 }

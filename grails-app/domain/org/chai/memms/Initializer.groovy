@@ -49,9 +49,9 @@ import org.chai.location.DataLocationType;
 import org.chai.location.Location;
 import org.chai.location.LocationLevel;
 import org.chai.memms.corrective.maintenance.Comment;
-import org.chai.memms.corrective.maintenance.MaintenanceProcess;
+import org.chai.memms.corrective.maintenance.CorrectiveProcess;
+import org.chai.memms.corrective.maintenance.CorrectiveProcess.ProcessType;
 import org.chai.memms.corrective.maintenance.NotificationWorkOrder
-import org.chai.memms.corrective.maintenance.MaintenanceProcess.ProcessType;
 import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.memms.corrective.maintenance.WorkOrder.Criticality;
 import org.chai.memms.corrective.maintenance.WorkOrder.FailureReason;
@@ -59,8 +59,9 @@ import org.chai.memms.corrective.maintenance.WorkOrderStatus;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
 import org.chai.memms.preventive.maintenance.DurationBasedOrder;
 import org.chai.memms.preventive.maintenance.Prevention;
-import org.chai.memms.preventive.maintenance.PreventiveAction;
-import org.chai.memms.preventive.maintenance.WorkBasedOrder;
+import org.chai.memms.preventive.maintenance.WorkBasedOrder
+import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderType;
+import org.chai.memms.preventive.maintenance.PreventiveProcess;
 import org.chai.memms.security.Role
 import org.chai.memms.security.User
 import org.chai.memms.security.User.UserType
@@ -614,20 +615,44 @@ public class Initializer {
 		equipment10.save(failOnError:true)	
 	}
 	
-	
+	static def createPreventiveMaintenanceStructure(){
+		
+	}
 	//Models definition
 	//Preventive Maintenance
-	public static def newDurationBasedOrder(def equipment){
-		return new DurationBasedOrder(equipment:equipment).save(failOnError:true)
+	public static def newDurationBasedOrder(def equipment, def status,def preventionResponsible,def technicianInCharge,def names,def descriptions,def openOn,def closedOn,def addedOn){
+		return new DurationBasedOrder(
+			equipment:equipment,
+			type:PreventiveOrderType.DURATIONBASED,
+			status:status,
+			names:names,
+			descriptions:descriptions,
+			preventionResponsible:preventionResponsible,
+			technicianInCharge:technicianInCharge,
+			openOn:openOn,
+			closedOn:closedOn,
+			addedOn:addedOn
+			).save(failOnError:true)
 	}
-	public static def newWorkBasedOrder(def equipment){
-		return new WorkBasedOrder(equipment:equipment).save(failOnError:true)
+	public static def newWorkBasedOrder(def equipment, def status,def preventionResponsible,def technicianInCharge,def names,def descriptions,def openOn,def closedOn,def addedOn){
+		return new WorkBasedOrder(
+			equipment:equipment,
+			type:PreventiveOrderType.WORKBASED,
+			status:status,
+			names:names,
+			descriptions:descriptions,
+			preventionResponsible:preventionResponsible,
+			technicianInCharge:technicianInCharge,
+			openOn:openOn,
+			closedOn:closedOn,
+			addedOn:addedOn
+			).save(failOnError:true)
 	}	
 	public static def newPrevention(def order,def addedBy,def scheduledOn,def happenAsScheduled,def eventDate,def addedOn,def timeSpend,def descriptions){
 		return new Prevention(order:order,addedBy:addedBy,scheduledOn:scheduledOn,happenAsScheduled:happenAsScheduled,eventDate:eventDate,addedOn:addedOn,timeSpend:timeSpend,descriptions:descriptions).save(failOnError:true)
 	}
-	public static def newPreventionAction(def prevention, def name, def addedOn, def addedBy){
-		return new PreventiveAction(prevention:prevention,name:name,addedOn:addedOn,addedBy:addedBy).save(failOnError:true)
+	public static def newPreventionProcess(def prevention, def name, def addedOn, def addedBy){
+		return new PreventiveProcess(prevention:prevention,name:name,addedOn:addedOn,addedBy:addedBy).save(failOnError:true)
 	}
 	public static def newTimeSpend(def hours,def minutes){
 		return new TimeSpend(hours,minutes)
@@ -637,10 +662,10 @@ public class Initializer {
 	}
 	//Corrective Maintenance
 	public static def newWorkOrder(def equipment, def description, def criticality, def addedBy, def openOn,def failureReason,def currentStatus){
-		return new WorkOrder(equipment:equipment,description: description,criticality:criticality,addedBy:addedBy,openOn: openOn,currentStatus:currentStatus,failureReason:failureReason).save(failOnError:true)
+		return new WorkOrder(equipment:equipment,description: description,criticality:criticality,addedBy:addedBy,openOn: openOn,currentStatus:currentStatus,failureReason:failureReason,addedOn:now()).save(failOnError:true)
 	}
 	public static def newWorkOrder(def equipment, def description, def criticality,def addedBy, def openOn, def closedOn, def failureReason,def currentStatus){
-		return new WorkOrder(equipment:equipment, description:description, criticality:criticality,addedBy:addedBy, openOn: openOn, closedOn:closedOn, currentStatus:currentStatus,failureReason:failureReason).save(failOnError:true)
+		return new WorkOrder(equipment:equipment, description:description, criticality:criticality,addedBy:addedBy, openOn: openOn, closedOn:closedOn, currentStatus:currentStatus,failureReason:failureReason,addedOn:now()).save(failOnError:true)
 	}
 	public static newWorkOrderNotification(def workOrder, def sender, def receiver,def writtenOn, def content){
 		return new NotificationWorkOrder(workOrder: workOrder, sender: sender, receiver: receiver, writtenOn: writtenOn, content: content).save(failOnError: true)
@@ -654,7 +679,7 @@ public class Initializer {
 		return new Comment(workOrder: workOrder, writtenBy: writtenBy, writtenOn: writtenOn, content: content ).save(failOnError: true)
 	}
 	public static newMaintenanceProcess(def workOrder,def type, def name, def addedOn, def addedBy){
-		return new MaintenanceProcess(workOrder: workOrder,type: type,name: name, addedOn: addedOn, addedBy: addedBy ).save(failOnError: true)
+		return new CorrectiveProcess(workOrder: workOrder,type: type,name: name, addedOn: addedOn, addedBy: addedBy ).save(failOnError: true)
 	}
 	public static newWorkOrderStatus(def workOrder,def status,def changeOn,def changedBy,def escalation){
 		def stat = new WorkOrderStatus(workOrder:workOrder,status:status,changeOn:changeOn,changedBy:changedBy,escalation:escalation)

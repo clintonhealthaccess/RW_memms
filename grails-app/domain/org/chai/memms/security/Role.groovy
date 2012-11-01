@@ -27,8 +27,11 @@
  */
 package org.chai.memms.security
 
+import groovy.transform.EqualsAndHashCode;
+
 import org.chai.memms.util.Utils
 
+@EqualsAndHashCode(includes='name')
 class Role {
     String name
 	String permissionString
@@ -63,30 +66,5 @@ class Role {
 	
 	String toString() {
 		return name;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this.is(obj))
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof Role))
-			return false;
-		Role other = (Role) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
 	}
 }

@@ -28,13 +28,16 @@
 package org.chai.memms.preventive.maintenance
 
 import org.chai.memms.inventory.Equipment;
+import org.chai.memms.maintenance.MaintenanceOrder;
+import org.chai.memms.security.User;
 
 /**
  * @author Jean Kahigiso M.
  *
  */
 @i18nfields.I18nFields
-public abstract class PreventiveOrder {
+public abstract class PreventiveOrder extends MaintenanceOrder {
+	
 	enum PreventiveOrderType{
 		
 		NONE("none"),
@@ -58,10 +61,25 @@ public abstract class PreventiveOrder {
 		String getKey(){ return name() }
 	}
 	
+	enum PreventionResponsible{
+		
+		NONE("none"),
+		SERVIDEPROVIDER("service.provider"),
+		DEPARTMENTUSER("department.user"),
+		HCTITULAIRE("hc.titulaire"),
+		HCTECHNICIAN("hc.technician")
+		
+		String messageCode = "prevention.in.charge"
+		String name
+		PreventionResponsible(String name){this.name=name}
+		String getKey(){ return name() }
+		
+	}
+	String names
 	String descriptions
-	Date startDate
-	Date untilDate
-	Date addedOn
+	PreventionResponsible  preventionResponsible
+	
+	User technicianInCharge
 	
 	PreventiveOrderType type
 	PreventiveOrderStatus status
@@ -70,50 +88,29 @@ public abstract class PreventiveOrder {
 	static belongsTo = [equipment: Equipment]
 	static hasMany = [preventions: Prevention]
 	
+	static constraints = {
+		importFrom MaintenanceOrder, exclude:["closedOn"]
+		type nullable: false, inList:[PreventiveOrderType.DURATIONBASED,PreventiveOrderType.WORKBASED]
+		status nullable:false, inList:[PreventiveOrderStatus.OPEN,PreventiveOrderStatus.CLOSED]
+
+		closedOn nullable:true, validator:{ val, obj ->
+			if(val!=null) return (val<=new Date() && obj.status.equals(PreventiveOrderStatus.CLOSED))
+		}
+		preventionResponsible nullable:false,inList:[PreventionResponsible.HCTECHNICIAN,PreventionResponsible.HCTITULAIRE,PreventionResponsible.SERVIDEPROVIDER,PreventionResponsible.DEPARTMENTUSER]
+		technicianInCharge nullable:true, validator:{ val, obj ->
+			if(obj.preventionResponsible.equals(PreventionResponsible.HCTECHNICIAN)) return (val!=null)
+		}
+		
+	}
 	static mapping = {
 		table "memms_preventive_order_abstract"
-		tablePerSubclass true
+		tablePerHierarchy false 
 		cache true
 		version false
 
 	}
 	
-	static constraints = {
-		
-		type nullable: false, inList:[PreventiveOrderType.DURATIONBASED,PreventiveOrderType.WORKBASED]
-		status nullable:false, inList:[PreventiveOrderStatus.OPEN,PreventiveOrderStatus.CLOSED]
-		startDate nullable: false, validator:{ it <= new Date()}
-		addedOn nullable:false, validator:{ it <= new Date()}
-		untilDate nullable:true, validator:{ val, obj ->
-			if(val!=null) return (val<=new Date() && obj.status.equals(PreventiveOrderStatus.CLOSED))
-		}
-		
-	}
 	
 	abstract Integer getPlannedPrevention();
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this.is(obj))
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		PreventiveOrder other = (PreventiveOrder) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
-	}
-	
 }

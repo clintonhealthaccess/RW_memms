@@ -84,11 +84,23 @@ class EquipmentService {
 		
 	public List<Equipment> getEquipmentsByDataLocation(DataLocation dataLocation,Map<String, String> params) {
 		def criteria = Equipment.createCriteria();
-			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-				eq('dataLocation',dataLocation)
-			}
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			eq('dataLocation',dataLocation)
+		}
 	}
 	
+	public List<Equipment> getEquipmentsByDataLocationAndManages(DataLocation dataLocation,Map<String, String> params) {
+		List<DataLocation> dataLocations = [dataLocation]
+		dataLocations.addAll(dataLocation.manages)
+		
+		def criteria = Equipment.createCriteria();
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			or{
+				for(DataLocation dataLoc: dataLocations)
+					eq('dataLocation',dataLoc)
+			}
+		}
+	}
 
 	public List<Equipment> filterEquipment(def dataLocation, def supplier, def manufacturer,def serviceProvider, def equipmentType, 
 		def purchaser,def donor,def obsolete,def status,Map<String, String> params){

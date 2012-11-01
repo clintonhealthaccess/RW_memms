@@ -56,7 +56,7 @@ class EquipmentServiceSpec extends IntegrationTests{
 	def "can search equipment by serial number, description and observation"() {
 		setup:
 		setupLocationTree()
-
+		
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
 
@@ -119,6 +119,40 @@ class EquipmentServiceSpec extends IntegrationTests{
 		then:
 		equipments.size() == 1
 		equipments[0].getDescriptions(new Locale("en")).equals('Equipment Descriptions one')
+	}
+	
+	
+	def "get equipment by datalocation and manages"() {
+		setup:
+		setupLocationTree()
+		def kivuye = DataLocation.findByCode('Kivuye HC')
+		def butaro = DataLocation.findByCode('Butaro DH')
+		butaro.addToManages(kivuye)
+		butaro.save()
+		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+
+		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
+		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
+		def user  = newUser("admin", "Admin UID")
+		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
+		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
+
+		Initializer.newEquipment("SERIAL10",PurchasedBy.BYDONOR,Donor.MOHPARTNER,"CHAI",,false,Initializer.newPeriod(32),"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),"",Initializer.now(),"equipmentModel",kivuye,department,equipmentType,manufacture,supplier)
+		Initializer.newEquipment("SERIAL11",PurchasedBy.BYFACILITY,null,null,false,Initializer.newPeriod(32),"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),"USD",Initializer.now(),"equipmentModel",butaro,department,equipmentType,manufacture,supplier)
+		def List<Equipment> equipments
+
+		when:
+		equipments = equipmentService.getEquipmentsByDataLocationAndManages(butaro, [:])
+
+		then:
+		equipments.size() == 2
+		kivuye.managedBy == butaro
+		//This test event the default sorting which is id/desc
+		equipments[0].serialNumber.equals("SERIAL11")
+		equipments[1].serialNumber.equals("SERIAL10")
 	}
 
 	def "filter equipments"() {
