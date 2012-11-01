@@ -33,6 +33,7 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils
 import org.hibernate.Criteria;
 import org.chai.location.CalculationLocation;
+import org.chai.location.DataLocation
 import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.memms.security.User.UserType;
 import org.chai.memms.util.Utils
@@ -77,12 +78,22 @@ class UserService {
 		}
 	}
 	
-	List<User> getNotificationGroup(WorkOrder workOrder,User sender,Boolean escalate){
+	List<User> getNotificationWorkOrderGroup(WorkOrder workOrder,User sender,Boolean escalate){
 		def users =  getActiveUserByTypeAndLocation(UserType.TECHNICIANDH,workOrder.equipment.dataLocation, [:])
 		if(escalate) users.addAll(getActiveUserByTypeAndLocation(UserType.TECHNICIANMMC,null, [:]))
 		if(!users.contains( workOrder.addedBy )) users.add(workOrder.addedBy)
 		users.remove(sender)
-		if(log.isDebugEnabled()) log.debug("Users in notification group: " + users)
+		if(log.isDebugEnabled()) log.debug("Users in notificationWorkOrder group: " + users)
+		return users
+	}
+	
+	List<User> getNotificationEquipmentGroup(DataLocation dataLocation){
+		def users;
+		
+		if(dataLocation.managedBy instanceof DataLocation) users =  getActiveUserByTypeAndLocation(UserType.TECHNICIANDH,dataLocation.managedBy, [:])
+		else users =  getActiveUserByTypeAndLocation(UserType.TECHNICIANDH,dataLocation, [:])
+		
+		if(log.isDebugEnabled()) log.debug("Users in notificationEquipment group: " + users)
 		return users
 	}
 }

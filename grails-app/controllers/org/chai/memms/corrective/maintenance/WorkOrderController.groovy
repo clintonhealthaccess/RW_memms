@@ -132,7 +132,7 @@ class WorkOrderController extends AbstractEntityController{
 		entity.save(failOnError: true)
 		if(log.isDebugEnabled()) log.debug("Created WorkOrder: "+entity)
 		if(newEntity || escalation){ //TODO define default message
-			users = userService.getNotificationGroup(entity,user,escalation)
+			users = userService.getNotificationWorkOrderGroup(entity,user,escalation)
 			notificationWorkOrderService.sendNotifications(entity,message(code:"workorder.creation.default.message"),user,users)
 		}
 		(!currentEquipmentStatus)?:currentEquipmentStatus.save(flush:true)
