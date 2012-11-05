@@ -84,7 +84,7 @@ class EquipmentStatus {
 
 	@Override
 	public String toString() {
-		return "EquipmentStatus [dateOfEvent=" + dateOfEvent + ", changedBy="+ changedBy + ", status=" + status + "]";
+		return "EquipmentStatus [dateOfEvent=" + dateOfEvent + ", changedBy="+ changedBy + ", status=" + status + " statusChangeDate=" + statusChangeDate + "]";
 	}	
 	@Override
 	public int hashCode() {

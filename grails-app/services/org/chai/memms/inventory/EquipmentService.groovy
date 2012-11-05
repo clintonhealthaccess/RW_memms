@@ -65,10 +65,14 @@ class EquipmentService {
 	static transactional = true
 	def languageService;
 	
-	public void updateCurrentEquipmentStatus(Equipment equipment){
-		EquipmentStatus status =  equipment.timeBasedStatus
-		if(!status) equipment.currentStatus = null
-		else equipment.currentStatus = status.status
+	public void updateCurrentEquipmentStatus(Equipment equipment,EquipmentStatus status){
+		if(status!=null){
+			equipment.currentStatus = status.status
+			equipment.addToStatus(status)
+		}else{
+			//This assume that there is no equipment without at least one status associated to it!
+			equipment.currentStatus = equipment.timeBasedStatus.status
+		}
 		if(log.isDebugEnabled()) log.debug("Updating Equipment status params: "+equipment)
 		equipment.save(failOnError:true)
 	}
@@ -144,7 +148,7 @@ class EquipmentService {
 			for(Equipment equipment: equipments){
 				List<String> line = [
 					equipment.serialNumber,equipment.type.code,equipment.type?.getNames(new Locale("en")),
-					equipment.type?.getNames(new Locale("fr")),equipment.model,equipment.getCurrentState()?.status,
+					equipment.type?.getNames(new Locale("fr")),equipment.model,equipment.currentStatus,
 					equipment.dataLocation?.code,equipment.dataLocation?.getNames(new Locale("en")),equipment.dataLocation?.getNames(new Locale("fr")),
 					equipment.department?.code,equipment.department?.getNames(new Locale("en")),equipment.department?.getNames(new Locale("fr")),
 					equipment.room,equipment.manufacturer?.code,equipment.manufacturer?.contact?.contactName,

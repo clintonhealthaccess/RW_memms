@@ -38,11 +38,12 @@ class EquipmentStatusSpec extends IntegrationTests{
 					"equipmentModel",
 					DataLocation.list().first(),
 					department,
-					equipmentType,manufacture,supplier
+					equipmentType,manufacture,supplier,
+					Status.INSTOCK
 					)
 		
 		when:
-		def statusOne = Initializer.newEquipmentStatus(new Date(),User.findByUsername("admin"),Status.INSTOCK,equipment,true,[:])
+		def statusOne = Initializer.newEquipmentStatus(new Date(),User.findByUsername("admin"),Status.INSTOCK,equipment,[:])
 		def statusTwo = new EquipmentStatus(statusChangeDate:new Date(),changedBy:User.findByUsername("admin"),status:Status.INSTOCK,equipment:equipment,current:true,dateOfEvent:Initializer.getDate(10, 07,2012)).save(failOnError: true)
 		then:
 		EquipmentStatus.count() == 2

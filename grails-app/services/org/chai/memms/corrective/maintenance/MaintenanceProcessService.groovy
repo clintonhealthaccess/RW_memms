@@ -38,19 +38,15 @@ import org.chai.memms.security.User;
  */
 class MaintenanceProcessService {
 	static transactional = true	
-	
-	def createProcess(WorkOrder workOrder,ProcessType type,String name,Date addedOn,User addedBy){
-		return new MaintenanceProcess(workOrder:workOrder,type: type,name:name,addedOn:addedOn,addedBy:addedBy);
-	}
-	
-	def addProcess(WorkOrder workOrder,ProcessType type,String name,Date addedOn,User addedBy){
-		MaintenanceProcess process = createProcess(workOrder,type,name,addedOn,addedBy)
+		
+	WorkOrder addProcess(WorkOrder workOrder,ProcessType type,String name,Date addedOn,User addedBy){
+		MaintenanceProcess process = new MaintenanceProcess(type: type,name:name,addedOn:addedOn,addedBy:addedBy)
 		workOrder.addToProcesses(process)
 		workOrder.lastModifiedOn = addedOn
 		workOrder.lastModifiedBy = addedBy
 		return workOrder.save(failOnError:true)
 	}
-	def deleteProcess(MaintenanceProcess process,Date deletedOn,User deletedBy){
+	WorkOrder deleteProcess(MaintenanceProcess process,Date deletedOn,User deletedBy){
 		WorkOrder workOrder = process.workOrder		
 		workOrder.removeFromProcesses(process)
 		workOrder.lastModifiedOn = deletedOn

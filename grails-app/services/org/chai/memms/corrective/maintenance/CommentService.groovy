@@ -28,6 +28,7 @@
 package org.chai.memms.corrective.maintenance
 
 import org.chai.memms.corrective.maintenance.Comment;
+import org.chai.memms.security.User;
 
 /**
  * @author Jean Kahigiso M.
@@ -36,7 +37,22 @@ import org.chai.memms.corrective.maintenance.Comment;
 class CommentService {
 	
 	static transactional = true
-	def createComment(def workOrder, def writtenBy, def writtenOn, def content){
-			return new Comment(workOrder: workOrder, writtenBy: writtenBy, writtenOn: writtenOn, content: content ).save(failOnError: true, flush:true)		
+	
+	Comment createComment(WorkOrder workOrder, User writtenBy, Date writtenOn, String content){
+		    Comment comment = new Comment(writtenBy: writtenBy, writtenOn: writtenOn, content: content )
+			workOrder.addToComments(comment)
+			workOrder.lastModifiedOn = writtenOn
+			workOrder.lastModifiedBy = writtenBy
+			workOrder.save(failOnError: true)	
+			return comment	
+	}
+	
+	WorkOrder deleteComment(Comment comment,User user,Date now){
+		WorkOrder workOrder = comment.workOrder
+		workOrder.removeFromComments(comment)
+		workOrder.lastModifiedOn = now
+		workOrder.lastModifiedBy = user
+		comment.delete()
+		return workOrder.save(failOnError:true,flush:true)	
 	}
 }

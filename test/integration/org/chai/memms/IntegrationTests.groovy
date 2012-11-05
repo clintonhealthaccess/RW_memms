@@ -43,6 +43,7 @@ import org.chai.location.LocationLevel
 import org.chai.memms.inventory.Equipment
 import org.chai.memms.inventory.Equipment.Donor;
 import org.chai.memms.inventory.Equipment.PurchasedBy;
+import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.inventory.EquipmentType
 import org.chai.memms.inventory.EquipmentType.Observation
 import org.chai.memms.inventory.Provider.Type
@@ -119,7 +120,9 @@ abstract class IntegrationTests extends IntegrationSpec {
 
 		def equipment = new Equipment(serialNumber:CODE(123),manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),
 				registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,dataLocation:DataLocation.findByCode(KIVUYE),
-				purchaser:PurchasedBy.BYFACILITY,obsolete:false,expectedLifeTime:Initializer.newPeriod(20),descriptions:['en':'Equipment Descriptions'], type:equipmentType)
+				purchaser:PurchasedBy.BYFACILITY,obsolete:false,expectedLifeTime:Initializer.newPeriod(20),descriptions:['en':'Equipment Descriptions'], type:equipmentType,
+				currentStatus:Status.OPERATIONAL
+				)
 		equipment.genarateAndSetEquipmentCode()
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")

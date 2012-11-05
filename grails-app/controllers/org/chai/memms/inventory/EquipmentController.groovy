@@ -88,6 +88,7 @@ class EquipmentController extends AbstractEntityController{
 		if(log.isDebugEnabled()) log.debug("Equipment params: before bind "+params)
 		if(!entity.id){
 			entity.registeredOn = new Date()
+			entity.currentStatus = "$params.status"
 		}else{
 			if(params["warranty.sameAsSupplier"]=="on"){
 				params["warranty.contact.contactName"]=""
@@ -124,9 +125,8 @@ class EquipmentController extends AbstractEntityController{
 		EquipmentStatus status
 		if(entity.dataLocation) hasAccess(entity.dataLocation)
 		if(entity.id==null)
-			status = equipmentStatusService.createEquipmentStatus(now,user,params.cmd.status,entity,params.cmd.dateOfEvent,[:])
-		entity.save(failOnError:true)
-		(!status)?:status.save(failOnError:true)
+			entity = equipmentStatusService.createEquipmentStatus(now,user,params.cmd.status,entity,params.cmd.dateOfEvent,[:])
+		else entity.save(failOnError:true)
 	}
 
 	def save = { StatusCommand cmd ->

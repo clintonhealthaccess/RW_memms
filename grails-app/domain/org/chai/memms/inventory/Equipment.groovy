@@ -162,6 +162,7 @@ public class Equipment {
 		version false
 	}
 	
+	@Transient
 	def genarateAndSetEquipmentCode() {
 		if(!code){
 			def randomInt = RandomUtils.nextInt(99999)
@@ -178,17 +179,21 @@ public class Equipment {
 		if(!status) return null
 		EquipmentStatus currentState = status.asList()[0]
 		for(EquipmentStatus state : status){
-			if(state.dateOfEvent.after(currentState.dateOfEvent))
-				currentState= state;
 			//To make sure we only compare date not time
 			currentState.dateOfEvent.clearTime()
 			state.dateOfEvent.clearTime()
+			if(state.dateOfEvent.after(currentState.dateOfEvent)){
+				currentState= state;
+			}
 			if(state.dateOfEvent.compareTo(currentState.dateOfEvent)==0){
 				if(state.statusChangeDate.after(currentState.statusChangeDate))
 					currentState = state
+				//This case happen in test data settings
+				if(state.statusChangeDate.compareTo(currentState.statusChangeDate)==0)
+					currentState = (currentState.id > state.id)?currentState:state
 			}
+			
 		}
-		if(log.isDebugEnabled()) log.debug("Get currentStatus by basedOn time:" + currentState)
 		return currentState
 	}
 	

@@ -49,11 +49,12 @@ class EquipmentStatusService {
 		}
 	}
 	
-	def createEquipmentStatus(Date statusChangeDate,User changedBy,Status value, Equipment equipment,Date dateOfEvent, Map<String,String> reasons){
+	Equipment createEquipmentStatus(Date statusChangeDate,User changedBy,Status value, Equipment equipment,Date dateOfEvent, Map<String,String> reasons){
 		def status = new EquipmentStatus(dateOfEvent:dateOfEvent,changedBy:changedBy,status:value,equipment:equipment,statusChangeDate:statusChangeDate)
 		Utils.setLocaleValueInMap(status,reasons,"Reasons")
+		equipment.currentStatus=value
 		equipment.addToStatus(status)
-		return status
+		return equipment.save(failOnError:true)
 	}
 }
 
