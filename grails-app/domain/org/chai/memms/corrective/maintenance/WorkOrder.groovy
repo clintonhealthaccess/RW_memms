@@ -135,6 +135,7 @@ public class WorkOrder extends MaintenanceOrder{
 		currency  nullable: true, blank: true, inList: ["RWF","USD","EUR"], validator:{ val, obj ->
 			if(val == null && obj.estimatedCost != null) return false
 		}
+		
 	}
 	
 	@Transient

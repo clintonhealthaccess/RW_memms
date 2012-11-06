@@ -29,9 +29,6 @@ package org.chai.memms.corrective.maintenance
 
 import org.chai.location.DataLocation
 import org.chai.memms.corrective.maintenance.WorkOrder.Criticality
-import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus
-import org.chai.memms.security.User;
-import org.chai.memms.util.Utils;
 
 import java.util.Map;
 import org.chai.location.CalculationLocation;
@@ -40,7 +37,11 @@ import org.chai.location.DataLocationType;
 import org.chai.location.Location;
 import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus;
+import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
 import org.chai.memms.inventory.Equipment;
+import org.chai.memms.security.User;
+import org.chai.memms.util.Utils;
+
 
 /**
  * @author Jean Kahigiso M.
@@ -133,6 +134,7 @@ class WorkOrderService {
 		workOrder.save(failOnError:true)
 		if(status)
 			workOrderNotificationService.newNotification(workOrder,content,escalatedBy,true)
+		return workOrder
 	}
 	
 	List<WorkOrder> getWorkOrdersByEquipment(Equipment equipment, Map<String, String> params){

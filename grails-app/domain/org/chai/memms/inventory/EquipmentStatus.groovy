@@ -62,7 +62,6 @@ class EquipmentStatus {
 	Date statusChangeDate;
 	User changedBy
 	Status status
-	Boolean current
 	String reasons
 	
 	static belongsTo = [equipment: Equipment]
@@ -78,21 +77,16 @@ class EquipmentStatus {
 		statusChangeDate nullable: false, validator:{it <= new Date()} 
 		changedBy nullable: false 
 		status blank: false, nullable: false, inList:[Status.OPERATIONAL,Status.PARTIALLYOPERATIONAL,Status.INSTOCK,Status.UNDERMAINTENANCE,Status.FORDISPOSAL,Status.DISPOSED]
-		current nullable: false
 		reasons nullable: true, blank: true
 	}
 	
 	static mapping = {
 		version false
 		table "memms_equipment_status"
-		reasons_en type: "text"
-		reasons_fr type: "text"
 	}
 
 	@Override
 	public String toString() {
-		return "EquipmentStatus [dateOfEvent=" + dateOfEvent + ", changedBy="
-				+ changedBy + ", status=" + status + ", current=" + current
-				+ "]";
+		return "EquipmentStatus [dateOfEvent=" + dateOfEvent + ", changedBy="+ changedBy + ", status=" + status + " statusChangeDate=" + statusChangeDate + "]";
 	}	
 }

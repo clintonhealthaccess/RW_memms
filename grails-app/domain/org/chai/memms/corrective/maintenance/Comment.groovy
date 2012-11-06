@@ -56,6 +56,10 @@ public class Comment {
 	   content type:"text"
 	   
    }
+   
+//   def beforeDelete = {
+//	   workOrder.removeFromComments(this)
+//	}
 
 	@Override
 	public String toString() {

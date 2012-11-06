@@ -27,12 +27,18 @@
  */
 package org.chai.memms.corrective.maintenance
 
+import java.util.Date;
+import java.util.Map;
+
 import org.chai.memms.Initializer;
 import org.chai.memms.IntegrationTests;
 import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.memms.inventory.Equipment;
+import org.chai.memms.inventory.EquipmentStatus;
+import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.corrective.maintenance.WorkOrder.Criticality;
 import org.chai.memms.corrective.maintenance.WorkOrder.FailureReason;
+import org.chai.memms.corrective.maintenance.WorkOrderStatus;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
 import org.chai.memms.corrective.maintenance.WorkOrderController;
 import org.chai.memms.security.User;
@@ -44,8 +50,10 @@ import org.chai.memms.security.User;
 class WorkOrderControllerSpec extends IntegrationTests{
 	
 	def workOrderController
+	def equipmentStatusService
+	def workOrderStatusService
 	
-	def "can save workOrder test"(){
+	def "can create and save a workOrder"(){
 		setup:
 		setupLocationTree()
 		setupEquipment()
@@ -58,7 +66,215 @@ class WorkOrderControllerSpec extends IntegrationTests{
 		workOrderController.params.description = "equiment description"
 		workOrderController.params.criticality = "NORMAL"
 		workOrderController.save()
+		def workOrder = WorkOrder.list()[0]
 		then:
 		WorkOrder.count()==1
+		workOrder.currentStatus == OrderStatus.OPENATFOSA
+		workOrder.timeBasedStatus == WorkOrderStatus.list()[0]
+		workOrder.timeBasedStatus.status == OrderStatus.OPENATFOSA
+		workOrder.equipment == equipment
+		//check equipment update
+		equipment.status.size() ==1
+		equipment.workOrders.size() ==1
+		equipment.currentStatus == Status.UNDERMAINTENANCE
+		equipment.timeBasedStatus == EquipmentStatus.list()[0]
+		
+		
+	}
+	
+	def "can update (when escalating) workOrder status and update equipment status"(){
+		setup:		
+		setupLocationTree()
+		setupEquipment()
+		setupSystemUser()
+		def user = User.findByUsername("systemUser")
+		def equipment = Equipment.findBySerialNumber(CODE(123))
+		def workOrder =  new WorkOrder(equipment:equipment,description:"test work order",criticality:Criticality.NORMAL,currentStatus:OrderStatus.OPENATFOSA,addedBy:user,openOn:Initializer.now(),failureReason:FailureReason.NOTSPECIFIED)
+		workOrder = workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATFOSA,user,Initializer.now(),false)
+		equipment = equipmentStatusService.createEquipmentStatus(Initializer.now(),user,Status.UNDERMAINTENANCE,equipment,Initializer.now(),[:])
+		equipment.addToWorkOrders(workOrder)
+		equipment.save(failOnError:true)
+		when:
+		workOrderController = new WorkOrderController()
+		workOrderController.params."id" = workOrder.id+''
+		workOrderController.params.criticality = 'LOW'
+		workOrderController.params.currentStatus = 'OPENATMMC'
+		workOrderController.save()
+
+		then:
+		WorkOrder.count()==1
+		WorkOrderStatus.count() == 2
+		workOrder.criticality == Criticality.LOW
+		workOrder.currentStatus == OrderStatus.OPENATMMC
+		workOrder.timeBasedStatus == WorkOrderStatus.list()[1]
+		workOrder.timeBasedStatus.status == OrderStatus.OPENATMMC
+		workOrder.status.asList().size() == 2
+		workOrder.status.asList().contains(workOrder.timeBasedStatus)
+		workOrder.timeBasedStatus.escalation == true
+		//check equipment update
+		equipment.status.asList()[0] == EquipmentStatus.list()[0]
+		equipment.status.asList()[0].status == Status.UNDERMAINTENANCE
+		equipment.currentStatus == Status.UNDERMAINTENANCE
+		equipment.timeBasedStatus == EquipmentStatus.list()[0]
+		equipment.timeBasedStatus.status == Status.UNDERMAINTENANCE
+		equipment.workOrders.size() ==1
+		equipment.workOrders.asList().contains(workOrder)
+		
+	}
+	
+	def "can update  (de-escalating) workOrder status and update equipment status"(){
+		setup:
+		setupLocationTree()
+		setupEquipment()
+		setupSystemUser()
+		def user = User.findByUsername("systemUser")
+		def equipment = Equipment.findBySerialNumber(CODE(123))
+		def workOrder =  new WorkOrder(equipment:equipment,description:"test work order",criticality:Criticality.NORMAL,currentStatus:OrderStatus.OPENATFOSA,addedBy:user,openOn:Initializer.now(),failureReason:FailureReason.NOTSPECIFIED)
+		workOrder = workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATFOSA,user,Initializer.now(),false)
+		equipment = equipmentStatusService.createEquipmentStatus(Initializer.now(),user,Status.UNDERMAINTENANCE,equipment,Initializer.now(),[:])
+		equipment.addToWorkOrders(workOrder)
+		equipment.save(failOnError:true)
+		workOrder = workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATMMC,user,Initializer.now(),true)
+		when:
+		workOrderController = new WorkOrderController()
+		workOrderController.params."id" = workOrder.id+''
+		workOrderController.params.criticality = 'NORMAL'
+		workOrderController.params.currentStatus = 'OPENATFOSA'
+		workOrderController.save()
+
+		then:
+		WorkOrder.count()==1
+		WorkOrderStatus.count() == 3
+		workOrder.criticality == Criticality.NORMAL
+		workOrder.currentStatus == OrderStatus.OPENATFOSA
+		workOrder.timeBasedStatus == WorkOrderStatus.list()[2]
+		workOrder.timeBasedStatus.status == OrderStatus.OPENATFOSA
+		workOrder.status.asList().size() == 3
+		workOrder.status.asList().contains(workOrder.timeBasedStatus)
+		//check equipment update
+		equipment.status.asList()[0] == EquipmentStatus.list()[0]
+		equipment.status.asList()[0].status == Status.UNDERMAINTENANCE
+		equipment.currentStatus == Status.UNDERMAINTENANCE
+		equipment.timeBasedStatus == EquipmentStatus.list()[0]
+		equipment.timeBasedStatus.status == Status.UNDERMAINTENANCE
+		equipment.workOrders.size() ==1
+		equipment.workOrders.asList().contains(workOrder)
+		
+	}
+	
+	def "can update (closed fixed) workOrder and update equipment status"(){
+		setup:
+		setupLocationTree()
+		setupEquipment()
+		setupSystemUser()
+		def user = User.findByUsername("systemUser")
+		def equipment = Equipment.findBySerialNumber(CODE(123))
+		def workOrder =  new WorkOrder(equipment:equipment,description:"test work order",criticality:Criticality.NORMAL,currentStatus:OrderStatus.OPENATFOSA,addedBy:user,openOn:Initializer.now(),failureReason:FailureReason.NOTSPECIFIED)
+		workOrder = workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATFOSA,user,Initializer.now(),false)
+		equipment = equipmentStatusService.createEquipmentStatus(Initializer.now(),user,Status.UNDERMAINTENANCE,equipment,Initializer.now(),[:])
+		equipment.addToWorkOrders(workOrder)
+		equipment.save(failOnError:true)
+		workOrder = workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATMMC,user,Initializer.now(),true)
+		workOrder = workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATFOSA,user,Initializer.now(),false)
+		
+		when://CLOSEDFIXED
+		workOrderController = new WorkOrderController()
+		workOrderController.params."id" = workOrder.id+''
+		workOrderController.params.criticality = 'NORMAL'
+		workOrderController.params.currentStatus = 'CLOSEDFIXED'
+		workOrderController.save()
+
+		then:
+		WorkOrder.count()==1
+		WorkOrderStatus.count() == 4
+		workOrder.criticality == Criticality.NORMAL
+		workOrder.currentStatus == OrderStatus.CLOSEDFIXED
+		workOrder.timeBasedStatus == WorkOrderStatus.list()[3]
+		workOrder.timeBasedStatus.status == OrderStatus.CLOSEDFIXED
+		workOrder.status.asList().size() == 4
+		workOrder.status.asList().contains(workOrder.timeBasedStatus)
+		workOrder.closedOn !=null
+		//check equipment update
+		equipment.status.asList().size() == 2
+		equipment.currentStatus == Status.OPERATIONAL
+		equipment.timeBasedStatus.status == Status.OPERATIONAL
+		equipment.workOrders.size() ==1
+		equipment.workOrders.asList().contains(workOrder)
+	}
+	
+	def "can update (closed for disposal) workOrder and update equipment status"(){
+		setup:
+		setupLocationTree()
+		setupEquipment()
+		setupSystemUser()
+		def user = User.findByUsername("systemUser")
+		def equipment = Equipment.findBySerialNumber(CODE(123))
+		def workOrder =  new WorkOrder(equipment:equipment,description:"test work order",criticality:Criticality.NORMAL,currentStatus:OrderStatus.OPENATFOSA,addedBy:user,openOn:Initializer.now(),failureReason:FailureReason.NOTSPECIFIED)
+		workOrder = workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATFOSA,user,Initializer.now(),false)
+		equipment = equipmentStatusService.createEquipmentStatus(Initializer.now(),user,Status.UNDERMAINTENANCE,equipment,Initializer.now(),[:])
+		equipment.addToWorkOrders(workOrder)
+		equipment.save(failOnError:true)
+		workOrder = workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATMMC,user,Initializer.now(),true)
+		workOrder = workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATFOSA,user,Initializer.now(),false)
+	
+		when://CLOSEDFORDISPOSAL
+		workOrderController = new WorkOrderController()
+		workOrderController.params."id" = workOrder.id+''
+		workOrderController.params.criticality 	= 'NORMAL'
+		workOrderController.params.currentStatus = 'CLOSEDFORDISPOSAL'
+		workOrderController.save()
+
+		then:
+		WorkOrder.count()==1
+		WorkOrderStatus.count() == 4
+		workOrder.criticality == Criticality.NORMAL
+		workOrder.currentStatus == OrderStatus.CLOSEDFORDISPOSAL
+		workOrder.timeBasedStatus == WorkOrderStatus.list()[3]
+		workOrder.timeBasedStatus.status == OrderStatus.CLOSEDFORDISPOSAL
+		workOrder.status.asList().size() == 4
+		workOrder.status.asList().contains(workOrder.timeBasedStatus)
+		workOrder.closedOn !=null
+		//check equipment update
+		equipment.status.asList().size() == 2
+		equipment.currentStatus == Status.FORDISPOSAL
+		equipment.timeBasedStatus.status == Status.FORDISPOSAL
+		equipment.workOrders.size() ==1
+		equipment.workOrders.asList().contains(workOrder)
+		
+	}
+	
+	def "can't update a closed work order"(){
+		setup:	
+		setupLocationTree()
+		setupEquipment()
+		setupSystemUser()
+		def user = User.findByUsername("systemUser")
+		def equipment = Equipment.findBySerialNumber(CODE(123))
+		def workOrder =  new WorkOrder(equipment:equipment,description:"test work order",criticality:Criticality.NORMAL,currentStatus:OrderStatus.OPENATFOSA,addedBy:user,openOn:Initializer.now(),failureReason:FailureReason.NOTSPECIFIED)
+		workOrder = workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.OPENATFOSA,user,Initializer.now(),false)
+		equipment = equipmentStatusService.createEquipmentStatus(Initializer.now(),user,Status.UNDERMAINTENANCE,equipment,Initializer.now(),[:])
+		equipment.addToWorkOrders(workOrder)
+		equipment.save(failOnError:true)
+		workOrder = workOrderStatusService.createWorkOrderStatus(workOrder,OrderStatus.CLOSEDFIXED,user,Initializer.now(),false)
+		equipment = equipmentStatusService.createEquipmentStatus(Initializer.now(),user,Status.OPERATIONAL,equipment,Initializer.now(),[:])
+		equipment.save(failOnError:true)
+		
+		when:
+		workOrderController = new WorkOrderController()
+		workOrderController.params."id" = workOrder.id+''
+		workOrderController.params.description = 'testing'
+		workOrderController.params.criticality = 'LOW'
+		workOrderController.save()
+
+		then:
+		WorkOrder.count()==1
+		WorkOrderStatus.count() == 2
+		WorkOrder.list()[0].description == "test work order"
+		WorkOrder.list()[0].criticality == Criticality.NORMAL
+		//check equipment update
+		equipment.workOrders.size() == 1
+		equipment.timeBasedStatus.status==Status.OPERATIONAL
+		
+		
 	}
 }

@@ -28,6 +28,7 @@ class MaintenanceProcessServiceSpec  extends IntegrationTests{
 		then:
 		CorrectiveProcess.count() == 1
 	}
+
 	def "can create a add maintenance process using create process method"(){
 		setup:
 		setupLocationTree()
@@ -50,8 +51,10 @@ class MaintenanceProcessServiceSpec  extends IntegrationTests{
 		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,user, Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		maintenanceProcessService.addProcess(workOrder,ProcessType.ACTION,"name test",Initializer.now(),user)
 		when:
+		def processeSizeBefore = workOrder.processes.size()
 		maintenanceProcessService.deleteProcess(workOrder.processes.asList()[0],Initializer.now(),user)
 		then:
 		CorrectiveProcess.count() == 0
+		processeSizeBefore == 1
 	}
 }

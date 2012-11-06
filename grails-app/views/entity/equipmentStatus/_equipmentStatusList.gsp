@@ -7,7 +7,7 @@
 			<g:sortableColumn property="status" params="['equipment.id': equipment?.id]" title="${message(code: 'equipment.status.label')}" />
 			<g:sortableColumn property="dateOfEvent" params="['equipment.id': equipment?.id]" title="${message(code: 'equipment.status.date.of.event.label')}" />
 			<g:sortableColumn property="statusChangeDate" params="['equipment.id': equipment?.id]" title="${message(code: 'equipment.status.recordedon.label')}" />
-			<g:sortableColumn property="current" params="['equipment.id': equipment?.id]" title="${message(code: 'equipment.status.current.label')}" />
+			<th><g:message code="equipment.status.current.label"/></th>
 		</tr>
 	</thead>
 	<tbody>		
@@ -25,7 +25,7 @@
     			<td>${message(code: status?.status?.messageCode+'.'+status?.status?.name)}</td>
     			<td>${Utils.formatDate(status?.dateOfEvent)}</td>
     			<td>${Utils.formatDateWithTime(status?.statusChangeDate)}</td>
-    			<td>${(status.current)? '\u2713':''}</td>
+    			<td>${(status==equipment.timeBasedStatus)? '\u2713':''}</td>
     		</tr>
    		</g:each>
 	</tbody>

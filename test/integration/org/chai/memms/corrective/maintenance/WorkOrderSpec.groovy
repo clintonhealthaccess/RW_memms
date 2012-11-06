@@ -57,6 +57,9 @@ class WorkOrderSpec extends IntegrationTests{
 		WorkOrder.count() == 1
 		WorkOrder.list()[0].status.status.equals([OrderStatus.OPENATFOSA])
 		WorkOrderStatus.count() == 1
+		workOrder.currentStatus ==  OrderStatus.OPENATFOSA
+		workOrder.timeBasedStatus.status ==  OrderStatus.OPENATFOSA
+		workOrder.status.size() ==1
 	}
 	
 	def "if status is clossed closedOn should be set and to newer than openOn"(){

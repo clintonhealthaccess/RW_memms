@@ -53,6 +53,7 @@ import java.io.File;
 class EquipmentServiceSpec extends IntegrationTests{
 
 	def equipmentService
+	
 	def "can search equipment by serial number, description and observation"() {
 		setup:
 		setupLocationTree()
@@ -67,9 +68,9 @@ class EquipmentServiceSpec extends IntegrationTests{
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 
 		Initializer.newEquipment("SERIAL10",PurchasedBy.BYDONOR,Donor.OTHERNGO,"Internews",false,Initializer.newPeriod(32),"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),'',Initializer.now(),"equipmentModel",DataLocation.list().first(),department,equipmentType,manufacture,supplier)
+				,Initializer.getDate(10,10,2010),'',Initializer.now(),"equipmentModel",DataLocation.list().first(),department,equipmentType,manufacture,supplier,Status.OPERATIONAL)
 		Initializer.newEquipment("SERIAL11",PurchasedBy.BYMOH,null,null,false,Initializer.newPeriod(32),"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),"RWF",Initializer.now(),"equipmentModel",DataLocation.list().first(),department,equipmentType,manufacture,supplier)
+				,Initializer.getDate(10,10,2010),"RWF",Initializer.now(),"equipmentModel",DataLocation.list().first(),department,equipmentType,manufacture,supplier,Status.OPERATIONAL)
 		def List<Equipment> equipments
 
 		when://Searching by serial number
@@ -108,9 +109,9 @@ class EquipmentServiceSpec extends IntegrationTests{
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 
 		Initializer.newEquipment("SERIAL10",PurchasedBy.BYDONOR,Donor.MOHPARTNER,"CHAI",,false,Initializer.newPeriod(32),"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),"",Initializer.now(),"equipmentModel",DataLocation.findByCode('Kivuye HC'),department,equipmentType,manufacture,supplier)
+				,Initializer.getDate(10,10,2010),"",Initializer.now(),"equipmentModel",DataLocation.findByCode('Kivuye HC'),department,equipmentType,manufacture,supplier,Status.OPERATIONAL)
 		Initializer.newEquipment("SERIAL11",PurchasedBy.BYFACILITY,null,null,false,Initializer.newPeriod(32),"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),"USD",Initializer.now(),"equipmentModel",DataLocation.findByCode('Butaro DH'),department,equipmentType,manufacture,supplier)
+				,Initializer.getDate(10,10,2010),"USD",Initializer.now(),"equipmentModel",DataLocation.findByCode('Butaro DH'),department,equipmentType,manufacture,supplier,Status.OPERATIONAL)
 		def List<Equipment> equipments
 
 		when:
@@ -158,7 +159,8 @@ class EquipmentServiceSpec extends IntegrationTests{
 	def "filter equipments"() {
 		setup:
 		setupLocationTree()
-
+		def butaroDH =  DataLocation.findByCode('Butaro DH')
+		def kivuyeHC = DataLocation.findByCode('Kivuye HC')
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
 		def serviceProContact = Initializer.newContact([:],"Service Provider","jk@yahoo.com","0768-888-787","Street 1654","6353")
@@ -171,9 +173,9 @@ class EquipmentServiceSpec extends IntegrationTests{
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 
 		def equipmentOne = Initializer.newEquipment("SERIAL10",PurchasedBy.BYDONOR,Donor.MOHPARTNER,"Intra-health",false,Initializer.newPeriod(32),"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),"",Initializer.now(),"equipmentModel",DataLocation.findByCode('Kivuye HC'),department,equipmentType,manufacture,supplier)
+				,Initializer.getDate(10,10,2010),"",Initializer.now(),"equipmentModel",kivuyeHC,department,equipmentType,manufacture,supplier,Status.INSTOCK)
 		def equipmentTwo = Initializer.newEquipment("SERIAL11",PurchasedBy.BYFACILITY,null,null,true,Initializer.newPeriod(32),"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),"USD",Initializer.now(),"equipmentModel",DataLocation.findByCode('Butaro DH'),department,equipmentType,manufacture,supplier)
+				,Initializer.getDate(10,10,2010),"USD",Initializer.now(),"equipmentModel",butaroDH,department,equipmentType,manufacture,supplier,Status.OPERATIONAL)
 		
 		equipmentOne.serviceProvider=servicePro
 		equipmentOne.serviceContractPeriod = Initializer.newPeriod(2)
@@ -185,46 +187,40 @@ class EquipmentServiceSpec extends IntegrationTests{
 		equipmentTwo.save(failOnError:true)
 		
 		def List<Equipment> equipmentsOne, equipmentsTwo, equipmentsThree
-		def equipmentStatusOneActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("admin"),Status.INSTOCK,equipmentOne,false,[:])
-		def equipmentStatusOneInActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentOne,true,[:])
-		def equipmentStatusTwo = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("admin"),Status.DISPOSED,equipmentOne,true,[:])
-		
-		equipmentOne.addToStatus(equipmentStatusOneInActive).save(failOnError:true,flush: true)
-		equipmentOne.addToStatus(equipmentStatusOneActive).save(failOnError:true,flush: true)
-		equipmentTwo.addToStatus(equipmentStatusTwo).save(failOnError:true,flush: true)
+		def equipmentStatusOneActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("admin"),Status.INSTOCK,equipmentOne,[:])
+		def equipmentStatusOneInActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("admin"),Status.OPERATIONAL,equipmentOne,[:])
+		def equipmentStatusTwo = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("admin"),Status.DISPOSED,equipmentOne,[:])
 		
 		when://Search by defaults
 		
-		equipmentsOne = equipmentService.filterEquipment(DataLocation.findByCode('Butaro DH'),
-			supplier,manufacture,servicePro,equipmentType,PurchasedBy.NONE,Donor.NONE,'true',Status.DISPOSED,[:])
+		equipmentsOne = equipmentService.filterEquipment(butaroDH,supplier,manufacture,servicePro,equipmentType,PurchasedBy.NONE,Donor.NONE,'true',Status.OPERATIONAL,[:])
 
 		then:
 		Equipment.count() == 2
+		Equipment.list()[0].currentStatus == Status.DISPOSED
+		Equipment.list()[1].currentStatus ==Status.OPERATIONAL
 		equipmentsOne.size() == 1
 		equipmentsOne[0].getDescriptions(new Locale("en")).equals('Equipment Descriptions two')
 		
-		when://Search by active status
+		when://Search by currentStatus
 		
-		equipmentsTwo = equipmentService.filterEquipment(DataLocation.findByCode('Kivuye HC'),
-			supplier, manufacture,servicePro,equipmentType,PurchasedBy.BYDONOR,Donor.NONE,'false',Status.OPERATIONAL,[:])
-		equipmentsThree = equipmentService.filterEquipment(DataLocation.findByCode('Kivuye HC'),
-			supplier, manufacture,servicePro,equipmentType,PurchasedBy.BYDONOR,Donor.NONE,'false',Status.INSTOCK,[:])
+		equipmentsTwo = equipmentService.filterEquipment(kivuyeHC,supplier, manufacture,servicePro,equipmentType,PurchasedBy.BYDONOR,Donor.MOHPARTNER,'false',Status.DISPOSED,[:])
+		equipmentsThree = equipmentService.filterEquipment(kivuyeHC,supplier, manufacture,servicePro,equipmentType,PurchasedBy.BYDONOR,Donor.NONE,'false',Status.INSTOCK,[:])
 
 		then:
 		Equipment.count() == 2
 		equipmentsTwo.size() == 1
 		equipmentsThree.size() == 0
 		equipmentsTwo[0].getDescriptions(new Locale("en")).equals('Equipment Descriptions one')
-		equipmentsTwo[0].status.size() == 2
+		equipmentsTwo[0].status.size() == 3
 		
-		when://Search by donor
-		equipmentsTwo = equipmentService.filterEquipment(DataLocation.findByCode('Kivuye HC'),
-			supplier, manufacture,servicePro,equipmentType,null,Donor.MOHPARTNER,'false',Status.OPERATIONAL,[:])
+		when://Search by donor only
+		equipmentsTwo = equipmentService.filterEquipment(kivuyeHC,supplier, manufacture,servicePro,equipmentType,null,Donor.MOHPARTNER,'false',Status.DISPOSED,[:])
 
 		then:
 		Equipment.count() == 2
 		equipmentsTwo.size() == 1
-		equipmentsTwo[0].status.size() == 2
+		equipmentsTwo[0].status.size() == 3
 	}
 
 	def "can export equipments"(){
@@ -244,18 +240,18 @@ class EquipmentServiceSpec extends IntegrationTests{
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
 
 		def equipmentOne = Initializer.newEquipment("SERIAL10",PurchasedBy.BYFACILITY,null,null,true,Initializer.newPeriod(32),"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),"",Initializer.now(),"equipmentModel",DataLocation.findByCode(KIVUYE),department,equipmentType,manufacture,supplier)
+				,Initializer.getDate(10,10,2010),"",Initializer.now(),"equipmentModel",DataLocation.findByCode(KIVUYE),department,equipmentType,manufacture,supplier,Status.INSTOCK)
 		def equipmentTwo = Initializer.newEquipment("SERIAL11",PurchasedBy.BYFACILITY,null,null,,true,Initializer.newPeriod(32),"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),"EUR",Initializer.now(),"equipmentModel",DataLocation.findByCode(KIVUYE),department,equipmentType,manufacture,supplier)
+				,Initializer.getDate(10,10,2010),"EUR",Initializer.now(),"equipmentModel",DataLocation.findByCode(KIVUYE),department,equipmentType,manufacture,supplier,Status.INSTOCK)
 		def equipmentThree = Initializer.newEquipment("SERIAL12",PurchasedBy.BYFACILITY,null,null,,true,Initializer.newPeriod(32),"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
-			,Initializer.getDate(10,10,2010),"EUR",Initializer.now(),"equipmentModel",DataLocation.findByCode(KIVUYE),department,equipmentType,manufacture,supplier)
+			,Initializer.getDate(10,10,2010),"EUR",Initializer.now(),"equipmentModel",DataLocation.findByCode(KIVUYE),department,equipmentType,manufacture,supplier,Status.INSTOCK)
 		def equipmentFour = Initializer.newEquipment("SERIAL13",PurchasedBy.BYFACILITY,null,null,,true,Initializer.newPeriod(32),"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
-			,Initializer.getDate(10,10,2010),"EUR",Initializer.now(),"equipmentModel",DataLocation.findByCode(BUTARO),department,equipmentType,manufacture,supplier)
+			,Initializer.getDate(10,10,2010),"EUR",Initializer.now(),"equipmentModel",DataLocation.findByCode(BUTARO),department,equipmentType,manufacture,supplier,Status.INSTOCK)
 	
 		
 		def List<Equipment> equipmentsOne, equipmentsTwo, equipmentsThree
-		def equipmentStatusOneActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("user"),Status.INSTOCK,equipmentOne,false,[:])
-		def equipmentStatusOneInActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("user"),Status.OPERATIONAL,equipmentOne,true,[:])
+		def equipmentStatusOneActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("user"),Status.INSTOCK,equipmentOne,[:])
+		def equipmentStatusOneInActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("user"),Status.OPERATIONAL,equipmentOne,[:])
 		
 		equipmentOne.warranty=warranty
 		equipmentOne.warrantyPeriod = Initializer.newPeriod(22)
@@ -273,5 +269,34 @@ class EquipmentServiceSpec extends IntegrationTests{
 		
 		then:
 		csvFile != null
+	}
+	
+	def "update equipment status"(){
+		setup:
+		
+		setupLocationTree()
+		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+		def manufacture = Initializer.newProvider(CODE(111), Type.MANUFACTURER,manufactureContact)
+		def supplier = Initializer.newProvider(CODE(222), Type.SUPPLIER,supplierContact)
+		def warrantyContact = Initializer.newContact(['fr':'Warranty Address Descriptions One'],"Warranty","jk@yahoo.com","0768-888-787","Street 654","8988")
+		def warranty = Initializer.newWarranty(warrantyContact,Initializer.getDate(10, 12, 2010),false,[:])
+		
+		def user  = newUser("user", "user", true, true)
+		setupSecurityManager(user)
+		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
+		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
+		def equipment = Initializer.newEquipment("SERIAL10",PurchasedBy.BYFACILITY,null,null,true,Initializer.newPeriod(32),"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),"",Initializer.now(),"equipmentModel",DataLocation.findByCode(KIVUYE),department,equipmentType,manufacture,supplier,Status.INSTOCK)
+		def statusOne = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("user"),Status.INSTOCK,equipment,[:])
+		def statusTwo = new EquipmentStatus(dateOfEvent:Initializer.now(),changedBy:User.findByUsername("user"),status:Status.OPERATIONAL,statusChangeDate:Initializer.now())
+		
+		when:
+		equipment = equipmentService.updateCurrentEquipmentStatus(Equipment.findBySerialNumber("SERIAL10"),statusTwo)
+
+		then:
+		Equipment.count() == 1
+		Equipment.list()[0].currentStatus == Status.OPERATIONAL
+		
 	}
 }
