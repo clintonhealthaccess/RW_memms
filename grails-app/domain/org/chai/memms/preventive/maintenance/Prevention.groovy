@@ -42,7 +42,7 @@ public class Prevention {
 	
 	Date scheduledOn
 	Date eventDate
-	Date addedOn
+	Date dateCreated
 	TimeSpend timeSpend
 	User addedBy
 	
@@ -68,7 +68,6 @@ public class Prevention {
 		timeSpend nullable: true
 		scheduledOn nullable: false, validator:{it <= new Date()}
 		eventDate nullable: false, validator:{it <= new Date()}
-		addedOn nullable: false, validator:{it <= new Date()}
 		
 	}
 	

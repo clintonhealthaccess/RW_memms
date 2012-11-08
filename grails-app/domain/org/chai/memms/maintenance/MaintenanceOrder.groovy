@@ -45,7 +45,7 @@ public abstract class MaintenanceOrder {
 	
 	Date openOn
 	Date closedOn
-	Date addedOn
+	Date dateCreated
 	Date lastModifiedOn
 	
 	User addedBy
@@ -55,7 +55,6 @@ public abstract class MaintenanceOrder {
 	static constraints = {
 		
 		openOn nullable: false, validator:{it <= new Date()}
-		addedOn nullable: false, validator:{ it <= new Date()}
 		closedOn nullable: true
 		addedBy nullable: false
 		

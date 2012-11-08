@@ -42,7 +42,7 @@ class DurationBasedOrder extends PreventiveOrder {
 		WEEKLY("weekly"),
 		MONTHLY("monthly"),
 		TRIMESTRIAL("trimestrial"), //Occurring every three month
-		QUARTERLY("quarterly"), //Occur every four month
+		QUARTERLY("quarterly"), // Occur every four month
 		SEMESTRIAL("semestrial"), //Happen every six month
 		YEARLY("yearly"),
 		OTHER("other")

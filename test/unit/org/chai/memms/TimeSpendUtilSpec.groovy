@@ -84,5 +84,45 @@ class TimeSpendUtilSpec extends UnitSpec {
 		timeSpend.numberOfMinutes == 35		
 	}
 	
+	def "test can set minutes and hours as 0"() {
+		
+		when:
+		TimeSpend timeSpend = new TimeSpend(0,0)
+		then:
+		timeSpend.hours == null
+		timeSpend.minutes == null
+		timeSpend.numberOfMinutes == 0
+	}
+	
+	def "test can set minutes  as 0"() {
+		
+		when:
+		TimeSpend timeSpend = new TimeSpend(3,0)
+		then:
+		timeSpend.hours == 3
+		timeSpend.minutes == null
+		timeSpend.numberOfMinutes == 180
+	}
+	
+	def "test can set hours  as 0 minutes > an hours"() {
+		
+		when:
+		TimeSpend timeSpend = new TimeSpend(0,61)
+		then:
+		timeSpend.hours == 1
+		timeSpend.minutes == 1
+		timeSpend.numberOfMinutes == 61
+	}
+	
+	def "test can set hours as 0 minutes < an hours"() {
+		
+		when:
+		TimeSpend timeSpend = new TimeSpend(0,50)
+		then:
+		timeSpend.hours == null
+		timeSpend.minutes == 50
+		timeSpend.numberOfMinutes == 50
+	}
+	
 }
 	

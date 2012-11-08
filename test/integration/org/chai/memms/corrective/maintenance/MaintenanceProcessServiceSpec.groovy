@@ -23,7 +23,7 @@ class MaintenanceProcessServiceSpec  extends IntegrationTests{
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,user, Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		when:
-		def process = maintenanceProcessService.createProcess(workOrder,ProcessType.ACTION,"name test",Initializer.now(),user)
+		def process = maintenanceProcessService.addProcess(workOrder,ProcessType.ACTION,"name test",user)
 		process.save()
 		then:
 		CorrectiveProcess.count() == 1
@@ -37,7 +37,7 @@ class MaintenanceProcessServiceSpec  extends IntegrationTests{
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,user, Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		when:
-		maintenanceProcessService.addProcess(workOrder,ProcessType.ACTION,"name test",Initializer.now(),user)
+		maintenanceProcessService.addProcess(workOrder,ProcessType.ACTION,"name test",user)
 		then:
 		CorrectiveProcess.count() == 1
 	}
@@ -49,10 +49,10 @@ class MaintenanceProcessServiceSpec  extends IntegrationTests{
 		def user = newUser("user", "user")
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,user, Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-		maintenanceProcessService.addProcess(workOrder,ProcessType.ACTION,"name test",Initializer.now(),user)
+		maintenanceProcessService.addProcess(workOrder,ProcessType.ACTION,"name test",user)
 		when:
 		def processeSizeBefore = workOrder.processes.size()
-		maintenanceProcessService.deleteProcess(workOrder.processes.asList()[0],Initializer.now(),user)
+		maintenanceProcessService.deleteProcess(workOrder.processes.asList()[0],user)
 		then:
 		CorrectiveProcess.count() == 0
 		processeSizeBefore == 1

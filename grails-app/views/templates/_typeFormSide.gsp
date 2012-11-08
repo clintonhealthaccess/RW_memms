@@ -14,7 +14,7 @@
 	<ul class="half">
 		<li>
 			<span class="label"><g:message code="equipment.type.added.on.label" /></span>
-			<span class="text">${Utils.formatDate(type?.addedOn)}</span>
+			<span class="text">${Utils.formatDate(type?.dateCreated)}</span>
 		</li>
 		<li>
 			<span class="label"><g:message code="equipment.type.last.modified.on.label" /></span>

@@ -35,7 +35,6 @@ import org.chai.memms.security.User;
  * @author Jean Kahigiso M.
  *
  */
-@EqualsAndHashCode(includes='id')
 public class WorkOrderStatus {
 	
 	enum OrderStatus{
@@ -50,7 +49,7 @@ public class WorkOrderStatus {
 		String getKey() { return name() }
 	}
 	
-	Date changeOn
+	Date dateCreated
 	User changedBy
 	OrderStatus status
 	Boolean escalation = false
@@ -62,7 +61,6 @@ public class WorkOrderStatus {
 	}
 	
 	static constraints = {
-		changeOn nullable: false, validator:{it <= new Date()}
 		status nullable: false, inList:[OrderStatus.OPENATFOSA,OrderStatus.OPENATMMC,OrderStatus.CLOSEDFIXED,OrderStatus.CLOSEDFORDISPOSAL]
 		escalation validator:{ val, obj ->
 			def valid = true

@@ -38,7 +38,6 @@ import i18nfields.I18nFields
  */
 
 @i18nfields.I18nFields
-@EqualsAndHashCode(includes='id')
 class EquipmentStatus {
 	
 	enum Status{
@@ -59,7 +58,7 @@ class EquipmentStatus {
 	}
 	
 	Date dateOfEvent;
-	Date statusChangeDate;
+	Date dateCreated;
 	User changedBy
 	Status status
 	String reasons
@@ -67,14 +66,10 @@ class EquipmentStatus {
 	static belongsTo = [equipment: Equipment]
 	static i18nFields = ["reasons"]
 	
-	def isCurrent(){
-		return current
-	}
 	static constraints = {
-		dateOfEvent nullable:false, validator:{val, obj ->
+		dateOfEvent nullable:false, validator:{ val, obj ->
 			return (val <= new Date()) &&  (val.after(obj.equipment.purchaseDate) || (val.compareTo(obj.equipment.purchaseDate)==0))
 		} 
-		statusChangeDate nullable: false, validator:{it <= new Date()} 
 		changedBy nullable: false 
 		status blank: false, nullable: false, inList:[Status.OPERATIONAL,Status.PARTIALLYOPERATIONAL,Status.INSTOCK,Status.UNDERMAINTENANCE,Status.FORDISPOSAL,Status.DISPOSED]
 		reasons nullable: true, blank: true
@@ -87,6 +82,6 @@ class EquipmentStatus {
 
 	@Override
 	public String toString() {
-		return "EquipmentStatus [dateOfEvent=" + dateOfEvent + ", changedBy="+ changedBy + ", status=" + status + " statusChangeDate=" + statusChangeDate + "]";
+		return "EquipmentStatus [dateOfEvent=" + dateOfEvent + ", changedBy="+ changedBy + ", status=" + status + " dateCreated=" + dateCreated + "]";
 	}	
 }

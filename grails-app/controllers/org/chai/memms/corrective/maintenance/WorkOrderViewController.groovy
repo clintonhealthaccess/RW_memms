@@ -71,11 +71,8 @@ class WorkOrderViewController extends AbstractController{
 	}
 	def view  = {
 		WorkOrder workOrder = WorkOrder.get(params.int('workOrder'))
-		if(workOrder==null)
-			response.sendError(404)
-		else{
-			render(view:"/entity/summary", model:[entities: workOrder])
-		}
+		if(workOrder==null) response.sendError(404)
+		else render(view:"/entity/workOrder/summary", model:[entities: workOrder])
 	}
 
 	def list = {
@@ -143,7 +140,7 @@ class WorkOrderViewController extends AbstractController{
 			response.sendError(404)
 		else {
 				if (log.isDebugEnabled()) log.debug("addProcess params: "+params)
-				maintenanceProcessService.addProcess(order,type,value,now,user)	
+				maintenanceProcessService.addProcess(order,type,value,user)	
 				if(order!=null){
 					result=true
 					def processes = (type==ProcessType.ACTION)? order.actions:order.materials
@@ -162,7 +159,7 @@ class WorkOrderViewController extends AbstractController{
 			response.sendError(404)
 		else{
 			type = process.type
-			WorkOrder order = maintenanceProcessService.deleteProcess(process,now,user)
+			WorkOrder order = maintenanceProcessService.deleteProcess(process,user)
 			result = true
 			def processes = (type==ProcessType.ACTION)? order.actions:order.materials
 			html = g.render(template:"/templates/processList",model:[processes:processes,type:type.name])
@@ -178,7 +175,7 @@ class WorkOrderViewController extends AbstractController{
 		if (order == null || content.equals("") || order.currentStatus.equals(OrderStatus.CLOSEDFIXED) || order.currentStatus.equals(OrderStatus.CLOSEDFORDISPOSAL))
 			response.sendError(404)
 		else {
-			def comment = commentService.createComment(order,user, now,content)
+			def comment = commentService.createComment(order,user,content)
 			if(comment==null) response.sendError(404)
 			else{ 
 				result=true
@@ -196,7 +193,7 @@ class WorkOrderViewController extends AbstractController{
 		if(!comment || comment.workOrder.currentStatus.equals(OrderStatus.CLOSEDFIXED) || comment.workOrder.currentStatus.equals(OrderStatus.CLOSEDFORDISPOSAL)) 
 			response.sendError(404)
 		else{
-			order = commentService.deleteComment(comment,user,now)
+			order = commentService.deleteComment(comment,user)
 			result = true
 			html = g.render(template:"/templates/comments",model:[order:order])
 		}
@@ -223,8 +220,8 @@ class WorkOrderViewController extends AbstractController{
 	}
 
 	def getWorkOrderClueTipsAjaxData = {
-		def workOrder = WorkOrder.get(params.long("id"))
-		def html = g.render(template:"/templates/workOrderClueTip",model:[workOrder:workOrder])
+		def workOrder = WorkOrder.get(params.long("order.id"))
+		def html = g.render(template:"/templates/workOrderClueTip",model:[equipment:workOrder.equipment])
 		render(contentType:"text/plain", text:html)
 	}
 

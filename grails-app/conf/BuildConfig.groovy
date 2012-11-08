@@ -83,7 +83,7 @@ grails.project.dependency.resolution = {
         compile ":hibernate:$grailsVersion"
 		compile ":mail:1.0"
         compile ":jquery:1.7.1"
-        compile ":resources:1.2-RC1"
+        compile ":resources:1.2-RC1"	
 		compile ":cached-resources:1.0"
 		compile ":cache-headers:1.1.5"
 		compile ":shiro:1.1.5"
@@ -94,7 +94,7 @@ grails.project.dependency.resolution = {
 		compile ":yui-minify-resources:0.1.5"
         build ":tomcat:$grailsVersion"
 		compile ":rabbitmq-tasks:0.5.3-SNAPSHOT"
-		compile ":chai-locations:0.3-CHAI"
+		compile ':chai-locations:0.4-CHAI'
 		compile ":build-info-tag:0.3.1"
 		//compile ':cloud-foundry:1.2.3'
 		

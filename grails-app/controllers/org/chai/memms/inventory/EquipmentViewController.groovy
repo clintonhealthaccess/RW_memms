@@ -65,6 +65,11 @@ class EquipmentViewController extends AbstractController {
 	def getEntityClass() {
 		return Equipment.class;
 	}
+	def view ={
+		Equipment equipment = Equipment.get(params.int("equipment.id"))
+		if(equipment == null)	response.sendError(404)
+		else render(view:"/entity/equipment/summary", model:[equipment: equipment])		
+	}
 	
 	def list={
 		def dataLocation = DataLocation.get(params.int('dataLocation.id'))
@@ -259,7 +264,11 @@ class EquipmentViewController extends AbstractController {
 			def value= false; def entity = null;
 			if(property.equals("obsolete")){
 				if(equipment.obsolete) equipment.obsolete = false
-				else equipment.obsolete = true
+				else {
+					equipment.lastModifiedBy = user
+					equipment.lastModifiedOn = now
+					equipment.obsolete = true
+				}
 				entity = equipment.save(flush:true)
 
 			}

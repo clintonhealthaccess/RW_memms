@@ -44,7 +44,7 @@
 					${type.expectedLifeTime?.numberOfMonths}
 				</td>
 				<td>
-					${Utils.formatDateWithTime(type?.addedOn)}
+					${Utils.formatDateWithTime(type?.dateCreated)}
 				</td>
 				<td>
 					${Utils.formatDateWithTime(type?.lastModifiedOn)}

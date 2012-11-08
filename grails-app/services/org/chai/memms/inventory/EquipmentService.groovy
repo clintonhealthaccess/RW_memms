@@ -46,6 +46,7 @@ import org.hibernate.criterion.Order
 import org.hibernate.criterion.Projections
 import org.hibernate.criterion.Restrictions
 import org.apache.commons.lang.StringUtils
+import org.chai.memms.security.User;
 import org.chai.memms.util.ImportExportConstant;
 import org.chai.memms.util.Utils;
 
@@ -65,14 +66,16 @@ class EquipmentService {
 	static transactional = true
 	def languageService;
 	
-	public void updateCurrentEquipmentStatus(Equipment equipment,EquipmentStatus status){
+	public void updateCurrentEquipmentStatus(Equipment equipment,EquipmentStatus status,User user){
 		if(status!=null){
 			equipment.currentStatus = status.status
 			equipment.addToStatus(status)
 		}else{
-			//This assume that there is no equipment without at least one status associated to it!
+			//This assume that there is no equipment without at least one status associated to it
 			equipment.currentStatus = equipment.timeBasedStatus.status
 		}
+		equipment.lastModifiedBy = user
+		equipment.lastModifiedOn = new Date()
 		if(log.isDebugEnabled()) log.debug("Updating Equipment status params: "+equipment)
 		equipment.save(failOnError:true)
 	}

@@ -37,17 +37,16 @@ import org.chai.memms.security.User;
  *
  */
 @i18nfields.I18nFields
-@EqualsAndHashCode(includes='id')
 public class Comment {
 	User writtenBy
-	Date writtenOn
+	Date dateCreated
 	String content
 	
    static belongsTo = [workOrder: WorkOrder]
    
+   
    static constraints ={
 	   writtenBy nullable: false
-	   writtenOn nullable: false, validator:{it <=new Date()}
 	   content nullable:false, blank:false
    }
    static mapping ={
@@ -57,10 +56,6 @@ public class Comment {
 	   
    }
    
-//   def beforeDelete = {
-//	   workOrder.removeFromComments(this)
-//	}
-
 	@Override
 	public String toString() {
 		return "Comment [id=" + id + ", writtenBy=" + writtenBy + "]";

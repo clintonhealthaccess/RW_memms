@@ -129,7 +129,7 @@ class WorkOrderService {
 	
 	def escalateWorkOrder(WorkOrder workOrder,String content, User escalatedBy){
 		workOrder.currentStatus = OrderStatus.OPENATMMC
-		WorkOrderStatus status = new WorkOrderStatus(workOrder:workOrder,status:OrderStatus.OPENATMMC,escalation:true,changedBy:escalatedBy,changeOn:new Date())
+		WorkOrderStatus status = new WorkOrderStatus(workOrder:workOrder,status:OrderStatus.OPENATMMC,escalation:true,changedBy:escalatedBy)
 		workOrder.addToStatus(status)
 		workOrder.save(failOnError:true)
 		if(status)

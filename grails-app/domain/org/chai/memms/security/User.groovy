@@ -67,6 +67,7 @@ class User {
 	String uuid
     String passwordHash = ''
 	String permissionString = ''
+	Date dateCreated
 	Boolean confirmed = false
 	Boolean active = false
 	String defaultLanguage	
@@ -105,8 +106,9 @@ class User {
 		if(calculationLocation instanceof Location && location instanceof DataLocation) return false
 		if(calculationLocation instanceof DataLocation && location instanceof DataLocation) return calculationLocation == location
 		if(calculationLocation instanceof Location && location instanceof Location && calculationLocation.level == location.level) return calculationLocation == location
+		
 		if(calculationLocation instanceof DataLocation && location instanceof Location && calculationLocation.location.level == location.level) return calculationLocation.location == location
-		return locationService.getParentOfLevel(calculationLocation instanceof Location ? calculationLocation : calculationLocation.location, location.level) == location
+		return calculationLocation.getParentOfLevel(location.level) == location
 	}
 	
 	def canActivate() {

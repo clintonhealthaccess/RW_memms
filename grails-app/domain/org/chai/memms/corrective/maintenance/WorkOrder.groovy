@@ -100,10 +100,10 @@ public class WorkOrder extends MaintenanceOrder{
 		failureReasonDetails nullable: true
 		testResultsDescriptions nullable: true
 		workTime nullable: true, validator:{ 
-			if(it!=null && it.numberOfMinutes <=0) return false		
+			if(it!=null) return (it.numberOfMinutes > 0) 	
 		}
 		travelTime nullable: true, validator:{ 
-			if(it!=null && it.numberOfMinutes <=0) return false		
+			if(it!=null) return (it.numberOfMinutes > 0)	
 		}
 		description nullable: false, blank: false
 		returnedTo nullable: true, blank: true
@@ -166,7 +166,7 @@ public class WorkOrder extends MaintenanceOrder{
 	def getTimeBasedStatus(){
 		WorkOrderStatus currentState = status.asList()[0]
 		for(WorkOrderStatus state : status)
-			if(state.changeOn.after(currentState.changeOn))
+			if(state.dateCreated.after(currentState.dateCreated))
 				currentState= state;
 		return currentState
 	}
@@ -192,7 +192,7 @@ public class WorkOrder extends MaintenanceOrder{
 
 	@Override
 	public String toString() {
-		return "WorkOrder [id= " + id + "currentStatus= "+currentStatus+"]";
+		return "WorkOrder [id= " + id + " currentStatus= "+currentStatus+"]";
 	}
 
 }

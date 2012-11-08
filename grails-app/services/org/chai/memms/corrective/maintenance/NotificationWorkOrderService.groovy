@@ -49,7 +49,7 @@ class NotificationWorkOrderService {
 		int numberOfNotificationSent = 0
 		receivers.each{ receiver ->
 			if(receiver.active){
-					def notification = new NotificationWorkOrder(workOrder:workOrder,sender:sender,receiver:receiver,writtenOn:Utils.now(),content:content,read:false).save(failOnError: true)
+					def notification = new NotificationWorkOrder(workOrder:workOrder,sender:sender,receiver:receiver,content:content,read:false).save(failOnError: true)
 					if(notification)
 						numberOfNotificationSent++
 				}
@@ -92,9 +92,9 @@ class NotificationWorkOrderService {
 			if(workOrder) 
 				eq("workOrder",workOrder)
 			if(from) 
-				ge("writtenOn",Utils.getMinDateFromDateTime(from))
+				ge("dateCreated",Utils.getMinDateFromDateTime(from))
 			if(to) 
-				le("writtenOn",Utils.getMaxDateFromDateTime(to))
+				le("dateCreated",Utils.getMaxDateFromDateTime(to))
 			if(receiver) 
 				eq("receiver",receiver)
 			if(read!=null) 

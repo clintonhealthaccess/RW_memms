@@ -55,7 +55,7 @@ class WorkOrderViewControllerSpec extends IntegrationTests{
 		def user = newUser("user","user")
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,user,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-		def process = Initializer.newMaintenanceProcess(workOrder, ProcessType.ACTION, "Process", Initializer.now(),user)
+		def process = Initializer.newCorrectiveProcess(workOrder, ProcessType.ACTION, "Process",user)
 		workOrder.addToProcesses(process)
 		workOrder.save(flush:true)
 		workOrderViewController = new WorkOrderViewController()
@@ -109,7 +109,7 @@ class WorkOrderViewControllerSpec extends IntegrationTests{
 		def user = newUser("user","user")
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,user,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-		def comment = Initializer.newComment(workOrder,user, Initializer.now(), "Test comment")
+		def comment = Initializer.newComment(workOrder,user,"Test comment")
 		workOrder.addToComments(comment)
 		workOrder.save(flush:true)
 		workOrderViewController = new WorkOrderViewController()
@@ -119,4 +119,23 @@ class WorkOrderViewControllerSpec extends IntegrationTests{
 		then:
 		workOrder.comments.size() == 0
 	}
+	
+	//TODO find how to test this
+	
+//	def "getWorkOrderClueTipsAjaxData test"(){
+//		setup:
+//		setupLocationTree()
+//		setupEquipment()
+//		setupSystemUser()
+//		def user = newUser("user","user")
+//		def equipment = Equipment.findBySerialNumber(CODE(123))
+//		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,user,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+//		workOrderViewController = new WorkOrderViewController()
+//		def html = render(template:"/templates/workOrderClueTip",model:[equipment:equipment])
+//		when:
+//		workOrderViewController.params.'order.id' = workOrder.id
+//		workOrderViewController.getWorkOrderClueTipsAjaxData()
+//		then:
+//		render(contentType:"text/plain", text:html)
+//	}
 }

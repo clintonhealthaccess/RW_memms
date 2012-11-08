@@ -36,18 +36,16 @@ import org.chai.memms.security.User;
  * @author Jean Kahigiso M.
  *
  */
-@EqualsAndHashCode(includes='id')
 abstract class Notification {
 	User sender
 	User receiver
-	Date writtenOn
+	Date dateCreated
 	String content
 	Boolean read = false
 	
 	static constraints ={
 		sender nullable: false
 		receiver nullable: false 
-		writtenOn nullable: false, validator:{it <=new Date()}
 		content nullable:false, blank:false
 		read nullable: false
 	}

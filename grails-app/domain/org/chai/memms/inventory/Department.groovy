@@ -40,6 +40,7 @@ class Department {
 	String code
 	String names
 	String descriptions
+	Date dateCreated
 	
 	static hasMany = [equipments: Equipment]
 	static i18nFields = ["names","descriptions"]

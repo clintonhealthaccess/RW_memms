@@ -83,6 +83,45 @@ class PeriodUtilSpec extends UnitSpec {
 		period.numberOfMonths == 3
 		
 	}
+	def "test can set months and years to 0"() {
+		when:
+		Period period = new Period(0,0)
+		then:
+		period.years == null
+		period.months == null
+		period.numberOfMonths == 0
+		
+	}
+	
+	def "test can set months to 0"() {
+		when:
+		Period period = new Period(2,0)
+		then:
+		period.years == 2
+		period.months == null
+		period.numberOfMonths == 24
+		
+	}
+	
+	def "test can set years to 0 and months < a year"() {
+		when:
+		Period period = new Period(0,9)
+		then:
+		period.years == null
+		period.months == 9
+		period.numberOfMonths == 9
+		
+	}
+	
+	def "test can set years to 0 and months > a year"() {
+		when:
+		Period period = new Period(0,13)
+		then:
+		period.years == 1
+		period.months == 1
+		period.numberOfMonths == 13
+		
+	}
 	
 }
 	

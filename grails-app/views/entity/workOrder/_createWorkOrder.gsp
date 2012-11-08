@@ -49,10 +49,10 @@
 	    			<th>${message(code:'work.order.status.changed.by.label')}</th>
 	    			<th>${message(code:'work.order.status.escalation.label')}</th>
 	    		</tr>
-	    		<g:each in="${order.status.sort{a,b -> (a.changeOn > b.changeOn) ? -1 : 1}}" status="i" var="status">
+	    		<g:each in="${order.status.sort{a,b -> (a.dateCreated > b.dateCreated) ? -1 : 1}}" status="i" var="status">
 			    		<tr>
 			    			<td>${message(code: status?.status?.messageCode+'.'+status?.status?.name)}</td>
-			    			<td>${Utils.formatDate(status?.changeOn)}</td>
+			    			<td>${Utils.formatDate(status?.dateCreated)}</td>
 			    			<td>${status.changedBy.firstname} ${status.changedBy.lastname}</td>
 			    			<td>${(status.escalation)? '\u2713':''}</td>
 			    		</tr>

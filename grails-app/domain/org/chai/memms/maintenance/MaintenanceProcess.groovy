@@ -38,16 +38,14 @@ import org.chai.memms.security.User;
  * @author Jean Kahigiso M.
  *
  */
-@EqualsAndHashCode(includes='id')
 public abstract class MaintenanceProcess {
 	
 	String name
-	Date addedOn
+	Date dateCreated
 	User addedBy
 	
 	static constraints = {
 		name nullable:false, blank: false
-		addedOn nullable:false, validator:{it <= new Date()}
 		addedBy nullable:false
 	}
 		

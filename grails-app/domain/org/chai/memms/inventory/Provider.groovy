@@ -55,6 +55,7 @@ public class Provider{
 	String code
 	Type type
 	Contact contact
+	Date dateCreated
 	
 	static embedded = ["contact"]
 	static mappedBy = [manufacturers: "manufacturer",suppliers: "supplier",serviceProviders: "serviceProvider"]

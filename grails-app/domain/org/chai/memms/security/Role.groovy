@@ -35,6 +35,7 @@ import org.chai.memms.util.Utils
 class Role {
     String name
 	String permissionString
+	Date dateCreated
 	
 	static belongsTo = User
     static hasMany = [ users: User ]

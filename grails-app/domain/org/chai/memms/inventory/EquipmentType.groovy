@@ -64,7 +64,7 @@ class EquipmentType {
 	Period expectedLifeTime
 	Observation observation
 	
-	Date addedOn
+	Date dateCreated
 	Date lastModifiedOn
 	
 	static embedded = ["expectedLifeTime"]
@@ -79,7 +79,6 @@ class EquipmentType {
 		
 		expectedLifeTime nullable: true
 		
-		addedOn nullable: false, blank: false, validator:{it <= new Date()}
 		lastModifiedOn nullable: false, blank: false, validator:{it <= new Date()}
 		
 		observation nullable: false, inLIst:[Observation.USEDINMEMMS,Observation.RETIRED,Observation.TOODETAILED,Observation.NOTINSCOPE]

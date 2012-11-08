@@ -87,7 +87,7 @@ abstract class IntegrationTests extends IntegrationSpec {
 		//new org.apache.shiro.grails.ShiroSecurityService()
 	}
 	static def setupSystemUser(){
-		def user = newUser("systemUser","systemUser", true, true)
+		def user = (User.findByUsername("systemUser"))?User.findByUsername("systemUser"):newUser("systemUser","systemUser", true, true)
 		user.location = DataLocation.findByCode(BUTARO)
 		user.save(failOnError:true)
 		setupSecurityManager(user)
@@ -120,15 +120,16 @@ abstract class IntegrationTests extends IntegrationSpec {
 	}
 
 	static def setupEquipment(){
+		setupSystemUser()
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
-		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
+		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now())
 
 		def equipment = new Equipment(serialNumber:CODE(123),manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),
-				registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,dataLocation:DataLocation.findByCode(KIVUYE),
+				dateCreated:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,dataLocation:DataLocation.findByCode(KIVUYE),
 				purchaser:PurchasedBy.BYFACILITY,obsolete:false,expectedLifeTime:Initializer.newPeriod(20),descriptions:['en':'Equipment Descriptions'], type:equipmentType,
-				currentStatus:Status.OPERATIONAL
+				currentStatus:Status.OPERATIONAL,
+				addedBy: User.findByUsername("systemUser")
 				)
-		equipment.genarateAndSetEquipmentCode()
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
 		def servicePro = Initializer.newContact([:],"Service Provider","sp@yahoo.com","0768-888-787","Street 1654","6353")

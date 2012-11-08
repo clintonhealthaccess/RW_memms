@@ -1,5 +1,6 @@
 import org.chai.memms.DatePropertyEditorRegistrar;
 import org.chai.memms.PeriodPropertyEditorRegistrar;
+import org.chai.memms.TimeSpendPropertyEditorRegistrar;
 import org.springframework.beans.PropertyEditorRegistrar;
 
 /**
@@ -40,7 +41,11 @@ beans = {
 	grailsSecurityBridge(org.chai.task.ShiroSecurityBridge) {
 	}
 	
-	periodPropertyEditorRegistrar(PeriodPropertyEditorRegistrar) {
-		//messageSource = ref('messageSource')
+	periodPropertyEditorRegistrar(PeriodPropertyEditorRegistrar){
+		
 	 }
+	
+	timeSpendPropertyEditorRegistrar(TimeSpendPropertyEditorRegistrar){
+		
+	}
 }

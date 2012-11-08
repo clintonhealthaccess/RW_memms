@@ -34,31 +34,13 @@ class MaintenanceProcessSpec  extends IntegrationTests{
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,user, Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		def maintenanceProcessWithErrors = new CorrectiveProcess()
-		def expectedFieldErrors = ["name","addedOn","addedBy","type","workOrder"]
+		def expectedFieldErrors = ["name","addedBy","type","workOrder"]
 
 		when://All required fields in
 		maintenanceProcessWithErrors.save()
 		then:
-		maintenanceProcessWithErrors.errors.fieldErrorCount == 5
+		maintenanceProcessWithErrors.errors.fieldErrorCount == 4
 		expectedFieldErrors.each{maintenanceProcessWithErrors.errors.hasFieldErrors(it)}
 		CorrectiveProcess.count() == 0
-	}
-	
-	def "maintenance process date should be before or equal to today"(){
-		setup:
-		setupLocationTree()
-		setupEquipment()
-		def user = newUser("user", "user")
-		def equipment = Equipment.findBySerialNumber(CODE(123))
-		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,user, Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-		def maintenanceProcessWithErrors
-		expect:
-		CorrectiveProcess.count() == 0
-		when:
-		maintenanceProcessWithErrors = new CorrectiveProcess(name:"name test date error", addedOn:new Date().next(), addedBy:user, type:ProcessType.ACTION, workOrder:workOrder)
-		maintenanceProcessWithErrors.save()
-		then:
-		CorrectiveProcess.count() == 0
-		maintenanceProcessWithErrors.errors.hasFieldErrors("addedOn") == true
 	}
 }
