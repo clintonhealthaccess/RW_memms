@@ -69,6 +69,14 @@ class WorkOrderViewController extends AbstractController{
 	def getEntityClass() {
 		return WorkOrder.class;
 	}
+	def view  = {
+		WorkOrder workOrder = WorkOrder.get(params.int('workOrder'))
+		if(workOrder==null)
+			response.sendError(404)
+		else{
+			render(view:"/entity/summary", model:[entities: workOrder])
+		}
+	}
 
 	def list = {
 		adaptParamsForList()
@@ -132,7 +140,7 @@ class WorkOrderViewController extends AbstractController{
 		def value = params["value"]
 		def result = false
 		def html =""
-		if (order == null || type==null || value.equals(""))
+		if (order == null || order.currentStatus.equals(OrderStatus.CLOSEDFIXED) || order.currentStatus.equals(OrderStatus.CLOSEDFORDISPOSAL) || type==null || value.equals(""))
 			response.sendError(404)
 		else {
 				if (log.isDebugEnabled()) log.debug("addProcess params: "+params)
@@ -151,7 +159,8 @@ class WorkOrderViewController extends AbstractController{
 		def result = false
 		def html =""
 		def type =null
-		if(!process) response.sendError(404)
+		if(!process || process.workOrder.currentStatus.equals(OrderStatus.CLOSEDFIXED) || process.workOrder.currentStatus.equals(OrderStatus.CLOSEDFORDISPOSAL)) 
+			response.sendError(404)
 		else{
 			type = process.type
 			WorkOrder order = maintenanceProcessService.deleteProcess(process,now,user)
@@ -167,19 +176,30 @@ class WorkOrderViewController extends AbstractController{
 		def html =""
 		def content = params["content"]
 		def result = false
-		if (order == null || content.equals("") )
+		if (order == null || content.equals("") || order.currentStatus.equals(OrderStatus.CLOSEDFIXED) || order.currentStatus.equals(OrderStatus.CLOSEDFORDISPOSAL))
 			response.sendError(404)
 		else {
 			def comment = commentService.createComment(order,user, now,content)
 			if(comment==null) response.sendError(404)
 			else{ 
-				order.addToComments(comment)
-				order.lastModifiedOn = now
-				order.lastModifiedBy = user
-				order.save(flush:true)
 				result=true
 				html = g.render(template:"/templates/comments",model:[order:order])
 			}
+		}
+		render(contentType:"text/json") { results = [result,html] }
+	}
+	
+	def removeComment = {
+		Comment comment = Comment.get(params.int("comment.id"))
+		WorkOrder order
+		def html =""
+		def result = false
+		if(!comment || comment.workOrder.currentStatus.equals(OrderStatus.CLOSEDFIXED) || comment.workOrder.currentStatus.equals(OrderStatus.CLOSEDFORDISPOSAL)) 
+			response.sendError(404)
+		else{
+			order = commentService.deleteComment(comment,user,now)
+			result = true
+			html = g.render(template:"/templates/comments",model:[order:order])
 		}
 		render(contentType:"text/json") { results = [result,html] }
 	}
@@ -189,7 +209,7 @@ class WorkOrderViewController extends AbstractController{
 		WorkOrder order = WorkOrder.get(params.int("order"))
 		def result = false
 		def html = ""
-		if (order == null)
+		if (!order || order.currentStatus.equals(OrderStatus.CLOSEDFIXED) || order.currentStatus.equals(OrderStatus.CLOSEDFORDISPOSAL))
 			response.sendError(404)
 		else {
 			def equipment = order.equipment
@@ -209,24 +229,7 @@ class WorkOrderViewController extends AbstractController{
 		render(contentType:"text/plain", text:html)
 	}
 
-	def removeComment = {
-		Comment comment = Comment.get(params.int("comment.id"))
-		WorkOrder order
-		def html =""
-		def result = false
-		if(!comment) response.sendError(404)
-		else{
-			order = comment.workOrder
-			order.comments.remove(comment)
-			comment.delete()
-			order.lastModifiedOn = now
-			order.lastModifiedBy = user
-			order.save(flush:true)
-			result = true
-			html = g.render(template:"/templates/comments",model:[order:order])
-		}
-		render(contentType:"text/json") { results = [result,html] }
-	}
+	
 	
 	def search = {
 		adaptParamsForList()

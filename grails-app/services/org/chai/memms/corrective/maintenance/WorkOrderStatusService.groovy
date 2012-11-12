@@ -40,10 +40,13 @@ class WorkOrderStatusService {
 	
 	static transactional = true
 	
-	def createWorkOrderStatus(WorkOrder workOrder, OrderStatus status, User changedBy, Date changeOn,Boolean escalation){
-		def stat = new WorkOrderStatus(workOrder:workOrder,status:status,changedBy:changedBy,changeOn:changeOn,escalation:escalation)
+	WorkOrder createWorkOrderStatus(WorkOrder workOrder, OrderStatus status, User changedBy, Date changeOn,Boolean escalation){
+		def stat = new WorkOrderStatus(status:status,changedBy:changedBy,changeOn:changeOn,escalation:escalation)
 		workOrder.addToStatus(stat)
-		return stat
+		workOrder.currentStatus = status
+		if(status.equals(OrderStatus.CLOSEDFIXED) || status.equals(OrderStatus.CLOSEDFORDISPOSAL))
+			workOrder.closedOn = new Date()
+		return workOrder.save(failOnError: true, flush:true)
 	}
 	
 }

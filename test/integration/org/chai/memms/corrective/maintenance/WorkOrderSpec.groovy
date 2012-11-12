@@ -32,6 +32,7 @@ import org.chai.memms.IntegrationTests;
 import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus;
 import org.chai.memms.inventory.Equipment;
+import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.corrective.maintenance.MaintenanceProcess.ProcessType;
 import org.chai.memms.corrective.maintenance.WorkOrder.Criticality;
 import org.chai.memms.corrective.maintenance.WorkOrder.FailureReason;
@@ -56,6 +57,9 @@ class WorkOrderSpec extends IntegrationTests{
 		WorkOrder.count() == 1
 		WorkOrder.list()[0].status.status.equals([OrderStatus.OPENATFOSA])
 		WorkOrderStatus.count() == 1
+		workOrder.currentStatus ==  OrderStatus.OPENATFOSA
+		workOrder.timeBasedStatus.status ==  OrderStatus.OPENATFOSA
+		workOrder.status.size() ==1
 	}
 	def "if status is clossed closedOn should be set and to newer that openOn"(){
 		setup:

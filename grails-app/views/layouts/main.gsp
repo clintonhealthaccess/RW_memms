@@ -129,8 +129,14 @@
 						<li><a href="${createLink(controller: 'provider', action:'list')}"><g:message code="header.navigation.manufacturer.and.supplier"/></a></li>
 					</shiro:hasPermission>
 					<shiro:hasPermission permission="menu:advanced:admin">
-					<li><a href="${createLink(controller: 'role', action:'list')}"><g:message code="role.manage.label"/></a></li>
-					<li><a href="${createLink(controller: 'user', action:'list')}"><g:message code="user.label"/></a></li>
+						<li><a href="#"><g:message code="user.manage.users.label"/></a>
+							<div class="sub-submenu">
+								<ul class="submenu">
+									<li><a href="${createLink(controller: 'role', action:'list')}"><g:message code="roles.label" /></a></li>
+									<li><a href="${createLink(controller: 'user', action:'list')}"><g:message code="users.label" /></a></li>
+								</ul>
+							</div>
+						</li>
 					</shiro:hasPermission>
 	         	</ul>
         	 </li>

@@ -42,14 +42,18 @@ class EquipmentTypeService {
 	static transactional = true
 	def languageService;
 		
-	public List<EquipmentType> searchEquipmentType(String text, Map<String, String> params) {
+	public List<EquipmentType> searchEquipmentType(String text,Observation observation, Map<String, String> params) {
 		def dbFieldName = 'names_'+languageService.getCurrentLanguagePrefix();
 		def dbFieldDescritpion = 'descriptions_'+languageService.getCurrentLanguagePrefix();
 		def criteria = EquipmentType.createCriteria()
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			if(observation!=null)
+				eq("observation",observation)
 			or{
-				for(Observation obs: this.getEnumeMatcher(text))
-					eq("observation",obs)
+				if(observation==null){
+					for(Observation obs: this.getEnumeMatcher(text))
+						eq("observation",obs)
+				}
 				ilike("code","%"+text+"%")
 				ilike(dbFieldName,"%"+text+"%")
 				ilike(dbFieldDescritpion,"%"+text+"%")
