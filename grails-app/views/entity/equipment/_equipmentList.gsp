@@ -6,7 +6,7 @@
 			<g:sortableColumn property="type" defaultOrder="asc" title="${message(code: 'equipment.type.label')}" params="[q:q,'dataLocation.id':dataLocation.id]" />
 			<g:sortableColumn property="model" defaultOrder="asc" title="${message(code: 'equipment.model.label')}" params="[q:q,'dataLocation.id':dataLocation.id]" />
 			<th><g:message code="location.label"/></th>
-			<th><g:message code="equipment.status.label"/></th>
+			<g:sortableColumn property="currentStatus" defaultOrder="asc" title="${message(code: 'equipment.status.label')}" params="[q:q,'dataLocation.id':dataLocation.id]" />
 			<g:sortableColumn property="obsolete" defaultOrder="asc" title="${message(code: 'equipment.obsolete.label')}" params="[q:q,'dataLocation.id':dataLocation.id]" />
 			<g:sortableColumn property="manufacturer" defaultOrder="asc" title="${message(code: 'provider.type.manufacturer')}" params="[q:q,'dataLocation.id':dataLocation.id]" />
 			<g:sortableColumn property="supplier" defaultOrder="asc" title="${message(code: 'provider.type.supplier')}" params="[q:q,'dataLocation.id':dataLocation.id]" />
@@ -41,7 +41,7 @@
 				</td>
 				<td>
 					<a href="${createLinkWithTargetURI(controller:'equipmentStatus', action:'create', params:['equipment.id': equipment?.id])}" title="${message(code: 'tooltip.click.update.status')}" class="tooltip">
-  	    				${message(code: equipment.currentState?.status?.messageCode+'.'+equipment.currentState?.status?.name)}
+  	    				${message(code: equipment.currentStatus?.messageCode+'.'+equipment.currentStatus?.name)}
   	    			</a>
 				</td>
 				<td>

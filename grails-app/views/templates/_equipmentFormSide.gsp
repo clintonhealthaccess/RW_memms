@@ -67,9 +67,9 @@
 			<ul>
 				<li>
 					<span class="label"><g:message code="equipment.status.label"/>:</span>
-					<span class="text">${message(code: equipment.currentState?.status?.messageCode+'.'+equipment.currentState?.status?.name)}</span>
+					<span class="text">${message(code: equipment.currentStatus?.messageCode+'.'+equipment.currentStatus?.name)}</span>
 					<span class="label"><g:message code="equipment.status.date.of.event.label"/>:</span>
-					<span class="text">${Utils.formatDate(equipment.currentState?.dateOfEvent)}</span>
+					<span class="text">${Utils.formatDate(equipment.timeBasedStatus?.dateOfEvent)}</span>
 				</li>
 			</ul>
 		</li>

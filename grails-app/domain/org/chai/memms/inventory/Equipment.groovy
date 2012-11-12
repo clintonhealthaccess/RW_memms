@@ -78,13 +78,13 @@ public class Equipment {
 	}
 	
 	String serialNumber
-	Double purchaseCost
 	String currency
 	String descriptions
 	String model
 	String room
 	String code
 	String donorName
+	Double purchaseCost
 	
 	Period expectedLifeTime
 	Period serviceContractPeriod
@@ -96,6 +96,7 @@ public class Equipment {
 	Provider serviceProvider
 	Warranty warranty
 	
+	Status currentStatus
 	PurchasedBy purchaser
 	Donor donor
 	
@@ -103,6 +104,8 @@ public class Equipment {
 	Date purchaseDate
 	Date serviceContractStartDate
 	Date registeredOn
+	
+	
 	
 	static hasMany = [status: EquipmentStatus, workOrders: WorkOrder]
 	static belongsTo = [dataLocation: DataLocation, department: Department, type: EquipmentType]
@@ -112,6 +115,9 @@ public class Equipment {
 	static constraints = {
 		importFrom Contact
 		code nullable: false, blank:false, unique:true
+		currentStatus nullable:true,validator:{
+			if(it!=null) return it in [Status.OPERATIONAL,Status.PARTIALLYOPERATIONAL,Status.INSTOCK,Status.UNDERMAINTENANCE,Status.FORDISPOSAL,Status.DISPOSED]
+		}
 		supplier nullable: false
 		manufacturer nullable: false
 		serviceProvider nullable: true, validator:{val, obj ->
@@ -158,6 +164,7 @@ public class Equipment {
 		version false
 	}
 	
+	@Transient
 	def genarateAndSetEquipmentCode() {
 		if(!code){
 			def randomInt = RandomUtils.nextInt(99999)
@@ -170,44 +177,31 @@ public class Equipment {
 	}
 	
 	@Transient
-	def getCurrentState() {
-		if(!status) return null
-		for(EquipmentStatus state : status)
-			if(state.isCurrent() && state.equals(getTimeBasedStatus())) return state 
-		 setCurrentStatus()
-		 return getTimeBasedStatus();
-	}
-	
-	@Transient
-	def setCurrentStatus(){
-		def state = getTimeBasedStatus()
-		status.each{ stat ->
-			if(!stat.is(state)){
-				stat.current = false
-				stat.save(flush:true)
-			}
-		}
-		state.current = true
-		state.save(flush:true)
-	}
-	
-	@Transient
 	def getTimeBasedStatus(){
-		EquipmentStatus currentStatus = status.asList()[0]
+		if(!status) return null
+		EquipmentStatus currentState = status.asList()[0]
 		for(EquipmentStatus state : status){
-			if(state.dateOfEvent.after(currentStatus.dateOfEvent)){
-				currentStatus= state;
-			}else if(state.dateOfEvent.compareTo(currentStatus.dateOfEvent)==0){
-				if(state.statusChangeDate.after(currentStatus.statusChangeDate))
-					currentStatus = state
+			//To make sure we only compare date not time
+			currentState.dateOfEvent.clearTime()
+			state.dateOfEvent.clearTime()
+			if(state.dateOfEvent.after(currentState.dateOfEvent)){
+				currentState= state;
 			}
+			if(state.dateOfEvent.compareTo(currentState.dateOfEvent)==0){
+				if(state.statusChangeDate.after(currentState.statusChangeDate))
+					currentState = state
+				//This case happen in test data settings
+				if(state.statusChangeDate.compareTo(currentState.statusChangeDate)==0)
+					currentState = (currentState.id > state.id)?currentState:state
+			}
+			
 		}
-		return currentStatus
+		return currentState
 	}
 	
 	
 	String toString() {
-		return "Equipment[id=" + id + "]";
+		return "Equipment[id=" + id + " currentState="+currentStatus+"]";
 	}
 	@Override
 	public int hashCode() {

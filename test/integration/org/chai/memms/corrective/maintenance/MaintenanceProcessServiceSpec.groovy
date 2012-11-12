@@ -15,19 +15,6 @@ import org.chai.memms.security.User;
 class MaintenanceProcessServiceSpec  extends IntegrationTests{
 	def maintenanceProcessService
 	
-	def "can create a maintenance process using create maintenance method"(){
-		setup:
-		setupLocationTree()
-		setupEquipment()
-		def user = newUser("user", "user")
-		def equipment = Equipment.findBySerialNumber(CODE(123))
-		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,user, Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-		when:
-		def process = maintenanceProcessService.createProcess(workOrder,ProcessType.ACTION,"name test",Initializer.now(),user)
-		process.save()
-		then:
-		MaintenanceProcess.count() == 1
-	}
 	def "can create a add maintenance process using create process method"(){
 		setup:
 		setupLocationTree()
@@ -50,8 +37,10 @@ class MaintenanceProcessServiceSpec  extends IntegrationTests{
 		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,user, Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		maintenanceProcessService.addProcess(workOrder,ProcessType.ACTION,"name test",Initializer.now(),user)
 		when:
+		def processeSizeBefore = workOrder.processes.size()
 		maintenanceProcessService.deleteProcess(workOrder.processes.asList()[0],Initializer.now(),user)
 		then:
 		MaintenanceProcess.count() == 0
+		processeSizeBefore == 1
 	}
 }

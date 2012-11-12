@@ -1,4 +1,4 @@
-/** 
+/**
  * Copyright (c) 2012, Clinton Health Access Initiative.
  *
  * All rights reserved.
@@ -13,7 +13,7 @@
  *     * Neither the name of the <organization> nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -25,34 +25,35 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.corrective.maintenance
+package org.chai.memms.location
 
-import org.chai.memms.corrective.maintenance.MaintenanceProcess;
-import org.chai.memms.corrective.maintenance.WorkOrder;
-import org.chai.memms.corrective.maintenance.MaintenanceProcess.ProcessType;
-import org.chai.memms.security.User;
+import org.chai.location.Location;
+import org.chai.location.LocationLevel;
+import org.chai.memms.IntegrationTests;
 
 /**
  * @author Jean Kahigiso M.
  *
  */
-class MaintenanceProcessService {
-	static transactional = true	
-		
-	WorkOrder addProcess(WorkOrder workOrder,ProcessType type,String name,Date addedOn,User addedBy){
-		MaintenanceProcess process = new MaintenanceProcess(type: type,name:name,addedOn:addedOn,addedBy:addedBy)
-		workOrder.addToProcesses(process)
-		workOrder.lastModifiedOn = addedOn
-		workOrder.lastModifiedBy = addedBy
-		return workOrder.save(failOnError:true)
-	}
-	WorkOrder deleteProcess(MaintenanceProcess process,Date deletedOn,User deletedBy){
-		WorkOrder workOrder = process.workOrder		
-		workOrder.removeFromProcesses(process)
-		workOrder.lastModifiedOn = deletedOn
-		workOrder.lastModifiedBy = deletedBy
-		process.delete()
-		return workOrder.save(failOnError:true)
+class LocationControllerSpec extends IntegrationTests{
+	def locationController
+	
+	def "can create save a location"(){
+		setup:
+		setupLocationTree()
+		locationController =  new LocationController()
+		when:
+		def level = LocationLevel.findByCode(SECTOR)
+		def parent = Location.findByCode(BURERA)
+		locationController.params.code = CODE("123")
+		locationController.params.names_en = "Test Sector location"
+		locationController.params."level.id" =  level.id
+		locationController.params."parent.id" = parent.id
+		locationController.save()
+		then:
+		Location.count() == 6
+		Location.list()[5].code == CODE("123")
+		Location.list()[5].parent == parent
 	}
 
 }
