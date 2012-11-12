@@ -88,6 +88,7 @@ class EquipmentViewController extends AbstractController {
 		render(view:"/entity/list", model:[
 					template:"equipment/equipmentList",
 					filterTemplate:"equipment/equipmentFilter",
+					listHeader:"equipment/listHeader",
 					dataLocation:dataLocation,
 					entities: equipments,
 					entityCount: equipments.totalCount,

@@ -59,7 +59,7 @@ class DurationBasedOrder extends PreventiveOrder {
 	static hasMany = [occurDaysOfWeek: Integer]
 	
 	static mapping = {
-		table "memms_preventive_order_based_on_duration"
+		table "memms_preventive_order_duration_based"
 		version false
 	}
 	

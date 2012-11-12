@@ -118,6 +118,7 @@ class DataLocationController extends AbstractEntityController {
 
 		render (view: '/entity/list', model:[
 			template:"location/dataLocationList",
+			actionButtonsTemplate:"location/dataLocationActionButtons",
 			entities: locations,
 			entityCount: locations.totalCount,
 			code: getLabel(),

@@ -91,13 +91,13 @@ class WorkOrderViewController extends AbstractController{
 		render(view:"/entity/list", model:[
 					template:"workOrder/workOrderList",
 					filterTemplate:"workOrder/workOrderFilter",
+					listHeader:"workOrder/listHeader",
 					entities: orders,
 					entityCount: orders.totalCount,
 					code: getLabel(),
 					entityClass: getEntityClass(),
 					equipment:equipment,
-					dataLocation:location,
-					controller:"workOrder"
+					dataLocation:location
 				])
 	}
 
