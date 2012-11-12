@@ -65,6 +65,13 @@ class EquipmentViewController extends AbstractController {
 	def getEntityClass() {
 		return Equipment.class;
 	}
+	
+	def getEquipmentClueTipsAjaxData = {
+		def equipment = Equipment.get(params.long("equipment.id"))
+		def html = g.render(template:"/templates/equipmentClueTip",model:[equipment:equipment])
+		render(contentType:"text/plain", text:html)
+	}
+	
 	def view ={
 		Equipment equipment = Equipment.get(params.int("equipment.id"))
 		if(equipment == null)	response.sendError(404)

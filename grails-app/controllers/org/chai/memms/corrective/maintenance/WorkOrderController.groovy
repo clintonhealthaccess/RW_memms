@@ -102,7 +102,7 @@ class WorkOrderController extends AbstractEntityController{
 			entity.currentStatus = OrderStatus.OPENATFOSA
 		}else{
 			params.oldStatus = entity.currentStatus
-			//Only change this value if it was changed
+			//Only change currentStatus value if currentStatus was changed
 			entity.currentStatus = (!params.currentStatus)?entity.currentStatus:OrderStatus."$params.currentStatus"
 			entity.lastModifiedOn = now
 			entity.lastModifiedBy = user

@@ -27,63 +27,13 @@
  */
 package org.chai.memms.preventive.maintenance
 
+import org.chai.memms.util.Utils;
 
 /**
  * @author Jean Kahigiso M.
  *
  */
-@i18nfields.I18nFields
-class DurationBasedOrder extends PreventiveOrder {
-	
-	enum OccurencyType{
-		
-		NONE("none"),
-		DAILY("daily"),
-		WEEKLY("weekly"),
-		MONTHLY("monthly"),
-		YEARLY("yearly"),
-		
-		String messageCode = "occurance.type"
-		String name
-		OccurencyType(String name){this.name = name}
-		String getKey(){ return name() }
-	}
-	
-
-	OccurencyType occurency
-	Boolean isRecurring = true
-	
-	Integer occurInterval = 1
-	Integer occurCount
-	
-	static hasMany = [occurDaysOfWeek: Integer]
-	
-	static mapping = {
-		table "memms_preventive_order_based_on_duration"
-		version false
-	}
-	
-	static constraints ={
-		importFrom PreventiveOrder, excludes:["closedOn"]
-		occurency nullable: false, inList:[OccurencyType.DAILY,OccurencyType.WEEKLY,OccurencyType.MONTHLY,OccurencyType.YEARLY]
-		closedOn nullable: true, validator:{val, obj ->
-			//if(val!=null) return (obj.occurCount!=null)
-		}
-		occurCount nullable: true
-		occurDaysOfWeek validator :{val, obj ->
-			//if(obj.occurency == OccurencyType.WEEKLY && !val)  return false
-		}
-		
-	}
-	
-	Integer getPlannedPrevention(){
-		//TODO
-		return null
-	}
-
-	@Override
-	public String toString() {
-		return "DurationBasedOrder [id= "+id+" occurency=" + occurency + "]";
-	}	
+class PreventiveOrderServiceSpec {
+	def preventiveOrderService
 	
 }

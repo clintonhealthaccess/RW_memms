@@ -23,7 +23,7 @@
           <span class="question-default">
             <img src="${resource(dir:'images/icons',file:'star_small.png')}">
           </span>
-          <g:message code="work.order.section.basic.information.label"/>
+          <g:message code="order.section.basic.information.label"/>
         </h4> 
       	<g:selectFromList name="equipment.id" readonly="${(closed)? true:false}" label="${message(code:'equipment.label')}" bean="${order}" field="equipment" optionKey="id" multiple="false"
   			ajaxLink="${createLink(controller:'equipmentView', action:'getAjaxData')}"

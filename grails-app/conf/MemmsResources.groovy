@@ -63,9 +63,20 @@ modules = {
 		
 	}
 	
+	fullCalendar{
+		dependsOn 'jquery'
+		resource url: '/js/jquery/jquery-ui/css/fullcalendar.css', bundle: 'core'
+		resource url: '/js/jquery/jquery-ui/js/fullcalendar.min.js', bundle: 'core'
+	}
+	
+	calendar{
+		dependsOn 'fullCalendar'
+		resource url: '/css/calendar.css', bundle: 'core'
+		resource url: '/js/calendar.js', bundle: 'core'
+	}
+	
 	fieldselection {
 		dependsOn 'jquery'
-
 		resource url: '/js/jquery/fieldselection/jquery.fieldselection.js', bundle: 'core'
 	}
 	

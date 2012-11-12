@@ -59,7 +59,10 @@ import org.chai.memms.corrective.maintenance.WorkOrderStatus;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
 import org.chai.memms.preventive.maintenance.DurationBasedOrder;
 import org.chai.memms.preventive.maintenance.Prevention;
+import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventionResponsible;
+import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatus;
 import org.chai.memms.preventive.maintenance.WorkBasedOrder
+import org.chai.memms.preventive.maintenance.DurationBasedOrder.OccurencyType;
 import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderType;
 import org.chai.memms.preventive.maintenance.PreventiveProcess;
 import org.chai.memms.security.Role
@@ -627,21 +630,55 @@ public class Initializer {
 	}
 	
 	static def createPreventiveMaintenanceStructure(){
+		//TODO the users and what they can
+		def admin = User.findByUsername("admin")
+		def titulaireHC = User.findByUsername("titulaireHC") //hospitalDepartment can do the same job too
+		def department = User.findByUsername("hospitalDepartment")
+		def techDH = User.findByUsername("techDH")
+		def techMMC = User.findByUsername("techMMC")
 		
-	}
+		def equipment01 =Equipment.findBySerialNumber("SERIAL01")
+		def equipment09 =Equipment.findBySerialNumber("SERIAL09")
+		def equipment10 =Equipment.findBySerialNumber("SERIAL10")
+		
+		def dOrderOne = newDurationBasedOrder(equipment01,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,"First Duration Order","First Duration Order",now(),null,OccurencyType.WEEKLY,true,1,null)
+		equipment01.addToPreventiveOrders(dOrderOne)
+		equipment01.save(failOnError:true)
+		
+		def dOrderTwo = newDurationBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,"Secod Duration Order","Second Duration Order",now(),null,OccurencyType.MONTHLY,true,2,null)
+		equipment09.addToPreventiveOrders(dOrderTwo)
+		equipment09.save(failOnError:true)
+		
+		def dOrderThree = newDurationBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,"Three Duration Order","Second Duration Order",now(),null,OccurencyType.DAILY,true,2,null)
+		equipment09.addToPreventiveOrders(dOrderThree)
+		equipment09.save(failOnError:true)
+		
+		def dOrderFour = newDurationBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,"Four Duration Order","Second Duration Order",now(),null,OccurencyType.YEARLY,true,2,null)
+		equipment09.addToPreventiveOrders(dOrderFour)
+		equipment09.save(failOnError:true)
+		
+		}
+	
+	
+	
 	//Models definition
 	//Preventive Maintenance
-	public static def newDurationBasedOrder(def equipment, def status,def preventionResponsible,def technicianInCharge,def names,def descriptions,def openOn,def closedOn){
+	public static def newDurationBasedOrder(def equipment,def addedBy,def status,def preventionResponsible,def technicianInCharge,def names,def description,def openOn,def closedOn,def occurency,def isRecurring,def occurInterval,def occurCount){
 		return new DurationBasedOrder(
 			equipment:equipment,
+			addedBy:addedBy,
 			type:PreventiveOrderType.DURATIONBASED,
 			status:status,
 			names:names,
-			descriptions:descriptions,
+			description:description,
 			preventionResponsible:preventionResponsible,
 			technicianInCharge:technicianInCharge,
 			openOn:openOn,
-			closedOn:closedOn
+			closedOn:closedOn,
+			occurency:occurency,
+			isRecurring: isRecurring,
+			occurInterval: occurInterval,
+			occurCount: occurCount
 			).save(failOnError:true)
 	}
 	public static def newWorkBasedOrder(def equipment, def status,def preventionResponsible,def technicianInCharge,def names,def descriptions,def openOn,def closedOn){

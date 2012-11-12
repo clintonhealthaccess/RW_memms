@@ -27,63 +27,54 @@
  */
 package org.chai.memms.preventive.maintenance
 
+import org.chai.location.CalculationLocation;
+import org.chai.memms.AbstractController
+import org.chai.memms.AbstractEntityController;
+import org.chai.memms.inventory.Equipment;
 
 /**
  * @author Jean Kahigiso M.
  *
  */
-@i18nfields.I18nFields
-class DurationBasedOrder extends PreventiveOrder {
+class PreventiveOrderViewController extends AbstractController {
 	
-	enum OccurencyType{
-		
-		NONE("none"),
-		DAILY("daily"),
-		WEEKLY("weekly"),
-		MONTHLY("monthly"),
-		YEARLY("yearly"),
-		
-		String messageCode = "occurance.type"
-		String name
-		OccurencyType(String name){this.name = name}
-		String getKey(){ return name() }
+	def preventiveOrderService
+	def equipmentService
+	
+	def getEntityClass() {
+		return DurationBasedOrder.class;
 	}
+	
+	def getLabel() {
+		return "preventive.order.label";
+	}
+	
+	def list = {	
+		adaptParamsForList()
+		List<DurationBasedOrder> orders = []
+		Equipment equipment = null
+		CalculationLocation  location = null
+		if(params["dataLocation.id"]) location = CalculationLocation.get(params.int("dataLocation.id"))
+		if(params["equipment.id"]) equipment = Equipment.get(params.int("equipment.id"))
+		
+		if(location)
+			orders = preventiveOrderService.getPreventiveOrderByDataLocationManages(location,params)
+		if(equipment)
+			 orders = preventiveOrderService.getPreventiveOrderByEquipment(equipment,params)
+
+		render (view: '/entity/list', model:[
+			template:"preventiveOrder/preventiveOrderList",
+			entities: orders,
+			entityCount: orders.totalCount,
+			code: getLabel(),
+			equipment:equipment,
+			names:names,
+			entityClass: getEntityClass(),
+			equipment:equipment,
+			dataLocation:location
+		])
+	}
+	
 	
 
-	OccurencyType occurency
-	Boolean isRecurring = true
-	
-	Integer occurInterval = 1
-	Integer occurCount
-	
-	static hasMany = [occurDaysOfWeek: Integer]
-	
-	static mapping = {
-		table "memms_preventive_order_based_on_duration"
-		version false
-	}
-	
-	static constraints ={
-		importFrom PreventiveOrder, excludes:["closedOn"]
-		occurency nullable: false, inList:[OccurencyType.DAILY,OccurencyType.WEEKLY,OccurencyType.MONTHLY,OccurencyType.YEARLY]
-		closedOn nullable: true, validator:{val, obj ->
-			//if(val!=null) return (obj.occurCount!=null)
-		}
-		occurCount nullable: true
-		occurDaysOfWeek validator :{val, obj ->
-			//if(obj.occurency == OccurencyType.WEEKLY && !val)  return false
-		}
-		
-	}
-	
-	Integer getPlannedPrevention(){
-		//TODO
-		return null
-	}
-
-	@Override
-	public String toString() {
-		return "DurationBasedOrder [id= "+id+" occurency=" + occurency + "]";
-	}	
-	
 }

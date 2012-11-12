@@ -218,14 +218,6 @@ class WorkOrderViewController extends AbstractController{
 		}
 		render(contentType:"text/json") { results = [result,html] }
 	}
-
-	def getWorkOrderClueTipsAjaxData = {
-		def workOrder = WorkOrder.get(params.long("order.id"))
-		def html = g.render(template:"/templates/workOrderClueTip",model:[equipment:workOrder.equipment])
-		render(contentType:"text/plain", text:html)
-	}
-
-	
 	
 	def search = {
 		adaptParamsForList()

@@ -51,6 +51,7 @@ class BootStrap {
 			Initializer.createUsers();
 			Initializer.createInventoryStructure()
 			Initializer.createCorrectiveMaintenanceStructure()
+			Initializer.createPreventiveMaintenanceStructure()
 			break;
 			case "production":					
 //				//Default roles

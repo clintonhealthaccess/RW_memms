@@ -52,6 +52,9 @@ import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.chai.memms.security.User
+import org.joda.time.DateTime
+import org.joda.time.Days;
+import org.joda.time.Weeks;
 
 /**
  * @author Jean Kahigiso M.
@@ -197,6 +200,18 @@ public class Utils {
 	public static Date now(){
 		return new Date()
 	}
+	
+	public static Boolean isInSameWeek(Date firstDate, Date secondDate) {
+		DateTime firstDateTime = new DateTime(firstDate)
+		DateTime secondDateTime = new DateTime(secondDate)
+		return ((Weeks.weeksBetween(firstDateTime, secondDateTime)).weeks == 0)
+	}
+
+	public static Boolean isOnSameDay(Date firstDate, Date secondDate) {
+		DateTime firstDateTime = new DateTime(firstDate)
+		DateTime secondDateTime = new DateTime(secondDate)
+		return ((Days.daysBetween(firstDateTime, secondDateTime)).days == 0)
+	}
 	/**
 	 * fieldName has to start with capital letter as
 	 * it is used to create setter of the object field
@@ -215,6 +230,18 @@ public class Utils {
 			   object."$methodName"("",new Locale(loc))
 	   }
    }
+	
+	
+	public static Date getDate( int day, int month, int year) {
+		final Calendar calendar = Calendar.getInstance();
+ 
+		calendar.clear();
+		calendar.set( Calendar.YEAR, year );
+		calendar.set( Calendar.MONTH, month - 1 );
+		calendar.set( Calendar.DAY_OF_MONTH, day );
+ 
+		return calendar.getTime();
+	}
 	
 	
 }

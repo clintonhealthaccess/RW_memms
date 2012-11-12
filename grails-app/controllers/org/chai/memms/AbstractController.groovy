@@ -38,7 +38,16 @@ import org.chai.location.Location
 import org.chai.location.LocationLevel
 
 public abstract class AbstractController {
+	
+	def languageService
 	def locationService
+	
+	def getNames(){
+		return 'names_'+languageService.getCurrentLanguagePrefix();
+	}
+	def getDescriptions(){
+		return 'descriptions_'+languageService.getCurrentLanguagePrefix();
+	}
 	def getTargetURI() {
 		return params.targetURI?: "/"
 	}

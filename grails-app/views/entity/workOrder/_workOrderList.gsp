@@ -33,7 +33,7 @@
 					</ul>
 				</td>
 				<td>
-					<a rel="${createLinkWithTargetURI(controller:'workOrderView', action:'getWorkOrderClueTipsAjaxData', params:['order.id': order.id])}" class="clueTip">
+					<a rel="${createLinkWithTargetURI(controller:'equipmentView', action:'getEquipmentClueTipsAjaxData', params:['equipment.id': order.equipment.id])}" class="clueTip">
 						${order.equipment.code}
 					</a>
 					

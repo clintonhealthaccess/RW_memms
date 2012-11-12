@@ -46,6 +46,7 @@ import org.hibernate.criterion.Order
 import org.hibernate.criterion.Projections
 import org.hibernate.criterion.Restrictions
 import org.apache.commons.lang.StringUtils
+import org.chai.memms.preventive.maintenance.PreventiveOrder;
 import org.chai.memms.security.User;
 import org.chai.memms.util.ImportExportConstant;
 import org.chai.memms.util.Utils;
