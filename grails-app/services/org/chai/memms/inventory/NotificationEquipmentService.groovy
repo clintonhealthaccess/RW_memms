@@ -9,6 +9,7 @@ import org.chai.memms.Notification;
 import org.chai.memms.corrective.maintenance.NotificationWorkOrder;
 import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.memms.security.User;
+import org.chai.memms.util.Utils;
 
 /**
  * Copyright (c) 2012, Clinton Health Access Initiative.
@@ -39,7 +40,7 @@ import org.chai.memms.security.User;
  */
 
 class NotificationEquipmentService {
-	
+	def userService
 	public int sendNotifications(DataLocation dataLocation, Department department, String content,User sender,List<User> receivers) {
 		if(log.isDebugEnabled()) log.debug("Notification equipment group: "+receivers)
 		int numberOfNotificationSent = 0
@@ -87,7 +88,7 @@ class NotificationEquipmentService {
 	}
 	
 	public List<NotificationEquipment> filterNotifications(DataLocation dataLocation, Department department,User receiver,Date from, Date to,Boolean read, Map<String, String> params){
-		def criteria = NotificationWorkOrder.createCriteria();
+		def criteria = NotificationEquipment.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(dataLocation)
 				eq("dataLocation",dataLocation)

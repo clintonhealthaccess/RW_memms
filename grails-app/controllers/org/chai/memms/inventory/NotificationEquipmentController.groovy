@@ -96,7 +96,7 @@ class NotificationEquipmentController extends AbstractEntityController{
 	def list={
 		adaptParamsForList()
 		Boolean read = (params.read) ? params.boolean("read") : null;
-		List<NotificationEquipment> notifications = notificationEquipmentService.filterNotifications(dataLocation,department, user, null,null,read, params)
+		List<NotificationEquipment> notifications = notificationEquipmentService.filterNotifications(null,null, user, null,null,read, params)
 		render(view:"/entity/list", model:[
 			template:"notification/notificationEquipmentList",
 			filterTemplate:"notification/notificationEquipmentFilter",
@@ -130,8 +130,8 @@ class NotificationEquipmentController extends AbstractEntityController{
 		if (log.isDebugEnabled()) log.debug ('creating notificationsEquipment with params:'+params)
 
 		adaptParamsForList()
-
-		def sent = notificationEquipmentService.newNotification(department,params.content, user,false)
+		//TODO find a way to retrieve a department instead of passing in dull
+		def sent = notificationEquipmentService.newNotification(null,params.content, user)
 		flash.message = message(code: 'default.saved.message', args: [message(code: getLabel(), default: 'entity')],sent.toString())
 		redirect(action: "list")
 	}

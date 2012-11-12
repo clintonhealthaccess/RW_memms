@@ -3,6 +3,7 @@
 	<thead>
 		<tr>
 			<th><g:message code="notification.sender.label"/></th>
+			<th><g:message code="datalocation.label"/></th>
 			<th><g:message code="notification.writtenOn.label"/></th>
 			<th><g:message code="notification.content.label"/></th>
 			<th/>
@@ -14,10 +15,11 @@
 				<td>
 					${notification?.sender?.firstname +" "+ notification?.sender?.lastname}
 				</td>
+				<td>${notification.dataLocation.code}</td>
 				<td>
 					${Utils.formatDateWithTime(notification.writtenOn)}
 				</td>
-				<td><g:stripHtml field="${notification?.content}" chars="30"/></td>
+				<td><g:stripHtml field="${notification.content}" chars="30"/></td>
 				<td>
 					<g:if test="${!notification.read}">
 						<a href="${createLinkWithTargetURI(controller:'notification', action:'read', params:[id: notification.id])}">

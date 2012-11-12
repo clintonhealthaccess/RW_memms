@@ -12,10 +12,9 @@
 	</div>
 	
 	<div class="main">
-  	<g:form url="[controller:'notification', action:'save', params:[targetURI: targetURI]]" useToken="true" class="simple-list">
+  	<g:form url="[controller:'notificationEquipment', action:'save', params:[targetURI: targetURI]]" useToken="true" class="simple-list">
   		<g:textarea name="content"  label="${message(code:'notification.content.label')}" rows="12" width="400" bean="${notification}" value="${notification?.content}" field="content" />
   		<div class="error-list"><g:renderErrors bean="${cmd}" field="content" /></div>
-  		<input type="hidden" name="workOrder.id" value="${workOrder.id}"></input>
   		<g:if test="${notification?.id != null}">
   			<input type="hidden" name="id" value="${notification.id}"></input>
   		</g:if>

@@ -250,11 +250,6 @@ class EquipmentViewController extends AbstractController {
 		response.outputStream.flush()
 	}
 
-	def requestRegistration = {
-		//TODO 
-		//get the facility, then send a request. best if all this logic is put in the services
-	}
-	
 	def updateObsolete = {
 		if (log.isDebugEnabled()) log.debug("updateObsolete equipment.obsolete "+params['equipment.id'])
 		Equipment equipment = Equipment.get(params.int(['equipment.id']))
