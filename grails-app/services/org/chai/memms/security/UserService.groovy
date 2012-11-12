@@ -50,6 +50,9 @@ class UserService {
 	static transactional = true
 	def sessionFactory;
 	
+	boolean isDepartmentOrTitulaire(User user){
+		return user.userType == UserType.TITULAIREHC || user.userType == UserType.HOSPITALDEPARTMENT
+	}
 	List<User> searchUser(String text, Map<String, String> params) {
 		if(log.isDebugEnabled()) log.debug("searchUser params=" + params)
 		def criteria = User.createCriteria()

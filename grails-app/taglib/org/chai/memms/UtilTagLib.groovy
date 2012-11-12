@@ -39,8 +39,16 @@ class UtilTagLib {
 	
 	def workOrderNotificationService
 	
+	def userService
+	
+	def equipmentRegistration = { attrs, body ->
+		def user = User.findByUuid(SecurityUtils.subject.principal, [cache: true])
+		boolean isDepartmentOrTitulaire = userService.isDepartmentOrTitulaire(user)
+		out << '<a href=' + createLinkWithTargetURI(controller: "equipmentView", action: isDepartmentOrTitulaire ? "requestRegistration" : "create", params:["dataLocation.id": attrs["dataLocation"] ]) + ' class="next medium left push-r">' + 
+		message(code: isDepartmentOrTitulaire ? "equipment.new.request.label" : "default.new.label" , args: attrs["entityName"] ) + '</a>'
+	}
+	
 	def notificationCount = { attrs, body ->
-		//TODO find if a user object can be passed form the view
 		def user = User.findByUuid(SecurityUtils.subject.principal, [cache: true])
 		out << workOrderNotificationService.getUnreadNotifications(user)
 	}
