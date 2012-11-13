@@ -7,6 +7,7 @@
 			<th><g:message code="notification.writtenOn.label"/></th>
 			<th><g:message code="notification.content.label"/></th>
 			<th/>
+			<th/>
 		</tr>
 	</thead>
 	<tbody>
@@ -21,11 +22,14 @@
 				</td>
 				<td><g:stripHtml field="${notification.content}" chars="30"/></td>
 				<td>
-					<g:if test="${!notification.read}">
-						<a href="${createLinkWithTargetURI(controller:'notification', action:'read', params:[id: notification.id])}">
+						<a href="${createLinkWithTargetURI(controller:'notificationEquipment', action:'read', params:[id: notification.id])}">
 							<g:message code="notification.read.label" />
 						</a>
-					</g:if>
+				</td>
+				<td>
+					<a href="${createLinkWithTargetURI(controller:'equipment', action:'create', params:['dataLocation.id': notification.dataLocation.id])}">
+							<g:message code="default.create.label" args="['Equipment']"/>
+						</a>
 				</td>
 			</tr>
 		</g:each>

@@ -9,7 +9,7 @@
 		</ul>
 	</g:hasErrors>
 
-	<g:form url="[controller:'notification', action:'filter']" method="get" useToken="false" class="filters-box">
+	<g:form url="[controller:'notificationEquipment', action:'filter']" method="get" useToken="false" class="filters-box">
 		<ul class="filters-list">
 			<li>
 				<label><g:message code="notification.read.label" /></label> 

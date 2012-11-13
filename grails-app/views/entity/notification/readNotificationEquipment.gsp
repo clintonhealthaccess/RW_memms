@@ -11,7 +11,7 @@
 	<div  class="entity-form-container togglable">
 	<div class="heading1-bar">
 		<h1>
-			<g:message code="notification.read.label"/> - Notification
+			<g:message code="notification.equipment.read.label" />
 		</h1>
 	</div>
 	

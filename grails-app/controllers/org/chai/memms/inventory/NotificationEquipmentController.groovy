@@ -75,7 +75,7 @@ class NotificationEquipmentController extends AbstractEntityController{
 		]
 	}
 	
-	def read={
+	def read = {
 		adaptParamsForList()
 		if(!params.id) redirect(uri: getTargetURI())
 		else{
@@ -88,12 +88,12 @@ class NotificationEquipmentController extends AbstractEntityController{
 				redirect(uri: getTargetURI())
 			}
 			else {
-				render(view: '/entity/notification/readNotificationEquipment', model:[notificationEquipment:notification, entityName:getLabel()])
+				render(view: '/entity/notification/readNotificationEquipment', model:[notification:notification, entityName:getLabel()])
 			}
 		}
 	}
 	
-	def list={
+	def list = {
 		adaptParamsForList()
 		Boolean read = (params.read) ? params.boolean("read") : null;
 		List<NotificationEquipment> notifications = notificationEquipmentService.filterNotifications(null,null, user, null,null,read, params)
