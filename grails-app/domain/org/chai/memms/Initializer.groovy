@@ -607,18 +607,14 @@ public class Initializer {
 		return new NotificationWorkOrder(workOrder: workOrder, sender: sender, receiver: receiver, writtenOn: writtenOn, content: content).save(failOnError: true)
 	}
 	
-	public static newNewEquipmentNotification(def dataLocation, def department, def sender, def receiver,def writtenOn, def content){
-		return new NotificationEquipment(dataLocation:dataLocation, department:department, sender: sender, receiver: receiver, writtenOn: writtenOn, content: content).save(failOnError: true)
-	}
-	
 	public static newComment(def workOrder, def writtenBy, def writtenOn, def content){
 		return new Comment(workOrder: workOrder, writtenBy: writtenBy, writtenOn: writtenOn, content: content ).save(failOnError: true)
 	}
 	public static newMaintenanceProcess(def workOrder,def type, def name, def addedOn, def addedBy){
 		return new MaintenanceProcess(workOrder: workOrder,type: type,name: name, addedOn: addedOn, addedBy: addedBy ).save(failOnError: true)
 	}
-	public static newNotificationEquipment(def sender, def receiver, def writtenOn, def content, def read, def dataLocaiton, def department){
-		return new NotificationEquipment(sender:sender, receiver:receiver, writtenOn:writtenOn, content:content, read:read, dataLocaiton:dataLocaiton, department:department).save(failOnError: true)
+	public static newNotificationEquipment(def sender, def receiver, def writtenOn, def content, def read, def dataLocation, def department){
+		return new NotificationEquipment(sender:sender, receiver:receiver, writtenOn:writtenOn, content:content, read:read, dataLocation:dataLocation, department:department).save(failOnError: true)
 	}
 	
 	public static newWorkOrderStatus(def workOrder,def status,def changeOn,def changedBy,def escalation){

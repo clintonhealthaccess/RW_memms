@@ -71,17 +71,11 @@ class NotificationEquipmentService {
 			projections{rowCount()}
 		}
 	}
-	public List<NotificationEquipment> searchNotificition(String text,User user,DataLocation dataLocation, Department department, Boolean read,Map<String, String> params) {
+	public List<NotificationEquipment> searchNotificition(String text,User user,Map<String, String> params) {
 		def criteria = NotificationEquipment.createCriteria()
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(user)
 				eq('receiver',user)
-			if(dataLocation)
-				eq('dataLocation',dataLocation)
-			if(department)
-				eq('department',department)
-			if(read)
-				eq('read',read)
 			if(text)
 				ilike("content","%"+text+"%")
 		}

@@ -79,7 +79,6 @@ class NotificationEquipmentController extends AbstractEntityController{
 		adaptParamsForList()
 		if(!params.id) redirect(uri: getTargetURI())
 		else{
-			
 			def notification = notificationEquipmentService.setNotificationRead(NotificationEquipment.get(params.int('id')))
 			if (log.isInfoEnabled()) log.info("reading notificationEquipment: "+notification)
 
@@ -110,7 +109,7 @@ class NotificationEquipmentController extends AbstractEntityController{
 	def search = {
 		adaptParamsForList()
 		Boolean read = (params.read) ? params.boolean("read") : null;
-		List<NotificationEquipment> notifications = notificationEquipmentService.searchNotificition(params['q'],user,dataLocation,department, read,params)
+		List<NotificationEquipment> notifications = notificationEquipmentService.searchNotificition(params['q'],user,params)
 		
 		render(view:"/entity/list", model:[
 			template:"notification/notificationEquipmentList",

@@ -114,7 +114,7 @@ abstract class IntegrationTests extends IntegrationSpec {
 		def gitarama = Initializer.newLocation(['en':GITARAMA], GITARAMA, south, district)
 
 		def butaro = Initializer.newDataLocation(['en':BUTARO], BUTARO, gitarama, dh)
-		def kivuye = Initializer.newDataLocation(['en':KIVUYE], KIVUYE, burera, hc)
+		def kivuye = Initializer.newDataLocation(['en':KIVUYE], KIVUYE, gitarama, hc)
 		butaro.addToManages(kivuye)
 		butaro.save(failOnError:true)
 		

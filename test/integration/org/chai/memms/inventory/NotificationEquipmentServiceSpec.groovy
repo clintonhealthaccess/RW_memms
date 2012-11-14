@@ -138,7 +138,7 @@ class NotificationEquipmentServiceSpec  extends IntegrationTests{
 		notificationEquipmentService.newNotification(null, "Send for rapair, two",senderTwo)
 		
 		when:
-		def found = notificationEquipmentService.searchNotificition("one",null,null, null,null,[:])
+		def found = notificationEquipmentService.searchNotificition("one",null,[:])
 		then:
 		NotificationEquipment.count() == 4
 		found.size() == 2
