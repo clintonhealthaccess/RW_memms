@@ -93,7 +93,9 @@ class UserService {
 	List<User> getNotificationEquipmentGroup(DataLocation dataLocation){
 		def users;
 		
-		if(dataLocation.managedBy instanceof DataLocation) users =  getActiveUserByTypeAndLocation(UserType.TECHNICIANDH,dataLocation.managedBy, [:])
+		if(dataLocation.managedBy instanceof DataLocation){log.debug("managed")
+			users =  getActiveUserByTypeAndLocation(UserType.TECHNICIANDH,dataLocation.managedBy, [:])
+		}
 		else users =  getActiveUserByTypeAndLocation(UserType.TECHNICIANDH,dataLocation, [:])
 		
 		if(log.isDebugEnabled()) log.debug("Users in notificationEquipment group: " + users)

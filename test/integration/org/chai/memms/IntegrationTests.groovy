@@ -212,7 +212,7 @@ abstract class IntegrationTests extends IntegrationSpec {
 	}
 
 	static def newOtherUser(def username, def uuid, def location) {
-		return new User(userType: UserType.OTHER, code: username, username: username, permissionString: '', passwordHash:'', uuid: uuid, location: location, firstname: 'other', lastname: 'last', organisation: 'org', phoneNumber: '+250 11 111 11 11').save(failOnError: true)
+		return new User(userType: UserType.OTHER, code: username, username: username, permissionString: '', passwordHash:'', uuid: uuid, location: location, firstname: 'other', lastname: 'last', organisation: 'org', phoneNumber: '+250 11 111 11 11',active:true).save(failOnError: true)
 	}
 
 	static def newSystemUser(def username, def uuid, def location) {
