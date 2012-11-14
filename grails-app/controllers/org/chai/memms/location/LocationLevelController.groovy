@@ -36,8 +36,6 @@ class LocationLevelController extends AbstractEntityController {
 	
 	def bindParams(def entity) {
 		entity.properties = params
-		
-		if (params.names!=null) entity.names = params.names
 	}
 
 	def getModel(def entity) {
@@ -75,16 +73,14 @@ class LocationLevelController extends AbstractEntityController {
 
 	def list = {
 		adaptParamsForList()
-		
 		List<LocationLevel> locationLevels = LocationLevel.list(params);
-
 		render (view: '/entity/list', model:[
 			template:"location/locationLevelList",
-			actionButtonsTemplate:"location/locationLevelActionButtons",
+			listTop:"location/locationLevelListTop",
 			entities: locationLevels,
 			entityCount: LocationLevel.count(),
 			code: getLabel(),
-			entityClass: getEntityClass()
+			names:names
 		])
 	}
 	

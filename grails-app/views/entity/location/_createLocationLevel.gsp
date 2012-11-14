@@ -14,9 +14,10 @@
 
 	<div class="main">
   	<g:form url="[controller:'locationLevel', action:'save', params:[targetURI: targetURI]]" useToken="true" class="simple-list">
-  		<g:i18nTextarea name="names" bean="${locationLevel}" label="${message(code:'entity.name.label')}" field="names" height="150" width="300" maxHeight="150" />
-
+  	
   		<g:input name="code" label="${message(code:'entity.code.label')}" bean="${locationLevel}" field="code"/>
+  		<g:input name="order" label="${message(code:'entity.order.label')}" bean="${locationLevel}" field="order"/>
+  		<g:i18nInput name="names" label="${message(code:'entity.names.label')}" bean="${locationLevel}" field="names"/>
 		
   		<g:if test="${locationLevel.id != null}">
   			<input type="hidden" name="id" value="${locationLevel.id}"></input>

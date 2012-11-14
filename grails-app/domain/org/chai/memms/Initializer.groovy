@@ -134,7 +134,7 @@ public class Initializer {
 			defaultClercRole.addToPermissions("equipmentStatus:*")
 			defaultClercRole.addToPermissions("home:*")
 			defaultClercRole.addToPermissions("menu:home")
-			defaultClercRole.addToPermissions("menu:inventory,correctivemaintenance")
+			defaultClercRole.addToPermissions("menu:inventory,maintenance,correctivemaintenance,preventivemaintenance")
 			defaultClercRole.addToPermissions("provider:getAjaxData")
 			defaultClercRole.addToPermissions("equipmentType:getAjaxData")
 			defaultClercRole.addToPermissions("department:getAjaxData")

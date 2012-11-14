@@ -13,7 +13,7 @@
 		</ul>
 	</g:hasErrors>
 
-	<g:form url="[controller:'workOrder', action:'filter']" method="get"
+	<g:form url="[controller:'workOrderView', action:'filter']" method="get"
 		useToken="false" class="filters-box">
 		<ul class="filters-list">
 			<li><g:selectFromEnum name="criticality" values="${Criticality.values()}" field="criticality" label="${message(code:'work.order.criticality.label')}" bean="${filterCmd}"/></li>

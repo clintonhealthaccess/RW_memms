@@ -80,11 +80,10 @@ class DepartmentController extends AbstractEntityController{
 		List<Department> departments = Department.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc")
 		render(view:"/entity/list", model:[
 			template:"department/departmentList",
-			actionButtonsTemplate:"department/departmentActionButtons",
+			listTop:"department/listTop",
 			entities: departments,
 			entityCount: departments.totalCount,
 			code: getLabel(),
-			entityClass: getEntityClass(),
 			names:names
 			])
 	}
@@ -95,6 +94,7 @@ class DepartmentController extends AbstractEntityController{
 				
 		render (view:"/entity/list", model:[
 			template:"department/departmentList",
+			listTop:"department/listTop",
 			entities: departments,
 			entityCount: departments.totalCount,
 			code: getLabel(),
@@ -110,7 +110,7 @@ class DepartmentController extends AbstractEntityController{
 				departments.each { department ->
 					elem (
 						key: department.id,
-						value: department.getNames(languageService.getCurrentLanguage())
+						value: department.names
 					)
 				}
 			}

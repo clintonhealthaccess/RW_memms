@@ -102,9 +102,9 @@ class UserController  extends  AbstractEntityController{
 		List<User> users = User.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc");
 		render (view: '/entity/list', model:[
 			template:"user/userList",
-			actionButtonsTemplate:"user/userActionButtons",
+			listTop:"user/listTop",
 			entities: users,
-			entityCount: User.count(),
+			entityCount: users.totalCount,
 			code: getLabel()
 		])
 		
@@ -113,9 +113,9 @@ class UserController  extends  AbstractEntityController{
 	def search = {
 		adaptParamsForList()
 		List<User> users = userService.searchUser(params['q'], params);
-		
 		render (view: '/entity/list', model:[
 			template:"user/userList",
+			listTop:"user/listTop",
 			entities: users,
 			entityCount: users.totalCount,
 			code: getLabel(),

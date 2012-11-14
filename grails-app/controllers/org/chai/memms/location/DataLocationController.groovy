@@ -115,35 +115,32 @@ class DataLocationController extends AbstractEntityController {
 	def list = {
 		adaptParamsForList()
 		List<DataLocation> locations = DataLocation.list(offset:params.offset,max:params.max,sort:params.sort ?:names,order: params.order ?:"asc");
-
 		render (view: '/entity/list', model:[
 			template:"location/dataLocationList",
-			actionButtonsTemplate:"location/dataLocationActionButtons",
+			listTop:"location/dataLocationListTop",
 			entities: locations,
 			entityCount: locations.totalCount,
 			code: getLabel(),
-			entityClass: getEntityClass(),
 			names:names
 		])
 	}
 	
 	def search = {
 		adaptParamsForList()
-		List<DataLocation> locations = locationService.searchLocation(DataLocation.class, params['q'], params)
-				
+		List<DataLocation> locations = locationService.searchLocation(DataLocation.class, params['q'], params)		
 		render (view: '/entity/list', model:[
 			template:"location/dataLocationList",
+			listTop:"location/dataLocationListTop",
 			entities: locations,
 			entityCount: locations.totalCount,
 			code: getLabel(),
-			q:params['q'],
-			names:names
+			names:names,
+			q:params['q']
 		])
 	}
 	
 	def getAjaxData = {
 		List<DataLocation> dataLocations = locationService.searchLocation(DataLocation.class, params['term'], [:])
-		
 		render(contentType:"text/json") {
 			elements = array {
 				dataLocations.each { dataLocation ->

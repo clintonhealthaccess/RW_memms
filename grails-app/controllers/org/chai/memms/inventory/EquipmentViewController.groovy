@@ -67,7 +67,8 @@ class EquipmentViewController extends AbstractController {
 	}
 	
 	def list={
-		def dataLocation = DataLocation.get(params.int('dataLocation.id'))
+		DataLocation dataLocation = DataLocation.get(params.int('dataLocation.id'))
+		
 		if (dataLocation == null)
 			response.sendError(404)
 
@@ -76,34 +77,33 @@ class EquipmentViewController extends AbstractController {
 		render(view:"/entity/list", model:[
 					template:"equipment/equipmentList",
 					filterTemplate:"equipment/equipmentFilter",
-					actionButtonsTemplate:"equipment/equipmentActionButtons",
+					listTop:"equipment/listTop",
 					dataLocation:dataLocation,
 					entities: equipments,
 					entityCount: equipments.totalCount,
-					code: getLabel(),
-					entityClass: getEntityClass(),
-					controller:"equipment"
+					code: getLabel()
 				])
 	}
 
 	def search = {
-		adaptParamsForList()
-		def location = DataLocation.get(params.int("dataLocation.id"));
-		if (location == null)
+		DataLocation dataLocation = DataLocation.get(params.int("dataLocation.id"));
+		
+		if (dataLocation == null)
 			response.sendError(404)
-		else{
-			List<Equipment> equipments = equipmentService.searchEquipment(params['q'],location,params)
-			render (view: '/entity/list', model:[
-						template:"equipment/equipmentList",
-						filterTemplate:"equipment/equipmentFilter",
-						entities: equipments,
-						entityCount: equipments.totalCount,
-						code: getLabel(),
-						q:params['q'],
-						dataLocation:location,
-						controller:"equipment"
-					])
-		}
+
+		adaptParamsForList()
+		List<Equipment> equipments = equipmentService.searchEquipment(params['q'],dataLocation,params)
+		render (view: '/entity/list', model:[
+					template:"equipment/equipmentList",
+					filterTemplate:"equipment/equipmentFilter",
+					listTop:"equipment/listTop",
+					dataLocation:dataLocation,
+					entities: equipments,
+					entityCount: equipments.totalCount,
+					code: getLabel(),
+					q:params['q']
+				])
+		
 	}
 
 	def summaryPage = {
@@ -118,7 +118,6 @@ class EquipmentViewController extends AbstractController {
 
 		def locationSkipLevels = inventoryService.getSkipLocationLevels()
 
-
 		if (location != null) {
 			template = '/inventorySummaryPage/sectionTable'
 			inventories = inventoryService.getInventoryByLocation(location,dataLocationTypesFilter,params)
@@ -130,8 +129,7 @@ class EquipmentViewController extends AbstractController {
 					currentLocationTypes: dataLocationTypesFilter,
 					template: template,
 					entityCount: inventories?.totalCount,
-					locationSkipLevels: locationSkipLevels,
-					entityClass: getEntityClass()
+					locationSkipLevels: locationSkipLevels
 				])
 	}
 
@@ -223,11 +221,11 @@ class EquipmentViewController extends AbstractController {
 		render (view: '/entity/list', model:[
 					template:"equipment/equipmentList",
 					filterTemplate:"equipment/equipmentFilter",
+					listTop:"equipment/listTop",
 					dataLocation:cmd.dataLocation,
 					entities: equipments,
 					entityCount: equipments.totalCount,
 					code: getLabel(),
-					entityClass: getEntityClass(),
 					filterCmd:cmd,
 					q:params['q']
 				])

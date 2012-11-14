@@ -77,11 +77,10 @@ class RoleController extends AbstractEntityController{
 		def roles = Role.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc");
 		render(view:"/entity/list",model:[
 			template: "role/roleList",
-			actionButtonsTemplate:"role/roleActionButtons",
+			listTop:"role/listTop",
 			entities: roles,
 			entityCount: roles.totalCount,
-			code: getLabel(),
-			entityClass: getEntityClass()
+			code: getLabel()
 			])
 	}
 	
@@ -90,8 +89,8 @@ class RoleController extends AbstractEntityController{
 		List<Role> filteredRoles = roleService.searchRole(params['q'], params)
 		render (view: '/entity/list', model:[
 			template:"role/roleList",
+			listTop:"role/listTop",
 			entities: filteredRoles,
-			entityClass: getEntityClass(),
 			entityCount: filteredRoles.totalCount,
 			code: getLabel(),
 			q:params['q']

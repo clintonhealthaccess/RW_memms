@@ -77,6 +77,12 @@ class WorkOrderViewController extends AbstractController{
 			render(view:"/entity/summary", model:[entities: workOrder])
 		}
 	}
+	
+	def getWorkOrderClueTipsAjaxData = {
+		def workOrder = WorkOrder.get(params.long("id"))
+		def html = g.render(template:"/templates/workOrderClueTip",model:[workOrder:workOrder])
+		render(contentType:"text/plain", text:html)
+	}
 
 	def list = {
 		adaptParamsForList()
@@ -94,19 +100,59 @@ class WorkOrderViewController extends AbstractController{
 		render(view:"/entity/list", model:[
 					template:"workOrder/workOrderList",
 					filterTemplate:"workOrder/workOrderFilter",
-					actionButtonsTemplate:"workOrder/workOrderActionButtons",
+					listTop:"workOrder/listTop",
+					dataLocation:location,
+					equipment:equipment,
 					entities: orders,
 					entityCount: orders.totalCount,
-					code: getLabel(),
-					entityClass: getEntityClass(),
-					equipment:equipment,
+					code: getLabel()
+				])
+	}
+	
+	def search = {
+		
+		Equipment equipment = null
+		DataLocation dataLocation = null
+		if(params["equipment.id"])
+			equipment = Equipment.get(params.long("equipment.id"))
+		else if(params["dataLocation.id"])
+			dataLocation = DataLocation.get(params.long('dataLocation.id'))
+		
+		adaptParamsForList()
+		List<WorkOrder> workOrders = workOrderService.searchWorkOrder(params['q'],dataLocation,equipment,params)
+		render (view: '/entity/list', model:[
+					template:"workOrder/workOrderList",
+					filterTemplate:"workOrder/workOrderFilter",
+					listTop:"workOrder/listTop",
 					dataLocation:location,
-					controller:"workOrder"
+					equipment:equipment,
+					entities: workOrders,
+					entityCount: workOrders.totalCount,
+					code: getLabel(),
+					q:params['q']
+				])
+	}
+
+	def filter = { FilterWorkOrderCommand cmd ->
+		if(log.isDebugEnabled()) log.debug("workOrder filter command object:"+cmd)
+		
+		adaptParamsForList()
+		List<WorkOrder> workOrders = workOrderService.filterWorkOrders(cmd.dataLocation,cmd.equipment,cmd.openOn,cmd.closedOn,cmd.criticality,cmd.currentStatus,params)
+		render(view:"/entity/list", model:[
+					template:"workOrder/workOrderList",
+					filterTemplate:"workOrder/workOrderFilter",
+					listTop:"workOrder/listTop",
+					dataLocation:cmd.dataLocation,
+					equipment:cmd.equipment,
+					entities: workOrders,
+					entityCount: workOrders.totalCount,
+					code: getLabel(),
+					filterCmd:cmd
 				])
 	}
 
 	def summaryPage = {
-		if(user.location instanceof DataLocation) redirect (controller: "workOrder", action: "list",params:['dataLocation.id':user.location.id])
+		if(user.location instanceof DataLocation) redirect (controller: "workOrderView", action: "list",params:['dataLocation.id':user.location.id])
 
 		def location = Location.get(params.int('location'))
 		def dataLocationTypesFilter = getLocationTypes()
@@ -127,8 +173,7 @@ class WorkOrderViewController extends AbstractController{
 					currentLocationTypes: dataLocationTypesFilter,
 					template: template,
 					entityCount: correctiveMaintenances?.totalCount,
-					locationSkipLevels: locationSkipLevels,
-					entityClass: getEntityClass()
+					locationSkipLevels: locationSkipLevels
 				])
 	}
 
@@ -223,55 +268,6 @@ class WorkOrderViewController extends AbstractController{
 		render(contentType:"text/json") { results = [result,html] }
 	}
 
-	def getWorkOrderClueTipsAjaxData = {
-		def workOrder = WorkOrder.get(params.long("id"))
-		def html = g.render(template:"/templates/workOrderClueTip",model:[workOrder:workOrder])
-		render(contentType:"text/plain", text:html)
-	}
-
-	
-	
-	def search = {
-		adaptParamsForList()
-		Equipment equipment = null
-		DataLocation dataLocation = null
-		if(params["equipment.id"]){
-			equipment = Equipment.get(params.long("equipment.id"))
-		}else if(params["dataLocation.id"]){
-			dataLocation = DataLocation.get(params.long('dataLocation.id'))
-		}
-		List<WorkOrder> workOrders = workOrderService.searchWorkOrder(params['q'],dataLocation,equipment,params)
-		render (view: '/entity/list', model:[
-					template:"workOrder/workOrderList",
-					filterTemplate:"workOrder/workOrderFilter",
-					entities: workOrders,
-					entityCount: workOrders.totalCount,
-					code: getLabel(),
-					equipment:equipment,
-					dataLocation:dataLocation,
-					q:params['q'],
-					controller:"workOrder"
-				])
-	}
-
-	def filter = { FilterWorkOrderCommand cmd ->
-		if(log.isDebugEnabled()) log.debug(cmd)
-		adaptParamsForList()
-		List<WorkOrder> orders = workOrderService.filterWorkOrders(cmd.dataLocation,cmd.equipment,cmd.openOn,cmd.closedOn,cmd.criticality,cmd.currentStatus,params)
-
-		render(view:"/entity/list", model:[
-					template:"workOrder/workOrderList",
-					filterTemplate:"workOrder/workOrderFilter",
-					entities: orders,
-					entityCount: orders.totalCount,
-					code: getLabel(),
-					equipment:cmd.equipment,
-					dataLocation:cmd.dataLocation,
-					entityClass: getEntityClass(),
-					filterCmd:cmd,
-					controller:"workOrder"
-				])
-	}
 }
 
 class FilterWorkOrderCommand {

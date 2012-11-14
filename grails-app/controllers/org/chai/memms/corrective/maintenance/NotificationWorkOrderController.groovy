@@ -105,12 +105,11 @@ class NotificationWorkOrderController extends AbstractEntityController{
 		render(view:"/entity/list", model:[
 			template:"notification/notificationWorkOrderList",
 			filterTemplate:"notification/notificationWorkOrderFilter",
-			actionButtonsTemplate:"notification/notificationWorkOrderActionButtons",
+			listTop:"notification/notificationWorkOrderListTop",
 			entities: notifications,
 			entityCount: notifications.totalCount,
 			workOrder:workOrder,
 			code: getLabel(),
-			entityClass: getEntityClass()
 			])
 	}
 	
@@ -123,11 +122,11 @@ class NotificationWorkOrderController extends AbstractEntityController{
 		render(view:"/entity/list", model:[
 			template:"notification/notificationWorkOrderList",
 			filterTemplate:"notification/notificationWorkOrderFilter",
+			listTop:"notification/notificationWorkOrderListTop",
 			entities: notifications,
 			entityCount: notifications.totalCount,
 			workOrder:workOrder,
 			code: getLabel(),
-			entityClass: getEntityClass(),
 			q:params['q']
 			])
 	}

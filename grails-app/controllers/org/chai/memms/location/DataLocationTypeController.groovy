@@ -74,16 +74,14 @@ class DataLocationTypeController extends AbstractEntityController {
 	
 	def list = {
 		adaptParamsForList()
-		
 		List<DataLocationType> types = DataLocationType.list(params);
-
 		render (view: '/entity/list', model:[
 			template:"location/dataLocationTypeList",
-			actionButtonsTemplate:"location/dataLocationTypeActionButtons",
+			listTop:"location/dataLocationTypeListTop",
 			entities: types,
-			entityCount: DataLocationType.count(),
+			entityCount: types.totalCount,
 			code: getLabel(),
-			entityClass: getEntityClass()
+			names:names
 		])
 	}
 }

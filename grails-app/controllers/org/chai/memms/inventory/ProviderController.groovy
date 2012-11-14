@@ -79,11 +79,10 @@ class ProviderController  extends AbstractEntityController {
 		List<Provider> providers = Provider.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc")
 		render(view:"/entity/list", model:[
 			template:"provider/providerList",
-			actionButtonsTemplate:"provider/providerActionButtons",
+			listTop:"provider/listTop",
 			entities: providers,
-			entityCount: Provider.count(),
-			code: getLabel(),
-			entityClass: getEntityClass()
+			entityCount: providers.totalCount,
+			code: getLabel()
 			])
 	}
 	
@@ -92,6 +91,7 @@ class ProviderController  extends AbstractEntityController {
 		List<Provider> providers = providerService.searchProvider(null, params['q'], params)		
 		render (view: '/entity/list', model:[
 			template:"provider/providerList",
+			listTop:"provider/listTop",
 			entities: providers,
 			entityCount: providers.totalCount,
 			code: getLabel(),
@@ -108,7 +108,6 @@ class ProviderController  extends AbstractEntityController {
 		if(type.equals(Type.MANUFACTURER)) detailsLabel="provider.manufacturer.details"
 		else if(type.equals(Type.SUPPLIER)) detailsLabel="provider.supplier.details" else detailsLabel="provider.serviceProvider.details"
 		List<Provider> providers = providerService.searchProvider(type, params['term'], [:])
-		if(log.isDebugEnabled()) log.debug("Providers : " + providers)
 		render(contentType:"text/json") {
 			elements = array {
 				providers.each { provider ->

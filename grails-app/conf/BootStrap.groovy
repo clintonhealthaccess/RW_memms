@@ -94,7 +94,7 @@ class BootStrap {
 				if(Role.findByName("Data Clerk")) defaultDataClerkRole = Role.findByName("Data Clerk") 
 				else defaultDataClerkRole = new Role(name: "Data Clerk")
 				defaultDataClerkRole.addToPermissions("home:*")
-				defaultDataClerkRole.addToPermissions("menu:home,inventory,correctivemaintenance")
+				defaultDataClerkRole.addToPermissions("menu:home,inventory,maintenance,correctivemaintenance,preventivemaintenance")
 				defaultDataClerkRole.addToPermissions("equipmentType:getAjaxData")
 				defaultDataClerkRole.addToPermissions("provider:getAjaxData")
 				defaultDataClerkRole.addToPermissions("department:getAjaxData")

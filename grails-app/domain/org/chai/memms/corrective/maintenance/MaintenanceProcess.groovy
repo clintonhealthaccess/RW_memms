@@ -27,12 +27,15 @@
  */
 package org.chai.memms.corrective.maintenance
 
+import groovy.transform.EqualsAndHashCode;
+
 import org.chai.memms.security.User;
 
 /**
  * @author Jean Kahigiso M.
  *
  */
+@EqualsAndHashCode
 class MaintenanceProcess {
 	
 	enum ProcessType{
@@ -67,30 +70,4 @@ class MaintenanceProcess {
 	public String toString() {
 		return "MaintenanceProcess [id=" + id + ", name=" + name + ", workOrder="+ workOrder +"]";
 	}	
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this.is(obj))
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		MaintenanceProcess other = (MaintenanceProcess) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
-	}
-	
-	
-	
 }

@@ -94,12 +94,12 @@ class EquipmentTypeController extends AbstractEntityController{
 		adaptParamsForList()
 		List<EquipmentType> types = EquipmentType.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc");
 		render(view:"/entity/list",model:[
-					template: "equipmentType/equipmentTypeList",
-					actionButtonsTemplate:"equipmentType/equipmentTypeActionButtons",
+					template:"equipmentType/equipmentTypeList",
+					listTop:"equipmentType/listTop",
 					entities: types,
 					entityCount: types.totalCount,
-					code: getLabel(),
 					entityClass: getEntityClass(),
+					code: getLabel(),
 					names:names,
 					importTask:'EquipmentTypeImportTask',
 					exportTask:'EquipmentTypeExportTask'
@@ -111,9 +111,10 @@ class EquipmentTypeController extends AbstractEntityController{
 		List<EquipmentType> types = equipmentTypeService.searchEquipmentType(params['q'],null,params)
 		render (view: '/entity/list', model:[
 					template:"equipmentType/equipmentTypeList",
+					listTop:"equipmentType/listTop",
 					entities: types,
+					entityCount: types.totalCount,
 					entityClass: getEntityClass(),
-					entityCount: types.totalCount,,
 					code: getLabel(),
 					q:params['q'],
 					names:names,
@@ -143,11 +144,7 @@ class EquipmentTypeController extends AbstractEntityController{
 			}
 		}
 	}
-	//TODO implement this method
-	def importer ={
-
-	}
-
+	
 	def export = {
 		def equipmentTypeExportTask = new EquipmentTypeExportFilter().save(failOnError: true,flush: true)
 		params.exportFilterId = equipmentTypeExportTask.id
