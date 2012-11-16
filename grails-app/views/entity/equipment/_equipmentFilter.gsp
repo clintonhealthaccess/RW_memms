@@ -54,11 +54,13 @@
 					<li><g:selectFromEnum name="purchaser" values="${PurchasedBy.values()}" field="purchaser" label="${message(code:'equipment.purchaser.label')}" /></li>
 					<li><g:selectFromEnum name="donor" values="${Donor.values()}" field="donor" label="${message(code:'equipment.donor.label')}" /></li>
 				</ul>
-				<button type="submit">Filter</button>
 				<input type="hidden" name="dataLocation.id" value="${dataLocation.id}"/>
+				<button type="submit"><g:message code="entity.filter.label" /></button>
 		  </g:form>
-		</div>
-		<g:if test="${params?.q}">
-		<h2 class="filter-results">Showing filtered list of equipment which contain search term ${params?.q}</h2>
-		</g:if>
+</div>
+<g:if test="${params?.q}">
+	<h2 class="filter-results">
+		<g:message code="entity.filter.message.label" args="${[message(code: 'entity.equipment.label'),params?.q]}" />
+	</h2>
+</g:if>
 		

@@ -75,13 +75,22 @@ class DataLocationTypeController extends AbstractEntityController {
 	def list = {
 		adaptParamsForList()
 		List<DataLocationType> types = DataLocationType.list(params);
-		render (view: '/entity/list', model:[
-			template:"location/dataLocationTypeList",
-			listTop:"location/dataLocationTypeListTop",
-			entities: types,
-			entityCount: types.totalCount,
-			code: getLabel(),
-			names:names
-		])
+		if(request.xhr){
+			this.ajaxModel(types)
+		}else{
+			render (view: '/entity/list', model:[
+				template:"location/dataLocationTypeList",
+				listTop:"location/dataLocationTypeListTop",
+				entities: types,
+				entityCount: types.totalCount,
+				code: getLabel(),
+				names:names
+			])
+		}
+	}
+	def ajaxModel(def entities) {
+		def model = [entities: entities,entityCount: entities.totalCount,names:names]
+		def listHtml = g.render(template:"/entity/location/dataLocationTypeList",model:model)
+		render(contentType:"text/json") { results = [listHtml] }
 	}
 }

@@ -1,4 +1,89 @@
+/**
+ * List ajax init
+ */
+function listGridAjaxInit(){
+	$(".spinner-container").hide()
+	listGridAjax()
+	searchFormAjax()
+}
+/**
+ * Loading list with Ajax
+ */
+function listGridAjax() {
+    $("#list-grid").find(".paginateButtons a, th.sortable a").live('click', function(event) {
+        event.preventDefault();
+        $("div.spinner-container").show();
+        var url = $(this).attr('href');
+        $.ajax({
+            type: 'GET',
+            url: url,
+            success: function(data) {
+            	$("div.spinner-container").hide();
+                $("div.list-template").fadeOut(100, function() {
+                	$("div.list-template").html(data.results[0]).show(300);
+                });
+            }
+        });
+    });
+}
+/**
+ * Loading search list with Ajax
+ */
+function searchFormAjax(){
+	 $(".heading1-bar form").submit(function(event) {	
+		 	event.preventDefault();
+		 	$(".spinner-container").show()
+		    var url = $(this).parents(".heading1-bar").find("form").attr("action");
+		    var term = $(this).parents(".heading1-bar").find("input").attr("value");		   	
+	        $.ajax({
+	            type: 'GET',
+	            url: url,
+	            data: {"q":term},
+	            success: function(data) {
+	            	$("div.spinner-container").hide();
+	                $("div.list-template").fadeOut(100, function() {
+	                	$("div.list-template").html(data.results[0]).show(300);
+	                });
+	            }
+	        })
+	});
+}
 
+function filterFormAjax() {
+    $("div.filters form").submit(function(event) {
+    event.preventDefault();
+    var filterBox = $(this).parents("div.filters");
+    alert("here i am");
+    filterGrid(filterBox);
+        return false;
+    });
+}
+
+function filterGrid(filterBox) {
+    var grid = $(filterBox).nextAll("div.list-template");
+    $(".spinner-container").show()
+    var url = $(filterBox).find("form").attr("action");
+    var data = $(filterBox).find("form").serialize();
+    $.ajax({
+       type: 'POST',
+       url: url,
+       data: data,
+       success: function(data) {
+           $(grid).fadeOut(100, function() {
+           	$("div.list-template").html(data.results[0]).show(300);
+           });
+       }
+    });
+}
+
+
+
+
+
+
+/**
+ * Make an input field to accept only number
+ */
 function numberOnlyField(){
 	$('.numbersOnly').keyup(function () {
 	    if (this.value != this.value.replace(/[^0-9\.]/g, '')) {

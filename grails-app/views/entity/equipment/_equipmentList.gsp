@@ -62,8 +62,10 @@
 		</g:each>
 	</tbody>	
 </table>
+<g:render template="/templates/pagination" />
 <script type="text/javascript">
 	$(document).ready(function() {
 		updateEquipment("${createLink(controller:'equipmentView',action: 'updateObsolete')}");
 	});
 </script>
+

@@ -1,13 +1,27 @@
 <div class="entity-list">
 	<div>
 		<!-- List Top Header Template goes here -->
-		<g:render template="${'/entity/'+listTop}" />
-		<!-- List Template goes here -->
-		<div class="main table">
-			<g:render template="${template}" />
-			<g:render template="/templates/pagination" />
+		<div class="heading1-bar">
+			<h1><g:message code="default.list.label" args="[entityName]" /></h1>
+			<g:render template="/entity/${listTop}" />
 		</div>
 		<!-- End of template -->
 		
+		<!-- Filter template if any goes here -->
+		<g:if test="${filterTemplate!=null}">
+			<g:render template="/entity/${filterTemplate}" />
+		</g:if>
+		<!-- End of template -->
+		
+		<!-- List Template goes here -->
+		<div id ="list-grid" class="main table">
+			<div class="spinner-container">
+				<img src="${resource(dir:'images',file:'list-spinner.gif')}" class="ajax-spinner"/>
+			</div>
+			<div class="list-template">
+				<g:render template="${template}" />
+			</div>
+		</div>
+		<!-- End of template -->
 	</div>
 </div>

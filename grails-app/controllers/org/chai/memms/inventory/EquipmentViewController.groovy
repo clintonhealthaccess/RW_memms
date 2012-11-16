@@ -65,7 +65,10 @@ class EquipmentViewController extends AbstractController {
 	def getEntityClass() {
 		return Equipment.class;
 	}
-	
+	def view ={
+		//TODO
+	}
+
 	def list={
 		DataLocation dataLocation = DataLocation.get(params.int('dataLocation.id'))
 		
@@ -74,7 +77,10 @@ class EquipmentViewController extends AbstractController {
 
 		adaptParamsForList()
 		def equipments = equipmentService.getEquipmentsByDataLocation(dataLocation,params)
-		render(view:"/entity/list", model:[
+		if(request.xhr){
+			this.ajaxModel(equipments,dataLocation)
+		}else{
+			render(view:"/entity/list", model:[
 					template:"equipment/equipmentList",
 					filterTemplate:"equipment/equipmentFilter",
 					listTop:"equipment/listTop",
@@ -82,28 +88,39 @@ class EquipmentViewController extends AbstractController {
 					entities: equipments,
 					entityCount: equipments.totalCount,
 					code: getLabel()
-				])
+					])
+		}
 	}
 
 	def search = {
 		DataLocation dataLocation = DataLocation.get(params.int("dataLocation.id"));
-		
 		if (dataLocation == null)
 			response.sendError(404)
 
 		adaptParamsForList()
-		List<Equipment> equipments = equipmentService.searchEquipment(params['q'],dataLocation,params)
-		render (view: '/entity/list', model:[
-					template:"equipment/equipmentList",
-					filterTemplate:"equipment/equipmentFilter",
-					listTop:"equipment/listTop",
-					dataLocation:dataLocation,
-					entities: equipments,
-					entityCount: equipments.totalCount,
-					code: getLabel(),
-					q:params['q']
-				])
-		
+		def equipments = equipmentService.searchEquipment(params['q'],dataLocation,params)
+		if(!request.xhr)
+			response.sendError(404)
+		this.ajaxModel(equipments,dataLocation)
+	}
+	
+	def filter = { FilterCommand cmd ->
+		if (log.isDebugEnabled()) log.debug("equipments.filter, command "+cmd)
+		if (cmd.dataLocation == null)
+			response.sendError(404)
+
+		adaptParamsForList()
+		def equipments = equipmentService.filterEquipment(cmd.dataLocation,cmd.supplier,cmd.manufacturer,cmd.serviceProvider,cmd.equipmentType,cmd.purchaser,cmd.donor,cmd.obsolete,cmd.status,params)
+		log.debug("gotcha: =>"+equipments+" cmd.dataLocation"+cmd.dataLocation)
+		if(!request.xhr)
+			response.sendError(404)
+		this.ajaxModel(equipments,cmd.dataLocation)
+	}
+	
+	def ajaxModel(def entities,def dataLocation) {
+		def model = [entities: entities,entityCount: entities.totalCount,dataLocation:dataLocation]
+		def listHtml = g.render(template:"/entity/equipment/equipmentList",model:model)
+		render(contentType:"text/json") { results = [listHtml] }
 	}
 
 	def summaryPage = {
@@ -209,27 +226,6 @@ class EquipmentViewController extends AbstractController {
 					dataLocationTypes:DataLocationType.list(),
 					code: getLabel()
 				])
-	}
-
-	def filter = { FilterCommand cmd ->
-		if (log.isDebugEnabled()) log.debug("equipments.filter, command "+cmd)
-		if (cmd.dataLocation == null)
-			response.sendError(404)
-
-		adaptParamsForList()
-		def equipments = equipmentService.filterEquipment(cmd.dataLocation,cmd.supplier,cmd.manufacturer,cmd.serviceProvider,cmd.equipmentType,cmd.purchaser,cmd.donor,cmd.obsolete,cmd.status,params)
-		render (view: '/entity/list', model:[
-					template:"equipment/equipmentList",
-					filterTemplate:"equipment/equipmentFilter",
-					listTop:"equipment/listTop",
-					dataLocation:cmd.dataLocation,
-					entities: equipments,
-					entityCount: equipments.totalCount,
-					code: getLabel(),
-					filterCmd:cmd,
-					q:params['q']
-				])
-
 	}
 
 	def export = { FilterCommand cmd ->

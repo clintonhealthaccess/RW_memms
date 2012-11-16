@@ -20,14 +20,13 @@
 			<li><g:selectFromEnum name="currentStatus" values="${OrderStatus.values()}" field="currentStatus" label="${message(code:'work.order.status.label')}" bean="${filterCmd}"/></li>
 			<li><div class="half"><g:input name="openOn" dateClass="date-picker" label="${message(code:'work.order.openOn.label')}" bean="${filterCmd}" field="openOn" value="${filterCmd?.openOn}"/></div><div class="half"><g:input name="closedOn" dateClass="date-picker" label="${message(code:'work.order.closedOn.label')}" bean="${filterCmd}" field="closedOn" value="${filterCmd?.closedOn}"/></div></li>
 		</ul>
-		<button type="submit">Filter</button>
 		<input type="hidden" name="dataLocation.id" value="${dataLocation?.id}" />
 		<input type="hidden" name="equipment.id" value="${equipment?.id}" />
+		<button type="submit"><g:message code="entity.filter.label" /></button>
 	</g:form>
 </div>
 <g:if test="${params?.q}">
 	<h2 class="filter-results">
-		Showing filtered list of equipment which contain search term
-		${params?.q}
+		<g:message code="entity.filter.message.label" args="${[message(code: 'entity.work.order.label'),params?.q]}" />
 	</h2>
 </g:if>

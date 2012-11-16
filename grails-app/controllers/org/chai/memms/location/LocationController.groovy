@@ -89,28 +89,32 @@ class LocationController extends AbstractEntityController {
 	def list = {
 		adaptParamsForList()
 		List<Location> locations = Location.list(offset:params.offset,max:params.max,sort:params.sort ?:"level",order: params.order ?:"asc");
-		render (view: '/entity/list', model:[
-			template:"location/locationList",
-			listTop:"location/locationListTop",
-			entities: locations,
-			entityCount: locations.totalCount,
-			code: getLabel(),
-			names:names
-		])
+		if(request.xhr){
+			this.ajaxModel(locations)
+		}else{
+			render (view: '/entity/list', model:[
+				template:"location/locationList",
+				listTop:"location/locationListTop",
+				entities: locations,
+				entityCount: locations.totalCount,
+				code: getLabel(),
+				names:names
+			])
+		}
+	}
+	
+	def ajaxModel(def entities) {
+		def model = [entities: entities,entityCount: entities.totalCount,names:names]
+		def listHtml = g.render(template:"/entity/location/locationList",model:model)
+		render(contentType:"text/json") { results = [listHtml] }
 	}
 	
 	def search = {
 		adaptParamsForList()
 		List<Location> locations = locationService.searchLocation(Location.class, params['q'], params)		
-		render (view: '/entity/list', model:[
-			template:"location/locationList",
-			listTop:"location/locationListTop",
-			entities: locations,
-			entityCount: locations.totalCount,
-			code: getLabel(),
-			names:names,
-			q:params['q']
-		])
+		if(!request.xhr)
+			response.sendError(404)
+		this.ajaxModel(locations)
 	}
 	
 	def getAjaxData = {		

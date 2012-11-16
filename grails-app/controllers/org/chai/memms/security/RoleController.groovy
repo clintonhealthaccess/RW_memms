@@ -74,26 +74,31 @@ class RoleController extends AbstractEntityController{
 	}
 	def list = {
 		adaptParamsForList()
-		def roles = Role.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc");
-		render(view:"/entity/list",model:[
-			template: "role/roleList",
-			listTop:"role/listTop",
-			entities: roles,
-			entityCount: roles.totalCount,
-			code: getLabel()
-			])
+		List<Role> roles = Role.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc");
+		if(request.xhr)
+			this.ajaxModel(roles)
+		else{
+			render(view:"/entity/list",model:[
+				template: "role/roleList",
+				listTop:"role/listTop",
+				entities: roles,
+				entityCount: roles.totalCount,
+				code: getLabel()
+				])
+		}
 	}
 	
 	def search = {
 		adaptParamsForList()
-		List<Role> filteredRoles = roleService.searchRole(params['q'], params)
-		render (view: '/entity/list', model:[
-			template:"role/roleList",
-			listTop:"role/listTop",
-			entities: filteredRoles,
-			entityCount: filteredRoles.totalCount,
-			code: getLabel(),
-			q:params['q']
-		])
+		List<Role> roles = roleService.searchRole(params['q'], params)
+		if(!request.xhr)
+			response.sendError(404)
+		this.ajaxModel(roles)
+	}
+	
+	def ajaxModel(def entities) {
+		def model = [entities: entities,entityCount: entities.totalCount,names:names]
+		def listHtml = g.render(template:"/entity/role/roleList",model:model)
+		render(contentType:"text/json") { results = [listHtml] }
 	}
 }
