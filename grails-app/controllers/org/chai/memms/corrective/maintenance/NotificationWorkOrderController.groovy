@@ -47,11 +47,11 @@ class NotificationWorkOrderController extends AbstractEntityController{
 	def notificationWorkOrderService
 	
 	def getEntity(def id) {
-		return WorkOrder.get(id);
+		return NotificationWorkOrder.get(id);
 	}
 
 	def createEntity() {
-		return new WorkOrder();
+		return new NotificationWorkOrder();
 	}
 
 	def getTemplate() {

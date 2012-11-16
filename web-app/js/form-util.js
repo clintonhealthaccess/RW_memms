@@ -5,6 +5,7 @@ function listGridAjaxInit(){
 	$(".spinner-container").hide()
 	listGridAjax()
 	searchFormAjax()
+	filterFormAjax()
 }
 /**
  * Loading list with Ajax
@@ -30,11 +31,12 @@ function listGridAjax() {
  * Loading search list with Ajax
  */
 function searchFormAjax(){
-	 $(".heading1-bar form").submit(function(event) {	
+	 $(".heading1-bar form").submit(function(event) {
 		 	event.preventDefault();
 		 	$(".spinner-container").show()
 		    var url = $(this).parents(".heading1-bar").find("form").attr("action");
-		    var term = $(this).parents(".heading1-bar").find("input").attr("value");		   	
+		    var term = $(this).parents(".heading1-bar").find("input").attr("value");
+		    alert("url: "+url+" term "+term)
 	        $.ajax({
 	            type: 'GET',
 	            url: url,
@@ -64,6 +66,7 @@ function filterGrid(filterBox) {
     $(".spinner-container").show()
     var url = $(filterBox).find("form").attr("action");
     var data = $(filterBox).find("form").serialize();
+    alert("url: "+url+" term "+data)
     $.ajax({
        type: 'POST',
        url: url,

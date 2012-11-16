@@ -9,7 +9,7 @@
 		</ul>
 	</g:hasErrors>
 
-	<g:form url="[controller:'notification', action:'filter']" method="get" useToken="false" class="filters-box">
+	<g:form url="[controller:'notificationEquipment', action:'filter']" method="get" useToken="false" class="filters-box">
 		<ul class="filters-list">
 			<li>
 				<label><g:message code="notification.read.label" /></label> 
@@ -21,13 +21,15 @@
 			</li>
 			<li><div class="half"><g:input name="from" dateClass="date-picker" label="${message(code:'notification.date.from.label')}" bean="${filterCmd}" field="from" value="${filterCmd?.from}"/></div><div class="half"><g:input name="to" dateClass="date-picker" label="${message(code:'notification.date.to.label')}" bean="${filterCmd}" field="to" value="${filterCmd?.to}"/></div></li>
 		</ul>
-		<input type="hidden" name="dataLocation.id" value="${dataLocation?.id}"/>
 		<button type="submit"><g:message code="entity.filter.label" /></button>
+		<g:if test="">
+		<input type="hidden" name="dataLocation.id" value="${dataLocation.id}"/>
+		</g:if>
   </g:form>
 </div>
 <g:if test="${params?.q}">
 	<h2 class="filter-results">
-		<g:message code="entity.filter.message.label" args="${[message(code: 'entity.notification.label'),params?.q]}"/>
+		<g:message code="entity.filter.message.label" args="${[message(code: 'entity.notification.label'),params?.q]}" />
 	</h2>
 </g:if>
 <script type="text/javascript">
