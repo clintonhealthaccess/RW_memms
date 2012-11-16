@@ -80,7 +80,7 @@ class NotificationEquipmentController extends AbstractEntityController{
 		if(!params.id) redirect(uri: getTargetURI())
 		else{
 			def notification = notificationEquipmentService.setNotificationRead(NotificationEquipment.get(params.int('id')))
-			if (log.isInfoEnabled()) log.info("reading notificationEquipment: "+notification)
+			if (log.isDebugEnabled()) log.debug("reading notificationEquipment: "+notification)
 
 			if (notification == null) {
 				flash.message = message(code: 'default.not.found.message', args: [message(code: getLabel(), default: 'notificationEquipment'), params.id])

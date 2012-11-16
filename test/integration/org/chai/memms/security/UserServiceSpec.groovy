@@ -175,4 +175,35 @@ class UserServiceSpec extends IntegrationTests{
 		then:
 		userGroup.size() == 2
 	}
+	
+	def "check if a user can request for equipment registration"(){
+		setup:
+		setupLocationTree()
+		def userOne = newOtherUser("userOne", "userOne", DataLocation.findByCode(KIVUYE))
+		userOne.userType = UserType.TITULAIREHC
+		userOne.save(failOnError:true)
+		
+		def userTwo = newOtherUser("userTwo", "userTwo", DataLocation.findByCode(BUTARO))
+		userTwo.userType = UserType.HOSPITALDEPARTMENT
+		userTwo.save(failOnError:true)
+		
+		def techDh = newOtherUser("techDh", "techDh", DataLocation.findByCode(BUTARO))
+		techDh.userType = UserType.TECHNICIANDH
+		techDh.save(failOnError:true)
+		
+		def techMMC = newOtherUser("techMMC", "techMMC", DataLocation.findByCode(BUTARO))
+		techMMC.userType = UserType.TECHNICIANMMC
+		techMMC.save(failOnError:true)
+		
+		def admin = newOtherUser("admin", "admin", DataLocation.findByCode(RWANDA))
+		admin.userType = UserType.ADMIN
+		admin.save(failOnError:true)
+
+		expect:
+		userService.canRequestEquipmentRegistration(userOne)
+		userService.canRequestEquipmentRegistration(userTwo)
+		!userService.canRequestEquipmentRegistration(techDh)
+		!userService.canRequestEquipmentRegistration(techMMC)
+		!userService.canRequestEquipmentRegistration(admin)
+	}
 }

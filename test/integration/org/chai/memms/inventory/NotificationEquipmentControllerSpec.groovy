@@ -44,7 +44,7 @@ class NotificationEquipmentControllerSpec  extends IntegrationTests{
 		NotificationEquipment.count() == 1
 	}
 	
-	def "reading a notification sets it's read status to read"(){
+	def "reading a notification sets it's read status to true"(){
 		setup:
 		setupLocationTree()
 		def senderOne = newOtherUser("senderOne", "senderOne", DataLocation.findByCode(KIVUYE))
