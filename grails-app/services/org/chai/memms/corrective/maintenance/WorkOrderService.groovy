@@ -148,11 +148,11 @@ class WorkOrderService {
 		def criteria = WorkOrder.createCriteria();
 		
 		if(location instanceof DataLocation)
-			equipments = equipmentService.getEquipmentsByDataLocation(location, [:])
+			equipments = equipmentService.getMyEquipments(location, [:])
 		else{
 			def dataLocations = location.getDataLocations(null,null)
 			for(DataLocation dataLocation: dataLocations)
-				equipments.addAll( equipmentService.getEquipmentsByDataLocation(dataLocation, [:]))
+				equipments.addAll( equipmentService.getMyEquipments(dataLocation, [:]))
 		}
 		
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){

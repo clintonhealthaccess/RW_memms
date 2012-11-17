@@ -27,6 +27,7 @@
  */
 package org.chai.memms.inventory
 
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.math.NumberUtils;
@@ -68,11 +69,15 @@ class EquipmentViewController extends AbstractController {
 	
 	def list={
 		def dataLocation = DataLocation.get(params.int('dataLocation.id'))
-		if (dataLocation == null)
-			response.sendError(404)
-
+		def equipments
 		adaptParamsForList()
-		def equipments = equipmentService.getEquipmentsByDataLocation(dataLocation,params)
+		
+		if (dataLocation != null){
+			if(!user.canAccessCalculationLocation(dataLocation)) response.sendError(404)
+			equipments = equipmentService.filterEquipment(dataLocation,null,null,null,null,null,null,null,null,params)
+		}
+		else equipments = equipmentService.getMyEquipments(user,params)
+		
 		render(view:"/entity/list", model:[
 					template:"equipment/equipmentList",
 					filterTemplate:"equipment/equipmentFilter",
@@ -107,7 +112,7 @@ class EquipmentViewController extends AbstractController {
 	}
 
 	def summaryPage = {
-		if(user.location instanceof DataLocation) redirect(controller:"equipmentView",action:"list",params:['dataLocation.id':user.location.id])
+		if(user.location instanceof DataLocation) redirect(controller:"equipmentView",action:"list")
 
 		def location = Location.get(params.long('location'))
 		def dataLocationTypesFilter = getLocationTypes()
