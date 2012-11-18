@@ -16,7 +16,7 @@
 		<!-- List Template goes here -->
 		<div id ="list-grid" class="main table">
 			<div class="spinner-container">
-				<img src="${resource(dir:'images',file:'list-spinner.gif')}" class="ajax-spinner"/>
+				<img src="${resource(dir:'images',file:'list-spinner.gif')}" class="ajax-big-spinner"/>
 			</div>
 			<div class="list-template">
 				<g:render template="${template}" />

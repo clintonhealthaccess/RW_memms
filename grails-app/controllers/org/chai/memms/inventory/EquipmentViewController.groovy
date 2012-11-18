@@ -71,14 +71,12 @@ class EquipmentViewController extends AbstractController {
 
 	def list={
 		DataLocation dataLocation = DataLocation.get(params.int('dataLocation.id'))
-		
 		if (dataLocation == null)
 			response.sendError(404)
-
 		adaptParamsForList()
 		def equipments = equipmentService.getEquipmentsByDataLocation(dataLocation,params)
 		if(request.xhr){
-			this.ajaxModel(equipments,dataLocation)
+			this.ajaxModel(equipments,dataLocation,"")
 		}else{
 			render(view:"/entity/list", model:[
 					template:"equipment/equipmentList",
@@ -101,7 +99,7 @@ class EquipmentViewController extends AbstractController {
 		def equipments = equipmentService.searchEquipment(params['q'],dataLocation,params)
 		if(!request.xhr)
 			response.sendError(404)
-		this.ajaxModel(equipments,dataLocation)
+		this.ajaxModel(equipments,dataLocation,params['q'])
 	}
 	
 	def filter = { FilterCommand cmd ->
@@ -111,14 +109,13 @@ class EquipmentViewController extends AbstractController {
 
 		adaptParamsForList()
 		def equipments = equipmentService.filterEquipment(cmd.dataLocation,cmd.supplier,cmd.manufacturer,cmd.serviceProvider,cmd.equipmentType,cmd.purchaser,cmd.donor,cmd.obsolete,cmd.status,params)
-		log.debug("gotcha: =>"+equipments+" cmd.dataLocation"+cmd.dataLocation)
 		if(!request.xhr)
 			response.sendError(404)
-		this.ajaxModel(equipments,cmd.dataLocation)
+		this.ajaxModel(equipments,cmd.dataLocation,"")
 	}
 	
-	def ajaxModel(def entities,def dataLocation) {
-		def model = [entities: entities,entityCount: entities.totalCount,dataLocation:dataLocation]
+	def ajaxModel(def entities,def dataLocation,def searchTerm) {
+		def model = [entities: entities,entityCount: entities.totalCount,dataLocation:dataLocation,q:searchTerm]
 		def listHtml = g.render(template:"/entity/equipment/equipmentList",model:model)
 		render(contentType:"text/json") { results = [listHtml] }
 	}

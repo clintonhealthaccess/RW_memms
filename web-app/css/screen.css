@@ -413,9 +413,9 @@ ul.horizontal li.last { margin-right: 0; }
 .sub_tree { display: none; }
 
 /* line 167, ../../src/stylesheets/partials/_tables.sass */
-.spinner-container { position: relative; width: 100%; height: 100%; opacity: 0.5; z-index: 20; }
+.spinner-container { position: absolute; width: 100%; height: 100%; opacity: 0.5; z-index: 20; }
 /* line 173, ../../src/stylesheets/partials/_tables.sass */
-.spinner-container .ajax-spinner { position: absolute; margin: 50px 40px 40px 460px; }
+.spinner-container .ajax-big-spinner { position: relative; margin: 40px 40px 40px 460px; z-index: 20; }
 
 /* line 1, ../../src/stylesheets/partials/_forms.sass */
 .form-section { border-bottom: 1px solid #eeeeee; *zoom: 1; }

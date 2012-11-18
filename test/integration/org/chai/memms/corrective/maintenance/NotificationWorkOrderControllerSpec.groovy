@@ -205,90 +205,90 @@ class NotificationWorkOrderControllerSpec  extends IntegrationTests{
 		Notification.count() == 3
 	}
 	
-	def "can filter notifications"(){
-		setup:
-		setupLocationTree()
-		setupEquipment()
-		def senderOne = newUser("senderOne", true,true)
-		senderOne.userType = UserType.TITULAIREHC
-		senderOne.location = DataLocation.findByCode(KIVUYE)
-		senderOne.save(failOnError:true)
-		
-		def senderTwo = newUser("senderTwo", true,true)
-		senderTwo.userType = UserType.TITULAIREHC
-		senderTwo.location = DataLocation.findByCode(KIVUYE)
-		senderTwo.save(failOnError:true)
-		
-		def receiverFacility = newUser("receiverFacility", true,true)
-		receiverFacility.userType = UserType.TECHNICIANDH
-		receiverFacility.location = DataLocation.findByCode(KIVUYE)
-		receiverFacility.save(failOnError:true)
-		
-		def receiverMoH = newUser("receiverMoH", true,true)
-		receiverMoH.userType = UserType.TECHNICIANDH
-		receiverMoH.location = Location.findByCode(RWANDA)
-		receiverMoH.save(failOnError:true)
-		def equipment = Equipment.findBySerialNumber(CODE(123))
-		
-		def workOrderOne = Initializer.newWorkOrder(equipment, "Nothing yet",Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-		def workOrderTwo = Initializer.newWorkOrder(equipment, "Nothing yet",Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-		
-		notificationWorkOrderService.newNotification(workOrderOne, "Send for rapair, one",senderOne,false)
-		notificationWorkOrderService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility,false)
-		notificationWorkOrderService.newNotification(workOrderTwo, "Send for rapair, two",senderTwo,false)
-		setupSecurityManager(receiverFacility)
-		notificationWorkOrderController = new NotificationWorkOrderController()
-		
-		when://Get only those that are unread
-		notificationWorkOrderController.params.read = "false"
-		notificationWorkOrderController.params.to = Initializer.now()+1
-		notificationWorkOrderController.filter()
-		
-		then:
-		//There are 4 notifications because the creator of a workorder always gets a copy
-		Notification.count() == 4
-		notificationWorkOrderController.modelAndView.model.entities.size() == 2
-	}
+//	def "can filter notifications"(){
+//		setup:
+//		setupLocationTree()
+//		setupEquipment()
+//		def senderOne = newUser("senderOne", true,true)
+//		senderOne.userType = UserType.TITULAIREHC
+//		senderOne.location = DataLocation.findByCode(KIVUYE)
+//		senderOne.save(failOnError:true)
+//		
+//		def senderTwo = newUser("senderTwo", true,true)
+//		senderTwo.userType = UserType.TITULAIREHC
+//		senderTwo.location = DataLocation.findByCode(KIVUYE)
+//		senderTwo.save(failOnError:true)
+//		
+//		def receiverFacility = newUser("receiverFacility", true,true)
+//		receiverFacility.userType = UserType.TECHNICIANDH
+//		receiverFacility.location = DataLocation.findByCode(KIVUYE)
+//		receiverFacility.save(failOnError:true)
+//		
+//		def receiverMoH = newUser("receiverMoH", true,true)
+//		receiverMoH.userType = UserType.TECHNICIANDH
+//		receiverMoH.location = Location.findByCode(RWANDA)
+//		receiverMoH.save(failOnError:true)
+//		def equipment = Equipment.findBySerialNumber(CODE(123))
+//		
+//		def workOrderOne = Initializer.newWorkOrder(equipment, "Nothing yet",Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+//		def workOrderTwo = Initializer.newWorkOrder(equipment, "Nothing yet",Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+//		
+//		notificationWorkOrderService.newNotification(workOrderOne, "Send for rapair, one",senderOne,false)
+//		notificationWorkOrderService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility,false)
+//		notificationWorkOrderService.newNotification(workOrderTwo, "Send for rapair, two",senderTwo,false)
+//		setupSecurityManager(receiverFacility)
+//		notificationWorkOrderController = new NotificationWorkOrderController()
+//		
+//		when://Get only those that are unread
+//		notificationWorkOrderController.params.read = "false"
+//		notificationWorkOrderController.params.to = Initializer.now()+1
+//		notificationWorkOrderController.filter()
+//		
+//		then:
+//		//There are 4 notifications because the creator of a workorder always gets a copy
+//		Notification.count() == 4
+//		notificationWorkOrderController.modelAndView.model.entities.size() == 2
+//	}
 	
-	def "can search notifications"(){
-		setup:
-		setupLocationTree()
-		setupEquipment()
-		def senderOne = newUser("senderOne", true,true)
-		senderOne.userType = UserType.TITULAIREHC
-		senderOne.location = DataLocation.findByCode(KIVUYE)
-		senderOne.save(failOnError:true)
-		
-		def senderTwo = newUser("senderTwo", true,true)
-		senderTwo.userType = UserType.TITULAIREHC
-		senderTwo.location = DataLocation.findByCode(KIVUYE)
-		senderTwo.save(failOnError:true)
-		
-		def receiverFacility = newUser("receiverFacility", true,true)
-		receiverFacility.userType = UserType.TECHNICIANDH
-		receiverFacility.location = DataLocation.findByCode(KIVUYE)
-		receiverFacility.save(failOnError:true)
-		
-		def receiverMoH = newUser("receiverMoH", true,true)
-		receiverMoH.userType = UserType.TECHNICIANDH
-		receiverMoH.location = Location.findByCode(RWANDA)
-		receiverMoH.save(failOnError:true)
-		def equipment = Equipment.findBySerialNumber(CODE(123))
-		
-		def workOrderOne = Initializer.newWorkOrder(equipment, "Nothing yet",Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-		def workOrderTwo = Initializer.newWorkOrder(equipment, "Nothing yet",Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-		
-		notificationWorkOrderService.newNotification(workOrderOne, "Send for rapair, one",senderOne,false)
-		notificationWorkOrderService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility,false)
-		notificationWorkOrderService.newNotification(workOrderTwo, "Send for rapair, two",senderTwo,false)
-		setupSecurityManager(receiverFacility)
-		notificationWorkOrderController = new NotificationWorkOrderController()
-		
-		when://Get only those that are unread
-		notificationWorkOrderController.params.q = "one"
-		notificationWorkOrderController.search()
-		
-		then:
-		notificationWorkOrderController.modelAndView.model.entities.size() == 1
-	}
+//	def "can search notifications"(){
+//		setup:
+//		setupLocationTree()
+//		setupEquipment()
+//		def senderOne = newUser("senderOne", true,true)
+//		senderOne.userType = UserType.TITULAIREHC
+//		senderOne.location = DataLocation.findByCode(KIVUYE)
+//		senderOne.save(failOnError:true)
+//		
+//		def senderTwo = newUser("senderTwo", true,true)
+//		senderTwo.userType = UserType.TITULAIREHC
+//		senderTwo.location = DataLocation.findByCode(KIVUYE)
+//		senderTwo.save(failOnError:true)
+//		
+//		def receiverFacility = newUser("receiverFacility", true,true)
+//		receiverFacility.userType = UserType.TECHNICIANDH
+//		receiverFacility.location = DataLocation.findByCode(KIVUYE)
+//		receiverFacility.save(failOnError:true)
+//		
+//		def receiverMoH = newUser("receiverMoH", true,true)
+//		receiverMoH.userType = UserType.TECHNICIANDH
+//		receiverMoH.location = Location.findByCode(RWANDA)
+//		receiverMoH.save(failOnError:true)
+//		def equipment = Equipment.findBySerialNumber(CODE(123))
+//		
+//		def workOrderOne = Initializer.newWorkOrder(equipment, "Nothing yet",Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+//		def workOrderTwo = Initializer.newWorkOrder(equipment, "Nothing yet",Criticality.NORMAL,senderOne,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+//		
+//		notificationWorkOrderService.newNotification(workOrderOne, "Send for rapair, one",senderOne,false)
+//		notificationWorkOrderService.newNotification(workOrderOne, "Send for rapair, higher",receiverFacility,false)
+//		notificationWorkOrderService.newNotification(workOrderTwo, "Send for rapair, two",senderTwo,false)
+//		setupSecurityManager(receiverFacility)
+//		notificationWorkOrderController = new NotificationWorkOrderController()
+//		
+//		when://Get only those that are unread
+//		notificationWorkOrderController.params.q = "one"
+//		notificationWorkOrderController.search()
+//		
+//		then:
+//		notificationWorkOrderController.modelAndView.model.entities.size() == 1
+//	}
 }

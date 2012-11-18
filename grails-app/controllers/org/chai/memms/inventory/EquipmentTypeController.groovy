@@ -94,7 +94,7 @@ class EquipmentTypeController extends AbstractEntityController{
 		adaptParamsForList()
 		List<EquipmentType> types = EquipmentType.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc");
 		if(request.xhr)
-			this.ajaxModel(types)
+			this.ajaxModel(types,"")
 		else{
 		render(view:"/entity/list",model:[
 				template:"equipmentType/equipmentTypeList",
@@ -115,11 +115,11 @@ class EquipmentTypeController extends AbstractEntityController{
 		List<EquipmentType> types = equipmentTypeService.searchEquipmentType(params['q'],null,params)
 		if(!request.xhr)
 			response.sendError(404)
-		this.ajaxModel(types)
+		this.ajaxModel(types,params['q'])
 	}
 	
-	def ajaxModel(def entities) {
-		def model = [entities: entities,entityCount: entities.totalCount,names:names]
+	def ajaxModel(def entities,def searchTerm) {
+		def model = [entities: entities,entityCount: entities.totalCount,entityClass:getEntityClass(),names:names,q:searchTerm]
 		def listHtml = g.render(template:"/entity/equipmentType/equipmentTypeList",model:model)
 		render(contentType:"text/json") { results = [listHtml] }
 	}

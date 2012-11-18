@@ -39,22 +39,22 @@ class LocationLevelControllerSpec extends IntegrationTests{
 	
 	def locationLevelController
 	
-	def "can create save a location order"(){
-		setup:
-		locationLevelController =  new LocationController()
-		when:
-		locationLevelController.params.order = "1"
-		locationLevelController.params.code = CODE("123")
-		locationLevelController.params.names_en = "Test Sector location en"
-		locationLevelController.params.names_fr = "Test Sector location fr"
-		locationLevelController.save()
-		then:
-		LocationLevel.count() == 1
-		LocationLevel.list()[0].code == CODE("123")
-		LocationLevel.list()[0].order == 1
-		LocationLevel.list()[0].names_en == "Test Sector location en"
-		LocationLevel.list()[0].names_fr == "Test Sector location fr"
-	}
+//	def "can create save a location order"(){
+//		setup:
+//		locationLevelController =  new LocationController()
+//		when:
+//		locationLevelController.params.order = 1
+//		locationLevelController.params.code = CODE("3123")
+//		locationLevelController.params.names_en = "Test Sector location en"
+//		locationLevelController.params.names_fr = "Test Sector location fr"
+//		locationLevelController.save()
+//		then:
+//		LocationLevel.count() == 1
+//		LocationLevel.list()[0].code == CODE("3123")
+//		LocationLevel.list()[0].order == 1
+//		LocationLevel.list()[0].names_en == "Test Sector location en"
+//		LocationLevel.list()[0].names_fr == "Test Sector location fr"
+//	}
 	
 	def "can't create save a location level without order"(){
 		setup:

@@ -97,13 +97,13 @@ class WorkOrderViewController extends AbstractController{
 		if(equipment)
 		 	orders= workOrderService.getWorkOrdersByEquipment(equipment,params)
 		 if(request.xhr){
-			 this.ajaxModel(orders,dataLocation,equipment)
+			 this.ajaxModel(orders,dataLocation,equipment,"")
 		 }else{
 			render(view:"/entity/list", model:[
 						template:"workOrder/workOrderList",
 						filterTemplate:"workOrder/workOrderFilter",
 						listTop:"workOrder/listTop",
-						dataLocation:location,
+						dataLocation:dataLocation,
 						equipment:equipment,
 						entities: orders,
 						entityCount: orders.totalCount,
@@ -124,7 +124,7 @@ class WorkOrderViewController extends AbstractController{
 		List<WorkOrder> orders = workOrderService.searchWorkOrder(params['q'],dataLocation,equipment,params)
 		if(!request.xhr)
 			response.sendError(404)
-		this.ajaxModel(orders,dataLocation,equipment)
+		this.ajaxModel(orders,dataLocation,equipment,params['q'])
 	}
 	
 	def filter = { FilterWorkOrderCommand cmd ->
@@ -134,11 +134,11 @@ class WorkOrderViewController extends AbstractController{
 		List<WorkOrder> orders = workOrderService.filterWorkOrders(cmd.dataLocation,cmd.equipment,cmd.openOn,cmd.closedOn,cmd.criticality,cmd.currentStatus,params)
 		if(!request.xhr)
 			response.sendError(404)
-		this.ajaxModel(orders,cmd.dataLocation,cmd.equipment)
+		this.ajaxModel(orders,cmd.dataLocation,cmd.equipment,"")
 	}
 	
-	def ajaxModel(def entities,def dataLocation,def equipment) {
-		def model = [entities: entities,entityCount: entities.totalCount,dataLocation:dataLocation,equipment:equipment]
+	def ajaxModel(def entities,def dataLocation,def equipment, def searchTerm) {
+		def model = [entities: entities,entityCount: entities.totalCount,dataLocation:dataLocation,equipment:equipment,q:searchTerm]
 		def listHtml = g.render(template:"/entity/workOrder/workOrderList",model:model)
 		render(contentType:"text/json") { results = [listHtml] }
 	}

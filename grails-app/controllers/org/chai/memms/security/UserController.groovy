@@ -99,14 +99,15 @@ class UserController  extends  AbstractEntityController{
 	
 	def list = {
 		adaptParamsForList()
-		List<User> users = User.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc");
+		def users = User.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc");
 		if(request.xhr)
-			this.ajaxModel(users)
+			this.ajaxModel(users,"")
 		else{
 			render (view: '/entity/list', model:[
 				template:"user/userList",
 				listTop:"user/listTop",
 				entities: users,
+				entityClass: getEntityClass(),
 				entityCount: users.totalCount,
 				code: getLabel()
 			])
@@ -115,14 +116,14 @@ class UserController  extends  AbstractEntityController{
 
 	def search = {
 		adaptParamsForList()
-		List<User> users = userService.searchUser(params['q'], params);
+		def users = userService.searchUser(params['q'], params);
 		if(!request.xhr)
 			response.sendError(404)
-		this.ajaxModel(users)
+		this.ajaxModel(users,params['q'])
 	}
 	
-	def ajaxModel(def entities) {
-		def model = [entities: entities,entityCount: entities.totalCount,names:names]
+	def ajaxModel(def entities,def searchTerm) {
+		def model = [entities: entities,entityCount: entities.totalCount,q: searchTerm,entityClass: getEntityClass(),]
 		def listHtml = g.render(template:"/entity/user/userList",model:model)
 		render(contentType:"text/json") { results = [listHtml] }
 	}

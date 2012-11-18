@@ -80,6 +80,10 @@ class User {
 		roles = []
 	}
 	
+	def getNames(){
+		"$firstname $lastname"
+	}
+	
 	def getPermissions() {
 		return Utils.split(permissionString, User.PERMISSION_DELIMITER)
 	}

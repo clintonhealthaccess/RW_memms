@@ -23,6 +23,7 @@
 		<input type="hidden" name="dataLocation.id" value="${dataLocation?.id}" />
 		<input type="hidden" name="equipment.id" value="${equipment?.id}" />
 		<button type="submit"><g:message code="entity.filter.label" /></button>
+		<a href="#" class="clear-form"><g:message code="default.link.clear.form.label"/></a>
 	</g:form>
 </div>
 <g:if test="${params?.q}">

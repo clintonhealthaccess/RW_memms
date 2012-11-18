@@ -88,6 +88,7 @@ class EquipmentService {
 				or{
 					ilike("code","%"+text+"%")
 					ilike("serialNumber","%"+text+"%")
+					ilike("model","%"+text+"%")
 					ilike(dbFieldDescriptions,"%"+text+"%") 
 					ilike("t."+dbFieldTypeNames,"%"+text+"%")
 			    }

@@ -22,9 +22,7 @@
 			<li><div class="half"><g:input name="from" dateClass="date-picker" label="${message(code:'notification.date.from.label')}" bean="${filterCmd}" field="from" value="${filterCmd?.from}"/></div><div class="half"><g:input name="to" dateClass="date-picker" label="${message(code:'notification.date.to.label')}" bean="${filterCmd}" field="to" value="${filterCmd?.to}"/></div></li>
 		</ul>
 		<button type="submit"><g:message code="entity.filter.label" /></button>
-		<g:if test="">
-		<input type="hidden" name="dataLocation.id" value="${dataLocation.id}"/>
-		</g:if>
+		<a href="#" class="clear-form"><g:message code="default.link.clear.form.label"/></a>
   </g:form>
 </div>
 <g:if test="${params?.q}">

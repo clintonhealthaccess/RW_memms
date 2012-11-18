@@ -6,6 +6,7 @@ function listGridAjaxInit(){
 	listGridAjax()
 	searchFormAjax()
 	filterFormAjax()
+	clearFormField()
 }
 /**
  * Loading list with Ajax
@@ -19,70 +20,88 @@ function listGridAjax() {
             type: 'GET',
             url: url,
             success: function(data) {
-            	$("div.spinner-container").hide();
-                $("div.list-template").fadeOut(100, function() {
-                	$("div.list-template").html(data.results[0]).show(300);
-                });
+            	addListAjaxResponse(data)
             }
         });
+        $(this).ajaxError(function(){ listLoadingFailed() })
     });
 }
+
 /**
- * Loading search list with Ajax
+ * Loading search results list with Ajax
  */
 function searchFormAjax(){
 	 $(".heading1-bar form").submit(function(event) {
 		 	event.preventDefault();
 		 	$(".spinner-container").show()
 		    var url = $(this).parents(".heading1-bar").find("form").attr("action");
-		    var term = $(this).parents(".heading1-bar").find("input").attr("value");
-		    alert("url: "+url+" term "+term)
+		    var dataLocation = $(this).parents(".heading1-bar").find("input[name=dataLocation]").attr("value");
+		    var equipment = $(this).parents(".heading1-bar").find("input[name=equipment]").attr("value");
+		    var term = $(this).parents(".heading1-bar").find("input[name=q]").attr("value");
 	        $.ajax({
 	            type: 'GET',
 	            url: url,
-	            data: {"q":term},
+	            data: {"dataLocation.id":dataLocation,"equipment.id":equipment,"q":term},
 	            success: function(data) {
-	            	$("div.spinner-container").hide();
-	                $("div.list-template").fadeOut(100, function() {
-	                	$("div.list-template").html(data.results[0]).show(300);
-	                });
+	            	addListAjaxResponse(data)
 	            }
 	        })
+	        $(this).ajaxError(function(){ listLoadingFailed() })
 	});
 }
-
+/**
+ * Loading filtered list with Ajax
+ */
 function filterFormAjax() {
     $("div.filters form").submit(function(event) {
-    event.preventDefault();
-    var filterBox = $(this).parents("div.filters");
-    alert("here i am");
-    filterGrid(filterBox);
-        return false;
+	    event.preventDefault();
+	    var filterBox = $(this).parents("div.filters");
+	    var grid = $(filterBox).nextAll("div.list-template");
+	    $(".spinner-container").show()
+	    var url = $(filterBox).find("form").attr("action");
+	    var data = $(filterBox).find("form").serialize(); 
+	    $.ajax({
+	        type: 'POST',
+	        url: url,
+	        data: data,
+	        success: function(data) {
+	        	addListAjaxResponse(data)
+	        }
+	     });
+	    $(this).ajaxError(function(){ listLoadingFailed() })
     });
 }
-
-function filterGrid(filterBox) {
-    var grid = $(filterBox).nextAll("div.list-template");
-    $(".spinner-container").show()
-    var url = $(filterBox).find("form").attr("action");
-    var data = $(filterBox).find("form").serialize();
-    alert("url: "+url+" term "+data)
-    $.ajax({
-       type: 'POST',
-       url: url,
-       data: data,
-       success: function(data) {
-           $(grid).fadeOut(100, function() {
-           	$("div.list-template").html(data.results[0]).show(300);
-           });
-       }
+/**
+ * Clear form content
+ */
+function clearFormField(){
+	$(".clear-form").live('click', function(event){
+		event.preventDefault();
+		var form = $(this).parents("form");
+		$(form)[0].reset();
+		//For chosen plugin fields
+		$(form).find(".chzn-done").val('').trigger("liszt:updated");
+	})
+}
+/**
+ * Add list html to div holder
+ * @param data
+ */
+function addListAjaxResponse(data){
+	$("div.spinner-container").hide();
+    $("div.list-template").fadeOut(300, function() {
+    	$(this).html(data.results[0]).show(600);
     });
 }
-
-
-
-
-
+/**
+ * Handle ajax list loading error 
+ */
+function listLoadingFailed(){
+	$("div.spinner-container").hide();
+    $("div.list-template").fadeOut(100, function() {
+    	$(this).html("<span class='ajax-error'>Failed to fetch data</span>").show();
+    });
+}
 
 /**
  * Make an input field to accept only number

@@ -78,7 +78,7 @@ class ProviderController  extends AbstractEntityController {
 		adaptParamsForList()
 		List<Provider> providers = Provider.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc")
 		if(request.xhr)
-			this.ajaxModel(providers)
+			this.ajaxModel(providers,"")
 		else{
 		render(view:"/entity/list", model:[
 			template:"provider/providerList",
@@ -95,11 +95,11 @@ class ProviderController  extends AbstractEntityController {
 		List<Provider> providers = providerService.searchProvider(null, params['q'], params)		
 		if(!request.xhr)
 			response.sendError(404)
-		this.ajaxModel(providers)
+		this.ajaxModel(providers,params['q'])
 	}
 	
-	def ajaxModel(def entities) {
-		def model = [entities: entities,entityCount: entities.totalCount,names:names]
+	def ajaxModel(def entities,def searchTerm) {
+		def model = [entities: entities,entityCount: entities.totalCount,names:names,q:searchTerm]
 		def listHtml = g.render(template:"/entity/provider/providerList",model:model)
 		render(contentType:"text/json") { results = [listHtml] }
 	}

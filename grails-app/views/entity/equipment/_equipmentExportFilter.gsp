@@ -17,28 +17,28 @@
 					<li><g:selectFromList name="equipmentTypeids"
 							label="${message(code:'equipment.type.label')}" bean="${filterCmd}"
 							field="type" optionKey="id" multiple="true"
-							ajaxLink="${createLink(controller:'EquipmentType', action:'getAjaxData', params:[class: 'EquipmentType'])}"
+							ajaxLink="${createLink(controller:'EquipmentType', action:'getAjaxData', params:[observation:'USEDINMEMMS'])}"
 							from="${filterCmd?.equipmentTypes}" value="${filterCmd?.equipmentTypes*.id}" 
 							values="${filterCmd?.equipmentTypes.collect{it.names + ' ['+ it.code +']'}}"/></li>
 
 					<li><g:selectFromList name="manufacturerids"
 							label="${message(code:'provider.type.manufacturer')}" bean="${filterCmd}"
 							field="manufacturer" optionKey="${filterCmd?.manufacturers? 'id' : null}" multiple="true"
-							ajaxLink="${createLink(controller:'Provider', action:'getAjaxData', params:[class: 'Provider',type:'MANUFACTURER'])}"
+							ajaxLink="${createLink(controller:'Provider', action:'getAjaxData', params:[type:'MANUFACTURER'])}"
 							from="${filterCmd?.manufacturers}" value="${filterCmd?.manufacturers?.id}" 
 							values="${filterCmd?.manufacturers.collect{it.contact.contactName + ' ['+ it.code +']'}}"/></li>
 
 					<li><g:selectFromList name="supplierids"
 							label="${message(code:'provider.type.supplier')}" bean="${filterCmd}"
 							field="supplier" optionKey="${filterCmd?.suppliers? 'id' : null}" multiple="true"
-							ajaxLink="${createLink(controller:'Provider', action:'getAjaxData', params:[class: 'Provider',type:'SUPPLIER'])}"
+							ajaxLink="${createLink(controller:'Provider', action:'getAjaxData', params:[type:'SUPPLIER'])}"
 							from="${filterCmd?.suppliers}" value="${filterCmd?.suppliers?.id}"
 							values="${filterCmd?.suppliers.collect{it.contact.contactName + ' ['+ it.code +']'}}"
 							/></li>
 					<li><g:selectFromList name="serviceProvidersIds"
 							label="${message(code:'provider.type.serviceProvider')}" bean="${filterCmd}"
 							field="serviceProviders" optionKey="${filterCmd?.suppliers? 'id' : null}" multiple="true"
-							ajaxLink="${createLink(controller:'Provider', action:'getAjaxData', params:[class: 'Provider',type:'SERVICEPROVIDER'])}"
+							ajaxLink="${createLink(controller:'Provider', action:'getAjaxData', params:[type:'SERVICEPROVIDER'])}"
 							from="${filterCmd?.serviceProviders}" value="${filterCmd?.serviceProviders?.id}"
 							values="${filterCmd?.serviceProviders.collect{it.contact.contactName + ' ['+ it.code +']'}}"
 							/></li>
@@ -69,5 +69,6 @@
 				</ul>
 				<input type="hidden" name="exported" value="true"/>
 				<button type="submit">Export</button>
+				<a href="#" class="clear-form"><g:message code="default.link.clear.form.label"/></a>
 		  </g:form>
 		</div>

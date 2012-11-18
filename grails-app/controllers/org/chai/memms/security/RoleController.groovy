@@ -76,7 +76,7 @@ class RoleController extends AbstractEntityController{
 		adaptParamsForList()
 		List<Role> roles = Role.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc");
 		if(request.xhr)
-			this.ajaxModel(roles)
+			this.ajaxModel(roles,"")
 		else{
 			render(view:"/entity/list",model:[
 				template: "role/roleList",
@@ -93,11 +93,11 @@ class RoleController extends AbstractEntityController{
 		List<Role> roles = roleService.searchRole(params['q'], params)
 		if(!request.xhr)
 			response.sendError(404)
-		this.ajaxModel(roles)
+		this.ajaxModel(roles,params['q'])
 	}
 	
-	def ajaxModel(def entities) {
-		def model = [entities: entities,entityCount: entities.totalCount,names:names]
+	def ajaxModel(def entities,def searchTerm) {
+		def model = [entities: entities,entityCount: entities.totalCount,q:searchTerm,names:names]
 		def listHtml = g.render(template:"/entity/role/roleList",model:model)
 		render(contentType:"text/json") { results = [listHtml] }
 	}
