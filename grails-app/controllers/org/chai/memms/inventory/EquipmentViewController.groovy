@@ -264,6 +264,7 @@ class EquipmentViewController extends AbstractController {
 
 		DataLocation dataLocation = null
 		if(params['dataLocation.id']) dataLocation = DataLocation.get(params.int("dataLocation.id"))
+		else if(user.location instanceof DataLocation) dataLocation = (DataLocation)user.location
 		List<Equipment> equipments =[]
 		if(dataLocation) equipments = equipmentService.searchEquipment(params['term'],dataLocation, [:])
 		else equipments = equipmentService.searchEquipment(params['term'],null, [:])
