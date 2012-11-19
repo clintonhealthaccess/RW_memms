@@ -13,5 +13,10 @@
 		</div>
 		<g:render template="${template}" />
 	</div>
+	<script type="text/javascript">
+			$(document).ready(function() {
+				 clearFormField()
+			});
+	</script>
 </body>
 </html>

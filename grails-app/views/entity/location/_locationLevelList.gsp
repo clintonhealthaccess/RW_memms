@@ -2,8 +2,8 @@
 	<thead>
 		<tr>
 			<th/>
-			<th><g:message code="entity.code.label"/></th>
-			<th><g:message code="entity.name.label"/></th>
+			<g:sortableColumn property="code" defaultOrder="asc" title="${message(code: 'entity.code.label')}" params="[q:q]" />
+			<g:sortableColumn property="${names}" defaultOrder="asc" title="${message(code: 'entity.name.label')}"  params="[q:q]" />
 		</tr>
 	</thead>
 	<tbody>
@@ -32,3 +32,4 @@
 		</g:each>
 	</tbody>
 </table>
+<g:render template="/templates/pagination" />

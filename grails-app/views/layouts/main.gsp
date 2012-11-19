@@ -28,9 +28,7 @@
       
       <ul id="top_nav">
 				<shiro:user>
-					<%
-						def user = User.findByUuid(SecurityUtils.subject.principal, [cache: true])
-					%>
+					<% def user = User.findByUuid(SecurityUtils.subject.principal, [cache: true])%>
 					<li>
 						<a href="${createLinkWithTargetURI(controller: 'account', action:'editAccount')}">
 							<g:message code="header.navigation.myaccount"/> : ${user?.firstname} ${user?.lastname}
@@ -80,10 +78,7 @@
     </div>
     
   </div>
-  
-  <%
-						def user = User.findByUuid(SecurityUtils.subject.principal, [cache: true])
-					%>
+  <% def user = User.findByUuid(SecurityUtils.subject.principal, [cache: true]) %>
   <div id="navigation">
     <div class="wrapper">
       <ul id="main-menu" class="menu">
@@ -98,20 +93,18 @@
 				</ul>
 	         </li>
 		</shiro:hasPermission>
-		<shiro:hasPermission permission="menu:correctivemaintenance">
-			<li><a class="${controllerName=='workOrder' || controllerName=='notificationWorkOrder' ?'active':''}" href="#"><g:message code="header.navigation.corrective.maintenance"/></a>
-			<ul class="submenu">
-			<%--<%
-						def user = User.findByUuid(SecurityUtils.subject.principal, [cache: true])
-					%>
-					--%>
-					<li><a class="${controllerName=='workOrder'?'active':''}" href="${createLink(controller:'workOrderView', action:'summaryPage')}"><g:message code="header.navigation.corrective.maintenance"/></a></li>
-					<li><a class="${controllerName=='notificationWorkOrder'?'active':''}" href="${createLink(controller: 'notificationWorkOrder', action:'list')}"><g:message code="header.navigation.notification.workOrder"/> ()</a></li>
+		<shiro:hasPermission permission="menu:maintenance">
+			<li><a href="#"><g:message code="header.navigation.maintenance"/></a>
+				<ul class="submenu">
+					<shiro:hasPermission permission="menu:correctivemaintenance">
+						<li><a class="${controllerName=='workOrderView'?'active':''}" href="${createLink(controller:'workOrderView', action:'summaryPage')}"><g:message code="header.navigation.corrective.maintenance"/></a></li>
+					</shiro:hasPermission>
+					<shiro:hasPermission permission="menu:preventivemaintenance">
+						<li><a class="${controllerName=='preventiveOrderView'?'active':''}" href="#"><g:message code="header.navigation.preventive.maintenance"/></a></li>
+					</shiro:hasPermission>
+					<li><a class="${controllerName=='notificationWorkOrder'?'active':''}" href="${createLink(controller: 'notificationWorkOrder', action:'list')}"><g:message code="notification.work.order.label"/> ()</a></li>
 	         	</ul>
-	         	</li>
-		</shiro:hasPermission>
-		<shiro:hasPermission permission="menu:preventivemaintenance">
-			<li><a class="${controllerName=='dashboard'?'active':''}" href="#"><g:message code="header.navigation.preventive.maintenance"/></a></li>
+         	</li>
 		</shiro:hasPermission>
 		<shiro:hasPermission permission="menu:reports">
 			<li><a class="${controllerName=='dashboard'?'active':''}" href="#"><g:message code="header.navigation.reports"/></a></li>

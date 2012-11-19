@@ -27,12 +27,15 @@
  */
 package org.chai.memms.security
 
+import groovy.transform.EqualsAndHashCode;
+
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocation;
 import org.chai.location.Location;
 import org.chai.location.LocationLevel;
 import org.chai.memms.util.Utils
 
+@EqualsAndHashCode
 class User {
 	def locationService
 	enum UserType{
@@ -75,6 +78,10 @@ class User {
 	
 	User() {
 		roles = []
+	}
+	
+	def getNames(){
+		"$firstname $lastname"
 	}
 	
 	def getPermissions() {

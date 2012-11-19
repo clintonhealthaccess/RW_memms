@@ -21,14 +21,14 @@
 			</li>
 			<li><div class="half"><g:input name="from" dateClass="date-picker" label="${message(code:'notification.date.from.label')}" bean="${filterCmd}" field="from" value="${filterCmd?.from}"/></div><div class="half"><g:input name="to" dateClass="date-picker" label="${message(code:'notification.date.to.label')}" bean="${filterCmd}" field="to" value="${filterCmd?.to}"/></div></li>
 		</ul>
-		<button type="submit">Filter</button>
-		<g:if test="">
-		<input type="hidden" name="dataLocation.id" value="${dataLocation.id}"/>
-		</g:if>
+		<button type="submit"><g:message code="entity.filter.label" /></button>
+		<a href="#" class="clear-form"><g:message code="default.link.clear.form.label"/></a>
   </g:form>
 </div>
 <g:if test="${params?.q}">
-<h2 class="filter-results">Showing filtered list of notifications which contain search term ${params?.q}</h2>
+	<h2 class="filter-results">
+		<g:message code="entity.filter.message.label" args="${[message(code: 'entity.notification.label'),params?.q]}" />
+	</h2>
 </g:if>
 <script type="text/javascript">
 	$(document).ready(function() {

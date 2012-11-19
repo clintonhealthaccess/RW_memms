@@ -25,14 +25,13 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.inventory
 
+ package org.chai.memms.inventory
 import java.util.Date;
 import java.util.Map;
 import org.chai.location.DataLocation;
 import org.chai.memms.AbstractEntityController;
 import org.chai.memms.Notification;
-import org.chai.memms.corrective.maintenance.NotificationWorkOrder;
 import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.memms.inventory.Equipment;
 import org.chai.memms.corrective.maintenance.WorkOrder.Criticality;
@@ -47,7 +46,7 @@ class NotificationEquipmentController extends AbstractEntityController{
 	def notificationEquipmentService
 	
 	def getEntity(def id) {
-		return NotificationEquipment.get(id);
+		return NotificationEquipment.get(id)
 	}
 
 	def createEntity() {
@@ -95,32 +94,37 @@ class NotificationEquipmentController extends AbstractEntityController{
 	def list = {
 		adaptParamsForList()
 		Boolean read = (params.read) ? params.boolean("read") : null;
-		List<NotificationEquipment> notifications = notificationEquipmentService.filterNotifications(null,null, user, null,null,read, params)
-		render(view:"/entity/list", model:[
-			template:"notification/notificationEquipmentList",
-			filterTemplate:"notification/notificationEquipmentFilter",
-			entities: notifications,
-			entityCount: notifications.totalCount,
-			code: getLabel(),
-			entityClass: getEntityClass()
-			])
+		def notifications = notificationEquipmentService.filterNotifications(null,null, user, null,null,read, params)
+		if(request.xhr)
+			this.ajaxModel(notifications,"")
+		else{
+			render(view:"/entity/list", model:[
+				template:"notification/notificationEquipmentList",
+				filterTemplate:"notification/notificationEquipmentFilter",
+				listTop:"notification/notificationEquipmentListTop",
+				entities: notifications,
+				entityCount: notifications.totalCount,
+				code: getLabel(),
+				entityClass: getEntityClass()
+				])
+		}
 	}
 	
 	def search = {
 		adaptParamsForList()
 		Boolean read = (params.read) ? params.boolean("read") : null;
-		List<NotificationEquipment> notifications = notificationEquipmentService.searchNotificition(params['q'],user,params)
-		
-		render(view:"/entity/list", model:[
-			template:"notification/notificationEquipmentList",
-			filterTemplate:"notification/notificationEquipmentFilter",
-			entities: notifications,
-			entityCount: notifications.totalCount,
-			code: getLabel(),
-			entityClass: getEntityClass(),
-			q:params['q']
-			])
+		def notifications = notificationEquipmentService.searchNotificition(params['q'],user,params)
+		if(!request.xhr)
+			response.sendError(404)
+		this.ajaxModel(notifications,params['q'])
 	}
+	
+	def ajaxModel(def entities,def searchTerm) {
+		def model = [entities: entities,entityCount: entities.totalCount,q: searchTerm,entityClass: getEntityClass()]
+		def listHtml = g.render(template:"/entity/notification/notificationEquipmentList",model:model)
+		render(contentType:"text/json") { results = [listHtml] }
+	}
+
 	def getAjaxData = {
 		//TODO will be used fetch new notifications using ajax and update page
 	}
@@ -144,15 +148,9 @@ class NotificationEquipmentController extends AbstractEntityController{
 	def filter = {NotificationEquipmentFilterCommand cmd ->
 		adaptParamsForList()
 		List<NotificationEquipment> notifications = notificationEquipmentService.filterNotifications(cmd.dataLocation,cmd.department, user, cmd.from,cmd.to,cmd.getReadStatus(), params)
-		render(view:"/entity/list", model:[
-			template:"notification/notificationEquipmentList",
-			filterTemplate:"notification/notificationEquipmentFilter",
-			entities: notifications,
-			entityCount: notifications.totalCount,
-			code: getLabel(),
-			entityClass: getEntityClass(),
-			filterCmd:cmd
-			])
+		if(!request.xhr)
+			response.sendError(404)
+		this.ajaxModel(notifications,"")
 	}
 }
 

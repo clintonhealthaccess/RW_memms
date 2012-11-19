@@ -9,16 +9,25 @@ class TaskListController extends AbstractController{
 	 */
 	def list = {
 		adaptParamsForList()
- 
 		def tasks = Task.list(params)
- 
-		render (view: '/entity/task/list', model:[
-			entities: tasks,
-			template: "task/taskList",
-			code: 'task.label',
-			entityCount: Task.count(),
-			entityClass: Task.class,
-			search: true
-		])
+		if(request.xhr)
+			this.ajaxModel(tasks)
+		else{
+			render (view: '/entity/task/list', model:[
+				entities: tasks,
+				template: "task/taskList",
+				listTop:"task/listTop",
+				code: 'task.label',
+				entityCount: Task.count(),
+				entityClass: Task.class,
+				search: true
+			])
+		}
 	}
+	def ajaxModel(def entities) {
+		def model = [entities: entities,entityCount: entities.totalCount]
+		def listHtml = g.render(template:"/entity/task/taskList",model:model)
+		render(contentType:"text/json") { results = [listHtml] }
+	}
+
 }

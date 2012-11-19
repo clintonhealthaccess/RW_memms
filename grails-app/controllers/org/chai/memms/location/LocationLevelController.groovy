@@ -36,8 +36,6 @@ class LocationLevelController extends AbstractEntityController {
 	
 	def bindParams(def entity) {
 		entity.properties = params
-		
-		if (params.names!=null) entity.names = params.names
 	}
 
 	def getModel(def entity) {
@@ -75,17 +73,25 @@ class LocationLevelController extends AbstractEntityController {
 
 	def list = {
 		adaptParamsForList()
-		
-		List<LocationLevel> locationLevels = LocationLevel.list(params);
-
+		List<LocationLevel> levels = LocationLevel.list(params);
+		if(request.xhr)
+			this.ajaxModel(levels)
+		else{
 		render (view: '/entity/list', model:[
 			template:"location/locationLevelList",
-			actionButtonsTemplate:"location/locationLevelActionButtons",
-			entities: locationLevels,
+			listTop:"location/locationLevelListTop",
+			entities: levels,
 			entityCount: LocationLevel.count(),
 			code: getLabel(),
-			entityClass: getEntityClass()
+			names:names
 		])
+		}
+	}
+	
+	def ajaxModel(def entities) {
+		def model = [entities: entities,entityCount: entities.totalCount,names:names]
+		def listHtml = g.render(template:"/entity/location/locationLevelList",model:model)
+		render(contentType:"text/json") { results = [listHtml] }
 	}
 	
 }

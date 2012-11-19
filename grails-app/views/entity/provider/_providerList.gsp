@@ -58,9 +58,10 @@
 					${provider.contact.country}
 				</td>
 				<td>
-					${provider.contact.addressDescriptions}
+					<g:stripHtml field="${provider.contact.addressDescriptions}" chars="30"/>
 				</td>
 			</tr>
 		</g:each>
 	</tbody>
 </table>
+<g:render template="/templates/pagination" />

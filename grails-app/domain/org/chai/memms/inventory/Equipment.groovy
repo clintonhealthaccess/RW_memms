@@ -37,6 +37,7 @@ import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.location.DataLocation;
 import org.apache.commons.lang.math.RandomUtils;
 
+import groovy.transform.EqualsAndHashCode;
 import i18nfields.I18nFields
 
 /**
@@ -44,6 +45,7 @@ import i18nfields.I18nFields
  *
  */
 @i18nfields.I18nFields
+@EqualsAndHashCode(includes="code")
 public class Equipment {
 	
 	enum PurchasedBy{
@@ -203,27 +205,4 @@ public class Equipment {
 	String toString() {
 		return "Equipment[id=" + id + " currentState="+currentStatus+"]";
 	}
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this.is(obj))
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Equipment other = (Equipment) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
-	}	
 }

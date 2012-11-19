@@ -13,7 +13,7 @@
 	
 	<div class="main">
   	<g:form url="[controller:'location', action:'save', params:[targetURI: targetURI]]" useToken="true" class="simple-list">
-  		<g:i18nTextarea name="names" bean="${location}" label="${message(code:'entity.name.label')}" field="names" height="150" width="300" maxHeight="150" />
+  		<g:i18nInput name="names" label="${message(code:'entity.names.label')}" bean="${location}" field="names"/>
   		<g:input name="code" label="${message(code:'entity.code.label')}" bean="${location}" field="code"/>
   		<g:selectFromList name="level.id" label="${message(code:'location.level.label')}" bean="${location}" field="level" 
   			from="${levels}" value="${location.level?.id}" values="${levels.collect{it.names}}" optionKey="id"/>

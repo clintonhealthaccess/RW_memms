@@ -78,7 +78,7 @@ class EquipmentService {
 		if(log.isDebugEnabled()) log.debug("Updating Equipment status params: "+equipment)
 		equipment.save(failOnError:true)
 	}
-	public List<Equipment> searchEquipment(String text,DataLocation dataLocation,Map<String, String> params) {
+	public def searchEquipment(String text,DataLocation dataLocation,Map<String, String> params) {
 		def dbFieldTypeNames = 'names_'+languageService.getCurrentLanguagePrefix();
 		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
 		def criteria = Equipment.createCriteria();
@@ -90,6 +90,7 @@ class EquipmentService {
 				or{
 					ilike("code","%"+text+"%")
 					ilike("serialNumber","%"+text+"%")
+					ilike("model","%"+text+"%")
 					ilike(dbFieldDescriptions,"%"+text+"%") 
 					ilike("t."+dbFieldTypeNames,"%"+text+"%")
 			    }
@@ -110,7 +111,7 @@ class EquipmentService {
 	}
 	
 
-	public List<Equipment> filterEquipment(def dataLocation, def supplier, def manufacturer,def serviceProvider, def equipmentType, 
+	public def filterEquipment(def dataLocation, def supplier, def manufacturer,def serviceProvider, def equipmentType, 
 		def purchaser,def donor,def obsolete,def status,Map<String, String> params){
 		
 		def criteria = Equipment.createCriteria();

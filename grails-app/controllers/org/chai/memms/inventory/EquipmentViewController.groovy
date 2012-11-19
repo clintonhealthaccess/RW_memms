@@ -66,7 +66,10 @@ class EquipmentViewController extends AbstractController {
 	def getEntityClass() {
 		return Equipment.class;
 	}
-	
+	def view ={
+		//TODO
+	}
+
 	def list={
 		def dataLocation = DataLocation.get(params.int('dataLocation.id'))
 		def equipments
@@ -81,34 +84,42 @@ class EquipmentViewController extends AbstractController {
 		render(view:"/entity/list", model:[
 					template:"equipment/equipmentList",
 					filterTemplate:"equipment/equipmentFilter",
-					actionButtonsTemplate:"equipment/equipmentActionButtons",
+					listTop:"equipment/listTop",
 					dataLocation:dataLocation,
 					entities: equipments,
 					entityCount: equipments.totalCount,
-					code: getLabel(),
-					entityClass: getEntityClass(),
-					controller:"equipment"
-				])
+					code: getLabel()
+					])
 	}
 
 	def search = {
-		adaptParamsForList()
-		def location = DataLocation.get(params.int("dataLocation.id"));
-		if (location == null)
+		DataLocation dataLocation = DataLocation.get(params.int("dataLocation.id"));
+		if (dataLocation == null)
 			response.sendError(404)
-		else{
-			List<Equipment> equipments = equipmentService.searchEquipment(params['q'],location,params)
-			render (view: '/entity/list', model:[
-						template:"equipment/equipmentList",
-						filterTemplate:"equipment/equipmentFilter",
-						entities: equipments,
-						entityCount: equipments.totalCount,
-						code: getLabel(),
-						q:params['q'],
-						dataLocation:location,
-						controller:"equipment"
-					])
-		}
+
+		adaptParamsForList()
+		def equipments = equipmentService.searchEquipment(params['q'],dataLocation,params)
+		if(!request.xhr)
+			response.sendError(404)
+		this.ajaxModel(equipments,dataLocation,params['q'])
+	}
+	
+	def filter = { FilterCommand cmd ->
+		if (log.isDebugEnabled()) log.debug("equipments.filter, command "+cmd)
+		if (cmd.dataLocation == null)
+			response.sendError(404)
+
+		adaptParamsForList()
+		def equipments = equipmentService.filterEquipment(cmd.dataLocation,cmd.supplier,cmd.manufacturer,cmd.serviceProvider,cmd.equipmentType,cmd.purchaser,cmd.donor,cmd.obsolete,cmd.status,params)
+		if(!request.xhr)
+			response.sendError(404)
+		this.ajaxModel(equipments,cmd.dataLocation,"")
+	}
+	
+	def ajaxModel(def entities,def dataLocation,def searchTerm) {
+		def model = [entities: entities,entityCount: entities.totalCount,dataLocation:dataLocation,q:searchTerm]
+		def listHtml = g.render(template:"/entity/equipment/equipmentList",model:model)
+		render(contentType:"text/json") { results = [listHtml] }
 	}
 
 	def summaryPage = {
@@ -123,7 +134,6 @@ class EquipmentViewController extends AbstractController {
 
 		def locationSkipLevels = inventoryService.getSkipLocationLevels()
 
-
 		if (location != null) {
 			template = '/inventorySummaryPage/sectionTable'
 			inventories = inventoryService.getInventoryByLocation(location,dataLocationTypesFilter,params)
@@ -135,8 +145,7 @@ class EquipmentViewController extends AbstractController {
 					currentLocationTypes: dataLocationTypesFilter,
 					template: template,
 					entityCount: inventories?.totalCount,
-					locationSkipLevels: locationSkipLevels,
-					entityClass: getEntityClass()
+					locationSkipLevels: locationSkipLevels
 				])
 	}
 
@@ -216,27 +225,6 @@ class EquipmentViewController extends AbstractController {
 					dataLocationTypes:DataLocationType.list(),
 					code: getLabel()
 				])
-	}
-
-	def filter = { FilterCommand cmd ->
-		if (log.isDebugEnabled()) log.debug("equipments.filter, command "+cmd)
-		if (cmd.dataLocation == null)
-			response.sendError(404)
-
-		adaptParamsForList()
-		def equipments = equipmentService.filterEquipment(cmd.dataLocation,cmd.supplier,cmd.manufacturer,cmd.serviceProvider,cmd.equipmentType,cmd.purchaser,cmd.donor,cmd.obsolete,cmd.status,params)
-		render (view: '/entity/list', model:[
-					template:"equipment/equipmentList",
-					filterTemplate:"equipment/equipmentFilter",
-					dataLocation:cmd.dataLocation,
-					entities: equipments,
-					entityCount: equipments.totalCount,
-					code: getLabel(),
-					entityClass: getEntityClass(),
-					filterCmd:cmd,
-					q:params['q']
-				])
-
 	}
 
 	def export = { FilterCommand cmd ->

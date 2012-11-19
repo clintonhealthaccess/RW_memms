@@ -77,36 +77,74 @@ class WorkOrderViewController extends AbstractController{
 			render(view:"/entity/summary", model:[entities: workOrder])
 		}
 	}
+	
+	def getWorkOrderClueTipsAjaxData = {
+		def workOrder = WorkOrder.get(params.long("id"))
+		def html = g.render(template:"/templates/workOrderClueTip",model:[workOrder:workOrder])
+		render(contentType:"text/plain", text:html)
+	}
 
 	def list = {
-		adaptParamsForList()
 		List<WorkOrder> orders= []
 		Equipment equipment = null
-		CalculationLocation  location = null
-		if(params["dataLocation.id"]) location = CalculationLocation.get(params.int("dataLocation.id"))
+		CalculationLocation  dataLocation = null
+		if(params["dataLocation.id"]) dataLocation = CalculationLocation.get(params.int("dataLocation.id"))
 		if(params["equipment.id"]) equipment = Equipment.get(params.int("equipment.id"))
 		
-		if(location)
-			orders = workOrderService.getWorkOrdersByCalculationLocation(location,params)	
+		adaptParamsForList()
+		if(dataLocation)
+			orders = workOrderService.getWorkOrdersByCalculationLocation(dataLocation,params)	
 		if(equipment)
 		 	orders= workOrderService.getWorkOrdersByEquipment(equipment,params)
-
-		render(view:"/entity/list", model:[
-					template:"workOrder/workOrderList",
-					filterTemplate:"workOrder/workOrderFilter",
-					actionButtonsTemplate:"workOrder/workOrderActionButtons",
-					entities: orders,
-					entityCount: orders.totalCount,
-					code: getLabel(),
-					entityClass: getEntityClass(),
-					equipment:equipment,
-					dataLocation:location,
-					controller:"workOrder"
-				])
+		 if(request.xhr){
+			 this.ajaxModel(orders,dataLocation,equipment,"")
+		 }else{
+			render(view:"/entity/list", model:[
+						template:"workOrder/workOrderList",
+						filterTemplate:"workOrder/workOrderFilter",
+						listTop:"workOrder/listTop",
+						dataLocation:dataLocation,
+						equipment:equipment,
+						entities: orders,
+						entityCount: orders.totalCount,
+						code: getLabel()
+					])
+		 }
+	}
+	
+	def search = {
+		Equipment equipment = null
+		DataLocation dataLocation = null
+		if(params["equipment.id"])
+			equipment = Equipment.get(params.long("equipment.id"))
+		else if(params["dataLocation.id"])
+			dataLocation = DataLocation.get(params.long('dataLocation.id'))
+			
+		adaptParamsForList()
+		List<WorkOrder> orders = workOrderService.searchWorkOrder(params['q'],dataLocation,equipment,params)
+		if(!request.xhr)
+			response.sendError(404)
+		this.ajaxModel(orders,dataLocation,equipment,params['q'])
+	}
+	
+	def filter = { FilterWorkOrderCommand cmd ->
+		if(log.isDebugEnabled()) log.debug("workOrder filter command object:"+cmd)
+		
+		adaptParamsForList()
+		List<WorkOrder> orders = workOrderService.filterWorkOrders(cmd.dataLocation,cmd.equipment,cmd.openOn,cmd.closedOn,cmd.criticality,cmd.currentStatus,params)
+		if(!request.xhr)
+			response.sendError(404)
+		this.ajaxModel(orders,cmd.dataLocation,cmd.equipment,"")
+	}
+	
+	def ajaxModel(def entities,def dataLocation,def equipment, def searchTerm) {
+		def model = [entities: entities,entityCount: entities.totalCount,dataLocation:dataLocation,equipment:equipment,q:searchTerm]
+		def listHtml = g.render(template:"/entity/workOrder/workOrderList",model:model)
+		render(contentType:"text/json") { results = [listHtml] }
 	}
 
 	def summaryPage = {
-		if(user.location instanceof DataLocation) redirect (controller: "workOrder", action: "list",params:['dataLocation.id':user.location.id])
+		if(user.location instanceof DataLocation) redirect (controller: "workOrderView", action: "list",params:['dataLocation.id':user.location.id])
 
 		def location = Location.get(params.int('location'))
 		def dataLocationTypesFilter = getLocationTypes()
@@ -127,8 +165,7 @@ class WorkOrderViewController extends AbstractController{
 					currentLocationTypes: dataLocationTypesFilter,
 					template: template,
 					entityCount: correctiveMaintenances?.totalCount,
-					locationSkipLevels: locationSkipLevels,
-					entityClass: getEntityClass()
+					locationSkipLevels: locationSkipLevels
 				])
 	}
 
@@ -223,55 +260,6 @@ class WorkOrderViewController extends AbstractController{
 		render(contentType:"text/json") { results = [result,html] }
 	}
 
-	def getWorkOrderClueTipsAjaxData = {
-		def workOrder = WorkOrder.get(params.long("id"))
-		def html = g.render(template:"/templates/workOrderClueTip",model:[workOrder:workOrder])
-		render(contentType:"text/plain", text:html)
-	}
-
-	
-	
-	def search = {
-		adaptParamsForList()
-		Equipment equipment = null
-		DataLocation dataLocation = null
-		if(params["equipment.id"]){
-			equipment = Equipment.get(params.long("equipment.id"))
-		}else if(params["dataLocation.id"]){
-			dataLocation = DataLocation.get(params.long('dataLocation.id'))
-		}
-		List<WorkOrder> workOrders = workOrderService.searchWorkOrder(params['q'],dataLocation,equipment,params)
-		render (view: '/entity/list', model:[
-					template:"workOrder/workOrderList",
-					filterTemplate:"workOrder/workOrderFilter",
-					entities: workOrders,
-					entityCount: workOrders.totalCount,
-					code: getLabel(),
-					equipment:equipment,
-					dataLocation:dataLocation,
-					q:params['q'],
-					controller:"workOrder"
-				])
-	}
-
-	def filter = { FilterWorkOrderCommand cmd ->
-		if(log.isDebugEnabled()) log.debug(cmd)
-		adaptParamsForList()
-		List<WorkOrder> orders = workOrderService.filterWorkOrders(cmd.dataLocation,cmd.equipment,cmd.openOn,cmd.closedOn,cmd.criticality,cmd.currentStatus,params)
-
-		render(view:"/entity/list", model:[
-					template:"workOrder/workOrderList",
-					filterTemplate:"workOrder/workOrderFilter",
-					entities: orders,
-					entityCount: orders.totalCount,
-					code: getLabel(),
-					equipment:cmd.equipment,
-					dataLocation:cmd.dataLocation,
-					entityClass: getEntityClass(),
-					filterCmd:cmd,
-					controller:"workOrder"
-				])
-	}
 }
 
 class FilterWorkOrderCommand {
