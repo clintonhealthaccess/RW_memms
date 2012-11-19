@@ -81,7 +81,7 @@ class BootStrap {
 				
 				def defaultDataClerkRole = Role.findOrCreateByName("Data Clerk") 
 				defaultDataClerkRole.addToPermissions("home:*")
-				defaultDataClerkRole.addToPermissions("menu:home,inventory,correctivemaintenance")
+				defaultDataClerkRole.addToPermissions("menu:home,inventory,maintenance,correctivemaintenance,preventivemaintenance")
 				defaultDataClerkRole.addToPermissions("equipmentType:getAjaxData")
 				defaultDataClerkRole.addToPermissions("provider:getAjaxData")
 				defaultDataClerkRole.addToPermissions("department:getAjaxData")

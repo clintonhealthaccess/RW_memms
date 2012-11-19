@@ -47,11 +47,11 @@ class NotificationWorkOrderController extends AbstractEntityController{
 	def notificationWorkOrderService
 	
 	def getEntity(def id) {
-		return WorkOrder.get(id);
+		return NotificationWorkOrder.get(id);
 	}
 
 	def createEntity() {
-		return new WorkOrder();
+		return new NotificationWorkOrder();
 	}
 
 	def getTemplate() {
@@ -101,36 +101,40 @@ class NotificationWorkOrderController extends AbstractEntityController{
 		adaptParamsForList()
 		Boolean read = (params.read) ? params.boolean("read") : null;
 		WorkOrder workOrder = WorkOrder.get(params.id)
-		List<NotificationWorkOrder> notifications = notificationWorkOrderService.filterNotifications(workOrder, user, null,null,read, params)
-		render(view:"/entity/list", model:[
-			template:"notification/notificationWorkOrderList",
-			filterTemplate:"notification/notificationWorkOrderFilter",
-			actionButtonsTemplate:"notification/notificationWorkOrderActionButtons",
-			entities: notifications,
-			entityCount: notifications.totalCount,
-			workOrder:workOrder,
-			code: getLabel(),
-			entityClass: getEntityClass()
-			])
+		def notifications = notificationWorkOrderService.filterNotifications(workOrder, user, null,null,read, params)
+		
+		if(request.xhr)
+			this.ajaxModel(notifications,workOrder,"")
+		else{
+			render(view:"/entity/list", model:[
+				template:"notification/notificationWorkOrderList",
+				filterTemplate:"notification/notificationWorkOrderFilter",
+				listTop:"notification/notificationWorkOrderListTop",
+				entities: notifications,
+				entityCount: notifications.totalCount,
+				workOrder:workOrder,
+				code: getLabel(),
+				])
+		}
 	}
 	
 	def search = {
 		adaptParamsForList()
 		Boolean read = (params.read) ? params.boolean("read") : null;
 		WorkOrder workOrder = WorkOrder.get(params.workOrder)
-		List<NotificationWorkOrder> notifications = notificationWorkOrderService.searchNotificition(params['q'],user,workOrder, read,params)
+		def notifications = notificationWorkOrderService.searchNotificition(params['q'],user,workOrder, read,params)
 		
-		render(view:"/entity/list", model:[
-			template:"notification/notificationWorkOrderList",
-			filterTemplate:"notification/notificationWorkOrderFilter",
-			entities: notifications,
-			entityCount: notifications.totalCount,
-			workOrder:workOrder,
-			code: getLabel(),
-			entityClass: getEntityClass(),
-			q:params['q']
-			])
+		if(!request.xhr)
+			response.sendError(404)
+		this.ajaxModel(notifications,workOrder,params['q'])
 	}
+	
+	def ajaxModel(def entities,def workOrder,def searchTerm) {
+		def model = [entities: entities,entityCount: entities.totalCount,workOrder:workOrder,q: searchTerm,entityClass: getEntityClass()]
+		def listHtml = g.render(template:"/entity/notification/notificationWorkOrderList",model:model)
+		render(contentType:"text/json") { results = [listHtml] }
+	}
+
 	def getAjaxData = {
 		//TODO will be used fetch new notifications using ajax and update page
 	}
@@ -175,16 +179,9 @@ class NotificationWorkOrderController extends AbstractEntityController{
 	def filter = {NotificationWorkOrderFilterCommand cmd ->
 		adaptParamsForList()
 		List<NotificationWorkOrder> notifications = notificationWorkOrderService.filterNotifications(cmd.workOrder, user, cmd.from,cmd.to,cmd.getReadStatus(), params)
-		render(view:"/entity/list", model:[
-			template:"notification/notificationWorkOrderList",
-			filterTemplate:"notification/notificationWorkOrderFilter",
-			entities: notifications,
-			entityCount: notifications.totalCount,
-			workOrder:cmd.workOrder,
-			code: getLabel(),
-			entityClass: getEntityClass(),
-			filterCmd:cmd
-			])
+		if(!request.xhr)
+			response.sendError(404)
+		this.ajaxModel(notifications,cmd.workOrder,"")
 	}
 }
 

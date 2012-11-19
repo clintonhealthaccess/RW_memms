@@ -34,7 +34,7 @@ import i18nfields.I18nFields
  *
  */
 @i18nfields.I18nFields
-@EqualsAndHashCode(includes='code')
+@EqualsAndHashCode(includes="code")
 class Department {
 	
 	String code

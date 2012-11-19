@@ -20,7 +20,7 @@
 		${render(template:'/templates/progressImages')}
 	
 		$(document).ready(function() {
-			
+			listGridAjaxInit()
 			window.setInterval(function(){
 				var data = '';
 				$('.js_task-entry').each(function(i, element) {

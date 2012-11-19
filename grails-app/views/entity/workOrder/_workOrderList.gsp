@@ -66,6 +66,7 @@
 		</g:each>
 	</tbody>
 </table>
+<g:render template="/templates/pagination" />
 <script type="text/javascript">
 	$(document).ready(function() {
 		escaletWorkOrder("${createLink(controller:'workOrder',action: 'escalate')}")

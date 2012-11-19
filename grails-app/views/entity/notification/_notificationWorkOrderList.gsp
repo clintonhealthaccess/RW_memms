@@ -2,8 +2,8 @@
 <table class="items">
 	<thead>
 		<tr>
-			<th><g:message code="notification.sender.label"/></th>
-			<th><g:message code="notification.writtenOn.label"/></th>
+			<g:sortableColumn property="sender"  title="${message(code: 'notification.sender.label')}" params="[q:q,'workOrder.id':workOrder?.id]" />
+			<g:sortableColumn property="writtenOn"  title="${message(code: 'notification.writtenOn.label')}" params="[q:q,'workOrder.id':workOrder?.id]" />
 			<th><g:message code="notification.content.label"/></th>
 			<th/>
 		</tr>
@@ -12,7 +12,7 @@
 		<g:each in="${entities}" status="i" var="notification">
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 				<td>
-					${notification?.sender?.firstname +" "+ notification?.sender?.lastname}
+					${notification?.sender?.names}
 				</td>
 				<td>
 					${Utils.formatDateWithTime(notification.writtenOn)}

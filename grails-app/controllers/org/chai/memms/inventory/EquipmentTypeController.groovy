@@ -91,33 +91,35 @@ class EquipmentTypeController extends AbstractEntityController{
 	def list = {
 		adaptParamsForList()
 		List<EquipmentType> types = EquipmentType.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc");
+		if(request.xhr)
+			this.ajaxModel(types,"")
+		else{
 		render(view:"/entity/list",model:[
-					template: "equipmentType/equipmentTypeList",
-					actionButtonsTemplate:"equipmentType/equipmentTypeActionButtons",
-					entities: types,
-					entityCount: types.totalCount,
-					code: getLabel(),
-					entityClass: getEntityClass(),
-					names:names,
-					importTask:'EquipmentTypeImportTask',
-					exportTask:'EquipmentTypeExportTask'
-				])
+				template:"equipmentType/equipmentTypeList",
+				listTop:"equipmentType/listTop",
+				entities: types,
+				entityCount: types.totalCount,
+				entityClass: getEntityClass(),
+				code: getLabel(),
+				names:names,
+				importTask:'EquipmentTypeImportTask',
+				exportTask:'EquipmentTypeExportTask'
+			])
+		}
 	}
-
+	
 	def search = {
 		adaptParamsForList()
 		List<EquipmentType> types = equipmentTypeService.searchEquipmentType(params['q'],null,params)
-		render (view: '/entity/list', model:[
-					template:"equipmentType/equipmentTypeList",
-					entities: types,
-					entityClass: getEntityClass(),
-					entityCount: types.totalCount,,
-					code: getLabel(),
-					q:params['q'],
-					names:names,
-					importTask:'EquipmentTypeImportTask'
-				])
-
+		if(!request.xhr)
+			response.sendError(404)
+		this.ajaxModel(types,params['q'])
+	}
+	
+	def ajaxModel(def entities,def searchTerm) {
+		def model = [entities: entities,entityCount: entities.totalCount,entityClass:getEntityClass(),names:names,q:searchTerm]
+		def listHtml = g.render(template:"/entity/equipmentType/equipmentTypeList",model:model)
+		render(contentType:"text/json") { results = [listHtml] }
 	}
 
 	def getAjaxData = {
@@ -141,11 +143,7 @@ class EquipmentTypeController extends AbstractEntityController{
 			}
 		}
 	}
-	//TODO implement this method
-	def importer ={
-
-	}
-
+	
 	def export = {
 		def equipmentTypeExportTask = new EquipmentTypeExportFilter().save(failOnError: true,flush: true)
 		params.exportFilterId = equipmentTypeExportTask.id

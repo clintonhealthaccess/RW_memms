@@ -1,7 +1,7 @@
 <table class="items spaced">
 	<thead>
 		<tr>
-			<th></th>
+			<th/>
 			<g:sortableColumn property="code" defaultOrder="asc" title="${message(code: 'equipment.code.label')}" params="[q:q,'dataLocation.id':dataLocation.id]" />
 			<g:sortableColumn property="type" defaultOrder="asc" title="${message(code: 'equipment.type.label')}" params="[q:q,'dataLocation.id':dataLocation.id]" />
 			<g:sortableColumn property="model" defaultOrder="asc" title="${message(code: 'equipment.model.label')}" params="[q:q,'dataLocation.id':dataLocation.id]" />
@@ -56,7 +56,7 @@
 				
 				<td>
 					<a href="${createLinkWithTargetURI(controller:'workOrderView', action:'list', params:['equipment.id': equipment?.id])}" title="${message(code: 'work.order.see.list.label')}" class="tooltip">
-  	    				${equipment.workOrders.size()}
+  	    				${equipment.workOrders?.size()}
   	    			</a>
 				</td>
 				<td>
@@ -68,8 +68,10 @@
 		</g:each>
 	</tbody>	
 </table>
+<g:render template="/templates/pagination" />
 <script type="text/javascript">
 	$(document).ready(function() {
 		updateEquipment("${createLink(controller:'equipmentView',action: 'updateObsolete')}");
 	});
 </script>
+

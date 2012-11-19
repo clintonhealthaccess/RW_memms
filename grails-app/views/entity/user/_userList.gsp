@@ -1,15 +1,14 @@
-
 <table class="items">
 	<thead>
 		<tr>
 			<th/>
-			<th><g:message code="user.username.label"/></th>
-			<th><g:message code="user.email.label"/></th>
+			<g:sortableColumn property="username" title="${message(code: 'user.username.label')}" params="[q:q]" />
+			<g:sortableColumn property="email" title="${message(code: 'user.email.label')}" params="[q:q]" />
 			<th><g:message code="user.permission.label"/></th>
 			<th><g:message code="roles.label"/></th>
-			<g:sortableColumn property="confirmed" params="[q:q]" title="${message(code: 'user.confirmed.label')}" />
-			<g:sortableColumn property="active" params="[q:q]" title="${message(code: 'user.active.label')}" />
-			<th><g:message code="entity.list.manage.label"/></th>
+			<g:sortableColumn property="confirmed" title="${message(code: 'user.confirmed.label')}" params="[q:q]"  />
+			<g:sortableColumn property="active" title="${message(code: 'user.active.label')}" params="[q:q]"  />
+			<th/>
 		</tr>
 	</thead>
 	<tbody>
@@ -40,3 +39,4 @@
 		</g:each>
 	</tbody>
 </table>
+<g:render template="/templates/pagination" />

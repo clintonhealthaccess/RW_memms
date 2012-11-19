@@ -47,7 +47,7 @@ import i18nfields.I18nFields
  *
  */
 @i18nfields.I18nFields
-@EqualsAndHashCode(includes='code')
+@EqualsAndHashCode(includes="code")
 public class Equipment {
 	
 	enum PurchasedBy{
@@ -223,8 +223,8 @@ public class Equipment {
 		return currentState
 	}
 	
-	
 	String toString() {
 		return "Equipment[id= " + id + " code= "+code+" serialNumber= "+serialNumber+" currentState= "+currentStatus+"]";
+
 	}
 }

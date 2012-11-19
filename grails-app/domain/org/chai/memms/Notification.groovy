@@ -36,6 +36,7 @@ import org.chai.memms.security.User;
  * @author Jean Kahigiso M.
  *
  */
+@EqualsAndHashCode
 abstract class Notification {
 	User sender
 	User receiver
@@ -57,5 +58,10 @@ abstract class Notification {
 		cache true
 		//Do not remove this as read is reserved keyword in MySQL
 		read column:"notification_read"
+	}
+
+	@Override
+	public String toString() {
+		return "Notification [id=" + id + ", sender=" + sender + ", receiver=" + receiver + "]";
 	}
 }

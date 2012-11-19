@@ -89,43 +89,43 @@ class LocationController extends AbstractEntityController {
 	def list = {
 		adaptParamsForList()
 		List<Location> locations = Location.list(offset:params.offset,max:params.max,sort:params.sort ?:"level",order: params.order ?:"asc");
-		render (view: '/entity/list', model:[
-			template:"location/locationList",
-			actionButtonsTemplate:"location/locationActionButtons",
-			entities: locations,
-			entityCount: locations.totalCount,
-			code: getLabel(),
-			entityClass: getEntityClass(),
-			names:names
-		])
+		if(request.xhr){
+			this.ajaxModel(locations)
+		}else{
+			render (view: '/entity/list', model:[
+				template:"location/locationList",
+				listTop:"location/locationListTop",
+				entities: locations,
+				entityCount: locations.totalCount,
+				code: getLabel(),
+				names:names
+			])
+		}
+	}
+	
+	def ajaxModel(def entities) {
+		def model = [entities: entities,entityCount: entities.totalCount,names:names]
+		def listHtml = g.render(template:"/entity/location/locationList",model:model)
+		render(contentType:"text/json") { results = [listHtml] }
 	}
 	
 	def search = {
 		adaptParamsForList()
-		
-		List<Location> locations = locationService.searchLocation(Location.class, params['q'], params)
-				
-		render (view: '/entity/list', model:[
-			template:"location/locationList",
-			entities: locations,
-			entityCount: locations.totalCount,
-			code: getLabel(),
-			q:params['q'],
-			names:names
-		])
+		List<Location> locations = locationService.searchLocation(Location.class, params['q'], params)		
+		if(!request.xhr)
+			response.sendError(404)
+		this.ajaxModel(locations)
 	}
 	
-	def getAjaxData = {
-		def clazz = Location.class
-		if (params['class'] != null) clazz = Class.forName('org.chai.location.'+params['class'], true, Thread.currentThread().contextClassLoader)
-		
-		def locations = locationService.searchLocation(clazz, params['term'], [:])
+	def getAjaxData = {		
+		List<Location> locations = locationService.searchLocation(Location.class, params['term'], [:])
 		render(contentType:"text/json") {
 			elements = array {
 				locations.each { location ->
+					def parent = (location.parent)?location.parent.names:""
 					elem (
 						key: location.id,
-						value: location.names + ' ['+location.class.simpleName+']'
+						value: location.names +" ["+parent+"] " 
 					)
 				}
 			}

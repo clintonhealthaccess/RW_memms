@@ -36,3 +36,4 @@
 		</g:each>
 	</tbody>
 </table>
+<g:render template="/templates/pagination" />

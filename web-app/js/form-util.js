@@ -1,4 +1,111 @@
+/**
+ * List ajax init
+ */
+function listGridAjaxInit(){
+	$(".spinner-container").hide()
+	listGridAjax()
+	searchFormAjax()
+	filterFormAjax()
+	clearFormField()
+}
+/**
+ * Loading list with Ajax
+ */
+function listGridAjax() {
+    $("#list-grid").find(".paginateButtons a, th.sortable a").live('click', function(event) {
+        event.preventDefault();
+        $("div.spinner-container").show();
+        var url = $(this).attr('href');
+        $.ajax({
+            type: 'GET',
+            url: url,
+            success: function(data) {
+            	addListAjaxResponse(data)
+            }
+        });
+        $(this).ajaxError(function(){ listLoadingFailed() })
+    });
+}
 
+/**
+ * Loading search results list with Ajax
+ */
+function searchFormAjax(){
+	 $(".heading1-bar form").submit(function(event) {
+		 	event.preventDefault();
+		 	$(".spinner-container").show()
+		    var url = $(this).parents(".heading1-bar").find("form").attr("action");
+		    var dataLocation = $(this).parents(".heading1-bar").find("input[name=dataLocation]").attr("value");
+		    var equipment = $(this).parents(".heading1-bar").find("input[name=equipment]").attr("value");
+		    var term = $(this).parents(".heading1-bar").find("input[name=q]").attr("value");
+	        $.ajax({
+	            type: 'GET',
+	            url: url,
+	            data: {"dataLocation.id":dataLocation,"equipment.id":equipment,"q":term},
+	            success: function(data) {
+	            	addListAjaxResponse(data)
+	            }
+	        })
+	        $(this).ajaxError(function(){ listLoadingFailed() })
+	});
+}
+/**
+ * Loading filtered list with Ajax
+ */
+function filterFormAjax() {
+    $("div.filters form").submit(function(event) {
+	    event.preventDefault();
+	    var filterBox = $(this).parents("div.filters");
+	    var grid = $(filterBox).nextAll("div.list-template");
+	    $(".spinner-container").show()
+	    var url = $(filterBox).find("form").attr("action");
+	    var data = $(filterBox).find("form").serialize(); 
+	    $.ajax({
+	        type: 'POST',
+	        url: url,
+	        data: data,
+	        success: function(data) {
+	        	addListAjaxResponse(data)
+	        }
+	     });
+	    $(this).ajaxError(function(){ listLoadingFailed() })
+    });
+}
+/**
+ * Clear form content
+ */
+function clearFormField(){
+	$(".clear-form").live('click', function(event){
+		event.preventDefault();
+		var form = $(this).parents("form");
+		$(form)[0].reset();
+		//For chosen plugin fields
+		$(form).find(".chzn-done").val('').trigger("liszt:updated");
+	})
+}
+/**
+ * Add list html to div holder
+ * @param data
+ */
+function addListAjaxResponse(data){
+	$("div.spinner-container").hide();
+    $("div.list-template").fadeOut(300, function() {
+    	$(this).html(data.results[0]).show(600);
+    });
+}
+/**
+ * Handle ajax list loading error 
+ */
+function listLoadingFailed(){
+	$("div.spinner-container").hide();
+    $("div.list-template").fadeOut(100, function() {
+    	$(this).html("<span class='ajax-error'>Failed to fetch data</span>").show();
+    });
+}
+
+/**
+ * Make an input field to accept only number
+ */
 function numberOnlyField(){
 	$('.numbers-only').keyup(function () {
 	    if (this.value != this.value.replace(/[^0-9\.]/g, '')) {

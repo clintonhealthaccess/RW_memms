@@ -45,7 +45,7 @@ class NotificationWorkOrderService {
 	def userService
 	
     public int sendNotifications(WorkOrder workOrder, String content,User sender,List<User> receivers) {
-		if(log.isDebugEnabled()) log.debug("Notification receivers group: "+receivers+" , for workorder " +  workOrder)
+		if(log.isDebugEnabled()) log.debug("Notification workOrder receivers group: "+receivers+" , for workorder " +  workOrder)
 		int numberOfNotificationSent = 0
 		receivers.each{ receiver ->
 			if(receiver.active){
@@ -58,7 +58,7 @@ class NotificationWorkOrderService {
     }
 	
 	public int newNotification(def workOrder,def content, def sender,boolean escalate){
-		def receivers = userService.getNotificationGroup(workOrder,sender,escalate)
+		def receivers = userService.getNotificationWorkOrderGroup(workOrder,sender,escalate)
 		return sendNotifications(workOrder,content,sender,receivers)
 	}
 	
@@ -86,7 +86,7 @@ class NotificationWorkOrderService {
 		}
 	}
 	
-	public List<Notification> filterNotifications(WorkOrder workOrder,User receiver,Date from, Date to,Boolean read, Map<String, String> params){
+	public List<NotificationWorkOrder> filterNotifications(WorkOrder workOrder,User receiver,Date from, Date to,Boolean read, Map<String, String> params){
 		def criteria = NotificationWorkOrder.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(workOrder) 
@@ -102,7 +102,7 @@ class NotificationWorkOrderService {
 		}
 	}
 	
-	public Notification setNotificationRead(NotificationWorkOrder notification){
+	public NotificationWorkOrder setNotificationRead(NotificationWorkOrder notification){
 		notification.read = true
 		notification.save(failOnError:true)
 		return notification

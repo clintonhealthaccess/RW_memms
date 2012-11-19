@@ -60,6 +60,6 @@ public class CorrectiveProcess extends MaintenanceProcess{
 
 	@Override
 	public String toString() {
-		return "CorrectiveProcess [id=" + id + ", name=" + name + ", workOrder="+ workOrder +"]";
-	}		
+		return "MaintenanceProcess [id=" + id + ", name=" + name + ", workOrder="+ workOrder +"]";
+	}	
 }

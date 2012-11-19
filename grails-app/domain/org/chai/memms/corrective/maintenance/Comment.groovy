@@ -37,6 +37,7 @@ import org.chai.memms.security.User;
  *
  */
 @i18nfields.I18nFields
+@EqualsAndHashCode
 public class Comment {
 	User writtenBy
 	Date dateCreated
@@ -55,7 +56,7 @@ public class Comment {
 	   content type:"text"
 	   
    }
-   
+
 	@Override
 	public String toString() {
 		return "Comment [id=" + id + ", writtenBy=" + writtenBy + "]";

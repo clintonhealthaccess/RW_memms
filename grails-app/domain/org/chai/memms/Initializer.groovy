@@ -142,7 +142,7 @@ public class Initializer {
 			defaultClercRole.addToPermissions("equipmentStatus:*")
 			defaultClercRole.addToPermissions("home:*")
 			defaultClercRole.addToPermissions("menu:home")
-			defaultClercRole.addToPermissions("menu:inventory,correctivemaintenance")
+			defaultClercRole.addToPermissions("menu:inventory,maintenance,correctivemaintenance,preventivemaintenance")
 			defaultClercRole.addToPermissions("provider:getAjaxData")
 			defaultClercRole.addToPermissions("equipmentType:getAjaxData")
 			defaultClercRole.addToPermissions("department:getAjaxData")
@@ -281,6 +281,7 @@ public class Initializer {
 		}		
 	}
 	static def createInventoryStructure(){
+		
 		if(!Department.count()){
 			//Add Department
 			def surgery = newDepartment(['en':'Surgery'],'SURGERY',['en':'Surgery Dep'])
@@ -334,7 +335,10 @@ public class Initializer {
 			def serviceProOne = newProvider("Nine",Type.SERVICEPROVIDER,contactNine)
 			def serviceProTwo = newProvider("Ten",Type.SERVICEPROVIDER,contactTen)
 		}
-		
+		if(!NotificationEquipment.count()){
+			newNotificationEquipment(User.findByUsername("titulaireHC"), User.findByUsername("techMMC"), now(), "I have a new equipment in my health center, am not sure of it't type but has a serial number of 9084320oidbfd. Could you come register it please? thanks", false, User.findByUsername("titulaireHC").location, null)
+			newNotificationEquipment(User.findByUsername("hospitalDepartment"), User.findByUsername("techMMC"), now(), "I have a new equipment in my department, am not sure of it't type but has a serial number of 9084320oidbfd. Could you come register it please? thanks", false, User.findByUsername("hospitalDepartment").location, null)
+		}
 		
 		if(!Equipment.count()){
 			def equipmentOne = newEquipment("SERIAL01",PurchasedBy.BYDONOR,Donor.MOHPARTNER,"CHAI",false,newPeriod(24),"Room A1","",['en':'Equipment Descriptions'],
@@ -551,7 +555,7 @@ public class Initializer {
 			equipmentTen.warranty=warrantyTen
 			equipmentTen.warrantyPeriod = newPeriod(28)
 			equipmentTen.save(failOnError:true)
-
+		
 		}
 	}
 	
@@ -727,7 +731,9 @@ public class Initializer {
 	public static newCorrectiveProcess(def workOrder,def type, def name,def addedBy){
 		return new CorrectiveProcess(workOrder: workOrder,type: type,name: name,addedBy: addedBy ).save(failOnError: true)
 	}
-	
+	public static newNotificationEquipment(def sender, def receiver, def writtenOn, def content, def read, def dataLocation, def department){
+		return new NotificationEquipment(sender:sender, receiver:receiver, writtenOn:writtenOn, content:content, read:read, dataLocation:dataLocation, department:department).save(failOnError: true)
+	}
 	
 	public static newWorkOrderStatus(def workOrder,def status,def changedBy,def escalation){
 		def equipment = workOrder.equipment

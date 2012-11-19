@@ -77,27 +77,31 @@ class ProviderController  extends AbstractEntityController {
 	def list = {
 		adaptParamsForList()
 		List<Provider> providers = Provider.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc")
+		if(request.xhr)
+			this.ajaxModel(providers,"")
+		else{
 		render(view:"/entity/list", model:[
 			template:"provider/providerList",
-			actionButtonsTemplate:"provider/providerActionButtons",
+			listTop:"provider/listTop",
 			entities: providers,
-			entityCount: Provider.count(),
-			code: getLabel(),
-			entityClass: getEntityClass()
+			entityCount: providers.totalCount,
+			code: getLabel()
 			])
+		}
 	}
 	
 	def search = {
 		adaptParamsForList()
 		List<Provider> providers = providerService.searchProvider(null, params['q'], params)		
-		render (view: '/entity/list', model:[
-			template:"provider/providerList",
-			entities: providers,
-			entityCount: providers.totalCount,
-			code: getLabel(),
-			q:params['q']
-		])
-		
+		if(!request.xhr)
+			response.sendError(404)
+		this.ajaxModel(providers,params['q'])
+	}
+	
+	def ajaxModel(def entities,def searchTerm) {
+		def model = [entities: entities,entityCount: entities.totalCount,names:names,q:searchTerm]
+		def listHtml = g.render(template:"/entity/provider/providerList",model:model)
+		render(contentType:"text/json") { results = [listHtml] }
 	}
 	
 	def getAjaxData = {
@@ -108,7 +112,6 @@ class ProviderController  extends AbstractEntityController {
 		if(type.equals(Type.MANUFACTURER)) detailsLabel="provider.manufacturer.details"
 		else if(type.equals(Type.SUPPLIER)) detailsLabel="provider.supplier.details" else detailsLabel="provider.serviceProvider.details"
 		List<Provider> providers = providerService.searchProvider(type, params['term'], [:])
-		if(log.isDebugEnabled()) log.debug("Providers : " + providers)
 		render(contentType:"text/json") {
 			elements = array {
 				providers.each { provider ->
