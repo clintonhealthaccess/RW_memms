@@ -7,10 +7,10 @@
 		<tr>
 			<th/>
 			<th><g:message code="equipment.label"/></th>
-			<g:sortableColumn property="currentStatus" defaultOrder="asc" title="${message(code: 'work.order.status.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
-			<g:sortableColumn property="criticality" defaultOrder="asc" title="${message(code: 'work.order.criticality.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
-			<g:sortableColumn property="openOn" defaultOrder="asc" title="${message(code: 'work.order.openOn.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
-			<g:sortableColumn property="closedOn" defaultOrder="asc" title="${message(code: 'work.order.closedOn.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
+			<g:sortableColumn property="currentStatus" title="${message(code: 'work.order.status.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
+			<g:sortableColumn property="criticality"  title="${message(code: 'work.order.criticality.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
+			<g:sortableColumn property="openOn"  title="${message(code: 'work.order.openOn.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
+			<g:sortableColumn property="closedOn"  title="${message(code: 'work.order.closedOn.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
 			<th><g:message code="work.order.description.label"/></th>
 			<th><g:message code="work.order.status.escalation.label"/></th>
 			<th><g:message code="work.order.messages.label"/></th>
@@ -71,14 +71,6 @@
 	$(document).ready(function() {
 		escaletWorkOrder("${createLink(controller:'workOrder',action: 'escalate')}")
 		getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}")
-		$('a.clueTip').cluetip({
-			  //cluetipClass: 'jtip', for formating the output
-			  arrows: true,
-			  dropShadow: false,
-			  hoverIntent: false,
-			  sticky: true,
-			  mouseOutClose: true,
-			  closePosition: 'title'
-			});
+		showClutips()
 	});
 </script>

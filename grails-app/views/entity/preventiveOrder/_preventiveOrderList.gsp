@@ -7,11 +7,11 @@
 		<tr>
 			<th/>
 			<th><g:message code="equipment.label"/></th>
-			<g:sortableColumn property="${names}" defaultOrder="asc" title="${message(code: 'entity.names.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
-			<g:sortableColumn property="type" defaultOrder="asc" title="${message(code: 'entity.type.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
-			<g:sortableColumn property="status" defaultOrder="asc" title="${message(code: 'entity.status.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
-			<g:sortableColumn property="openOn" defaultOrder="asc" title="${message(code: 'preventive.order.open.on.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
-			<g:sortableColumn property="closedOn" defaultOrder="asc" title="${message(code: 'preventive.order.closed.on.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
+			<g:sortableColumn property="${names}" title="${message(code: 'entity.names.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
+			<g:sortableColumn property="type"  title="${message(code: 'entity.type.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
+			<g:sortableColumn property="status"  title="${message(code: 'entity.status.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
+			<g:sortableColumn property="openOn"  title="${message(code: 'preventive.order.open.on.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
+			<g:sortableColumn property="closedOn"  title="${message(code: 'preventive.order.closed.on.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
 			<th><g:message code="entity.descriptions.label"/></th>
 			<th><g:message code="preventive.order.messages.label"/></th>
 		</tr>
@@ -66,15 +66,6 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}")
-		
-		$('a.clueTip').cluetip({
-			  arrows: true,
-			  dropShadow: false,
-			  hoverIntent: false,
-			  sticky: true,
-			  mouseOutClose: true,
-			  closePosition: 'title'
-		});
-		
+		showClutips()
 	});
 </script>

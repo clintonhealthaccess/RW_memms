@@ -58,7 +58,7 @@ import org.chai.memms.security.User.UserType;
 class WorkOrderViewController extends AbstractController{
 	
 	def workOrderService
-	def correctiveMaintenanceService
+	def maintenanceService
 	def commentService
 	def maintenanceProcessService
 
@@ -90,7 +90,7 @@ class WorkOrderViewController extends AbstractController{
 		
 		adaptParamsForList()
 		if(dataLocation)
-			orders = workOrderService.getWorkOrdersByCalculationLocation(dataLocation,params)	
+			orders = maintenanceService.getOrdersByCalculationLocation(WorkOrder.class,dataLocation,params)	
 		if(equipment)
 		 	orders= workOrderService.getWorkOrdersByEquipment(equipment,params)
 		 if(request.xhr){
@@ -149,12 +149,11 @@ class WorkOrderViewController extends AbstractController{
 		def correctiveMaintenances = null
 
 		adaptParamsForList()
-
-		def locationSkipLevels = correctiveMaintenanceService.getSkipLocationLevels()
+		def locationSkipLevels = maintenanceService.getSkipLocationLevels()
 
 		if (location != null) {
 			template = '/correctiveSummaryPage/sectionTable'
-			correctiveMaintenances = correctiveMaintenanceService.getCorrectiveMaintenancesByLocation(location,dataLocationTypesFilter,params)
+			correctiveMaintenances = maintenanceService.getCorrectiveMaintenancesByLocation(location,dataLocationTypesFilter,params)
 		}
 		render (view: '/correctiveSummaryPage/summaryPage', model: [
 					correctiveMaintenances:correctiveMaintenances?.correctiveMaintenanceList,

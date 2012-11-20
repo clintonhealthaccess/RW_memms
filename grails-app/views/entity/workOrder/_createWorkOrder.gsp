@@ -31,11 +31,11 @@
   		<g:if test="${order.id != null}">
 	  		<div class="row">
 		  		 <label class="top"><g:message code="work.order.reported.by.label"/> :</label>
-		  		 ${order.addedBy.firstname} ${order.addedBy.lastname}  - ${Utils.formatDateWithTime(order?.openOn)}
+		  		 ${order.addedBy.names}  - ${Utils.formatDateWithTime(order?.openOn)}
 	  		</div>
 	  		<div class="row">
 		  		 <label class="top"><g:message code="work.order.last.modified.by.label"/> :</label>
-		  		 ${order.lastModifiedBy?.firstname} ${order.lastModifiedBy?.lastname} - ${Utils.formatDateWithTime(order?.lastModifiedOn)}
+		  		 ${order.lastModifiedBy?.names} - ${Utils.formatDateWithTime(order?.lastModifiedOn)}
 	  		</div>
   		</g:if>						
    		<g:textarea name="description" rows="12" width="380" label="${message(code:'entity.description.label')}" readonly="${(closed)? true:false}" bean="${order}" field="description" value="${order.description}"/>

@@ -3,7 +3,7 @@ package org.chai.memms
 import java.util.List;
 
 class CorrectiveMaintenances {
-	List<CorrectiveMaintenance> correctiveMaintenanceList
+	List<Maintenance> correctiveMaintenanceList
 	Integer totalCount
 	
 	public CorrectiveMaintenances(){

@@ -71,6 +71,17 @@ function filterFormAjax() {
 	    $(this).ajaxError(function(){ listLoadingFailed() })
     });
 }
+
+function showClutips(){
+	$('a.clueTip').cluetip({
+		  arrows: true,
+		  dropShadow: false,
+		  hoverIntent: false,
+		  sticky: true,
+		  mouseOutClose: true,
+		  closePosition: 'title'
+		});
+}
 /**
  * Clear form content
  */

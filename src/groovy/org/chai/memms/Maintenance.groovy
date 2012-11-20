@@ -29,11 +29,11 @@ package org.chai.memms
 
 import org.chai.location.DataLocation
 
-class CorrectiveMaintenance {
+class Maintenance {
 	DataLocation dataLocation
-	Integer workOrderCount
+	Integer orderCount
 	
 	String toString() {
-		return "DataLocation = " + dataLocation + " , WorkOrder Count = " + workOrderCount
+		return "DataLocation = " + dataLocation + " , Order Count = " + orderCount
 	}
 }

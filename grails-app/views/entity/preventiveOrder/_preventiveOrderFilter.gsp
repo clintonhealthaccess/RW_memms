@@ -27,7 +27,6 @@
 </div>
 <g:if test="${params?.q}">
 	<h2 class="filter-results">
-		Showing filtered list of equipment which contain search term
-		${params?.q}
+		<g:message code="entity.filter.message.label" args="${[message(code: 'entity.preventive.order.label'),params?.q]}" />
 	</h2>
 </g:if>

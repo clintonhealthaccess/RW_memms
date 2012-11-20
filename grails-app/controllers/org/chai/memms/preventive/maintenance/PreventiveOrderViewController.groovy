@@ -28,6 +28,7 @@
 package org.chai.memms.preventive.maintenance
 
 import org.chai.location.CalculationLocation;
+import org.chai.location.DataLocation
 import org.chai.memms.AbstractController
 import org.chai.memms.AbstractEntityController;
 import org.chai.memms.inventory.Equipment;
@@ -40,6 +41,7 @@ class PreventiveOrderViewController extends AbstractController {
 	
 	def preventiveOrderService
 	def equipmentService
+	def maintenanceService
 	
 	def getEntityClass() {
 		return DurationBasedOrder.class;
@@ -53,26 +55,58 @@ class PreventiveOrderViewController extends AbstractController {
 		adaptParamsForList()
 		List<DurationBasedOrder> orders = []
 		Equipment equipment = null
-		CalculationLocation  location = null
-		if(params["dataLocation.id"]) location = CalculationLocation.get(params.int("dataLocation.id"))
+		CalculationLocation  dataLocation = null
+		if(params["dataLocation.id"]) dataLocation = CalculationLocation.get(params.int("dataLocation.id"))
 		if(params["equipment.id"]) equipment = Equipment.get(params.int("equipment.id"))
 		
 		if(location)
-			orders = preventiveOrderService.getPreventiveOrderByDataLocationManages(location,params)
+			orders = preventiveOrderService.getPreventiveOrderByDataLocationManages(dataLocation,params)
 		if(equipment)
-			 orders = preventiveOrderService.getPreventiveOrderByEquipment(equipment,params)
+			orders = preventiveOrderService.getPreventiveOrderByEquipment(equipment,params)
+		 if(request.xhr){
+			 this.ajaxModel(orders,dataLocation,equipment,"")
+		 }else{
+			render (view: '/entity/list', model:[
+				template:"preventiveOrder/preventiveOrderList",
+				filterTemplate:"preventiveOrder/preventiveOrderFilter",
+				listTop:"preventiveOrder/listTop",
+				dataLocation:dataLocation,		
+				equipment:equipment,
+				entities: orders,
+				entityCount: orders.totalCount,
+			])
+		}
+	}
+	
+	def ajaxModel(def entities,def dataLocation,def equipment, def searchTerm) {
+		def model = [entities: entities,entityCount: entities.totalCount,dataLocation:dataLocation,equipment:equipment,q:searchTerm]
+		def listHtml = g.render(template:"/entity/preventive/preventiveOrderList",model:model)
+		render(contentType:"text/json") { results = [listHtml] }
+	}
+	
+	def summaryPage = {
+		if(user.location instanceof DataLocation) redirect (controller: "preventiveOrderView", action: "list",params:['dataLocation.id':user.location.id])
 
-		render (view: '/entity/list', model:[
-			template:"preventiveOrder/preventiveOrderList",
-			entities: orders,
-			entityCount: orders.totalCount,
-			code: getLabel(),
-			equipment:equipment,
-			names:names,
-			entityClass: getEntityClass(),
-			equipment:equipment,
-			dataLocation:location
-		])
+		def location = Location.get(params.int('location'))
+		def dataLocationTypesFilter = getLocationTypes()
+		def template = null
+		def preventiveMaintenances = null
+
+		adaptParamsForList()
+		def locationSkipLevels = maintenanceService.getSkipLocationLevels()
+
+		if (location != null) {
+			template = '/preventiveSummaryPage/sectionTable'
+			preventiveMaintenances = maintenanceService.getPreventiveMaintenancesByLocation(location,dataLocationTypesFilter,params)
+		}
+		render (view: '/preventiveSummaryPage/summaryPage', model: [
+					preventiveMaintenances:preventiveMaintenances?.preventiveMaintenanceList,
+					currentLocation: location,
+					currentLocationTypes: dataLocationTypesFilter,
+					template: template,
+					entityCount: preventiveMaintenances?.totalCount,
+					locationSkipLevels: locationSkipLevels
+				])
 	}
 	
 	

@@ -40,7 +40,7 @@ import org.chai.memms.security.User;
  * @author Jean Kahigiso M.
  * 
  */
-@EqualsAndHashCode(includes='id')
+@EqualsAndHashCode
 public abstract class MaintenanceOrder {
 	
 	Date openOn
