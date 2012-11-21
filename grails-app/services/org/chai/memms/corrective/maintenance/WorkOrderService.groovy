@@ -51,7 +51,7 @@ class WorkOrderService {
 	def locationService
 	static transactional = true
 	def languageService;
-	def workOrderNotificationService
+	def notificationWorkOrderService
 	
 	/**
 	 * Searches for a WorkOrder that contains the search term
@@ -133,7 +133,7 @@ class WorkOrderService {
 		workOrder.addToStatus(status)
 		workOrder.save(failOnError:true)
 		if(status)
-			workOrderNotificationService.newNotification(workOrder,content,escalatedBy,true)
+			notificationWorkOrderService.newNotification(workOrder,content,escalatedBy,true)
 		return workOrder
 	}
 	

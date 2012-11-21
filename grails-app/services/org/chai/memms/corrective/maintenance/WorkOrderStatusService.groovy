@@ -47,6 +47,5 @@ class WorkOrderStatusService {
 		if(status.equals(OrderStatus.CLOSEDFIXED) || status.equals(OrderStatus.CLOSEDFORDISPOSAL))
 			workOrder.closedOn = new Date()
 		return workOrder.save(failOnError: true, flush:true)
-	}
-	
+	}	
 }
