@@ -62,7 +62,7 @@ public abstract class AbstractController {
 	
 	def adaptParamsForList() {
 		if(log.isDebugEnabled()) log.debug("Grails application value: " + grailsApplication)
-		params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.site.entity.list.max, 30)
+		params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.site.entity.list.max, 4)
 		params.offset = params.offset ? params.int('offset'): 0
 	}
 	

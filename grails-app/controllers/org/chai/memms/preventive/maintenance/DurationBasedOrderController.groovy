@@ -37,9 +37,9 @@ import org.chai.memms.inventory.Equipment;
  */
 class DurationBasedOrderController extends AbstractEntityController {
 	
-	
+
 	def bindParams(def entity) {
-		
+		entity.properties = params
 	}
 
 	def getModel(def entity) {

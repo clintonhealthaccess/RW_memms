@@ -39,7 +39,7 @@ class WorkBasedOrderController extends AbstractEntityController {
 	
 	
 	def bindParams(def entity) {
-		
+		entity.properties = params
 	}
 
 	def getModel(def entity) {
@@ -69,7 +69,7 @@ class WorkBasedOrderController extends AbstractEntityController {
 	}
 
 	def getEntityClass() {
-		return DurationBasedOrder.class;
+		return WorkBasedOrder.class;
 	}
 	
 }

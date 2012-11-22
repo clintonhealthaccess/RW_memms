@@ -34,6 +34,6 @@ class Maintenance {
 	Integer orderCount
 	
 	String toString() {
-		return "DataLocation = " + dataLocation + " , Order Count = " + orderCount
+		return "DataLocation = " + dataLocation + " , orderCount = " + orderCount
 	}
 }

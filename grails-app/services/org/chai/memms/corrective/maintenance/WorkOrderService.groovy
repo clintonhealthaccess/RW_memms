@@ -53,47 +53,6 @@ class WorkOrderService {
 	static transactional = true
 	def languageService;
 	def workOrderNotificationService
-	
-	/**
-	 * Searches for a WorkOrder that contains the search term
-	 * Pass a null value for the criteria you want to be ignored in the search other than the search text
-	 * NB workOrdersEquipment is named like this to avoid conflicting with the navigation property equipment
-	 * @param text
-	 * @param location
-	 * @param workOrdersEquipment
-	 * @param params
-	 * @return
-	 */
-	public List<WorkOrder> searchWorkOrder(String text,DataLocation dataLocation,Equipment workOrdersEquipment,Map<String, String> params) {
-		def dbFieldTypeNames = 'names_'+languageService.getCurrentLanguagePrefix();
-		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
-		def criteria = WorkOrder.createCriteria()
-		
-		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			if(workOrdersEquipment)  
-				eq('equipment',workOrdersEquipment)
-			if(dataLocation) 
-				equipment{eq('dataLocation',dataLocation)}
-			or{
-				ilike("description","%"+text+"%")
-				equipment{
-					or{
-						ilike("code","%"+text+"%")
-						ilike("serialNumber","%"+text+"%")
-						ilike(dbFieldDescriptions,"%"+text+"%")
-						type{
-							or{
-								ilike(dbFieldTypeNames,"%"+text+"%")
-								ilike("code","%"+text+"%")
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-	
-				
 
 	/**
 	 * Returns a filtered list of WorkOrders according to the passed criteria
@@ -110,7 +69,7 @@ class WorkOrderService {
 	 * @param params
 	 * @return
 	 */
-	List<WorkOrder> filterWorkOrders(def dataLocation,def workOrdersEquipment,def openOn,def closedOn,def criticality,def currentStatus,def params) {
+	def filterWorkOrders(def dataLocation,def workOrdersEquipment,def openOn,def closedOn,def criticality,def currentStatus,def params) {
 		def criteria = WorkOrder.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(dataLocation)
@@ -138,31 +97,4 @@ class WorkOrderService {
 		return workOrder
 	}
 	
-	List<WorkOrder> getWorkOrdersByEquipment(Equipment equipment, Map<String, String> params){
-		def criteria = WorkOrder.createCriteria();
-		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			eq("equipment",equipment)
-		}
-	}
-	
-	List<WorkOrder> getWorkOrdersByCalculationLocation(CalculationLocation location, Map<String, String> params){
-		def equipments =[]
-		def criteria = WorkOrder.createCriteria();
-		
-		if(location instanceof DataLocation)
-			equipments = equipmentService.getEquipmentsByDataLocation(location, [:])
-		else{
-			def dataLocations = location.getDataLocations(null,null)
-			for(DataLocation dataLocation: dataLocations)
-				equipments.addAll( equipmentService.getEquipmentsByDataLocation(dataLocation, [:]))
-		}
-		
-		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			or{
-				equipments.each { equipment ->
-					eq("equipment",equipment)
-				}
-			}
-		}
-	}
 }

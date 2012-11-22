@@ -66,7 +66,6 @@ public class WorkOrder extends MaintenanceOrder{
 	}
 
 	String currency
-	String description
 	String failureReasonDetails
 	String testResultsDescriptions
 	String returnedTo
@@ -175,7 +174,6 @@ public class WorkOrder extends MaintenanceOrder{
 	static mapping = {
 		table "memms_work_order"
 		version false
-		description type:"text"
 	}
 	@Transient
 	def getNotificationsReceivedByUser(def user){

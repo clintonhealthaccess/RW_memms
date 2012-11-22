@@ -8,7 +8,7 @@
 			<th><g:message code="entity.description.label"/></th>
 			<g:sortableColumn property="observation" params="[q:q]" title="${message(code: 'entity.observation.label')}" />
 			<g:sortableColumn property="expectedLifeTime" params="[q:q]" title="${message(code: 'equipmentType.expectedLifeTime.label')}" />
-			<g:sortableColumn property="addedOn" params="[q:q]" title="${message(code: 'equipment.type.added.on.label')}" />
+			<g:sortableColumn property="dateCreated" params="[q:q]" title="${message(code: 'equipment.type.added.on.label')}" />
 			<g:sortableColumn property="lastModifiedOn" params="[q:q]" title="${message(code: 'equipment.type.last.modified.on.label')}" />
 		</tr>
 	</thead>

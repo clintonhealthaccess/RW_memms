@@ -34,12 +34,13 @@ import java.util.Map;
 import java.util.Set;
 import org.chai.location.LocationLevel;
 import org.chai.memms.Maintenance;
-import org.chai.memms.CorrectiveMaintenances;
-import org.chai.memms.PreventiveMaintenances;
+import org.chai.memms.Maintenances;
 import org.chai.memms.Inventory
 import org.chai.memms.Inventories
 import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.memms.corrective.maintenance.WorkOrder.Criticality;
+import org.chai.memms.inventory.Equipment;
+import org.chai.memms.preventive.maintenance.PreventiveOrder;
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocationType;
 import org.chai.location.DataLocation
@@ -49,29 +50,116 @@ class MaintenanceService {
 
     static transactional = true
 	def locationService
-	def workOrderService
 	def grailsApplication
 	def equipmentService
 	
-	public Set<LocationLevel> getSkipLocationLevels() {
+	def getSkipLocationLevels() {
 		List<LocationLevel> levels = []
 		for (String skipLevel : grailsApplication.config.location.sector.skip.level) {
 			levels.add(locationService.findLocationLevelByCode(skipLevel));
 		}
 		return levels;
-	}  
+	} 
 	
-	public getOrdersByCalculationLocation(Class clazz,CalculationLocation location,Map<String,String> params){
-		def equipments =[]
+	/**
+	 * Searches for a Order that contains the search term
+	 * Pass a null value for the criteria you want to be ignored in the search other than the search text
+	 * NB workOrdersEquipment is named like this to avoid conflicting with the navigation property equipment
+	 * @param text
+	 * @param location
+	 * @param workOrdersEquipment
+	 * @param params
+	 * @return
+	 */
+	def searchOrder(Class clazz, String text,DataLocation dataLocation,Equipment equipment,Map<String, String> params) {
+		def dbFieldTypeNames = 'names_'+languageService.getCurrentLanguagePrefix();
+		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
+		def criteria = clazz.createCriteria()
+		
+		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			if(equipment)
+				eq('equipment',equipment)
+			if(dataLocation)
+				equipment{eq('dataLocation',dataLocation)}
+			or{
+				ilike("description","%"+text+"%")
+				equipment{
+					or{
+						ilike("code","%"+text+"%")
+						ilike("serialNumber","%"+text+"%")
+						ilike(dbFieldDescriptions,"%"+text+"%")
+						type{
+							or{
+								ilike(dbFieldTypeNames,"%"+text+"%")
+								ilike("code","%"+text+"%")
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	def getMaintenancesByLocation(Class clazz,def location,Set<DataLocationType> types,Map<String, String> params) {
+		if(log.isDebugEnabled()) log.debug("getMaintenancesByLocation url params: "+params)
+		List<Maintenance> maintenances = []
+		Set<LocationLevel> skipLevels = getSkipLocationLevels()
+		
+		for(DataLocation dataLocation : location.collectDataLocations(skipLevels,types)){
+			maintenances.add(new Maintenance(dataLocation:dataLocation,orderCount:this.getMaintenanceOrderByDataLocation(clazz,dataLocation,[:]).size()))
+		}
+		
+		Maintenances maintenance = new Maintenances()
+		//If user tries to access elements outside the range, return empty list
+		//TODO this is ideally supposed to avoid trying to access out of range data, but could be a bite
+		if(params.offset != null && params.max != null && params.offset > params.max) return maintenance
+		//If user specifies the pagination params, use them. Else return the whole list
+		if(params.offset != null && params.offset > 0  && params.max != null && params.max > 0) maintenance.maintenanceList = maintenances[(params.offset) .. ((params.offset + params.max) > maintenances.size() ? maintenances.size() - 1 : (params.offset + params.max))]
+		else maintenance.maintenanceList = maintenances
+		maintenance.totalCount = maintenances.size()
+		return maintenance
+	}
+	
+	def getMaintenanceOrderByDataLocationManages(Class clazz,def dataLocation,Map<String,String> params){
+		List<Equipment> equipments = equipmentService.getEquipmentsByDataLocation(dataLocation,[:])
+		equipments << equipmentService.getEquipmentsByDataLocationAndManages(dataLocation,[:]).asList()
+		def criteria =  clazz.createCriteria()
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			or{
+				for(Equipment equipment: equipments)
+					eq("equipment",equipment)
+			}
+		}
+		
+	}
+	
+	def getMaintenanceOrderByDataLocation(Class clazz,def dataLocation,Map<String,String> params){
+		def criteria = clazz.createCriteria();
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			if(dataLocation)
+				equipment{ eq('dataLocation',dataLocation)}
+		}
+		
+	}
+	
+	def getMaintenanceOrderByEquipment(Class clazz,def equipment,Map<String,String> params){
+		def criteria = clazz.createCriteria();
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+				eq('equipment',equipment)
+		}
+		
+	}
+	
+	def getMaintenanceOrderByCalculationLocation(Class clazz,def location,Map<String,String> params){
+		def equipments = []
 		def criteria = clazz.createCriteria();
 		
 		if(location instanceof DataLocation){
-		log.debug("location =>"+location)
 			equipments = equipmentService.getEquipmentsByDataLocation(location, [:])
 		}else{
 			def dataLocations = location.getDataLocations(null,null)
 			for(DataLocation dataLocation: dataLocations)
-				equipments.addAll( equipmentService.getEquipmentsByDataLocation(dataLocation, [:]))
+				equipments.addAll(equipmentService.getEquipmentsByDataLocation(dataLocation, [:]))
 		}
 		
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
@@ -80,53 +168,6 @@ class MaintenanceService {
 					eq("equipment",equipment)
 				}
 			}
-		}
-		
-	} 
-	
-	public CorrectiveMaintenances getCorrectiveMaintenancesByLocation(Location location,Set<DataLocationType> types,Map<String, String> params) {
-		if(log.isDebugEnabled()) log.debug("getCorrectiveMaintenancesByLocation url params: "+params)
-		List<Maintenance> maintenances = []
-		Set<LocationLevel> skipLevels = getSkipLocationLevels()
-		for(DataLocation dataLocation : location.collectDataLocations(skipLevels,types)){
-			maintenances.add(new Maintenance(dataLocation:dataLocation,orderCount:this.getMaintenanceOrder(WorkOrder.class,dataLocation,[:]).size()))
-		}
-		
-		CorrectiveMaintenances correctiveMaintenance = new CorrectiveMaintenances()
-		//If user tries to access elements outside the range, return empty list
-		//TODO this is ideally supposed to avoid trying to access out of range data, but could be a bite
-		if(params.offset != null && params.max != null && params.offset > params.max) return correctiveMaintenance
-		//If user specifies the pagination params, use them. Else return the whole list
-		if(params.offset != null && params.offset > 0  && params.max != null && params.max > 0) correctiveMaintenance.correctiveMaintenanceList = maintenances[(params.offset) .. ((params.offset + params.max) > maintenances.size() ? maintenances.size() - 1 : (params.offset + params.max))]
-		else correctiveMaintenance.correctiveMaintenanceList = maintenances
-		correctiveMaintenance.totalCount = maintenances.size()
-		return correctiveMaintenance
-	}
-	
-	public PreventiveMaintenances getPreventiveMaintenancesByLocation(Location location,Set<DataLocationType> types,Map<String, String> params) {
-		if(log.isDebugEnabled()) log.debug("getPreventiveMaintenancesByLocation url params: "+params)
-		List<Maintenance> maintenances = []
-		Set<LocationLevel> skipLevels = getSkipLocationLevels()
-		for(DataLocation dataLocation : location.collectDataLocations(skipLevels,types)){
-			maintenances.add(new Maintenance(dataLocation:dataLocation,orderCount:this.getMaintenanceOrder(PreventiveOrder.class,dataLocation,[:]).size()))
-		}
-		
-		PreventiveMaintenances preventiveMaintenance = new PreventiveMaintenances()
-		//If user tries to access elements outside the range, return empty list
-		//TODO this is ideally supposed to avoid trying to access out of range data, but could be a bite
-		if(params.offset != null && params.max != null && params.offset > params.max) return preventiveMaintenance
-		//If user specifies the pagination params, use them. Else return the whole list
-		if(params.offset != null && params.offset > 0  && params.max != null && params.max > 0) preventiveMaintenance.preventiveMaintenanceList = maintenances[(params.offset) .. ((params.offset + params.max) > maintenances.size() ? maintenances.size() - 1 : (params.offset + params.max))]
-		else preventiveMaintenance.preventiveMaintenanceList = maintenances
-		preventiveMaintenance.totalCount = maintenances.size()
-		return preventiveMaintenance
-	}
-	
-	public getMaintenanceOrder(Class clazz,def dataLocation,Map<String,String> params){
-		def criteria = clazz.createCriteria();
-		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			if(dataLocation)
-				equipment{ eq('dataLocation',dataLocation)}
 		}
 		
 	}

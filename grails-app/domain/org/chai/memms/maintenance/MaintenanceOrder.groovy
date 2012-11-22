@@ -50,6 +50,7 @@ public abstract class MaintenanceOrder {
 	
 	User addedBy
 	User lastModifiedBy
+	String description
 	
 		
 	static constraints = {
@@ -64,11 +65,13 @@ public abstract class MaintenanceOrder {
 		lastModifiedBy nullable: true, validator:{ val, obj ->
 			if(val!=null) return (obj.lastModifiedOn!=null)
 		}
+		description nullable:false, blank: false
 		
 	}
 	
 	static mapping = {
 		table "memms_maintenance_order_abstract"
+		description type:"text"
 		tablePerHierarchy false
 		version false
 		cache true

@@ -82,17 +82,17 @@ class WorkOrderViewController extends AbstractController{
 	}
 
 	def list = {
-		List<WorkOrder> orders= []
-		Equipment equipment = null
-		CalculationLocation  dataLocation = null
+		def equipment = null
+		def  dataLocation = null
 		if(params["dataLocation.id"]) dataLocation = CalculationLocation.get(params.int("dataLocation.id"))
 		if(params["equipment.id"]) equipment = Equipment.get(params.int("equipment.id"))
 		
 		adaptParamsForList()
+		def orders= []
 		if(dataLocation)
-			orders = maintenanceService.getOrdersByCalculationLocation(WorkOrder.class,dataLocation,params)	
+			orders = maintenanceService.getMaintenanceOrderByCalculationLocation(WorkOrder.class,dataLocation,params)	
 		if(equipment)
-		 	orders= workOrderService.getWorkOrdersByEquipment(equipment,params)
+		 	orders= maintenanceService.getMaintenanceOrderByEquipment(WorkOrder.class,equipment,params)
 		 if(request.xhr){
 			 this.ajaxModel(orders,dataLocation,equipment,"")
 		 }else{
@@ -110,15 +110,15 @@ class WorkOrderViewController extends AbstractController{
 	}
 	
 	def search = {
-		Equipment equipment = null
-		DataLocation dataLocation = null
+		def equipment = null
+		def dataLocation = null
 		if(params["equipment.id"])
 			equipment = Equipment.get(params.long("equipment.id"))
 		else if(params["dataLocation.id"])
 			dataLocation = DataLocation.get(params.long('dataLocation.id'))
 			
 		adaptParamsForList()
-		List<WorkOrder> orders = workOrderService.searchWorkOrder(params['q'],dataLocation,equipment,params)
+		def orders = maintenanceService.searchOrder(WorkOrder.class,params['q'],dataLocation,equipment,params)
 		if(!request.xhr)
 			response.sendError(404)
 		this.ajaxModel(orders,dataLocation,equipment,params['q'])
@@ -128,7 +128,7 @@ class WorkOrderViewController extends AbstractController{
 		if(log.isDebugEnabled()) log.debug("workOrder filter command object:"+cmd)
 		
 		adaptParamsForList()
-		List<WorkOrder> orders = workOrderService.filterWorkOrders(cmd.dataLocation,cmd.equipment,cmd.openOn,cmd.closedOn,cmd.criticality,cmd.currentStatus,params)
+		def orders = workOrderService.filterWorkOrders(cmd.dataLocation,cmd.equipment,cmd.openOn,cmd.closedOn,cmd.criticality,cmd.currentStatus,params)
 		if(!request.xhr)
 			response.sendError(404)
 		this.ajaxModel(orders,cmd.dataLocation,cmd.equipment,"")
@@ -146,22 +146,24 @@ class WorkOrderViewController extends AbstractController{
 		def location = Location.get(params.int('location'))
 		def dataLocationTypesFilter = getLocationTypes()
 		def template = null
-		def correctiveMaintenances = null
+		def maintenances = null
 
 		adaptParamsForList()
 		def locationSkipLevels = maintenanceService.getSkipLocationLevels()
 
 		if (location != null) {
-			template = '/correctiveSummaryPage/sectionTable'
-			correctiveMaintenances = maintenanceService.getCorrectiveMaintenancesByLocation(location,dataLocationTypesFilter,params)
+			template = '/orderSummaryPage/sectionTable'
+			maintenances = maintenanceService.getMaintenancesByLocation(WorkOrder.class,location,dataLocationTypesFilter,params)
 		}
-		render (view: '/correctiveSummaryPage/summaryPage', model: [
-					correctiveMaintenances:correctiveMaintenances?.correctiveMaintenanceList,
+		render (view: '/orderSummaryPage/summaryPage', model: [
+					maintenances:maintenances?.maintenanceList,
 					currentLocation: location,
 					currentLocationTypes: dataLocationTypesFilter,
 					template: template,
-					entityCount: correctiveMaintenances?.totalCount,
-					locationSkipLevels: locationSkipLevels
+					entityCount: maintenances?.totalCount,
+					locationSkipLevels: locationSkipLevels,
+					controller:'workOrderView',
+					code:getLabel()
 				])
 	}
 
@@ -250,7 +252,7 @@ class WorkOrderViewController extends AbstractController{
 			def content = "Please review work order on equipment serial number: ${order.equipment.code}"
 			workOrderService.escalateWorkOrder(order, content, user)
 			result=true 
-			def orders= workOrderService.getWorkOrdersByEquipment(equipment,[:])
+			def orders= workOrderService.getMaintenanceOrderByEquipment(WorkOrder.class,equipment,[:])
 			html = g.render(template:"/entity/workOrder/workOrderList",model:[equipment:equipment,entities:orders])
 		}
 		render(contentType:"text/json") { results = [result,html] }

@@ -29,6 +29,7 @@ package org.chai.memms.preventive.maintenance
 
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocation
+import org.chai.location.Location
 import org.chai.memms.AbstractController
 import org.chai.memms.AbstractEntityController;
 import org.chai.memms.inventory.Equipment;
@@ -44,7 +45,7 @@ class PreventiveOrderViewController extends AbstractController {
 	def maintenanceService
 	
 	def getEntityClass() {
-		return DurationBasedOrder.class;
+		return PreventiveOrder.class;
 	}
 	
 	def getLabel() {
@@ -53,16 +54,16 @@ class PreventiveOrderViewController extends AbstractController {
 	
 	def list = {	
 		adaptParamsForList()
-		List<DurationBasedOrder> orders = []
-		Equipment equipment = null
-		CalculationLocation  dataLocation = null
+		def orders = []
+		def equipment = null
+		def  dataLocation = null
 		if(params["dataLocation.id"]) dataLocation = CalculationLocation.get(params.int("dataLocation.id"))
 		if(params["equipment.id"]) equipment = Equipment.get(params.int("equipment.id"))
 		
-		if(location)
-			orders = preventiveOrderService.getPreventiveOrderByDataLocationManages(dataLocation,params)
+		if(dataLocation)
+			orders = maintenanceService.getMaintenanceOrderByCalculationLocation(PreventiveOrder.class,dataLocation,params)	
 		if(equipment)
-			orders = preventiveOrderService.getPreventiveOrderByEquipment(equipment,params)
+			orders = maintenanceService.getPreventiveOrderByEquipment(equipment,params)
 		 if(request.xhr){
 			 this.ajaxModel(orders,dataLocation,equipment,"")
 		 }else{
@@ -74,13 +75,30 @@ class PreventiveOrderViewController extends AbstractController {
 				equipment:equipment,
 				entities: orders,
 				entityCount: orders.totalCount,
+				code:getLabel(),
+				names:names
 			])
 		}
 	}
 	
+	def search = {
+		def equipment = null
+		def dataLocation = null
+		if(params["equipment.id"])
+			equipment = Equipment.get(params.long("equipment.id"))
+		else if(params["dataLocation.id"])
+			dataLocation = DataLocation.get(params.long('dataLocation.id'))
+			
+		adaptParamsForList()
+		def orders = maintenanceService.searchOrder(PreventiveOrder.class,params['q'],dataLocation,equipment,params)
+		if(!request.xhr)
+			response.sendError(404)
+		this.ajaxModel(orders,dataLocation,equipment,params['q'])
+	}
+	
 	def ajaxModel(def entities,def dataLocation,def equipment, def searchTerm) {
-		def model = [entities: entities,entityCount: entities.totalCount,dataLocation:dataLocation,equipment:equipment,q:searchTerm]
-		def listHtml = g.render(template:"/entity/preventive/preventiveOrderList",model:model)
+		def model = [entities: entities,entityCount: entities.totalCount,dataLocation:dataLocation,equipment:equipment,q:searchTerm,names:names]
+		def listHtml = g.render(template:"/entity/preventiveOrder/preventiveOrderList",model:model)
 		render(contentType:"text/json") { results = [listHtml] }
 	}
 	
@@ -90,22 +108,24 @@ class PreventiveOrderViewController extends AbstractController {
 		def location = Location.get(params.int('location'))
 		def dataLocationTypesFilter = getLocationTypes()
 		def template = null
-		def preventiveMaintenances = null
+		def maintenances = null
 
 		adaptParamsForList()
 		def locationSkipLevels = maintenanceService.getSkipLocationLevels()
 
 		if (location != null) {
-			template = '/preventiveSummaryPage/sectionTable'
-			preventiveMaintenances = maintenanceService.getPreventiveMaintenancesByLocation(location,dataLocationTypesFilter,params)
+			template = '/orderSummaryPage/sectionTable'
+			maintenances = maintenanceService.getMaintenancesByLocation(PreventiveOrder.class,location,dataLocationTypesFilter,params)
 		}
-		render (view: '/preventiveSummaryPage/summaryPage', model: [
-					preventiveMaintenances:preventiveMaintenances?.preventiveMaintenanceList,
+		render (view: '/orderSummaryPage/summaryPage', model: [
+					maintenances:maintenances?.maintenanceList,
 					currentLocation: location,
 					currentLocationTypes: dataLocationTypesFilter,
 					template: template,
-					entityCount: preventiveMaintenances?.totalCount,
-					locationSkipLevels: locationSkipLevels
+					entityCount: maintenances?.totalCount,
+					locationSkipLevels: locationSkipLevels,
+					controller:'preventiveOrderView',
+					code:getLabel()
 				])
 	}
 	

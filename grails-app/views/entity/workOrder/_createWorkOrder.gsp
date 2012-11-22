@@ -41,10 +41,10 @@
    		<g:textarea name="description" rows="12" width="380" label="${message(code:'entity.description.label')}" readonly="${(closed)? true:false}" bean="${order}" field="description" value="${order.description}"/>
    		<g:selectFromEnum name="criticality" bean="${order}" values="${Criticality.values()}" field="criticality" readonly="${(closed)? true:false}" label="${message(code:'work.order.criticality.label')}"/>
    		<g:if test="${order.id != null}">
-   			<g:selectFromEnum name="currentStatus" bean="${order}" values="${OrderStatus.values()}" field="currentStatus" label="${message(code:'work.order.status.label')}"/>
+   			<g:selectFromEnum name="currentStatus" bean="${order}" values="${OrderStatus.values()}" field="currentStatus" label="${message(code:'entity.status.label')}"/>
    			<table class="items">
 	    		<tr>
-	    			<th>${message(code:'work.order.status.label')}</th>
+	    			<th>${message(code:'entity.status.label')}</th>
 	    			<th>${message(code:'work.order.status.changed.on.label')}</th>
 	    			<th>${message(code:'work.order.status.changed.by.label')}</th>
 	    			<th>${message(code:'work.order.status.escalation.label')}</th>

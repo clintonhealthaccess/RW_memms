@@ -8,21 +8,21 @@
 		<table class="items">
 			<thead>
 				<th><g:message code="datalocation.label" /></th>
-				<th><g:message code="preventiveMaintenance.preventiveOrder.count" /></th>
+				<th>${message(code:code)}</th>
 				<th></th>
 			</thead>
 			<tbody>
-				<g:each in="${preventiveMaintenances}" var="preventiveMaintenance">
+				<g:each in="${maintenances}" var="maintenance">
 					<tr>
 						<td>
-							${preventiveMaintenance.dataLocation.names}
+							${maintenance.dataLocation.names}
 						</td>
 						<td>
-							${preventiveMaintenance.orderCount}
+							${maintenance.orderCount}
 						</td>
 						<td>
-							<shiro:hasPermission permission="preventiveOrder:list">
-								<a href="${createLink(controller: 'preventiveOrderView', action: 'list', params:['dataLocation.id': preventiveMaintentce.dataLocation.id] )}"><g:message code="entity.manage.label" /></a>
+							<shiro:hasPermission permission="order:list">
+								<a href="${createLink(controller: controller, action: 'list', params:['dataLocation.id': maintenance.dataLocation.id] )}"><g:message code="entity.list.manage.label" /></a>
 							</shiro:hasPermission>
 						</td>
 					</tr>

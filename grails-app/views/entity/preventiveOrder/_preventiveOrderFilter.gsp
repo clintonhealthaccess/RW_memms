@@ -1,8 +1,9 @@
-<%@ page import="org.chai.memms.corrective.maintenance.WorkOrder.Criticality"%>
-<%@ page import="org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus"%>
+<%@ page import="org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderType"%>
+<%@ page import="org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatus"%>
+<%@ page import="org.chai.memms.preventive.maintenance.PreventiveOrder.PreventionResponsible"%>
 <%@ page import="java.util.Date" %>
 <div class="filters main">
-	<h2><g:message code="work.order.filter.label" /><a href="#" id="showhide" class="right"><g:message code="entity.show.hide.filter.label" /></a></h2>
+	<h2><g:message code="preventive.order.filter.label" /><a href="#" id="showhide" class="right"><g:message code="entity.show.hide.filter.label" /></a></h2>
 	<g:hasErrors bean="${filterCmd}">
 		<ul>
 			<g:eachError var="err" bean="${filterCmd}">
@@ -13,16 +14,18 @@
 		</ul>
 	</g:hasErrors>
 
-	<g:form url="[controller:'workOrder', action:'filter']" method="get"
+	<g:form url="[controller:'preventiveOrderView', action:'filter']" method="get"
 		useToken="false" class="filters-box">
 		<ul class="filters-list">
-			<li><g:selectFromEnum name="criticality" values="${Criticality.values()}" field="criticality" label="${message(code:'work.order.criticality.label')}" bean="${filterCmd}"/></li>
-			<li><g:selectFromEnum name="currentStatus" values="${OrderStatus.values()}" field="currentStatus" label="${message(code:'work.order.status.label')}" bean="${filterCmd}"/></li>
-			<li><div class="half"><g:input name="openOn" dateClass="date-picker" label="${message(code:'work.order.openOn.label')}" bean="${filterCmd}" field="openOn" value="${filterCmd?.openOn}"/></div><div class="half"><g:input name="closedOn" dateClass="date-picker" label="${message(code:'work.order.closedOn.label')}" bean="${filterCmd}" field="closedOn" value="${filterCmd?.closedOn}"/></div></li>
+			<li><g:selectFromEnum name="type" values="${PreventiveOrderType.values()}" field="type" label="${message(code:'preventive.order.type.label')}" bean="${filterCmd}"/></li>
+			<li><g:selectFromEnum name="status" values="${PreventiveOrderStatus.values()}" field="currentStatus" label="${message(code:'entity.status.label')}" bean="${filterCmd}"/></li>
+			<li><g:selectFromEnum name="preventionResponsible" values="${PreventionResponsible.values()}" field="currentStatus" label="${message(code:'preventive.order.prevention.responsible.label')}" bean="${filterCmd}"/></li>
+			<li><div class="half"><g:input name="openOn" dateClass="date-picker" label="${message(code:'order.open.on.label')}" bean="${filterCmd}" field="openOn" value="${filterCmd?.openOn}"/></div><div class="half"><g:input name="closedOn" dateClass="date-picker" label="${message(code:'order.closed.on.label')}" bean="${filterCmd}" field="closedOn" value="${filterCmd?.closedOn}"/></div></li>
 		</ul>
-		<button type="submit">Filter</button>
 		<input type="hidden" name="dataLocation.id" value="${dataLocation?.id}" />
 		<input type="hidden" name="equipment.id" value="${equipment?.id}" />
+		<button type="submit"><g:message code="entity.filter.label" /></button>
+		<a href="#" class="clear-form"><g:message code="default.link.clear.form.label"/></a>
 	</g:form>
 </div>
 <g:if test="${params?.q}">

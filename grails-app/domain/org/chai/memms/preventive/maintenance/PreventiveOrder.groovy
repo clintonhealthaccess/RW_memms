@@ -76,7 +76,6 @@ public abstract class PreventiveOrder extends MaintenanceOrder {
 		
 	}
 	String names
-	String description
 	PreventionResponsible  preventionResponsible
 	
 	User technicianInCharge
@@ -98,7 +97,6 @@ public abstract class PreventiveOrder extends MaintenanceOrder {
 		technicianInCharge nullable:true, validator:{ val, obj ->
 			if(obj.preventionResponsible.equals(PreventionResponsible.HCTECHNICIAN)) return (val!=null)
 		}
-		description nullable:false
 		
 	}
 	static mapping = {
