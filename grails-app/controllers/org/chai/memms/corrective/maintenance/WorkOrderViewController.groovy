@@ -127,6 +127,25 @@ class WorkOrderViewController extends AbstractController{
 		this.ajaxModel(orders,dataLocation,equipment,params['q'])
 	}
 	
+	def escalate = {
+		WorkOrder order = WorkOrder.get(params.int("order"))
+		def result = false
+		def html = ""
+		if (!order || order.currentStatus.equals(OrderStatus.CLOSEDFIXED) || order.currentStatus.equals(OrderStatus.CLOSEDFORDISPOSAL))
+			response.sendError(404)
+		else {
+			def equipment = order.equipment
+			//TODO define default escalation message
+			def content = "Please review work order on equipment serial number: ${order.equipment.code}"
+			workOrderService.escalateWorkOrder(order, content, user)
+			result=true
+			def orders= workOrderService.getWorkOrdersByEquipment(equipment,[:])
+			html = g.render(template:"/entity/workOrder/workOrderList",model:[equipment:equipment,entities:orders])
+		}
+		
+		render(contentType:"text/json") { results = [result,html] }
+	}
+	
 	def filter = { FilterWorkOrderCommand cmd ->
 		if(log.isDebugEnabled()) log.debug("workOrder filter command object:"+cmd)
 		
@@ -240,26 +259,6 @@ class WorkOrderViewController extends AbstractController{
 		}
 		render(contentType:"text/json") { results = [result,html] }
 	}
-
-	
-	def escalate = {
-		WorkOrder order = WorkOrder.get(params.int("order"))
-		def result = false
-		def html = ""
-		if (!order || order.currentStatus.equals(OrderStatus.CLOSEDFIXED) || order.currentStatus.equals(OrderStatus.CLOSEDFORDISPOSAL))
-			response.sendError(404)
-		else {
-			def equipment = order.equipment
-			//TODO define default escalation message
-			def content = "Please review work order on equipment serial number: ${order.equipment.code}"
-			workOrderService.escalateWorkOrder(order, content, user)
-			result=true 
-			def orders= workOrderService.getWorkOrdersByEquipment(equipment,[:])
-			html = g.render(template:"/entity/workOrder/workOrderList",model:[equipment:equipment,entities:orders])
-		}
-		render(contentType:"text/json") { results = [result,html] }
-	}
-
 }
 
 class FilterWorkOrderCommand {
