@@ -2,6 +2,7 @@
  * List ajax init
  */
 function listGridAjaxInit(){
+	alert(1)
 	$(".spinner-container").hide()
 	listGridAjax()
 	searchFormAjax()
