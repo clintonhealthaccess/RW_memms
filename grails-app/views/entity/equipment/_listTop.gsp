@@ -1,8 +1,6 @@
 <span class="right">
 	<shiro:hasPermission permission="equipment:create">
-		<a href="${createLinkWithTargetURI(controller:'equipment', action:'create', params:['location.id': location?.id,'dataLocation.id': dataLocation?.id])}" class="next medium left push-r"> 
-			<g:message code="default.new.label" args="[entityName]" />
-		</a>
+		<g:equipmentRegistration dataLocation="${dataLocation?.id}" entityName="${[entityName]}"/>
 	</shiro:hasPermission>
 	<a href="${createLinkWithTargetURI(controller: 'equipmentView', action:'export', params:['location.id': location?.id,'dataLocation.id': dataLocation?.id])}" class="next medium gray left export push-r">
 		<g:message code="default.export.label" />
