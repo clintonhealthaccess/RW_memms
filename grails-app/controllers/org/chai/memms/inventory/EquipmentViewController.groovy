@@ -100,6 +100,7 @@ class EquipmentViewController extends AbstractController {
 			dataLocations.addAll((user.location as DataLocation).manages)
 			
 		render(view:"/entity/list", model:[
+					listTop:"equipment/listTop",
 					template:"equipment/selectFacility",
 					dataLocations:dataLocations
 				])
