@@ -31,7 +31,7 @@
 					<% def user = User.findByUuid(SecurityUtils.subject.principal, [cache: true])%>
 					<li>
 						<a href="${createLinkWithTargetURI(controller: 'account', action:'editAccount')}">
-							<g:message code="header.navigation.myaccount"/> : ${user?.firstname} ${user?.lastname}
+							<g:message code="header.navigation.myaccount"/> : ${user.names}
 						</a>
 					</li>
 				</shiro:user>
