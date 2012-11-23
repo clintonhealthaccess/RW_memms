@@ -141,9 +141,10 @@ class WorkOrderViewController extends AbstractController{
 			result=true
 			def orders= workOrderService.getWorkOrdersByEquipment(equipment,[:])
 			html = g.render(template:"/entity/workOrder/workOrderList",model:[equipment:equipment,entities:orders])
+			if(!request.xhr)
+				response.sendError(404)
+			this.ajaxModel(orders,null,equipment,params['q'])
 		}
-		
-		render(contentType:"text/json") { results = [result,html] }
 	}
 	
 	def filter = { FilterWorkOrderCommand cmd ->
