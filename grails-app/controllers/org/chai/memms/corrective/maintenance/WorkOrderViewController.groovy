@@ -83,7 +83,7 @@ class WorkOrderViewController extends AbstractController{
 		def html = g.render(template:"/templates/workOrderClueTip",model:[workOrder:workOrder])
 		render(contentType:"text/plain", text:html)
 	}
-
+	
 	def list = {
 		List<WorkOrder> orders= []
 		Equipment equipment = null
