@@ -125,63 +125,6 @@ class WorkOrderServiceSpec  extends IntegrationTests{
 		equipments.size() == 1
 	}
 	
-	def "can get escalated WorkOrders - for Calculation locations that a user can access"(){
-		setup:
-		setupLocationTree()
-		setupEquipment()
-		def sender = newOtherUser("sender", "sender", DataLocation.findByCode(KIVUYE))
-		sender.userType = UserType.TITULAIREHC
-		sender.save(failOnError:true)
-		
-		def senderWrong = newOtherUser("senderWrong", "senderWrong", DataLocation.findByCode(GITWE))
-		senderWrong.userType = UserType.TITULAIREHC
-		senderWrong.save(failOnError:true)
-		
-		def techdh = newOtherUser("receiverOne", "receiverOne", DataLocation.findByCode(BUTARO))
-		techdh.userType = UserType.TECHNICIANDH
-		techdh.save(failOnError:true)
-		
-		def techdhWrong = newOtherUser("techdhWrong", "techdhWrong", DataLocation.findByCode(MUSANZE))
-		techdhWrong.userType = UserType.TECHNICIANDH
-		techdhWrong.save(failOnError:true)
-		
-		def admin = newOtherUser("admin", "admin", Location.findByCode(RWANDA) )
-		admin.userType = UserType.ADMIN
-		admin.save(failOnError:true)
-		
-		def equipment = Equipment.findBySerialNumber(CODE(123))
-		def workOrderOne = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,sender,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet, not even after escalations", Criticality.NORMAL,sender,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-		when:
-		def escalatedOneFalse = workOrderService.getEscalatedWorkOrders(sender,[:])
-		def escalatedTwoFalse = workOrderService.getEscalatedWorkOrders(senderWrong,[:])
-		def escalatedThreeFalse = workOrderService.getEscalatedWorkOrders(techdh,[:])
-		def escalatedFourFalse = workOrderService.getEscalatedWorkOrders(techdhWrong,[:])
-		def escalatedFiveFalse = workOrderService.getEscalatedWorkOrders(admin,[:])
-		then:
-		WorkOrder.count() == 2
-		escalatedOneFalse.size() == 0
-		escalatedTwoFalse.size() == 0
-		escalatedThreeFalse.size() == 0
-		escalatedFourFalse.size() == 0
-		escalatedFiveFalse.size() == 0
-		
-		when:
-		workOrderService.escalateWorkOrder(workOrderOne,"escalate this", techdh)
-		def escalatedOneTrue = workOrderService.getEscalatedWorkOrders(sender,[:])
-		def escalatedTwoTrue = workOrderService.getEscalatedWorkOrders(senderWrong,[:])
-		def escalatedThreeTrue = workOrderService.getEscalatedWorkOrders(techdh,[:])
-		def escalatedFourTrue = workOrderService.getEscalatedWorkOrders(techdhWrong,[:])
-		def escalatedFiveTrue = workOrderService.getEscalatedWorkOrders(admin,[:])
-		then:
-		WorkOrder.count() == 2
-		escalatedOneTrue.size() == 1
-		escalatedTwoTrue.size() == 0
-		escalatedThreeTrue.size() == 1
-		escalatedFourTrue.size() == 0
-		escalatedFiveTrue.size() == 1
-	}
-	
 	def "can get workOrders by calculationLocation"(){
 		setup:
 		setupLocationTree()
