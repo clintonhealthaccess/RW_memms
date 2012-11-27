@@ -55,7 +55,6 @@ class WorkOrderService {
 	static transactional = true
 	def languageService;
 	def notificationWorkOrderService
-
 	/**
 	 * Searches for a WorkOrder that contains the search term
 	 * Pass a null value for the criteria you want to be ignored in the search other than the search text

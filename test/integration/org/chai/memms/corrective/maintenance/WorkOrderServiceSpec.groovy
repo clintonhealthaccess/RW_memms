@@ -140,4 +140,21 @@ class WorkOrderServiceSpec  extends IntegrationTests{
 		workOrdersPassesDataLocation.size() == 2
 		workOrdersFailsDataLocation.size() == 0
 	}
+	def "can escalate a WorkOrders"(){
+		setup:
+		setupLocationTree()
+		setupEquipment()
+		def titulaire = newUser("clerk", true,true)
+		titulaire.userType = UserType.TITULAIREHC
+		titulaire.location = DataLocation.findByCode(KIVUYE)
+		titulaire.save(failOnError:true)
+		
+		def equipment = Equipment.findBySerialNumber(CODE(123))
+		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,titulaire,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		when:
+		workOrderService.escalateWorkOrder( workOrder,"needs further review", titulaire)
+		then:
+		workOrder.status.size() == 1
+		workOrder.status.escalation
+	}
 }

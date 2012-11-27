@@ -156,7 +156,8 @@ function escaletWorkOrder(baseUrl){
 			data:{"order":event.target.id},
 			url:baseUrl,
 			success: function(data) {
-				refreshList(data.results[1],".items")
+				$(".spinner-container").show()
+				addListAjaxResponse(data)
 			}
 		});
 		$(this).ajaxError(function(){

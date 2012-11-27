@@ -81,15 +81,19 @@ class EquipmentViewController extends AbstractController {
 		}
 		else equipments = equipmentService.getMyEquipments(user,params)
 		
-		render(view:"/entity/list", model:[
-					template:"equipment/equipmentList",
-					filterTemplate:"equipment/equipmentFilter",
-					listTop:"equipment/listTop",
-					dataLocation:dataLocation,
-					entities: equipments,
-					entityCount: equipments.totalCount,
-					code: getLabel()
-					])
+		if(request.xhr){
+			 this.ajaxModel(equipments,dataLocation,"")
+		 }else{
+			render(view:"/entity/list", model:[
+						template:"equipment/equipmentList",
+						filterTemplate:"equipment/equipmentFilter",
+						listTop:"equipment/listTop",
+						dataLocation:dataLocation,
+						entities: equipments,
+						entityCount: equipments.totalCount,
+						code: getLabel()
+						])
+		}
 	}
 	
 	def selectFacility = {
@@ -112,7 +116,7 @@ class EquipmentViewController extends AbstractController {
 			response.sendError(404)
 
 		adaptParamsForList()
-		def equipments = equipmentService.searchEquipment(params['q'],dataLocation,params)
+		def equipments = equipmentService.searchEquipment(params['q'],user,params)
 		if(!request.xhr)
 			response.sendError(404)
 		this.ajaxModel(equipments,dataLocation,params['q'])

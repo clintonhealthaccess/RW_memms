@@ -31,7 +31,7 @@
 					<% def user = User.findByUuid(SecurityUtils.subject.principal, [cache: true])%>
 					<li>
 						<a href="${createLinkWithTargetURI(controller: 'account', action:'editAccount')}">
-							<g:message code="header.navigation.myaccount"/> : ${user?.firstname} ${user?.lastname}
+							<g:message code="header.navigation.myaccount"/> : ${user.names}
 						</a>
 					</li>
 				</shiro:user>
@@ -89,7 +89,7 @@
 			<li><a class="${controllerName=='equipment' || controllerName=='equipmentView' || controllerName=='notificationEquipment' ?'active':''}" href="#"><g:message code="header.navigation.inventory"/></a>
 				<ul class="submenu">
 					<li><a class="${controllerName=='equipment' || controllerName=='equipmentView' ?'active':''}" href="${createLink(controller:'equipmentView', action:'summaryPage')}"><g:message code="header.navigation.inventory"/></a></li>
-					<li><a class="${controllerName=='notificationEquipment' ?'active':''}" href="${createLink(controller:'notificationEquipment', action:'list')}"><g:message code="header.navigation.notification.equipment"/> ()</a></li>
+					<li><a class="${controllerName=='notificationEquipment' ?'active':''}" href="${createLink(controller:'notificationEquipment', action:'list')}"><g:message code="header.navigation.notification.equipment"/></a></li>
 				</ul>
 	         </li>
 		</shiro:hasPermission>
@@ -103,7 +103,7 @@
 						<li><a class="${controllerName=='preventiveOrderView'?'active':''}" href="#"><g:message code="header.navigation.preventive.maintenance"/></a></li>
 					</shiro:hasPermission>
 					<li><a class="${controllerName=='workOrderView' && actionName == 'escalated' ?'active':''}" href="${createLink(controller: 'workOrderView', action:'escalated')}"><g:message code="notification.work.order.escalated.label"/> ()</a></li>
-					<li><a class="${controllerName=='notificationWorkOrder'?'active':''}" href="${createLink(controller: 'notificationWorkOrder', action:'list')}"><g:message code="notification.work.order.label"/> ()</a></li>
+					<li><a class="${controllerName=='notificationWorkOrder'?'active':''}" href="${createLink(controller: 'notificationWorkOrder', action:'list')}"><g:message code="notification.work.order.label"/></a></li>
 	         	</ul>
          	</li>
 		</shiro:hasPermission>
