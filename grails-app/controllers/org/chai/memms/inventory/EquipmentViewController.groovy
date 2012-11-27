@@ -81,24 +81,42 @@ class EquipmentViewController extends AbstractController {
 		}
 		else equipments = equipmentService.getMyEquipments(user,params)
 		
-		render(view:"/entity/list", model:[
-					template:"equipment/equipmentList",
-					filterTemplate:"equipment/equipmentFilter",
-					listTop:"equipment/listTop",
-					dataLocation:dataLocation,
-					entities: equipments,
-					entityCount: equipments.totalCount,
-					code: getLabel()
-					])
+		if(request.xhr){
+			 this.ajaxModel(equipments,dataLocation,"")
+		 }else{
+			render(view:"/entity/list", model:[
+						template:"equipment/equipmentList",
+						filterTemplate:"equipment/equipmentFilter",
+						listTop:"equipment/listTop",
+						dataLocation:dataLocation,
+						entities: equipments,
+						entityCount: equipments.totalCount,
+						code: getLabel()
+						])
+		}
 	}
-
+	
+	def selectFacility = {
+		adaptParamsForList()
+		def dataLocations = []
+		dataLocations.add(user.location as DataLocation)
+		if((user.location as DataLocation).manages)
+			dataLocations.addAll((user.location as DataLocation).manages)
+			
+		render(view:"/entity/list", model:[
+					listTop:"equipment/listTop",
+					template:"equipment/selectFacility",
+					dataLocations:dataLocations
+				])
+	}
+	
 	def search = {
 		DataLocation dataLocation = DataLocation.get(params.int("dataLocation.id"));
 		if (dataLocation == null)
 			response.sendError(404)
 
 		adaptParamsForList()
-		def equipments = equipmentService.searchEquipment(params['q'],dataLocation,params)
+		def equipments = equipmentService.searchEquipment(params['q'],user,params)
 		if(!request.xhr)
 			response.sendError(404)
 		this.ajaxModel(equipments,dataLocation,params['q'])
@@ -263,12 +281,7 @@ class EquipmentViewController extends AbstractController {
 	}
 
 	def getAjaxData = {
-
-		DataLocation dataLocation = null
-		if(params['dataLocation.id']) dataLocation = DataLocation.get(params.int("dataLocation.id"))
-		List<Equipment> equipments =[]
-		if(dataLocation) equipments = equipmentService.searchEquipment(params['term'],dataLocation, [:])
-		else equipments = equipmentService.searchEquipment(params['term'],null, [:])
+		List<Equipment> equipments = equipmentService.searchEquipment(params['term'],user, [:])
 		render(contentType:"text/json") {
 			elements = array {
 				equipments.each { equipment ->
