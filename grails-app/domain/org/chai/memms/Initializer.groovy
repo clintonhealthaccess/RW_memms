@@ -336,8 +336,8 @@ public class Initializer {
 			def serviceProTwo = newProvider("Ten",Type.SERVICEPROVIDER,contactTen)
 		}
 		if(!NotificationEquipment.count()){
-			newNotificationEquipment(User.findByUsername("titulaireHC"), User.findByUsername("techMMC"), now(), "I have a new equipment in my health center, am not sure of it't type but has a serial number of 9084320oidbfd. Could you come register it please? thanks", false, User.findByUsername("titulaireHC").location, null)
-			newNotificationEquipment(User.findByUsername("hospitalDepartment"), User.findByUsername("techMMC"), now(), "I have a new equipment in my department, am not sure of it't type but has a serial number of 9084320oidbfd. Could you come register it please? thanks", false, User.findByUsername("hospitalDepartment").location, null)
+			newNotificationEquipment(User.findByUsername("titulaireHC"), User.findByUsername("techDH"), now(), "I have a new equipment in my health center, am not sure of it't type but has a serial number of 9084320oidbfd. Could you come register it please? thanks", false, User.findByUsername("titulaireHC").location, null)
+			newNotificationEquipment(User.findByUsername("hospitalDepartment"), User.findByUsername("techDH"), now(), "I have a new equipment in my department, am not sure of it't type but has a serial number of 9084320oidbfd. Could you come register it please? thanks", false, User.findByUsername("hospitalDepartment").location, null)
 		}
 		
 		if(!Equipment.count()){
@@ -645,19 +645,19 @@ public class Initializer {
 		def equipment09 =Equipment.findBySerialNumber("SERIAL09")
 		def equipment10 =Equipment.findBySerialNumber("SERIAL10")
 		
-		def dOrderOne = newDurationBasedOrder(equipment01,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,"First Duration Order","First Duration Order",now(),null,OccurencyType.WEEKLY,true,1,null)
+		def dOrderOne = newDurationBasedOrder(equipment01,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'First Duration Order'],"First Duration Order",now(),null,OccurencyType.WEEKLY,true,1,null)
 		equipment01.addToPreventiveOrders(dOrderOne)
 		equipment01.save(failOnError:true)
 		
-		def dOrderTwo = newDurationBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,"Secod Duration Order","Second Duration Order",now(),null,OccurencyType.MONTHLY,true,2,null)
+		def dOrderTwo = newDurationBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'Secod Duration Order'],"Second Duration Order",now(),null,OccurencyType.MONTHLY,true,2,null)
 		equipment09.addToPreventiveOrders(dOrderTwo)
 		equipment09.save(failOnError:true)
 		
-		def dOrderThree = newDurationBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,"Three Duration Order","Second Duration Order",now(),null,OccurencyType.DAILY,true,2,null)
+		def dOrderThree = newDurationBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'Three Duration Order'],"Second Duration Order",now(),null,OccurencyType.DAILY,true,2,null)
 		equipment09.addToPreventiveOrders(dOrderThree)
 		equipment09.save(failOnError:true)
 		
-		def dOrderFour = newDurationBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,"Four Duration Order","Second Duration Order",now(),null,OccurencyType.YEARLY,true,2,null)
+		def dOrderFour = newDurationBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'Four Duration Order'],"Second Duration Order",now(),null,OccurencyType.YEARLY,true,2,null)
 		equipment09.addToPreventiveOrders(dOrderFour)
 		equipment09.save(failOnError:true)
 		
@@ -668,12 +668,11 @@ public class Initializer {
 	//Models definition
 	//Preventive Maintenance
 	public static def newDurationBasedOrder(def equipment,def addedBy,def status,def preventionResponsible,def technicianInCharge,def names,def description,def openOn,def closedOn,def occurency,def isRecurring,def occurInterval,def occurCount){
-		return new DurationBasedOrder(
+		def order  = new DurationBasedOrder(
 			equipment:equipment,
 			addedBy:addedBy,
 			type:PreventiveOrderType.DURATIONBASED,
 			status:status,
-			names:names,
 			description:description,
 			preventionResponsible:preventionResponsible,
 			technicianInCharge:technicianInCharge,
@@ -683,20 +682,23 @@ public class Initializer {
 			isRecurring: isRecurring,
 			occurInterval: occurInterval,
 			occurCount: occurCount
-			).save(failOnError:true)
+			)
+		Utils.setLocaleValueInMap(order,names,"Names") 
+		return order.save(failOnError:true)
 	}
 	public static def newWorkBasedOrder(def equipment, def status,def preventionResponsible,def technicianInCharge,def names,def descriptions,def openOn,def closedOn){
-		return new WorkBasedOrder(
+		def order  = new WorkBasedOrder(
 			equipment:equipment,
 			type:PreventiveOrderType.WORKBASED,
 			status:status,
-			names:names,
 			descriptions:descriptions,
 			preventionResponsible:preventionResponsible,
 			technicianInCharge:technicianInCharge,
 			openOn:openOn,
 			closedOn:closedOn
-			).save(failOnError:true)
+			)
+		Utils.setLocaleValueInMap(order,names,"Names") 
+		return order.save(failOnError:true)
 	}	
 	public static def newPrevention(def order,def addedBy,def scheduledOn,def happenAsScheduled,def eventDate,def timeSpend,def descriptions){
 		return new Prevention(order:order,addedBy:addedBy,scheduledOn:scheduledOn,happenAsScheduled:happenAsScheduled,eventDate:eventDate,timeSpend:timeSpend,descriptions:descriptions).save(failOnError:true)

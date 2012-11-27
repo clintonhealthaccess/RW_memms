@@ -110,20 +110,25 @@ class UserServiceSpec extends IntegrationTests{
 	def "get notificationWorkOrder group"(){
 		setup:
 		setupLocationTree()
-		setupEquipment()
-		def sender = newUser("sender", true,true)
-		sender.userType = UserType.TITULAIREHC
-		sender.location = DataLocation.findByCode(KIVUYE)
-		sender.save(failOnError:true)
+		
+		def senderTitulaire = newUser("senderTitulaire", true,true)
+		senderTitulaire.userType = UserType.TITULAIREHC
+		senderTitulaire.location = DataLocation.findByCode(KIVUYE)
+		senderTitulaire.save(failOnError:true)
+		
+		def senderDepartment = newUser("senderDepartment", true,true)
+		senderDepartment.userType = UserType.HOSPITALDEPARTMENT
+		senderDepartment.location = DataLocation.findByCode(KIVUYE)
+		senderDepartment.save(failOnError:true)
 		
 		def receiverFacilityOne = newUser("receiverFacilityOne", true,true)
 		receiverFacilityOne.userType = UserType.TECHNICIANDH
-		receiverFacilityOne.location = DataLocation.findByCode(KIVUYE)
+		receiverFacilityOne.location = DataLocation.findByCode(BUTARO)
 		receiverFacilityOne.save(failOnError:true)
 		
 		def receiverFacilityTwo = newUser("receiverFacilityTwo", true,true)
 		receiverFacilityTwo.userType = UserType.TECHNICIANDH
-		receiverFacilityTwo.location = DataLocation.findByCode(KIVUYE)
+		receiverFacilityTwo.location = DataLocation.findByCode(BUTARO)
 		receiverFacilityTwo.save(failOnError:true)
 		
 		def receiverMoHOne = newUser("receiverMoHOne", true,true)
@@ -136,20 +141,25 @@ class UserServiceSpec extends IntegrationTests{
 		receiverMoHTwo.location = Location.findByCode(RWANDA)
 		receiverMoHTwo.save(failOnError:true)
 		
-		def equipment = Equipment.findBySerialNumber(CODE(123))
-		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,sender,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-		def userGroupOne,userGroupTwo,userGroupThree,userGroupFour
+		def equipmentManaged = newEquipment(CODE(123),DataLocation.findByCode(KIVUYE))
+		def equipmentNotManaged = newEquipment(CODE(133),DataLocation.findByCode(BUTARO))
+		
+		def workOrderManaged = Initializer.newWorkOrder(equipmentManaged, "Nothing yet managed", Criticality.NORMAL,senderTitulaire,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def workOrderNotManaged = Initializer.newWorkOrder(equipmentNotManaged, "Nothing yet not managed", Criticality.NORMAL,senderDepartment,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		def initialGroupManaged,initialGroupNotManaged,sentByTechdh,escalated,sentByTechAtMOH
 
 		when:
-		userGroupOne = userService.getNotificationWorkOrderGroup(workOrder,sender,false)
-		userGroupTwo = userService.getNotificationWorkOrderGroup(workOrder,receiverFacilityOne,false)
-		userGroupThree = userService.getNotificationWorkOrderGroup(workOrder,receiverFacilityTwo,true)
-		userGroupFour = userService.getNotificationWorkOrderGroup(workOrder,receiverMoHTwo,false)
+		initialGroupManaged = userService.getNotificationWorkOrderGroup(workOrderManaged,senderTitulaire,false)
+		initialGroupNotManaged = userService.getNotificationWorkOrderGroup(workOrderNotManaged,senderDepartment,false)
+		sentByTechdh = userService.getNotificationWorkOrderGroup(workOrderManaged,receiverFacilityOne,false)
+		escalated = userService.getNotificationWorkOrderGroup(workOrderNotManaged,receiverFacilityTwo,true)
+		sentByTechAtMOH = userService.getNotificationWorkOrderGroup(workOrderManaged,receiverMoHTwo,false)
 		then:
-		userGroupOne.size() == 2
-		userGroupTwo.size() == 2
-		userGroupThree.size() == 4
-		userGroupFour.size() == 3
+		initialGroupManaged.size() == 2
+		initialGroupNotManaged.size() == 2
+		sentByTechdh.size() == 1
+		escalated.size() == 3
+		sentByTechAtMOH.size() == 3
 	}
 	
 	def "get notificationEquipment group"(){
@@ -205,5 +215,36 @@ class UserServiceSpec extends IntegrationTests{
 		!userService.canRequestEquipmentRegistration(techDh)
 		!userService.canRequestEquipmentRegistration(techMMC)
 		!userService.canRequestEquipmentRegistration(admin)
+	}
+	
+	def "check if a user can view managed equipments"(){
+		setup:
+		setupLocationTree()
+		def userOne = newOtherUser("userOne", "userOne", DataLocation.findByCode(KIVUYE))
+		userOne.userType = UserType.TITULAIREHC
+		userOne.save(failOnError:true)
+		
+		def userTwo = newOtherUser("userTwo", "userTwo", DataLocation.findByCode(BUTARO))
+		userTwo.userType = UserType.HOSPITALDEPARTMENT
+		userTwo.save(failOnError:true)
+		
+		def techDh = newOtherUser("techDh", "techDh", DataLocation.findByCode(BUTARO))
+		techDh.userType = UserType.TECHNICIANDH
+		techDh.save(failOnError:true)
+		
+		def techMMC = newOtherUser("techMMC", "techMMC", DataLocation.findByCode(BUTARO))
+		techMMC.userType = UserType.TECHNICIANMMC
+		techMMC.save(failOnError:true)
+		
+		def admin = newOtherUser("admin", "admin", DataLocation.findByCode(RWANDA))
+		admin.userType = UserType.ADMIN
+		admin.save(failOnError:true)
+
+		expect:
+		!userService.canViewManagedEquipments(userOne)
+		!userService.canViewManagedEquipments(userTwo)
+		userService.canViewManagedEquipments(techDh)
+		!userService.canViewManagedEquipments(techMMC)
+		!userService.canViewManagedEquipments(admin)
 	}
 }

@@ -45,6 +45,8 @@ import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocationType;
 import org.chai.location.DataLocation
 import org.chai.location.Location
+import org.chai.memms.location.LanguageService;
+
 
 class MaintenanceService {
 
@@ -52,6 +54,7 @@ class MaintenanceService {
 	def locationService
 	def grailsApplication
 	def equipmentService
+	def languageService
 	
 	def getSkipLocationLevels() {
 		List<LocationLevel> levels = []
@@ -67,21 +70,26 @@ class MaintenanceService {
 	 * NB workOrdersEquipment is named like this to avoid conflicting with the navigation property equipment
 	 * @param text
 	 * @param location
-	 * @param workOrdersEquipment
+	 * @param euip //Named so to avoid ambiguity in criteria
 	 * @param params
 	 * @return
 	 */
-	def searchOrder(Class clazz, String text,DataLocation dataLocation,Equipment equipment,Map<String, String> params) {
-		def dbFieldTypeNames = 'names_'+languageService.getCurrentLanguagePrefix();
+	def searchOrder(Class clazz,String text,DataLocation dataLocation,Equipment equip,Map<String, String> params) {
+		def dbFieldNames = 'names_'+languageService.getCurrentLanguagePrefix();
 		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
 		def criteria = clazz.createCriteria()
 		
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			if(equipment)
-				eq('equipment',equipment)
+			log.debug("dataLocation"+dataLocation+"equipment"+equip)
+			if(equip)
+				eq('equipment',equip)
 			if(dataLocation)
-				equipment{eq('dataLocation',dataLocation)}
+				equipment{
+					eq('dataLocation',dataLocation)
+				}
 			or{
+				if(clazz.equals(PreventiveOrder.class) || clazz.getSuperclass().equals(PreventiveOrder.class))
+					ilike(dbFieldNames,"%"+text+"%")
 				ilike("description","%"+text+"%")
 				equipment{
 					or{
@@ -90,7 +98,7 @@ class MaintenanceService {
 						ilike(dbFieldDescriptions,"%"+text+"%")
 						type{
 							or{
-								ilike(dbFieldTypeNames,"%"+text+"%")
+								ilike(dbFieldNames,"%"+text+"%")
 								ilike("code","%"+text+"%")
 							}
 						}
@@ -120,7 +128,7 @@ class MaintenanceService {
 		return maintenance
 	}
 	
-	def getMaintenanceOrderByDataLocationManages(Class clazz,def dataLocation,Map<String,String> params){
+	def getMaintenanceOrderByDataLocationManages(Class clazz,DataLocation dataLocation,Map<String,String> params){
 		List<Equipment> equipments = equipmentService.getEquipmentsByDataLocation(dataLocation,[:])
 		equipments << equipmentService.getEquipmentsByDataLocationAndManages(dataLocation,[:]).asList()
 		def criteria =  clazz.createCriteria()
@@ -155,11 +163,11 @@ class MaintenanceService {
 		def criteria = clazz.createCriteria();
 		
 		if(location instanceof DataLocation){
-			equipments = equipmentService.getEquipmentsByDataLocation(location, [:])
+			equipments = equipmentService.getEquipmentsByDataLocationAndManages(location, [:])
 		}else{
 			def dataLocations = location.getDataLocations(null,null)
 			for(DataLocation dataLocation: dataLocations)
-				equipments.addAll(equipmentService.getEquipmentsByDataLocation(dataLocation, [:]))
+				equipments.addAll(equipmentService.getEquipmentsByDataLocationAndManages(dataLocation, [:]))
 		}
 		
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){

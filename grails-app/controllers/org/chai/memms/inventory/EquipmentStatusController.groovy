@@ -63,7 +63,7 @@ class EquipmentStatusController extends AbstractEntityController{
 		return EquipmentStatus.class;
 	}
 	def deleteEntity(def entity) {
-		Equipment equipment = entity.equipment
+		def equipment = entity.equipment
 		if(equipment.status && equipment.status.size()==1)
 			flash.message = message(code: "equipment.without.status", args: [message(code: getLabel(), default: 'entity'), params.id], default: 'Status {0} cannot be deleted')
 		else{
@@ -107,16 +107,25 @@ class EquipmentStatusController extends AbstractEntityController{
 		if (equipment == null) 
 			response.sendError(404)
 		else{
-			List<EquipmentStatus> equipmentStatus  = equipmentStatusService.getEquipmentStatusByEquipment(equipment,params)		
-			render(view:"/entity/list", model:[
-				template: "equipmentStatus/equipmentStatusList",
-				equipment: equipment,
-				entities: equipmentStatus,
-				entityCount: equipmentStatus.totalCount,
-				code: getLabel(),
-				entityClass: getEntityClass(),
-				
-				])
+			def equipmentStatus  = equipmentStatusService.getEquipmentStatusByEquipment(equipment,params)
+			if(request.xhr)
+				this.ajaxModel(equipment,equipmentStatus)
+			else{
+				render(view:"/entity/list", model:[
+					template: "equipmentStatus/equipmentStatusList",
+					listTop:"equipmentStatus/listTop",
+					equipment: equipment,
+					entities: equipmentStatus,
+					entityCount: equipmentStatus.totalCount,
+					code: getLabel(),
+					entityClass: getEntityClass()
+					])
+			}
 		}
+	}
+	def ajaxModel(def equipment,def entities) {
+		def model = [entities: entities,entityCount: entities.totalCount,equipment:equipment,entityClass:getEntityClass()]
+		def listHtml = g.render(template:"/entity/equipmentStatus/equipmentStatusList",model:model)
+		render(contentType:"text/json") { results = [listHtml] }
 	}
 }

@@ -36,10 +36,12 @@ import org.chai.memms.corrective.maintenance.CorrectiveProcess;
 import org.chai.memms.inventory.Equipment;
 import org.chai.memms.security.User;
 
+
 /**
  * @author Jean Kahigiso M.
  * 
  */
+
 @EqualsAndHashCode
 public abstract class MaintenanceOrder {
 	

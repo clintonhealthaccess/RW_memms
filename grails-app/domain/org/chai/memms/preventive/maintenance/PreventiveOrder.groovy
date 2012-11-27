@@ -30,6 +30,7 @@ package org.chai.memms.preventive.maintenance
 import org.chai.memms.inventory.Equipment;
 import org.chai.memms.maintenance.MaintenanceOrder;
 import org.chai.memms.security.User;
+import groovy.transform.EqualsAndHashCode;
 
 /**
  * @author Jean Kahigiso M.
@@ -84,9 +85,11 @@ public abstract class PreventiveOrder extends MaintenanceOrder {
 	
 	static belongsTo = [equipment: Equipment]
 	static hasMany = [preventions: Prevention]
+	static i18nFields = ["names"]
 	
 	static constraints = {
 		importFrom MaintenanceOrder, exclude:["closedOn"]
+		names nullable: true, blank: true
 		type nullable: false, inList:[PreventiveOrderType.DURATIONBASED,PreventiveOrderType.WORKBASED]
 		status nullable:false, inList:[PreventiveOrderStatus.OPEN,PreventiveOrderStatus.CLOSED]
 

@@ -27,20 +27,13 @@
  */
 package org.chai.memms.corrective.maintenance
 
-import org.chai.location.DataLocation
 import org.chai.memms.corrective.maintenance.WorkOrder.Criticality
-
-import java.util.Map;
-import org.chai.location.CalculationLocation;
-import org.chai.location.DataLocation;
-import org.chai.location.DataLocationType;
-import org.chai.location.Location;
 import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
-import org.chai.memms.inventory.Equipment;
 import org.chai.memms.security.User;
 import org.chai.memms.util.Utils;
+import org.chai.memms.corrective.maintenance.NotificationWorkOrderService;
 
 
 /**
@@ -48,11 +41,8 @@ import org.chai.memms.util.Utils;
  *
  */
 class WorkOrderService {	
-	def equipmentService
-	def locationService
 	static transactional = true
-	def languageService;
-	def workOrderNotificationService
+	def notificationWorkOrderService
 
 	/**
 	 * Returns a filtered list of WorkOrders according to the passed criteria
@@ -69,13 +59,13 @@ class WorkOrderService {
 	 * @param params
 	 * @return
 	 */
-	def filterWorkOrders(def dataLocation,def workOrdersEquipment,def openOn,def closedOn,def criticality,def currentStatus,def params) {
+	def filterWorkOrders(def dataLocation,def equipment,def openOn,def closedOn,def criticality,def currentStatus,def params) {
 		def criteria = WorkOrder.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(dataLocation)
 				equipment{ eq('dataLocation',dataLocation)}
-			if(workOrdersEquipment)
-				eq("equipment",workOrdersEquipment)
+			if(equipment)
+				eq("equipment",equipment)
 			if(openOn)
 				between("openOn",Utils.getMinDateFromDateTime(openOn),Utils.getMaxDateFromDateTime(openOn))
 			if(closedOn)
@@ -87,14 +77,13 @@ class WorkOrderService {
 		}
 	}
 	
-	def escalateWorkOrder(WorkOrder workOrder,String content, User escalatedBy){
+	def escalateWorkOrder(def workOrder,def content,def escalatedBy){
 		workOrder.currentStatus = OrderStatus.OPENATMMC
 		WorkOrderStatus status = new WorkOrderStatus(workOrder:workOrder,status:OrderStatus.OPENATMMC,escalation:true,changedBy:escalatedBy)
 		workOrder.addToStatus(status)
 		workOrder.save(failOnError:true)
 		if(status)
-			workOrderNotificationService.newNotification(workOrder,content,escalatedBy,true)
+			NotificationWorkOrderService.newNotification(workOrder,content,escalatedBy,true)
 		return workOrder
 	}
-	
 }

@@ -116,6 +116,7 @@ class User {
 		if(userType == UserType.TECHNICIANDH && location instanceof DataLocation && calculationLocation instanceof DataLocation && ((DataLocation)calculationLocation).managedBy != null) return ((DataLocation)calculationLocation).managedBy == location
 		return calculationLocation.getParentOfLevel(location.level) == location
 	}
+
 	
 	def canActivate() {
 		return confirmed == true && active == false

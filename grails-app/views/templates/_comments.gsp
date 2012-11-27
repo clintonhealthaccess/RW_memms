@@ -8,7 +8,7 @@
 			    <a href="#" class="delete-comment delete-row" id="${comment.id}">X</a>
 			</div>
 			<div class="comment-meta">
-				<span class="comment-written-by">${comment.writtenBy.firstname} ${comment.writtenBy.lastname}</span>
+				<span class="comment-written-by">${comment.writtenBy.names}</span>
 				<span class="comment-written-on">${Utils.formatDateWithTime(comment?.dateCreated)}</span>
 			</div>
 			<div class="comment-content">${comment.content}</div>

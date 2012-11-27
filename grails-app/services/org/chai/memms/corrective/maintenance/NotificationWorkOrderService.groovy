@@ -72,7 +72,7 @@ class NotificationWorkOrderService {
 			projections{rowCount()}
 		}
 	}
-	public List<NotificationWorkOrder> searchNotificition(String text,User user,WorkOrder workOrder, Boolean read,Map<String, String> params) {
+	public def searchNotificition(String text,User user,WorkOrder workOrder, Boolean read,Map<String, String> params) {
 		def criteria = NotificationWorkOrder.createCriteria()
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(user)
@@ -86,7 +86,7 @@ class NotificationWorkOrderService {
 		}
 	}
 	
-	public List<NotificationWorkOrder> filterNotifications(WorkOrder workOrder,User receiver,Date from, Date to,Boolean read, Map<String, String> params){
+	public def filterNotifications(WorkOrder workOrder,User receiver,Date from, Date to,Boolean read, Map<String, String> params){
 		def criteria = NotificationWorkOrder.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(workOrder) 
@@ -102,7 +102,7 @@ class NotificationWorkOrderService {
 		}
 	}
 	
-	public NotificationWorkOrder setNotificationRead(NotificationWorkOrder notification){
+	public def setNotificationRead(NotificationWorkOrder notification){
 		notification.read = true
 		notification.save(failOnError:true)
 		return notification

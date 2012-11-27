@@ -31,3 +31,5 @@ prodDb.h2.db
 .classpath
 .project
 .screen.css
+*.sublime-project
+*.sublime-workspace

@@ -127,7 +127,7 @@
   		</div>  
   	</g:form>
   </div>
-  
+  </div>
   <g:if test="${order.id != null}">
     <div class="heading1-bar">
   		<h1><g:message code="work.order.comment.label.alt" args="${['s']}"/></h1>
@@ -149,7 +149,6 @@
 	  	</div>
     </div>
   </g:if>
-</div>
 <script type="text/javascript">
 	$(document).ready(function() {
 		numberOnlyField();

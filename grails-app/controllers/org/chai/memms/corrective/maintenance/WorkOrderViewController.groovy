@@ -147,10 +147,9 @@ class WorkOrderViewController extends AbstractController{
 		def dataLocationTypesFilter = getLocationTypes()
 		def template = null
 		def maintenances = null
-
-		adaptParamsForList()
 		def locationSkipLevels = maintenanceService.getSkipLocationLevels()
 
+		adaptParamsForList()
 		if (location != null) {
 			template = '/orderSummaryPage/sectionTable'
 			maintenances = maintenanceService.getMaintenancesByLocation(WorkOrder.class,location,dataLocationTypesFilter,params)
