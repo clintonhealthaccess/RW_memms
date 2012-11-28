@@ -111,7 +111,7 @@ class User {
 		//This takes care of technicians to be able to access the dataLocations that they manage
 		if(userType == UserType.TECHNICIANDH && location instanceof DataLocation && calculationLocation instanceof DataLocation && (calculationLocation as DataLocation).managedBy != null) return ((DataLocation)calculationLocation).managedBy == location
 		
-		return location instanceof Location ? calculationLocation.getParentOfLevel(location.level) == location : calculationLocation.getParentOfLevel(location.location.level) == location
+		return location.instanceOf(Location) ? calculationLocation.getParentOfLevel(location.level) == location : calculationLocation.getParentOfLevel(location.location.level) == location
 		
 		return false
 	}
