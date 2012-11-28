@@ -172,7 +172,7 @@ class WorkOrderViewControllerSpec extends IntegrationTests{
 		workOrderViewController.list()
 		then:
 		WorkOrder.count() == 2
-		workOrderViewController.response.status == 404
+		workOrderViewController.modelAndView.model.entities.size() == 0
 	}
 	def "can list workOrders - by admin"(){
 		setup:
