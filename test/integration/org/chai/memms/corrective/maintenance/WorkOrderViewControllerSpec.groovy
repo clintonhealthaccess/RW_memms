@@ -237,7 +237,7 @@ class WorkOrderViewControllerSpec extends IntegrationTests{
 		when:
 		workOrderViewController.params."q" = "escalations"
 		workOrderViewController.request.makeAjaxRequest()
-		workOrderViewController.list()
+		workOrderViewController.search()
 		then:
 		WorkOrder.count() == 2
 		!workOrderViewController.response.json.results[0].contains("before")
