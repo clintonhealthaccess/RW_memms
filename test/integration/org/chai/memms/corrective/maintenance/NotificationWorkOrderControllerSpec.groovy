@@ -24,6 +24,7 @@ class NotificationWorkOrderControllerSpec extends IntegrationTests{
 	def "can save a notification"(){
 		setup:
 		setupLocationTree()
+		setupSystemUser()
 		
 		def sender = newOtherUser("sender", "sender", DataLocation.findByCode(KIVUYE))
 		sender.userType = UserType.TITULAIREHC
@@ -70,6 +71,7 @@ class NotificationWorkOrderControllerSpec extends IntegrationTests{
 	def "reading a notification sets it's read status to read"(){
 		setup:
 		setupLocationTree()
+		setupSystemUser()
 		
 		def senderTitulaire = newUser("senderTitulaire", true,true)
 		senderTitulaire.userType = UserType.TITULAIREHC
@@ -117,6 +119,7 @@ class NotificationWorkOrderControllerSpec extends IntegrationTests{
 	def "can list notification - from a work order"(){
 		setup:
 		setupLocationTree()
+		setupSystemUser()
 		
 		def senderTitulaire = newUser("senderTitulaire", true,true)
 		senderTitulaire.userType = UserType.TITULAIREHC
@@ -167,6 +170,7 @@ class NotificationWorkOrderControllerSpec extends IntegrationTests{
 	def "can list notification - all of them for the current user"(){
 		setup:
 		setupLocationTree()
+		setupSystemUser()
 		
 		def senderTitulaire = newUser("senderTitulaire", true,true)
 		senderTitulaire.userType = UserType.TITULAIREHC

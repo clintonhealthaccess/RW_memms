@@ -49,7 +49,7 @@ class WorkOrderService {
 	 * Pass a null value for the criteria you want to be ignored in the filter
 	 * NB workOrdersEquipment is named like this to avoid conflicting with the navigation property equipment
 	 * @param dataLocation
-	 * @param workOrdersequipment
+	 * @param equip //Named so to avoid ambiguity in criteria
 	 * @param openOn
 	 * @param closedOn
 	 * @param assistaceRequested
@@ -59,13 +59,13 @@ class WorkOrderService {
 	 * @param params
 	 * @return
 	 */
-	def filterWorkOrders(def dataLocation,def equipment,def openOn,def closedOn,def criticality,def currentStatus,def params) {
+	def filterWorkOrders(def dataLocation,def equip,def openOn,def closedOn,def criticality,def currentStatus,def params) {
 		def criteria = WorkOrder.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(dataLocation)
 				equipment{ eq('dataLocation',dataLocation)}
-			if(equipment)
-				eq("equipment",equipment)
+			if(equip)
+				eq("equipment",equip)
 			if(openOn)
 				between("openOn",Utils.getMinDateFromDateTime(openOn),Utils.getMaxDateFromDateTime(openOn))
 			if(closedOn)

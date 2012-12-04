@@ -31,6 +31,8 @@ import org.chai.memms.inventory.Equipment;
 import org.chai.memms.maintenance.MaintenanceOrder;
 import org.chai.memms.security.User;
 import groovy.transform.EqualsAndHashCode;
+import org.joda.time.DateTime;
+import org.chai.memms.TimeDate
 
 /**
  * @author Jean Kahigiso M.
@@ -82,13 +84,17 @@ public abstract class PreventiveOrder extends MaintenanceOrder {
 	User technicianInCharge
 	PreventiveOrderType type
 	PreventiveOrderStatus status
+	TimeDate openOn
 	
 	static belongsTo = [equipment: Equipment]
 	static hasMany = [preventions: Prevention]
 	static i18nFields = ["names"]
+	static embedded = ["openOn"]
+
 	
 	static constraints = {
 		importFrom MaintenanceOrder, exclude:["closedOn"]
+		openOn nullable: false, validator:{it.timeDate <= new Date()}
 		names nullable: true, blank: true
 		type nullable: false, inList:[PreventiveOrderType.DURATIONBASED,PreventiveOrderType.WORKBASED]
 		status nullable:false, inList:[PreventiveOrderStatus.OPEN,PreventiveOrderStatus.CLOSED]
@@ -109,7 +115,14 @@ public abstract class PreventiveOrder extends MaintenanceOrder {
 		version false
 
 	}
-	
+
+	public int getDurationMinutes() {
+        return Minutes.minutesBetween(new DateTime(openOn.timeDate), getEndTimeForEvent()).minutes
+    }
+
+    public int getEndTimeForEvent() {
+        return new DateTime(openOn.timeDate).plusHours(1)
+    }	
 	
 	abstract Integer getPlannedPrevention();
 

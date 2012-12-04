@@ -8,7 +8,6 @@
 	<g:layoutHead />	
 	<r:require module="core"/>
 	<r:layoutResources/>
-
 </head>
 <body>
   <div id="header">

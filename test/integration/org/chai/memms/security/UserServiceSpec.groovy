@@ -110,7 +110,7 @@ class UserServiceSpec extends IntegrationTests{
 	def "get notificationWorkOrder group"(){
 		setup:
 		setupLocationTree()
-		
+		setupSystemUser()
 		def senderTitulaire = newUser("senderTitulaire", true,true)
 		senderTitulaire.userType = UserType.TITULAIREHC
 		senderTitulaire.location = DataLocation.findByCode(KIVUYE)

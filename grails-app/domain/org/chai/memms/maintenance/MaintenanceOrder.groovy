@@ -45,7 +45,6 @@ import org.chai.memms.security.User;
 @EqualsAndHashCode
 public abstract class MaintenanceOrder {
 	
-	Date openOn
 	Date closedOn
 	Date dateCreated
 	Date lastModifiedOn
@@ -57,7 +56,6 @@ public abstract class MaintenanceOrder {
 		
 	static constraints = {
 		
-		openOn nullable: false, validator:{it <= new Date()}
 		closedOn nullable: true
 		addedBy nullable: false
 		

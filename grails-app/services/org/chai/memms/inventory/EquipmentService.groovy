@@ -116,7 +116,7 @@ class EquipmentService {
 		if(user.location instanceof Location) dataLocations.addAll(user.location.getDataLocations([:], [:]))
 		else{
 			dataLocations.add((DataLocation)user.location)
-			if(userService.canViewManagedEquipments(user)) dataLocations.addAll((user.location as DataLocation).manages)
+			if(userService.canViewManagedEquipments(user)) dataLocations.addAll((user.location as DataLocation).manages?.asList())
 		}
 		
 		if(log.isDebugEnabled()) log.debug("Current user = " + user + " , Current user's managed dataLocations = " + dataLocations)
@@ -129,15 +129,24 @@ class EquipmentService {
 	}
 	
 	public def getEquipmentsByDataLocationAndManages(DataLocation dataLocation,Map<String, String> params) {
+		if(log.isDebugEnabled()) log.debug("getEquipmentsByDataLocationAndManages  dataLocation= "+dataLocation)
 		List<DataLocation> dataLocations = [dataLocation]
-		dataLocations.addAll(dataLocation.manages)
-		
+		(!dataLocation.manages)?:dataLocations.addAll(dataLocation.manages)
+
 		def criteria = Equipment.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			or{
 				for(DataLocation dataLoc: dataLocations)
 					eq('dataLocation',dataLoc)
 			}
+		}
+	}
+
+	public def getEquipmentsByDataLocation(DataLocation dataLocation,Map<String, String> params) {
+		if(log.isDebugEnabled()) log.debug("getEquipmentsByDataLocation  dataLocation= "+dataLocation)
+		def criteria = Equipment.createCriteria();
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			eq('dataLocation',dataLocation)
 		}
 	}
 

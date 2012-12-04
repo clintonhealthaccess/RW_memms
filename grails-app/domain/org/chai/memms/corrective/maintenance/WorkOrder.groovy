@@ -35,6 +35,7 @@ import org.chai.memms.corrective.maintenance.CorrectiveProcess.ProcessType;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
 import org.chai.memms.inventory.Equipment;
 import org.chai.memms.maintenance.MaintenanceOrder;
+import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.memms.security.User;
 
 /**
@@ -74,6 +75,7 @@ public class WorkOrder extends MaintenanceOrder{
 	User receivedBy
 	User fixedBy
 	
+	Date openOn
 	Date returnedOn
 	
 	Double estimatedCost
@@ -93,6 +95,7 @@ public class WorkOrder extends MaintenanceOrder{
 	static constraints = {
 		importFrom MaintenanceOrder, exclude:["closedOn"]
 		
+		openOn nullable: false, validator:{it <= new Date()}
 		receivedBy nullable: true
 		fixedBy nullable: true
 		

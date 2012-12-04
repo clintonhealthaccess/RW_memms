@@ -93,6 +93,7 @@ class EquipmentViewController extends AbstractController {
 		if(request.xhr){
 			 this.ajaxModel(equipments,dataLocation,"")
 		 }else{
+		 	log.debug("not an ajax request"+params)
 			render(view:"/entity/list", model:[
 						template:"equipment/equipmentList",
 						filterTemplate:"equipment/equipmentFilter",
@@ -161,16 +162,14 @@ class EquipmentViewController extends AbstractController {
 
 		def locationSkipLevels = inventoryService.getSkipLocationLevels()
 
-		if (location != null) {
-			template = '/inventorySummaryPage/sectionTable'
+		if (location != null) 
 			inventories = inventoryService.getInventoryByLocation(location,dataLocationTypesFilter,params)
-		}
-
+	
 		render (view: '/inventorySummaryPage/summaryPage', model: [
 					inventories:inventories?.inventoryList,
 					currentLocation: location,
 					currentLocationTypes: dataLocationTypesFilter,
-					template: template,
+					template: "/inventorySummaryPage/sectionTable",
 					entityCount: inventories?.totalCount,
 					locationSkipLevels: locationSkipLevels
 				])

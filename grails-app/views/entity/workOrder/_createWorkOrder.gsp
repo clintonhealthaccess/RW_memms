@@ -53,7 +53,7 @@
 			    		<tr>
 			    			<td>${message(code: status?.status?.messageCode+'.'+status?.status?.name)}</td>
 			    			<td>${Utils.formatDate(status?.dateCreated)}</td>
-			    			<td>${status.changedBy.firstname} ${status.changedBy.lastname}</td>
+			    			<td>${status.changedBy.names}</td>
 			    			<td>${(status.escalation)? '\u2713':''}</td>
 			    		</tr>
 	    		</g:each>

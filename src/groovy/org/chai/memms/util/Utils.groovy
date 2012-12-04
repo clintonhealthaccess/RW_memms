@@ -63,12 +63,12 @@ import org.joda.time.Weeks;
 public class Utils {
 	
 	private final static String DATE_FORMAT = "dd/MM/yyyy";
-	private final static String DATE_FORMAT_TIME = "dd/MM/yyyy hh:mm:ss";
+	private final static String DATE_FORMAT_TIME = "dd/MM/yyyy HH:mm:ss";
+	private final static String TIME_FORMAT = "HH:mm:ss"
 	public final static String ZIP_FILE_EXTENSION = ".zip";
 	
 	public final static String CODE_DELIMITER = "~";
-	public final static String CODE_PATTERN = 
-			CODE_DELIMITER + "[^" + CODE_DELIMITER + "]+" + CODE_DELIMITER;
+	public final static String CODE_PATTERN = CODE_DELIMITER + "[^" + CODE_DELIMITER + "]+" + CODE_DELIMITER;
 	public final static String VALUE_NOT_EXPORTABLE = "VALUE_NOT_EXPORTABLE";	
 	private final static Integer MAX_YEAR = now().year+1900;
 	private final static Integer MIN_YEAR = 1970;
@@ -150,6 +150,10 @@ public class Utils {
 	public static Date parseDate(String string) throws ParseException {
 		return new SimpleDateFormat(DATE_FORMAT).parse(string);
 	}
+
+	public static Date parseTime(String string) throws ParseException {
+		return new SimpleDateFormat(TIME_FORMAT).parse(string);
+	}
 	
 	//TODO implement reg expressions in groovy
 	public static boolean containsId(String word, Long id) {
@@ -190,7 +194,7 @@ public class Utils {
 		Integer.metaClass.mixin TimeCategory
 		Date.metaClass.mixin TimeCategory
 		Date cleanedDate = date.clearTime()
-		cleanedDate = cleanedDate + 23.hours + 59.minutes + 59.seconds
+		cleanedDate = cleanedDate + 0.hours + 59.minutes + 59.seconds
 		return cleanedDate
 	}
 	public static Date getMinDateFromDateTime(Date date){

@@ -43,7 +43,7 @@ class WorkBasedOrder extends PreventiveOrder{
 		MOTHN("month"),
 		YEAR("year")
 		
-		String messageCode = "interval.type"
+		String messageCode = "preventive.interval.type"
 		String name
 		WorkIntervalType(String name){this.name=name}
 		String getKey(){ return name() }

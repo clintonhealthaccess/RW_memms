@@ -70,7 +70,7 @@ class MaintenanceService {
 	 * NB workOrdersEquipment is named like this to avoid conflicting with the navigation property equipment
 	 * @param text
 	 * @param location
-	 * @param euip //Named so to avoid ambiguity in criteria
+	 * @param equip //Named so to avoid ambiguity in criteria
 	 * @param params
 	 * @return
 	 */
@@ -122,15 +122,19 @@ class MaintenanceService {
 		//TODO this is ideally supposed to avoid trying to access out of range data, but could be a bite
 		if(params.offset != null && params.max != null && params.offset > params.max) return maintenance
 		//If user specifies the pagination params, use them. Else return the whole list
-		if(params.offset != null && params.offset > 0  && params.max != null && params.max > 0) maintenance.maintenanceList = maintenances[(params.offset) .. ((params.offset + params.max) > maintenances.size() ? maintenances.size() - 1 : (params.offset + params.max))]
-		else maintenance.maintenanceList = maintenances
+		if(params.offset != null && params.offset > 0  && params.max != null && params.max > 0) 
+			maintenance.maintenanceList = maintenances[(params.offset) .. ((params.offset + params.max) > maintenances.size() ? maintenances.size() - 1 : (params.offset + params.max))]
+		else 
+			maintenance.maintenanceList = maintenances
+
+		log.debug("maintenances.size(): "+maintenances.size())
 		maintenance.totalCount = maintenances.size()
 		return maintenance
 	}
 	
 	def getMaintenanceOrderByDataLocationManages(Class clazz,DataLocation dataLocation,Map<String,String> params){
 		List<Equipment> equipments = equipmentService.getEquipmentsByDataLocation(dataLocation,[:])
-		equipments << equipmentService.getEquipmentsByDataLocationAndManages(dataLocation,[:]).asList()
+		equipments << equipmentService.getEquipmentsByDataLocationAndManages(dataLocation,[:])
 		def criteria =  clazz.createCriteria()
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			or{
@@ -141,15 +145,13 @@ class MaintenanceService {
 		
 	}
 	
-	def getMaintenanceOrderByDataLocation(Class clazz,def dataLocation,Map<String,String> params){
+	def getMaintenanceOrderByDataLocation(Class clazz,DataLocation dataLocation,Map<String,String> params){
 		def criteria = clazz.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(dataLocation)
 				equipment{ eq('dataLocation',dataLocation)}
-		}
-		
+		}		
 	}
-	
 	def getMaintenanceOrderByEquipment(Class clazz,def equipment,Map<String,String> params){
 		def criteria = clazz.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
@@ -158,11 +160,11 @@ class MaintenanceService {
 		
 	}
 	
-	def getMaintenanceOrderByCalculationLocation(Class clazz,def location,Map<String,String> params){
+	def getMaintenanceOrderByCalculationLocation(Class clazz,CalculationLocation location,Map<String,String> params){
 		def equipments = []
 		def criteria = clazz.createCriteria();
 		
-		if(location instanceof DataLocation){
+		if(location.instanceOf(DataLocation)){
 			equipments = equipmentService.getEquipmentsByDataLocationAndManages(location, [:])
 		}else{
 			def dataLocations = location.getDataLocations(null,null)

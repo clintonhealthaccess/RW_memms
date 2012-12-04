@@ -7,9 +7,12 @@ import org.chai.location.DataLocation;
 import org.chai.memms.Initializer;
 import org.chai.memms.IntegrationTests
 import org.chai.memms.inventory.Equipment;
+import org.chai.memms.MaintenanceService
+import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.memms.corrective.maintenance.WorkOrder.Criticality;
 import org.chai.memms.corrective.maintenance.WorkOrder.FailureReason;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
+import org.chai.memms.corrective.maintenance.WorkOrderService;
 import org.chai.memms.security.User;
 import org.chai.memms.security.User.UserType;
 
@@ -19,6 +22,7 @@ import org.chai.memms.security.User.UserType;
  */
 class WorkOrderServiceSpec  extends IntegrationTests{
 	
+	def maintenanceService
 	def workOrderService
 	def notificationWorkOrderService
 	
@@ -33,21 +37,21 @@ class WorkOrderServiceSpec  extends IntegrationTests{
 		when:
 		
 		//Search by description
-		def workOrdersPassesDescription = workOrderService.searchWorkOrder("Nothing yet",null,null,adaptParamsForList())
-		def workOrdersFailsDescription = workOrderService.searchWorkOrder("fails",null,null,adaptParamsForList())
+		def workOrdersPassesDescription = maintenanceService.searchOrder(WorkOrder.class,"Nothing yet",null,null,[:])
+		def workOrdersFailsDescription = maintenanceService.searchOrder(WorkOrder.class,"fails",null,null,[:])
 		
 		//search by DataLocation
-		def workOrdersPassesDataLocation = workOrderService.searchWorkOrder("Nothing",DataLocation.findByCode(KIVUYE),null,[:])
-		def workOrdersFailsDataLocation = workOrderService.searchWorkOrder("Nothing",DataLocation.findByCode(BUTARO),null,[:])
+		def workOrdersPassesDataLocation = maintenanceService.searchOrder(WorkOrder.class,"Nothing",DataLocation.findByCode(KIVUYE),null,[:])
+		def workOrdersFailsDataLocation = maintenanceService.searchOrder(WorkOrder.class,"Nothing",DataLocation.findByCode(BUTARO),null,[:])
 		
 		//Search by Equipment
-		def workOrdersPassesEquipment = workOrderService.searchWorkOrder("Nothing",null,equipment,[:])
+		def workOrdersPassesEquipment = maintenanceService.searchOrder(WorkOrder.class,"Nothing",null,equipment,[:])
 		
 		//Search by equipment serial number
-		def workOrdersPassesEquipmentSerialnumber = workOrderService.searchWorkOrder(CODE(123),null,null,adaptParamsForList())
+		def workOrdersPassesEquipmentSerialnumber = maintenanceService.searchOrder(WorkOrder.class,CODE(123),null,null,[:])
 		
 		//Search by equipment type
-		def workOrdersPassesEquipmentType = workOrderService.searchWorkOrder("acce",null,null,adaptParamsForList())
+		def workOrdersPassesEquipmentType = maintenanceService.searchOrder(WorkOrder.class,"acce",null,null,[:])
 		then:
 		workOrdersFailsDescription.size() == 0
 		workOrdersPassesDescription.size() == 1
@@ -118,7 +122,7 @@ class WorkOrderServiceSpec  extends IntegrationTests{
 		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,clerk,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		notificationWorkOrderService.newNotification(workOrder, "Send for rapair",clerk,false)
 		when:
-		def equipments = workOrderService.getWorkOrdersByEquipment(equipment,[:])
+		def equipments = maintenanceService.getMaintenanceOrderByEquipment(WorkOrder.class,equipment,[:])
 		then:
 		equipments.size() == 1
 	}

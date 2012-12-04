@@ -61,7 +61,7 @@
 				</td>
 				<td>
 					<a href="${createLinkWithTargetURI(controller:'preventiveOrderView', action:'list', params:['equipment.id': equipment?.id])}" title="${message(code: 'preventive.order.see.list.label')}" class="tooltip">
-  	    				${equipment.preventiveOrders.size()}
+  	    				${equipment.preventiveOrders?.size()}
   	    			</a>
 				</td>
 			</tr>

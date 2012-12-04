@@ -25,55 +25,18 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.preventive.maintenance
+package org.chai.memms
 
-import groovy.transform.EqualsAndHashCode;
-
-import org.chai.memms.TimeSpend;
-import org.chai.memms.security.User;
-
+import org.springframework.beans.PropertyEditorRegistrar;
+import org.springframework.beans.PropertyEditorRegistry;
 /**
  * @author Jean Kahigiso M.
  *
  */
-@i18nfields.I18nFields
-@EqualsAndHashCode
-public class Prevention {
-	
-	Date scheduledOn
-	Date eventDate
-	Date dateCreated
-	TimeSpend timeSpend
-	User addedBy
-	
-	
-	String descriptions
-	
-	
-	static i18nFields = ["descriptions"]
-	static belongsTo = [order:  PreventiveOrder]
-	static hasMany = [processes: PreventiveProcess]
-	static embedded = ["timeSpend"]
-	
-
-	static mapping = {
-		
-		table "memms_prevention"
-		version false
-	}
-	
-	static constraints = {
-		
-		addedBy nullable: false
-		timeSpend nullable: true
-		scheduledOn nullable: false, validator:{it <= new Date()}
-		eventDate nullable: false, validator:{it <= new Date()}
-		
-	}
-	
+class TimeDatePropertyEditorRegistrar implements PropertyEditorRegistrar{
 	
 	@Override
-	public String toString() {
-		return "Prevention [id="+id+" addedBy=" + addedBy + "]";
+	public void registerCustomEditors(PropertyEditorRegistry registry) {
+		registry.registerCustomEditor(TimeDate.class,new CustomTimeDateEditor());
 	}
 }

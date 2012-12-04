@@ -30,6 +30,7 @@ package org.chai.memms.preventive.maintenance
 import org.chai.location.CalculationLocation;
 import org.chai.memms.AbstractEntityController;
 import org.chai.memms.inventory.Equipment;
+import org.chai.memms.security.User.UserType;
 
 /**
  * @author Jean Kahigiso M.
@@ -37,7 +38,8 @@ import org.chai.memms.inventory.Equipment;
  */
 class WorkBasedOrderController extends AbstractEntityController {
 	
-	
+	def userService
+
 	def bindParams(def entity) {
 		entity.properties = params
 	}
@@ -49,6 +51,7 @@ class WorkBasedOrderController extends AbstractEntityController {
 			order:entity,
 			equipments: equipments,
 			currencies: grailsApplication.config.site.possible.currency,
+			technicians : userService.getActiveUserByTypeAndLocation(UserType.TECHNICIANDH,entity.equipment?.dataLocation,[:])
 		]
 	}
 

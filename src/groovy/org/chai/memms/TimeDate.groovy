@@ -25,76 +25,79 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.preventive.maintenance
-
+package org.chai.memms
+import org.chai.memms.util.Utils;
+import java.util.Date;
+import groovy.time.TimeCategory;
 
 /**
+ * This class expect the following date "dd/MM/yyyy HH:mm:ss";
+ *
  * @author Jean Kahigiso M.
  *
  */
-@i18nfields.I18nFields
-class DurationBasedOrder extends PreventiveOrder {
+class TimeDate {
+
+	Date timeDate
 	
-	enum OccurencyType{
-		
-		NONE("none"),
-		DAILY("daily"),
-		WEEKLY("weekly"),
-		MONTHLY("monthly"),
-		YEARLY("yearly"),
-		
-		String messageCode = "preventive.occurance.type"
-		String name
-		OccurencyType(String name){this.name = name}
-		String getKey(){ return name() }
+	public TimeDate(){}
+	public TimeDate(Date startDate,String startTime){
+		if(startDate!=null && startTime!=null && this.hasTimeFormat(startTime))
+			this.buildTimeDate(startDate,startTime)
 	}
 	
-
-	OccurencyType occurency
-	Boolean isRecurring = true
-	
-	Integer occurInterval = 1
-	Integer occurCount
-	
-	static hasMany = [occurDaysOfWeek: Integer]
+	static constraints = {
+		timeDate nullable:false
+	}
 	
 	static mapping = {
-		table "memms_preventive_order_duration_based"
 		version false
 	}
+
+
+	static transients =["date","time","formatDate"]
 	
-	static constraints ={
-		importFrom PreventiveOrder, excludes:["closedOn"]
-		occurency nullable: false, inList:[OccurencyType.DAILY,OccurencyType.WEEKLY,OccurencyType.MONTHLY,OccurencyType.YEARLY]
-		closedOn nullable: true, validator:{val, obj ->
-			if(val!=null) return (obj.occurCount!=null)
-		}
-		occurCount nullable: true
-		occurDaysOfWeek validator :{val, obj ->
-			if(obj.occurency.equals(OccurencyType.WEEKLY) && !val)  return false
-			if(!obj.occurency.equals(OccurencyType.WEEKLY) && val)  return false
-		}
-		
+	public String getDate(){
+		def split = this.getFormatDate().split(" ")
+		return split[0]
 	}
 
-	def updateOccurDaysOfWeek(){
-		if(!occurency.equals(OccurencyType.WEEKLY)){
-			occurDaysOfWeek?.clear()
-		}
+	public String getTime(){
+		def split = this.getFormatDate().split(" ")
+		return split[1]
 	}
 
-	def beforeUpdate(){
-		updateOccurDaysOfWeek()
+	public String getFormatDate(){
+		return Utils.formatDateWithTime(timeDate)
+	}
+
+	private buildTimeDate(Date sentDate,String sentTime){
+		Integer.metaClass.mixin TimeCategory
+		Date.metaClass.mixin TimeCategory
+		Date time = sentDate.clearTime()
+		sentTime.trim()
+		def hourMinSecond =  sentTime.split(":")
+		timeDate = time + Integer.parseInt(hourMinSecond[0]).hours + Integer.parseInt(hourMinSecond[1]).minutes + Integer.parseInt(hourMinSecond[2]).seconds
+		return timeDate
+	}
+
+	private hasTimeFormat(String sentTime){
+		if(sentTime.isEmpty()) return false
+		if(!(sentTime.size() in 5..8)) return false
+
+		try{ Utils.parseTime(sentTime);
+		}catch(Exception ex){ return false; }
+		//Avoid negative value
+		def split = sentTime.split(":")
+		if(!(split[0].size() in 1..2) || Integer.parseInt(split[0])<0) return false
+		if(!(split[1].size() in 1..2) || Integer.parseInt(split[1])<0) return false
+		if(!(split[2].size() in 1..2) || Integer.parseInt(split[2])<0) return false
+		return true;
 	}
 	
-	Integer getPlannedPrevention(){
-		//TODO
-		return null
-	}
-
 	@Override
 	public String toString() {
-		return "DurationBasedOrder [id= "+id+" occurency=" + occurency + "]";
-	}	
+		return "TimeDate [timeDate= " + timeDate + "]";
+	}
 	
 }

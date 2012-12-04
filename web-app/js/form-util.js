@@ -2,11 +2,11 @@
  * List ajax init
  */
 function listGridAjaxInit(){
-	$(".spinner-container").hide()
-	listGridAjax()
-	searchFormAjax()
-	filterFormAjax()
-	clearFormField()
+	$(".spinner-container").hide();
+	listGridAjax();
+	searchFormAjax();
+	filterFormAjax();
+	clearFormField();
 }
 /**
  * Loading list with Ajax
@@ -20,10 +20,10 @@ function listGridAjax() {
             type: 'GET',
             url: url,
             success: function(data) {
-            	addListAjaxResponse(data)
+            	addListAjaxResponse(data);
             }
         });
-        $(this).ajaxError(function(){ listLoadingFailed() })
+        $(this).ajaxError(function(){ listLoadingFailed(); });
     });
 }
 
@@ -33,7 +33,7 @@ function listGridAjax() {
 function searchFormAjax(){
 	 $(".heading1-bar form").submit(function(event) {
 		 	event.preventDefault();
-		 	$(".spinner-container").show()
+		 	$(".spinner-container").show();
 		    var url = $(this).parents(".heading1-bar").find("form").attr("action");
 		    var dataLocation = $(this).parents(".heading1-bar").find("input[name=dataLocation]").attr("value");
 		    var equipment = $(this).parents(".heading1-bar").find("input[name=equipment]").attr("value");
@@ -43,10 +43,10 @@ function searchFormAjax(){
 	            url: url,
 	            data: {"dataLocation.id":dataLocation,"equipment.id":equipment,"q":term},
 	            success: function(data) {
-	            	addListAjaxResponse(data)
+	            	addListAjaxResponse(data);
 	            }
-	        })
-	        $(this).ajaxError(function(){ listLoadingFailed() })
+	        });
+	        $(this).ajaxError(function(){ listLoadingFailed(); });
 	});
 }
 /**
@@ -65,10 +65,10 @@ function filterFormAjax() {
 	        url: url,
 	        data: data,
 	        success: function(data) {
-	        	addListAjaxResponse(data)
+	        	addListAjaxResponse(data);
 	        }
 	     });
-	    $(this).ajaxError(function(){ listLoadingFailed() })
+	    $(this).ajaxError(function(){ listLoadingFailed(); });
     });
 }
 
@@ -92,7 +92,7 @@ function clearFormField(){
 		$(form)[0].reset();
 		//For chosen plugin fields
 		$(form).find(".chzn-done").val('').trigger("liszt:updated");
-	})
+	});
 }
 /**
  * Add list html to div holder
@@ -136,6 +136,22 @@ function getDatePicker(iconPath){
 			showOn: "both",
 			buttonImage: iconPath,
 			buttonImageOnly: true
+		});
+		$('.date-time-picker').datetimepicker({
+			changeYear: true,
+			dateFormat: "dd/mm/yy",
+			showOn: "both",
+			buttonImage: iconPath,
+			buttonImageOnly: true,
+			timeFormat: "HH:mm:ss",
+			addSliderAccess: true,
+			sliderAccessArgs: { touchonly: false }
+		});
+		$('.time-picker').timepicker({
+			timeFormat: "HH:mm:ss",
+			showSecond: true,
+			addSliderAccess: true,
+			sliderAccessArgs: { touchonly: false }
 		});
 	});
 }

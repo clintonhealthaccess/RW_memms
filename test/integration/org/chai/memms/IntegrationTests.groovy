@@ -133,7 +133,7 @@ abstract class IntegrationTests extends IntegrationSpec {
 	
 	static def newEquipment(def serialNumber, DataLocation dataLocation){
 		def department = Initializer.newDepartment(['en':"testName"], serialNumber,['en':"testDescription"])
-		def equipmentType = Initializer.newEquipmentType(serialNumber,["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),Initializer.now())
+		def equipmentType = Initializer.newEquipmentType(serialNumber,["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),12)
 
 		def equipment = new Equipment(serialNumber:serialNumber,manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),
 				registeredOn:Initializer.getDate(23,07,2010), model:"equipmentModel", department:department,dataLocation:dataLocation,

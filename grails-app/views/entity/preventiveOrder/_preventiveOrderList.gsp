@@ -9,6 +9,7 @@
 			<th><g:message code="equipment.label"/></th>
 			<g:sortableColumn property="${names}" title="${message(code: 'entity.names.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
 			<g:sortableColumn property="type"  title="${message(code: 'entity.type.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
+			<th><g:message code="entity.occurence.label"/></th>
 			<g:sortableColumn property="status"  title="${message(code: 'entity.status.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
 			<g:sortableColumn property="openOn"  title="${message(code: 'preventive.order.open.on.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
 			<g:sortableColumn property="closedOn"  title="${message(code: 'preventive.order.closed.on.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
@@ -22,12 +23,15 @@
 				<td>
 					<ul class="horizontal">
 						<li>
-							<a href="${createLinkWithTargetURI(controller:(order.type.equals(PreventiveOrderType.DURATIONBASED))?durationBaseOrder:workBasedOrder, action:'edit', params:[id: order.id])}" class="edit-button">
-								<g:message code="default.link.edit.label" />
+							<a href="${createLinkWithTargetURI(controller:(order.type.equals(PreventiveOrderType.DURATIONBASED))?'durationBasedOrder':'workBasedOrder', action:'edit', 
+							params:[id: order.id])}" class="edit-button"> <g:message code="default.link.edit.label" />
 							</a>
 						</li>
 						<li>
-							<a href="${createLinkWithTargetURI(controller:(order.type.equals(PreventiveOrderType.DURATIONBASED))?durationBaseOrder:workBasedOrder, action:'delete', params:[id: order.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');" class="delete-button"><g:message code="default.link.delete.label" /></a>
+							<a href="${createLinkWithTargetURI(controller:(order.type.equals(PreventiveOrderType.DURATIONBASED))?'durationBasedOrder':'workBasedOrder', action:'delete', 
+							params:[id: order.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');" class="delete-button">
+							<g:message code="default.link.delete.label" />
+							</a>
 						</li>
 						
 					</ul>
@@ -45,13 +49,21 @@
 					${message(code: order.type?.messageCode+'.'+order.type?.name)}
 				</td>
 				<td>
+					<g:if test="${order.type.equals(PreventiveOrderType.DURATIONBASED)}">
+						${message(code: order.occurency?.messageCode+'.'+order.occurency?.name)}
+					</g:if>
+					<g:if test="${order.type.equals(PreventiveOrderType.WORKBASED)}">
+						${message(code: order.intervalType?.messageCode+'.'+order.intervalType?.name)}
+					</g:if>					
+				</td>
+				<td>
 					${message(code: order.status?.messageCode+'.'+order.status?.name)}
 				</td>
 				<td>
-					${Utils.formatDateWithTime(order.openOn)}
+					${Utils.formatDateWithTime(order.openOn?.timeDate)}
 				</td>
 				<td>
-					${Utils.formatDateWithTime(order.closedOn)}
+					${Utils.formatDateWithTime(order?.closedOn)}
 				</td>
 				<td>
 					<g:stripHtml field="${order.description}" chars="30"/>
@@ -63,6 +75,7 @@
 		</g:each>
 	</tbody>
 </table>
+<g:render template="/templates/pagination" />
 <script type="text/javascript">
 	$(document).ready(function() {
 		getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}")
