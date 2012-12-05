@@ -41,6 +41,7 @@ class Department {
 	String names
 	String descriptions
 	Date dateCreated
+	Date lastUpdated
 	
 	static hasMany = [equipments: Equipment]
 	static i18nFields = ["names","descriptions"]
@@ -50,6 +51,9 @@ class Department {
 		code nullable:false, blank:false, unique:true
 		names nullable: true, blank: true
 		descriptions nullable: true, blank: true
+		lastUpdated nullable: true, validator:{
+			if(it!=null) return (it <= new Date())
+		}
 	}
 	
 	static mapping = {

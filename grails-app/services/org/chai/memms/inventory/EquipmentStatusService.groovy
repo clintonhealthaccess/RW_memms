@@ -56,7 +56,6 @@ class EquipmentStatusService {
 		if(equipment.id){
 			//When updating an equipment
 			equipment.lastModifiedBy = changedBy
-			equipment.lastModifiedOn = new Date()
 		}
 		equipment.addToStatus(status)
 		if(!equipment.currentStatus.equals(Status.DISPOSED))

@@ -61,6 +61,7 @@ class WorkOrderViewController extends AbstractController{
 	def maintenanceService
 	def commentService
 	def maintenanceProcessService
+	def userService
 
 	def getLabel() {
 		return "work.order.label";
@@ -69,44 +70,43 @@ class WorkOrderViewController extends AbstractController{
 	def getEntityClass() {
 		return WorkOrder.class;
 	}
-	def view  = {
-		WorkOrder workOrder = WorkOrder.get(params.int('workOrder'))
-		if(workOrder==null) response.sendError(404)
-		else render(view:"/entity/workOrder/summary", model:[entities: workOrder])
-	}
 	
 	def getWorkOrderClueTipsAjaxData = {
 		def workOrder = WorkOrder.get(params.long("id"))
 		def html = g.render(template:"/templates/workOrderClueTip",model:[workOrder:workOrder])
 		render(contentType:"text/plain", text:html)
 	}
-
+	
 	def list = {
+		def orders= []
 		def equipment = null
 		def  dataLocation = null
 		if(params["dataLocation.id"]) dataLocation = CalculationLocation.get(params.int("dataLocation.id"))
 		if(params["equipment.id"]) equipment = Equipment.get(params.int("equipment.id"))
 		
-		adaptParamsForList()
-		def orders= []
-		if(dataLocation)
-			orders = maintenanceService.getMaintenanceOrderByCalculationLocation(WorkOrder.class,dataLocation,params)	
-		if(equipment)
-		 	orders= maintenanceService.getMaintenanceOrderByEquipment(WorkOrder.class,equipment,params)
-		 if(request.xhr){
-			 this.ajaxModel(orders,dataLocation,equipment,"")
-		 }else{
-			render(view:"/entity/list", model:[
-						template:"workOrder/workOrderList",
-						filterTemplate:"workOrder/workOrderFilter",
-						listTop:"workOrder/listTop",
-						dataLocation:dataLocation,
-						equipment:equipment,
-						entities: orders,
-						entityCount: orders.totalCount,
-						code: getLabel()
-					])
-		 }
+		if(dataLocation && !user.canAccessCalculationLocation(dataLocation)) response.sendError(404)
+		else if(equipment && !user.canAccessCalculationLocation(equipment.dataLocation)) response.sendError(404)
+		else{
+			adaptParamsForList()
+			if(dataLocation)
+				orders = maintenanceService.getMaintenanceOrderByCalculationLocation(WorkOrder.class,dataLocation,params)
+			if(equipment)
+				orders= maintenanceService.getMaintenanceOrderByEquipment(WorkOrder.class,equipment,params)
+			if(request.xhr){
+				this.ajaxModel(orders,dataLocation,equipment,"")
+			}else{
+				render(view:"/entity/list", model:[
+							template:"workOrder/workOrderList",
+							filterTemplate:"workOrder/workOrderFilter",
+							listTop:"workOrder/listTop",
+							dataLocation:dataLocation,
+							equipment:equipment,
+							entities: orders,
+							entityCount: orders.totalCount,
+							code: getLabel()
+						])
+			}
+		}
 	}
 	
 	def search = {
@@ -122,6 +122,26 @@ class WorkOrderViewController extends AbstractController{
 		if(!request.xhr)
 			response.sendError(404)
 		this.ajaxModel(orders,dataLocation,equipment,params['q'])
+	}
+	
+	def escalate = {
+		WorkOrder order = WorkOrder.get(params.int("order"))
+		def result = false
+		def html = ""
+		if (!order || order.currentStatus.equals(OrderStatus.CLOSEDFIXED) || order.currentStatus.equals(OrderStatus.CLOSEDFORDISPOSAL))
+			response.sendError(404)
+		else {
+			def equipment = order.equipment
+			//TODO define default escalation message
+			def content = "Please review work order on equipment serial number: ${order.equipment.code}"
+			workOrderService.escalateWorkOrder(order, content, user)
+			result=true
+			def orders= maintenanceService.getMaintenanceOrderByEquipment(WorkOrder.class,equipment,[:])
+			html = g.render(template:"/entity/workOrder/workOrderList",model:[equipment:equipment,entities:orders])
+			if(!request.xhr)
+				response.sendError(404)
+			this.ajaxModel(orders,null,equipment,params['q'])
+		}
 	}
 	
 	def filter = { FilterWorkOrderCommand cmd ->
@@ -236,26 +256,6 @@ class WorkOrderViewController extends AbstractController{
 		}
 		render(contentType:"text/json") { results = [result,html] }
 	}
-
-	
-	def escalate = {
-		WorkOrder order = WorkOrder.get(params.int("order"))
-		def result = false
-		def html = ""
-		if (!order || order.currentStatus.equals(OrderStatus.CLOSEDFIXED) || order.currentStatus.equals(OrderStatus.CLOSEDFORDISPOSAL))
-			response.sendError(404)
-		else {
-			def equipment = order.equipment
-			//TODO define default escalation message
-			def content = "Please review work order on equipment serial number: ${order.equipment.code}"
-			workOrderService.escalateWorkOrder(order, content, user)
-			result=true 
-			def orders= workOrderService.getMaintenanceOrderByEquipment(WorkOrder.class,equipment,[:])
-			html = g.render(template:"/entity/workOrder/workOrderList",model:[equipment:equipment,entities:orders])
-		}
-		render(contentType:"text/json") { results = [result,html] }
-	}
-
 }
 
 class FilterWorkOrderCommand {

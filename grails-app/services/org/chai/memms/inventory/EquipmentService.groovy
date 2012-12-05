@@ -80,7 +80,6 @@ class EquipmentService {
 			equipment.currentStatus = equipment.timeBasedStatus.status
 		}
 		equipment.lastModifiedBy = user
-		equipment.lastModifiedOn = new Date()
 		if(log.isDebugEnabled()) log.debug("Updating Equipment status params: "+equipment)
 		equipment.save(failOnError:true)
 	}

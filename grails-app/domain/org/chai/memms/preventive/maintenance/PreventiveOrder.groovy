@@ -93,7 +93,10 @@ public abstract class PreventiveOrder extends MaintenanceOrder {
 
 	
 	static constraints = {
-		importFrom MaintenanceOrder, exclude:["closedOn"]
+		importFrom MaintenanceOrder, exclude:["closedOn","lastUpdated"]
+		lastUpdated nullable: true, validator:{ val, obj ->
+			if(val!=null) return ((val <= new Date()) && (val.after(obj.openOn.timeDate) || (val.compareTo(obj.openOn.timeDate)==0)))
+		}
 		openOn nullable: false, validator:{it.timeDate <= new Date()}
 		names nullable: true, blank: true
 		type nullable: false, inList:[PreventiveOrderType.DURATIONBASED,PreventiveOrderType.WORKBASED]

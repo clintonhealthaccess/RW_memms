@@ -57,6 +57,7 @@ public class Provider{
 	Type type
 	Contact contact
 	Date dateCreated
+	Date lastUpdated
 	
 	static embedded = ["contact"]
 	static mappedBy = [manufacturers: "manufacturer",suppliers: "supplier",serviceProviders: "serviceProvider"]
@@ -66,6 +67,9 @@ public class Provider{
 		code nullable: false, blank: false, unique: true
 		type nullable: false, inList: [Type.BOTH,Type.MANUFACTURER,Type.SUPPLIER,Type.SERVICEPROVIDER]
 		contact nullable: false
+		lastUpdated nullable: true, validator:{
+			if(it != null) return (it <= new Date())
+		}
 	}
 	static mapping = {
 	    version false

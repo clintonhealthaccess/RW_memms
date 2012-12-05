@@ -47,7 +47,7 @@ public abstract class MaintenanceOrder {
 	
 	Date closedOn
 	Date dateCreated
-	Date lastModifiedOn
+	Date lastUpdated
 	
 	User addedBy
 	User lastModifiedBy
@@ -59,14 +59,15 @@ public abstract class MaintenanceOrder {
 		closedOn nullable: true
 		addedBy nullable: false
 		
-		lastModifiedOn nullable: true, validator:{ val, obj ->
-			if(val!=null) return ((val <= new Date()) && (val.after(obj.openOn) || (val.compareTo(obj.openOn)==0)))
-		}
 		lastModifiedBy nullable: true, validator:{ val, obj ->
-			if(val!=null) return (obj.lastModifiedOn!=null)
+			if(val!=null) return (obj.lastUpdated!=null)
 		}
 		description nullable:false, blank: false
 		
+	}
+
+	def beforeUpdate(){
+		lastUpdated = new Date();
 	}
 	
 	static mapping = {

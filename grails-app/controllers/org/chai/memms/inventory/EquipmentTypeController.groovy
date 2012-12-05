@@ -71,11 +71,6 @@ class EquipmentTypeController extends AbstractEntityController{
 	}
 
 	def bindParams(def entity) {
-		if(!entity.id){
-			entity.lastModifiedOn= new Date()
-		}else{
-			entity.lastModifiedOn= new Date()
-		}
 		entity.properties = params
 	}
 

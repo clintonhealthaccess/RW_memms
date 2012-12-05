@@ -68,12 +68,14 @@ class User {
     String passwordHash = ''
 	String permissionString = ''
 	Date dateCreated
+	Date lastUpdated
 	Boolean confirmed = false
 	Boolean active = false
 	String defaultLanguage	
 	String firstname, lastname, organisation, phoneNumber
 	CalculationLocation location
 	UserType userType
+
 	
 	static hasMany = [roles: Role]
 	
@@ -106,40 +108,43 @@ class User {
 	}
 	
 	public boolean canAccessCalculationLocation(CalculationLocation calculationLocation){
-		//TODO what does the first condition means
+		if(log.isDebugEnabled()) log.debug("User = " + this + ", of type = " +this.username + "	, of CalculationLocation = " + location + " , is trying to access CalculationLocation = " + calculationLocation)
 		if(calculationLocation instanceof Location && location instanceof DataLocation) return false
-		if(calculationLocation instanceof DataLocation && location instanceof DataLocation) return calculationLocation == location
-		if(calculationLocation instanceof Location && location instanceof Location && calculationLocation.level == location.level) return calculationLocation == location
-		
-		if(calculationLocation instanceof DataLocation && location instanceof Location && calculationLocation.location.level == location.level) return calculationLocation.location == location
+		if(calculationLocation == location) return true
 		//This takes care of technicians to be able to access the dataLocations that they manage
-		if(userType == UserType.TECHNICIANDH && location instanceof DataLocation && calculationLocation instanceof DataLocation && ((DataLocation)calculationLocation).managedBy != null) return ((DataLocation)calculationLocation).managedBy == location
-		return calculationLocation.getParentOfLevel(location.level) == location
+		if(userType == UserType.TECHNICIANDH && location instanceof DataLocation && calculationLocation instanceof DataLocation && (calculationLocation as DataLocation).managedBy != null) 
+			return ((DataLocation)calculationLocation).managedBy == location
+		return (location.instanceOf(Location)) ? calculationLocation.getParentOfLevel(location.level) == location : calculationLocation.getParentOfLevel(location.location.level) == location
+		return false
 	}
 
-	
 	def canActivate() {
 		return confirmed == true && active == false
 	}
+
+
 	
     static constraints = {
 		permissionString nullable: false
-		email(email:true, unique: true, nullable: true)
-        username(nullable: false, blank: false, unique: true)
-		uuid(nullable: false, blank: false, unique: true)
-		firstname(nullable: false, blank: false)
-		lastname(nullable: false, blank: false)
-		phoneNumber(phoneNumber: true, nullable: false, blank: false)
-		organisation(nullable: false, blank: false)
-		defaultLanguage(nullable: true)
-		userType(nullable: false, blank: false)
-		location(nullable: true)
-		registrationToken(nullable: true)
-		passwordToken(nullable: true)
-		active(validator: {val, obj ->
+		email email:true, unique: true, nullable: true 
+        username nullable: false, blank: false, unique: true 
+		uuid nullable: false, blank: false, unique: true 
+		firstname nullable: false, blank: false 
+		lastname nullable: false, blank: false 
+		phoneNumber phoneNumber: true, nullable: false, blank: false 
+		organisation nullable: false, blank: false 
+		defaultLanguage nullable: true 
+		userType nullable: false, blank: false 
+		location nullable: true 
+		registrationToken nullable: true 
+		passwordToken nullable: true 
+		active validator: {val, obj ->
 			//TODO fix this
 			//return val ? obj.location != null && (obj.permissionString || obj.roles.size() > 0) : true
-		})
+		} 
+		lastUpdated nullable: true, validator:{
+			if(it != null) return (it <= new Date())
+		}
     }
 	
 	static mapping = {

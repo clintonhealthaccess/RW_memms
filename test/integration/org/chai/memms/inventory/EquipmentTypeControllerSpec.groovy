@@ -22,8 +22,6 @@ class EquipmentTypeControllerSpec extends IntegrationTests{
 			equipmentTypeController.params."descriptions_$it" = "some kind of description $it"
 		}
 		equipmentTypeController.params.observation = "USEDINMEMMS"
-		equipmentTypeController.params.dateCreated = new Date()
-		equipmentTypeController.params.lastModifiedOn = new Date()
 		equipmentTypeController.params.expectedLifeTime = "struct"
 		equipmentTypeController.params.expectedLifeTime_years = "1"
 		equipmentTypeController.params.expectedLifeTime_months = "3"

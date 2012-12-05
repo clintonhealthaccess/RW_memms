@@ -57,8 +57,8 @@ class EquipmentStatus {
 		String getKey() { return name() }
 	}
 	
-	Date dateOfEvent;
-	Date dateCreated;
+	Date dateOfEvent
+	Date dateCreated
 	User changedBy
 	Status status
 	String reasons

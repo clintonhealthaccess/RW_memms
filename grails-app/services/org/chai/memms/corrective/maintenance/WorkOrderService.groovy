@@ -28,6 +28,15 @@
 package org.chai.memms.corrective.maintenance
 
 import org.chai.memms.corrective.maintenance.WorkOrder.Criticality
+
+import java.util.Map;
+import java.util.Set;
+
+import org.chai.location.CalculationLocation;
+import org.chai.location.DataLocation;
+import org.chai.location.DataLocationType;
+import org.chai.location.Location;
+import org.chai.location.LocationLevel;
 import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
@@ -40,7 +49,7 @@ import org.chai.memms.corrective.maintenance.NotificationWorkOrderService;
  * @author Jean Kahigiso M.
  *
  */
-class WorkOrderService {	
+class WorkOrderService {
 	static transactional = true
 	def notificationWorkOrderService
 
@@ -76,14 +85,14 @@ class WorkOrderService {
 				eq("currentStatus",currentStatus)
 		}
 	}
-	
+
 	def escalateWorkOrder(def workOrder,def content,def escalatedBy){
 		workOrder.currentStatus = OrderStatus.OPENATMMC
 		WorkOrderStatus status = new WorkOrderStatus(workOrder:workOrder,status:OrderStatus.OPENATMMC,escalation:true,changedBy:escalatedBy)
 		workOrder.addToStatus(status)
 		workOrder.save(failOnError:true)
 		if(status)
-			NotificationWorkOrderService.newNotification(workOrder,content,escalatedBy,true)
+			notificationWorkOrderService.newNotification(workOrder,content,escalatedBy,true)
 		return workOrder
 	}
 }

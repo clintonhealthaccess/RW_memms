@@ -41,7 +41,6 @@ class CommentService {
 	Comment createComment(WorkOrder workOrder, User writtenBy, String content){
 		    Comment comment = new Comment(writtenBy: writtenBy, content: content )
 			workOrder.addToComments(comment)
-			workOrder.lastModifiedOn = new Date()
 			workOrder.lastModifiedBy = writtenBy
 			workOrder.save(failOnError: true)	
 			return comment	
@@ -50,7 +49,6 @@ class CommentService {
 	WorkOrder deleteComment(Comment comment,User user){
 		WorkOrder workOrder = comment.workOrder
 		workOrder.removeFromComments(comment)
-		workOrder.lastModifiedOn = new Date()
 		workOrder.lastModifiedBy = user
 		comment.delete()
 		return workOrder.save(failOnError:true)	

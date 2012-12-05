@@ -108,7 +108,7 @@ public class Equipment {
 	Date purchaseDate
 	Date serviceContractStartDate
 	Date dateCreated
-	Date lastModifiedOn
+	Date lastUpdated
 	
 	User addedBy
 	User lastModifiedBy
@@ -126,10 +126,10 @@ public class Equipment {
 		addedBy nullable: false
 		
 		lastModifiedBy nullable:true, validator:{ val, obj ->
-			if (val != null) return (obj.lastModifiedOn != null) 
+			if (val != null) return (obj.lastUpdated != null) 
 		}
-		lastModifiedOn nullable:true, validator:{ val, obj ->
-			if(val != null) return (obj.lastModifiedOn!=null && (obj.lastModifiedOn.after(obj.dateCreated) || obj.lastModifiedOn.compareTo(obj.dateCreated)==0))
+		lastUpdated nullable:true, validator:{ val, obj ->
+			if(val != null) return (obj.lastUpdated!=null && (obj.lastUpdated.after(obj.dateCreated) || obj.lastUpdated.compareTo(obj.dateCreated)==0))
 		}
 		currentStatus nullable:true,validator:{
 			if(it!=null) return it in [Status.OPERATIONAL,Status.PARTIALLYOPERATIONAL,Status.INSTOCK,Status.UNDERMAINTENANCE,Status.FORDISPOSAL,Status.DISPOSED]
@@ -182,6 +182,10 @@ public class Equipment {
 		table "memms_equipment"
 		version false
 		cache true
+	}
+
+	def beforeUpdate(){
+		lastUpdated = new Date()
 	}
 	
 	def beforeValidate(){

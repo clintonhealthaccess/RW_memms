@@ -281,7 +281,6 @@ class EquipmentViewController extends AbstractController {
 				if(equipment.obsolete) equipment.obsolete = false
 				else {
 					equipment.lastModifiedBy = user
-					equipment.lastModifiedOn = now
 					equipment.obsolete = true
 				}
 				entity = equipment.save(flush:true)

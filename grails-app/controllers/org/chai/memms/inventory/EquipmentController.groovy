@@ -90,7 +90,6 @@ class EquipmentController extends AbstractEntityController{
 		}else{
 		    params.oldStatus =  entity.currentStatus
 			entity.lastModifiedBy = user
-			entity.lastModifiedOn = now
 			if(params["warranty.sameAsSupplier"]=="on"){
 				params["warranty.contact.contactName"]=""
 				params["warranty.contact.email"]=""

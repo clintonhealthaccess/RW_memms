@@ -104,7 +104,6 @@ class WorkOrderController extends AbstractEntityController{
 			params.oldStatus = entity.currentStatus
 			//Only change currentStatus value if currentStatus was changed
 			entity.currentStatus = (!params.currentStatus)?entity.currentStatus:OrderStatus."$params.currentStatus"
-			entity.lastModifiedOn = now
 			entity.lastModifiedBy = user
 			if(entity.currentStatus.equals(OrderStatus.CLOSEDFIXED) || entity.currentStatus.equals(OrderStatus.CLOSEDFORDISPOSAL))
 				entity.closedOn = now

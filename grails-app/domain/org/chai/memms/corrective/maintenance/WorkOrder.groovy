@@ -93,7 +93,11 @@ public class WorkOrder extends MaintenanceOrder{
 	static embedded = ["workTime","travelTime"]
 
 	static constraints = {
-		importFrom MaintenanceOrder, exclude:["closedOn"]
+		importFrom MaintenanceOrder, exclude:["closedOn","lastUpdated"]
+		
+		lastUpdated nullable: true, validator:{ val, obj ->
+			if(val!=null) return ((val <= new Date()) && (val.after(obj.openOn) || (val.compareTo(obj.openOn)==0)))
+		}
 		
 		openOn nullable: false, validator:{it <= new Date()}
 		receivedBy nullable: true

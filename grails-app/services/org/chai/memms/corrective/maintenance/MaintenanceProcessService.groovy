@@ -43,7 +43,6 @@ class MaintenanceProcessService {
 	WorkOrder addProcess(WorkOrder workOrder,ProcessType type,String name,User addedBy){
 		CorrectiveProcess process = new CorrectiveProcess(type: type,name:name,addedBy:addedBy)
 		workOrder.addToProcesses(process)
-		workOrder.lastModifiedOn = new Date()
 		workOrder.lastModifiedBy = addedBy
 		return workOrder.save(failOnError:true)
 	}
@@ -51,7 +50,6 @@ class MaintenanceProcessService {
 	WorkOrder deleteProcess(CorrectiveProcess process,User deletedBy){
 		WorkOrder workOrder = process.workOrder		
 		workOrder.removeFromProcesses(process)
-		workOrder.lastModifiedOn = new Date()
 		workOrder.lastModifiedBy = deletedBy
 		process.delete()
 		return workOrder.save(failOnError:true)
