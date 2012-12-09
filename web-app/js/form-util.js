@@ -8,6 +8,7 @@ function listGridAjaxInit(){
 	filterFormAjax()
 	clearFormField()
 }
+
 /**
  * Loading list with Ajax
  */
@@ -21,9 +22,9 @@ function listGridAjax() {
             url: url,
             success: function(data) {
             	addListAjaxResponse(data)
-            }
+            },
+        	error : function(jqXHR, exception, errorThrown){listLoadingFailed(jqXHR, exception, errorThrown)}
         });
-        $(this).ajaxError(function(){ listLoadingFailed() })
     });
 }
 
@@ -44,9 +45,9 @@ function searchFormAjax(){
 	            data: {"dataLocation.id":dataLocation,"equipment.id":equipment,"q":term},
 	            success: function(data) {
 	            	addListAjaxResponse(data)
-	            }
+	            },
+	            error : function(jqXHR, exception, errorThrown){listLoadingFailed(jqXHR, exception, errorThrown)}
 	        })
-	        $(this).ajaxError(function(){ listLoadingFailed() })
 	});
 }
 /**
@@ -66,9 +67,9 @@ function filterFormAjax() {
 	        data: data,
 	        success: function(data) {
 	        	addListAjaxResponse(data)
-	        }
+	        },
+	    	error : function(jqXHR, exception, errorThrown){listLoadingFailed(jqXHR, exception, errorThrown)}
 	     });
-	    $(this).ajaxError(function(){ listLoadingFailed() })
     });
 }
 /**
@@ -96,10 +97,27 @@ function addListAjaxResponse(data){
 /**
  * Handle ajax list loading error 
  */
-function listLoadingFailed(){
+function listLoadingFailed(jqXHR, exception, errorThrown){
+	alert("errorThrown: " + errorThrown + " , jqXHR : " + jqXHR + " , jqXHR.status : "+ jqXHR.status + " , jqXHR.responseText:  , exception: " + exception)
 	$("div.spinner-container").hide();
     $("div.list-template").fadeOut(100, function() {
-    	$(this).html("<span class='ajax-error'>Failed to fetch data</span>").show();
+    	var error = "";
+    if (jqXHR.status === 0) {
+    	error = 'Not connect.\n Verify Network.'
+      } else if (jqXHR.status == 404) {
+    	  error = 'Requested page not found. [404]';
+      } else if (jqXHR.status == 500) {
+    	  error = 'Internal Server Error [500].';
+      } else if (exception === 'parsererror') {
+    	  error = 'Requested JSON parse failed.';
+      } else if (exception === 'timeout') {
+    	  error = 'Time out error.';
+      } else if (exception === 'abort') {
+    	  error = 'Ajax request aborted.';
+      } else {
+    	  error = 'Uncaught Error.\n' + errorThrown;
+      }
+    	$(this).html("<span class='ajax-error'> "+ error +"</span>").show();
     });
 }
 
