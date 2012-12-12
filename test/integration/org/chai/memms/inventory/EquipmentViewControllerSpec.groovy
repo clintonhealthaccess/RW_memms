@@ -470,7 +470,7 @@ class EquipmentViewControllerSpec extends IntegrationTests{
 		
 		when:
 		equipmentViewController.params.q = CODE(123)
-		equipmentViewController.params."dataLocation.id" = DataLocation.findByCode(MUSANZE).id
+		equipmentViewController.params."dataLocation.id" = DataLocation.findByCode(MUSANZE).id+''
 		equipmentViewController.request.makeAjaxRequest()
 		equipmentViewController.search()
 		
