@@ -35,7 +35,7 @@
 	  		</div>
 	  		<div class="row">
 		  		 <label class="top"><g:message code="work.order.last.modified.by.label"/> :</label>
-		  		 ${order.lastModifiedBy?.names} - ${Utils.formatDateWithTime(order?.lastModifiedOn)}
+		  		 ${order.lastModifiedBy?.names} - ${Utils.formatDateWithTime(order?.lastUpdated)}
 	  		</div>
   		</g:if>						
    		<g:textarea name="description" rows="12" width="380" label="${message(code:'entity.description.label')}" readonly="${(closed)? true:false}" bean="${order}" field="description" value="${order.description}"/>

@@ -63,7 +63,7 @@ class PreventiveOrderViewController extends AbstractController {
 		if(dataLocation)
 			orders = maintenanceService.getMaintenanceOrderByCalculationLocation(PreventiveOrder.class,dataLocation,params)	
 		if(equipment)
-			orders = maintenanceService.getPreventiveOrderByEquipment(equipment,params)
+			orders = maintenanceService.getMaintenanceOrderByEquipment(PreventiveOrder.class,equipment,params)
 		 if(request.xhr){
 			 this.ajaxModel(orders,dataLocation,equipment,"")
 		 }else{
@@ -80,7 +80,7 @@ class PreventiveOrderViewController extends AbstractController {
 			])
 		}
 	}
-	
+
 	def search = {
 		def equipment = null
 		def dataLocation = null
@@ -105,7 +105,7 @@ class PreventiveOrderViewController extends AbstractController {
 	def summaryPage = {
 		if(user.location instanceof DataLocation) redirect (controller: "preventiveOrderView", action: "list",params:['dataLocation.id':user.location.id])
 
-		def location = Location.get(params.int('location'))
+		def location = Location.get(params.long('location'))
 		def dataLocationTypesFilter = getLocationTypes()
 		def template = null
 		def maintenances = null

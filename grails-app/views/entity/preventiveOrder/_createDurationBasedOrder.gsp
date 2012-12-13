@@ -37,9 +37,10 @@
   	</div>
 </div>
 <script type="text/javascript">
-	$(document).ready(function() {
-		numberOnlyField();
-		getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}");
-	});
+  $(document).ready(function() {
+    numberOnlyField();
+    getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}");
+    getToHide()
+  });
 </script>
 

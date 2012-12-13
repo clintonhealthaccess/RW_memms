@@ -33,3 +33,10 @@
 		<g:message code="entity.filter.message.label" args="${[message(code: 'entity.preventive.order.label'),params?.q]}" />
 	</h2>
 </g:if>
+
+<div class="filters main projection">
+	<a href="${createLinkWithTargetURI(controller:'durationBasedOrder',action:'calendar',params:['dataLocation.id': dataLocation?.id])}">
+		View Mapper
+	</a>			
+</div>
+

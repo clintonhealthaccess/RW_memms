@@ -111,6 +111,10 @@ class FormTagLib {
 	def currency = { attrs, body ->
 		out << render(template:"/tags/form/currency", model: attrs)
 	}
+
+	def inputPlusSelect = { attrs, body ->
+		out << render(template:"/tags/form/inputPlusSelect", model: attrs)
+	}
 	
 	def address = { attrs, body ->
 		out << render(template:"/tags/form/address", model: attrs)

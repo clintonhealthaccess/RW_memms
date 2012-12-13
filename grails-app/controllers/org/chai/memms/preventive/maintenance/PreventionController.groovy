@@ -27,59 +27,52 @@
  */
 package org.chai.memms.preventive.maintenance
 
-import groovy.transform.EqualsAndHashCode;
-
-import org.chai.memms.TimeSpend;
-import org.chai.memms.security.User;
-import org.chai.memms.TimeDate;
-
+import org.chai.location.CalculationLocation;
+import org.chai.memms.AbstractEntityController;
+import org.chai.memms.inventory.Equipment;
+import org.chai.memms.security.User.UserType;
+import org.chai.memms.TimeDate
 
 
 /**
  * @author Jean Kahigiso M.
  *
  */
-@i18nfields.I18nFields
-@EqualsAndHashCode
-public class Prevention {
-	
-	TimeDate scheduledOn
-	Date eventDate
-	Date dateCreated
-	Date lastUpdated
-	TimeSpend timeSpend
-	User addedBy
-	
-	
-	String descriptions
-	
-	
-	static i18nFields = ["descriptions"]
-	static belongsTo = [order:  PreventiveOrder]
-	static hasMany = [processes: PreventiveProcess]
-	static embedded = ["timeSpend","scheduledOn"]
-	
+class PreventionController extends AbstractEntityController {
 
-	static mapping = {
-		
-		table "memms_prevention"
-		version false
+	def bindParams(def entity) {
+		entity.properties = params
 	}
-	
-	static constraints = {
-		
-		addedBy nullable: false
-		timeSpend nullable: true
-		scheduledOn nullable: false, validator:{it.timeDate <= new Date()}
-		eventDate nullable: false, validator:{it <= new Date()}
-		lastUpdated nullable: true, validator:{if(it != null) return (it <= new Date())}
 
+	def getModel(def entity) {
+		if(entity.id==null) entity.addedBy = user
 		
+		[prevention:entity]
+	}
+
+	def getEntity(def id) {
+		return Prevention.get(id);
+	}
+
+	def createEntity() {
+		return new Prevention();
+	}
+
+	def getTemplate() {
+		return "/entity/preventiveOrder/createPrevetion";
+	}
+
+	def getLabel() {
+		return "prevention.order.label";
+	}
+
+	def getEntityClass() {
+		return Prevention.class;
+	}
+
+	def list = {
+		def preventions =  Prevention.findByPreventiveOrder(params.long("order.id"));
+
 	}
 	
-	
-	@Override
-	public String toString() {
-		return "Prevention [id="+id+" addedBy=" + addedBy + "]";
-	}
 }

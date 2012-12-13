@@ -9,7 +9,8 @@
 			<th><g:message code="equipment.label"/></th>
 			<g:sortableColumn property="${names}" title="${message(code: 'entity.names.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
 			<g:sortableColumn property="type"  title="${message(code: 'entity.type.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
-			<th><g:message code="entity.occurence.label"/></th>
+			<th><g:message code="entity.occurency.label"/></th>
+			<th><g:message code="entity.occurency.interval.label"/></th>
 			<g:sortableColumn property="status"  title="${message(code: 'entity.status.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
 			<g:sortableColumn property="openOn"  title="${message(code: 'preventive.order.open.on.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
 			<g:sortableColumn property="closedOn"  title="${message(code: 'preventive.order.closed.on.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
@@ -32,8 +33,7 @@
 							params:[id: order.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');" class="delete-button">
 							<g:message code="default.link.delete.label" />
 							</a>
-						</li>
-						
+						</li>	
 					</ul>
 				</td>
 				<td>
@@ -49,12 +49,10 @@
 					${message(code: order.type?.messageCode+'.'+order.type?.name)}
 				</td>
 				<td>
-					<g:if test="${order.type.equals(PreventiveOrderType.DURATIONBASED)}">
-						${message(code: order.occurency?.messageCode+'.'+order.occurency?.name)}
-					</g:if>
-					<g:if test="${order.type.equals(PreventiveOrderType.WORKBASED)}">
-						${message(code: order.intervalType?.messageCode+'.'+order.intervalType?.name)}
-					</g:if>					
+					${message(code: order.occurency?.messageCode+'.'+order.occurency?.name)}					
+				</td>
+				<td>
+					${order.occurInterval}					
 				</td>
 				<td>
 					${message(code: order.status?.messageCode+'.'+order.status?.name)}

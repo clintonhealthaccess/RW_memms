@@ -138,6 +138,7 @@ class WorkOrderServiceSpec  extends IntegrationTests{
 		Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,senderOne, Initializer.getDate(12, 9,2012),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.LOW,senderOne, Initializer.getDate(12, 9,2012),Initializer.getDate(18, 9,2012),FailureReason.NOTSPECIFIED,OrderStatus.CLOSEDFIXED)
 		when:
+		//TODO to be fixed
 		def workOrdersPassesDataLocation = maintenanceService.getMaintenanceOrderByCalculationLocation(WorkOrder.class,DataLocation.findByCode(KIVUYE),[:])
 		def workOrdersFailsDataLocation = maintenanceService.getMaintenanceOrderByCalculationLocation(WorkOrder.class,CalculationLocation.findByCode(BURERA),[:])
 		

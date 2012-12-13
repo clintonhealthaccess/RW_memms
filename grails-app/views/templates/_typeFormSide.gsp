@@ -18,7 +18,7 @@
 		</li>
 		<li>
 			<span class="label"><g:message code="equipment.type.last.modified.on.label" /></span>
-			<span class="text">${Utils.formatDate(type?.lastModifiedOn)}</span>
+			<span class="text">${Utils.formatDate(type?.lastUpdated)}</span>
 		</li>
 	</ul>
 	<input type="hidden" id="expectedLifeTime" value="${type?.expectedLifeTime?.numberOfMonths}"/> 

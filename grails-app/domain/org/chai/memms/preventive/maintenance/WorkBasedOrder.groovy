@@ -38,10 +38,10 @@ class WorkBasedOrder extends PreventiveOrder{
 		
 		NONE("none"),
 		HOURS("hours"),
-		DAY("day"),
-		WEEK("week"),
-		MOTHN("month"),
-		YEAR("year")
+		DAY("days"),
+		WEEK("weeks"),
+		MOTHN("months"),
+		YEAR("years")
 		
 		String messageCode = "preventive.interval.type"
 		String name
@@ -50,8 +50,9 @@ class WorkBasedOrder extends PreventiveOrder{
 		
 	}
 	
-	WorkIntervalType intervalType
-	Integer occurInterval
+	WorkIntervalType occurency
+	Integer occurInterval = 1
+	
 	
 	static mapping = {
 		table "memms_preventive_order_work_based"
@@ -69,7 +70,7 @@ class WorkBasedOrder extends PreventiveOrder{
 	
 	@Override
 	public String toString() {
-		return "WorkBasedOrder [id= "+id+" occurency=" + intervalType + "]";
+		return "WorkBasedOrder [id= "+id+" occurency=" + occurency + "]";
 	}
 	
 	

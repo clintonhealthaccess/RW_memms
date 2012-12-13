@@ -28,19 +28,80 @@
 package org.chai.memms.preventive.maintenance
 
 import org.chai.location.CalculationLocation;
+import org.chai.location.DataLocation;
 import org.chai.memms.AbstractEntityController;
 import org.chai.memms.inventory.Equipment;
 import org.chai.memms.security.User.UserType;
+import org.joda.time.DateTime
+import org.joda.time.Instant
+import grails.converters.JSON
+import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderType
+import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatus
 
 
 /**
  * @author Jean Kahigiso M.
  *
  */
+ 
 class DurationBasedOrderController extends AbstractEntityController {
 	def userService
+	def preventiveOrderService
+
+	def calendar = {
+		def dataLocation = DataLocation.get(params.long("dataLocation.id"))
+		render (view: '/entity/view', model: [template: "/templates/calendar",dataLocation:dataLocation])	
+	}
+
+	def projection = {
+		def dataLocation = DataLocation.get(params.long("dataLocation.id"))
+		def orderList = []
+		def startRange = new Instant(params.long('start')  * 1000L).toDate()
+		def endRange = new Instant(params.long('end')  * 1000L).toDate()
+
+        def orders = DurationBasedOrder.withCriteria {
+        	and{
+        		or{
+		        	equipment{
+		        		eq("dataLocation",dataLocation)
+		        	}
+	       		 }
+	        	between("openOn.timeDate",startRange,endRange)
+        	}
+        }
+        orders.each { order ->
+            def dates = preventiveOrderService.findOccurrencesInRange(order, startRange, endRange)
+
+            dates.each { date ->
+                DateTime startTime = new DateTime(date)
+                DateTime endTime = startTime.plusMinutes(order.durationMinutes)
+                orderList << [
+                    		id: order.id,
+	                        title: order.names,
+	                        allDay: false,
+                    	    start: (startTime.toInstant().millis / 1000L),
+                    	    end: (endTime.toInstant().millis / 1000L)	
+                			]
+            }
+        }
+        withFormat {
+            html {
+                [orderInstanceList: orderList]
+            }
+            json {
+                render orderList as JSON
+            }
+        }
+	}
 
 	def bindParams(def entity) {
+		if(!entity.id){
+			entity.addedBy = user
+			entity.type = PreventiveOrderType.DURATIONBASED
+			entity.status = PreventiveOrderStatus.OPEN
+		}else{
+			entity.lastModifiedBy = user
+		}
 		entity.properties = params
 	}
 

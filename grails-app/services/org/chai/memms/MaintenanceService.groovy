@@ -127,19 +127,19 @@ class MaintenanceService {
 		else 
 			maintenance.maintenanceList = maintenances
 
-		log.debug("maintenances.size(): "+maintenances.size())
 		maintenance.totalCount = maintenances.size()
 		return maintenance
 	}
 	
-	def getMaintenanceOrderByDataLocationManages(Class clazz,DataLocation dataLocation,Map<String,String> params){
-		List<Equipment> equipments = equipmentService.getEquipmentsByDataLocation(dataLocation,[:])
+	def getMaintenanceOrderByDataLocationAndManages(Class clazz,DataLocation dataLocation,Map<String,String> params){
+		def equipments = equipmentService.getEquipmentsByDataLocation(dataLocation,[:])
 		equipments << equipmentService.getEquipmentsByDataLocationAndManages(dataLocation,[:])
 		def criteria =  clazz.createCriteria()
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			or{
-				for(Equipment equipment: equipments)
+				equipments.each{ equipment ->
 					eq("equipment",equipment)
+				}
 			}
 		}
 		
@@ -147,10 +147,14 @@ class MaintenanceService {
 	
 	def getMaintenanceOrderByDataLocation(Class clazz,DataLocation dataLocation,Map<String,String> params){
 		def criteria = clazz.createCriteria();
+		def equipments = equipmentService.getEquipmentsByDataLocation(dataLocation,[:])
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			if(dataLocation)
-				equipment{ eq('dataLocation',dataLocation)}
-		}		
+			or{
+				equipment{
+					eq("dataLocation",dataLocation)
+				}
+			}
+		}	
 	}
 	def getMaintenanceOrderByEquipment(Class clazz,def equipment,Map<String,String> params){
 		def criteria = clazz.createCriteria();

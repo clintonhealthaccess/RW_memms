@@ -43,6 +43,13 @@ import org.joda.time.Months;
 import org.joda.time.Weeks;
 import org.joda.time.Years;
 import org.springframework.transaction.annotation.Transactional;
+import static org.joda.time.DateTimeConstants.SUNDAY;
+import static org.joda.time.DateTimeConstants.MONDAY;
+import static org.joda.time.DateTimeConstants.TUESDAY;
+import static org.joda.time.DateTimeConstants.WEDNESDAY;
+import static org.joda.time.DateTimeConstants.THURSDAY;
+import static org.joda.time.DateTimeConstants.FRIDAY;
+import static org.joda.time.DateTimeConstants.SATURDAY;
 
 /**
  * @author Jean Kahigiso M.
@@ -54,7 +61,7 @@ class PreventiveOrderService {
 	def grailsApplication
 	
 	@Transactional(readOnly = true)
-	public def findOccurrencesInRange(DurationBasedOrder order, Date rangeStart, Date rangeEnd) {
+	public def findOccurrencesInRange(PreventiveOrder order, Date rangeStart, Date rangeEnd) {
 		def dates = []
 		Date currentDate
 		if (order.isRecurring) {
@@ -65,24 +72,24 @@ class PreventiveOrderService {
 				currentDate = findNextOccurrence(order, nextMinute)
 			}
 		}else  // One time (non-recurring) order
-			if (order.openOn >= rangeStart && order.closedOn <= rangeEnd) dates.add(order.openOn)
+			if (order.openOn.timeDate >= rangeStart && order.closedOn <= rangeEnd) dates.add(order.openOn.timeDate)
 		return dates
 	}
 	
 	// For repeating order get next occurrence after the specified date
 	@Transactional(readOnly = true)
-	Date findNextOccurrence(DurationBasedOrder order, Date afterDate) {
+	Date findNextOccurrence(PreventiveOrder order, Date afterDate) {
 		Date nextOccurrence
 
 		if (!order.isRecurring) // non-repeating order
 			nextOccurrence = null
 		else if (order.closedOn && afterDate > order.closedOn) // Order is already over
 			nextOccurrence = null
-		else if (afterDate < order.openOn) // First occurrence
-			if (order.occurency == OccurencyType.WEEKLY && !(isOnRecurringDay(order, order.openOn))) {
-				Date nextDay = new DateTime(order.openOn).plusDays(1).toDate()
+		else if (afterDate < order.openOn.timeDate) // First occurrence
+			if (order.occurency == OccurencyType.WEEKLY && !(isOnRecurringDay(order, order.openOn.timeDate))) {
+				Date nextDay = new DateTime(order.openOn.timeDate).plusDays(1).toDate()
 				nextOccurrence = findNextOccurrence(order, nextDay)
-			}else nextOccurrence = order.openOn
+			}else nextOccurrence = order.openOn.timeDate
 		else {
 			switch (order.occurency) {
 				case OccurencyType.DAILY:
@@ -104,22 +111,22 @@ class PreventiveOrderService {
 		return nextOccurrence
 	}
 	
-	private Date findNextDailyOccurrence(DurationBasedOrder order, Date afterDate) {
-		DateTime nextOccurrence = new DateTime(order.openOn)
+	private Date findNextDailyOccurrence(PreventiveOrder order, Date afterDate) {
+		DateTime nextOccurrence = new DateTime(order.openOn.timeDate)
 
-		Integer daysBeforeDate = Days.daysBetween(new DateTime(order.openOn), new DateTime(afterDate)).getDays()
+		Integer daysBeforeDate = Days.daysBetween(new DateTime(order.openOn.timeDate), new DateTime(afterDate)).getDays()
 		Integer occurrencesBeforeDate = Math.floor(daysBeforeDate / order.occurInterval)
 		nextOccurrence = nextOccurrence.plusDays((occurrencesBeforeDate + 1) * order.occurInterval)
 
 		return nextOccurrence.toDate()
 	}
 	
-	private Date findNextWeeklyOccurrence(DurationBasedOrder order, Date afterDate) {
+	private Date findNextWeeklyOccurrence(PreventiveOrder order, Date afterDate) {
 		Boolean occurrenceFound = false
-		Integer weeksBeforeDate = Weeks.weeksBetween(new DateTime(order.openOn), new DateTime(afterDate)).getWeeks()
+		Integer weeksBeforeDate = Weeks.weeksBetween(new DateTime(order.openOn.timeDate), new DateTime(afterDate)).getWeeks()
 		Integer weekOccurrencesBeforeDate = Math.floor(weeksBeforeDate / order.occurInterval)
 
-		DateTime lastOccurrence = new DateTime(order.openOn)
+		DateTime lastOccurrence = new DateTime(order.openOn.timeDate)
 		lastOccurrence = lastOccurrence.plusWeeks(weekOccurrencesBeforeDate * order.occurInterval)
 		lastOccurrence = lastOccurrence.withDayOfWeek(MONDAY)
 
@@ -141,23 +148,23 @@ class PreventiveOrderService {
 		return nextOccurrence.toDate()
 	}
 	
-	private Date findNextMonthlyOccurrence(DurationBasedOrder order, Date afterDate) {
-		DateTime nextOccurrence = new DateTime(order.openOn)
-		Integer monthsBeforeDate = Months.monthsBetween(new DateTime(order.openOn), new DateTime(afterDate)).getMonths()
+	private Date findNextMonthlyOccurrence(PreventiveOrder order, Date afterDate) {
+		DateTime nextOccurrence = new DateTime(order.openOn.timeDate)
+		Integer monthsBeforeDate = Months.monthsBetween(new DateTime(order.openOn.timeDate), new DateTime(afterDate)).getMonths()
 		Integer occurrencesBeforeDate = Math.floor(monthsBeforeDate / order.occurInterval)
 		nextOccurrence = nextOccurrence.plusMonths((occurrencesBeforeDate + 1) * order.occurInterval)
 		return nextOccurrence.toDate()
 	}
 	
-	private Date findNextYearlyOccurrence(DurationBasedOrder order, Date afterDate) {
-		DateTime nextOccurrence = new DateTime(order.openOn)
-		Integer yearsBeforeDate = Years.yearsBetween(new DateTime(order.openOn), new DateTime(afterDate)).getYears()
+	private Date findNextYearlyOccurrence(PreventiveOrder order, Date afterDate) {
+		DateTime nextOccurrence = new DateTime(order.openOn.timeDate)
+		Integer yearsBeforeDate = Years.yearsBetween(new DateTime(order.openOn.timeDate), new DateTime(afterDate)).getYears()
 		Integer occurrencesBeforeDate = Math.floor(yearsBeforeDate / order.occurInterval)
 		nextOccurrence = nextOccurrence.plusYears((occurrencesBeforeDate + 1) * order.occurInterval)
 		return nextOccurrence.toDate()
 	}
 
-	private boolean isOnRecurringDay(DurationBasedOrder order, Date date) {
+	private boolean isOnRecurringDay(PreventiveOrder order, Date date) {
 		Integer day = new DateTime(date).getDayOfWeek()
 		return order.occurDaysOfWeek.find{it == day}
 	}

@@ -32,6 +32,7 @@ import org.chai.memms.maintenance.MaintenanceOrder;
 import org.chai.memms.security.User;
 import groovy.transform.EqualsAndHashCode;
 import org.joda.time.DateTime;
+import org.joda.time.Minutes;
 import org.chai.memms.TimeDate
 
 /**
@@ -95,9 +96,9 @@ public abstract class PreventiveOrder extends MaintenanceOrder {
 	static constraints = {
 		importFrom MaintenanceOrder, exclude:["closedOn","lastUpdated"]
 		lastUpdated nullable: true, validator:{ val, obj ->
-			if(val!=null) return ((val <= new Date()) && (val.after(obj.openOn.timeDate) || (val.compareTo(obj.openOn.timeDate)==0)))
+			if(val!=null) return (val <= new Date())
 		}
-		openOn nullable: false, validator:{it.timeDate <= new Date()}
+		openOn nullable: false, validator:{it.timeDate >= new Date()}
 		names nullable: true, blank: true
 		type nullable: false, inList:[PreventiveOrderType.DURATIONBASED,PreventiveOrderType.WORKBASED]
 		status nullable:false, inList:[PreventiveOrderStatus.OPEN,PreventiveOrderStatus.CLOSED]
@@ -119,11 +120,11 @@ public abstract class PreventiveOrder extends MaintenanceOrder {
 
 	}
 
-	public int getDurationMinutes() {
-        return Minutes.minutesBetween(new DateTime(openOn.timeDate), getEndTimeForEvent()).minutes
+	def getDurationMinutes() {
+        return Minutes.minutesBetween(new DateTime(openOn.timeDate), getEndTimeForOrder()).minutes
     }
 
-    public int getEndTimeForEvent() {
+    def getEndTimeForOrder() {
         return new DateTime(openOn.timeDate).plusHours(1)
     }	
 	

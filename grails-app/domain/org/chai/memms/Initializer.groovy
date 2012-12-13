@@ -646,27 +646,27 @@ public class Initializer {
 		def equipment09 =Equipment.findBySerialNumber("SERIAL09")
 		def equipment10 =Equipment.findBySerialNumber("SERIAL10")
 		
-		def dOrderOne = newDurationBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'First Duration Order'],"First Duration Order",now(),null,OccurencyType.WEEKLY,true,1,2,[1,3,5])
+		def dOrderOne = newDurationBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'First Duration Order'],"First Duration Order",now()+1,null,OccurencyType.WEEKLY,true,1,2,[1,3,5])
 		equipment01.addToPreventiveOrders(dOrderOne)
 		equipment01.save(failOnError:true)
 		
-		def dOrderTwo = newDurationBasedOrder(equipment01,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'Secod Duration Order'],"Second Duration Order",now(),null,OccurencyType.MONTHLY,true,2,null,[])
+		def dOrderTwo = newDurationBasedOrder(equipment01,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'Secod Duration Order'],"Second Duration Order",now()+1,null,OccurencyType.MONTHLY,true,2,null,[])
 		equipment09.addToPreventiveOrders(dOrderTwo)
 		equipment09.save(failOnError:true)
 		
-		def dOrderThree = newDurationBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'Three Duration Order'],"Second Duration Order",now(),null,OccurencyType.DAILY,true,2,null,[])
+		def dOrderThree = newDurationBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'Three Duration Order'],"Second Duration Order",now()+1,null,OccurencyType.DAILY,true,2,null,[])
 		equipment09.addToPreventiveOrders(dOrderThree)
 		equipment09.save(failOnError:true)
 		
-		def dOrderFour = newDurationBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'Four Duration Order'],"Second Duration Order",now(),null,OccurencyType.YEARLY,true,2,null,[])
+		def dOrderFour = newDurationBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'Four Duration Order'],"Second Duration Order",now()+1,null,OccurencyType.YEARLY,true,2,null,[])
 		equipment09.addToPreventiveOrders(dOrderFour)
 		equipment09.save(failOnError:true)
 
-		def dOrderFive = newWorkBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'First Work Based Five'],"First Work Based Order",now(),null,WorkIntervalType.HOURS,22)
+		def dOrderFive = newWorkBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'First Work Based Five'],"First Work Based Order",now()+1,null,WorkIntervalType.HOURS,22)
 		equipment09.addToPreventiveOrders(dOrderFive)
 		equipment09.save(failOnError:true)
 
-		def dOrderSix = newWorkBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'Second Work Based Six'],"Second Work Based Order",now(),null,WorkIntervalType.WEEK,2)
+		def dOrderSix = newWorkBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'Second Work Based Six'],"Second Work Based Order",now()+1,null,WorkIntervalType.WEEK,2)
 		equipment09.addToPreventiveOrders(dOrderSix)
 		equipment09.save(failOnError:true)
 		
@@ -698,7 +698,7 @@ public class Initializer {
 		Utils.setLocaleValueInMap(order,names,"Names") 
 		return order.save(failOnError:true)
 	}
-	public static def newWorkBasedOrder(def equipment,def addedBy,def status,def preventionResponsible,def technicianInCharge,def names,def description,def openOn,def closedOn,def intervalType,def occurInterval){
+	public static def newWorkBasedOrder(def equipment,def addedBy,def status,def preventionResponsible,def technicianInCharge,def names,def description,def openOn,def closedOn,def occurency,def occurInterval){
 		def timeDate =  newTimeDate(openOn)
 		def order  = new WorkBasedOrder(
 			equipment: equipment,
@@ -709,7 +709,7 @@ public class Initializer {
 			preventionResponsible: preventionResponsible,
 			technicianInCharge: technicianInCharge,
 			occurInterval: occurInterval,
-			intervalType:intervalType,
+			occurency:occurency,
 			openOn: timeDate,
 			closedOn: closedOn
 			)

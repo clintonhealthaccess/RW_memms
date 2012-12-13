@@ -31,6 +31,8 @@ import org.chai.location.CalculationLocation;
 import org.chai.memms.AbstractEntityController;
 import org.chai.memms.inventory.Equipment;
 import org.chai.memms.security.User.UserType;
+import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderType
+import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatus
 
 /**
  * @author Jean Kahigiso M.
@@ -41,17 +43,28 @@ class WorkBasedOrderController extends AbstractEntityController {
 	def userService
 
 	def bindParams(def entity) {
+		def oldStatus = entity.status
+		if(!entity.id){
+			entity.addedBy = user
+			entity.type = PreventiveOrderType.WORKBASED
+			entity.status = PreventiveOrderStatus.OPEN
+		}else{
+			entity.lastModifiedBy = user
+		}
 		entity.properties = params
 	}
 
 	def getModel(def entity) {
 		def equipments =  []
+		def usersInCharge = userService.getActiveUserByTypeAndLocation([UserType.HOSPITALDEPARTMENT,UserType.TITULAIREHC,UserType.TECHNICIANDH],entity.equipment?.dataLocation,[:])
+		usersInCharge << entity.lastModifiedBy
 		if(entity.equipment) equipments << entity.equipment
+
 		[
 			order:entity,
 			equipments: equipments,
 			currencies: grailsApplication.config.site.possible.currency,
-			technicians : userService.getActiveUserByTypeAndLocation(UserType.TECHNICIANDH,entity.equipment?.dataLocation,[:])
+			technicians : usersInCharge
 		]
 	}
 

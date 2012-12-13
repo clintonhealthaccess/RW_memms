@@ -1,4 +1,15 @@
 /**
+ * Load Calendar
+ */
+
+function loadCalendar(dataLocation){
+	$("#calendar").fullCalendar({
+	        events: "projection.json?dataLocation.id="+dataLocation,
+	        header: { left: 'prev,next today',center: 'title',right: 'month,agendaWeek,agendaDay'}
+	    });
+}
+
+/**
  * List ajax init
  */
 function listGridAjaxInit(){
@@ -118,7 +129,7 @@ function listLoadingFailed(){
  * Make an input field to accept only number
  */
 function numberOnlyField(){
-	$('.numbers-only').keyup(function () {
+	$(".numbers-only").keyup(function () {
 	    if (this.value != this.value.replace(/[^0-9\.]/g, '')) {
 	       this.value = this.value.replace(/[^0-9\.]/g, '');
 	    }
@@ -375,4 +386,15 @@ function getToHide(parchaseCost,estimatedCost){
 			$(".donor-information").slideUp()
 		}
 	})
+
+	$("select[name=occurency]").change(function(e){
+		if($(this).val()=="WEEKLY"){ 
+			$(".week-days").slideDown()
+		}else{
+			$(".week-days").slideUp()
+		}
+		$("select[name=occurInterval]").nextAll("label.has-helper").html($(this).find("option:selected").text());
+		$("input[name=occurInterval]").nextAll("label.has-helper").html($(this).find("option:selected").text());
+	})
 }
+

@@ -23,8 +23,7 @@
                 </span>
                 <g:message code="order.section.occurance.information.label"/>
               </h4> 
-              <g:selectFromEnum name="intervalType" bean="${order}" values="${WorkIntervalType.values()}" field="intervalType"  label="${message(code:'preventive.repeats.label')}"/>
-              <g:occurInterval name="occurInterval" bean="${order}" value="${order.occurInterval}" range="${10}" field="occurInterval" label="${message(code:'preventive.repeats.every.label')}"/>
+              <g:inputPlusSelect label="${message(code:'preventive.repeats.every.label')}" bean="${order}"  inputField="occurInterval" selectField="occurency" selectFieldValues="${WorkIntervalType.values()}" />
               <g:inputTimeDate name="openOn" field="openOn" date="${order.openOn?.date}" time="${order.openOn?.time}" label='preventive.starts.on.label' bean="${order}" dateClass="date-picker" timeClass="time-picker"/>
             </fieldset>
           </div>
@@ -36,9 +35,10 @@
     </div>
 </div>
 <script type="text/javascript">
-  	$(document).ready(function() {
-    		numberOnlyField();
-    		getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}");
-  	});
+  $(document).ready(function() {
+    numberOnlyField();
+    getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}");
+    getToHide()
+  });
 </script>
 
