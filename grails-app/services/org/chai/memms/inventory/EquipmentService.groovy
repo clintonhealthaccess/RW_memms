@@ -83,9 +83,10 @@ class EquipmentService {
 		if(log.isDebugEnabled()) log.debug("Updating Equipment status params: "+equipment)
 		equipment.save(failOnError:true)
 	}
-	public def searchEquipment(String text,User user,Map<String, String> params) {
+	public def searchEquipment(String text,User user,DataLocation currentDataLocation,Map<String, String> params) {
 		def dataLocations = []
-		if(user.location instanceof Location) dataLocations.addAll(user.location.getDataLocations([].toSet(), [].toSet()))
+		if(currentDataLocation) dataLocations.add(currentDataLocation)
+		else if(user.location instanceof Location) dataLocations.addAll(user.location.getDataLocations([].toSet(), [].toSet()))
 		else{
 			dataLocations = []
 			dataLocations.add(user.location as DataLocation)
@@ -149,13 +150,21 @@ class EquipmentService {
 		}
 	}
 
-	public def filterEquipment(def dataLocation, def supplier, def manufacturer,def serviceProvider, def equipmentType, 
+	public def filterEquipment(def user, def dataLocation, def supplier, def manufacturer,def serviceProvider, def equipmentType, 
 		def purchaser,def donor,def obsolete,def status,Map<String, String> params){
+		
+		def dataLocations = []
+		if(dataLocation) dataLocations.add(dataLocation)
+		else if(user.location instanceof Location) dataLocations.addAll(user.location.getDataLocations([:], [:]))
+		else{
+			dataLocations.add((DataLocation)user.location)
+			dataLocations.addAll((user.location as DataLocation).manages)
+		}
 		
 		def criteria = Equipment.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			if(dataLocation != null)
-				eq('dataLocation',dataLocation)
+			if(dataLocations != null)
+				inList('dataLocation',dataLocations)
 			if(supplier != null)
 				eq ("supplier", supplier)
 			if(manufacturer != null)

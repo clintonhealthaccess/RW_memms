@@ -87,6 +87,7 @@ class EquipmentViewController extends AbstractController {
 		if (dataLocation != null){
 			if(!user.canAccessCalculationLocation(dataLocation)) response.sendError(404)
 			equipments = equipmentService.getEquipmentsByDataLocationAndManages(dataLocation,params)
+			//equipments = equipmentService.filterEquipment(user,dataLocation,null,null,null,null,null,null,null,null,params)
 		}
 		else equipments = equipmentService.getMyEquipments(user,params)
 		
@@ -106,6 +107,7 @@ class EquipmentViewController extends AbstractController {
 		}
 	}
 	
+	//TODO don't think we need ajax for this
 	def selectFacility = {
 		adaptParamsForList()
 		def dataLocations = []
@@ -121,27 +123,30 @@ class EquipmentViewController extends AbstractController {
 	}
 	
 	def search = {
-		DataLocation dataLocation = DataLocation.get(params.int("dataLocation.id"));
-		if (dataLocation == null)
+		DataLocation dataLocation = DataLocation.get(params.int("dataLocation.id"))
+		if (dataLocation != null && !user.canAccessCalculationLocation(dataLocation))
 			response.sendError(404)
-
-		adaptParamsForList()
-		def equipments = equipmentService.searchEquipment(params['q'],user,params)
-		if(!request.xhr)
-			response.sendError(404)
-		this.ajaxModel(equipments,dataLocation,params['q'])
+		else{
+			adaptParamsForList()
+			def equipments = equipmentService.searchEquipment(params['q'],user,dataLocation,params)
+			if(!request.xhr)
+				response.sendError(404)
+			else
+				this.ajaxModel(equipments,dataLocation,params['q'])
+		}
 	}
 	
 	def filter = { FilterCommand cmd ->
 		if (log.isDebugEnabled()) log.debug("equipments.filter, command "+cmd)
-		if (cmd.dataLocation == null)
+		if (cmd.dataLocation != null && !user.canAccessCalculationLocation(cmd.dataLocation))
 			response.sendError(404)
-
-		adaptParamsForList()
-		def equipments = equipmentService.filterEquipment(cmd.dataLocation,cmd.supplier,cmd.manufacturer,cmd.serviceProvider,cmd.equipmentType,cmd.purchaser,cmd.donor,cmd.obsolete,cmd.status,params)
-		if(!request.xhr)
-			response.sendError(404)
-		this.ajaxModel(equipments,cmd.dataLocation,"")
+		else{
+			adaptParamsForList()
+			def equipments = equipmentService.filterEquipment(user,cmd.dataLocation,cmd.supplier,cmd.manufacturer,cmd.serviceProvider,cmd.equipmentType,cmd.purchaser,cmd.donor,cmd.obsolete,cmd.status,params)
+			if(!request.xhr)
+				response.sendError(404)
+			else this.ajaxModel(equipments,cmd.dataLocation,"")
+		}
 	}
 	
 	def ajaxModel(def entities,def dataLocation,def searchTerm) {
@@ -256,12 +261,10 @@ class EquipmentViewController extends AbstractController {
 	def export = { FilterCommand cmd ->
 		if (log.isDebugEnabled()) log.debug("equipments.export, command "+cmd)
 		def dataLocation = DataLocation.get(params.int('dataLocation.id'))
-		if (dataLocation == null)
-			response.sendError(404)
 		adaptParamsForList()
 
-		def equipments = equipmentService.filterEquipment(dataLocation,cmd.supplier,cmd.manufacturer,cmd.serviceProvider,cmd.equipmentType,cmd.purchaser,cmd.donor,cmd.obsolete,cmd.status,params)
-		File file = equipmentService.exporter(dataLocation,equipments)
+		def equipments = equipmentService.filterEquipment(user,dataLocation,cmd.supplier,cmd.manufacturer,cmd.serviceProvider,cmd.equipmentType,cmd.purchaser,cmd.donor,cmd.obsolete,cmd.status,params)
+		File file = equipmentService.exporter(dataLocation?:user.location,equipments)
 
 		response.setHeader "Content-disposition", "attachment; filename=${file.name}.csv"
 		response.contentType = 'text/csv'
@@ -292,7 +295,7 @@ class EquipmentViewController extends AbstractController {
 	}
 
 	def getAjaxData = {
-		List<Equipment> equipments = equipmentService.searchEquipment(params['term'],user, [:])
+		List<Equipment> equipments = equipmentService.searchEquipment(params['term'],user,null,[:])
 		render(contentType:"text/json") {
 			elements = array {
 				equipments.each { equipment ->
