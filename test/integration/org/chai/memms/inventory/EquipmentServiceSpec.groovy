@@ -59,6 +59,7 @@ class EquipmentServiceSpec extends IntegrationTests{
 	def "can search equipment by serial number, description and observation"() {
 		setup:
 		setupLocationTree()
+		def user = newOtherUser("user", "user", DataLocation.findByCode(KIVUYE))
 		
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
@@ -73,8 +74,8 @@ class EquipmentServiceSpec extends IntegrationTests{
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now())
 
 		Initializer.newEquipment(CODE(123),PurchasedBy.BYDONOR,Donor.OTHERNGO,"Internews",false,Initializer.newPeriod(32),"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),'',"equipmentModel",DataLocation.findByCode(BUTARO),department,equipmentType,manufacture,supplier,Status.OPERATIONAL,user,null,null)
-		Initializer.newEquipment(CODE(124),PurchasedBy.BYMOH,null,null,false,Initializer.newPeriod(32),"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
+				,Initializer.getDate(10,10,2010),"EUR","equipmentModel",DataLocation.findByCode(BUTARO),department,equipmentType,manufacture,supplier,Status.OPERATIONAL,user,null,null)
+		def equipmentCodeToFind = Initializer.newEquipment(CODE(124),PurchasedBy.BYMOH,null,null,false,Initializer.newPeriod(32),"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
 				,Initializer.getDate(10,10,2010),"RWF","equipmentModel",DataLocation.findByCode(KIVUYE),department,equipmentType,manufacture,supplier,Status.OPERATIONAL,user,null,null)
 
 		def List<Equipment> equipments

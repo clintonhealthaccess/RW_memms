@@ -121,17 +121,17 @@ abstract class IntegrationTests extends IntegrationSpec {
 		def musanze = Initializer.newDataLocation(['en':MUSANZE], MUSANZE, burera, dh)
 		def gitwe = Initializer.newDataLocation(['en':GITWE], GITWE, burera, hc)
 		def muvuna = Initializer.newDataLocation(['en':MUVUNA], MUVUNA, burera, hc)
-		musanze.addToManages(gitwe)
 		musanze.addToManages(muvuna)
+		musanze.addToManages(gitwe)
 		musanze.save(failOnError:true)
 	}
 
 	static def setupEquipment(){
-		setupSystemUser()
 		newEquipment(CODE(123),DataLocation.findByCode(KIVUYE))
 	}
 	
 	static def newEquipment(def serialNumber, DataLocation dataLocation){
+		setupSystemUser()
 		def department = Initializer.newDepartment(['en':"testName"], serialNumber,['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(serialNumber,["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),12)
 
@@ -152,11 +152,12 @@ abstract class IntegrationTests extends IntegrationSpec {
 		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
 		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),false,[:])
 
-		equipment.manufacturer=manufacture
-		equipment.supplier=supplier
+		equipment.manufacturer = manufacture
+		equipment.supplier = supplier
 
-		equipment.warranty=warranty
-		equipment.warrantyPeriod=Initializer.newPeriod(4)
+		equipment.warranty = warranty
+		equipment.warrantyPeriod = Initializer.newPeriod(4)
+		
 
 		equipment.save(failOnError: true)
 	}

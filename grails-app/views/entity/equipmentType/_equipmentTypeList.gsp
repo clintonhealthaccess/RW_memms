@@ -47,7 +47,7 @@
 					${Utils.formatDateWithTime(type?.dateCreated)}
 				</td>
 				<td>
-					${Utils.formatDateWithTime(type?.lastModifiedOn)}
+					${Utils.formatDateWithTime(type?.lastUpdated)}
 				</td>
 			</tr>
 		</g:each>

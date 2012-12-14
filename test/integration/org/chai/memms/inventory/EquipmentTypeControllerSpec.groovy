@@ -44,10 +44,10 @@ class EquipmentTypeControllerSpec extends IntegrationTests{
 	def "list equipment types"(){
 		setup:
 		equipmentTypeController = new EquipmentTypeController();
-		Initializer.newEquipmentType(CODE(123), ["en":"names equipment type one"], ["en":"descriptions equipment type one"],Observation.RETIRED ,  Initializer.now(), Initializer.now())
-		Initializer.newEquipmentType(CODE(124), ["en":"names equipment type two"], ["en":"descriptions equipment type two"],Observation.NOTINSCOPE ,  Initializer.now(), Initializer.now())
-		Initializer.newEquipmentType(CODE(125), ["en":"names equipment type three"], ["en":"descriptions equipment type three"],Observation.TOODETAILED ,  Initializer.now(), Initializer.now())
-		Initializer.newEquipmentType(CODE(126), ["en":"names equipment type four"], ["en":"descriptions equipment type four"],Observation.USEDINMEMMS ,  Initializer.now(), Initializer.now())
+		Initializer.newEquipmentType(CODE(123), ["en":"names equipment type one"], ["en":"descriptions equipment type one"],Observation.RETIRED ,  Initializer.now(),)
+		Initializer.newEquipmentType(CODE(124), ["en":"names equipment type two"], ["en":"descriptions equipment type two"],Observation.NOTINSCOPE ,  Initializer.now(),)
+		Initializer.newEquipmentType(CODE(125), ["en":"names equipment type three"], ["en":"descriptions equipment type three"],Observation.TOODETAILED ,  Initializer.now(),)
+		Initializer.newEquipmentType(CODE(126), ["en":"names equipment type four"], ["en":"descriptions equipment type four"],Observation.USEDINMEMMS ,  Initializer.now(),)
 		
 		when: "none ajax"
 		equipmentTypeController.list()
@@ -69,10 +69,10 @@ class EquipmentTypeControllerSpec extends IntegrationTests{
 	def "search equipment types"(){
 		setup:
 		equipmentTypeController = new EquipmentTypeController();
-		Initializer.newEquipmentType(CODE(123), ["en":"names equipment type one"], ["en":"descriptions equipment type one"],Observation.RETIRED ,  Initializer.now(), Initializer.now())
-		Initializer.newEquipmentType(CODE(124), ["en":"names equipment type two"], ["en":"descriptions equipment type two"],Observation.NOTINSCOPE ,  Initializer.now(), Initializer.now())
-		Initializer.newEquipmentType(CODE(125), ["en":"names equipment type three"], ["en":"descriptions equipment type three"],Observation.TOODETAILED ,  Initializer.now(), Initializer.now())
-		Initializer.newEquipmentType(CODE(126), ["en":"names equipment type four"], ["en":"descriptions equipment type four"],Observation.USEDINMEMMS ,  Initializer.now(), Initializer.now())
+		Initializer.newEquipmentType(CODE(123), ["en":"names equipment type one"], ["en":"descriptions equipment type one"],Observation.RETIRED ,  Initializer.now(),)
+		Initializer.newEquipmentType(CODE(124), ["en":"names equipment type two"], ["en":"descriptions equipment type two"],Observation.NOTINSCOPE ,  Initializer.now(),)
+		Initializer.newEquipmentType(CODE(125), ["en":"names equipment type three"], ["en":"descriptions equipment type three"],Observation.TOODETAILED ,  Initializer.now(),)
+		Initializer.newEquipmentType(CODE(126), ["en":"names equipment type four"], ["en":"descriptions equipment type four"],Observation.USEDINMEMMS ,  Initializer.now(),)
 		
 		when: "none ajax fails"
 		equipmentTypeController.params.q = "three"
