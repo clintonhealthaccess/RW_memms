@@ -158,7 +158,7 @@ class WorkOrderViewControllerSpec extends IntegrationTests{
 		techdh.userType = UserType.TECHNICIANDH
 		techdh.save(failOnError:true)
 		
-		def sender = newOtherUser("sender", "sender", DataLocation.findByCode(KIVUYE))
+		def sender = newOtherUser("sender", "sender", DataLocation.findByCode(GITWE))
 		sender.userType = UserType.TITULAIREHC
 		sender.save(failOnError:true)
 		

@@ -50,20 +50,20 @@ import org.chai.memms.location.LanguageService;
 
 class MaintenanceService {
 
-    static transactional = true
+	static transactional = true
 	def locationService
 	def grailsApplication
 	def equipmentService
 	def languageService
-	
+
 	def getSkipLocationLevels() {
 		List<LocationLevel> levels = []
 		for (String skipLevel : grailsApplication.config.location.sector.skip.level) {
 			levels.add(locationService.findLocationLevelByCode(skipLevel));
 		}
 		return levels;
-	} 
-	
+	}
+
 	/**
 	 * Searches for a Order that contains the search term
 	 * Pass a null value for the criteria you want to be ignored in the search other than the search text
@@ -78,7 +78,7 @@ class MaintenanceService {
 		def dbFieldNames = 'names_'+languageService.getCurrentLanguagePrefix();
 		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
 		def criteria = clazz.createCriteria()
-		
+
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			log.debug("dataLocation"+dataLocation+"equipment"+equip)
 			if(equip)
@@ -107,30 +107,30 @@ class MaintenanceService {
 			}
 		}
 	}
-	
+
 	def getMaintenancesByLocation(Class clazz,def location,Set<DataLocationType> types,Map<String, String> params) {
 		if(log.isDebugEnabled()) log.debug("getMaintenancesByLocation url params: "+params)
 		List<Maintenance> maintenances = []
 		Set<LocationLevel> skipLevels = getSkipLocationLevels()
-		
+
 		for(DataLocation dataLocation : location.collectDataLocations(skipLevels,types)){
 			maintenances.add(new Maintenance(dataLocation:dataLocation,orderCount:this.getMaintenanceOrderByDataLocation(clazz,dataLocation,[:]).size()))
 		}
-		
+
 		Maintenances maintenance = new Maintenances()
 		//If user tries to access elements outside the range, return empty list
 		//TODO this is ideally supposed to avoid trying to access out of range data, but could be a bite
 		if(params.offset != null && params.max != null && params.offset > params.max) return maintenance
 		//If user specifies the pagination params, use them. Else return the whole list
-		if(params.offset != null && params.offset > 0  && params.max != null && params.max > 0) 
+		if(params.offset != null && params.offset > 0  && params.max != null && params.max > 0)
 			maintenance.maintenanceList = maintenances[(params.offset) .. ((params.offset + params.max) > maintenances.size() ? maintenances.size() - 1 : (params.offset + params.max))]
-		else 
+		else
 			maintenance.maintenanceList = maintenances
 
 		maintenance.totalCount = maintenances.size()
 		return maintenance
 	}
-	
+
 	def getMaintenanceOrderByDataLocationAndManages(Class clazz,DataLocation dataLocation,Map<String,String> params){
 		def equipments = equipmentService.getEquipmentsByDataLocation(dataLocation,[:])
 		equipments << equipmentService.getEquipmentsByDataLocationAndManages(dataLocation,[:])
@@ -142,9 +142,9 @@ class MaintenanceService {
 				}
 			}
 		}
-		
+
 	}
-	
+
 	def getMaintenanceOrderByDataLocation(Class clazz,DataLocation dataLocation,Map<String,String> params){
 		def criteria = clazz.createCriteria();
 		def equipments = equipmentService.getEquipmentsByDataLocation(dataLocation,[:])
@@ -154,20 +154,20 @@ class MaintenanceService {
 					eq("dataLocation",dataLocation)
 				}
 			}
-		}	
+		}
 	}
 	def getMaintenanceOrderByEquipment(Class clazz,def equipment,Map<String,String> params){
 		def criteria = clazz.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-				eq('equipment',equipment)
+			eq('equipment',equipment)
 		}
-		
+
 	}
-	
+
 	def getMaintenanceOrderByCalculationLocation(Class clazz,CalculationLocation location,Map<String,String> params){
 		def equipments = []
 		def criteria = clazz.createCriteria();
-		
+
 		if(location.instanceOf(DataLocation)){
 			equipments = equipmentService.getEquipmentsByDataLocationAndManages(location, [:])
 		}else{
@@ -175,14 +175,10 @@ class MaintenanceService {
 			for(DataLocation dataLocation: dataLocations)
 				equipments.addAll(equipmentService.getEquipmentsByDataLocationAndManages(dataLocation, [:]))
 		}
-		
+
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			or{
-				equipments.each { equipment ->
-					eq("equipment",equipment)
-				}
-			}
+			inList("equipment",equipments)
 		}
-		
+
 	}
 }

@@ -2,7 +2,7 @@
 	<thead>
 		<tr>
 			<th/>
-			<g:sortableColumn property="code"  title="${message(code: 'equipment.code.label')}" params="[q:q,'dataLocation.id':dataLocation.id]" />
+			<g:sortableColumn property="code"  title="${message(code: 'equipment.code.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
 			<g:sortableColumn property="type"  title="${message(code: 'equipment.type.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
 			<g:sortableColumn property="model"  title="${message(code: 'equipment.model.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
 			<th><g:message code="location.label"/></th>

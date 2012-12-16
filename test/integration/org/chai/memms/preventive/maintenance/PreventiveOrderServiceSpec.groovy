@@ -28,12 +28,13 @@
 package org.chai.memms.preventive.maintenance
 
 import org.chai.memms.util.Utils;
+import org.chai.memms.IntegrationTests
 
 /**
  * @author Jean Kahigiso M.
  *
  */
-class PreventiveOrderServiceSpec {
+class PreventiveOrderServiceSpec extends IntegrationTests {
 	def preventiveOrderService
 	
 }
