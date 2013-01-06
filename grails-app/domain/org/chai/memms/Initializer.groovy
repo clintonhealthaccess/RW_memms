@@ -719,8 +719,8 @@ public class Initializer {
 		Utils.setLocaleValueInMap(prevention,descriptions,"Descriptions")
 		return prevention.save(failOnError:true)
 	}
-	public static def newPreventionProcess(def dateCreated, def name,def addedBy){
-		return new PreventiveProcess(dateCreated:dateCreated,name:name,addedBy:addedBy).save(failOnError:true)
+	public static def newPreventionProcess(def dateCreated, def name,def addedBy, def prevention){
+		return new PreventiveProcess(dateCreated:dateCreated,name:name,addedBy:addedBy,prevention:prevention).save(failOnError:true)
 	}
 	public static def newTimeDate(def date,def time){
 		return new TimeDate(date,time)
