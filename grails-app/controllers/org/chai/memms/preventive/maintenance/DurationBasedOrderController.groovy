@@ -112,7 +112,7 @@ class DurationBasedOrderController extends AbstractEntityController {
 			order:entity,
 			equipments: equipments,
 			currencies: grailsApplication.config.site.possible.currency,
-			technicians : userService.getActiveUserByTypeAndLocation(UserType.TECHNICIANDH,entity.equipment?.dataLocation,[:])
+			technicians : userService.getActiveUserByTypeAndLocation([UserType.TECHNICIANDH],entity.equipment?.dataLocation,[:])
 		]
 	}
 

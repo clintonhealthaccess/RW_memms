@@ -67,7 +67,7 @@ public class Prevention {
 	}
 	
 	static constraints = {
-		
+		descriptions nullable: true, blank: true
 		addedBy nullable: false
 		timeSpend nullable: true
 		scheduledOn nullable: false, validator:{it.timeDate <= new Date()}

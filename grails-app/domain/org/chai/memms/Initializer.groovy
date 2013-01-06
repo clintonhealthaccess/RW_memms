@@ -561,9 +561,8 @@ public class Initializer {
 	}
 	
 	static def createCorrectiveMaintenanceStructure(){
-		//TODO the users and what they can 
 		def admin = User.findByUsername("admin")
-		def titulaireHC = User.findByUsername("titulaireHC") //hospitalDepartment can do the same job too
+		def titulaireHC = User.findByUsername("titulaireHC")
 		def department = User.findByUsername("hospitalDepartment")
 		def techDH = User.findByUsername("techDH")
 		def techMMC = User.findByUsername("techMMC")
@@ -693,7 +692,6 @@ public class Initializer {
 			occurInterval: occurInterval,
 			occurCount: occurCount,
 			occurDaysOfWeek: occurDaysOfWeek
-
 			)
 		Utils.setLocaleValueInMap(order,names,"Names") 
 		return order.save(failOnError:true)
@@ -715,12 +713,14 @@ public class Initializer {
 			)
 		Utils.setLocaleValueInMap(order,names,"Names") 
 		return order.save(failOnError:true)
-	}	
-	public static def newPrevention(def order,def addedBy,def scheduledOn,def happenAsScheduled,def eventDate,def timeSpend,def descriptions){
-		return new Prevention(order:order,addedBy:addedBy,scheduledOn:scheduledOn,happenAsScheduled:happenAsScheduled,eventDate:eventDate,timeSpend:timeSpend,descriptions:descriptions).save(failOnError:true)
 	}
-	public static def newPreventionProcess(def prevention, def name,def addedBy){
-		return new PreventiveProcess(prevention:prevention,name:name,addedBy:addedBy).save(failOnError:true)
+	public static def newPrevention(def order,def addedBy,def scheduledOn,def eventDate,def timeSpend,def descriptions, def processes){
+		def prevention = new Prevention(order:order,addedBy:addedBy,scheduledOn:scheduledOn,eventDate:eventDate,timeSpend:timeSpend,processes:processes)
+		Utils.setLocaleValueInMap(prevention,descriptions,"Descriptions")
+		return prevention.save(failOnError:true)
+	}
+	public static def newPreventionProcess(def dateCreated, def name,def addedBy){
+		return new PreventiveProcess(dateCreated:dateCreated,name:name,addedBy:addedBy).save(failOnError:true)
 	}
 	public static def newTimeDate(def date,def time){
 		return new TimeDate(date,time)
