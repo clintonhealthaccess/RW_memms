@@ -77,7 +77,7 @@ class CorrectiveMaintenanceServiceSpec extends IntegrationTests{
 		when:
 		def correctiveMaintenances = maintenanceService.getMaintenancesByLocation(WorkOrder.class,burera,types,["offset":1,"max":0 ])
 		then:
-		correctiveMaintenances.maintenanceList.size() == 0
-		correctiveMaintenances.totalCount == 0
+		correctiveMaintenances.maintenanceList.size() == 3
+		correctiveMaintenances.totalCount == 3
 	}
 }
