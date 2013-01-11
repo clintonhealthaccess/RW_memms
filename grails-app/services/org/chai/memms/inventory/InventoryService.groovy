@@ -65,9 +65,8 @@ class InventoryService {
 		
 		Inventories inventory = new Inventories()
 		inventory.inventoryList = inventories[(params.offset) .. ((params.offset + params.max) > inventories.size() ? inventories.size() - 1 : (params.offset + params.max))]
-		
-		log.debug("inventories.size(): "+inventories.size())
-		inventory.totalCount = inventories.size()
+
+		inventory.totalCount = inventories.size() - 1
 		return inventory
 	}
 }
