@@ -65,7 +65,7 @@ class MaintenanceService {
 	}
 
 	/**
-	 * Searches for a Order that contains the search term
+	 * Searches for an Order that contains the search term
 	 * Pass a null value for the criteria you want to be ignored in the search other than the search text
 	 * NB workOrdersEquipment is named like this to avoid conflicting with the navigation property equipment
 	 * @param text
@@ -113,7 +113,7 @@ class MaintenanceService {
 		List<Maintenance> maintenances = []
 		Set<LocationLevel> skipLevels = getSkipLocationLevels()
 
-		for(DataLocation dataLocation : location.collectDataLocations(skipLevels,types)){
+		for(DataLocation dataLocation : location.collectDataLocations(skipLevels,types)){log.debug("dataLocation = " + dataLocation)
 			maintenances.add(new Maintenance(dataLocation:dataLocation,orderCount:this.getMaintenanceOrderByDataLocation(clazz,dataLocation,[:]).size()))
 		}
 
@@ -128,6 +128,7 @@ class MaintenanceService {
 			maintenance.maintenanceList = maintenances
 
 		maintenance.totalCount = maintenances.size()
+		log.debug(maintenances)
 		return maintenance
 	}
 
@@ -137,9 +138,7 @@ class MaintenanceService {
 		def criteria =  clazz.createCriteria()
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			or{
-				equipments.each{ equipment ->
-					eq("equipment",equipment)
-				}
+					inList("equipment",equipments)
 			}
 		}
 
