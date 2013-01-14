@@ -51,7 +51,6 @@ class WorkBasedOrder extends PreventiveOrder{
 	}
 	
 	WorkIntervalType occurency
-	Integer occurInterval = 1
 	
 	
 	static mapping = {

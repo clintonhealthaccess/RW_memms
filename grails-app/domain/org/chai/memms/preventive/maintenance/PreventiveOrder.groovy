@@ -85,12 +85,12 @@ public abstract class PreventiveOrder extends MaintenanceOrder {
 	User technicianInCharge
 	PreventiveOrderType type
 	PreventiveOrderStatus status
-	TimeDate openOn
+	TimeDate firstOccurenceOn
 	
 	static belongsTo = [equipment: Equipment]
 	static hasMany = [preventions: Prevention]
 	static i18nFields = ["names"]
-	static embedded = ["openOn"]
+	static embedded = ["firstOccurenceOn"]
 
 	
 	static constraints = {
@@ -98,7 +98,7 @@ public abstract class PreventiveOrder extends MaintenanceOrder {
 		lastUpdated nullable: true, validator:{ val, obj ->
 			if(val!=null) return (val <= new Date())
 		}
-		openOn nullable: false, validator:{it.timeDate >= new Date()}
+		firstOccurenceOn nullable: false, validator:{it.timeDate >= new Date()}
 		names nullable: true, blank: true
 		type nullable: false, inList:[PreventiveOrderType.DURATIONBASED,PreventiveOrderType.WORKBASED]
 		status nullable:false, inList:[PreventiveOrderStatus.OPEN,PreventiveOrderStatus.CLOSED]
@@ -121,11 +121,11 @@ public abstract class PreventiveOrder extends MaintenanceOrder {
 	}
 
 	def getDurationMinutes() {
-        return Minutes.minutesBetween(new DateTime(openOn.timeDate), getEndTimeForOrder()).minutes
+        return Minutes.minutesBetween(new DateTime(firstOccurenceOn.timeDate), getEndTimeForOrder()).minutes
     }
 
     def getEndTimeForOrder() {
-        return new DateTime(openOn.timeDate).plusHours(1)
+        return new DateTime(firstOccurenceOn.timeDate).plusHours(1)
     }	
 	
 	abstract Integer getPlannedPrevention();

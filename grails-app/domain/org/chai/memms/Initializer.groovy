@@ -675,8 +675,8 @@ public class Initializer {
 	
 	//Models definition
 	//Preventive Maintenance
-	public static def newDurationBasedOrder(def equipment,def addedBy,def status,def preventionResponsible,def technicianInCharge,def names,def description,def openOn,def closedOn,def occurency,def isRecurring,def occurInterval,def occurCount,def occurDaysOfWeek){
-		def timeDate =  newTimeDate(openOn)
+	public static def newDurationBasedOrder(def equipment,def addedBy,def status,def preventionResponsible,def technicianInCharge,def names,def description,def firstOccurenceOn,def closedOn,def occurency,def isRecurring,def occurInterval,def occurCount,def occurDaysOfWeek){
+		def timeDate =  newTimeDate(firstOccurenceOn)
 		def order  = new DurationBasedOrder(
 			equipment: equipment,
 			addedBy: addedBy,
@@ -685,7 +685,7 @@ public class Initializer {
 			description: description,
 			preventionResponsible: preventionResponsible,
 			technicianInCharge: technicianInCharge,
-			openOn: timeDate,
+			firstOccurenceOn: timeDate,
 			closedOn: closedOn,
 			occurency: occurency,
 			isRecurring: isRecurring,
@@ -696,8 +696,8 @@ public class Initializer {
 		Utils.setLocaleValueInMap(order,names,"Names") 
 		return order.save(failOnError:true)
 	}
-	public static def newWorkBasedOrder(def equipment,def addedBy,def status,def preventionResponsible,def technicianInCharge,def names,def description,def openOn,def closedOn,def occurency,def occurInterval){
-		def timeDate =  newTimeDate(openOn)
+	public static def newWorkBasedOrder(def equipment,def addedBy,def status,def preventionResponsible,def technicianInCharge,def names,def description,def firstOccurenceOn,def closedOn,def occurency,def occurInterval){
+		def timeDate =  newTimeDate(firstOccurenceOn)
 		def order  = new WorkBasedOrder(
 			equipment: equipment,
 			addedBy: addedBy,
@@ -708,7 +708,7 @@ public class Initializer {
 			technicianInCharge: technicianInCharge,
 			occurInterval: occurInterval,
 			occurency:occurency,
-			openOn: timeDate,
+			firstOccurenceOn: timeDate,
 			closedOn: closedOn
 			)
 		Utils.setLocaleValueInMap(order,names,"Names") 
