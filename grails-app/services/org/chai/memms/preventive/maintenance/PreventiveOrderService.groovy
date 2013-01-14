@@ -1,4 +1,5 @@
 /** 
+
  * Copyright (c) 2012, Clinton Health Access Initiative.
  *
  * All rights reserved.
@@ -114,7 +115,7 @@ class PreventiveOrderService {
 	private Date findNextDailyOccurrence(PreventiveOrder order, Date afterDate) {
 		DateTime nextOccurrence = new DateTime(order.openOn.timeDate)
 
-		Integer daysBeforeDate = Days.daysBetween(new DateTime(order.openOn.timeDate), new DateTime(afterDate)).getDays()
+		Integer daysBeforeDate = Days.daysBetween (new DateTime(order.openOn.timeDate), new DateTime(afterDate)).getDays()
 		Integer occurrencesBeforeDate = Math.floor(daysBeforeDate / order.occurInterval)
 		nextOccurrence = nextOccurrence.plusDays((occurrencesBeforeDate + 1) * order.occurInterval)
 

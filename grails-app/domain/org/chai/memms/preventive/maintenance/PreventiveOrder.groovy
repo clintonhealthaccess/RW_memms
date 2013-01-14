@@ -98,7 +98,6 @@ public abstract class PreventiveOrder extends MaintenanceOrder {
 		lastUpdated nullable: true, validator:{ val, obj ->
 			if(val!=null) return (val <= new Date())
 		}
-		//TODO why is date opened on in the future?
 		openOn nullable: false, validator:{it.timeDate >= new Date()}
 		names nullable: true, blank: true
 		type nullable: false, inList:[PreventiveOrderType.DURATIONBASED,PreventiveOrderType.WORKBASED]

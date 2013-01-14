@@ -88,36 +88,136 @@ class MaintenanceServiceSpec extends IntegrationTests{
 		ordersTwo.maintenanceList.size() == 3
 	}
 	
-//	def "can get maintenanceOrder by dataLocation and manages"(){
-//		setup:
-//		setupLocationTree()
-//		def techInCharge = newOtherUserWithType("techInCharge", "techInCharge", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
-//		def addedBy = newUser("addedBy", CODE(123))
-//		def equipmentDurationBasedOrderOne = newEquipment(CODE(123),DataLocation.findByCode(KIVUYE))
-//		def equipmentWorkBasedOrderOne = newEquipment(CODE(124),DataLocation.findByCode(KIVUYE))
-//		
-//		def equipmentDurationBasedOrderTwo = newEquipment(CODE(125),DataLocation.findByCode(BUTARO))
-//		def equipmentWorkBasedOrderTwo = newEquipment(CODE(126),DataLocation.findByCode(BUTARO))
-//		//Duration based orders
-//		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description one",
-//			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
-//		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description two",
-//			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
-//		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderTwo,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description three",
-//			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
-//		//Work Based Orders
-//		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"testing"],"description one",
-//			Initializer.now()+1,null,WorkIntervalType.NONE,1)
-//		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"testing"],"description one",
-//			Initializer.now()+1,null,WorkIntervalType.NONE,1)
-//		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderTwo, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description one",
-//			Initializer.now()+1,null,WorkIntervalType.NONE,1)
-//			
-//		when:
-//		def ordersButaro = maintenanceService.getMaintenanceOrderByDataLocationAndManages(WorkBasedOrder.class,DataLocation.findByCode(BUTARO) ,[:])
-//		def ordersKIvuye = maintenanceService.getMaintenanceOrderByDataLocationAndManages(DurationBasedOrder.class,DataLocation.findByCode(KIVUYE) ,[:])
-//		then:
-//		ordersButaro.size() == 2
-//		ordersKIvuye.size() == 3
-//	}
+	def "can get maintenanceOrder by dataLocation and manages"(){
+		setup:
+		setupLocationTree()
+		def techInCharge = newOtherUserWithType("techInCharge", "techInCharge", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
+		def addedBy = newUser("addedBy", CODE(123))
+		def equipmentDurationBasedOrderOne = newEquipment(CODE(123),DataLocation.findByCode(KIVUYE))
+		def equipmentWorkBasedOrderOne = newEquipment(CODE(124),DataLocation.findByCode(KIVUYE))
+		
+		def equipmentDurationBasedOrderTwo = newEquipment(CODE(125),DataLocation.findByCode(BUTARO))
+		def equipmentWorkBasedOrderTwo = newEquipment(CODE(126),DataLocation.findByCode(BUTARO))
+		//Duration based orders
+		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description one",
+			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
+		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description two",
+			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
+		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderTwo,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description three",
+			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
+		//Work Based Orders
+		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"testing"],"description one",
+			Initializer.now()+1,null,WorkIntervalType.NONE,1)
+		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"testing"],"description one",
+			Initializer.now()+1,null,WorkIntervalType.NONE,1)
+		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderTwo, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description one",
+			Initializer.now()+1,null,WorkIntervalType.NONE,1)
+			
+		when:
+		def ordersButaro = maintenanceService.getMaintenanceOrderByDataLocationAndManages(WorkBasedOrder.class,DataLocation.findByCode(BUTARO) ,[:])
+		def ordersKIvuye = maintenanceService.getMaintenanceOrderByDataLocationAndManages(DurationBasedOrder.class,DataLocation.findByCode(KIVUYE) ,[:])
+		then:
+		ordersButaro.size() == 3
+		ordersKIvuye.size() == 2
+	}
+	
+	def "can get maintenanceOrder by dataLocation"(){
+		setup:
+		setupLocationTree()
+		def techInCharge = newOtherUserWithType("techInCharge", "techInCharge", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
+		def addedBy = newUser("addedBy", CODE(123))
+		def equipmentDurationBasedOrderOne = newEquipment(CODE(123),DataLocation.findByCode(KIVUYE))
+		def equipmentWorkBasedOrderOne = newEquipment(CODE(124),DataLocation.findByCode(KIVUYE))
+		
+		def equipmentDurationBasedOrderTwo = newEquipment(CODE(125),DataLocation.findByCode(BUTARO))
+		def equipmentWorkBasedOrderTwo = newEquipment(CODE(126),DataLocation.findByCode(BUTARO))
+		//Duration based orders
+		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description one",
+			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
+		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description two",
+			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
+		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderTwo,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description three",
+			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
+		//Work Based Orders
+		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"testing"],"description one",
+			Initializer.now()+1,null,WorkIntervalType.NONE,1)
+		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"testing"],"description one",
+			Initializer.now()+1,null,WorkIntervalType.NONE,1)
+		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderTwo, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description one",
+			Initializer.now()+1,null,WorkIntervalType.NONE,1)
+			
+		when:
+		def ordersButaro = maintenanceService.getMaintenanceOrderByDataLocation(WorkBasedOrder.class,DataLocation.findByCode(BUTARO) ,[:])
+		def ordersKIvuye = maintenanceService.getMaintenanceOrderByDataLocation(DurationBasedOrder.class,DataLocation.findByCode(KIVUYE) ,[:])
+		then:
+		ordersButaro.size() == 1
+		ordersKIvuye.size() == 2
+	}
+	
+	def "can get maintenanceOrder by equipment"(){
+		setup:
+		setupLocationTree()
+		def techInCharge = newOtherUserWithType("techInCharge", "techInCharge", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
+		def addedBy = newUser("addedBy", CODE(123))
+		def equipmentDurationBasedOrderOne = newEquipment(CODE(123),DataLocation.findByCode(KIVUYE))
+		def equipmentWorkBasedOrderOne = newEquipment(CODE(124),DataLocation.findByCode(KIVUYE))
+		
+		def equipmentDurationBasedOrderTwo = newEquipment(CODE(125),DataLocation.findByCode(BUTARO))
+		def equipmentWorkBasedOrderTwo = newEquipment(CODE(126),DataLocation.findByCode(BUTARO))
+		//Duration based orders
+		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description one",
+			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
+		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description two",
+			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
+		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderTwo,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description three",
+			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
+		//Work Based Orders
+		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"testing"],"description one",
+			Initializer.now()+1,null,WorkIntervalType.NONE,1)
+		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"testing"],"description one",
+			Initializer.now()+1,null,WorkIntervalType.NONE,1)
+		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderTwo, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description one",
+			Initializer.now()+1,null,WorkIntervalType.NONE,1)
+			
+		when:
+		def ordersButaro = maintenanceService.getMaintenanceOrderByEquipment(WorkBasedOrder.class,equipmentWorkBasedOrderOne ,[:])
+		def ordersKIvuye = maintenanceService.getMaintenanceOrderByEquipment(DurationBasedOrder.class,equipmentDurationBasedOrderTwo ,[:])
+		then:
+		ordersButaro.size() == 2
+		ordersKIvuye.size() == 1
+	}
+	
+	//This gets the managed orders too
+	def "can get maintenanceOrder by CalculationLocation"(){
+		setup:
+		setupLocationTree()
+		def techInCharge = newOtherUserWithType("techInCharge", "techInCharge", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
+		def addedBy = newUser("addedBy", CODE(123))
+		def equipmentDurationBasedOrderOne = newEquipment(CODE(123),DataLocation.findByCode(KIVUYE))
+		def equipmentWorkBasedOrderOne = newEquipment(CODE(124),DataLocation.findByCode(KIVUYE))
+		
+		def equipmentDurationBasedOrderTwo = newEquipment(CODE(125),DataLocation.findByCode(BUTARO))
+		def equipmentWorkBasedOrderTwo = newEquipment(CODE(126),DataLocation.findByCode(BUTARO))
+		//Duration based orders
+		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description one",
+			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
+		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description two",
+			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
+		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderTwo,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description three",
+			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
+		//Work Based Orders
+		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"testing"],"description one",
+			Initializer.now()+1,null,WorkIntervalType.NONE,1)
+		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"testing"],"description one",
+			Initializer.now()+1,null,WorkIntervalType.NONE,1)
+		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderTwo, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description one",
+			Initializer.now()+1,null,WorkIntervalType.NONE,1)
+			
+		when:
+		def ordersButaro = maintenanceService.getMaintenanceOrderByCalculationLocation(WorkBasedOrder.class,DataLocation.findByCode(BUTARO) ,[:])
+		def ordersKIvuye = maintenanceService.getMaintenanceOrderByCalculationLocation(DurationBasedOrder.class,Location.findByCode(GITARAMA) ,[:])
+		then:
+		ordersButaro.size() == 3
+		ordersKIvuye.size() == 3
+	}
 }
