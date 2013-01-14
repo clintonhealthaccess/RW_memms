@@ -189,9 +189,12 @@ rabbitmq.concurrentConsumers = 1
 rabbitmq.retryPolicy.maxAttempts = 1
 
 site.fallback.language="en"
-site.contact.email="memms.rwanda@gmail.com"
-site.entity.list.max=40
-site.from.email="memms.rwanda@gmail.com"
+site.entity.list.max = 40
+site.admin.email = "memms@dhsst.org"
+site.contact.email = "memms@dhsst.org"
+site.from.email = "no-reply@dhsst.org"
+
+
 
 site.datalocationtype.checked=["District Hospital","Health Center"]
 location.sector.skip.level=["Sector"]
