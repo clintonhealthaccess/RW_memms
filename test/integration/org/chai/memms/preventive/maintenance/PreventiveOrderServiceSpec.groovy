@@ -51,7 +51,7 @@ class PreventiveOrderServiceSpec extends IntegrationTests {
 		setup:
 		Date dateCreated = new Date().parse('yyyy/MM/dd', '2020/02/01')
 		Date dateEndDaily = new Date().parse('yyyy/MM/dd', '2020/02/20')
-		Date dateEndWeekly = new Date().parse('yyyy/MM/dd', '2020/03/01')
+		Date dateEndWeekly = new Date().parse('yyyy/MM/dd', '2020/02/29')
 		Date dateEndMonthly = new Date().parse('yyyy/MM/dd', '2021/02/01')
 		Date dateEndYearly = new Date().parse('yyyy/MM/dd', '2023/02/01')
 		setupLocationTree()
@@ -111,8 +111,8 @@ class PreventiveOrderServiceSpec extends IntegrationTests {
 	
 	def "can find next weekly occurences"(){
 		setup:
-		Date dateCreated = new Date().parse('yyyy/MM/dd', '2013/02/14')
-		Date dateExpected = new Date().parse('yyyy/MM/dd', '2022/02/01')
+		Date dateCreated = new Date().parse('yyyy/MM/dd', '2020/02/01')
+		Date dateExpected = new Date().parse('yyyy/MM/dd', '2020/02/04')
 		setupLocationTree()
 		def techInCharge = newOtherUserWithType("techInCharge", "techInCharge", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
 		def addedBy = newUser("addedBy", CODE(123))
@@ -169,7 +169,6 @@ class PreventiveOrderServiceSpec extends IntegrationTests {
 		when:
 		def nextOccurenceYearlyDurationBased = preventiveOrderService.findNextYearlyOccurrence(nextYearlyOccurenceBasedOrder, dateCreated+1)
 		then:
-		//This will fail in a leap year
 		nextOccurenceYearlyDurationBased == dateExpected
 	}
 	
@@ -177,7 +176,7 @@ class PreventiveOrderServiceSpec extends IntegrationTests {
 		setup:
 		Date dateCreated = new Date().parse('yyyy/MM/dd', '2020/02/01')
 		Date dateExpectedDaily = new Date().parse('yyyy/MM/dd', '2020/02/05')
-		Date dateExpectedWeekly = new Date().parse('yyyy/MM/dd', '2020/02/01')
+		Date dateExpectedWeekly = new Date().parse('yyyy/MM/dd', '2020/02/04')
 		Date dateExpectedMonthly = new Date().parse('yyyy/MM/dd', '2020/05/01')
 		Date dateExpectedYearly = new Date().parse('yyyy/MM/dd', '2022/02/01')
 		setupLocationTree()

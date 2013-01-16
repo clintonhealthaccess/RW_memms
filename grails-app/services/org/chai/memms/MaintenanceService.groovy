@@ -133,15 +133,11 @@ class MaintenanceService {
 	}
 
 	def getMaintenanceOrderByDataLocationAndManages(Class clazz,DataLocation dataLocation,Map<String,String> params){
-		def equipments = equipmentService.getEquipmentsByDataLocation(dataLocation,[:])
-		equipments << equipmentService.getEquipmentsByDataLocationAndManages(dataLocation,[:])
+		def equipments = equipmentService.getEquipmentsByDataLocationAndManages(dataLocation,[:])
 		def criteria =  clazz.createCriteria()
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			or{
-					inList("equipment",equipments)
-			}
+			inList("equipment",equipments)
 		}
-
 	}
 
 	def getMaintenanceOrderByDataLocation(Class clazz,DataLocation dataLocation,Map<String,String> params){

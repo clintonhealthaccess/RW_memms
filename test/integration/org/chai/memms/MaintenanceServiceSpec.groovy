@@ -115,10 +115,10 @@ class MaintenanceServiceSpec extends IntegrationTests{
 			
 		when:
 		def ordersButaro = maintenanceService.getMaintenanceOrderByDataLocationAndManages(WorkBasedOrder.class,DataLocation.findByCode(BUTARO) ,[:])
-		def ordersKIvuye = maintenanceService.getMaintenanceOrderByDataLocationAndManages(DurationBasedOrder.class,DataLocation.findByCode(KIVUYE) ,[:])
+		def ordersKivuye = maintenanceService.getMaintenanceOrderByDataLocationAndManages(DurationBasedOrder.class,DataLocation.findByCode(KIVUYE) ,[:])
 		then:
 		ordersButaro.size() == 3
-		ordersKIvuye.size() == 2
+		ordersKivuye.size() == 2
 	}
 	
 	def "can get maintenanceOrder by dataLocation"(){

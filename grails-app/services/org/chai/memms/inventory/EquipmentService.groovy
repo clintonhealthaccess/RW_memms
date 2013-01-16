@@ -135,10 +135,11 @@ class EquipmentService {
 
 		def criteria = Equipment.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			or{
-				for(DataLocation dataLoc: dataLocations)
-					eq('dataLocation',dataLoc)
-			}
+			inList('dataLocation',dataLocations)
+//			or{
+//				for(DataLocation dataLoc: dataLocations)
+//					eq('dataLocation',dataLoc)
+//			}
 		}
 	}
 
