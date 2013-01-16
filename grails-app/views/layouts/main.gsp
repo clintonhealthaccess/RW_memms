@@ -102,7 +102,9 @@
 					<shiro:hasPermission permission="menu:preventivemaintenance">
 						<li><a class="${controllerName=='preventiveOrderView'?'active':''}" href="#"><g:message code="header.navigation.preventive.maintenance"/></a></li>
 					</shiro:hasPermission>
+					<shiro:hasPermission permission="menu:notificationWorkOrder">
 					<li><a class="${controllerName=='notificationWorkOrder'?'active':''}" href="${createLink(controller: 'notificationWorkOrder', action:'list')}"><g:message code="notification.work.order.label"/></a></li>
+					</shiro:hasPermission>
 	         	</ul>
          	</li>
 		</shiro:hasPermission>
@@ -112,9 +114,13 @@
 		<shiro:hasPermission permission="menu:admin">
 			<li><a href="#"><g:message code="header.navigation.administration"/></a>
 	         	<ul class="submenu">
+	         		<shiro:hasPermission permission="menu:equipmentType">
 					<li><a href="${createLink(controller: 'equipmentType', action:'list')}"><g:message code="equipment.type.label"/></a></li>
+					</shiro:hasPermission>
+					<shiro:hasPermission permission="menu:equipmentExport">
 					<li><a href="${createLink(controller: 'equipmentView', action:'generalExport')}"><g:message code="equipment.export.label"/></a></li>
-					<shiro:hasPermission permission="menu:advanced">
+					</shiro:hasPermission>
+					<shiro:hasPermission permission="menu:location">
 					<li><a href="#"><g:message code="location.label"/></a>
 						<div class="sub-submenu">
 							<ul class="submenu">
@@ -126,16 +132,20 @@
 						</div>
 					</li>
 					</shiro:hasPermission>
-					<shiro:hasPermission permission="menu:advanced">
+					<shiro:hasPermission permission="menu:department">
 						<li><a href="${createLink(controller: 'department', action:'list')}"><g:message code="department.label"/></a></li>
+					</shiro:hasPermission>
+					<shiro:hasPermission permission="menu:provider">
 						<li><a href="${createLink(controller: 'provider', action:'list')}"><g:message code="header.navigation.manufacturer.and.supplier"/></a></li>
 					</shiro:hasPermission>
-					<shiro:hasPermission permission="menu:advanced:admin">
+					<shiro:hasPermission permission="menu:user">
 						<li><a href="#"><g:message code="user.manage.users.label"/></a>
 							<div class="sub-submenu">
 								<ul class="submenu">
 									<li><a href="${createLink(controller: 'role', action:'list')}"><g:message code="roles.label" /></a></li>
-									<li><a href="${createLink(controller: 'user', action:'list')}"><g:message code="users.label" /></a></li>
+									<shiro:hasPermission permission="menu:role">
+										<li><a href="${createLink(controller: 'user', action:'list')}"><g:message code="users.label" /></a></li>
+									</shiro:hasPermission>
 								</ul>
 							</div>
 						</li>
@@ -143,7 +153,6 @@
 	         	</ul>
         	 </li>
 		</shiro:hasPermission>
-        
       </ul>
     </div>
   </div>
