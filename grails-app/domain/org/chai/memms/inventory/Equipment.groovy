@@ -120,8 +120,10 @@ public class Equipment {
 		currentStatus nullable:true,validator:{
 			if(it!=null) return it in [Status.OPERATIONAL,Status.PARTIALLYOPERATIONAL,Status.INSTOCK,Status.UNDERMAINTENANCE,Status.FORDISPOSAL,Status.DISPOSED]
 		}
-		supplier nullable: false
-		manufacturer nullable: false
+		//TODO nullable has to be false, but it is true for first iteration
+		supplier nullable: true
+		//TODO nullable has to be false, but it is true for first iteration
+		manufacturer nullable: true
 		serviceProvider nullable: true, validator:{val, obj ->
 			if(val == null) return (obj.serviceContractStartDate==null && obj.serviceContractPeriod==null)
 		}
@@ -132,7 +134,9 @@ public class Equipment {
 		
 		serialNumber nullable: false, blank: false,  unique: true
 		purchaseCost nullable: true, blank: true, validator:{ if(it!=null) return (it>0) }
-		purchaser nullable: false, inList:[PurchasedBy.BYFACILITY,PurchasedBy.BYMOH,PurchasedBy.BYDONOR]
+		//TODO nullable has to be false, but it is true for first iteration
+		//The value none have to be removed from valid answer
+		purchaser nullable: false, inList:[PurchasedBy.NONE,PurchasedBy.BYFACILITY,PurchasedBy.BYMOH,PurchasedBy.BYDONOR]
 		donor nullable:true,inList:[Donor.OTHERNGO,Donor.MOHPARTNER,Donor.OTHERS,Donor.INDIVIDUAL], validator:{ val, obj ->
 			if(obj.purchaser == PurchasedBy.BYDONOR) return (val!=null)
 		}
@@ -151,10 +155,12 @@ public class Equipment {
 			if(val==null) return (obj.serviceContractPeriod==null && obj.serviceProvider==null)
 		}
 		room nullable: true, blank: true
-		
-		manufactureDate nullable: false, blank: false, validator:{it <= new Date()}
-		purchaseDate nullable: false, blank: false, validator:{ val, obj ->
-			return  ((val <= new Date()) && val.after(obj.manufactureDate) || (val.compareTo(obj.manufactureDate)==0))
+		//TODO nullable has to be false, but it is true for first iteration
+		manufactureDate nullable: true, blank: false, validator:{it <= new Date()}
+		//TODO nullable has to be false, but it is true for first iteration
+		purchaseDate nullable: true, blank: false, validator:{ val, obj ->
+			//TODO uncomment when fix
+			//return  ((val <= new Date()) && val.after(obj.manufactureDate) || (val.compareTo(obj.manufactureDate)==0))
 		}
 		registeredOn nullable: false, blank:false
 		descriptions nullable: true, blank: true

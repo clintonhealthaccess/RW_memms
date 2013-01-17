@@ -69,7 +69,8 @@ class EquipmentStatus {
 	}
 	static constraints = {
 		dateOfEvent nullable:false, validator:{val, obj ->
-			return (val <= new Date()) &&  (val.after(obj.equipment.purchaseDate) || (val.compareTo(obj.equipment.purchaseDate)==0))
+			//TODO be uncomment after first data collection
+			return (val <= new Date()) //&&  (val.after(obj.equipment.purchaseDate) || (val.compareTo(obj.equipment.purchaseDate)==0))
 		} 
 		statusChangeDate nullable: false, validator:{it <= new Date()} 
 		changedBy nullable: false 
