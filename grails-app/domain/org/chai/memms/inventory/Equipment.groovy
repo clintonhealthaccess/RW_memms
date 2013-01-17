@@ -117,6 +117,7 @@ public class Equipment {
 	static constraints = {
 		importFrom Contact
 		code nullable: false, blank:false, unique:true
+		model nullable: true
 		currentStatus nullable:true,validator:{
 			if(it!=null) return it in [Status.OPERATIONAL,Status.PARTIALLYOPERATIONAL,Status.INSTOCK,Status.UNDERMAINTENANCE,Status.FORDISPOSAL,Status.DISPOSED]
 		}
