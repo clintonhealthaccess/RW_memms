@@ -130,7 +130,7 @@ class User {
 		phoneNumber(phoneNumber: true, nullable: false, blank: false)
 		organisation(nullable: false, blank: false)
 		defaultLanguage(nullable: true)
-		userType(nullable: false, blank: false)
+		userType nullable: false, blank: false, inList:[UserType.ADMIN,UserType.SYSTEM,UserType.TECHNICIANDH,UserType.TECHNICIANMMC,UserType.TITULAIREHC,UserType.HOSPITALDEPARTMENT,UserType.OTHER]
 		location(nullable: true)
 		registrationToken(nullable: true)
 		passwordToken(nullable: true)
