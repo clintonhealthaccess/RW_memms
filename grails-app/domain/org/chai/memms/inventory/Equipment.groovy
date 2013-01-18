@@ -147,9 +147,10 @@ public class Equipment {
 		currency  nullable: true, blank: true, inList: ["RWF","USD","EUR"], validator:{ val, obj ->
 			if(obj.purchaseCost != null) return (val != null)
 		}
-		expectedLifeTime nullable: false
+		//TODO nullable has to be false, but it is true for first iteration
+		expectedLifeTime nullable: true
 		serviceContractPeriod nullable: true, validator:{ val, obj ->
-			if(val==null) return (obj.serviceContractStartDate==null && obj.serviceProvider==null)
+			if(val==null) return (obj.serviceContractStartDate == null && obj.serviceProvider == null)
 		}
 		serviceContractStartDate nullable: true, blank: true, validator:{ val, obj ->
 			if(val!=null) return (val<=new Date() && (val.after(obj.purchaseDate) || (val.compareTo(obj.purchaseDate)==0)))
