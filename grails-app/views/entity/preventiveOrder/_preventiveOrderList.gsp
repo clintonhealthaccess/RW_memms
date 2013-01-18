@@ -2,6 +2,7 @@
 <%@ page import="org.apache.shiro.SecurityUtils" %>
 <%@ page import="org.chai.memms.security.User" %>
 <%@ page import="org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderType" %>
+<%@ page import="org.chai.memms.preventive.maintenance.DurationBasedOrder" %>
 <table class="items">
 	<thead>
 		<tr>
@@ -52,13 +53,13 @@
 					${message(code: order.occurency?.messageCode+'.'+order.occurency?.name)}					
 				</td>
 				<td>
-					${order.occurInterval}					
+					${order.instanceOf(DurationBasedOrder)? order.occurInterval : ''}					
 				</td>
 				<td>
 					${message(code: order.status?.messageCode+'.'+order.status?.name)}
 				</td>
 				<td>
-					${Utils.formatDateWithTime(order.openOn?.timeDate)}
+					${Utils.formatDateWithTime(order.firstOccurenceOn?.timeDate)}
 				</td>
 				<td>
 					${Utils.formatDateWithTime(order?.closedOn)}

@@ -78,9 +78,8 @@ class MaintenanceService {
 		def dbFieldNames = 'names_'+languageService.getCurrentLanguagePrefix();
 		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
 		def criteria = clazz.createCriteria()
-
+		log.debug("text = " + text)
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			log.debug("dataLocation"+dataLocation+"equipment"+equip)
 			if(equip)
 				eq('equipment',equip)
 			if(dataLocation)
