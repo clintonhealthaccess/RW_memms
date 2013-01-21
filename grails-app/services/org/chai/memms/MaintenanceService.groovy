@@ -115,14 +115,10 @@ class MaintenanceService {
 		for(DataLocation dataLocation : location.collectDataLocations(skipLevels,types)){log.debug("dataLocation = " + dataLocation)
 			maintenances.add(new Maintenance(dataLocation:dataLocation,orderCount:this.getMaintenanceOrderByDataLocation(clazz,dataLocation,[:]).size()))
 		}
-
 		Maintenances maintenance = new Maintenances()
-		//If user tries to access elements outside the range, return empty list
-		//TODO this is ideally supposed to avoid trying to access out of range data, but could be a bite
-		if(params.offset != null && params.max != null && params.offset > params.max) return maintenance
 		//If user specifies the pagination params, use them. Else return the whole list
-		if(params.offset != null && params.offset > 0  && params.max != null && params.max > 0)
-			maintenance.maintenanceList = maintenances[(params.offset) .. ((params.offset + params.max) > maintenances.size() ? maintenances.size() - 1 : (params.offset + params.max))]
+		if(params.offset != null && params.offset >= 0  && params.max != null && params.max > 0)
+			maintenance.maintenanceList = maintenances[(params.offset) ..< ((params.offset + params.max) > maintenances.size() ? maintenances.size() : (params.offset + params.max))]
 		else
 			maintenance.maintenanceList = maintenances
 

@@ -170,9 +170,11 @@ class WorkOrderViewController extends AbstractController{
 		def locationSkipLevels = maintenanceService.getSkipLocationLevels()
 
 		adaptParamsForList()
+		log.debug("location = " +location)
 		if (location != null) 
 			maintenances = maintenanceService.getMaintenancesByLocation(WorkOrder.class,location,dataLocationTypesFilter,params)
 		
+		log.debug("maintenances = " +maintenances?.maintenanceList)
 		render (view: '/orderSummaryPage/summaryPage', model: [
 					maintenances:maintenances?.maintenanceList,
 					currentLocation: location,

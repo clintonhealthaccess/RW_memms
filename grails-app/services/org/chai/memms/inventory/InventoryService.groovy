@@ -55,8 +55,8 @@ class InventoryService {
 		return levels;
 	}
 	
+	//If params are not in order return the whole list.
 	public Inventories getInventoryByLocation(Location location,Set<DataLocationType> types,Map<String, String> params) {
-		if(log.isDebugEnabled()) log.debug("params="+params)
 		List<Inventory> inventories = []
 		Set<LocationLevel> skipLevels = getSkipLocationLevels()
 		for(DataLocation dataLocation : location.collectDataLocations(skipLevels,types)){
@@ -64,9 +64,8 @@ class InventoryService {
 		}
 		
 		Inventories inventory = new Inventories()
-		inventory.inventoryList = inventories[(params.offset) .. ((params.offset + params.max) > inventories.size() ? inventories.size() - 1 : (params.offset + params.max))]
-		
-		log.debug("inventories.size(): "+inventories.size())
+		inventory.inventoryList = inventories[(params.offset) ..< ((params.offset + params.max) > inventories.size() ? inventories.size() : (params.offset + params.max))]
+
 		inventory.totalCount = inventories.size()
 		return inventory
 	}
