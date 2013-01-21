@@ -91,7 +91,6 @@ class PreventiveOrderViewController extends AbstractController {
 			
 		adaptParamsForList()
 		def orders = maintenanceService.searchOrder(PreventiveOrder.class,params['q'],dataLocation,equipment,params)
-		log.debug("Orders = " + orders + " , size" + orders.size() + " , params = " + params)
 		if(!request.xhr)
 			response.sendError(404)
 		this.ajaxModel(orders,dataLocation,equipment,params['q'])
@@ -103,7 +102,7 @@ class PreventiveOrderViewController extends AbstractController {
 		render(contentType:"text/json") { results = [listHtml] }
 	}
 	
-	def summaryPage = {log.debug(user.location)
+	def summaryPage = {
 		if(user.location instanceof DataLocation) redirect (controller: "preventiveOrderView", action: "list",params:['dataLocation.id':user.location.id])
 
 		def location = Location.get(params.long('location'))

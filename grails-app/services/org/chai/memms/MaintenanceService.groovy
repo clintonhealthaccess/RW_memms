@@ -78,7 +78,6 @@ class MaintenanceService {
 		def dbFieldNames = 'names_'+languageService.getCurrentLanguagePrefix();
 		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
 		def criteria = clazz.createCriteria()
-		log.debug("text = " + text)
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(equip)
 				eq('equipment',equip)
@@ -112,7 +111,7 @@ class MaintenanceService {
 		List<Maintenance> maintenances = []
 		Set<LocationLevel> skipLevels = getSkipLocationLevels()
 
-		for(DataLocation dataLocation : location.collectDataLocations(skipLevels,types)){log.debug("dataLocation = " + dataLocation)
+		for(DataLocation dataLocation : location.collectDataLocations(skipLevels,types)){
 			maintenances.add(new Maintenance(dataLocation:dataLocation,orderCount:this.getMaintenanceOrderByDataLocation(clazz,dataLocation,[:]).size()))
 		}
 		Maintenances maintenance = new Maintenances()
@@ -123,7 +122,6 @@ class MaintenanceService {
 			maintenance.maintenanceList = maintenances
 
 		maintenance.totalCount = maintenances.size()
-		log.debug(maintenances)
 		return maintenance
 	}
 
