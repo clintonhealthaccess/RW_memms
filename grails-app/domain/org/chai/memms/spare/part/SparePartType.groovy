@@ -25,36 +25,69 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms
+package org.chai.memms.spare.part
 
-import i18nfields.I18nFields
+import javax.persistence.Transient;
+
+import groovy.transform.EqualsAndHashCode;
+import org.chai.memms.inventory.Provider;
+import org.chai.memms.spare.part.SparePartStatus.Status;
+
 /**
  * @author Jean Kahigiso M.
  *
  */
 @i18nfields.I18nFields
-class Warranty{
+@EqualsAndHashCode(includes="code")
+class SparePartType {
 	
-	Date startDate
-	Boolean sameAsSupplier = false
+	String code
+	String names
 	String descriptions
-	Contact contact
+	String partNumber
 	
-	static i18nFields = ["descriptions"]
-	static embedded = ["contact","numberOfMonth"]
+	Provider manufacturer
+	
+	Date discontinuedDate
+	Date dateCreated
+	Date lastUpdated
+	
+	static i18nFields = ["descriptions","names"]
+	
+	static hasMany = [spareParts: SparePart]
 	
 	static constraints = {
-		importFrom Contact
-		startDate nullable:false, validator:{it <= new Date()} 
-		descriptions nullable: true, blank: true
-		contact nullable: true,validator:{val, obj ->
-			 if(obj.sameAsSupplier==true) return (val==null)
-			}
-		sameAsSupplier nullable: true
-		
+		code nullable: false, unique :true
+		partNumber nullable: false
+		discontinuedDate nullable: true
+		manufacturer nullable: false
 	}
 	
 	static mapping = {
+		table "memms_spare_part_type"
 		version false
+		cache true
 	}
+	
+	@Transient
+	def getInStockSpareParts(){
+		List<SparePart> inStockSpareParts =  []
+		if(!spareParts==null && !spareParts.isEmpty()){
+			for(SparePart sparePart: spareParts)
+				if(sparePart.usedOnEquipment == null && sparePart.currentStatus.equals(Status.INSTOCK))
+					inStockSpareParts.add(sparePart)
+		}
+		return inStockSpareParts
+	}
+	
+	@Transient
+	def getPendingSpareParts(){
+		//TODO add more status
+	}
+	
+	@Override
+	public String toString() {
+		return "SparePartType [code=" + code + ", partNumber=" + partNumber + "]";
+	}
+	
 }

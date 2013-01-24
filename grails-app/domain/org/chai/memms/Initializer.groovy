@@ -69,6 +69,7 @@ import org.chai.memms.preventive.maintenance.PreventiveProcess;
 import org.chai.memms.security.Role
 import org.chai.memms.security.User
 import org.chai.memms.security.User.UserType
+import org.chai.memms.spare.part.SparePartType;
 import org.chai.memms.util.Utils;
 
 public class Initializer {
@@ -671,9 +672,22 @@ public class Initializer {
 		
 		}
 	
+	public static createSparePartStructure(){
+		def sparePartOne = newSparePartType("4323", ['en':'first spare part','fr':'premier sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part",Provider.findByCode("ONE"),now())
+	}
+	
 	
 	
 	//Models definition
+	
+	//Spare Part
+	public static def newSparePartType(def code, def names, def descriptions,def partNumber,def manufacturer, def discontinuedDate){
+		def type = new SparePartType(code:code,partNumber:partNumber,manufacturer:manufacturer,discontinuedDate:discontinuedDate)
+		Utils.setLocaleValueInMap(type,names,"Names")
+		Utils.setLocaleValueInMap(type,descriptions,"Descriptions")
+		return type.save(failOnError: true)
+	}
+	
 	//Preventive Maintenance
 	public static def newDurationBasedOrder(def equipment,def addedBy,def status,def preventionResponsible,def technicianInCharge,def names,def description,def firstOccurenceOn,def closedOn,def occurency,def isRecurring,def occurInterval,def occurCount,def occurDaysOfWeek){
 		def timeDate =  newTimeDate(firstOccurenceOn)
