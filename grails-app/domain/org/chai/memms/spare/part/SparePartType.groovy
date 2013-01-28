@@ -58,6 +58,8 @@ class SparePartType {
 	
 	static constraints = {
 		code nullable: false, unique :true
+		names nullable: true, blank: true
+		descriptions nullable: true, blank: true
 		partNumber nullable: false
 		discontinuedDate nullable: true
 		manufacturer nullable: false
