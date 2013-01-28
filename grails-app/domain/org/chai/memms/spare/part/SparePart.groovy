@@ -27,6 +27,8 @@
  */
 package org.chai.memms.spare.part
 
+import java.util.Date;
+
 import groovy.transform.EqualsAndHashCode;
 
 import javax.persistence.Transient;
@@ -75,7 +77,7 @@ class SparePart {
 	
 	Date purchaseDate
 	Date dateCreated
-	Date dateUpdated
+	Date lastUpdated
 	
 	StockLocation stockLocation
 	DataLocation location
@@ -115,12 +117,42 @@ class SparePart {
 	
 	@Transient
 	def getTimeBasedStatus(){
-		//DOTO to be implemented 
+		if(!status) return null
+		SparePartStatus currentState = status.asList()[0]
+		for(SparePartStatus state : status){
+			currentState.dateOfEvent.clearTime()
+			state.dateOfEvent.clearTime()
+			if(state.dateOfEvent.after(currentState.dateOfEvent)){
+				currentState= state;
+			}
+			if(state.dateOfEvent.compareTo(currentState.dateOfEvent)==0){
+				if(state.dateCreated.after(currentState.dateCreated))
+					currentState = state
+				if(state.dateCreated.compareTo(currentState.dateCreated)==0)
+					currentState = (currentState.id > state.id)?currentState:state
+			}
+			
+		}
+		return currentState
+	}
+	def beforeUpdate(){
+		dateUpdated = new Date()
+	}
+	
+	def beforeValidate(){
+		this.getGenerateAndSetCode()
 	}
 	
 	@Transient
 	def getGenerateAndSetCode(){
-		//DOTO to be implemented
+		if(!code){
+			def randomInt = RandomUtils.nextInt(99999)
+			def now = new Date()
+			def sparePartCode = "${dataLocation.code}-${randomInt}-${now.month}-${now.year+1900}"
+			if(log.isDebugEnabled()) log.debug("Generated code:" + sparePartCode)
+			if(SparePart.findByCode(sparePartCode.toString()) == null) code = sparePartCode
+			else getGenerateAndSetCode()
+		}
 	}
 	
 	String toString() {

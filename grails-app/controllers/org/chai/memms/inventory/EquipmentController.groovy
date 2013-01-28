@@ -53,8 +53,6 @@ import java.util.Set
  *
  */
 class EquipmentController extends AbstractEntityController{
-	
-	def grailsApplication
 	def equipmentStatusService
 
 
