@@ -66,7 +66,7 @@ class DurationBasedOrderController extends AbstractEntityController {
 		        		eq("dataLocation",dataLocation)
 		        	}
 	       		 }
-	        	between("openOn.timeDate",startRange,endRange)
+	        	between("firstOccurenceOn.timeDate",startRange,endRange)
         	}
         }
         orders.each { order ->

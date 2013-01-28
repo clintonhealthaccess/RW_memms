@@ -31,7 +31,6 @@ package org.chai.memms.preventive.maintenance
  * @author Jean Kahigiso M.
  *
  */
-@i18nfields.I18nFields
 class WorkBasedOrder extends PreventiveOrder{
 	
 	enum WorkIntervalType{
