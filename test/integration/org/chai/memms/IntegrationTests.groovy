@@ -40,6 +40,10 @@ import org.chai.location.DataLocation
 import org.chai.location.DataLocationType
 import org.chai.location.Location
 import org.chai.location.LocationLevel
+import org.chai.memms.preventive.maintenance.DurationBasedOrder;
+import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderType;
+import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatus;
+import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventionResponsible;
 import org.chai.memms.inventory.Equipment
 import org.chai.memms.inventory.Equipment.Donor;
 import org.chai.memms.inventory.Equipment.PurchasedBy;
@@ -160,6 +164,13 @@ abstract class IntegrationTests extends IntegrationSpec {
 		
 
 		equipment.save(failOnError: true)
+	}
+
+	static def newDurationBasedOrder(def equipment, def addedBy, def firstOccurenceOn, def occurency) {
+		new DurationBasedOrder(equipment: equipment, addedBy: addedBy, description: 'description',
+			type: PreventiveOrderType.DURATIONBASED, status: PreventiveOrderStatus.OPEN, preventionResponsible: PreventionResponsible.SERVICEPROVIDER,
+			firstOccurenceOn: firstOccurenceOn, occurency: occurency
+		).save(failOnError: true)
 	}
 
 	static def getLocationLevels(def levels) {

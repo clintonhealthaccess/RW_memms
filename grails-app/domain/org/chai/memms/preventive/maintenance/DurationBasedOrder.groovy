@@ -27,17 +27,18 @@
  */
 package org.chai.memms.preventive.maintenance
 
+import org.joda.time.DateTime
 
 /**
  * @author Jean Kahigiso M.
  *
  */
-@i18nfields.I18nFields
 class DurationBasedOrder extends PreventiveOrder {
 	
 	enum OccurencyType{
 		
 		NONE("none"),
+		DAYS_OF_WEEK("days_of_week"),
 		DAILY("daily"),
 		WEEKLY("weekly"),
 		MONTHLY("monthly"),
@@ -49,12 +50,8 @@ class DurationBasedOrder extends PreventiveOrder {
 		String getKey(){ return name() }
 	}
 	
-
 	OccurencyType occurency
-	Boolean isRecurring = true
-	
 	Integer occurInterval = 1
-	Integer occurCount
 	
 	static hasMany = [occurDaysOfWeek: Integer]
 	
@@ -63,28 +60,94 @@ class DurationBasedOrder extends PreventiveOrder {
 		version false
 	}
 	
-	static constraints ={
+	static constraints = {
+		
 		importFrom PreventiveOrder, excludes:["closedOn"]
-		occurency nullable: false, inList:[OccurencyType.DAILY,OccurencyType.WEEKLY,OccurencyType.MONTHLY,OccurencyType.YEARLY]
-		closedOn nullable: true, validator:{val, obj ->
-			if(val!=null) return (obj.occurCount!=null)
-		}
-		occurCount nullable: true
+		occurency nullable: false
+		closedOn nullable: true
 		occurDaysOfWeek validator :{val, obj ->
-			if(obj.occurency.equals(OccurencyType.WEEKLY) && !val)  return false
-			if(!obj.occurency.equals(OccurencyType.WEEKLY) && val)  return false
+			if (obj.occurency == OccurencyType.DAYS_OF_WEEK) {
+				log.debug("checking list size of ${val}")
+				return val != null && val.size() > 0
+			}
 		}
 		
 	}
 
 	def updateOccurDaysOfWeek(){
-		if(!occurency.equals(OccurencyType.WEEKLY)){
+		if(!occurency.equals(OccurencyType.DAYS_OF_WEEK)){
 			occurDaysOfWeek?.clear()
 		}
 	}
 
 	def beforeUpdate(){
 		updateOccurDaysOfWeek()
+	}
+	
+	def getOccurCount() {
+		return getOccurencesBetween(firstOccurenceOn.timeDate, new Date()).size()
+	}
+	
+	/**
+	 * Returns a list of all dates when this duration based order will be 
+	 * occurring between the indicated period of time
+	 */ 
+	def getOccurencesBetween(Date start, Date end) {
+		log.debug("getOccurencesBetween(${start}, ${end})")
+		
+		def dates = []
+		def occurence = firstOccurenceOn.timeDate
+		
+		// let's loop until we reach the end of the range
+		while (occurence.before(end) || occurence.equals(end)) {
+			DateTime dateTime = new DateTime(occurence)
+			
+			// if we are after start, we add to the dates
+			if (occurence.after(start) || occurence.equals(start)) {
+				if (occurency != OccurencyType.DAYS_OF_WEEK || dateTime.getDayOfWeek() in occurDaysOfWeek)
+				dates << occurence
+			}
+			
+			switch(occurency) {
+				case OccurencyType.DAYS_OF_WEEK:
+					def sortedDaysOfWeek = occurDaysOfWeek.sort()
+					log.debug("found days of week: ${sortedDaysOfWeek}")
+					
+					for (def dayOfWeek : sortedDaysOfWeek) {
+						def newDateTime = dateTime.withDayOfWeek(dayOfWeek)
+						log.debug("comparing new date ${newDateTime} with ${dateTime}")
+						
+						if (newDateTime.toDate().after(dateTime.toDate())) {
+							log.debug("found new date ${newDateTime}")
+							occurence = newDateTime.toDate()
+							break;
+						}
+					}
+					if (dateTime.toDate().equals(occurence)) {
+						occurence = dateTime.plusWeeks(1).withDayOfWeek(sortedDaysOfWeek[0]).toDate()
+					}
+				break
+				case OccurencyType.DAILY:
+					occurence = dateTime.plusDays(occurInterval).toDate()
+				break
+				case OccurencyType.WEEKLY:
+					occurence = dateTime.plusWeeks(occurInterval).toDate()
+				break
+				case OccurencyType.MONTHLY:
+					occurence = dateTime.plusMonths(occurInterval).toDate()
+				break
+				case OccurencyType.YEARLY:
+					occurence = dateTime.plusYears(occurInterval).toDate()
+				break
+				case OccurencyType.NONE:
+					// this will break the while loop and exit
+					occurence = end + 1;
+				break
+			}
+		}
+
+		log.debug("getOccurencesBetween(...)=${dates}")
+		return dates
 	}
 	
 	Integer getPlannedPrevention(){

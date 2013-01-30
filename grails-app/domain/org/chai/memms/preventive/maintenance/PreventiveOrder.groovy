@@ -42,6 +42,7 @@ import org.chai.memms.TimeDate
 @i18nfields.I18nFields
 public abstract class PreventiveOrder extends MaintenanceOrder {
 	
+	// fterrier: why this if there is a class to distinguish them?
 	enum PreventiveOrderType{
 		
 		NONE("none"),
@@ -68,7 +69,7 @@ public abstract class PreventiveOrder extends MaintenanceOrder {
 	enum PreventionResponsible{
 		
 		NONE("none"),
-		SERVIDEPROVIDER("service.provider"),
+		SERVICEPROVIDER("service.provider"),
 		DEPARTMENTUSER("department.user"),
 		HCTITULAIRE("hc.titulaire"),
 		HCTECHNICIAN("hc.technician")
@@ -106,7 +107,7 @@ public abstract class PreventiveOrder extends MaintenanceOrder {
 		closedOn nullable:true, validator:{ val, obj ->
 			if(val!=null) return (val<=new Date() && obj.status.equals(PreventiveOrderStatus.CLOSED))
 		}
-		preventionResponsible nullable:false,inList:[PreventionResponsible.HCTECHNICIAN,PreventionResponsible.HCTITULAIRE,PreventionResponsible.SERVIDEPROVIDER,PreventionResponsible.DEPARTMENTUSER]
+		preventionResponsible nullable:false,inList:[PreventionResponsible.HCTECHNICIAN,PreventionResponsible.HCTITULAIRE,PreventionResponsible.SERVICEPROVIDER,PreventionResponsible.DEPARTMENTUSER]
 		technicianInCharge nullable:true, validator:{ val, obj ->
 			if(obj.preventionResponsible.equals(PreventionResponsible.HCTECHNICIAN)) return (val!=null)
 		}

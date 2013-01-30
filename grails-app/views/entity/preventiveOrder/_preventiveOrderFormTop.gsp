@@ -27,6 +27,8 @@
 	  		</div>
   		</g:if>	
 
+		<g:i18nInput name="names" label="${message(code:'entity.names.label')}" bean="${order}" field="names"/>
+
    		<g:textarea name="description" rows="12" width="380" label="${message(code:'entity.description.label')}"  bean="${order}" field="description" value="${order.description}"/>
       <g:if test="${order.id != null}">
    		   <g:selectFromEnum name="status" bean="${order}" values="${PreventiveOrderStatus.values()}" field="status"  label="${message(code:'entity.status.label')}"/>

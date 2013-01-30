@@ -10,8 +10,10 @@ import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderType
 import org.chai.memms.security.User.UserType;
 import org.chai.memms.util.Utils;
 import org.chai.location.DataLocation
+import grails.validation.ValidationException
 
 class DurationBasedOrderSpec extends IntegrationTests {
+	
 	def "can create and save a durration based order"() {
 		setup:
 		setupLocationTree()
@@ -21,7 +23,32 @@ class DurationBasedOrderSpec extends IntegrationTests {
 		when:
 		//TODO the firstOccurenceOn time needs to have a "24:60:60", otherwise the condition would fail at times later than these
 		def order  = new DurationBasedOrder(equipment: equipment,addedBy: addedBy,type: PreventiveOrderType.DURATIONBASED,status: PreventiveOrderStatus.CLOSED,description: "test",
-			preventionResponsible: PreventionResponsible.SERVIDEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: OccurencyType.DAILY).save(failOnError:true)
+			preventionResponsible: PreventionResponsible.SERVICEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: OccurencyType.DAILY).save(failOnError:true)
+		
+		then:
+		DurationBasedOrder.count() == 1		
+	}
+	
+	def "if occurence type is DAYS_OF_WEEK, then a list of days must be specified"() {
+		setup:
+		setupLocationTree()
+		setupEquipment()
+		def addedBy = newUser("addedBy", CODE(123))
+		def equipment = Equipment.findBySerialNumber(CODE(123))
+		
+		when:
+		//TODO the firstOccurenceOn time needs to have a "24:60:60", otherwise the condition would fail at times later than these
+		def order  = new DurationBasedOrder(equipment: equipment,addedBy: addedBy,type: PreventiveOrderType.DURATIONBASED,status: PreventiveOrderStatus.CLOSED,description: "test",
+			preventionResponsible: PreventionResponsible.SERVICEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: OccurencyType.DAYS_OF_WEEK)
+		order.save(failOnError: true)
+			
+		then:
+		thrown ValidationException
+
+		when:
+		order.occurDaysOfWeek = [1, 3]
+		order.save(failOnError: true)
+		
 		then:
 		DurationBasedOrder.count() == 1
 	}
@@ -36,10 +63,10 @@ class DurationBasedOrderSpec extends IntegrationTests {
 		
 		when:
 		def orderWrong  = new DurationBasedOrder(equipment: equipment,addedBy: addedBy,type: PreventiveOrderType.DURATIONBASED,status: PreventiveOrderStatus.CLOSED,description: "test",lastModifiedBy:lastModifiedByUser,
-			preventionResponsible: PreventionResponsible.SERVIDEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: OccurencyType.DAILY).save()
+			preventionResponsible: PreventionResponsible.SERVICEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: OccurencyType.DAILY).save()
 		
 		def orderRight  = new DurationBasedOrder(equipment: equipment,addedBy: addedBy,type: PreventiveOrderType.DURATIONBASED,status: PreventiveOrderStatus.CLOSED,description: "test",lastModifiedBy:lastModifiedByUser,lastUpdated:Initializer.now()-1,
-			preventionResponsible: PreventionResponsible.SERVIDEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: OccurencyType.DAILY).save(failOnError:true)
+			preventionResponsible: PreventionResponsible.SERVICEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: OccurencyType.DAILY).save(failOnError:true)
 		then:
 		DurationBasedOrder.count() == 1
 		orderWrong == null
@@ -53,9 +80,9 @@ class DurationBasedOrderSpec extends IntegrationTests {
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		when:
 		def orderFail  = new DurationBasedOrder(equipment: equipment,addedBy: addedBy,type: PreventiveOrderType.DURATIONBASED,status: PreventiveOrderStatus.CLOSED,description: "test",lastUpdated:Initializer.now()+1,
-				preventionResponsible: PreventionResponsible.SERVIDEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: OccurencyType.DAILY).save()
+				preventionResponsible: PreventionResponsible.SERVICEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: OccurencyType.DAILY).save()
 		def orderPass  = new DurationBasedOrder(equipment: equipment,addedBy: addedBy,type: PreventiveOrderType.DURATIONBASED,status: PreventiveOrderStatus.CLOSED,description: "test",lastUpdated:Initializer.now(),
-				preventionResponsible: PreventionResponsible.SERVIDEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: OccurencyType.DAILY).save(failOnError:true)
+				preventionResponsible: PreventionResponsible.SERVICEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: OccurencyType.DAILY).save(failOnError:true)
 
 		then:
 		DurationBasedOrder.count() == 1
@@ -84,7 +111,7 @@ class DurationBasedOrderSpec extends IntegrationTests {
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		when:
 		def order  = new DurationBasedOrder(equipment: equipment,addedBy: addedBy,type: PreventiveOrderType.NONE,status: PreventiveOrderStatus.CLOSED,description: "test",
-			preventionResponsible: PreventionResponsible.SERVIDEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: OccurencyType.DAILY).save()
+			preventionResponsible: PreventionResponsible.SERVICEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: OccurencyType.DAILY).save()
 		then:
 		DurationBasedOrder.count() == 0
 		order == null
@@ -153,7 +180,7 @@ class DurationBasedOrderSpec extends IntegrationTests {
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		when:
 		def order  = new DurationBasedOrder(equipment: equipment,addedBy: addedBy,type: PreventiveOrderType.DURATIONBASED,status: PreventiveOrderStatus.CLOSED,description: "test",
-			preventionResponsible: PreventionResponsible.SERVIDEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: OccurencyType.NONE).save()
+			preventionResponsible: PreventionResponsible.SERVICEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: OccurencyType.NONE).save()
 		then:
 		DurationBasedOrder.count() == 0
 		order == null

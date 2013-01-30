@@ -60,34 +60,34 @@ class DurationBasedOrderController extends AbstractEntityController {
 		def endRange = new Instant(params.long('end')  * 1000L).toDate()
 
         def orders = DurationBasedOrder.withCriteria {
-        	and{
-        		or{
-		        	equipment{
-		        		eq("dataLocation",dataLocation)
-		        	}
-	       		 }
-	        	between("firstOccurenceOn.timeDate",startRange,endRange)
+        	and {
+		        equipment{
+		        	eq("dataLocation",dataLocation)
+		        }
         	}
         }
+
+		log.debug("found order list ${orders}")
         orders.each { order ->
-            def dates = preventiveOrderService.findOccurrencesInRange(order, startRange, endRange)
+			if (log.debugEnabled) log.debug("checking order ${order} for occurences")
+	
+            def dates = order.getOccurencesBetween(startRange, endRange)
 
             dates.each { date ->
                 DateTime startTime = new DateTime(date)
                 DateTime endTime = startTime.plusMinutes(order.durationMinutes)
                 orderList << [
-                    		id: order.id,
-	                        title: order.names,
-	                        allDay: false,
-                    	    start: (startTime.toInstant().millis / 1000L),
-                    	    end: (endTime.toInstant().millis / 1000L)	
-                			]
+                    id: order.id,
+					title: order.names,
+					allDay: false,
+					start: (startTime.toInstant().millis / 1000L),
+					end: (endTime.toInstant().millis / 1000L)	
+				]
             }
         }
+		if (log.debugEnabled) log.debug("found occurrences ${orderList}")
+
         withFormat {
-            html {
-                [orderInstanceList: orderList]
-            }
             json {
                 render orderList as JSON
             }
