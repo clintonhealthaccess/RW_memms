@@ -67,7 +67,7 @@ class DurationBasedOrderController extends AbstractEntityController {
         	}
         }
 
-		log.debug("found order list ${orders}")
+		if(log.isDebugEnabled()) log.debug("found order list ${orders}")
         orders.each { order ->
 			if (log.debugEnabled) log.debug("checking order ${order} for occurences")
 	

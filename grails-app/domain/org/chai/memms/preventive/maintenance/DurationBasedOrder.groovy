@@ -115,10 +115,10 @@ class DurationBasedOrder extends PreventiveOrder {
 					
 					for (def dayOfWeek : sortedDaysOfWeek) {
 						def newDateTime = dateTime.withDayOfWeek(dayOfWeek)
-						log.debug("comparing new date ${newDateTime} with ${dateTime}")
+						if(log.isDebugEnabled()) log.debug("comparing new date ${newDateTime} with ${dateTime}")
 						
 						if (newDateTime.toDate().after(dateTime.toDate())) {
-							log.debug("found new date ${newDateTime}")
+							if(log.isDebugEnabled()) log.debug("found new date ${newDateTime}")
 							occurence = newDateTime.toDate()
 							break;
 						}
