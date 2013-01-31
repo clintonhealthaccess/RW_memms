@@ -67,8 +67,9 @@ class EquipmentStatus {
 	static i18nFields = ["reasons"]
 	
 	static constraints = {
-		dateOfEvent nullable:false, validator:{ val, obj ->
-			return (val <= new Date()) &&  (val.after(obj.equipment.purchaseDate) || (val.compareTo(obj.equipment.purchaseDate)==0))
+		dateOfEvent nullable:false, validator:{val, obj ->
+			//TODO be uncomment after first data collection
+			return (val <= new Date()) //&&  (val.after(obj.equipment.purchaseDate) || (val.compareTo(obj.equipment.purchaseDate)==0))
 		} 
 		changedBy nullable: false 
 		status blank: false, nullable: false, inList:[Status.OPERATIONAL,Status.PARTIALLYOPERATIONAL,Status.INSTOCK,Status.UNDERMAINTENANCE,Status.FORDISPOSAL,Status.DISPOSED]

@@ -48,8 +48,8 @@
 				<td>
 					<g:listCheckBox name="obsolete" id="${equipment.id}" checked="${(!equipment.obsolete)?:'checked'}"/>
 				</td>
-				<td>${equipment.manufacturer.contact.contactName}</td>
-				<td>${equipment.supplier.contact.contactName}</td>
+				<td>${equipment.manufacturer?.contact?.contactName}</td>
+				<td>${equipment.supplier?.contact?.contactName}</td>
 				
 				
 				<td>${message(code: equipment.purchaser?.messageCode+'.'+equipment.purchaser?.name)}</td>

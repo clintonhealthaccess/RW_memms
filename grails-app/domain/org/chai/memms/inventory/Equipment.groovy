@@ -131,11 +131,14 @@ public class Equipment {
 		lastUpdated nullable:true, validator:{ val, obj ->
 			if(val != null) return (obj.lastUpdated!=null && (obj.lastUpdated.after(obj.dateCreated) || obj.lastUpdated.compareTo(obj.dateCreated)==0))
 		}
+		model nullable: true
 		currentStatus nullable:true,validator:{
 			if(it!=null) return it in [Status.OPERATIONAL,Status.PARTIALLYOPERATIONAL,Status.INSTOCK,Status.UNDERMAINTENANCE,Status.FORDISPOSAL,Status.DISPOSED]
 		}
-		supplier nullable: false
-		manufacturer nullable: false
+		//TODO nullable has to be false, but it is true for first iteration
+		supplier nullable: true
+		//TODO nullable has to be false, but it is true for first iteration
+		manufacturer nullable: true
 		serviceProvider nullable: true, validator:{val, obj ->
 			if(val == null) return (obj.serviceContractStartDate==null && obj.serviceContractPeriod==null)
 		}
@@ -148,8 +151,11 @@ public class Equipment {
 		}
 		
 		serialNumber nullable: false, blank: false,  unique: true
-		purchaseCost nullable: true, validator:{ if(it!=null) return (it>=0) }
-		purchaser nullable: false, inList:[PurchasedBy.BYFACILITY,PurchasedBy.BYMOH,PurchasedBy.BYDONOR]
+
+		purchaseCost nullable: true, blank: true, validator:{ if(it!=null) return (it>0) }
+		//TODO nullable has to be false, but it is true for first iteration
+		//The value none have to be removed from valid answer
+		purchaser nullable: false, inList:[PurchasedBy.NONE,PurchasedBy.BYFACILITY,PurchasedBy.BYMOH,PurchasedBy.BYDONOR]
 		donor nullable:true,inList:[Donor.OTHERNGO,Donor.MOHPARTNER,Donor.OTHERS,Donor.INDIVIDUAL], validator:{ val, obj ->
 			if(obj.purchaser == PurchasedBy.BYDONOR) return (val!=null)
 		}
@@ -159,9 +165,14 @@ public class Equipment {
 		currency  nullable: true, blank: true, inList: ["RWF","USD","EUR"], validator:{ val, obj ->
 			if(obj.purchaseCost != null) return (val != null)
 		}
-		expectedLifeTime nullable: false, validator:{it.numberOfMonths >= 0}
+
+		//TODO nullable has to be false, but it is true for first iteration
+		expectedLifeTime nullable: true, validator:{
+			if(it==null) return true 
+			else return (it.numberOfMonths >= 0)
+		}
 		serviceContractPeriod nullable: true, validator:{ val, obj ->
-			if(val==null) return (obj.serviceContractStartDate==null && obj.serviceProvider==null)
+			if(val==null) return (obj.serviceContractStartDate == null && obj.serviceProvider == null)
 			if(val!=null) return (val.numberOfMonths >= 0)
 		}
 		serviceContractStartDate nullable: true, blank: true, validator:{ val, obj ->
@@ -169,10 +180,12 @@ public class Equipment {
 			if(val==null) return (obj.serviceContractPeriod==null && obj.serviceProvider==null)
 		}
 		room nullable: true, blank: true
-		
-		manufactureDate nullable: false, blank: false, validator:{it <= new Date()}
-		purchaseDate nullable: false, blank: false, validator:{ val, obj ->
-			return  ((val <= new Date()) && val.after(obj.manufactureDate) || (val.compareTo(obj.manufactureDate)==0))
+		//TODO nullable has to be false, but it is true for first iteration
+		manufactureDate nullable: true, blank: false, validator:{it <= new Date()}
+		//TODO nullable has to be false, but it is true for first iteration
+		purchaseDate nullable: true, blank: false, validator:{ val, obj ->
+			//TODO uncomment when fix
+			//return  ((val <= new Date()) && val.after(obj.manufactureDate) || (val.compareTo(obj.manufactureDate)==0))
 		}
 		descriptions nullable: true, blank: true
 		obsolete nullable: false
@@ -197,10 +210,10 @@ public class Equipment {
 		if(!code){
 			def randomInt = RandomUtils.nextInt(99999)
 			def now = new Date()
-			def equipmentCode = "${dataLocation.code}-${randomInt}-${now.month}-${now.year+1900}"
+			def equipmentCode = "${dataLocation.code}-${randomInt}-${now.month+1}-${now.year+1900}"
 			if(log.isDebugEnabled()) log.debug("Generated code:" + equipmentCode)
 			if(Equipment.findByCode(equipmentCode.toString()) == null) code = equipmentCode 
-			else genarateEquipmentCode()
+			else genarateAndSetEquipmentCode()
 		}
 	}
 	
