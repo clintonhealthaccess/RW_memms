@@ -793,8 +793,7 @@ public class Initializer {
 			supplier:supplier,
 			currentStatus:currentStatus,
 			addedBy:addedBy,
-			lastModifiedBy:lastModifiedBy,
-			lastModifiedOn:lastModifiedOn
+			lastModifiedBy:lastModifiedBy
 			);
 		Utils.setLocaleValueInMap(equipment,descriptions,"Descriptions")
 		return equipment.save(failOnError: true,flush:true)

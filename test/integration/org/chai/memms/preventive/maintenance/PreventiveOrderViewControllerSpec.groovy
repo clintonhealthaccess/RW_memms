@@ -29,18 +29,18 @@ class PreventiveOrderViewControllerSpec extends IntegrationTests {
 		def equipmentDurationBasedOrderTwo = newEquipment(CODE(125),DataLocation.findByCode(BUTARO))
 		def equipmentWorkBasedOrderTwo = newEquipment(CODE(126),DataLocation.findByCode(BUTARO))
 		//Duration based orders
-		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description one",
-			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
-		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description two",
-			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
-		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderTwo,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description three",
-			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
+		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"test"],"description one",
+			Initializer.now()+1,null,OccurencyType.DAILY,1,null)
+		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"test"],"description two",
+			Initializer.now()+1,null,OccurencyType.DAILY,1,null)
+		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderTwo,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"test"],"description three",
+			Initializer.now()+1,null,OccurencyType.DAILY,1,null)
 		//Work Based Orders
-		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"testing"],"description one",
+		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"testing"],"description one",
 			Initializer.now()+1,null,WorkIntervalType.NONE,1)
-		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"testing"],"description one",
+		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"testing"],"description one",
 			Initializer.now()+1,null,WorkIntervalType.NONE,1)
-		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderTwo, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description one",
+		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderTwo, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"test"],"description one",
 			Initializer.now()+1,null,WorkIntervalType.NONE,1)
 		setupSecurityManager(newSystemUser("user", "user", DataLocation.findByCode(BUTARO)))
 		preventiveOrderViewController = new PreventiveOrderViewController()
@@ -49,6 +49,7 @@ class PreventiveOrderViewControllerSpec extends IntegrationTests {
 		then:
 		preventiveOrderViewController.response.redirectedUrl == '/preventiveOrderView/list?dataLocation.id=' + DataLocation.findByCode(BUTARO).id
 	}
+
 	
 	def "sends a list of null maintenance when accessing summaryPage by a user with a location without specifying the location"(){
 		setup:
@@ -61,18 +62,18 @@ class PreventiveOrderViewControllerSpec extends IntegrationTests {
 		def equipmentWorkBasedOrderTwo = newEquipment(CODE(126),DataLocation.findByCode(BUTARO))
 		
 		//Duration based orders
-		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description one",
-			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
-		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description two",
-			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
-		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderTwo,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description three",
-			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
+		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"test"],"description one",
+			Initializer.now()+1,null,OccurencyType.DAILY,1,null)
+		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"test"],"description two",
+			Initializer.now()+1,null,OccurencyType.DAILY,1,null)
+		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderTwo,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"test"],"description three",
+			Initializer.now()+1,null,OccurencyType.DAILY,1,null)
 		//Work Based Orders
-		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"testing"],"description one",
+		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"testing"],"description one",
 			Initializer.now()+1,null,WorkIntervalType.NONE,1)
-		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"testing"],"description one",
+		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"testing"],"description one",
 			Initializer.now()+1,null,WorkIntervalType.NONE,1)
-		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderTwo, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description one",
+		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderTwo, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"test"],"description one",
 			Initializer.now()+1,null,WorkIntervalType.NONE,1)
 		setupSecurityManager(newSystemUser("user", "user", Location.findByCode(GITARAMA)))
 		preventiveOrderViewController = new PreventiveOrderViewController()
@@ -94,18 +95,18 @@ class PreventiveOrderViewControllerSpec extends IntegrationTests {
 		def equipmentWorkBasedOrderTwo = newEquipment(CODE(126),DataLocation.findByCode(BUTARO))
 		
 		//Duration based orders
-		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description one",
-			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
-		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description two",
-			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
-		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderTwo,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description three",
-			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
+		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"test"],"description one",
+			Initializer.now()+1,null,OccurencyType.DAILY,1,null)
+		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"test"],"description two",
+			Initializer.now()+1,null,OccurencyType.DAILY,1,null)
+		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderTwo,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"test"],"description three",
+			Initializer.now()+1,null,OccurencyType.DAILY,1,null)
 		//Work Based Orders
-		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"testing"],"description one",
+		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"testing"],"description one",
 			Initializer.now()+1,null,WorkIntervalType.NONE,1)
-		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"testing"],"description one",
+		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"testing"],"description one",
 			Initializer.now()+1,null,WorkIntervalType.NONE,1)
-		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderTwo, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description one",
+		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderTwo, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"test"],"description one",
 			Initializer.now()+1,null,WorkIntervalType.NONE,1)
 		setupSecurityManager(newSystemUser("user", "user", Location.findByCode(SOUTH)))
 		preventiveOrderViewController = new PreventiveOrderViewController()
@@ -128,18 +129,18 @@ class PreventiveOrderViewControllerSpec extends IntegrationTests {
 		def equipmentWorkBasedOrderTwo = newEquipment(CODE(126),DataLocation.findByCode(BUTARO))
 		
 		//Duration based orders
-		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description one",
-			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
-		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description two",
-			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
-		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderTwo,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description three",
-			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
+		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"test"],"description one",
+			Initializer.now()+1,null,OccurencyType.DAILY,1,null)
+		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"test"],"description two",
+			Initializer.now()+1,null,OccurencyType.DAILY,1,null)
+		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderTwo,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"test"],"description three",
+			Initializer.now()+1,null,OccurencyType.DAILY,1,null)
 		//Work Based Orders
-		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"testing"],"description one",
+		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"testing"],"description one",
 			Initializer.now()+1,null,WorkIntervalType.NONE,1)
-		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"testing"],"description one",
+		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"testing"],"description one",
 			Initializer.now()+1,null,WorkIntervalType.NONE,1)
-		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderTwo, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description one",
+		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderTwo, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"test"],"description one",
 			Initializer.now()+1,null,WorkIntervalType.NONE,1)
 		setupSecurityManager(newSystemUser("user", "user", Location.findByCode(SOUTH)))
 		preventiveOrderViewController = new PreventiveOrderViewController()
@@ -161,18 +162,18 @@ class PreventiveOrderViewControllerSpec extends IntegrationTests {
 		def equipmentWorkBasedOrderTwo = newEquipment(CODE(126),DataLocation.findByCode(BUTARO))
 		
 		//Duration based orders
-		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description one",
-			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
-		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description two",
-			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
-		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderTwo,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description three",
-			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
+		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"test"],"description one",
+			Initializer.now()+1,null,OccurencyType.DAILY,1,null)
+		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"test"],"description two",
+			Initializer.now()+1,null,OccurencyType.DAILY,1,null)
+		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderTwo,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"test"],"description three",
+			Initializer.now()+1,null,OccurencyType.DAILY,1,null)
 		//Work Based Orders
-		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"testing"],"description one",
+		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"testing"],"description one",
 			Initializer.now()+1,null,WorkIntervalType.NONE,1)
-		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"testing"],"description one",
+		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"testing"],"description one",
 			Initializer.now()+1,null,WorkIntervalType.NONE,1)
-		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderTwo, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description one",
+		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderTwo, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"test"],"description one",
 			Initializer.now()+1,null,WorkIntervalType.NONE,1)
 		preventiveOrderViewController = new PreventiveOrderViewController()
 		when:
@@ -195,18 +196,18 @@ class PreventiveOrderViewControllerSpec extends IntegrationTests {
 		def equipmentWorkBasedOrderTwo = newEquipment(CODE(126),DataLocation.findByCode(BUTARO))
 		
 		//Duration based orders
-		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description one",
-			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
-		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description two",
-			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
-		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderTwo,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description three",
-			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
+		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"test"],"description one",
+			Initializer.now()+1,null,OccurencyType.DAILY,1,null)
+		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"test"],"description two",
+			Initializer.now()+1,null,OccurencyType.DAILY,1,null)
+		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderTwo,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"test"],"description three",
+			Initializer.now()+1,null,OccurencyType.DAILY,1,null)
 		//Work Based Orders
-		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"testing"],"description one",
+		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"testing"],"description one",
 			Initializer.now()+1,null,WorkIntervalType.NONE,1)
-		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"testing"],"description one",
+		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"testing"],"description one",
 			Initializer.now()+1,null,WorkIntervalType.NONE,1)
-		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderTwo, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description one",
+		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderTwo, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"test"],"description one",
 			Initializer.now()+1,null,WorkIntervalType.NONE,1)
 		preventiveOrderViewController = new PreventiveOrderViewController()
 		when:
@@ -230,18 +231,18 @@ class PreventiveOrderViewControllerSpec extends IntegrationTests {
 		def equipmentWorkBasedOrderTwo = newEquipment(CODE(126),DataLocation.findByCode(BUTARO))
 		
 		//Duration based orders
-		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description one",
-			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
-		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description two",
-			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
-		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderTwo,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description three",
-			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
+		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"test"],"description one",
+			Initializer.now()+1,null,OccurencyType.DAILY,1,null)
+		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"test"],"description two",
+			Initializer.now()+1,null,OccurencyType.DAILY,1,null)
+		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderTwo,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"test"],"description three",
+			Initializer.now()+1,null,OccurencyType.DAILY,1,null)
 		//Work Based Orders
-		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"testing"],"description one",
+		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"testing"],"description one",
 			Initializer.now()+1,null,WorkIntervalType.NONE,1)
-		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"testing"],"description one",
+		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"testing"],"description one",
 			Initializer.now()+1,null,WorkIntervalType.NONE,1)
-		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderTwo, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description one",
+		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderTwo, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"test"],"description one",
 			Initializer.now()+1,null,WorkIntervalType.NONE,1)
 		preventiveOrderViewController = new PreventiveOrderViewController()
 		when:
@@ -265,18 +266,18 @@ class PreventiveOrderViewControllerSpec extends IntegrationTests {
 		def equipmentWorkBasedOrderTwo = newEquipment(CODE(126),DataLocation.findByCode(BUTARO))
 		
 		//Duration based orders
-		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description one",
-			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
-		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description two",
-			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
-		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderTwo,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description three",
-			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
+		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"test"],"description one",
+			Initializer.now()+1,null,OccurencyType.DAILY,1,null)
+		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"test"],"description two",
+			Initializer.now()+1,null,OccurencyType.DAILY,1,null)
+		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderTwo,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"test"],"description three",
+			Initializer.now()+1,null,OccurencyType.DAILY,1,null)
 		//Work Based Orders
-		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"testing"],"description one",
+		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"testing"],"description one",
 			Initializer.now()+1,null,WorkIntervalType.NONE,1)
-		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"testing"],"description one",
+		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"testing"],"description one",
 			Initializer.now()+1,null,WorkIntervalType.NONE,1)
-		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderTwo, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description one",
+		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderTwo, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"test"],"description one",
 			Initializer.now()+1,null,WorkIntervalType.NONE,1)
 		preventiveOrderViewController = new PreventiveOrderViewController()
 		when:
@@ -297,18 +298,18 @@ class PreventiveOrderViewControllerSpec extends IntegrationTests {
 		def equipmentWorkBasedOrderTwo = newEquipment(CODE(126),DataLocation.findByCode(BUTARO))
 		
 		//Duration based orders
-		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description one",
-			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
-		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description two",
-			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
-		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderTwo,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description three",
-			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
+		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"test"],"description one",
+			Initializer.now()+1,null,OccurencyType.DAILY,1,null)
+		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderOne,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"test"],"description two",
+			Initializer.now()+1,null,OccurencyType.DAILY,1,null)
+		Initializer.newDurationBasedOrder(equipmentDurationBasedOrderTwo,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"test"],"description three",
+			Initializer.now()+1,null,OccurencyType.DAILY,1,null)
 		//Work Based Orders
-		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"testing"],"description one",
+		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"testing"],"description one",
 			Initializer.now()+1,null,WorkIntervalType.NONE,1)
-		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"testing"],"description one",
+		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderOne, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"testing"],"description one",
 			Initializer.now()+1,null,WorkIntervalType.NONE,1)
-		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderTwo, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description one",
+		Initializer.newWorkBasedOrder( equipmentWorkBasedOrderTwo, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"test"],"description one",
 			Initializer.now()+1,null,WorkIntervalType.NONE,1)
 		preventiveOrderViewController = new PreventiveOrderViewController()
 		when:

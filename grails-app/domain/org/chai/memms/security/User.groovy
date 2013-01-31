@@ -139,7 +139,7 @@ class User {
 		passwordToken nullable: true 
 		userType nullable: false, blank: false, inList:[UserType.ADMIN,UserType.SYSTEM,UserType.TECHNICIANDH,UserType.TECHNICIANMMC,UserType.TITULAIREHC,UserType.HOSPITALDEPARTMENT,UserType.OTHER]
 		//TODO fix this
-		active(validator: {val, obj ->
+		active validator: { val, obj ->
 			//return val ? obj.location != null && (obj.permissionString || obj.roles.size() > 0) : true
 		} 
 		lastUpdated nullable: true, validator:{

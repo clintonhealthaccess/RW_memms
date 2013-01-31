@@ -63,11 +63,11 @@ class DurationBasedOrder extends PreventiveOrder {
 	static constraints = {
 		
 		importFrom PreventiveOrder, excludes:["closedOn"]
-		occurency nullable: false
+		occurency nullable: false, inList:[OccurencyType.DAYS_OF_WEEK,OccurencyType.DAILY,OccurencyType.WEEKLY,OccurencyType.MONTHLY,OccurencyType.YEARLY]
 		closedOn nullable: true
 		occurDaysOfWeek validator :{val, obj ->
 			if (obj.occurency == OccurencyType.DAYS_OF_WEEK) {
-				log.debug("checking list size of ${val}")
+				if(log.isDebugEnabled()) log.debug("checking list size of ${val}")
 				return val != null && val.size() > 0
 			}
 		}
@@ -93,7 +93,7 @@ class DurationBasedOrder extends PreventiveOrder {
 	 * occurring between the indicated period of time
 	 */ 
 	def getOccurencesBetween(Date start, Date end) {
-		log.debug("getOccurencesBetween(${start}, ${end})")
+		if(log.isDebugEnabled()) log.debug("getOccurencesBetween(${start}, ${end})")
 		
 		def dates = []
 		def occurence = firstOccurenceOn.timeDate
@@ -111,7 +111,7 @@ class DurationBasedOrder extends PreventiveOrder {
 			switch(occurency) {
 				case OccurencyType.DAYS_OF_WEEK:
 					def sortedDaysOfWeek = occurDaysOfWeek.sort()
-					log.debug("found days of week: ${sortedDaysOfWeek}")
+					if(log.isDebugEnabled()) log.debug("found days of week: ${sortedDaysOfWeek}")
 					
 					for (def dayOfWeek : sortedDaysOfWeek) {
 						def newDateTime = dateTime.withDayOfWeek(dayOfWeek)
@@ -146,7 +146,7 @@ class DurationBasedOrder extends PreventiveOrder {
 			}
 		}
 
-		log.debug("getOccurencesBetween(...)=${dates}")
+		if(log.isDebugEnabled()) log.debug("getOccurencesBetween(...)=${dates}")
 		return dates
 	}
 	
