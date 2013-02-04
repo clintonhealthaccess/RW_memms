@@ -38,8 +38,7 @@ import org.chai.memms.AbstractEntityController;
 import org.chai.memms.inventory.Equipment;
 
 class DataLocationController extends AbstractEntityController {
-	def locationService	
-	def grailsApplication
+	def locationService
 	
 	def getModel(def entity) {
 		def locations = []

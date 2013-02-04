@@ -30,6 +30,7 @@ package org.chai.memms.spare.part
 import java.util.Date;
 
 import org.chai.memms.security.User;
+import i18nfields.I18nFields
 
 /**
  * @author Jean Kahigiso M.
@@ -46,7 +47,7 @@ class SparePartStatus {
 		PENDINGORDER("pending.order"),
 		DISPOSED("disposed")
 		
-		String messageCode = "equipment.status"
+		String messageCode = "spare.part.status"
 		
 		final String name
 		Status(String name){ this.name=name }

@@ -13,7 +13,7 @@ import org.chai.memms.util.Utils;
  *
  */
 class SparePartTypeSpec extends IntegrationTests{
- 
+
 	def "can create and save an spare part type"(){
 		setup:
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
@@ -24,6 +24,5 @@ class SparePartTypeSpec extends IntegrationTests{
 		sparePartTypeTwo.save(failOnError: true)
 		then:
 		SparePartType.count() == 2
-	
 	}
 }

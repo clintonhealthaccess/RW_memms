@@ -32,6 +32,8 @@ import javax.persistence.Transient;
 import groovy.transform.EqualsAndHashCode;
 import org.chai.memms.inventory.Provider;
 import org.chai.memms.spare.part.SparePartStatus.Status;
+import org.chai.memms.spare.part.SparePart;
+import i18nfields.I18nFields;
 
 /**
  * @author Jean Kahigiso M.
@@ -62,7 +64,7 @@ class SparePartType {
 		descriptions nullable: true, blank: true
 		partNumber nullable: false
 		discontinuedDate nullable: true
-		manufacturer nullable: false
+		manufacturer nullable: true
 	}
 	
 	static mapping = {

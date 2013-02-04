@@ -37,12 +37,11 @@ import org.chai.memms.inventory.Equipment.Donor;
 import org.chai.memms.inventory.Equipment.PurchasedBy;
 import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.inventory.EquipmentType.Observation;
-import org.chai.location.Location
-import org.chai.location.DataLocation
-import org.chai.memms.security.User;
-import org.chai.memms.security.User.UserType
-import org.chai.memms.IntegrationTests
+import org.chai.location.Location;
 import org.chai.location.DataLocation;
+import org.chai.memms.security.User;
+import org.chai.memms.security.User.UserType;
+import org.chai.memms.IntegrationTests;
 import org.chai.memms.inventory.Provider.Type;
 import org.chai.memms.inventory.Equipment;
 

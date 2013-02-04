@@ -32,7 +32,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import org.chai.location.CalculationLocation;
+import org.chai.location.CalculationLocation
 import org.chai.location.DataLocation;
 import org.chai.location.DataLocationType;
 import org.chai.location.Location;
@@ -41,7 +41,12 @@ import org.chai.memms.inventory.Equipment;
 import org.chai.memms.spare.part.SparePart;
 import org.chai.memms.spare.part.SparePartStatus;
 import org.chai.memms.security.User;
-import org.chai.location.Location;
+import org.chai.memms.spare.part.SparePart.Donor;
+import org.chai.memms.spare.part.SparePart.PurchasedBy;
+import org.chai.memms.spare.part.SparePartStatus.Status;
+import org.chai.memms.spare.part.SparePartType;
+
+
 import org.supercsv.io.CsvListWriter;
 import org.supercsv.io.ICsvListWriter;
 import org.supercsv.prefs.CsvPreference;
@@ -64,7 +69,7 @@ class SparePartService {
 			//This assume that there is no sparePart without at least one status associated to it
 			sparePart.currentStatus = sparePart.timeBasedStatus.status
 		}
-		sparePart.lastModifiedBy = user
+		sparePart.lastModified = user
 		if(log.isDebugEnabled()) log.debug("Updating SparePart status params: "+sparePart)
 		sparePart.save(failOnError:true)
 	}
@@ -76,7 +81,9 @@ class SparePartService {
 		else{
 			dataLocations = []
 			dataLocations.add(user.location as DataLocation)
-			if(userService.canViewManagedSpareParts(user)) dataLocations.addAll(((DataLocation)user.location).manages)
+			//TODO to be reviewed by aphrodice
+			if(userService.canViewManagedSpareParts(user))
+			dataLocations.addAll(((DataLocation)user.location).manages)
 		}
 		
 		def dbFieldTypeNames = 'names_'+languageService.getCurrentLanguagePrefix();
@@ -86,7 +93,7 @@ class SparePartService {
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 				createAlias("type","t")
 				if(dataLocations)
-					inList('dataLocation',dataLocations)
+					inList('location',dataLocations)
 				or{
 					ilike("code","%"+text+"%")
 					ilike("serialNumber","%"+text+"%")
@@ -109,7 +116,7 @@ class SparePartService {
 		def criteria = SparePart.createCriteria();
 
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			inList('dataLocation',dataLocations)
+			inList('location',dataLocations)
 		}
 	}
 	public def getSparePartsByDataLocationAndManages(DataLocation dataLocation,Map<String, String> params) {
@@ -134,7 +141,7 @@ class SparePartService {
 		}
 	}
 	public def filterSparePart(def user, def dataLocation, def supplier, def manufacturer, def sparePartType,
-		def purchaser,def donor,def obsolete,def status,Map<String, String> params){
+		def purchaser,def donor,def sameAsManufacturer,def status,Map<String, String> params){
 		
 		def dataLocations = []
 		if(dataLocation) dataLocations.add(dataLocation)
@@ -158,8 +165,8 @@ class SparePartService {
 				eq ("purchaser",purchaser)
 			if(donor && !donor.equals(Donor.NONE))
 				eq ("donor",donor)
-			if(obsolete)
-				eq ("obsolete", (obsolete.equals('true'))?true:false)
+			if(sameAsManufacturer)
+				eq ("sameAsManufacturer", (sameAsManufacturer.equals('true'))?true:false)
 			if(status && !status.equals(Status.NONE))
 				eq ("currentStatus",status)
 		}
@@ -185,12 +192,11 @@ class SparePartService {
 					List<String> line = [
 						sparePart.serialNumber,sparePart.type.code,sparePart.type?.getNames(new Locale("en")),
 						sparePart.type?.getNames(new Locale("fr")),sparePart.model,sparePart.currentStatus,
-						sparePart.dataLocation?.code,sparePart.dataLocation?.getNames(new Locale("en")),sparePart.dataLocation?.getNames(new Locale("fr")),
-						sparePart.department?.code,sparePart.department?.getNames(new Locale("en")),sparePart.department?.getNames(new Locale("fr")),
+						sparePart.location?.code,sparePart.location?.getNames(new Locale("en")),sparePart.location?.getNames(new Locale("fr")),
 						sparePart.manufacturer?.code,sparePart.manufacturer?.contact?.contactName,
 						sparePart.manufactureDate,sparePart.supplier?.code,sparePart.supplier?.contact?.contactName,sparePart.purchaseDate,
 						sparePart.purchaseCost?:"n/a",sparePart.currency?:"n/a",
-						sparePart.purchaser.name(),sparePart.obsolete,sparePart?.warranty?.startDate,sparePart?.warrantyPeriod?.numberOfMonths?:""
+						sparePart.purchaser.name(),sparePart.sameAsManufacturer,sparePart?.warranty?.startDate,sparePart?.warrantyPeriod?.numberOfMonths?:""
 						]
 					writer.write(line)
 				}
@@ -218,9 +224,6 @@ class SparePartService {
 			headers.add(ImportExportConstant.LOCATION_CODE)
 			headers.add(ImportExportConstant.LOCATION_NAME_EN)
 			headers.add(ImportExportConstant.LOCATION_NAME_FR)
-			headers.add(ImportExportConstant.DEPARTMENT_CODE)
-			headers.add(ImportExportConstant.DEPARTMENT_NAME_EN)
-			headers.add(ImportExportConstant.DEPARTMENT_NAME_FR)
 			headers.add(ImportExportConstant.MANUFACTURER_CODE)
 			headers.add(ImportExportConstant.MANUFACTURER_CONTACT_NAME)
 			headers.add(ImportExportConstant.SPARE_PART_MANUFACTURE_DATE)
