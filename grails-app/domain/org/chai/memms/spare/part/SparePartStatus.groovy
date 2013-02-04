@@ -31,6 +31,7 @@ import java.util.Date;
 
 import org.chai.memms.security.User;
 import i18nfields.I18nFields
+import org.chai.memms.spare.part.SparePart
 
 /**
  * @author Jean Kahigiso M.
@@ -63,6 +64,19 @@ class SparePartStatus {
 	static belongsTo = [sparePart: SparePart]
 	static i18nFields = ["reasons"]
 	
+	static constraints = {
+		dateOfEvent nullable:false, validator:{ val, obj ->
+			return (val <= new Date()) &&  (val.after(obj.sparePart.purchaseDate) || (val.compareTo(obj.sparePart.purchaseDate)==0))
+		}
+		changedBy nullable: false
+		status blank: false, nullable: false, inList:[Status.OPERATIONAL,Status.INSTOCK,Status.PENDINGORDER, Status.DISPOSED]
+		reasons nullable: true, blank: true
+	}
+	
+	static mapping = {
+		version false
+		table "memms_spare_part_status"
+	}
 	
 	@Override
 	public String toString() {

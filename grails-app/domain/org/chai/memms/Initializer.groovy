@@ -71,6 +71,8 @@ import org.chai.memms.security.User
 import org.chai.memms.security.User.UserType
 import org.chai.memms.spare.part.SparePart
 import org.chai.memms.spare.part.SparePartType;
+import org.chai.memms.spare.part.SparePartStatus;
+import org.chai.memms.spare.part.SparePartStatus.Status;
 import org.chai.memms.util.Utils;
 import org.chai.memms.TimeDate;
 import org.chai.memms.TimeSpend
@@ -820,6 +822,17 @@ public class Initializer {
 		Utils.setLocaleValueInMap(type,names,"Names")
 		Utils.setLocaleValueInMap(type,descriptions,"Descriptions")
 		return type.save(failOnError: true)
+	}
+	//Spare Part status
+	public static def newSparePartStatus(def dateOfEvent,def changedBy,def value, def sparePart,def reasons){
+		def status = new SparePartStatus(dateOfEvent:dateOfEvent,changedBy:changedBy,status:value)
+		Utils.setLocaleValueInMap(status,reasons,"Reasons")
+		sparePart.addToStatus(status)
+		sparePart.save(failOnError:true,flush:true)
+		sparePart.currentStatus = value
+		sparePart.lastModified = changedBy
+		sparePart.save(failOnError:true,flush:true)
+		return status
 	}
 	// Spare part
 	static def newSparePart(def serialNumber,def purchaser,def donor,def donorName,def sameAsManufacturer,def expectedLifeTime,

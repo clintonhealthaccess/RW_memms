@@ -202,7 +202,7 @@ class SparePart {
 		return currentState
 	}
 	def beforeUpdate(){
-		dateUpdated = new Date()
+		lastUpdated = new Date()
 	}
 	
 	def beforeValidate(){

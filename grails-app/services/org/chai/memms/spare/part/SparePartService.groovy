@@ -126,7 +126,7 @@ class SparePartService {
 
 		def criteria = SparePart.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			inList('dataLocation',dataLocations)
+			inList('location',dataLocations)
 //			or{
 //				for(DataLocation dataLoc: dataLocations)
 //					eq('dataLocation',dataLoc)
@@ -137,7 +137,7 @@ class SparePartService {
 		if(log.isDebugEnabled()) log.debug("getSparePartsByDataLocation  dataLocation= "+dataLocation)
 		def criteria = SparePart.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			eq('dataLocation',dataLocation)
+			eq('location',dataLocation)
 		}
 	}
 	public def filterSparePart(def user, def dataLocation, def supplier, def manufacturer, def sparePartType,
@@ -154,7 +154,7 @@ class SparePartService {
 		def criteria = SparePart.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(dataLocations != null)
-				inList('dataLocation',dataLocations)
+				inList('location',dataLocations)
 			if(supplier != null)
 				eq ("supplier", supplier)
 			if(manufacturer != null)
