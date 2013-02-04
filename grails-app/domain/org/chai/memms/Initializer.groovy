@@ -685,7 +685,7 @@ public class Initializer {
 		def type = new SparePartType(code:code,partNumber:partNumber,manufacturer:manufacturer,discontinuedDate:discontinuedDate)
 		Utils.setLocaleValueInMap(type,names,"Names")
 		Utils.setLocaleValueInMap(type,descriptions,"Descriptions")
-		return type.save(failOnError: true)
+		return type.save(failOnError: false)
 	}
 	
 	//Preventive Maintenance

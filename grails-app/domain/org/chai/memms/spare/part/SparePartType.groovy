@@ -41,6 +41,7 @@ import org.chai.memms.spare.part.SparePartStatus.Status;
 @EqualsAndHashCode(includes="code")
 class SparePartType {
 	
+	
 	String code
 	String names
 	String descriptions
@@ -85,6 +86,13 @@ class SparePartType {
 	@Transient
 	def getPendingSpareParts(){
 		//TODO add more status
+		List<SparePart> pendingSpareParts=[]
+		if(!spareParts==null && !spareParts.isEmpty()){
+			for(SparePart sparePart:spareParts)
+			if(sparePart.usedOnEquipment == null && sparePart.currentStatus.equals(Status.PENDINGORDER))
+			pendingSpareParts.add(sparePart)
+			}
+		return pendingSpareParts
 	}
 	
 	@Override
