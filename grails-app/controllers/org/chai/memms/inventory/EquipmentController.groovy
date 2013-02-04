@@ -117,8 +117,9 @@ class EquipmentController extends AbstractEntityController{
 		boolean validStatus = true
 		if(entity.id==null){
 			//Checking if the dateOfEvent is not after parchase date and add error
-			if(!(entity.purchaseDate?.before(params.cmd.dateOfEvent) || entity.purchaseDate?.compareTo(params.cmd.dateOfEvent)==0)) 
-				params.cmd.errors.rejectValue('dateOfEvent','date.of.event.before.parchase.date')
+			//TODO to be uncommented after first data collection, as the date of purchase of old equipment might be unknown
+			//if(!(entity.purchaseDate?.before(params.cmd.dateOfEvent) || entity.purchaseDate?.compareTo(params.cmd.dateOfEvent)==0)) 
+			//	params.cmd.errors.rejectValue('dateOfEvent','date.of.event.before.parchase.date')
 			validStatus = (!params.cmd.hasErrors()) 
 			if(log.isDebugEnabled()) log.debug("Rejecting EquipmentStatus: "+params.cmd.errors)
 		}
