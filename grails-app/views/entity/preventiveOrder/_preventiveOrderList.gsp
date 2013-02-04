@@ -10,13 +10,13 @@
 			<th><g:message code="equipment.label"/></th>
 			<g:sortableColumn property="${names}" title="${message(code: 'entity.names.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
 			<g:sortableColumn property="type"  title="${message(code: 'entity.type.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
-			<th><g:message code="entity.occurency.label"/></th>
-			<th><g:message code="entity.occurency.interval.label"/></th>
+			<th><g:message code="preventive.occurance.label"/></th>
+			<th><g:message code="preventive.occurance.interval.label"/></th>
 			<g:sortableColumn property="status"  title="${message(code: 'entity.status.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
 			<g:sortableColumn property="openOn"  title="${message(code: 'preventive.order.open.on.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
 			<g:sortableColumn property="closedOn"  title="${message(code: 'preventive.order.closed.on.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
 			<th><g:message code="entity.descriptions.label"/></th>
-			<th><g:message code="preventive.order.messages.label"/></th>
+			<th><g:message code="entity.messages.label"/></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -53,7 +53,7 @@
 					${message(code: order.occurency?.messageCode+'.'+order.occurency?.name)}					
 				</td>
 				<td>
-					${order.instanceOf(DurationBasedOrder)? order.occurInterval : ''}					
+					${order.occurInterval}					
 				</td>
 				<td>
 					${message(code: order.status?.messageCode+'.'+order.status?.name)}

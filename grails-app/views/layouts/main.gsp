@@ -51,7 +51,7 @@
 						</li>
 					</g:if>
 				</shiro:notUser>
-			</ul>
+		</ul>
       
       <h2>
         <span class="right">

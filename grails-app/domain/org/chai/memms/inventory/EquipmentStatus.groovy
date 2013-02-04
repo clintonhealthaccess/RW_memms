@@ -67,7 +67,7 @@ class EquipmentStatus {
 	static i18nFields = ["reasons"]
 	
 	static constraints = {
-		dateOfEvent nullable:false, validator:{val, obj ->
+		dateOfEvent nullable:false, validator:{ val, obj ->
 			//TODO be uncomment after first data collection
 			return (val <= new Date()) //&&  (val.after(obj.equipment.purchaseDate) || (val.compareTo(obj.equipment.purchaseDate)==0))
 		} 

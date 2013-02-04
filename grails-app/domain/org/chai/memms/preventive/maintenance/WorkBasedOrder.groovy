@@ -61,10 +61,6 @@ class WorkBasedOrder extends PreventiveOrder{
 		importFrom PreventiveOrder
 	}
 	
-	Integer getPlannedPrevention(){
-		//TODO
-		return null
-	}
 	
 	@Override
 	public String toString() {

@@ -51,7 +51,6 @@ class DurationBasedOrder extends PreventiveOrder {
 	}
 	
 	OccurencyType occurency
-	Integer occurInterval = 1
 	
 	static hasMany = [occurDaysOfWeek: Integer]
 	
@@ -150,11 +149,6 @@ class DurationBasedOrder extends PreventiveOrder {
 		return dates
 	}
 	
-	Integer getPlannedPrevention(){
-		//TODO
-		return null
-	}
-
 	@Override
 	public String toString() {
 		return "DurationBasedOrder [id= "+id+" occurency=" + occurency + "]";

@@ -87,6 +87,8 @@ public abstract class PreventiveOrder extends MaintenanceOrder {
 	PreventiveOrderType type
 	PreventiveOrderStatus status
 	TimeDate firstOccurenceOn
+	Integer occurInterval = 1
+
 	
 	static belongsTo = [equipment: Equipment]
 	static hasMany = [preventions: Prevention]
@@ -99,7 +101,8 @@ public abstract class PreventiveOrder extends MaintenanceOrder {
 		lastUpdated nullable: true, validator:{ val, obj ->
 			if(val!=null) return (val <= new Date())
 		}
-		firstOccurenceOn nullable: false, validator:{it.timeDate >= new Date()}
+		occurInterval nullable: false, validator:{return (it >= 1)}
+		firstOccurenceOn nullable: false, validator:{ return (it.timeDate >= new Date())}
 		names nullable: true, blank: true
 		type nullable: false, inList:[PreventiveOrderType.DURATIONBASED,PreventiveOrderType.WORKBASED]
 		status nullable:false, inList:[PreventiveOrderStatus.OPEN,PreventiveOrderStatus.CLOSED]
@@ -129,6 +132,4 @@ public abstract class PreventiveOrder extends MaintenanceOrder {
         return new DateTime(firstOccurenceOn.timeDate).plusHours(1)
     }	
 	
-	abstract Integer getPlannedPrevention();
-
 }

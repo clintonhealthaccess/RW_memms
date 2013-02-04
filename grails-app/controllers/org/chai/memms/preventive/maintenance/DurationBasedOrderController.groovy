@@ -107,12 +107,14 @@ class DurationBasedOrderController extends AbstractEntityController {
 
 	def getModel(def entity) {
 		def equipments =  []
+		def usersInCharge = userService.getActiveUserByTypeAndLocation([UserType.HOSPITALDEPARTMENT,UserType.TITULAIREHC,UserType.TECHNICIANDH],entity.equipment?.dataLocation,[:])
+		if(entity.lastModifiedBy != null) usersInCharge.add(entity.lastModifiedBy)
 		if(entity.equipment) equipments << entity.equipment
 		[
 			order:entity,
 			equipments: equipments,
 			currencies: grailsApplication.config.site.possible.currency,
-			technicians : userService.getActiveUserByTypeAndLocation([UserType.TECHNICIANDH],entity.equipment?.dataLocation,[:])
+			technicians : usersInCharge
 		]
 	}
 

@@ -23,8 +23,9 @@
                 </span>
                 <g:message code="order.section.occurance.information.label"/>
               </h4> 
-              <g:inputPlusSelect label="${message(code:'preventive.repeats.every.label')}" bean="${order}"  inputField="occurInterval" selectField="occurency" selectFieldValues="${WorkIntervalType.values()}" />
-              <g:inputTimeDate name="openOn" field="openOn" date="${order.openOn?.date}" time="${order.openOn?.time}" label='preventive.starts.on.label' bean="${order}" dateClass="date-picker" timeClass="time-picker"/>
+              <g:selectFromEnum name="occurency" bean="${order}" values="${WorkIntervalType.values()}" field="occurency"  label="${message(code:'preventive.repeats.label')}"/>
+              <g:input name="occurInterval" dateClass="numbers_only" label="${message(code:'preventive.repeats.every.label')}" bean="${order}" field="occurInterval"/>
+              <g:inputTimeDate name="firstOccurenceOn" field="firstOccurenceOn" date="${order.firstOccurenceOn?.date}" time="${order.firstOccurenceOn?.time}" label='preventive.starts.on.label' bean="${order}" dateClass="date-picker" timeClass="time-picker"/>
             </fieldset>
           </div>
       		<div class="buttons">

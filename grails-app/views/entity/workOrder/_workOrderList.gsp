@@ -13,7 +13,7 @@
 			<g:sortableColumn property="closedOn"  title="${message(code: 'order.closed.on.label')}" params="[q:q,'equipment.id':equipment?.id,'dataLocation.id':dataLocation?.id]" />
 			<th><g:message code="work.order.description.label"/></th>
 				<th><g:message code="work.order.status.escalation.label"/></th>
-			<th><g:message code="work.order.messages.label"/></th>
+			<th><g:message code="entity.messages.label"/></th>
 		</tr>
 	</thead>
 	<tbody>
