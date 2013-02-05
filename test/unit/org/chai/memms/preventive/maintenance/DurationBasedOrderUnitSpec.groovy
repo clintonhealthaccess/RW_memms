@@ -45,11 +45,11 @@ class DurationBasedOrderUnitSpec extends UnitSpec {
 	
 	def "test occurence days of week"() {
 		setup:
-		def firstDayOfWeek = new DateTime(new Date()).withDayOfWeek(1).toDate()
-		def daily = new DurationBasedOrder(occurency: OccurencyType.DAYS_OF_WEEK, firstOccurenceOn: new TimeDate(firstDayOfWeek-1, "00:00:00"), occurDaysOfWeek: [1, 3, 5])
+		def firstDayOfWeek = new DateTime(new Date()).withDayOfWeek(1).withMillisOfSecond(0)
+		def daily = new DurationBasedOrder(occurency: OccurencyType.DAYS_OF_WEEK, firstOccurenceOn: new TimeDate(firstDayOfWeek.toDate()-1, firstDayOfWeek.toLocalTime().toString("HH:mm:ss")), occurDaysOfWeek: [1, 3, 5])
 			
 		expect:
-		daily.getOccurencesBetween(firstDayOfWeek, firstDayOfWeek + 7) == [firstDayOfWeek, firstDayOfWeek + 2, firstDayOfWeek + 4 , firstDayOfWeek + 1.weeks]
-	}
+		daily.getOccurencesBetween(firstDayOfWeek.toDate(), firstDayOfWeek.toDate() + 8) == [firstDayOfWeek.toDate(), firstDayOfWeek.toDate() + 2, firstDayOfWeek.toDate() + 4 , firstDayOfWeek.toDate() + 1.weeks]
+	} 	
 	
 }
