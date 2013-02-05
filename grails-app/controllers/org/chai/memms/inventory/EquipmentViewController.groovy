@@ -95,15 +95,11 @@ class EquipmentViewController extends AbstractController {
 			 this.ajaxModel(equipments,dataLocation,"")
 		 }else{
 		 	log.debug("not an ajax request"+params)
-			render(view:"/entity/list", model:[
-						template:"equipment/equipmentList",
-						filterTemplate:"equipment/equipmentFilter",
-						listTop:"equipment/listTop",
-						dataLocation:dataLocation,
-						entities: equipments,
-						entityCount: equipments.totalCount,
-						code: getLabel()
-						])
+			render(view:"/entity/list", model: model(equipments, dataLocation) << [
+				template:"equipment/equipmentList",
+				filterTemplate:"equipment/equipmentFilter",
+				listTop:"equipment/listTop"
+			])
 		}
 	}
 	
@@ -116,10 +112,10 @@ class EquipmentViewController extends AbstractController {
 			dataLocations.addAll((user.location as DataLocation).manages)
 			
 		render(view:"/entity/list", model:[
-					listTop:"equipment/listTop",
-					template:"equipment/selectFacility",
-					dataLocations:dataLocations
-				])
+			listTop:"equipment/listTop",
+			template:"equipment/selectFacility",
+			dataLocations:dataLocations
+		])
 	}
 	
 	def search = {
@@ -130,7 +126,11 @@ class EquipmentViewController extends AbstractController {
 			adaptParamsForList()
 			def equipments = equipmentService.searchEquipment(params['q'],user,dataLocation,params)
 			if(!request.xhr)
-				response.sendError(404)
+				render(view:"/entity/list", model: model(equipments, dataLocation) << [
+					template:"equipment/equipmentList",
+					filterTemplate:"equipment/equipmentFilter",
+					listTop:"equipment/listTop"
+				])
 			else
 				this.ajaxModel(equipments,dataLocation,params['q'])
 		}
@@ -149,8 +149,17 @@ class EquipmentViewController extends AbstractController {
 		}
 	}
 	
+	def model(def entities, def dataLocation) {
+		return [
+			entities: entities,
+			entityCount: entities.totalCount,
+			dataLocation:dataLocation,
+			code: getLabel()
+		]
+	}
+	
 	def ajaxModel(def entities,def dataLocation,def searchTerm) {
-		def model = [entities: entities,entityCount: entities.totalCount,dataLocation:dataLocation,q:searchTerm]
+		def model = model(entities, dataLocation) << [q:searchTerm]
 		def listHtml = g.render(template:"/entity/equipment/equipmentList",model:model)
 		render(contentType:"text/json") { results = [listHtml] }
 	}

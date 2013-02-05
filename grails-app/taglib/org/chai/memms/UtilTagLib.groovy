@@ -91,11 +91,6 @@ class UtilTagLib {
 		out << render(template:"/tags/util/locales", model: attrs)
 	}
 	
-//	def i18n = { attrs, body ->
-//		def text = languageService.getText(attrs['field'])
-//		out << text 
-//	}
-	
 	def prettyList = { attrs, body ->
 		def entities = attrs['entities']
 		def splitDelim = attrs['split'] ?: ','
@@ -109,6 +104,11 @@ class UtilTagLib {
 		else {}
 		
 		out << text
+	}
+	
+	def i18nField = { attrs, body ->
+		def field = attrs['field']
+		out << field + '_' + languageService.currentLanguage
 	}
 	
 	def ifText = { attrs, body ->
