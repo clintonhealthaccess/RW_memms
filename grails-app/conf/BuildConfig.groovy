@@ -63,8 +63,8 @@ grails.project.dependency.resolution = {
 		* Configure our resolver.
 		*/
 		def libResolver = new GrailsRepoResolver(null, null);
-		libResolver.addArtifactPattern("https://github.com/fterrier/repository/raw/master/[organisation]/[module]/[type]s/[artifact]-[revision].[ext]")
-		libResolver.addIvyPattern("https://github.com/fterrier/repository/raw/master/[organisation]/[module]/ivys/ivy-[revision].xml")
+		libResolver.addArtifactPattern("https://github.com/clintonhealthaccess/repository/raw/master/[organisation]/[module]/[type]s/[artifact]-[revision].[ext]")
+		libResolver.addIvyPattern("https://github.com/clintonhealthaccess/repository/raw/master/[organisation]/[module]/ivys/ivy-[revision].xml")
 		libResolver.name = "github"
         //libResolver.settings = ivySettings
 		resolver libResolver
