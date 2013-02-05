@@ -103,8 +103,9 @@ class DurationBasedOrder extends PreventiveOrder {
 			
 			// if we are after start, we add to the dates
 			if (occurence.after(start) || occurence.equals(start)) {
-				if (occurency != OccurencyType.DAYS_OF_WEEK || dateTime.getDayOfWeek() in occurDaysOfWeek)
-				dates << occurence
+				if (occurency != OccurencyType.DAYS_OF_WEEK || dateTime.getDayOfWeek() in occurDaysOfWeek) {
+					dates << occurence
+				}
 			}
 			
 			switch(occurency) {
