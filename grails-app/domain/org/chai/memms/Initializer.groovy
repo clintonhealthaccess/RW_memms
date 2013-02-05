@@ -673,13 +673,14 @@ public class Initializer {
 		}
 	
 	public static createSparePartStructure(){
-		def sparePartOne = newSparePartType("4323", ['en':'first spare part','fr':'premier sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part",Provider.findByCode("ONE"),now())
+		def sparePartOne = newSparePartType("4323", ['en':'first spare part','fr':' prm pr'],['en':'frst spr prt dscrpt','fr':' dscrpt prm pr'],"XYZ",Provider.findByCode("ONE"),now())
+	
+		
+//	def sparePartOne = newSparePartType("4323", ['en':'frst spr prt','fr':' prm pr'],['en':'frst spr prt dscrpt','fr':' dscrpt prm pr'],"XYZ",Provider.findByCode("ONE"),now())
+//		def sparePartTwo = newSparePartType("4324", ['en':'second spare part','fr':'deuxième piece de rechange'], ['en':'01/01/2015','fr':'01/01/2015'],"4324-ABC",Provider.findByCode("TWO"),now())
+//		def sparePartThree = newSparePartType("4325", ['en':'third spare part','fr':'troisième piece de rechange'], ['en':'08/31/2014','fr':'31/08/2015'],"4325-IJK",Provider.findByCode("THREE"),now())
 	}
-	
-	
-	
-	//Models definition
-	
+		
 	//Spare Part
 	public static def newSparePartType(def code, def names, def descriptions,def partNumber,def manufacturer, def discontinuedDate){
 		def type = new SparePartType(code:code,partNumber:partNumber,manufacturer:manufacturer,discontinuedDate:discontinuedDate)

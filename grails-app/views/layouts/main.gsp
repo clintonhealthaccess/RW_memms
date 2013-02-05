@@ -112,6 +112,7 @@
 			<li><a href="#"><g:message code="header.navigation.administration"/></a>
 	         	<ul class="submenu">
 					<li><a href="${createLink(controller: 'equipmentType', action:'list')}"><g:message code="equipment.type.label"/></a></li>
+					<li><a href="${createLink(controller: 'sparePartType', action:'list')}"><g:message code="spare.part.type.label"/></a></li>
 					<li><a href="${createLink(controller: 'equipmentView', action:'generalExport')}"><g:message code="equipment.export.label"/></a></li>
 					<shiro:hasPermission permission="menu:advanced">
 					<li><a href="#"><g:message code="location.label"/></a>

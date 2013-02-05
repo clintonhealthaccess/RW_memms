@@ -41,7 +41,7 @@ import org.chai.memms.spare.part.SparePartStatus.Status;
 @EqualsAndHashCode(includes="code")
 class SparePartType {
 	
-	
+
 	String code
 	String names
 	String descriptions
