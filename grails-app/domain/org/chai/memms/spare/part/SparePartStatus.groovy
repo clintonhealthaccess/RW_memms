@@ -30,8 +30,9 @@ package org.chai.memms.spare.part
 import java.util.Date;
 
 import org.chai.memms.security.User;
-import i18nfields.I18nFields
-import org.chai.memms.spare.part.SparePart
+import groovy.transform.EqualsAndHashCode;
+import org.chai.memms.spare.part.SparePart;
+import i18nfields.I18nFields;
 
 /**
  * @author Jean Kahigiso M.
@@ -40,7 +41,7 @@ import org.chai.memms.spare.part.SparePart
 @i18nfields.I18nFields
 class SparePartStatus {
 	
-	enum Status{
+	enum StatusOfSparePart{
 		
 		NONE("none"),
 		INSTOCK("in.stock"),
@@ -51,14 +52,14 @@ class SparePartStatus {
 		String messageCode = "spare.part.status"
 		
 		final String name
-		Status(String name){ this.name=name }
+		StatusOfSparePart(String name){ this.name=name }
 		String getKey() { return name() }
 	}
 	
 	Date dateOfEvent
 	Date dateCreated
 	User changedBy
-	Status status
+	StatusOfSparePart statusOfSparePart
 	String reasons
 	
 	static belongsTo = [sparePart: SparePart]
@@ -69,7 +70,7 @@ class SparePartStatus {
 			return (val <= new Date()) &&  (val.after(obj.sparePart.purchaseDate) || (val.compareTo(obj.sparePart.purchaseDate)==0))
 		}
 		changedBy nullable: false
-		status blank: false, nullable: false, inList:[Status.OPERATIONAL,Status.INSTOCK,Status.PENDINGORDER, Status.DISPOSED]
+		statusOfSparePart blank: false, nullable: false, inList:[StatusOfSparePart.OPERATIONAL,StatusOfSparePart.INSTOCK,StatusOfSparePart.PENDINGORDER, StatusOfSparePart.DISPOSED]
 		reasons nullable: true, blank: true
 	}
 	
@@ -80,7 +81,7 @@ class SparePartStatus {
 	
 	@Override
 	public String toString() {
-		return "SparePartStatus [dateOfEvent=" + dateOfEvent + ", changedBy="+ changedBy + ", status=" + status + " dateCreated=" + dateCreated + "]";
+		return "SparePartStatus [dateOfEvent=" + dateOfEvent + ", changedBy="+ changedBy + ", statusOfSparePart=" + statusOfSparePart + " dateCreated=" + dateCreated + "]";
 	}	
 
 }

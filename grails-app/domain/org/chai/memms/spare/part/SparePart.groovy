@@ -37,15 +37,13 @@ import org.chai.location.DataLocation;
 import org.chai.memms.Period;
 import org.chai.memms.Warranty;
 import org.chai.memms.inventory.Equipment;
-import org.chai.memms.inventory.Equipment.Donor;
-import org.chai.memms.inventory.Equipment.PurchasedBy;
 import org.chai.memms.inventory.Provider;
 import org.chai.memms.security.User;
 import org.chai.memms.spare.part.SparePartType;
 import org.chai.memms.spare.part.SparePartStatus;
-import org.chai.memms.spare.part.SparePartStatus.Status;
-import i18nfields.I18nFields;
+import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
 import org.apache.commons.lang.math.RandomUtils;
+import i18nfields.I18nFields;
 
 /**
  * @author Jean Kahigiso M.
@@ -81,7 +79,7 @@ class SparePart {
 		String getKey() { return name() }
 		
 	}
-	enum PurchasedBy{
+	enum SparePartPurchasedBy{
 		
 		NONE('none'),
 		BYMOH("by.moh"),
@@ -91,7 +89,7 @@ class SparePart {
 		String messageCode = "spare.part.purchased"
 		
 		final String name
-		PurchasedBy(String name){ this.name=name }
+		SparePartPurchasedBy(String name){ this.name=name }
 		String getKey() { return name() }
 		
 	}
@@ -112,7 +110,7 @@ class SparePart {
 	Provider supplier
 	Provider manufacturer
 	Warranty warranty
-	PurchasedBy purchaser
+	SparePartPurchasedBy purchaser
 	Donor donor
 	String donorName
 	//Boolean obsolete
@@ -121,7 +119,7 @@ class SparePart {
 	Date lastUpdated
 	Date manufactureDate
 
-	Status currentStatus
+	StatusOfSparePart currentStatus
 	
 	User addedBy
 	User lastModified
@@ -136,7 +134,7 @@ class SparePart {
 		names nullable: true, blank: true
 		descriptions nullable: true, blank: true
 		serialNumber nullable: true, validator: { val, obj ->
-			if(!obj.currentStatus.equals(Status.PENDINGORDER)) return (val!=null)
+			if(!obj.currentStatus.equals(StatusOfSparePart.PENDINGORDER)) return (val!=null)
 		}
 		purchaseDate nullable: true
 //		purchaseCost nullable: true, validator: {val, obj ->
@@ -162,15 +160,18 @@ class SparePart {
 			if (obj.warranty!=null) return (val!=null) && (val.numberOfMonths >= 0)
 		}
 		purchaseCost nullable: true, validator:{ if(it!=null) return (it>=0) }
-		purchaser nullable: false, inList:[PurchasedBy.BYFACILITY,PurchasedBy.BYMOH,PurchasedBy.BYDONOR]
+		purchaser nullable: false, inList:[SparePartPurchasedBy.BYFACILITY,SparePartPurchasedBy.BYMOH,SparePartPurchasedBy.BYDONOR]
 		donor nullable:true,inList:[Donor.OTHERNGO,Donor.MOHPARTNER,Donor.OTHERS,Donor.INDIVIDUAL], validator:{ val, obj ->
-			if(obj.purchaser == PurchasedBy.BYDONOR) return (val!=null)
+			if(obj.purchaser == SparePartPurchasedBy.BYDONOR) return (val!=null)
 		}
 		donorName nullable:true,blank:true, validator:{val, obj ->
-			if(obj.purchaser == PurchasedBy.BYDONOR || obj.donor !=null) return (val!=null && val!="")
+			if(obj.purchaser == SparePartPurchasedBy.BYDONOR || obj.donor !=null) return (val!=null && val!="")
 		}
 		currency  nullable: true, blank: true, inList: ["RWF","USD","EUR"], validator:{ val, obj ->
 			if(obj.purchaseCost != null) return (val != null)
+		}
+		currentStatus nullable:true,validator:{
+			if(it!=null) return it in [StatusOfSparePart.OPERATIONAL,StatusOfSparePart.INSTOCK,StatusOfSparePart.PENDINGORDER,StatusOfSparePart.DISPOSED]
 		}
 		
 	}

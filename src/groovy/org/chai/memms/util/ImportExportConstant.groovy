@@ -88,7 +88,7 @@ class ImportExportConstant {
 	public final static String SPARE_PART_MANUFACTURE_DATE = "Manufacture date"
 	public final static String SPARE_PART_PURCHASE_COST = "Cost"
 	public final static String SPARE_PART_PURCHASE_COST_CURRENCY = "Currency"
-	public final static String SPARE_PART_STATUS = "Status"
+	public final static String SPARE_PART_STATUS = "StatusOfSparePart"
 	public final static String SPARE_PART_DONATION = "Donation"
 	public final static String SPARE_PART_OBSOLETE = "Obsolete"
 	public final static String SPARE_PART_WARRANTY_START = "Warranty start"

@@ -42,8 +42,8 @@ import org.chai.memms.spare.part.SparePart;
 import org.chai.memms.spare.part.SparePartStatus;
 import org.chai.memms.security.User;
 import org.chai.memms.spare.part.SparePart.Donor;
-import org.chai.memms.spare.part.SparePart.PurchasedBy;
-import org.chai.memms.spare.part.SparePartStatus.Status;
+import org.chai.memms.spare.part.SparePart.SparePartPurchasedBy;
+import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
 import org.chai.memms.spare.part.SparePartType;
 
 
@@ -63,7 +63,7 @@ class SparePartService {
 	
 	public void updateCurrentSparePartStatus(SparePart sparePart,SparePartStatus status,User user){
 		if(status!=null){
-			sparePart.currentStatus = status.status
+			sparePart.currentStatus = status.statusOfSparePart
 			sparePart.addToStatus(status)
 		}else{
 			//This assume that there is no sparePart without at least one status associated to it
@@ -161,13 +161,13 @@ class SparePartService {
 				eq ("manufacturer", manufacturer)
 			if(sparePartType != null)
 				eq ("type", sparePartType)
-			if(purchaser && !purchaser.equals(PurchasedBy.NONE))
+			if(purchaser && !purchaser.equals(SparePartPurchasedBy.NONE))
 				eq ("purchaser",purchaser)
 			if(donor && !donor.equals(Donor.NONE))
 				eq ("donor",donor)
 			if(sameAsManufacturer)
 				eq ("sameAsManufacturer", (sameAsManufacturer.equals('true'))?true:false)
-			if(status && !status.equals(Status.NONE))
+			if(status && !status.equals(StatusOfSparePart.NONE))
 				eq ("currentStatus",status)
 		}
 	}

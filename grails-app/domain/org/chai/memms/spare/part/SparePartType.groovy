@@ -31,7 +31,7 @@ import javax.persistence.Transient;
 
 import groovy.transform.EqualsAndHashCode;
 import org.chai.memms.inventory.Provider;
-import org.chai.memms.spare.part.SparePartStatus.Status;
+import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
 import org.chai.memms.spare.part.SparePart;
 import i18nfields.I18nFields;
 
@@ -78,7 +78,7 @@ class SparePartType {
 		List<SparePart> inStockSpareParts =  []
 		if(!spareParts==null && !spareParts.isEmpty()){
 			for(SparePart sparePart: spareParts)
-				if(sparePart.usedOnEquipment == null && sparePart.currentStatus.equals(Status.INSTOCK))
+				if(sparePart.usedOnEquipment == null && sparePart.currentStatus.equals(StatusOfSparePart.INSTOCK))
 					inStockSpareParts.add(sparePart)
 		}
 		return inStockSpareParts

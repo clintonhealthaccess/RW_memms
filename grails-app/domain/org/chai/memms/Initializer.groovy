@@ -41,7 +41,6 @@ import org.chai.memms.inventory.EquipmentType
 import org.chai.memms.inventory.EquipmentType.Observation;
 import org.chai.memms.inventory.Provider
 import org.chai.memms.inventory.Equipment.PurchasedBy;
-import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.inventory.Provider.Type;
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocation;
@@ -73,6 +72,8 @@ import org.chai.memms.spare.part.SparePart
 import org.chai.memms.spare.part.SparePartType;
 import org.chai.memms.spare.part.SparePartStatus;
 import org.chai.memms.spare.part.SparePartStatus.Status;
+import org.chai.memms.inventory.EquipmentStatus.Status
+
 import org.chai.memms.util.Utils;
 import org.chai.memms.TimeDate;
 import org.chai.memms.TimeSpend
@@ -825,7 +826,7 @@ public class Initializer {
 	}
 	//Spare Part status
 	public static def newSparePartStatus(def dateOfEvent,def changedBy,def value, def sparePart,def reasons){
-		def status = new SparePartStatus(dateOfEvent:dateOfEvent,changedBy:changedBy,status:value)
+		def status = new SparePartStatus(dateOfEvent:dateOfEvent,changedBy:changedBy,statusOfSparePart:value)
 		Utils.setLocaleValueInMap(status,reasons,"Reasons")
 		sparePart.addToStatus(status)
 		sparePart.save(failOnError:true,flush:true)

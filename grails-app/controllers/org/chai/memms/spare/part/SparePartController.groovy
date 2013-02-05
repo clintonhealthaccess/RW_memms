@@ -5,7 +5,7 @@ package org.chai.memms.spare.part
 
 import java.util.Date;
 
-import org.chai.memms.spare.part.SparePartStatus.Status;
+import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
 
 /**
  * @author Aphrodice Rwagaju
@@ -66,8 +66,8 @@ class SparePartController {
 		}
 		//Making sure a disposed sparePart cannot be modified 
 		//TODO add this check to method that modified sparePart
-		if(!params.oldStatus.equals(Status.DISPOSED))
-			bindData(entity,params,[exclude:["status","dateOfEvent"]])
+		if(!params.oldStatus.equals(StatusOfSparePart.DISPOSED))
+			bindData(entity,params,[exclude:["statusOfSparePart","dateOfEvent"]])
 		if(log.isDebugEnabled()) log.debug("SparePart params: after bind  "+entity)
 	}
 
@@ -88,7 +88,7 @@ class SparePartController {
 		SparePartStatus status
 		if(entity.dataLocation) hasAccess(entity.dataLocation)
 		if(entity.id==null){
-			entity.currentStatus = Status."$params.cmd.status"
+			entity.currentStatus = StatusOfSparePart."$params.cmd.status"
 			sparePartStatusService.createSparePartStatus(user,params.cmd.status,entity,params.cmd.dateOfEvent,[:])
 		}
 		else entity.save(failOnError:true)
@@ -120,15 +120,15 @@ class SparePartController {
 }
 
 class StatusCommand {
-	Status status
+	StatusOfSparePart statusOfSparePart
 	Date dateOfEvent
 
 	static constraints = {
-		status nullable: false, inList: [Status.DISPOSED,Status.INSTOCK,Status.PENDINGORDER,Status.OPERATIONAL]
+		statusOfSparePart nullable: false, inList: [StatusOfSparePart.DISPOSED,StatusOfSparePart.INSTOCK,StatusOfSparePart.PENDINGORDER,StatusOfSparePart.OPERATIONAL]
 		dateOfEvent nullable: false
 	}
 
 	String toString(){
-		return "StatusCommand [Status "+status+" dateOfEvent: "+dateOfEvent+"]";
+		return "StatusCommand [Status "+statusOfSparePart+" dateOfEvent: "+dateOfEvent+"]";
 	}
 }
