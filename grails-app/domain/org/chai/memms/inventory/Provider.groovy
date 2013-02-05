@@ -36,7 +36,6 @@ import i18nfields.I18nFields
  * @author Jean Kahigiso M.
  *
  */
-@i18nfields.I18nFields
 @EqualsAndHashCode(includes="code")
 public class Provider{
 	

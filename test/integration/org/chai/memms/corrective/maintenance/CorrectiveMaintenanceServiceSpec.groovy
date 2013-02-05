@@ -38,6 +38,7 @@ import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
 import org.chai.memms.security.User;
 import org.chai.location.DataLocationType
 import org.chai.location.Location
+import java.util.HashSet
 
 class CorrectiveMaintenanceServiceSpec extends IntegrationTests{
 	def maintenanceService
@@ -57,7 +58,7 @@ class CorrectiveMaintenanceServiceSpec extends IntegrationTests{
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		def burera= Location.findByCode(BURERA)
 		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,user,Initializer.now(),FailureReason.NOTSPECIFIED, OrderStatus.OPENATFOSA)		
-		def types = grailsApplication.config.site.datalocationtype.checked.collect{ DataLocationType.findByCode(it) }.toSet()
+		def types = new HashSet(DataLocationType.findAllByDefaultSelected(true))
 		when:
 		def correctiveMaintenances = maintenanceService.getMaintenancesByLocation(WorkOrder.class,burera,types,[:])
 		then:
@@ -73,7 +74,7 @@ class CorrectiveMaintenanceServiceSpec extends IntegrationTests{
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		def burera= Location.findByCode(BURERA)
 		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,user,Initializer.now(),FailureReason.NOTSPECIFIED, OrderStatus.OPENATFOSA)
-		def types = grailsApplication.config.site.datalocationtype.checked.collect{ DataLocationType.findByCode(it) }.toSet()
+		def types = new HashSet(DataLocationType.findAllByDefaultSelected(true))
 		when:
 		def correctiveMaintenances = maintenanceService.getMaintenancesByLocation(WorkOrder.class,burera,types,["offset":1,"max":0 ])
 		then:

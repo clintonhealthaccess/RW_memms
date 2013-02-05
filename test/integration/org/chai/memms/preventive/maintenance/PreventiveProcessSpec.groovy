@@ -20,9 +20,9 @@ class PreventiveProcessSpec extends IntegrationTests {
 		def techInCharge = newOtherUserWithType("techInCharge", "techInCharge", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
 		def addedBy = newUser("addedBy", CODE(123))
 		def equipment = Equipment.findBySerialNumber(CODE(123))
-		def durationBasedOrder = Initializer.newDurationBasedOrder(equipment,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description",
-			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
-		def workBasedOrder = Initializer.newWorkBasedOrder( equipment, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description",
+		def durationBasedOrder = Initializer.newDurationBasedOrder(equipment,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"test"],"description",
+			Initializer.now()+1,null,OccurencyType.DAILY,1,null)
+		def workBasedOrder = Initializer.newWorkBasedOrder( equipment, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"test"],"description",
 			Initializer.now()+1,null,WorkIntervalType.NONE,1)
 		def preventionDurationBased = Initializer.newPrevention(durationBasedOrder,addedBy,Initializer.newTimeDate(Initializer.now()-1, "01:00:00"),Initializer.now(),null,["en":"descriptions"], null)
 		def preventionWorkBased = Initializer.newPrevention(workBasedOrder,addedBy,Initializer.newTimeDate(Initializer.now()-1, "01:00:00"),Initializer.now(),null,["en":"descriptions"], null)

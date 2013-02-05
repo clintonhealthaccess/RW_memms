@@ -60,7 +60,7 @@ class ProviderController  extends AbstractEntityController {
 	}
 	
 	def deleteEntity(def entity) {
-		if(entity.manufactures.size() > 0 || entity.suppliers.size() > 0 ){
+		if(entity.manufacturers.size() > 0 || entity.suppliers.size() > 0 ){
 			flash.message = message(code: 'provider.hasequipments', args: [message(code: getLabel(), default: 'entity'), params.id], default: '{0} still has associated equipments.')
 		}else super.deleteEntity(entity)
 	}

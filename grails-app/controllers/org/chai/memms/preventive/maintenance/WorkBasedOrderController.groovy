@@ -57,7 +57,7 @@ class WorkBasedOrderController extends AbstractEntityController {
 	def getModel(def entity) {
 		def equipments =  []
 		def usersInCharge = userService.getActiveUserByTypeAndLocation([UserType.HOSPITALDEPARTMENT,UserType.TITULAIREHC,UserType.TECHNICIANDH],entity.equipment?.dataLocation,[:])
-		usersInCharge << entity.lastModifiedBy
+		if(entity.lastModifiedBy != null) usersInCharge.add(entity.lastModifiedBy)
 		if(entity.equipment) equipments << entity.equipment
 
 		[

@@ -31,7 +31,6 @@ package org.chai.memms.preventive.maintenance
  * @author Jean Kahigiso M.
  *
  */
-@i18nfields.I18nFields
 class WorkBasedOrder extends PreventiveOrder{
 	
 	enum WorkIntervalType{
@@ -62,10 +61,6 @@ class WorkBasedOrder extends PreventiveOrder{
 		importFrom PreventiveOrder
 	}
 	
-	Integer getPlannedPrevention(){
-		//TODO
-		return null
-	}
 	
 	@Override
 	public String toString() {
