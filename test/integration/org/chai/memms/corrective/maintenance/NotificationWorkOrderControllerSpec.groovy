@@ -305,6 +305,7 @@ class NotificationWorkOrderControllerSpec extends IntegrationTests{
 		notificationWorkOrderController = new NotificationWorkOrderController()
 		
 		when://Get only those that are unread
+		notificationWorkOrderController.request.makeAjaxRequest()
 		notificationWorkOrderController.params.q = "one"
 		notificationWorkOrderController.search()
 		
