@@ -673,12 +673,10 @@ public class Initializer {
 		}
 	
 	public static createSparePartStructure(){
-		def sparePartOne = newSparePartType("4323", ['en':'first spare part','fr':' prm pr'],['en':'frst spr prt dscrpt','fr':' dscrpt prm pr'],"XYZ",Provider.findByCode("ONE"),now())
-	
-		
-//	def sparePartOne = newSparePartType("4323", ['en':'frst spr prt','fr':' prm pr'],['en':'frst spr prt dscrpt','fr':' dscrpt prm pr'],"XYZ",Provider.findByCode("ONE"),now())
-//		def sparePartTwo = newSparePartType("4324", ['en':'second spare part','fr':'deuxième piece de rechange'], ['en':'01/01/2015','fr':'01/01/2015'],"4324-ABC",Provider.findByCode("TWO"),now())
-//		def sparePartThree = newSparePartType("4325", ['en':'third spare part','fr':'troisième piece de rechange'], ['en':'08/31/2014','fr':'31/08/2015'],"4325-IJK",Provider.findByCode("THREE"),now())
+		def sparePartOne = newSparePartType("4323", ['en':'first spare part','fr':' premiere piece de rechange'],['en':'first spare part description','fr':' description de la premiere piece de rechange'],"4323-XYZ",Provider.findByCode("ONE"),now())
+		def sparePartTwo = newSparePartType("4324", ['en':'second spare part','fr':' deuxieme piece de rechange'],['en':'second spare part description','fr':' description de la deuxieme piece de rechange'],"4324-ABC",Provider.findByCode("TWO"),now())
+		def sparePartThree = newSparePartType("4325", ['en':'third spare part','fr':' troisieme piece de rechange'],['en':'third spare part description','fr':' description de la troisieme piece de rechange'],"4325-IJK",Provider.findByCode("THREE"),now())
+
 	}
 		
 	//Spare Part

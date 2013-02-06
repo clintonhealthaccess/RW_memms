@@ -32,6 +32,7 @@ import javax.persistence.Transient;
 import groovy.transform.EqualsAndHashCode;
 import org.chai.memms.inventory.Provider;
 import org.chai.memms.spare.part.SparePartStatus.Status;
+import org.chai.memms.spare.part.SparePart;
 
 /**
  * @author Jean Kahigiso M.
@@ -44,26 +45,22 @@ class SparePartType {
 
 	String code
 	String names
-	String descriptions
 	String partNumber
-	
-	Provider manufacturer
-	
+	String descriptions
 	Date discontinuedDate
 	Date dateCreated
 	Date lastUpdated
+	Provider manufacturer
 	
 	static i18nFields = ["descriptions","names"]
-	
-	static hasMany = [spareParts: SparePart]
-	
+	static hasMany = [spareParts: SparePart]	
 	static constraints = {
 		code nullable: false, unique :true
 		names nullable: true, blank: true
 		descriptions nullable: true, blank: true
 		partNumber nullable: false
 		discontinuedDate nullable: true
-		manufacturer nullable: false
+		manufacturer nullable: true
 	}
 	
 	static mapping = {
@@ -85,7 +82,6 @@ class SparePartType {
 	
 	@Transient
 	def getPendingSpareParts(){
-		//TODO add more status
 		List<SparePart> pendingSpareParts=[]
 		if(!spareParts==null && !spareParts.isEmpty()){
 			for(SparePart sparePart:spareParts)
