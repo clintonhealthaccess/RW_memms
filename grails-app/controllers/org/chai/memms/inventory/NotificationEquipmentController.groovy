@@ -160,9 +160,15 @@ class NotificationEquipmentController extends AbstractEntityController{
 	def filter = {NotificationEquipmentFilterCommand cmd ->
 		adaptParamsForList()
 		List<NotificationEquipment> notifications = notificationEquipmentService.filterNotifications(cmd.dataLocation,cmd.department, user, cmd.from,cmd.to,cmd.getReadStatus(), params)
-		if(!request.xhr)
-			response.sendError(404)
-		this.ajaxModel(notifications,"")
+		if(request.xhr)
+			this.ajaxModel(notifications,"")
+		else {
+			render(view:"/entity/list", model: model(notifications) << [
+				template:"notification/notificationEquipmentList",
+				filterTemplate:"notification/notificationEquipmentFilter",
+				listTop:"notification/notificationEquipmentListTop"
+			])	
+		}
 	}
 }
 

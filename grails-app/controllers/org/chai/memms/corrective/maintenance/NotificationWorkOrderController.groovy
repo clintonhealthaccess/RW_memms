@@ -190,9 +190,15 @@ class NotificationWorkOrderController extends AbstractEntityController{
 	def filter = {NotificationWorkOrderFilterCommand cmd ->
 		adaptParamsForList()
 		List<NotificationWorkOrder> notifications = notificationWorkOrderService.filterNotifications(cmd.workOrder, user, cmd.from,cmd.to,cmd.getReadStatus(), params)
-		if(!request.xhr)
-			response.sendError(404)
-		this.ajaxModel(notifications,cmd.workOrder,"")
+		if(request.xhr)
+			this.ajaxModel(notifications,cmd.workOrder,"")
+		else {
+			render(view:"/entity/list", model: model(notifications, cmd.workOrder) << [
+				template:"notification/notificationWorkOrderList",
+				filterTemplate:"notification/notificationWorkOrderFilter",
+				listTop:"notification/notificationWorkOrderListTop"
+			])
+		}
 	}
 }
 

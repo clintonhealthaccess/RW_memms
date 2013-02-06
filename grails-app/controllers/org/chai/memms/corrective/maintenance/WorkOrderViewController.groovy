@@ -151,9 +151,15 @@ class WorkOrderViewController extends AbstractController{
 		
 		adaptParamsForList()
 		def orders = workOrderService.filterWorkOrders(cmd.dataLocation,cmd.equipment,cmd.openOn,cmd.closedOn,cmd.criticality,cmd.currentStatus,params)
-		if(!request.xhr)
-			response.sendError(404)
-		this.ajaxModel(orders,cmd.dataLocation,cmd.equipment,"")
+		if(request.xhr)
+			this.ajaxModel(orders,cmd.dataLocation,cmd.equipment,"")
+		else {
+			render(view:"/entity/list", model: model(orders, cmd.dataLocation, cmd.equipment) << [
+				template:"workOrder/workOrderList",
+				filterTemplate:"workOrder/workOrderFilter",
+				listTop:"workOrder/listTop",
+			])
+		}
 	}
 	
 	def model(def entities, def dataLocation, def equipment) {

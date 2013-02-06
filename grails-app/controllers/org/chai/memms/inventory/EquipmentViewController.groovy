@@ -143,9 +143,15 @@ class EquipmentViewController extends AbstractController {
 		else{
 			adaptParamsForList()
 			def equipments = equipmentService.filterEquipment(user,cmd.dataLocation,cmd.supplier,cmd.manufacturer,cmd.serviceProvider,cmd.equipmentType,cmd.purchaser,cmd.donor,cmd.obsolete,cmd.status,params)
-			if(!request.xhr)
-				response.sendError(404)
-			else this.ajaxModel(equipments,cmd.dataLocation,"")
+			if(request.xhr)
+				this.ajaxModel(equipments,cmd.dataLocation,"")
+			else {
+				render(view:"/entity/list", model: model(equipments, cmd.dataLocation) << [
+					template:"equipment/equipmentList",
+					filterTemplate:"equipment/equipmentFilter",
+					listTop:"equipment/listTop"
+				])
+			}
 		}
 	}
 	
