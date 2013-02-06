@@ -6,8 +6,8 @@
 			<g:sortableColumn property="type"  title="${message(code: 'sparePart.type.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
 			<g:sortableColumn property="model"  title="${message(code: 'sparePart.model.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
 			<th><g:message code="location.label"/></th>
-			<g:sortableColumn property="currentStatus"  title="${message(code: 'sparePart.status.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
-			<g:sortableColumn property="obsolete"  title="${message(code: 'sparePart.obsolete.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
+			<g:sortableColumn property="statusOfSparePart"  title="${message(code: 'sparePart.status.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
+			<g:sortableColumn property="sameAsManufacturer"  title="${message(code: 'sparePart.same.as.manufacturer.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
 			<g:sortableColumn property="manufacturer"  title="${message(code: 'provider.type.manufacturer')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
 			<g:sortableColumn property="supplier"  title="${message(code: 'provider.type.supplier')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
 			<g:sortableColumn property="purchaser"  title="${message(code: 'sparePart.purchaser.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />

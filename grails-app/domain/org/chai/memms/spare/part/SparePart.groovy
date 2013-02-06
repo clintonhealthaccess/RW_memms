@@ -64,21 +64,6 @@ class SparePart {
 		StockLocation(String name){ this.name=name }
 		String getKey() { return name() }
 	}
-	enum Donor{
-		
-		NONE('none'),
-		MOHPARTNER("moh.partner"),
-		OTHERNGO("other.ngo"),
-		INDIVIDUAL("individual"),
-		OTHERS("others")
-		
-		String messageCode = "spare.part.donor"
-		
-		final String name
-		Donor(String name){ this.name=name }
-		String getKey() { return name() }
-		
-	}
 	enum SparePartPurchasedBy{
 		
 		NONE('none'),
@@ -110,16 +95,14 @@ class SparePart {
 	Provider supplier
 	Provider manufacturer
 	Warranty warranty
-	SparePartPurchasedBy purchaser
-	Donor donor
-	String donorName
+	SparePartPurchasedBy sparePartPurchasedBy
 	//Boolean obsolete
 	Date purchaseDate
 	Date dateCreated
 	Date lastUpdated
 	Date manufactureDate
 
-	StatusOfSparePart currentStatus
+	StatusOfSparePart statusOfSparePart
 	
 	User addedBy
 	User lastModified
@@ -134,7 +117,7 @@ class SparePart {
 		names nullable: true, blank: true
 		descriptions nullable: true, blank: true
 		serialNumber nullable: true, validator: { val, obj ->
-			if(!obj.currentStatus.equals(StatusOfSparePart.PENDINGORDER)) return (val!=null)
+			if(!obj.statusOfSparePart.equals(StatusOfSparePart.PENDINGORDER)) return (val!=null)
 		}
 		purchaseDate nullable: true
 //		purchaseCost nullable: true, validator: {val, obj ->
@@ -160,17 +143,12 @@ class SparePart {
 			if (obj.warranty!=null) return (val!=null) && (val.numberOfMonths >= 0)
 		}
 		purchaseCost nullable: true, validator:{ if(it!=null) return (it>=0) }
-		purchaser nullable: false, inList:[SparePartPurchasedBy.BYFACILITY,SparePartPurchasedBy.BYMOH,SparePartPurchasedBy.BYDONOR]
-		donor nullable:true,inList:[Donor.OTHERNGO,Donor.MOHPARTNER,Donor.OTHERS,Donor.INDIVIDUAL], validator:{ val, obj ->
-			if(obj.purchaser == SparePartPurchasedBy.BYDONOR) return (val!=null)
-		}
-		donorName nullable:true,blank:true, validator:{val, obj ->
-			if(obj.purchaser == SparePartPurchasedBy.BYDONOR || obj.donor !=null) return (val!=null && val!="")
-		}
+		sparePartPurchasedBy nullable: false, inList:[SparePartPurchasedBy.BYFACILITY,SparePartPurchasedBy.BYMOH,SparePartPurchasedBy.BYDONOR]
+		
 		currency  nullable: true, blank: true, inList: ["RWF","USD","EUR"], validator:{ val, obj ->
 			if(obj.purchaseCost != null) return (val != null)
 		}
-		currentStatus nullable:true,validator:{
+		statusOfSparePart nullable:true,validator:{
 			if(it!=null) return it in [StatusOfSparePart.OPERATIONAL,StatusOfSparePart.INSTOCK,StatusOfSparePart.PENDINGORDER,StatusOfSparePart.DISPOSED]
 		}
 		
@@ -223,7 +201,7 @@ class SparePart {
 	}
 	
 	String toString() {
-		return "SparePart [id= " + id + " code= "+code+" serialNumber= "+serialNumber+" currentState= "+currentStatus+"]";
+		return "SparePart [id= " + id + " code= "+code+" serialNumber= "+serialNumber+" currentState= "+statusOfSparePart+"]";
 
 	}
 }

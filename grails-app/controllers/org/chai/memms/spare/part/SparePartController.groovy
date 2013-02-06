@@ -5,13 +5,32 @@ package org.chai.memms.spare.part
 
 import java.util.Date;
 
+import org.apache.shiro.SecurityUtils;
+import org.chai.memms.AbstractEntityController;
+import org.chai.memms.spare.part.SparePartStatus;
 import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
+import org.chai.memms.Contact
+import org.chai.memms.Initializer;
+import org.chai.memms.spare.part.SparePart.SparePartPurchasedBy;
+import org.chai.memms.security.User;
+import org.chai.memms.security.User.UserType;
+import org.chai.memms.util.Utils;
+import org.chai.memms.spare.part.SparePart;
+import org.chai.memms.spare.part.Provider;
+import org.chai.location.DataLocation;
+import org.chai.location.CalculationLocation;
+import org.chai.location.DataLocationType;
+import org.chai.location.Location
+import org.chai.location.LocationLevel
+
+import java.util.HashSet;
+import java.util.Set
 
 /**
  * @author Aphrodice Rwagaju
  *
  */
-class SparePartController {
+class SparePartController extends AbstractEntityController{
 	def sparePartStatusService
 
 
@@ -45,7 +64,7 @@ class SparePartController {
 		if(!entity.id){
 			entity.addedBy = user
 		}else{
-		    params.oldStatus =  entity.currentStatus
+		    params.oldStatus =  entity.statusOfSparePart
 			entity.lastModifiedBy = user
 			if(params["warranty.sameAsSupplier"]=="on"){
 				params["warranty.contact.contactName"]=""
@@ -86,7 +105,7 @@ class SparePartController {
 
 	def saveEntity(def entity) {
 		SparePartStatus status
-		if(entity.dataLocation) hasAccess(entity.dataLocation)
+		if(entity.location) hasAccess(entity.location)
 		if(entity.id==null){
 			entity.currentStatus = StatusOfSparePart."$params.cmd.status"
 			sparePartStatusService.createSparePartStatus(user,params.cmd.status,entity,params.cmd.dateOfEvent,[:])

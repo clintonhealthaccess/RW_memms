@@ -59,7 +59,7 @@ class SparePartControllerSpec extends IntegrationTests{
 			sparePartController.params.currency = "USD"
 			sparePartController.params.model = "model one"
 			sparePartController.params.room = "ROOM A1"
-			sparePartController.params.purchaser = SparePartPurchasedBy.BYFACILITY
+			sparePartController.params.sparePartPurchasedBy = SparePartPurchasedBy.BYFACILITY
 			sparePartController.params.obsolete = false
 			sparePartController.params.descriptions_en = "test_english_descriptions"
 			sparePartController.params.manufactureDate = Initializer.getDate(1,1,2012)

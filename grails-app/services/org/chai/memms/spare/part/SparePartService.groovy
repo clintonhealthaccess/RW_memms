@@ -41,7 +41,6 @@ import org.chai.memms.inventory.Equipment;
 import org.chai.memms.spare.part.SparePart;
 import org.chai.memms.spare.part.SparePartStatus;
 import org.chai.memms.security.User;
-import org.chai.memms.spare.part.SparePart.Donor;
 import org.chai.memms.spare.part.SparePart.SparePartPurchasedBy;
 import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
 import org.chai.memms.spare.part.SparePartType;
@@ -61,13 +60,13 @@ class SparePartService {
 	def languageService;
 	def userService
 	
-	public void updateCurrentSparePartStatus(SparePart sparePart,SparePartStatus status,User user){
-		if(status!=null){
-			sparePart.currentStatus = status.statusOfSparePart
-			sparePart.addToStatus(status)
+	public void updateCurrentSparePartStatus(SparePart sparePart,SparePartStatus sparePartStatus,User user){
+		if(sparePartStatus!=null){
+			sparePart.statusOfSparePart = sparePartStatus.statusOfSparePart
+			sparePart.addToStatus(sparePartStatus)
 		}else{
-			//This assume that there is no sparePart without at least one status associated to it
-			sparePart.currentStatus = sparePart.timeBasedStatus.status
+			//This assume that there is no sparePart without at least one sparePartStatus associated to it
+			sparePart.statusOfSparePart = sparePart.timeBasedStatus.sparePartStatus
 		}
 		sparePart.lastModified = user
 		if(log.isDebugEnabled()) log.debug("Updating SparePart status params: "+sparePart)
@@ -141,7 +140,7 @@ class SparePartService {
 		}
 	}
 	public def filterSparePart(def user, def dataLocation, def supplier, def manufacturer, def sparePartType,
-		def purchaser,def donor,def sameAsManufacturer,def status,Map<String, String> params){
+		def sparePartPurchasedBy,def sameAsManufacturer,def sparePartStatus,Map<String, String> params){
 		
 		def dataLocations = []
 		if(dataLocation) dataLocations.add(dataLocation)
@@ -161,14 +160,12 @@ class SparePartService {
 				eq ("manufacturer", manufacturer)
 			if(sparePartType != null)
 				eq ("type", sparePartType)
-			if(purchaser && !purchaser.equals(SparePartPurchasedBy.NONE))
-				eq ("purchaser",purchaser)
-			if(donor && !donor.equals(Donor.NONE))
-				eq ("donor",donor)
+			if(sparePartPurchasedBy && !sparePartPurchasedBy.equals(SparePartPurchasedBy.NONE))
+				eq ("sparePartPurchasedBy",sparePartPurchasedBy)
 			if(sameAsManufacturer)
 				eq ("sameAsManufacturer", (sameAsManufacturer.equals('true'))?true:false)
-			if(status && !status.equals(StatusOfSparePart.NONE))
-				eq ("currentStatus",status)
+			if(sparePartStatus && !sparePartStatus.equals(StatusOfSparePart.NONE))
+				eq ("statusOfSparePart",sparePartStatus)
 		}
 	}
 		public File exporter(DataLocation dataLocation,List<SparePart> spareParts){
@@ -191,12 +188,12 @@ class SparePartService {
 				for(SparePart sparePart: spareParts){
 					List<String> line = [
 						sparePart.serialNumber,sparePart.type.code,sparePart.type?.getNames(new Locale("en")),
-						sparePart.type?.getNames(new Locale("fr")),sparePart.model,sparePart.currentStatus,
+						sparePart.type?.getNames(new Locale("fr")),sparePart.model,sparePart.statusOfSparePart,
 						sparePart.location?.code,sparePart.location?.getNames(new Locale("en")),sparePart.location?.getNames(new Locale("fr")),
 						sparePart.manufacturer?.code,sparePart.manufacturer?.contact?.contactName,
 						sparePart.manufactureDate,sparePart.supplier?.code,sparePart.supplier?.contact?.contactName,sparePart.purchaseDate,
 						sparePart.purchaseCost?:"n/a",sparePart.currency?:"n/a",
-						sparePart.purchaser.name(),sparePart.sameAsManufacturer,sparePart?.warranty?.startDate,sparePart?.warrantyPeriod?.numberOfMonths?:""
+						sparePart.sparePartPurchasedBy.name(),sparePart.sameAsManufacturer,sparePart?.warranty?.startDate,sparePart?.warrantyPeriod?.numberOfMonths?:""
 						]
 					writer.write(line)
 				}

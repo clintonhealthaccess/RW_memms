@@ -108,17 +108,14 @@
 				</shiro:hasPermission>
 				<shiro:hasPermission permission="menu:sparePart">
 					<li><a
-						class="${controllerName=='sparePart' || controllerName=='sparePartView' || controllerName=='notificationEquipment' ?'active':''}"
+						class="${controllerName=='sparePart' || controllerName=='sparePartView'?'active':''}"
 						href="#"><g:message code="header.navigation.sparePart" /></a>
 						<ul class="submenu">
 							<li><a
 								class="${controllerName=='sparePart' || controllerName=='sparePartView' ?'active':''}"
 								href="${createLink(controller:'sparePartView', action:'summaryPage')}"><g:message
 										code="header.navigation.sparePart" /></a></li>
-							<li><a
-								class="${controllerName=='notificationSparePart' ?'active':''}"
-								href="${createLink(controller:'notificationSparePart', action:'list')}"><g:message
-										code="header.navigation.notification.sparePart" /></a></li>
+							
 						</ul></li>
 				</shiro:hasPermission>
 				<shiro:hasPermission permission="menu:maintenance">

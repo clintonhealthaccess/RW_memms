@@ -11,7 +11,6 @@ import org.chai.memms.inventory.Provider.Type;
 import org.chai.memms.security.User;
 import org.chai.memms.security.User.UserType;
 import org.chai.memms.spare.part.SparePart;
-import org.chai.memms.spare.part.SparePart.Donor;
 import org.chai.memms.spare.part.SparePart.SparePartPurchasedBy;
 import org.chai.memms.spare.part.SparePartStatus;
 import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
@@ -39,14 +38,14 @@ class SparePartServiceSpec extends IntegrationTests{
 		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],"CODE Spare Part",Provider.findByCode("ONE"),Initializer.now())
 
 
-		Initializer.newSparePart(CODE(123),SparePartPurchasedBy.BYDONOR,Donor.OTHERNGO,"Internews",false,Initializer.newPeriod(32),"",['en':'Spare Part Descriptions one'],Initializer.getDate(22,07,2010),Initializer.getDate(22,07,2011),"",'MODEL1',
+		Initializer.newSparePart(CODE(123),SparePartPurchasedBy.BYDONOR,false,Initializer.newPeriod(32),"",['en':'Spare Part Descriptions one'],Initializer.getDate(22,07,2010),Initializer.getDate(22,07,2011),"",'MODEL1',
 				DataLocation.findByCode(BUTARO),sparePartType,manufacture,supplier,StatusOfSparePart.OPERATIONAL,user,null,null)
-		def sparePartCodeToFind = Initializer.newSparePart(CODE(124),SparePartPurchasedBy.BYMOH,null,null,false,Initializer.newPeriod(32),"2900.23",['en':'Spare Part Descriptions two'],Initializer.getDate(22,07,2010), Initializer.getDate(22,07,2011),"RWF",'MODEL2',
+		def sparePartCodeToFind = Initializer.newSparePart(CODE(124),SparePartPurchasedBy.BYMOH,false,Initializer.newPeriod(32),"2900.23",['en':'Spare Part Descriptions two'],Initializer.getDate(22,07,2010), Initializer.getDate(22,07,2011),"RWF",'MODEL2',
 				DataLocation.findByCode(KIVUYE),sparePartType,manufacture,supplier,StatusOfSparePart.OPERATIONAL,user,null,null)
 		//
-		//		def newSparePart(def serialNumber,def purchaser,def donor,def donorName,def sameAsManufacturer,def expectedLifeTime,
+		//		def newSparePart(def serialNumber,def sparePartPurchasedBy,def donor,def donorName,def sameAsManufacturer,def expectedLifeTime,
 		//			def purchaseCost,def descriptions,def manufactureDate, def purchaseDate,def currency,def model,def dataLocation,def type,def manufacture,
-		//			def supplier,def currentStatus,def addedBy,def lastModifiedBy,def lastModifiedOn)
+		//			def supplier,def statusOfSparePart,def addedBy,def lastModifiedBy,def lastModifiedOn)
 
 		def List<SparePart> spareParts
 
@@ -117,15 +116,15 @@ class SparePartServiceSpec extends IntegrationTests{
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
 		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],"CODE Spare Part",Provider.findByCode("ONE"),Initializer.now())
 
-		Initializer.newSparePart(CODE(123),SparePartPurchasedBy.BYDONOR,Donor.OTHERNGO,"CHAI",false,Initializer.newPeriod(32),"",['en':'Spare Part Descriptions one'],Initializer.getDate(22,07,2010),
+		Initializer.newSparePart(CODE(123),SparePartPurchasedBy.BYDONOR,false,Initializer.newPeriod(32),"",['en':'Spare Part Descriptions one'],Initializer.getDate(22,07,2010),
 				Initializer.getDate(22,07,2011),"",'MODEL1',
 				DataLocation.findByCode(BUTARO),sparePartType,manufacture,supplier,StatusOfSparePart.OPERATIONAL,user,null,null)
 
-		Initializer.newSparePart(CODE(124),SparePartPurchasedBy.BYFACILITY,null,null,false,Initializer.newPeriod(32),"2900.23",['en':'Spare Part Descriptions Two'],Initializer.getDate(22,07,2010),
+		Initializer.newSparePart(CODE(124),SparePartPurchasedBy.BYFACILITY,false,Initializer.newPeriod(32),"2900.23",['en':'Spare Part Descriptions Two'],Initializer.getDate(22,07,2010),
 				Initializer.getDate(22,07,2011),"USD",'MODEL1',
 				DataLocation.findByCode('Butaro DH'),sparePartType,manufacture,supplier,StatusOfSparePart.OPERATIONAL,user,null,null)
 
-		def sparePartCodeToFind = Initializer.newSparePart(CODE(124),SparePartPurchasedBy.BYMOH,null,null,false,Initializer.newPeriod(32),"2900.23",['en':'Spare Part Descriptions two'],Initializer.getDate(22,07,2010), Initializer.getDate(22,07,2011),"RWF",'MODEL2',
+		def sparePartCodeToFind = Initializer.newSparePart(CODE(124),SparePartPurchasedBy.BYMOH,false,Initializer.newPeriod(32),"2900.23",['en':'Spare Part Descriptions two'],Initializer.getDate(22,07,2010), Initializer.getDate(22,07,2011),"RWF",'MODEL2',
 				DataLocation.findByCode(KIVUYE),sparePartType,manufacture,supplier,StatusOfSparePart.OPERATIONAL,user,null,null)
 
 
@@ -157,11 +156,11 @@ class SparePartServiceSpec extends IntegrationTests{
 		//def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Initializer.now())
 		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],"CODE Spare Part",Provider.findByCode("ONE"),Initializer.now())
 		
-		Initializer.newSparePart("SERIAL10",SparePartPurchasedBy.BYDONOR,Donor.MOHPARTNER,"CHAI",,false,Initializer.newPeriod(32),"",['en':'Spare Part Descriptions one'],Initializer.getDate(22,07,2010)
+		Initializer.newSparePart("SERIAL10",SparePartPurchasedBy.BYDONOR,false,Initializer.newPeriod(32),"",['en':'Spare Part Descriptions one'],Initializer.getDate(22,07,2010)
 				,Initializer.getDate(10,10,2010),"","sparePartModel",
 				kivuye,sparePartType,manufacture,supplier,StatusOfSparePart.OPERATIONAL
 				,user,null,null)
-		Initializer.newSparePart("SERIAL11",SparePartPurchasedBy.BYFACILITY,null,null,false,Initializer.newPeriod(32),"2900.23",['en':'Spare Part Descriptions two'],Initializer.getDate(22,07,2010)
+		Initializer.newSparePart("SERIAL11",SparePartPurchasedBy.BYFACILITY,false,Initializer.newPeriod(32),"2900.23",['en':'Spare Part Descriptions two'],Initializer.getDate(22,07,2010)
 				,Initializer.getDate(10,10,2010),"USD","sparePartModel",butaro,sparePartType,manufacture,supplier,StatusOfSparePart.OPERATIONAL
 				,user,null,null)
 		
@@ -193,12 +192,12 @@ class SparePartServiceSpec extends IntegrationTests{
 		//def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Initializer.now())
 		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],"CODE Spare Part",Provider.findByCode("ONE"),Initializer.now())
 		
-		def sparePartOne = Initializer.newSparePart("SERIAL10",SparePartPurchasedBy.BYDONOR,Donor.MOHPARTNER,"Intra-health",false,Initializer.newPeriod(32),"",['en':'Spare Part Descriptions one'],Initializer.getDate(22,07,2010)
+		def sparePartOne = Initializer.newSparePart("SERIAL10",SparePartPurchasedBy.BYDONOR,false,Initializer.newPeriod(32),"",['en':'Spare Part Descriptions one'],Initializer.getDate(22,07,2010)
 				,Initializer.getDate(10,10,2010),"","sparePartModel",
 				kivuyeHC,sparePartType,manufacture,supplier,StatusOfSparePart.INSTOCK
 				,user,null,null)
 		
-		def sparePartTwo = Initializer.newSparePart("SERIAL11",SparePartPurchasedBy.BYFACILITY,null,null,true,Initializer.newPeriod(32),"2900.23",['en':'Spare Part Descriptions two'],Initializer.getDate(22,07,2010)
+		def sparePartTwo = Initializer.newSparePart("SERIAL11",SparePartPurchasedBy.BYFACILITY,true,Initializer.newPeriod(32),"2900.23",['en':'Spare Part Descriptions two'],Initializer.getDate(22,07,2010)
 				,Initializer.getDate(10,10,2010),"USD","sparePartModel",
 				butaroDH,sparePartType,manufacture,supplier,StatusOfSparePart.OPERATIONAL,
 				,user,null,null)
@@ -213,22 +212,22 @@ class SparePartServiceSpec extends IntegrationTests{
 
 		when://Search by defaults
 
-		sparePartsOne = sparePartService.filterSparePart(null,butaroDH,supplier,manufacture,sparePartType,SparePartPurchasedBy.NONE,Donor.NONE,'true',StatusOfSparePart.OPERATIONAL,[:])
+		sparePartsOne = sparePartService.filterSparePart(null,butaroDH,supplier,manufacture,sparePartType,SparePartPurchasedBy.NONE,'true',StatusOfSparePart.OPERATIONAL,[:])
 
 		then:
 		SparePart.count() == 2
-		SparePart.list()[0].currentStatus == StatusOfSparePart.DISPOSED
-		SparePart.list()[1].currentStatus ==StatusOfSparePart.OPERATIONAL
+		SparePart.list()[0].statusOfSparePart == StatusOfSparePart.DISPOSED
+		SparePart.list()[1].statusOfSparePart ==StatusOfSparePart.OPERATIONAL
 		sparePartsOne.size() == 1
 		sparePartsOne[0].getDescriptions(new Locale("en")).equals('Spare Part Descriptions two')
-		sparePartsOne[0].currentStatus == StatusOfSparePart.OPERATIONAL
-		sparePartsOne[0].purchaser == SparePartPurchasedBy.BYFACILITY
+		sparePartsOne[0].statusOfSparePart == StatusOfSparePart.OPERATIONAL
+		sparePartsOne[0].sparePartPurchasedBy == SparePartPurchasedBy.BYFACILITY
 		sparePartsOne[0].serialNumber.equals("SERIAL11")
 
-		when://Search by currentStatus
+		when://Search by statusOfSparePart
 
-		sparePartsTwo = sparePartService.filterSparePart(null,kivuyeHC,supplier, manufacture,sparePartType,SparePartPurchasedBy.BYDONOR,Donor.MOHPARTNER,'false',StatusOfSparePart.DISPOSED,[:])
-		sparePartsThree = sparePartService.filterSparePart(null,kivuyeHC,supplier, manufacture,sparePartType,SparePartPurchasedBy.BYDONOR,Donor.NONE,'false',StatusOfSparePart.INSTOCK,[:])
+		sparePartsTwo = sparePartService.filterSparePart(null,kivuyeHC,supplier, manufacture,sparePartType,SparePartPurchasedBy.BYDONOR,'false',StatusOfSparePart.DISPOSED,[:])
+		sparePartsThree = sparePartService.filterSparePart(null,kivuyeHC,supplier, manufacture,sparePartType,SparePartPurchasedBy.BYDONOR,'false',StatusOfSparePart.INSTOCK,[:])
 
 		then:
 		SparePart.count() == 2
@@ -237,13 +236,13 @@ class SparePartServiceSpec extends IntegrationTests{
 		sparePartsTwo[0].getDescriptions(new Locale("en")).equals('Spare Part Descriptions one')
 		sparePartsTwo[0].status.size() == 3
 
-		when://Search by donor only
+		/*when://Search by donor only
 		sparePartsTwo = sparePartService.filterSparePart(null,kivuyeHC,supplier, manufacture,sparePartType,null,Donor.MOHPARTNER,'false',StatusOfSparePart.DISPOSED,[:])
 
 		then:
 		SparePart.count() == 2
 		sparePartsTwo.size() == 1
-		sparePartsTwo[0].status.size() == 3
+		sparePartsTwo[0].status.size() == 3*/
 	}
 	
 	def "can export spare parts"(){
@@ -264,23 +263,23 @@ class SparePartServiceSpec extends IntegrationTests{
 		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],"CODE Spare Part",Provider.findByCode("ONE"),Initializer.now())
 
 
-		def sparePartOne = Initializer.newSparePart("SERIAL10",SparePartPurchasedBy.BYFACILITY,null,null,true,Initializer.newPeriod(32),"",['en':'Spare Part Descriptions two'],Initializer.getDate(22,07,2010)
+		def sparePartOne = Initializer.newSparePart("SERIAL10",SparePartPurchasedBy.BYFACILITY,true,Initializer.newPeriod(32),"",['en':'Spare Part Descriptions two'],Initializer.getDate(22,07,2010)
 				,Initializer.getDate(10,10,2010),"","sparePartModel",
 				DataLocation.findByCode(KIVUYE),sparePartType,manufacture,supplier,StatusOfSparePart.INSTOCK,
 				user,null,null)
 			
 		
-		def sparePartTwo = Initializer.newSparePart("SERIAL11",SparePartPurchasedBy.BYFACILITY,null,null,true,Initializer.newPeriod(32),"2900.23",['en':'Spare Part Descriptions two'],Initializer.getDate(22,07,2010)
+		def sparePartTwo = Initializer.newSparePart("SERIAL11",SparePartPurchasedBy.BYFACILITY,true,Initializer.newPeriod(32),"2900.23",['en':'Spare Part Descriptions two'],Initializer.getDate(22,07,2010)
 				,Initializer.getDate(10,10,2010),"EUR","sparePartModel",
 				DataLocation.findByCode(KIVUYE),sparePartType,manufacture,supplier,StatusOfSparePart.INSTOCK
 				,user,null,null)
 		
-		def sparePartThree = Initializer.newSparePart("SERIAL12",SparePartPurchasedBy.BYFACILITY,null,null,true,Initializer.newPeriod(32),"2900.23",['en':'Spare Part Descriptions two'],Initializer.getDate(22,07,2010)
+		def sparePartThree = Initializer.newSparePart("SERIAL12",SparePartPurchasedBy.BYFACILITY,true,Initializer.newPeriod(32),"2900.23",['en':'Spare Part Descriptions two'],Initializer.getDate(22,07,2010)
 			,Initializer.getDate(10,10,2010),"EUR","sparePartModel",
 			DataLocation.findByCode(KIVUYE),sparePartType,manufacture,supplier,StatusOfSparePart.INSTOCK,
 			user,null,null)
 		
-		def sparePartFour = Initializer.newSparePart("SERIAL13",SparePartPurchasedBy.BYFACILITY,null,null,true,Initializer.newPeriod(32),"2900.23",['en':'Spare Part Descriptions two'],Initializer.getDate(22,07,2010)
+		def sparePartFour = Initializer.newSparePart("SERIAL13",SparePartPurchasedBy.BYFACILITY,true,Initializer.newPeriod(32),"2900.23",['en':'Spare Part Descriptions two'],Initializer.getDate(22,07,2010)
 			,Initializer.getDate(10,10,2010),"EUR","sparePartModel",
 			DataLocation.findByCode(BUTARO),sparePartType,manufacture,supplier,StatusOfSparePart.INSTOCK
 			,user,null,null)
@@ -324,7 +323,7 @@ class SparePartServiceSpec extends IntegrationTests{
 		
 		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],"CODE Spare Part",Provider.findByCode("ONE"),Initializer.now())
 
-		def sparePart = Initializer.newSparePart("SERIAL10",SparePartPurchasedBy.BYFACILITY,null,null,true,Initializer.newPeriod(32),"",['en':'Spare Part Descriptions two'],Initializer.getDate(22,07,2010)
+		def sparePart = Initializer.newSparePart("SERIAL10",SparePartPurchasedBy.BYFACILITY,true,Initializer.newPeriod(32),"",['en':'Spare Part Descriptions two'],Initializer.getDate(22,07,2010)
 				,Initializer.getDate(10,10,2010),"","sparePartModel",
 				DataLocation.findByCode(KIVUYE),sparePartType,manufacture,supplier,StatusOfSparePart.INSTOCK,
 				User.findByUsername("user"),null,null)
@@ -337,7 +336,7 @@ class SparePartServiceSpec extends IntegrationTests{
 
 		then:
 		SparePart.count() == 1
-		SparePart.list()[0].currentStatus == StatusOfSparePart.OPERATIONAL
+		SparePart.list()[0].statusOfSparePart == StatusOfSparePart.OPERATIONAL
 		
 	}
 }

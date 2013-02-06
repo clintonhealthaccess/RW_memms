@@ -32,7 +32,6 @@ import org.chai.memms.IntegrationTests;
 import org.chai.memms.util.Utils;
 import org.chai.memms.inventory.Provider;
 import org.chai.memms.inventory.Provider.Type;
-import org.chai.memms.spare.part.SparePart.Donor;
 import org.chai.memms.spare.part.SparePart.StockLocation;
 import org.chai.memms.spare.part.SparePart.SparePartPurchasedBy;
 import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
@@ -54,9 +53,9 @@ class SparePartSpec extends IntegrationTests {
 		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",Provider.findByCode("ONE"),Initializer.now())
 		
 		when:
-		def sparePart = new SparePart(serialNumber:"test123",purchaser:PurchasedBy.BYDONOR,donor:Donor.MOHPARTNER,donorName:"CHAI",sameAsManufacturer:false,expectedLifeTime:Initializer.newPeriod(20),
+		def sparePart = new SparePart(serialNumber:"test123",sparePartPurchasedBy:SparePartPurchasedBy.BYDONOR,sameAsManufacturer:false,expectedLifeTime:Initializer.newPeriod(20),
 				descriptions:['en':'SparePart Descriptions'],manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),model:"sparePartModel",
-				type:sparePartType,currentStatus:StatusOfSparePart.OPERATIONAL,dateCreated:Initializer.getDate(23,07,2010), addedBy: User.findByUsername("systemUser"))
+				type:sparePartType,statusOfSparePart:StatusOfSparePart.OPERATIONAL,dateCreated:Initializer.getDate(23,07,2010), addedBy: User.findByUsername("systemUser"))
 
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
