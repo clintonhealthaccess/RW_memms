@@ -20,9 +20,7 @@ class SparePartTypeSpec extends IntegrationTests{
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def manufacturer = Initializer.newProvider("TEST" + CODE(1), Type.MANUFACTURER,manufactureContact)
 		when:
-//		Initializer.newSparePartType("testOne",['en':'testOne names'],['en':'testOne descriptions'],"4544-GHTH",manufacturer,new Date())
 		def sparePartType = new SparePartType(code:CODE(124),names:["en":"names"],descriptions:["en":"descriptions"],partNumber:"7654-HGT",manufacturer:manufacturer,discontinuedDate:new Date()).save(failOnError: true)
-//		def sparePartTypeTwo = new SparePartType(code:CODE(125),names:["en":"name"],descriptions:["en":"description"],partNumber:"7655-HGT",manufacturer:manufacturer,discontinuedDate:new Date()).save(failOnError: true)
 		then:
 		SparePartType.count() == 1
 	}
@@ -31,7 +29,6 @@ class SparePartTypeSpec extends IntegrationTests{
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def manufacturer = Initializer.newProvider("TEST" + CODE(1), Type.MANUFACTURER,manufactureContact)
 		when:
-		//def sparePartTyepOne = Initializer.newSparePartType("testOne",['en':'testOne names'],['en':'testOne descriptions'],"4544-GHTH",manufacturer,new Date())
 		def sparePartType = new SparePartType(names:["en":"names"],descriptions:["en":"descriptions"],partNumber:"7654-HGT",manufacturer:manufacturer,discontinuedDate:new Date())
 		sparePartType.save()
 		then:
@@ -50,12 +47,5 @@ class SparePartTypeSpec extends IntegrationTests{
 		SparePartType.count() == 1
 		sparePartType.errors.hasFieldErrors('code') == true
 	}
-	
-	
-	
-	
-	
-	
-	
-	
+		
 }
