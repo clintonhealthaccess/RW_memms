@@ -1,6 +1,6 @@
 <%@ page import="org.chai.memms.util.Utils" %>
-<%@ page import="org.chai.memms.spare.part.SparePartStatus.Status" %>
-<%@ page import="org.chai.memms.spare.part.SparePart.PurchasedBy" %>
+<%@ page import="org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart" %>
+<%@ page import="org.chai.memms.spare.part.SparePart.SparePartPurchasedBy" %>
 <div  class="entity-form-container togglable">
   <div class="heading1-bar">
 		<h1>
@@ -36,15 +36,12 @@
       		<g:input name="serialNumber" label="${message(code:'sparePart.serial.number.label')}" bean="${sparePart}" field="serialNumber"/>
       		<g:input name="model" label="${message(code:'sparePart.model.label')}" bean="${sparePart}" field="model"/>
       		<g:i18nTextarea name="descriptions" bean="${sparePart}" label="${message(code:'entity.descriptions.label')}" field="descriptions" height="150" width="300" maxHeight="150" />
-      		<g:selectFromList name="department.id" label="${message(code:'department.label')}" bean="${sparePart}" field="department" optionKey="id" multiple="false"
-    			ajaxLink="${createLink(controller:'department', action:'getAjaxData')}"
-    			from="${departments}" value="${sparePart?.department?.id}" values="${departments.collect{it.names}}" />
-      		<g:input name="room" label="${message(code:'sparePart.room.label')}" bean="${sparePart}" field="room"/>
+     
       	</fieldset>
       	
      		<div id="form-aside-type" class="form-aside">
       	  <g:if test="${sparePart?.type != null}">
-      	 	  <g:render template="/templates/typeFormSide" model="['type':sparePart?.type,'cssClass':'current','field':'type' ]" />
+      	 	  <g:render template="/templates/sparePartFormSide" model="['type':sparePart?.type,'cssClass':'current','field':'type' ]" />
           </g:if>
         </div>
       </div>
@@ -57,12 +54,12 @@
           <g:message code="sparePart.section.status.information.label" default="Status Information"/> 
         </h4>
       	<g:if test="${sparePart.id == null}">
-      			<g:selectFromEnum name="status" bean="${cmd}" values="${Status.values()}" field="status" label="${message(code:'sparePart.status.label')}"/>
+      			<g:selectFromEnum name="status" bean="${cmd}" values="${StatusOfSparePart.values()}" field="status" label="${message(code:'sparePart.status.label')}"/>
       			<g:input name="dateOfEvent" dateClass="date-picker" label="${message(code:'sparePart.status.date.of.event.label')}" bean="${cmd}" field="dateOfEvent"/>
-      			<g:inputBox name="obsolete"  label="${message(code:'sparePart.obsolete.label')}" bean="${sparePart}" field="obsolete" value="${sparePart.obsolete}" checked="${(sparePart.obsolete)? true:false}"/>
+      			<g:inputBox name="sameAsManufacturer"  label="${message(code:'sparePart.same.as.manufacturer.label')}" bean="${sparePart}" field="sameAsManufacturer" value="${sparePart.sameAsManufacturer}" checked="${(sparePart.sameAsManufacturer)? true:false}"/>
       	</g:if>
       	<g:if test="${sparePart?.status!=null}">
-      	 	<g:inputBox name="obsolete"  label="${message(code:'sparePart.obsolete.label')}" bean="${sparePart}" field="obsolete" value="${sparePart.obsolete}" checked="${(sparePart.obsolete)? true:false}"/>
+      	 	<g:inputBox name="sameAsManufacturer"  label="${message(code:'sparePart.sameAsManufacturer.label')}" bean="${sparePart}" field="sameAsManufacturer" value="${sparePart.sameAsManufacturer}" checked="${(sparePart.sameAsManufacturer)? true:false}"/>
 	    	<table class="items">
 	    		<tr>
 	    			<th></th>

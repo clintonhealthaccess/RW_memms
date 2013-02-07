@@ -17,7 +17,7 @@
 					<span class="label"><g:message code="sparePart.model.label" /></span>
 					<span class="text">${sparePart.model}</span>
 					<span class="label"><g:message code="datalocation.label"/>:</span>
-					<span class="text">${sparePart.location.names}</span>
+					<span class="text">${sparePart.dataLocation.names}</span>
 					
 					<span class="label"><g:message code="entity.in.system.since.label"/>:</span>
 					<span class="text"> ${Utils.formatDate(sparePart.dateCreated)}</span>

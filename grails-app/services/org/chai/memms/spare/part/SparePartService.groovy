@@ -105,7 +105,7 @@ class SparePartService {
 				}
 		}
 	}
-	/*public def getMySpareParts(User user,Map<String, String> params) {
+	public def getMySpareParts(User user,Map<String, String> params) {
 		def dataLocations = []
 		if(user.location instanceof Location) dataLocations.addAll(user.location.getDataLocations([:], [:]))
 		else{
@@ -120,7 +120,7 @@ class SparePartService {
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			inList('dataLocation',dataLocations)
 		}
-	}*/
+	}
 	public def getSparePartsByDataLocationAndManages(DataLocation dataLocation,Map<String, String> params) {
 		if(log.isDebugEnabled()) log.debug("getSparePartsByDataLocationAndManages  dataLocation= "+dataLocation)
 		List<DataLocation> dataLocations = [dataLocation]
@@ -194,7 +194,7 @@ class SparePartService {
 					List<String> line = [
 						sparePart.serialNumber,sparePart.type.code,sparePart.type?.getNames(new Locale("en")),
 						sparePart.type?.getNames(new Locale("fr")),sparePart.model,sparePart.statusOfSparePart,
-						sparePart.location?.code,sparePart.location?.getNames(new Locale("en")),sparePart.location?.getNames(new Locale("fr")),
+						sparePart.dataLocation?.code,sparePart.dataLocation?.getNames(new Locale("en")),sparePart.dataLocation?.getNames(new Locale("fr")),
 						sparePart.manufacturer?.code,sparePart.manufacturer?.contact?.contactName,
 						sparePart.manufactureDate,sparePart.supplier?.code,sparePart.supplier?.contact?.contactName,sparePart.purchaseDate,
 						sparePart.purchaseCost?:"n/a",sparePart.currency?:"n/a",

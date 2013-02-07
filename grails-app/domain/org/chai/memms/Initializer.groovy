@@ -861,7 +861,7 @@ public class Initializer {
 			purchaseDate:purchaseDate,
 			currency:currency,
 			model:model,
-			location:dataLocation,
+			dataLocation:dataLocation,
 			type:type,
 			manufacturer:manufacture,
 			supplier:supplier,

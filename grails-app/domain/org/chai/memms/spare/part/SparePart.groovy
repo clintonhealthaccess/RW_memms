@@ -107,7 +107,7 @@ class SparePart {
 	User addedBy
 	User lastModified
 	
-	static belongsTo = [type: SparePartType, location: DataLocation, stockLocation: StockLocation]
+	static belongsTo = [type: SparePartType, dataLocation: DataLocation, stockLocation: StockLocation]
 	static hasMany = [status: SparePartStatus]	
 	static i18nFields = ["descriptions","names"]
 	static embedded = ["warranty","warrantyPeriod","expectedLifeTime"]
@@ -128,7 +128,7 @@ class SparePart {
 			if(obj.purchaseCost) return (val==null)
 		}
 		stockLocation  nullable: true, inList:[StockLocation.MMC, StockLocation.FACILITY]
-		location nullable: true, validator: {val,obj ->
+		dataLocation nullable: true, validator: {val,obj ->
 			if(obj.stockLocation.equals(StockLocation.FACILITY)) return (val==null)
 		}
 		addedBy nullable: false

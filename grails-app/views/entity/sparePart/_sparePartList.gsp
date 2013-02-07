@@ -2,17 +2,16 @@
 	<thead>
 		<tr>
 			<th/>
-			<g:sortableColumn property="code"  title="${message(code: 'sparePart.code.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
-			<g:sortableColumn property="type"  title="${message(code: 'sparePart.type.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
-			<g:sortableColumn property="model"  title="${message(code: 'sparePart.model.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
+			<g:sortableColumn property="code"  title="${message(code: 'spare.part.code.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
+			<g:sortableColumn property="type"  title="${message(code: 'spare.part.type.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
+			<g:sortableColumn property="model"  title="${message(code: 'spare.part.model.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
 			<th><g:message code="location.label"/></th>
-			<g:sortableColumn property="statusOfSparePart"  title="${message(code: 'sparePart.status.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
-			<g:sortableColumn property="sameAsManufacturer"  title="${message(code: 'sparePart.same.as.manufacturer.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
+			<g:sortableColumn property="statusOfSparePart"  title="${message(code: 'spare.part.status.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
+			<g:sortableColumn property="sameAsManufacturer"  title="${message(code: 'spare.part.same.as.manufacturer.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
 			<g:sortableColumn property="manufacturer"  title="${message(code: 'provider.type.manufacturer')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
 			<g:sortableColumn property="supplier"  title="${message(code: 'provider.type.supplier')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
-			<g:sortableColumn property="purchaser"  title="${message(code: 'sparePart.purchaser.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
-			<th><g:message code="work.order.label"/></th>
-			<th><g:message code="preventive.order.label"/></th>
+			<g:sortableColumn property="purchaser"  title="${message(code: 'spare.part.purchaser.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
+			
 		</tr>
 	</thead>
 	<tbody>
@@ -37,33 +36,22 @@
 				<td>${sparePart.model}</td>
 				<td>
 					<g:message code="datalocation.label"/>: ${sparePart.dataLocation.names}<br/>
-					<g:message code="department.label"/>: ${sparePart.department.names}<br/>
-					<g:message code="sparePart.room.label"/>: ${sparePart.room}<br/>
+					
 				</td>
 				<td>
 					<a href="${createLinkWithTargetURI(controller:'sparePartStatus', action:'create', params:['sparePart.id': sparePart?.id])}" title="${message(code: 'tooltip.click.update.status')}" class="tooltip">
-  	    				${message(code: sparePart.currentStatus?.messageCode+'.'+sparePart.currentStatus?.name)}
+  	    				${message(code: sparePart.statusOfSparePart?.messageCode+'.'+sparePart.statusOfSparePart?.name)}
   	    			</a>
 				</td>
 				<td>
-					<g:listCheckBox name="obsolete" id="${sparePart.id}" checked="${(!sparePart.obsolete)?:'checked'}"/>
+					<g:listCheckBox name="sameAsManufacturer" id="${sparePart.id}" checked="${(!sparePart.sameAsManufacturer)?:'checked'}"/>
 				</td>
 				<td>${sparePart.manufacturer.contact.contactName}</td>
 				<td>${sparePart.supplier.contact.contactName}</td>
 				
 				
-				<td>${message(code: sparePart.purchaser?.messageCode+'.'+sparePart.purchaser?.name)}</td>
+				<td>${message(code: sparePart.sparePartPurchasedBy?.messageCode+'.'+sparePart.sparePartPurchasedBy?.name)}</td>
 				
-				<td>
-					<a href="${createLinkWithTargetURI(controller:'workOrderView', action:'list', params:['sparePart.id': sparePart?.id])}" title="${message(code: 'work.order.see.list.label')}" class="tooltip">
-  	    				${sparePart.workOrders?.size()}
-  	    			</a>
-				</td>
-				<td>
-					<a href="${createLinkWithTargetURI(controller:'preventiveOrderView', action:'list', params:['sparePart.id': sparePart?.id])}" title="${message(code: 'preventive.order.see.list.label')}" class="tooltip">
-  	    				${sparePart.preventiveOrders?.size()}
-  	    			</a>
-				</td>
 			</tr>
 		</g:each>
 	</tbody>	

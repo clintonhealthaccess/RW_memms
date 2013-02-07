@@ -63,13 +63,13 @@ class SparePartViewController extends AbstractController{
 		adaptParamsForList()
 		List<SparePart> spareParts = SparePart.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc");
 		if(request.xhr)
-			this.ajaxModel(types,"")
+			this.ajaxModel(spareParts,"")
 		else{
 		render(view:"/entity/list",model:[
 				template:"sparePart/sparePartList",
 				listTop:"sparePart/listTop",
-				entities: types,
-				entityCount: types.totalCount,
+				entities: spareParts,
+				entityCount: spareParts.totalCount,
 				entityClass: getEntityClass(),
 				code: getLabel(),
 				names:names,
@@ -130,7 +130,7 @@ class SparePartViewController extends AbstractController{
 			response.sendError(404)
 		else{
 			adaptParamsForList()
-//			def spareParts = sparePartService.searchSparePart(params['q'],user,location,params)
+			def spareParts = sparePartService.searchSparePart(params['q'],user,location,params)
 			if(!request.xhr)
 				response.sendError(404)
 			else
