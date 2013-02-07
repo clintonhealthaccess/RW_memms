@@ -79,10 +79,10 @@ class SparePartController extends AbstractEntityController{
 				entity.warranty.contact=null
 			}
 		}
-//		if(params["purchaser"]!="BYDONOR"){
-//			params["donor"] =""
-//			params["donorName"] = ""
-//		}
+		if(params["purchaser"]!="BYDONOR"){
+			params["donor"] =""
+			params["donorName"] = ""
+		}
 		//Making sure a disposed sparePart cannot be modified 
 		//TODO add this check to method that modified sparePart
 		if(!params.oldStatus.equals(StatusOfSparePart.DISPOSED))

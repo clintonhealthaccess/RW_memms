@@ -4,10 +4,16 @@
 package org.chai.memms.spare.part
 
 import java.util.Set;
+import java.util.Map;
+
+import org.apache.commons.lang.math.NumberUtils;
 
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocation;
 import org.chai.location.DataLocationType;
+import org.chai.location.Location
+import org.chai.location.LocationLevel
+
 import org.chai.memms.AbstractController;
 import org.chai.memms.spare.part.SparePart;
 import org.chai.memms.spare.part.SparePartType;
@@ -15,14 +21,23 @@ import org.chai.memms.inventory.Provider;
 import org.chai.memms.spare.part.SparePart.SparePartPurchasedBy;
 import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
 
+
+import org.chai.memms.inventory.Provider;
+
+import org.chai.memms.security.User;
+import org.chai.memms.security.User.UserType;
+import org.chai.task.SparePartExportFilter;
+
 /**
  * @author Aphrodice Rwagaju
  *
  */
 class SparePartViewController extends AbstractController{
 	def providerService
-	def sparePartService
+	def partService
 	def sparePartStatusService
+	def sparePartService
+	def grailsApplication
 
 	def getLabel() {
 		return "sparePart.label";
@@ -44,9 +59,29 @@ class SparePartViewController extends AbstractController{
 		else render(view:"/entity/sparePart/summary", model:[sparePart: sparePart])
 	}
 	
-	def list={
+	def list = {
+		adaptParamsForList()
+		List<SparePart> spareParts = SparePart.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc");
+		if(request.xhr)
+			this.ajaxModel(types,"")
+		else{
+		render(view:"/entity/list",model:[
+				template:"sparePart/sparePartList",
+				listTop:"sparePart/listTop",
+				entities: types,
+				entityCount: types.totalCount,
+				entityClass: getEntityClass(),
+				code: getLabel(),
+				names:names,
+				/*importTask:'EquipmentTypeImportTask',
+				exportTask:'EquipmentTypeExportTask'*/
+			])
+		}
+	}
+	
+	/*def list={
 		def location = DataLocation.get(params.int('location.id'))
-		def spareParts
+		def spareParts= sparePartService.getSparePartsByDataLocationAndManages(location,params)
 		adaptParamsForList()
 		
 		if (location != null){
@@ -66,10 +101,13 @@ class SparePartViewController extends AbstractController{
 						location:location,
 						entities: spareParts,
 						entityCount: spareParts.totalCount,
+						entityClass: getEntityClass(),
 						code: getLabel()
+						
 						])
 		}
-	}
+
+	}*/
 	
 	//TODO don't think we need ajax for this
 	def selectFacility = {
@@ -92,7 +130,7 @@ class SparePartViewController extends AbstractController{
 			response.sendError(404)
 		else{
 			adaptParamsForList()
-			def spareParts = sparePartService.searchSparePart(params['q'],user,location,params)
+//			def spareParts = sparePartService.searchSparePart(params['q'],user,location,params)
 			if(!request.xhr)
 				response.sendError(404)
 			else
@@ -122,29 +160,29 @@ class SparePartViewController extends AbstractController{
 	def summaryPage = {
 		if(user.location instanceof DataLocation) redirect(controller:"sparePartView",action:"list")
 
-		def location = Location.get(params.long('location'))
+		def location = DataLocation.get(params.long('dataLocation'))
 		def locationTypesFilter = getLocationTypes()
 		def template = null
 		def spareParts = null
 
 		adaptParamsForList()
 
-		def locationSkipLevels = sparePartService.getSkipLocationLevels()
+		def locationSkipLevels = partService.getSkipLocationLevels()
 
 		if (location != null)
-			spareParts = sparePartService.getsparePartByLocation(location,locationTypesFilter,params)
+			spareParts = partService.getsparePartByLocation(location,locationTypesFilter,params)
 	
-		render (view: '/sparePartSummaryPage/summaryPage', model: [
+		render (view: '/partSummaryPage/summaryPage', model: [
 					spareParts:spareParts?.sparePartList,
 					currentLocation: location,
 					currentLocationTypes: locationTypesFilter,
-					template: "/sparePartSummaryPage/sectionTable",
+					template: "/partSummaryPage/sectionTable",
 					entityCount: spareParts?.totalCount,
 					locationSkipLevels: locationSkipLevels
 				])
 	}
 
-	def generalExport = { ExportFilterCommand cmd ->
+/*	def generalExport = { ExportFilterCommand cmd ->
 
 		// we do this because automatic data binding does not work with polymorphic elements
 		Set<CalculationLocation> calculationLocations = new HashSet<CalculationLocation>()
@@ -195,7 +233,7 @@ class SparePartViewController extends AbstractController{
 		if (log.isDebugEnabled()) log.debug("spareParts.export, command="+cmd+", params"+params)
 
 
-		/*if(params.exported != null){
+		if(params.exported != null){
 			def sparePartExportTask = new SparePartExportFilter(calculationLocations:cmd.calculationLocations,locationTypes:cmd.locationTypes,
 					sparePartTypes:cmd.sparePartTypes,manufacturers:cmd.manufacturers,suppliers:cmd.suppliers,sparePartStatus:cmd.sparePartStatus,
 					purchaser:cmd.purchaser,sameAsManufacturer:cmd.sameAsManufacturer).save(failOnError: true,flush: true)
@@ -203,7 +241,7 @@ class SparePartViewController extends AbstractController{
 			params.class = "SparePartExportTask"
 			params.targetURI = "/sparePartView/generalExport"
 			redirect(controller: "task", action: "create", params: params)
-		}*/
+		}
 		adaptParamsForList()
 		render(view:"/entity/sparePart/sparePartExportPage", model:[
 					template:"/entity/sparePart/sparePartExportFilter",
@@ -211,11 +249,11 @@ class SparePartViewController extends AbstractController{
 					locationTypes:DataLocationType.list(),
 					code: getLabel()
 				])
-	}
+	}*/
 
-	def export = { FilterCommand cmd ->
+	/*def export = { FilterCommand cmd ->
 		if (log.isDebugEnabled()) log.debug("spareParts.export, command "+cmd)
-		def location = DataLocation.get(params.int('location.id'))
+		def location = DataLocation.get(params.int('dataLocation.id'))
 		adaptParamsForList()
 
 		def spareParts = sparePartService.filterSparePart(user,location,cmd.supplier,cmd.manufacturer,cmd.sparePartType,cmd.purchaser,cmd.sameAsManufacturer,cmd.status,params)
@@ -225,7 +263,7 @@ class SparePartViewController extends AbstractController{
 		response.contentType = 'text/csv'
 		response.outputStream << file.text
 		response.outputStream.flush()
-	}
+	}*/
 
 	def updateSameAsManufacturer = {
 		if (log.isDebugEnabled()) log.debug("updateSameAsManufacturer sparePart.sameAsManufacturer "+params['sparePart.id'])

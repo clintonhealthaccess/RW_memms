@@ -31,12 +31,15 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.chai.location.CalculationLocation
 import org.chai.location.DataLocation;
 import org.chai.location.DataLocationType;
 import org.chai.location.Location;
 import org.chai.location.LocationLevel;
+import org.chai.memms.Parts;
+import org.chai.memms.Part;
 import org.chai.memms.inventory.Equipment;
 import org.chai.memms.spare.part.SparePart;
 import org.chai.memms.spare.part.SparePartStatus;
@@ -44,7 +47,6 @@ import org.chai.memms.security.User;
 import org.chai.memms.spare.part.SparePart.SparePartPurchasedBy;
 import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
 import org.chai.memms.spare.part.SparePartType;
-
 
 import org.supercsv.io.CsvListWriter;
 import org.supercsv.io.ICsvListWriter;
@@ -59,6 +61,7 @@ class SparePartService {
 	static transactional = true
 	def languageService;
 	def userService
+	
 	
 	public void updateCurrentSparePartStatus(SparePart sparePart,SparePartStatus sparePartStatus,User user){
 		if(sparePartStatus!=null){
@@ -92,7 +95,7 @@ class SparePartService {
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 				createAlias("type","t")
 				if(dataLocations)
-					inList('location',dataLocations)
+					inList('dataLocation',dataLocations)
 				or{
 					ilike("code","%"+text+"%")
 					ilike("serialNumber","%"+text+"%")
@@ -102,7 +105,7 @@ class SparePartService {
 				}
 		}
 	}
-	public def getMySpareParts(User user,Map<String, String> params) {
+	/*public def getMySpareParts(User user,Map<String, String> params) {
 		def dataLocations = []
 		if(user.location instanceof Location) dataLocations.addAll(user.location.getDataLocations([:], [:]))
 		else{
@@ -115,9 +118,9 @@ class SparePartService {
 		def criteria = SparePart.createCriteria();
 
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			inList('location',dataLocations)
+			inList('dataLocation',dataLocations)
 		}
-	}
+	}*/
 	public def getSparePartsByDataLocationAndManages(DataLocation dataLocation,Map<String, String> params) {
 		if(log.isDebugEnabled()) log.debug("getSparePartsByDataLocationAndManages  dataLocation= "+dataLocation)
 		List<DataLocation> dataLocations = [dataLocation]
@@ -125,13 +128,14 @@ class SparePartService {
 
 		def criteria = SparePart.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			inList('location',dataLocations)
+			inList('dataLocation',dataLocations)
 //			or{
 //				for(DataLocation dataLoc: dataLocations)
 //					eq('dataLocation',dataLoc)
 //			}
 		}
 	}
+	
 	public def getSparePartsByDataLocation(DataLocation dataLocation,Map<String, String> params) {
 		if(log.isDebugEnabled()) log.debug("getSparePartsByDataLocation  dataLocation= "+dataLocation)
 		def criteria = SparePart.createCriteria();
@@ -139,6 +143,7 @@ class SparePartService {
 			eq('location',dataLocation)
 		}
 	}
+	
 	public def filterSparePart(def user, def dataLocation, def supplier, def manufacturer, def sparePartType,
 		def sparePartPurchasedBy,def sameAsManufacturer,def sparePartStatus,Map<String, String> params){
 		
@@ -153,7 +158,7 @@ class SparePartService {
 		def criteria = SparePart.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(dataLocations != null)
-				inList('location',dataLocations)
+				inList('dataLocation',dataLocations)
 			if(supplier != null)
 				eq ("supplier", supplier)
 			if(manufacturer != null)
@@ -236,5 +241,7 @@ class SparePartService {
 			
 			return headers;
 		}
+		
+		
 
 }

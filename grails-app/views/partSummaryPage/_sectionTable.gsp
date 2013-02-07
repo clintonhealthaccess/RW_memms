@@ -1,27 +1,27 @@
 <table class="items spaced">
 	<thead>
 		<th><g:message code="datalocation.label" /></th>
-		<th><g:message code="spare.part.sparePart.count" /></th>
+		<th><g:message code="part.sparePart.count" /></th>
 		<th></th>
 		<th></th>
 	</thead>
 	<tbody>
-		<g:each in="${spareParts}" var="sparePart">
+		<g:each in="${parts}" var="part">
 			<tr>
 				<td>
-					${sparePart.location.names}
+					${part.dataLocation.names}
 				</td>
 				<td>
-					${sparePart.sparePartCount}
+					${part.sparePartCount}
 				</td>
 				<td>
 					<shiro:hasPermission permission="sparePart:create">
-						<a href="${createLinkWithTargetURI(controller: 'sparePart', action:'create', params:['location.id': sparePart.location.id])}"><g:message code="sparePart.add.sparePart.label" /></a>
+						<a href="${createLinkWithTargetURI(controller: 'sparePart', action:'create', params:['dataLocation.id': part.dataLocation.id])}"><g:message code="part.add.sparePart.label" /></a>
 					</shiro:hasPermission>
 				</td>
 				<td>
 					<shiro:hasPermission permission="sparePart:list">
-						<a href="${createLink(controller: 'sparePartView', action: 'list', params:['location.id': sparePart.location.id] )}"><g:message code="sparePart.manage.sparePart.label" /></a>
+						<a href="${createLink(controller: 'sparePartView', action: 'list', params:['dataLocation.id': part.dataLocation.id] )}"><g:message code="part.manage.sparePart.label" /></a>
 					</shiro:hasPermission>
 				</td>
 			</tr>

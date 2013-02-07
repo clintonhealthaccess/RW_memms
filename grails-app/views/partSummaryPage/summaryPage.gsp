@@ -3,7 +3,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<meta name="layout" content="main" />
 		<g:set var="entityClass" value="${entityClass}" />
-		<title><g:message code="summary.title.label" args="${[message(code:'spare.part.label')]}" /></title>
+		<title><g:message code="summary.title.label" args="${[message(code:'part.label')]}" /></title>
 		<r:require modules="chosen, dropdown"/>
 	</head>
 	<body>
@@ -13,8 +13,8 @@
 				<g:dataLocationTypeFilter linkParams="${params}" selected="${currentLocationTypes}"/>
 			</div>			
 			<div class="main table">
-				<g:if test="${spareParts == null}">
-					<p class="nav-help"> <g:message code="summary.selectlocation.text" args="${[message(code:'spare.part.label')]}" /></p>
+				<g:if test="${parts == null}">
+					<p class="nav-help"> <g:message code="summary.selectlocation.text" args="${[message(code:'part.label')]}" /></p>
 				</g:if>
 				<g:else>
 				  <br/>
