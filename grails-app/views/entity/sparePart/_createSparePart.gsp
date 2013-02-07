@@ -1,7 +1,6 @@
 <%@ page import="org.chai.memms.util.Utils" %>
 <%@ page import="org.chai.memms.spare.part.SparePartStatus.Status" %>
 <%@ page import="org.chai.memms.spare.part.SparePart.PurchasedBy" %>
-<%@ page import="org.chai.memms.spare.part.SparePart.Donor" %>
 <div  class="entity-form-container togglable">
   <div class="heading1-bar">
 		<h1>

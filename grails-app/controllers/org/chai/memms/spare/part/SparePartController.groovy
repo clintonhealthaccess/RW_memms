@@ -16,7 +16,7 @@ import org.chai.memms.security.User;
 import org.chai.memms.security.User.UserType;
 import org.chai.memms.util.Utils;
 import org.chai.memms.spare.part.SparePart;
-import org.chai.memms.spare.part.Provider;
+import org.chai.memms.inventory.Provider;
 import org.chai.location.DataLocation;
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocationType;
@@ -79,10 +79,10 @@ class SparePartController extends AbstractEntityController{
 				entity.warranty.contact=null
 			}
 		}
-		if(params["purchaser"]!="BYDONOR"){
-			params["donor"] =""
-			params["donorName"] = ""
-		}
+//		if(params["purchaser"]!="BYDONOR"){
+//			params["donor"] =""
+//			params["donorName"] = ""
+//		}
 		//Making sure a disposed sparePart cannot be modified 
 		//TODO add this check to method that modified sparePart
 		if(!params.oldStatus.equals(StatusOfSparePart.DISPOSED))
@@ -123,7 +123,7 @@ class SparePartController extends AbstractEntityController{
 		if (entity.manufacturer != null) manufacturers << entity.manufacturer
 		if (entity.supplier != null) suppliers << entity.supplier
 		if (entity.type!=null) types << entity.type
-		if (entity.dataLocation!=null) dataLocations << entity.dataLocation
+		if (entity.location!=null) dataLocations << entity.location
 		[
 					sparePart: entity,
 					manufacturers: manufacturers,
