@@ -126,11 +126,6 @@ class SparePartTypeController  extends AbstractEntityController{
 				}
 			}
 		}
-	}
-
-	
-
-
-	
+	}	
 	
 }

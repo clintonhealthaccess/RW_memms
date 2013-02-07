@@ -18,15 +18,12 @@ class SparePartTypeControllerSpec extends IntegrationTests {
 
  def "can create and save a spare part type with default values - all locales"(){
 	 setup:
-	
 	sparePartTypeController = new SparePartTypeController()
-	
 	def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 	def manufacturer = Initializer.newProvider("TEST" + CODE(1), Type.MANUFACTURER,manufactureContact)
+	
 	when:
-	
-	sparePartTypeController.params.code = CODE(123)
-	
+	sparePartTypeController.params.code = CODE(123)	
 	grailsApplication.config.i18nFields.locales.each{
 		sparePartTypeController.params."names_$it" = "Spare part name $it"
 		sparePartTypeController.params."descriptions_$it" = "some kind of description $it"
@@ -34,8 +31,8 @@ class SparePartTypeControllerSpec extends IntegrationTests {
 	sparePartTypeController.params.partNumber="7654-HGT"
 	sparePartTypeController.params."manufacturer.id"=manufacturer.id
 	sparePartTypeController.save()
-	then:
 	
+	then:
 	SparePartType.count() == 1
 	SparePartType.list()[0].code.equals(CODE(123))
 }
@@ -44,13 +41,14 @@ def "list spare part types"(){
 	sparePartTypeController = new SparePartTypeController();
 	def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 	def manufacturer = Initializer.newProvider("TEST" + CODE(1), Type.MANUFACTURER,manufactureContact)
-    def sparePartTypeOne = new SparePartType(code:CODE(123),names:["en":"names"],descriptions:["en":"descriptions"],partNumber:"7654-HGT",manufacturer:manufacturer,discontinuedDate:new Date()).save(failOnError: true)
-	def sparePartTypeTwo = new SparePartType(code:CODE(124),names:["en":"names"],descriptions:["en":"descriptions"],partNumber:"7654-HGT", manufacturer:manufacturer,discontinuedDate:new Date()).save(failOnError: true)
-	def sparePartTypeThree = new SparePartType(code:CODE(125),names:["en":"names"],descriptions:["en":"descriptions"],partNumber:"7654-HGT",manufacturer:manufacturer,discontinuedDate:new Date()).save(failOnError: true)
-	def sparePartTypeFour = new SparePartType(code:CODE(126),names:["en":"names"],descriptions:["en":"descriptions"],partNumber:"7654-HGT",manufacturer:manufacturer,discontinuedDate:new Date()).save(failOnError: true)
+	Initializer.newSparePartType(CODE(123),["en":"names spare part type one"],["en":"descriptions spare part type one"],"7654-HGT",manufacturer,new Date())
+	Initializer.newSparePartType(CODE(124),["en":"names spare part type two"],["en":"descriptions spare part type two"],"7655-HGT",manufacturer,new Date())
+	Initializer.newSparePartType(CODE(125),["en":"names spare part type three"],["en":"descriptions spare part type three"],"7656-HGT",manufacturer,new Date())
+	Initializer.newSparePartType(CODE(126),["en":"names spare part type four"],["en":"descriptions spare part type four"],"7657-HGT",manufacturer,new Date())
 	
 	when: "none ajax"
 	sparePartTypeController.list()
+	
 	then:
 	SparePartType.count() == 4
 	sparePartTypeController.modelAndView.model.entities.size() == 4
@@ -59,6 +57,7 @@ def "list spare part types"(){
 	
 	sparePartTypeController.request.makeAjaxRequest()
 	sparePartTypeController.list()
+	
 	then:
 	SparePartType.count() == 4
 	sparePartTypeController.response.json.results[0].contains(SparePartType.findByCode(CODE(123)).code)
@@ -72,10 +71,10 @@ def "search spare part types"(){
 	sparePartTypeController = new SparePartTypeController();
 	def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 	def manufacturer = Initializer.newProvider("TEST" + CODE(1), Type.MANUFACTURER,manufactureContact)
-    def sparePartTypeOne = new SparePartType(code:CODE(123),names:["en":"names"],descriptions:["en":"descriptions"],partNumber:"7654-HGT",manufacturer:manufacturer,discontinuedDate:new Date()).save(failOnError: true)
-	def sparePartTypeTwo = new SparePartType(code:CODE(124),names:["en":"names"],descriptions:["en":"descriptions"],partNumber:"7654-HGT", manufacturer:manufacturer,discontinuedDate:new Date()).save(failOnError: true)
-	def sparePartTypeThree = new SparePartType(code:CODE(125),names:["en":"names"],descriptions:["en":"descriptions"],partNumber:"7654-HGT",manufacturer:manufacturer,discontinuedDate:new Date()).save(failOnError: true)
-	def sparePartTypeFour = new SparePartType(code:CODE(126),names:["en":"names"],descriptions:["en":"descriptions"],partNumber:"7654-HGT",manufacturer:manufacturer,discontinuedDate:new Date()).save(failOnError: true)
+	Initializer.newSparePartType(CODE(123),["en":"names spare part type one"],["en":"descriptions spare part type one"],"7654-HGT",manufacturer,new Date())
+	Initializer.newSparePartType(CODE(124),["en":"names spare part type two"],["en":"descriptions spare part type two"],"7655-HGT",manufacturer,new Date())
+	Initializer.newSparePartType(CODE(125),["en":"names spare part type three"],["en":"descriptions spare part type three"],"7656-HGT",manufacturer,new Date())
+	Initializer.newSparePartType(CODE(126),["en":"names spare part type four"],["en":"descriptions spare part type four"],"7657-HGT",manufacturer,new Date())
 	
 	when: "none ajax fails"
 	sparePartTypeController.params.q = "three"
@@ -89,11 +88,12 @@ def "search spare part types"(){
 	sparePartTypeController.params.q = "three"
 	sparePartTypeController.request.makeAjaxRequest()
 	sparePartTypeController.search()
+	
 	then:
 	SparePartType.count() == 4
 	!sparePartTypeController.response.json.results[0].contains(SparePartType.findByCode(CODE(123)).code)
 	!sparePartTypeController.response.json.results[0].contains(SparePartType.findByCode(CODE(124)).code)
-	!sparePartTypeController.response.json.results[0].contains(SparePartType.findByCode(CODE(125)).code)
+	sparePartTypeController.response.json.results[0].contains(SparePartType.findByCode(CODE(125)).code)
 	!sparePartTypeController.response.json.results[0].contains(SparePartType.findByCode(CODE(126)).code)
 }
 

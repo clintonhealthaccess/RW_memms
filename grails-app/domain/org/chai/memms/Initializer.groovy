@@ -671,13 +671,13 @@ public class Initializer {
 		equipment09.save(failOnError:true)
 		
 		}
-	
-	public static createSparePartStructure(){
-		def sparePartOne = newSparePartType("4323", ['en':'first spare part','fr':' premiere piece de rechange'],['en':'first spare part description','fr':' description de la premiere piece de rechange'],"4323-XYZ",Provider.findByCode("ONE"),now())
-		def sparePartTwo = newSparePartType("4324", ['en':'second spare part','fr':' deuxieme piece de rechange'],['en':'second spare part description','fr':' description de la deuxieme piece de rechange'],"4324-ABC",Provider.findByCode("TWO"),now())
-		def sparePartThree = newSparePartType("4325", ['en':'third spare part','fr':' troisieme piece de rechange'],['en':'third spare part description','fr':' description de la troisieme piece de rechange'],"4325-IJK",Provider.findByCode("THREE"),now())
 
-	}
+    public static createSparePartStructure(){
+			def sparePartOne = newSparePartType("4323", ['en':'first spare part','fr':' premiere piece de rechange'],['en':'first spare part description','fr':' description de la premiere piece de rechange'],"4323-XYZ",Provider.findByCode("ONE"),now())
+	     	def sparePartTwo = newSparePartType("4324", ['en':'second spare part','fr':' deuxieme piece de rechange'],['en':'second spare part description','fr':' description de la deuxieme piece de rechange'],"4324-ABC",Provider.findByCode("TWO"),now())
+	 		def sparePartThree = newSparePartType("4325", ['en':'third spare part','fr':' troisieme piece de rechange'],['en':'third spare part description','fr':' description de la troisieme piece de rechange'],"4325-IJK",Provider.findByCode("THREE"),now())
+	
+    }
 		
 	//Spare Part
 	public static def newSparePartType(def code, def names, def descriptions,def partNumber,def manufacturer, def discontinuedDate){
@@ -686,7 +686,7 @@ public class Initializer {
 		Utils.setLocaleValueInMap(type,descriptions,"Descriptions")
 		return type.save(failOnError: false)
 	}
-	
+
 	//Preventive Maintenance
 	public static def newDurationBasedOrder(def equipment,def addedBy,def status,def preventionResponsible,def technicianInCharge,def names,def description,def firstOccurenceOn,def closedOn,def occurency,def isRecurring,def occurInterval,def occurCount,def occurDaysOfWeek){
 		def timeDate =  newTimeDate(firstOccurenceOn)
