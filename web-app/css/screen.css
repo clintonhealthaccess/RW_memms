@@ -1236,12 +1236,12 @@ table.nice-table .cell { cursor: default; }
 /* line 13, ../../src/stylesheets/partials/_comments.sass */
 .comment-section button { margin: 5px 0 0 110px; }
 /* line 15, ../../src/stylesheets/partials/_comments.sass */
-.comment-section .ajax-error { color: #d30000; position: absolute; right: 30px; top: 10px; }
-/* line 20, ../../src/stylesheets/partials/_comments.sass */
+.comment-section .ajax-error { color: #d30000; display: inline !important; padding: 0 5px; }
+/* line 19, ../../src/stylesheets/partials/_comments.sass */
 .comment-section .ajax-spinner { background: white; position: absolute; right: 6px; top: 11px; z-index: 10; }
 
-/* line 27, ../../src/stylesheets/partials/_comments.sass */
-.comment-button { margin-bottom: 20px; }
+/* line 26, ../../src/stylesheets/partials/_comments.sass */
+.comment-button { margin-bottom: 20px; position: relative; }
 
 /* line 31, ../../src/stylesheets/partials/_comments.sass */
 .comment-list li { border-top: 1px solid #eeeeee; line-height: 1.5; padding: 10px 5px; position: relative; *zoom: 1; }
