@@ -51,7 +51,7 @@ class SparePartController extends AbstractEntityController{
 	}
 	
 	def getLabel() {
-		return "sparePart.label";
+		return "spare.part.label";
 	}
 
 	def getEntityClass() {
@@ -65,7 +65,7 @@ class SparePartController extends AbstractEntityController{
 			entity.addedBy = user
 		}else{
 		    params.oldStatus =  entity.statusOfSparePart
-			entity.lastModifiedBy = user
+			entity.lastModified = user
 			if(params["warranty.sameAsSupplier"]=="on"){
 				params["warranty.contact.contactName"]=""
 				params["warranty.contact.email"]=""
@@ -79,10 +79,7 @@ class SparePartController extends AbstractEntityController{
 				entity.warranty.contact=null
 			}
 		}
-		if(params["purchaser"]!="BYDONOR"){
-			params["donor"] =""
-			params["donorName"] = ""
-		}
+
 		//Making sure a disposed sparePart cannot be modified 
 		//TODO add this check to method that modified sparePart
 		if(!params.oldStatus.equals(StatusOfSparePart.DISPOSED))

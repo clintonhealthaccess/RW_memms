@@ -5,10 +5,10 @@
   <div class="heading1-bar">
 		<h1>
 			<g:if test="${sparePart.id != null}">
-				<g:message code="default.edit.label" args="[message(code:'sparePart.label')]" />
+				<g:message code="default.edit.label" args="[message(code:'spare.part.label')]" />
 			</g:if>
 			<g:else>
-				<g:message code="default.new.label" args="[message(code:'sparePart.label')]" />
+				<g:message code="default.new.label" args="[message(code:'spare.part.label')]" />
 			</g:else>
 		</h1>
 		<g:locales/>
@@ -24,17 +24,18 @@
               <img src="${resource(dir:'images/icons',file:'star_small.png')}">
             </span>
             <g:message code="sparePart.section.basic.information.label" default="Basic Information"/>
-          </h4>  			  		
+          </h4>
+          <!--  		  		
       		<div class="row">
-    			  <input type="hidden" name="dataLocation.id" value="${sparePart.dataLocation.id}" />
-    			  <label><g:message code="datalocation.label"/>:</label> ${sparePart.dataLocation.names}
-    		  </div>				
-        	<g:selectFromList name="type.id" label="${message(code:'sparePart.type.label')}" bean="${sparePart}" field="type" optionKey="id" multiple="false"
+    			 TO ADD THE DATA LOCATION
+    		  </div>
+    		  -->  					
+        	<g:selectFromList name="type.id" label="${message(code:'spare.part.type.label')}" bean="${sparePart}" field="type" optionKey="id" multiple="false"
     			ajaxLink="${createLink(controller:'sparePartType', action:'getAjaxData', params: [observation:'USEDINMEMMS'])}"
     			from="${types}" value="${sparePart?.type?.id}" values="${types.collect{it.names}}" />
       		<g:inputYearMonth name="expectedLifeTime" field="expectedLifeTime" years="${sparePart.expectedLifeTime?.years}" months="${sparePart.expectedLifeTime?.months}" label='entity.expectedLifeTime.label' bean="${sparePart}"/>
-      		<g:input name="serialNumber" label="${message(code:'sparePart.serial.number.label')}" bean="${sparePart}" field="serialNumber"/>
-      		<g:input name="model" label="${message(code:'sparePart.model.label')}" bean="${sparePart}" field="model"/>
+      		<g:input name="serialNumber" label="${message(code:'spare.part.serial.number.label')}" bean="${sparePart}" field="serialNumber"/>
+      		<g:input name="model" label="${message(code:'spare.part.model.label')}" bean="${sparePart}" field="model"/>
       		<g:i18nTextarea name="descriptions" bean="${sparePart}" label="${message(code:'entity.descriptions.label')}" field="descriptions" height="150" width="300" maxHeight="150" />
      
       	</fieldset>
@@ -54,19 +55,19 @@
           <g:message code="sparePart.section.status.information.label" default="Status Information"/> 
         </h4>
       	<g:if test="${sparePart.id == null}">
-      			<g:selectFromEnum name="status" bean="${cmd}" values="${StatusOfSparePart.values()}" field="status" label="${message(code:'sparePart.status.label')}"/>
-      			<g:input name="dateOfEvent" dateClass="date-picker" label="${message(code:'sparePart.status.date.of.event.label')}" bean="${cmd}" field="dateOfEvent"/>
-      			<g:inputBox name="sameAsManufacturer"  label="${message(code:'sparePart.same.as.manufacturer.label')}" bean="${sparePart}" field="sameAsManufacturer" value="${sparePart.sameAsManufacturer}" checked="${(sparePart.sameAsManufacturer)? true:false}"/>
+      			<g:selectFromEnum name="status" bean="${cmd}" values="${StatusOfSparePart.values()}" field="status" label="${message(code:'spare.part.status.label')}"/>
+      			<g:input name="dateOfEvent" dateClass="date-picker" label="${message(code:'spare.part.status.date.of.event.label')}" bean="${cmd}" field="dateOfEvent"/>
+      			<g:inputBox name="sameAsManufacturer"  label="${message(code:'spare.part.same.as.manufacturer.label')}" bean="${sparePart}" field="sameAsManufacturer" value="${sparePart.sameAsManufacturer}" checked="${(sparePart.sameAsManufacturer)? true:false}"/>
       	</g:if>
       	<g:if test="${sparePart?.status!=null}">
-      	 	<g:inputBox name="sameAsManufacturer"  label="${message(code:'sparePart.sameAsManufacturer.label')}" bean="${sparePart}" field="sameAsManufacturer" value="${sparePart.sameAsManufacturer}" checked="${(sparePart.sameAsManufacturer)? true:false}"/>
+      	 	<g:inputBox name="sameAsManufacturer"  label="${message(code:'spare.part.sameAsManufacturer.label')}" bean="${sparePart}" field="sameAsManufacturer" value="${sparePart.sameAsManufacturer}" checked="${(sparePart.sameAsManufacturer)? true:false}"/>
 	    	<table class="items">
 	    		<tr>
 	    			<th></th>
-	    			<th>${message(code:'sparePart.status.label')}</th>
-	    			<th>${message(code:'sparePart.status.date.of.event.label')}</th>
-	    			<th>${message(code:'sparePart.status.recordedon.label')}</th>
-	    			<th>${message(code:'sparePart.status.current.label')}</th>
+	    			<th>${message(code:'spare.part.status.label')}</th>
+	    			<th>${message(code:'spare.part.status.date.of.event.label')}</th>
+	    			<th>${message(code:'spare.part.status.recordedon.label')}</th>
+	    			<th>${message(code:'spare.part.status.current.label')}</th>
 	    		</tr>
 	    		<g:each in="${sparePart.status.sort{a,b -> (a.dateCreated > b.dateCreated) ? -1 : 1}}" status="i" var="status">
 		    		<g:if test="${i+1<numberOfStatusToDisplay}">
@@ -109,7 +110,7 @@
       	<g:selectFromList name="manufacturer.id" label="${message(code:'provider.type.manufacturer')}" bean="${sparePart}" field="manufacturer" optionKey="id" multiple="false"
   			ajaxLink="${createLink(controller:'provider', action:'getAjaxData', params: [type:'MANUFACTURER'])}"
   			from="${manufacturers}" value="${sparePart?.manufacturer?.id}" values="${manufacturers.collect{it.contact?.contactName}}" />	
-  			<g:inputDate name="manufactureDate"  precision="month" label="${message(code:'sparePart.manufacture.date.label')}" value="${sparePart?.manufactureDate}" bean="${sparePart}" field="manufactureDate"/>
+  			<g:inputDate name="manufactureDate"  precision="month" label="${message(code:'spare.part.manufacture.date.label')}" value="${sparePart?.manufactureDate}" bean="${sparePart}" field="manufactureDate"/>
      	</fieldset>
     	  <div id="form-aside-manufacturer" class="form-aside">
 	    	  <g:if test="${sparePart?.manufacturer != null}">
@@ -128,13 +129,10 @@
       	<g:selectFromList name="supplier.id" label="${message(code:'provider.type.supplier')}" bean="${sparePart}" field="supplier" optionKey="id" multiple="false"
   			ajaxLink="${createLink(controller:'provider', action:'getAjaxData', params: [type:'SUPPLIER'])}"
   			from="${suppliers}" value="${sparePart?.supplier?.id}" values="${suppliers.collect{it.contact?.contactName}}" />		
-  			<g:input name="purchaseDate" dateClass="date-picker" label="${message(code:'sparePart.purchase.date.label')}" bean="${sparePart}" field="purchaseDate"/>
-    		<g:selectFromEnum name="purchaser" bean="${sparePart}" values="${PurchasedBy.values()}" field="purchaser" label="${message(code:'sparePart.purchaser.label')}"/>
-    		<div class="donor-information">
-	    		<g:selectFromEnum name="donor" bean="${sparePart}" values="${Donor.values()}" field="donor" label="${message(code:'sparePart.donor.label')}"/>
-	    		<g:input name="donorName"  label="${message(code:'sparePart.donor.name.label')}" bean="${sparePart}" field="donorName"/>
-    		</div>
-    		<g:currency costName="purchaseCost" id="purchase-cost" costLabel="${message(code:'sparePart.purchase.cost.label')}" bean="${sparePart}" costField="purchaseCost"  currencyName="currency" values="${currencies}" currencyField="currency" currencyLabel="${message(code:'sparePart.currency.label')}"/>
+  			<g:input name="purchaseDate" dateClass="date-picker" label="${message(code:'spare.part.purchase.date.label')}" bean="${sparePart}" field="purchaseDate"/>
+    		<g:selectFromEnum name="sparePartPurchasedBy" bean="${sparePart}" values="${SparePartPurchasedBy.values()}" field="sparePartPurchasedBy" label="${message(code:'spare.part.sparePartPurchasedBy.label')}"/>
+    		
+    		<g:currency costName="purchaseCost" id="purchase-cost" costLabel="${message(code:'spare.part.purchase.cost.label')}" bean="${sparePart}" costField="purchaseCost"  currencyName="currency" values="${currencies}" currencyField="currency" currencyLabel="${message(code:'spare.part.currency.label')}"/>
      	</fieldset>
      	 <div id="form-aside-supplier" class="form-aside">
      		<g:if test="${sparePart?.supplier != null}">
@@ -150,33 +148,14 @@
           </span>
           <g:message code="sparePart.section.warranty.information.label" default="Warranty Information"/>
         </h4>
-        <g:inputBox name="warranty.sameAsSupplier"  label="${message(code:'sparePart.same.as.supplier.label')}" bean="${sparePart}" field="warranty.sameAsSupplier" checked="${(sparePart.warranty?.sameAsSupplier)? true:false}"/>
+        <g:inputBox name="warranty.sameAsSupplier"  label="${message(code:'spare.part.same.as.supplier.label')}" bean="${sparePart}" field="warranty.sameAsSupplier" checked="${(sparePart.warranty?.sameAsSupplier)? true:false}"/>
       	<g:input name="warranty.startDate" dateClass="date-picker" label="${message(code:'warranty.start.date.label')}" bean="${sparePart}" field="warranty.startDate"/>
-    	<g:inputYearMonth name="warrantyPeriod" field="warrantyPeriod" years="${sparePart.warrantyPeriod?.years}" months="${sparePart.warrantyPeriod?.months}" bean="${sparePart}" label='sparePart.warranty.period.label'/>
+    	<g:inputYearMonth name="warrantyPeriod" field="warrantyPeriod" years="${sparePart.warrantyPeriod?.years}" months="${sparePart.warrantyPeriod?.months}" bean="${sparePart}" label='spare.part.warranty.period.label'/>
       	<g:address  bean="${sparePart}" warranty="true" field="warranty.contact"/>
      	<g:i18nTextarea name="warranty.descriptions" bean="${sparePart}" label="${message(code:'warranty.descriptions.label')}" field="warranty.descriptions" height="150" width="300" maxHeight="150" />	 			
   		</fieldset> 
       </div>
-      <div class="form-section">
-      	<fieldset class="form-content">
-      	<h4 class="section-title">
-          <span class="question-default">
-            <img src="${resource(dir:'images/icons',file:'star_small.png')}" alt="Section"/>
-          </span>
-          <g:message code="sparePart.section.service.provider.information.label" default="Service Provider Information"/>
-        </h4>
-        <g:selectFromList name="serviceProvider.id" label="${message(code:'provider.type.serviceProvider')}" bean="${sparePart}" field="serviceProvider" optionKey="id" multiple="false"
-  			ajaxLink="${createLink(controller:'provider', action:'getAjaxData', params: [type:'SERVICEPROVIDER'])}"
-  			from="${serviceProviders}" value="${sparePart.serviceProvider?.id}" values="${serviceProviders.collect{it.contact?.contactName}}" />
-  			<g:input name="serviceContractStartDate" dateClass="date-picker" label="${message(code:'sparePart.provider.startDate.label')}" bean="${sparePart}" field="serviceContractStartDate"/>
-  			<g:inputYearMonth name="serviceContractPeriod" field="serviceContractPeriod" years="${sparePart.serviceContractPeriod?.years}" months="${sparePart.serviceContractPeriod?.months}" bean="${sparePart}" label='sparePart.provider.period.label'/>
-  		</fieldset> 
-  		<div id="form-aside-serviceProvider" class="form-aside">
-	    	  <g:if test="${sparePart?.serviceProvider != null}">
-	    	 	 <g:render template="/templates/providerFormSide" model="['provider':sparePart.serviceProvider,'type':sparePart.serviceProvider?.type,'label':'provider.service.provider.details','cssClass':'current','field':'serviceProvider' ]" />
-	          </g:if>
-       	</div>
-      </div>
+      
   		<g:if test="${sparePart.id != null}">
   			<input type="hidden" name="id" value="${sparePart.id}"/>
   		</g:if>
@@ -191,7 +170,7 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		numberOnlyField();
-		getToHide("${message(code:'sparePart.purchase.cost.label')}","${message(code:'sparePart.estimated.cost.label')}");
+		getToHide("${message(code:'spare.part.purchase.cost.label')}","${message(code:'spare.part.estimated.cost.label')}");
 		getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}");
 	});
 </script>

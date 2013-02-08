@@ -153,7 +153,7 @@
 						<ul class="submenu">
 						<li><a
 								href="${createLink(controller: 'sparePartView', action:'list')}"><g:message
-										code="sparePart.label" /></a></li>
+										code="spare.part.label" /></a></li>
 							<li><a
 								href="${createLink(controller: 'equipmentType', action:'list')}"><g:message
 										code="equipment.type.label" /></a></li>

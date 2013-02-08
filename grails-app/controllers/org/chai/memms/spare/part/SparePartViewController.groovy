@@ -40,7 +40,7 @@ class SparePartViewController extends AbstractController{
 	def grailsApplication
 
 	def getLabel() {
-		return "sparePart.label";
+		return "spare.part.label";
 	}
 
 	def getEntityClass() {
@@ -52,7 +52,7 @@ class SparePartViewController extends AbstractController{
 		def html = g.render(template:"/templates/sparePartClueTip",model:[sparePart:sparePart])
 		render(contentType:"text/plain", text:html)
 	}
-	
+	//TODO By Aphrodice View Page not yet having codes "/entity/sparePart/summary"
 	def view ={
 		SparePart sparePart = SparePart.get(params.int("sparePart.id"))
 		if(sparePart == null)	response.sendError(404)
@@ -73,8 +73,8 @@ class SparePartViewController extends AbstractController{
 				entityClass: getEntityClass(),
 				code: getLabel(),
 				names:names,
-				/*importTask:'EquipmentTypeImportTask',
-				exportTask:'EquipmentTypeExportTask'*/
+				//importTask:'EquipmentTypeImportTask',
+				//exportTask:'EquipmentTypeExportTask'
 			])
 		}
 	}
@@ -276,7 +276,7 @@ class SparePartViewController extends AbstractController{
 			if(property.equals("sameAsManufacturer")){
 				if(sparePart.sameAsManufacturer) sparePart.sameAsManufacturer = false
 				else {
-					sparePart.lastModifiedBy = user
+					sparePart.lastModified = user
 					sparePart.sameAsManufacturer = true
 				}
 				entity = sparePart.save(flush:true)

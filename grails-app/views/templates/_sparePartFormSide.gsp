@@ -1,7 +1,7 @@
 <%@ page import="org.chai.memms.util.Utils" %>
 <div id="form-aside-${field}-${sparePart.id}" class="${(cssClass)?:cssClass}">
 	<a href="${createLinkWithTargetURI(controller:'sparePart', action:'edit', params:[id: sparePart.id])}" class="next small gray right pulled">
-		<g:message code="default.edit.label" args="[message(code:'sparePart.label')]" />
+		<g:message code="default.edit.label" args="[message(code:'spare.part.label')]" />
 	</a>
 	<h5><g:message code="sparePart.details.label" /></h5>
 	
