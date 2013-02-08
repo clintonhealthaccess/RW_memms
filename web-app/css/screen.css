@@ -795,89 +795,93 @@ form.search-form button { height: 23px; margin: 0 0 0 -1px; -moz-border-radius-t
 .filters button { margin: 5px 15px 15px; }
 /* line 619, ../../src/stylesheets/partials/_forms.sass */
 .filters .date-picker { width: 137px; }
-
 /* line 622, ../../src/stylesheets/partials/_forms.sass */
+.filters.projection { padding: 10px; }
+/* line 624, ../../src/stylesheets/partials/_forms.sass */
+.filters.projection .question-help { background-color: white; border: none; display: inline; margin: 0; padding: 12px 45px; position: relative; top: -2px; }
+
+/* line 633, ../../src/stylesheets/partials/_forms.sass */
 .filters-box { display: none; }
 
-/* line 625, ../../src/stylesheets/partials/_forms.sass */
+/* line 636, ../../src/stylesheets/partials/_forms.sass */
 .filter-results { color: #aaaaaa; font: bold 14px Arial, sans-serif; padding: 5px 0; text-transform: uppercase; }
 
-/* line 631, ../../src/stylesheets/partials/_forms.sass */
+/* line 642, ../../src/stylesheets/partials/_forms.sass */
 .form-languages a { font-size: 10px; margin-left: 5px; text-transform: uppercase; }
 
-/* line 636, ../../src/stylesheets/partials/_forms.sass */
+/* line 647, ../../src/stylesheets/partials/_forms.sass */
 .checkbox { position: relative; *zoom: 1; }
 /* line 38, ../../../../.rvm/gems/ruby-1.9.3-p327/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .checkbox:after { content: ""; display: table; clear: both; }
-/* line 639, ../../src/stylesheets/partials/_forms.sass */
+/* line 650, ../../src/stylesheets/partials/_forms.sass */
 .checkbox .ajax-spinner, .checkbox .list-check-box { position: absolute; }
-/* line 641, ../../src/stylesheets/partials/_forms.sass */
+/* line 652, ../../src/stylesheets/partials/_forms.sass */
 .checkbox .ajax-spinner { top: -7px; }
-/* line 643, ../../src/stylesheets/partials/_forms.sass */
+/* line 654, ../../src/stylesheets/partials/_forms.sass */
 .checkbox .list-check-box { margin: 0; top: -5px; }
-/* line 646, ../../src/stylesheets/partials/_forms.sass */
+/* line 657, ../../src/stylesheets/partials/_forms.sass */
 .checkbox .ajax-error { color: #d30000; display: inline-block; left: -50%; position: absolute; top: 12px; white-space: nowrap; }
 
-/* line 653, ../../src/stylesheets/partials/_forms.sass */
+/* line 664, ../../src/stylesheets/partials/_forms.sass */
 .process-list-action, .process-list-material { border: 1px solid #47aef7; max-height: 188px; overflow-y: scroll; }
 
-/* line 659, ../../src/stylesheets/partials/_forms.sass */
+/* line 670, ../../src/stylesheets/partials/_forms.sass */
 .hide-list { display: none; }
 
-/* line 663, ../../src/stylesheets/partials/_forms.sass */
+/* line 674, ../../src/stylesheets/partials/_forms.sass */
 .process { margin-bottom: 15px; }
-/* line 665, ../../src/stylesheets/partials/_forms.sass */
-.process fieldset { display: inline; padding: 3px 0 10px; width: 330px; }
-/* line 669, ../../src/stylesheets/partials/_forms.sass */
-.process fieldset ul { margin-bottom: 10px; }
-/* line 671, ../../src/stylesheets/partials/_forms.sass */
-.process fieldset li { border-bottom: 1px solid #eeeeee; line-height: 1.4; padding: 5px; position: relative; }
 /* line 676, ../../src/stylesheets/partials/_forms.sass */
-.process fieldset li:last-child { border-bottom: 0; }
-/* line 678, ../../src/stylesheets/partials/_forms.sass */
-.process fieldset li .ajax-spinner { position: absolute; right: 28px; top: 6px; }
+.process fieldset { display: inline; padding: 3px 0 10px; width: 330px; }
+/* line 680, ../../src/stylesheets/partials/_forms.sass */
+.process fieldset ul { margin-bottom: 10px; }
 /* line 682, ../../src/stylesheets/partials/_forms.sass */
+.process fieldset li { border-bottom: 1px solid #eeeeee; line-height: 1.4; padding: 5px; position: relative; }
+/* line 687, ../../src/stylesheets/partials/_forms.sass */
+.process fieldset li:last-child { border-bottom: 0; }
+/* line 689, ../../src/stylesheets/partials/_forms.sass */
+.process fieldset li .ajax-spinner { position: absolute; right: 28px; top: 6px; }
+/* line 693, ../../src/stylesheets/partials/_forms.sass */
 .process input[type=text] { width: 264px; }
-/* line 684, ../../src/stylesheets/partials/_forms.sass */
+/* line 695, ../../src/stylesheets/partials/_forms.sass */
 .process .ajax-error { color: #d30000; font-size: 12px; padding: 0 0 0 3px; }
-/* line 688, ../../src/stylesheets/partials/_forms.sass */
+/* line 699, ../../src/stylesheets/partials/_forms.sass */
 .process .ajax-error.alt { display: block; }
-/* line 690, ../../src/stylesheets/partials/_forms.sass */
+/* line 701, ../../src/stylesheets/partials/_forms.sass */
 .process a.delete-row { float: none; position: absolute; right: 4px; top: 4px; }
 
-/* line 696, ../../src/stylesheets/partials/_forms.sass */
+/* line 707, ../../src/stylesheets/partials/_forms.sass */
 a.delete-row { background: #d30000; color: white; display: block; float: right; font-size: 10px; font-weight: bold; height: 18px; position: relative; z-index: 1000; line-height: 18px; margin-left: 5px; opacity: 0.2; text-align: center; text-decoration: none; width: 18px; -webkit-border-radius: 50%; -moz-border-radius: 50%; -ms-border-radius: 50%; -o-border-radius: 50%; border-radius: 50%; }
-/* line 713, ../../src/stylesheets/partials/_forms.sass */
+/* line 724, ../../src/stylesheets/partials/_forms.sass */
 a.delete-row:hover, a.delete-row:focus { opacity: 1; }
 
-/* line 718, ../../src/stylesheets/partials/_forms.sass */
+/* line 729, ../../src/stylesheets/partials/_forms.sass */
 .filters .ui-datepicker-trigger { position: absolute; right: 13px; top: 17px; }
 
-/* line 722, ../../src/stylesheets/partials/_forms.sass */
+/* line 733, ../../src/stylesheets/partials/_forms.sass */
 .ui-datepicker-trigger { position: relative; right: 20px; top: 4px; }
 
-/* line 726, ../../src/stylesheets/partials/_forms.sass */
+/* line 737, ../../src/stylesheets/partials/_forms.sass */
 .ui-datepicker-title, .ui-datepicker-calendar { font-size: 12px !important; }
 
-/* line 731, ../../src/stylesheets/partials/_forms.sass */
+/* line 742, ../../src/stylesheets/partials/_forms.sass */
 .period-month-year { display: inline-block; width: 20%; }
-/* line 734, ../../src/stylesheets/partials/_forms.sass */
+/* line 745, ../../src/stylesheets/partials/_forms.sass */
 .period-month-year input[type=text] { float: left; width: 55px; }
-/* line 737, ../../src/stylesheets/partials/_forms.sass */
+/* line 748, ../../src/stylesheets/partials/_forms.sass */
 .period-month-year label { width: auto; }
 
-/* line 739, ../../src/stylesheets/partials/_forms.sass */
+/* line 750, ../../src/stylesheets/partials/_forms.sass */
 .time-date { display: inline-block; width: 33%; }
-/* line 742, ../../src/stylesheets/partials/_forms.sass */
+/* line 753, ../../src/stylesheets/partials/_forms.sass */
 .time-date label { width: auto; }
 
-/* line 745, ../../src/stylesheets/partials/_forms.sass */
+/* line 756, ../../src/stylesheets/partials/_forms.sass */
 .week-days-options { display: inline-block; width: auto; }
 
-/* line 749, ../../src/stylesheets/partials/_forms.sass */
+/* line 760, ../../src/stylesheets/partials/_forms.sass */
 .small-text-field { width: 133px !important; }
 
-/* line 752, ../../src/stylesheets/partials/_forms.sass */
+/* line 763, ../../src/stylesheets/partials/_forms.sass */
 .rows-wrapper .row { float: none !important; display: inline-block !important; }
 
 /* line 1, ../../src/stylesheets/partials/_flashes.sass */
