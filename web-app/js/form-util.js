@@ -388,10 +388,12 @@ function getToHide(parchaseCost,estimatedCost){
 	})
 
 	$("select[name=occurency]").change(function(e){
-		if($(this).val()=="WEEKLY"){ 
+		if($(this).val()=="DAYS_OF_WEEK"){ 
 			$(".week-days").slideDown()
+			$(".occur-interval").slideUp()
 		}else{
 			$(".week-days").slideUp()
+			$(".occur-interval").slideDown()
 		}
 		$("select[name=occurInterval]").nextAll("label.has-helper").html($(this).find("option:selected").text());
 		$("input[name=occurInterval]").nextAll("label.has-helper").html($(this).find("option:selected").text());

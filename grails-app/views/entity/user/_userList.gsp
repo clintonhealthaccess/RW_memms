@@ -2,6 +2,7 @@
 	<thead>
 		<tr>
 			<th/>
+			<th><g:message code="entity.names.label"/></th>
 			<g:sortableColumn property="username" title="${message(code: 'user.username.label')}" params="[q:q]" />
 			<g:sortableColumn property="email" title="${message(code: 'user.email.label')}" params="[q:q]" />
 			<th><g:message code="user.permission.label"/></th>
@@ -24,6 +25,7 @@
 						</li>
 	           		</ul>
 				</td>
+				<td>${user.names}</td>
 				<td>${user.username}</td>					
   				<td>${user.email}</td>
   				<td><g:stripHtml field="${user.permissionString}" chars="30"/></td>

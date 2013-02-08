@@ -62,7 +62,7 @@ public abstract class AbstractController {
 	
 	def adaptParamsForList() {
 		if(log.isDebugEnabled()) log.debug("Grails application value: " + grailsApplication)
-		params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.site.entity.list.max, 5)
+		params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.site.entity.list.max, 40)
 		params.offset = params.offset ? params.int('offset'): 0
 	}
 	
@@ -83,13 +83,14 @@ public abstract class AbstractController {
 		}
 		
 		if(dataLocationTypes == null || dataLocationTypes.empty){
-			dataLocationTypes.addAll(grailsApplication.config.site.datalocationtype.checked.collect{ DataLocationType.findByCode(it) } - null)
+			dataLocationTypes.addAll(DataLocationType.findAllByDefaultSelected(true))
 		}
 		
 		return dataLocationTypes.sort()
 	}
 	
 	def hasAccess(CalculationLocation location){
+	//TO BE REVIEWED BY APHRODICE BECAUSE IT MAKES ERRORS WHILE TESTING
 		if(!user.canAccessCalculationLocation(location)) response.sendError(403)
 	}
 }

@@ -26,7 +26,7 @@
 			      	<g:selectFromEnum name="occurency" bean="${order}" values="${OccurencyType.values()}" field="occurency"  label="${message(code:'preventive.repeats.label')}"/>
 			      	<g:occurInterval name="occurInterval" bean="${order}" value="${order.occurInterval}" range="${10}" field="occurInterval" label="${message(code:'preventive.repeats.every.label')}"/>
 			      	<g:weekDays name="occurDaysOfWeek" label="${message(code:'preventive.repeats.on.label')}" bean="${order}" field="occurDaysOfWeek"/>
-			      	<g:inputTimeDate name="openOn" field="openOn" date="${order.openOn?.date}" time="${order.openOn?.time}" label='preventive.starts.on.label' bean="${order}" dateClass="date-picker" timeClass="time-picker"/>
+			      	<g:inputTimeDate name="firstOccurenceOn" field="firstOccurenceOn" date="${order.firstOccurenceOn?.date}" time="${order.firstOccurenceOn?.time}" label='preventive.starts.on.label' bean="${order}" dateClass="date-picker" timeClass="time-picker"/>
       			</fieldset>
 	     	</div>
 	  		<div class="buttons">

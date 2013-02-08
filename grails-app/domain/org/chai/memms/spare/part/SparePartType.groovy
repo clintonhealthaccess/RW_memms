@@ -35,7 +35,6 @@ import org.chai.memms.spare.part.SparePartStatus;
 import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
 import org.chai.memms.spare.part.SparePart;
 import i18nfields.I18nFields;
-
 /**
  * @author Jean Kahigiso M.
  *
@@ -44,21 +43,18 @@ import i18nfields.I18nFields;
 @EqualsAndHashCode(includes="code")
 class SparePartType {
 	
+
 	String code
 	String names
-	String descriptions
 	String partNumber
-	
-	Provider manufacturer
-	
+	String descriptions
 	Date discontinuedDate
 	Date dateCreated
 	Date lastUpdated
+	Provider manufacturer
 	
 	static i18nFields = ["descriptions","names"]
-	
-	static hasMany = [spareParts: SparePart]
-	
+	static hasMany = [spareParts: SparePart]	
 	static constraints = {
 		code nullable: false, unique :true
 		names nullable: true, blank: true
@@ -87,7 +83,13 @@ class SparePartType {
 	
 	@Transient
 	def getPendingSpareParts(){
-		//TODO add more status
+		List<SparePart> pendingSpareParts=[]
+		if(!spareParts==null && !spareParts.isEmpty()){
+			for(SparePart sparePart:spareParts)
+			if(sparePart.usedOnEquipment == null && sparePart.statusOfSparePart.equals(StatusOfSparePart.PENDINGORDER))
+			pendingSpareParts.add(sparePart)
+			}
+		return pendingSpareParts
 	}
 	
 	@Override

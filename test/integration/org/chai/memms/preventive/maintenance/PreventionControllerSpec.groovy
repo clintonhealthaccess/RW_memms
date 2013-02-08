@@ -21,8 +21,8 @@ class PreventionControllerSpec extends IntegrationTests {
 		def techInCharge = newOtherUserWithType("techInCharge", "techInCharge", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
 		def addedBy = newUser("addedBy", CODE(123))
 		def equipment = Equipment.findBySerialNumber(CODE(123))
-		def durationBasedOrder = Initializer.newDurationBasedOrder(equipment,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description",
-			Initializer.now()+1,null,OccurencyType.DAILY,true,1,1,null)
+		def durationBasedOrder = Initializer.newDurationBasedOrder(equipment,addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"test"],"description",
+			Initializer.now()+1,null,OccurencyType.DAILY,1,null)
 		setupSecurityManager(newSystemUser("user", "user", DataLocation.findByCode(BUTARO)))
 		preventionController = new PreventionController()
 		when:
@@ -42,7 +42,7 @@ class PreventionControllerSpec extends IntegrationTests {
 		def techInCharge = newOtherUserWithType("techInCharge", "techInCharge", DataLocation.findByCode(BUTARO),UserType.TECHNICIANDH)
 		def addedBy = newUser("addedBy", CODE(123))
 		def equipment = Equipment.findBySerialNumber(CODE(123))
-		def workBasedOrder = Initializer.newWorkBasedOrder( equipment, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVIDEPROVIDER,null,["en":"test"],"description",
+		def workBasedOrder = Initializer.newWorkBasedOrder( equipment, addedBy,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,["en":"test"],"description",
 			Initializer.now()+1,null,WorkIntervalType.NONE,1)
 		setupSecurityManager(newSystemUser("user", "user", DataLocation.findByCode(BUTARO)))
 		preventionController = new PreventionController()

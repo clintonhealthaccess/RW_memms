@@ -1,4 +1,4 @@
-/** 
+/**
  * Copyright (c) 2012, Clinton Health Access Initiative.
  *
  * All rights reserved.
@@ -13,7 +13,7 @@
  *     * Neither the name of the <organization> nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -25,110 +25,107 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.inventory
+package org.chai.memms.spare.part
+
+import java.util.Set;
 
 import org.chai.memms.AbstractEntityController;
-import org.chai.memms.inventory.Provider.Type;
-import org.chai.memms.inventory.Provider;
+import org.chai.memms.spare.part.SparePartType;
 
-/**
- * @author Jean Kahigiso M.
- *
- */
-class ProviderController  extends AbstractEntityController {
+
+class SparePartTypeController  extends AbstractEntityController{
+	def sparePartTypeService
 	
-    def providerService
-	
-	def  getEntity(def  id) {
-		return Provider.get(id);
+	def getEntity(def id) {
+		return SparePartType.get(id);
 	}
 
 	def createEntity() {
-		return new Provider();
+		return new SparePartType();
 	}
 
 	def getTemplate() {
-		return "/entity/provider/createProvider";
+		return "/entity/sparePartType/createSparePartType";
 	}
 
 	def getLabel() {
-		return "provider.label";
+		return "spare.part.type.label";
 	}
 
 	def getEntityClass() {
-		return Provider.class;
+		return SparePartType.class;
 	}
-	
+
 	def deleteEntity(def entity) {
-		if(entity.manufacturers.size() > 0 || entity.suppliers.size() > 0 ){
-			flash.message = message(code: 'provider.hasequipments', args: [message(code: getLabel(), default: 'entity'), params.id], default: '{0} still has associated equipments.')
-		}else super.deleteEntity(entity)
+		if (entity.spareParts.size() != 0)
+			flash.message = message(code: 'spare.part.type.hasspare part', args: [message(code: getLabel(), default: 'entity'), params.id], default: '{0} still has associated spare part.')
+		else
+			super.deleteEntity(entity);
 	}
-	def getModel(def entity) {
-	     [
-			 provider: entity
-		 ]
-	}	
-	
 	def bindParams(def entity) {
 		entity.properties = params
 	}
 	
+
+	def getModel(def entity) {
+		[
+			type: entity
+		]
+	}
+	
 	def list = {
 		adaptParamsForList()
-		List<Provider> providers = Provider.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc")
+		List<SparePartType> types = SparePartType.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc");
 		if(request.xhr)
-			this.ajaxModel(providers,"")
+			this.ajaxModel(types,"")
 		else{
-		render(view:"/entity/list", model:[
-			template:"provider/providerList",
-			listTop:"provider/listTop",
-			entities: providers,
-			entityCount: providers.totalCount,
-			code: getLabel()
+		render(view:"/entity/list",model:[
+				template:"sparePartType/sparePartTypeList",
+				listTop:"sparePartType/listTop",
+				entities: types,
+				entityCount: types.totalCount,
+				entityClass: getEntityClass(),
+				code: getLabel(),
+				names:names,
+				
 			])
 		}
 	}
 	
 	def search = {
 		adaptParamsForList()
-		List<Provider> providers = providerService.searchProvider(null, params['q'], params)		
+		List<SparePartType> types = sparePartTypeService.searchSparePartType(params['q'],params)
 		if(!request.xhr)
 			response.sendError(404)
-		this.ajaxModel(providers,params['q'])
+		this.ajaxModel(types,params['q'])
 	}
 	
 	def ajaxModel(def entities,def searchTerm) {
-		def model = [entities: entities,entityCount: entities.totalCount,names:names,q:searchTerm]
-		def listHtml = g.render(template:"/entity/provider/providerList",model:model)
+		def model = [entities: entities,entityCount: entities.totalCount,entityClass:getEntityClass(),names:names,q:searchTerm]
+		def listHtml = g.render(template:"/entity/sparePartType/sparePartTypeList",model:model)
 		render(contentType:"text/json") { results = [listHtml] }
 	}
-	
+
 	def getAjaxData = {
-		if(log.isDebugEnabled()) log.debug("Provider getAjaxData Sent Params: " + params)
-		def detailsLabel='';
-		def type =params['type']
-		type = Type."$type";
-		if(type.equals(Type.MANUFACTURER)) detailsLabel="provider.manufacturer.details"
-		else if(type.equals(Type.SUPPLIER)) detailsLabel="provider.supplier.details" else detailsLabel="provider.serviceProvider.details"
-		List<Provider> providers = providerService.searchProvider(type, params['term'], [:])
+		List<SparePartType> types = sparePartTypeService.searchSparePartType(params['term'],[:])
 		render(contentType:"text/json") {
 			elements = array {
-				providers.each { provider ->
+				types.each { type ->
 					elem (
-						key: provider.id,
-						value: provider.contact.contactName + ' ['+provider.code+']'
-					)
+							key: type.id,
+							value: type.getNames(languageService.getCurrentLanguage()) + ' ['+type.code+']'
+							)
 				}
 			}
 			htmls = array {
-				providers.each { provider ->
+				types.each { type ->
 					elem (
-						key: provider.id,
-						html: g.render(template:"/templates/providerFormSide",model:[provider:provider,type:type,label:detailsLabel,cssClass:"form-aside-hidden",field:type.name])						  
-					)
+							key: type.id,
+							html: g.render(template:"/templates/typeFormSide",model:[type:type,label:label,cssClass:"form-aside-hidden",field:'type'])
+							)
 				}
 			}
 		}
-	}
+	}	
+	
 }

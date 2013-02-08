@@ -42,6 +42,7 @@ import org.chai.memms.TimeDate
 @i18nfields.I18nFields
 public abstract class PreventiveOrder extends MaintenanceOrder {
 	
+	// fterrier: why this if there is a class to distinguish them?
 	enum PreventiveOrderType{
 		
 		NONE("none"),
@@ -68,7 +69,7 @@ public abstract class PreventiveOrder extends MaintenanceOrder {
 	enum PreventionResponsible{
 		
 		NONE("none"),
-		SERVIDEPROVIDER("service.provider"),
+		SERVICEPROVIDER("service.provider"),
 		DEPARTMENTUSER("department.user"),
 		HCTITULAIRE("hc.titulaire"),
 		HCTECHNICIAN("hc.technician")
@@ -86,6 +87,8 @@ public abstract class PreventiveOrder extends MaintenanceOrder {
 	PreventiveOrderType type
 	PreventiveOrderStatus status
 	TimeDate firstOccurenceOn
+	Integer occurInterval = 1
+
 	
 	static belongsTo = [equipment: Equipment]
 	static hasMany = [preventions: Prevention]
@@ -98,7 +101,8 @@ public abstract class PreventiveOrder extends MaintenanceOrder {
 		lastUpdated nullable: true, validator:{ val, obj ->
 			if(val!=null) return (val <= new Date())
 		}
-		firstOccurenceOn nullable: false, validator:{it.timeDate >= new Date()}
+		occurInterval nullable: false, validator:{return (it >= 1)}
+		firstOccurenceOn nullable: false, validator:{ return (it.timeDate >= new Date())}
 		names nullable: true, blank: true
 		type nullable: false, inList:[PreventiveOrderType.DURATIONBASED,PreventiveOrderType.WORKBASED]
 		status nullable:false, inList:[PreventiveOrderStatus.OPEN,PreventiveOrderStatus.CLOSED]
@@ -106,7 +110,7 @@ public abstract class PreventiveOrder extends MaintenanceOrder {
 		closedOn nullable:true, validator:{ val, obj ->
 			if(val!=null) return (val<=new Date() && obj.status.equals(PreventiveOrderStatus.CLOSED))
 		}
-		preventionResponsible nullable:false,inList:[PreventionResponsible.HCTECHNICIAN,PreventionResponsible.HCTITULAIRE,PreventionResponsible.SERVIDEPROVIDER,PreventionResponsible.DEPARTMENTUSER]
+		preventionResponsible nullable:false,inList:[PreventionResponsible.HCTECHNICIAN,PreventionResponsible.HCTITULAIRE,PreventionResponsible.SERVICEPROVIDER,PreventionResponsible.DEPARTMENTUSER]
 		technicianInCharge nullable:true, validator:{ val, obj ->
 			if(obj.preventionResponsible.equals(PreventionResponsible.HCTECHNICIAN)) return (val!=null)
 		}
@@ -128,6 +132,4 @@ public abstract class PreventiveOrder extends MaintenanceOrder {
         return new DateTime(firstOccurenceOn.timeDate).plusHours(1)
     }	
 	
-	abstract Integer getPlannedPrevention();
-
 }

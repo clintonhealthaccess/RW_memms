@@ -27,7 +27,7 @@ class WorkBasedOrderControllerSpec extends IntegrationTests {
 		workBasedOrderController.params.type = PreventiveOrderType.DURATIONBASED
 		workBasedOrderController.params.status = PreventiveOrderStatus.CLOSED
 		workBasedOrderController.params.description = "test"
-		workBasedOrderController.params.preventionResponsible = PreventionResponsible.SERVIDEPROVIDER
+		workBasedOrderController.params.preventionResponsible = PreventionResponsible.SERVICEPROVIDER
 		workBasedOrderController.params.firstOccurenceOn = Initializer.newTimeDate(Initializer.now(),"24:60:60")
 		workBasedOrderController.params.occurency = WorkIntervalType.NONE
 		workBasedOrderController.save()

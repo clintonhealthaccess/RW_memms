@@ -151,6 +151,7 @@ class EquipmentService {
 		}
 	}
 
+	// fterrier: signature is very long
 	public def filterEquipment(def user, def dataLocation, def supplier, def manufacturer,def serviceProvider, def equipmentType, 
 		def purchaser,def donor,def obsolete,def status,Map<String, String> params){
 		

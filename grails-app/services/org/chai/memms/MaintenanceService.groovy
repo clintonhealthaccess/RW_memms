@@ -111,7 +111,7 @@ class MaintenanceService {
 		List<Maintenance> maintenances = []
 		Set<LocationLevel> skipLevels = getSkipLocationLevels()
 
-		for(DataLocation dataLocation : location.collectDataLocations(skipLevels,types)){
+		for(DataLocation dataLocation : location.collectDataLocations(types)){
 			maintenances.add(new Maintenance(dataLocation:dataLocation,orderCount:this.getMaintenanceOrderByDataLocation(clazz,dataLocation,[:]).size()))
 		}
 		Maintenances maintenance = new Maintenances()

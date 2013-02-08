@@ -60,34 +60,34 @@ class DurationBasedOrderController extends AbstractEntityController {
 		def endRange = new Instant(params.long('end')  * 1000L).toDate()
 
         def orders = DurationBasedOrder.withCriteria {
-        	and{
-        		or{
-		        	equipment{
-		        		eq("dataLocation",dataLocation)
-		        	}
-	       		 }
-	        	between("openOn.timeDate",startRange,endRange)
+        	and {
+		        equipment{
+		        	eq("dataLocation",dataLocation)
+		        }
         	}
         }
+
+		if(log.isDebugEnabled()) log.debug("found order list ${orders}")
         orders.each { order ->
-            def dates = preventiveOrderService.findOccurrencesInRange(order, startRange, endRange)
+			if (log.debugEnabled) log.debug("checking order ${order} for occurences")
+	
+            def dates = order.getOccurencesBetween(startRange, endRange)
 
             dates.each { date ->
                 DateTime startTime = new DateTime(date)
                 DateTime endTime = startTime.plusMinutes(order.durationMinutes)
                 orderList << [
-                    		id: order.id,
-	                        title: order.names,
-	                        allDay: false,
-                    	    start: (startTime.toInstant().millis / 1000L),
-                    	    end: (endTime.toInstant().millis / 1000L)	
-                			]
+                    id: order.id,
+					title: order.names,
+					allDay: false,
+					start: (startTime.toInstant().millis / 1000L),
+					end: (endTime.toInstant().millis / 1000L)	
+				]
             }
         }
+		if (log.debugEnabled) log.debug("found occurrences ${orderList}")
+
         withFormat {
-            html {
-                [orderInstanceList: orderList]
-            }
             json {
                 render orderList as JSON
             }
@@ -107,12 +107,14 @@ class DurationBasedOrderController extends AbstractEntityController {
 
 	def getModel(def entity) {
 		def equipments =  []
+		def usersInCharge = userService.getActiveUserByTypeAndLocation([UserType.HOSPITALDEPARTMENT,UserType.TITULAIREHC,UserType.TECHNICIANDH],entity.equipment?.dataLocation,[:])
+		if(entity.lastModifiedBy != null) usersInCharge.add(entity.lastModifiedBy)
 		if(entity.equipment) equipments << entity.equipment
 		[
 			order:entity,
 			equipments: equipments,
 			currencies: grailsApplication.config.site.possible.currency,
-			technicians : userService.getActiveUserByTypeAndLocation([UserType.TECHNICIANDH],entity.equipment?.dataLocation,[:])
+			technicians : usersInCharge
 		]
 	}
 

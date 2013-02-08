@@ -133,12 +133,12 @@ class User {
 		phoneNumber phoneNumber: true, nullable: false, blank: false 
 		organisation nullable: false, blank: false 
 		defaultLanguage nullable: true 
-		userType nullable: false, blank: false 
 		location nullable: true 
 		registrationToken nullable: true 
 		passwordToken nullable: true 
-		active validator: {val, obj ->
-			//TODO fix this
+		userType nullable: false, blank: false, inList:[UserType.ADMIN,UserType.SYSTEM,UserType.TECHNICIANDH,UserType.TECHNICIANMMC,UserType.TITULAIREHC,UserType.HOSPITALDEPARTMENT,UserType.OTHER]
+		//TODO fix this
+		active validator: { val, obj ->
 			//return val ? obj.location != null && (obj.permissionString || obj.roles.size() > 0) : true
 		} 
 		lastUpdated nullable: true, validator:{
