@@ -20,7 +20,7 @@ class WorkBasedOrderSpec extends IntegrationTests {
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		//TODO the firstOccurenceOn time needs to have a "24:60:60", otherwise the condition would fail at times later than these
 		def order  = new WorkBasedOrder(equipment: equipment,addedBy: addedBy,type: PreventiveOrderType.DURATIONBASED,status: PreventiveOrderStatus.CLOSED,description: "test",
-			preventionResponsible: PreventionResponsible.SERVIDEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency:WorkIntervalType.NONE).save(failOnError:true)
+			preventionResponsible: PreventionResponsible.SERVICEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency:WorkIntervalType.NONE).save(failOnError:true)
 		then:
 		WorkBasedOrder.count() == 1
 	}
@@ -34,10 +34,10 @@ class WorkBasedOrderSpec extends IntegrationTests {
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		
 		def orderWrong  = new WorkBasedOrder(equipment: equipment,addedBy: addedBy,type: PreventiveOrderType.DURATIONBASED,status: PreventiveOrderStatus.CLOSED,description: "test",lastModifiedBy:lastModifiedByUser,
-			preventionResponsible: PreventionResponsible.SERVIDEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: WorkIntervalType.NONE).save()
+			preventionResponsible: PreventionResponsible.SERVICEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: WorkIntervalType.NONE).save()
 		
 		def orderRight  = new WorkBasedOrder(equipment: equipment,addedBy: addedBy,type: PreventiveOrderType.DURATIONBASED,status: PreventiveOrderStatus.CLOSED,description: "test",lastModifiedBy:lastModifiedByUser,lastUpdated:Initializer.now()-1,
-			preventionResponsible: PreventionResponsible.SERVIDEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: WorkIntervalType.NONE).save(failOnError:true)
+			preventionResponsible: PreventionResponsible.SERVICEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: WorkIntervalType.NONE).save(failOnError:true)
 		then:
 		WorkBasedOrder.count() == 1
 		orderWrong == null
@@ -51,9 +51,9 @@ class WorkBasedOrderSpec extends IntegrationTests {
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		
 		def orderFail  = new WorkBasedOrder(equipment: equipment,addedBy: addedBy,type: PreventiveOrderType.DURATIONBASED,status: PreventiveOrderStatus.CLOSED,description: "test",lastUpdated:Initializer.now()+1,
-				preventionResponsible: PreventionResponsible.SERVIDEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: WorkIntervalType.NONE).save()
+				preventionResponsible: PreventionResponsible.SERVICEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: WorkIntervalType.NONE).save()
 		def orderPass  = new WorkBasedOrder(equipment: equipment,addedBy: addedBy,type: PreventiveOrderType.DURATIONBASED,status: PreventiveOrderStatus.CLOSED,description: "test",lastUpdated:Initializer.now(),
-				preventionResponsible: PreventionResponsible.SERVIDEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: WorkIntervalType.NONE).save(failOnError:true)
+				preventionResponsible: PreventionResponsible.SERVICEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: WorkIntervalType.NONE).save(failOnError:true)
 
 		then:
 		WorkBasedOrder.count() == 1
@@ -69,7 +69,7 @@ class WorkBasedOrderSpec extends IntegrationTests {
 //		def equipment = Equipment.findBySerialNumber(CODE(123))
 //		//TODO the firstOccurenceOn time needs to have a "24:60:60", otherwise the condition would fail at times later than these
 //		def order  = new WorkBasedOrder(equipment: equipment,addedBy: addedBy,type: PreventiveOrderType.DURATIONBASED,status: PreventiveOrderStatus.CLOSED,description: "test",
-//			preventionResponsible: PreventionResponsible.SERVIDEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: WorkIntervalType.NONE).save(failOnError:true)
+//			preventionResponsible: PreventionResponsible.SERVICEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: WorkIntervalType.NONE).save(failOnError:true)
 //		then:
 //		WorkBasedOrder.count() == 1
 	}
@@ -81,7 +81,7 @@ class WorkBasedOrderSpec extends IntegrationTests {
 		def addedBy = newUser("addedBy", CODE(123))
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		def order  = new WorkBasedOrder(equipment: equipment,addedBy: addedBy,type: PreventiveOrderType.NONE,status: PreventiveOrderStatus.CLOSED,description: "test",
-			preventionResponsible: PreventionResponsible.SERVIDEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: WorkIntervalType.NONE).save()
+			preventionResponsible: PreventionResponsible.SERVICEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: WorkIntervalType.NONE).save()
 		then:
 		WorkBasedOrder.count() == 0
 		order == null
@@ -108,13 +108,13 @@ class WorkBasedOrderSpec extends IntegrationTests {
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		def order  = new WorkBasedOrder(equipment: equipment,addedBy: addedBy,type: PreventiveOrderType.DURATIONBASED,status: PreventiveOrderStatus.CLOSED,description: "test",
 				closedOn:Initializer.now(),
-				preventionResponsible: PreventionResponsible.SERVIDEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: WorkIntervalType.NONE).save(failOnError:true)
+				preventionResponsible: PreventionResponsible.SERVICEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: WorkIntervalType.NONE).save(failOnError:true)
 		def orderFailsOne  = new WorkBasedOrder(equipment: equipment,addedBy: addedBy,type: PreventiveOrderType.DURATIONBASED,status: PreventiveOrderStatus.CLOSED,description: "test",
 				closedOn:Initializer.now()+1,
-				preventionResponsible: PreventionResponsible.SERVIDEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: WorkIntervalType.NONE).save()
+				preventionResponsible: PreventionResponsible.SERVICEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: WorkIntervalType.NONE).save()
 		def orderFailsTwo  = new WorkBasedOrder(equipment: equipment,addedBy: addedBy,type: PreventiveOrderType.DURATIONBASED,status: PreventiveOrderStatus.OPEN,description: "test",
 				closedOn:Initializer.now(),
-				preventionResponsible: PreventionResponsible.SERVIDEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: WorkIntervalType.NONE).save()
+				preventionResponsible: PreventionResponsible.SERVICEPROVIDER, firstOccurenceOn: Initializer.newTimeDate(Initializer.now(),"24:60:60"),occurency: WorkIntervalType.NONE).save()
 
 		then:
 		WorkBasedOrder.count() == 1

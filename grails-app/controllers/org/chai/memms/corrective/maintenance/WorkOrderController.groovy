@@ -52,7 +52,6 @@ import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
  */
 class WorkOrderController extends AbstractEntityController{
 	
-	def grailsApplication
 	def locationService
 	def equipmentService
 	def equipmentStatusService

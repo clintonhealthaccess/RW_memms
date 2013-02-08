@@ -595,8 +595,6 @@ public class Initializer {
 		def notifationFive = newWorkOrderNotification(workOrderOne, techDH, department,"More information needed")
 		workOrderFive.save(failOnError:true)
 		
-		
-		
 		equipment01.addToWorkOrders(workOrderOne)
 		equipment01.addToWorkOrders(workOrderTwo)
 		equipment01.addToWorkOrders(workOrderFive)
@@ -642,33 +640,21 @@ public class Initializer {
 		def techDH = User.findByUsername("techDH")
 		def techMMC = User.findByUsername("techMMC")
 		
-		def equipment01 =Equipment.findBySerialNumber("SERIAL01")
-		def equipment09 =Equipment.findBySerialNumber("SERIAL09")
-		def equipment10 =Equipment.findBySerialNumber("SERIAL10")
+		def equipment01 = Equipment.findBySerialNumber("SERIAL01")
+		def equipment09 = Equipment.findBySerialNumber("SERIAL09")
+		def equipment10 = Equipment.findBySerialNumber("SERIAL10")
 		
-		def dOrderOne = newDurationBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'First Duration Order'],"First Duration Order",now()+1,null,OccurencyType.WEEKLY,true,1,2,[1,3,5])
-		equipment01.addToPreventiveOrders(dOrderOne)
-		equipment01.save(failOnError:true)
+		def dOrderOne = newDurationBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'First Duration Order'],"First Duration Order",now()+1,null,OccurencyType.DAYS_OF_WEEK,1,[1,3,5])
 		
-		def dOrderTwo = newDurationBasedOrder(equipment01,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'Secod Duration Order'],"Second Duration Order",now()+1,null,OccurencyType.MONTHLY,true,2,null,[])
-		equipment09.addToPreventiveOrders(dOrderTwo)
-		equipment09.save(failOnError:true)
+		def dOrderTwo = newDurationBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'Secod Duration Order'],"Second Duration Order",now()+1,null,OccurencyType.MONTHLY,2,[])
 		
-		def dOrderThree = newDurationBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'Three Duration Order'],"Second Duration Order",now()+1,null,OccurencyType.DAILY,true,2,null,[])
-		equipment09.addToPreventiveOrders(dOrderThree)
-		equipment09.save(failOnError:true)
+		def dOrderThree = newDurationBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'Three Duration Order'],"Second Duration Order",now()+1,null,OccurencyType.DAILY,2,[])
 		
-		def dOrderFour = newDurationBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'Four Duration Order'],"Second Duration Order",now()+1,null,OccurencyType.YEARLY,true,2,null,[])
-		equipment09.addToPreventiveOrders(dOrderFour)
-		equipment09.save(failOnError:true)
+		def dOrderFour = newDurationBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'Four Duration Order'],"Second Duration Order",now()+1,null,OccurencyType.YEARLY,2,[])
 
 		def dOrderFive = newWorkBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'First Work Based Five'],"First Work Based Order",now()+1,null,WorkIntervalType.HOURS,22)
-		equipment09.addToPreventiveOrders(dOrderFive)
-		equipment09.save(failOnError:true)
 
 		def dOrderSix = newWorkBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'Second Work Based Six'],"Second Work Based Order",now()+1,null,WorkIntervalType.WEEK,2)
-		equipment09.addToPreventiveOrders(dOrderSix)
-		equipment09.save(failOnError:true)
 		
 		}
 
@@ -676,9 +662,10 @@ public class Initializer {
 			def sparePartOne = newSparePartType("4323", ['en':'first spare part','fr':' premiere piece de rechange'],['en':'first spare part description','fr':' description de la premiere piece de rechange'],"4323-XYZ",Provider.findByCode("ONE"),now())
 	     	def sparePartTwo = newSparePartType("4324", ['en':'second spare part','fr':' deuxieme piece de rechange'],['en':'second spare part description','fr':' description de la deuxieme piece de rechange'],"4324-ABC",Provider.findByCode("TWO"),now())
 	 		def sparePartThree = newSparePartType("4325", ['en':'third spare part','fr':' troisieme piece de rechange'],['en':'third spare part description','fr':' description de la troisieme piece de rechange'],"4325-IJK",Provider.findByCode("THREE"),now())
-	
     }
-		
+	
+
+	//Models definition
 	//Spare Part
 	public static def newSparePartType(def code, def names, def descriptions,def partNumber,def manufacturer, def discontinuedDate){
 		def type = new SparePartType(code:code,partNumber:partNumber,manufacturer:manufacturer,discontinuedDate:discontinuedDate)
@@ -688,7 +675,7 @@ public class Initializer {
 	}
 
 	//Preventive Maintenance
-	public static def newDurationBasedOrder(def equipment,def addedBy,def status,def preventionResponsible,def technicianInCharge,def names,def description,def firstOccurenceOn,def closedOn,def occurency,def isRecurring,def occurInterval,def occurCount,def occurDaysOfWeek){
+	public static def newDurationBasedOrder(def equipment,def addedBy,def status,def preventionResponsible,def technicianInCharge,def names,def description,def firstOccurenceOn,def closedOn,def occurency,def occurInterval,def occurDaysOfWeek){
 		def timeDate =  newTimeDate(firstOccurenceOn)
 		def order  = new DurationBasedOrder(
 			equipment: equipment,
@@ -701,13 +688,13 @@ public class Initializer {
 			firstOccurenceOn: timeDate,
 			closedOn: closedOn,
 			occurency: occurency,
-			isRecurring: isRecurring,
 			occurInterval: occurInterval,
-			occurCount: occurCount,
 			occurDaysOfWeek: occurDaysOfWeek
 			)
 		Utils.setLocaleValueInMap(order,names,"Names") 
-		return order.save(failOnError:true)
+		equipment.addToPreventiveOrders(order)
+		equipment.save(failOnError:true)
+		return order.save(failOnError: true)
 	}
 	public static def newWorkBasedOrder(def equipment,def addedBy,def status,def preventionResponsible,def technicianInCharge,def names,def description,def firstOccurenceOn,def closedOn,def occurency,def occurInterval){
 		def timeDate =  newTimeDate(firstOccurenceOn)
@@ -725,7 +712,10 @@ public class Initializer {
 			closedOn: closedOn
 			)
 		Utils.setLocaleValueInMap(order,names,"Names") 
-		return order.save(failOnError:true)
+		
+		equipment.addToPreventiveOrders(order)
+		equipment.save(failOnError:true)
+		return order.save(failOnError: true)
 	}
 	public static def newPrevention(def order,def addedBy,def scheduledOn,def eventDate,def timeSpend,def descriptions, def processes){
 		def prevention = new Prevention(order:order,addedBy:addedBy,scheduledOn:scheduledOn,eventDate:eventDate,timeSpend:timeSpend,processes:processes)
@@ -819,8 +809,7 @@ public class Initializer {
 			supplier:supplier,
 			currentStatus:currentStatus,
 			addedBy:addedBy,
-			lastModifiedBy:lastModifiedBy,
-			lastModifiedOn:lastModifiedOn
+			lastModifiedBy:lastModifiedBy
 			);
 		Utils.setLocaleValueInMap(equipment,descriptions,"Descriptions")
 		return equipment.save(failOnError: true,flush:true)
@@ -887,13 +876,13 @@ public class Initializer {
 	
 	//Location
 	public static def newDataLocationType(def names, def code) {
-		def dataLocationType = new DataLocationType(code: code)
+		def dataLocationType = new DataLocationType(code: code, defaultSelected: true)
 		Utils.setLocaleValueInMap(dataLocationType,names,"Names")
 		return dataLocationType.save(failOnError: true)
 	}
 	
 	public static def newLocationLevel(def names, def code, def order) {
-		def locationLevel = new LocationLevel(code: code,order:order)
+		def locationLevel = new LocationLevel(code: code, order:order)
 		Utils.setLocaleValueInMap(locationLevel,names,"Names")
 		return locationLevel.save(failOnError: true)
 	}

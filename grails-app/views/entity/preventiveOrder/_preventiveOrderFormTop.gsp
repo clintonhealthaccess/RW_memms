@@ -27,13 +27,15 @@
 	  		</div>
   		</g:if>	
 
+		<g:i18nInput name="names" label="${message(code:'entity.names.label')}" bean="${order}" field="names"/>
+
    		<g:textarea name="description" rows="12" width="380" label="${message(code:'entity.description.label')}"  bean="${order}" field="description" value="${order.description}"/>
       <g:if test="${order.id != null}">
    		   <g:selectFromEnum name="status" bean="${order}" values="${PreventiveOrderStatus.values()}" field="status"  label="${message(code:'entity.status.label')}"/>
       </g:if>
    		<g:selectFromEnum name="preventionResponsible" bean="${order}" values="${PreventionResponsible.values()}" field="preventionResponsible"  label="${message(code:'preventive.order.prevention.responsible.label')}"/>
       
-   		 <g:selectFromList name="technicianInCharge.id" label="${message(code:'entity.name.label')}" bean="${order}" field="technicianInCharge" optionKey="id" multiple="false" ajaxLink="${createLink(controller:'user', action:'getAjaxData')}" from="${technicians}" value="${order?.technicianInCharge.id}" values="${technicians.collect{it?.names}}" />
+   		 <g:selectFromList name="technicianInCharge.id" label="${message(code:'entity.name.label')}" bean="${order}" field="technicianInCharge" optionKey="id" multiple="false" ajaxLink="${createLink(controller:'user', action:'getAjaxData')}" from="${technicians}" value="${order?.technicianInCharge?.id}" values="${technicians.collect{it?.names}}" />
     </fieldset>
     <div id="form-aside-equipment" class="form-aside">
       <g:if test="${order.id != null || order?.equipment!=null}">
