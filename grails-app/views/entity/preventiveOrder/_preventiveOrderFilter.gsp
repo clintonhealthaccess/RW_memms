@@ -35,7 +35,7 @@
 </g:if>
 
 <div class="filters main projection">
-  <a class="next gray" href="${createLinkWithTargetURI(controller:'durationBasedOrder',action:'calendar',params:['dataLocation.id': dataLocation?.id])}">
+  <a class="next medium gray" href="${createLinkWithTargetURI(controller:'durationBasedOrder',action:'calendar',params:['dataLocation.id': dataLocation?.id])}">
     View Mapper
   </a>
   <p class="question-help">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>

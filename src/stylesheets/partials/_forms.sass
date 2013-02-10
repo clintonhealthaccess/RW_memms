@@ -487,6 +487,10 @@ form.search-form
   th.desc a
     background-image: url(../images/skin/sorted_desc.gif)
     
+  + div
+    padding: 10px
+    text-align: center
+    
 .simple-list
   fieldset
     display: block
@@ -580,14 +584,19 @@ form.search-form
   padding: 0
   margin-bottom: 15px
   h2
-    border-bottom: 1px solid #eee
-    font: bold 15px Arial, sans-serif
+    font: bold 12px Arial, sans-serif
     padding: 10px 15px
+
     a
-      margin-top: 4px
-      opacity: 0.4
+      font: normal 11px Arial, sans-serif
+      margin-top: 1px
+      opacity: 0.7
+      text-decoration: none
+      +transition(all .4s)
       &:hover, &:focus
+        color: $primary - #111
         opacity: 1
+        text-decoration: underline
   ul.filters-list
     padding: 10px 15px 0
     +pie-clearfix
@@ -595,6 +604,7 @@ form.search-form
       display: inline
       float: left
       height: 50px
+      margin-right: 1%
       width: 32%
     .date
       select
@@ -628,9 +638,9 @@ form.search-form
       margin: 0
       padding: 12px 45px
       position: relative
-      top: -2px
     
 .filters-box
+  border-top: 1px solid #eee
   display: none
     
 .filter-results
