@@ -154,6 +154,8 @@
           </span>
           <g:message code="equipment.section.warranty.information.label" default="Warranty Information"/>
         </h4>
+		<div class="error-list"><g:renderErrors bean="${equipment}" field="warranty"/></div>
+		
         <g:inputBox name="warranty.sameAsSupplier"  label="${message(code:'equipment.same.as.supplier.label')}" bean="${equipment}" field="warranty.sameAsSupplier" checked="${(equipment.warranty?.sameAsSupplier)? true:false}"/>
       	<g:input name="warranty.startDate" dateClass="date-picker" label="${message(code:'warranty.start.date.label')}" bean="${equipment}" field="warranty.startDate"/>
     	<g:inputYearMonth name="warrantyPeriod" field="warrantyPeriod" years="${equipment.warrantyPeriod?.years}" months="${equipment.warrantyPeriod?.months}" bean="${equipment}" label='equipment.warranty.period.label'/>
