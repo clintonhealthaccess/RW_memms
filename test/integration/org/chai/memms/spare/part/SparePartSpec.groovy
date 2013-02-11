@@ -53,7 +53,7 @@ class SparePartSpec extends IntegrationTests {
 		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",Provider.findByCode("ONE"),Initializer.now())
 
 		when:
-		def sparePart = new SparePart(serialNumber:"test123",sparePartPurchasedBy:SparePartPurchasedBy.BYDONOR,sameAsManufacturer:false,expectedLifeTime:Initializer.newPeriod(20),
+		def sparePart = new SparePart(serialNumber:"test123",sparePartPurchasedBy:SparePartPurchasedBy.BYMOH,sameAsManufacturer:false,expectedLifeTime:Initializer.newPeriod(20),
 				descriptions:['en':'SparePart Descriptions'],manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),model:"sparePartModel",
 				type:sparePartType,statusOfSparePart:StatusOfSparePart.OPERATIONAL,dateCreated:Initializer.getDate(23,07,2010), addedBy: User.findByUsername("systemUser"))
 
