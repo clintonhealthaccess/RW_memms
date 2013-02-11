@@ -148,7 +148,7 @@ public class Equipment {
 		}
 
 		warranty nullable:true, validator:{ val, obj ->
-			if(val!=null) return (val.startDate.after(obj.purchaseDate) || val.startDate.compareTo(obj.purchaseDate)==0)
+			if(val!=null && val.startDate != null && obj.purchaseDate != null) return (val.startDate?.after(obj.purchaseDate) || val.startDate?.compareTo(obj.purchaseDate)==0)
 		}
 		warrantyPeriod nullable: true, validator:{val, obj ->
 			if (obj.warranty!=null) return (val!=null) && (val.numberOfMonths >= 0)
