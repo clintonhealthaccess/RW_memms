@@ -21,5 +21,4 @@
 			<span class="text">${Utils.formatDate(type?.lastUpdated)}</span>
 		</li>
 	</ul>
-	<input type="hidden" id="expectedLifeTime" value="${type?.expectedLifeTime?.numberOfMonths}"/> 
 </div>

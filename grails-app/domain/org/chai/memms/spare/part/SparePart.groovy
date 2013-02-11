@@ -69,8 +69,7 @@ class SparePart {
 		NONE('none'),
 		BYMOH("by.moh"),
 		BYFACILITY("by.facility"),
-		BYDONOR("by.donor")
-		
+	
 		String messageCode = "spare.part.purchased"
 		
 		final String name
@@ -93,10 +92,9 @@ class SparePart {
 	Equipment usedOnEquipment
 	Boolean sameAsManufacturer = false
 	Provider supplier
-	Provider manufacturer
 	Warranty warranty
 	SparePartPurchasedBy sparePartPurchasedBy
-	//Boolean obsolete
+	DataLocation dataLocation
 	Date purchaseDate
 	Date dateCreated
 	Date lastUpdated
@@ -107,7 +105,7 @@ class SparePart {
 	User addedBy
 	User lastModified
 	
-	static belongsTo = [type: SparePartType, dataLocation: DataLocation, stockLocation: StockLocation]
+	static belongsTo = [type: SparePartType, stockLocation: StockLocation]
 	static hasMany = [status: SparePartStatus]	
 	static i18nFields = ["descriptions","names"]
 	static embedded = ["warranty","warrantyPeriod","expectedLifeTime"]
@@ -120,16 +118,13 @@ class SparePart {
 			if(!obj.statusOfSparePart.equals(StatusOfSparePart.PENDINGORDER)) return (val!=null)
 		}
 		purchaseDate nullable: true
-//		purchaseCost nullable: true, validator: {val, obj ->
-//			if(obj.currency) return (val==null)
-//		}
-		manufacturer nullable: false
-		currency nullable: true, validator:{val, obj ->
-			if(obj.purchaseCost) return (val==null)
+		purchaseCost nullable: true, validator: {val, obj ->
+		if(obj.currency!=null) return (val!=null)
 		}
+		
 		stockLocation  nullable: true, inList:[StockLocation.MMC, StockLocation.FACILITY]
 		dataLocation nullable: true, validator: {val,obj ->
-			if(obj.stockLocation.equals(StockLocation.FACILITY)) return (val==null)
+			if(obj.stockLocation.equals(StockLocation.FACILITY)) return (val!=null)
 		}
 		addedBy nullable: false
 		usedOnEquipment nullable: true
@@ -142,8 +137,7 @@ class SparePart {
 		warrantyPeriod nullable: true, validator:{val, obj ->
 			if (obj.warranty!=null) return (val!=null) && (val.numberOfMonths >= 0)
 		}
-		purchaseCost nullable: true, validator:{ if(it!=null) return (it>=0) }
-		sparePartPurchasedBy nullable: false, inList:[SparePartPurchasedBy.BYFACILITY,SparePartPurchasedBy.BYMOH,SparePartPurchasedBy.BYDONOR]
+		sparePartPurchasedBy nullable: false, inList:[SparePartPurchasedBy.BYFACILITY,SparePartPurchasedBy.BYMOH]
 		
 		currency  nullable: true, blank: true, inList: ["RWF","USD","EUR"], validator:{ val, obj ->
 			if(obj.purchaseCost != null) return (val != null)

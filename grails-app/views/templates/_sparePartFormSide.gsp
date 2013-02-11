@@ -35,19 +35,7 @@
 				</li>
 			</ul>
 		</li>
-		<li>
-			<h6>${message(code:"provider.type.manufacturer")}</h6>
-			<ul>
-				<li>
-					<span class="label"><g:message code="entity.name.label"/>:</span>
-					<span class="text">${sparePart.manufacturer?.contact?.contactName}</span>
-					<span class="label"><g:message code="contact.email.label"/>:</span>
-					<span class="text">${sparePart.manufacturer?.contact?.email}</span>
-					<span class="label"><g:message code="contact.phone.label"/>:</span>
-					<span class="text">${sparePart.manufacturer?.contact?.phone}</span>
-				</li>
-			</ul>
-		</li>
+		
 		<li>
 			<h6>${message(code:"provider.type.supplier")}</h6>
 			<ul>

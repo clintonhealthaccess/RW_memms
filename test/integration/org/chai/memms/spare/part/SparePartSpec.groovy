@@ -51,7 +51,7 @@ class SparePartSpec extends IntegrationTests {
 		setupLocationTree()
 		setupSystemUser()
 		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",Provider.findByCode("ONE"),Initializer.now())
-		
+
 		when:
 		def sparePart = new SparePart(serialNumber:"test123",sparePartPurchasedBy:SparePartPurchasedBy.BYDONOR,sameAsManufacturer:false,expectedLifeTime:Initializer.newPeriod(20),
 				descriptions:['en':'SparePart Descriptions'],manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),model:"sparePartModel",
@@ -60,13 +60,13 @@ class SparePartSpec extends IntegrationTests {
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
 
-		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
+		//def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
 
 		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
 		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),false,[:])
 
-		sparePart.manufacturer=manufacture
+		//sparePart.manufacturer=manufacture
 		sparePart.supplier=supplier
 
 		sparePart.warranty = warranty

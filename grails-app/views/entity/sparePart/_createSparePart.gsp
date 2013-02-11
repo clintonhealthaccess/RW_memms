@@ -31,10 +31,10 @@
     		  </div>
     		  -->  					
         	<g:selectFromList name="type.id" label="${message(code:'spare.part.type.label')}" bean="${sparePart}" field="type" optionKey="id" multiple="false"
-    			ajaxLink="${createLink(controller:'sparePartType', action:'getAjaxData', params: [observation:'USEDINMEMMS'])}"
+    			ajaxLink="${createLink(controller:'sparePartType', action:'getAjaxData', params: [type:'TYPE'])}"
     			from="${types}" value="${sparePart?.type?.id}" values="${types.collect{it.names}}" />
-      		<g:inputYearMonth name="expectedLifeTime" field="expectedLifeTime" years="${sparePart.expectedLifeTime?.years}" months="${sparePart.expectedLifeTime?.months}" label='entity.expectedLifeTime.label' bean="${sparePart}"/>
-      		<g:input name="serialNumber" label="${message(code:'spare.part.serial.number.label')}" bean="${sparePart}" field="serialNumber"/>
+    			
+    		<g:input name="serialNumber" label="${message(code:'spare.part.serial.number.label')}" bean="${sparePart}" field="serialNumber"/>
       		<g:input name="model" label="${message(code:'spare.part.model.label')}" bean="${sparePart}" field="model"/>
       		<g:i18nTextarea name="descriptions" bean="${sparePart}" label="${message(code:'entity.descriptions.label')}" field="descriptions" height="150" width="300" maxHeight="150" />
      
@@ -98,26 +98,7 @@
      		</g:if>
      	</fieldset>
       </div>   
-      <div class="form-section">
-      	<fieldset class="form-content">
-      	<h4 class="section-title">
-          <span class="question-default">
-            <img src="${resource(dir:'images/icons',file:'star_small.png')}">
-
-          </span>
-          <g:message code="sparePart.section.manufacturer.information.label" default="Manufacturer Information"/>
-        </h4>
-      	<g:selectFromList name="manufacturer.id" label="${message(code:'provider.type.manufacturer')}" bean="${sparePart}" field="manufacturer" optionKey="id" multiple="false"
-  			ajaxLink="${createLink(controller:'provider', action:'getAjaxData', params: [type:'MANUFACTURER'])}"
-  			from="${manufacturers}" value="${sparePart?.manufacturer?.id}" values="${manufacturers.collect{it.contact?.contactName}}" />	
-  			<g:inputDate name="manufactureDate"  precision="month" label="${message(code:'spare.part.manufacture.date.label')}" value="${sparePart?.manufactureDate}" bean="${sparePart}" field="manufactureDate"/>
-     	</fieldset>
-    	  <div id="form-aside-manufacturer" class="form-aside">
-	    	  <g:if test="${sparePart?.manufacturer != null}">
-	    	 	 <g:render template="/templates/providerFormSide" model="['provider':sparePart?.manufacturer,'type':sparePart?.manufacturer?.type,'label':'provider.manufacturer.details','cssClass':'current','field':'manufacturer' ]" />
-	          </g:if>
-       	</div>
-      </div>
+     
       <div class="form-section">
       	<fieldset class="form-content">
       	<h4 class="section-title">
@@ -151,11 +132,11 @@
         <g:inputBox name="warranty.sameAsSupplier"  label="${message(code:'spare.part.same.as.supplier.label')}" bean="${sparePart}" field="warranty.sameAsSupplier" checked="${(sparePart.warranty?.sameAsSupplier)? true:false}"/>
       	<g:input name="warranty.startDate" dateClass="date-picker" label="${message(code:'warranty.start.date.label')}" bean="${sparePart}" field="warranty.startDate"/>
     	<g:inputYearMonth name="warrantyPeriod" field="warrantyPeriod" years="${sparePart.warrantyPeriod?.years}" months="${sparePart.warrantyPeriod?.months}" bean="${sparePart}" label='spare.part.warranty.period.label'/>
-      	<g:address  bean="${sparePart}" warranty="true" field="warranty.contact"/>
-     	<g:i18nTextarea name="warranty.descriptions" bean="${sparePart}" label="${message(code:'warranty.descriptions.label')}" field="warranty.descriptions" height="150" width="300" maxHeight="150" />	 			
+      	<!-- 
+      	WILL BE THEN ADDED (APHRORWA)
+      	-->
   		</fieldset> 
       </div>
-      
   		<g:if test="${sparePart.id != null}">
   			<input type="hidden" name="id" value="${sparePart.id}"/>
   		</g:if>

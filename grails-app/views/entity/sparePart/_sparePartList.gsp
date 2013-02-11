@@ -2,13 +2,12 @@
 	<thead>
 		<tr>
 			<th/>
-			<g:sortableColumn property="code"  title="${message(code: 'spare.part.code.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
-			<g:sortableColumn property="type"  title="${message(code: 'spare.part.type.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
-			<g:sortableColumn property="model"  title="${message(code: 'spare.part.model.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
+			<g:sortableColumn property="code"  title="${message(code: 'spare.part.code.label')}" params="[q:q]" />
+			<g:sortableColumn property="type"  title="${message(code: 'spare.part.type.label')}" params="[q:q]" />
+			<g:sortableColumn property="model"  title="${message(code: 'spare.part.model.label')}" params="[q:q]" />
 			<th><g:message code="location.label"/></th>
 			<g:sortableColumn property="statusOfSparePart"  title="${message(code: 'spare.part.status.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
 			<g:sortableColumn property="sameAsManufacturer"  title="${message(code: 'spare.part.same.as.manufacturer.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
-			<g:sortableColumn property="manufacturer"  title="${message(code: 'provider.type.manufacturer')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
 			<g:sortableColumn property="supplier"  title="${message(code: 'provider.type.supplier')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
 			<g:sortableColumn property="sparePartPurchasedBy"  title="${message(code: 'spare.part.purchaser.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
 			
@@ -44,9 +43,11 @@
   	    			</a>
 				</td>
 				<td>
-					<g:listCheckBox name="sameAsManufacturer" id="${sparePart.id}" checked="${(!sparePart.sameAsManufacturer)?:'checked'}"/>
+					<g:if name="sameAsManufacturer" id="${sparePart.id}" test="${(sparePart.sameAsManufacturer==true)}">&radic;</g:if>
+					<g:else>&nbsp;</g:else>
 				</td>
-				<td>${sparePart.manufacturer.contact.contactName}</td>
+		
+				
 				<td>${sparePart.supplier.contact.contactName}</td>
 				
 				

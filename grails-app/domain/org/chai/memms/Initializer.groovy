@@ -712,12 +712,12 @@ public class Initializer {
 		}
 		
 		if(!SparePart.count()){
-			def sparePartOne = newSparePart("SERIAL01",SparePartPurchasedBy.BYDONOR,false,newPeriod(24),"",['en':'Spare Part Descriptions'],
+			def sparePartOne = newSparePart("SERIAL01",SparePartPurchasedBy.BYMOH,false,newPeriod(24),"",['en':'Spare Part Descriptions'],
 				getDate(22,07,2010),getDate(10,10,2010),"",
 				'MODEL1',
 				DataLocation.findByCode(NYANZA),
 				SparePartType.findByCode("15810"),
-				Provider.findByCode("ONE"),
+		
 				Provider.findByCode("FIVE"),
 				StatusOfSparePart.INSTOCK,
 				User.findByUsername("admin"),
@@ -738,7 +738,7 @@ public class Initializer {
 				'MODEL2',
 				DataLocation.findByCode(NYANZA),
 				SparePartType.findByCode("15819"),
-				Provider.findByCode("TWO"),
+				
 				Provider.findByCode("FIVE"),
 				StatusOfSparePart.OPERATIONAL,
 				User.findByUsername("admin"),
@@ -757,7 +757,7 @@ public class Initializer {
 				'MODEL3',
 				DataLocation.findByCode(KIVUYE),
 				SparePartType.findByCode("15966"),
-				Provider.findByCode("TWO"),
+				
 				Provider.findByCode("FIVE"),
 				StatusOfSparePart.OPERATIONAL,
 				User.findByUsername("admin"),
@@ -771,12 +771,12 @@ public class Initializer {
 			sparePartThree.warrantyPeriod = newPeriod(12)
 			sparePartThree.save(failOnError:true)
 			
-			def sparePartFour = newSparePart("SERIAL04",SparePartPurchasedBy.BYDONOR,false,newPeriod(12),"",['en':'Spare Part Descriptions four'],
+			def sparePartFour = newSparePart("SERIAL04",SparePartPurchasedBy.BYMOH,false,newPeriod(12),"",['en':'Spare Part Descriptions four'],
 				getDate(18,2,2011),getDate(10,10,2011),"",
 				'MODEL2',
 				DataLocation.findByCode(KIVUYE),
 				SparePartType.findByCode("10035"),
-				Provider.findByCode("THREE"),
+				
 				Provider.findByCode("SEVEN"),
 				StatusOfSparePart.PENDINGORDER,
 				User.findByUsername("admin"),
@@ -792,12 +792,12 @@ public class Initializer {
 			sparePartFour.warrantyPeriod = newPeriod(24)
 			sparePartFour.save(failOnError:true)
 			
-			def sparePartFive = newSparePart("SERIAL05",SparePartPurchasedBy.BYDONOR,true,newPeriod(34),"",['en':'Spare Part Descriptions five'],
+			def sparePartFive = newSparePart("SERIAL05",SparePartPurchasedBy.BYMOH,true,newPeriod(34),"",['en':'Spare Part Descriptions five'],
 				getDate(11,8,2008),getDate(11,10,2009),"",
 				'MODEL1',
 				DataLocation.findByCode(BUNGWE),
 				SparePartType.findByCode("20760"),
-				Provider.findByCode("FOUR"),
+				
 				Provider.findByCode("SIX"),
 				StatusOfSparePart.PENDINGORDER,
 				User.findByUsername("admin"),
@@ -839,7 +839,7 @@ public class Initializer {
 	}
 	// Spare part
 	static def newSparePart(def serialNumber,def sparePartPurchasedBy,def sameAsManufacturer,def expectedLifeTime,
-		def purchaseCost,def descriptions,def manufactureDate, def purchaseDate,def currency,def model,def dataLocation,def type,def manufacture,
+		def purchaseCost,def descriptions,def manufactureDate, def purchaseDate,def currency,def model,def dataLocation,def type,
 		def supplier,def statusOfSparePart,def addedBy,def lastModifiedBy,def lastModifiedOn){
 		def sparePart = new SparePart(
 			serialNumber:serialNumber,
@@ -854,7 +854,6 @@ public class Initializer {
 			model:model,
 			dataLocation:dataLocation,
 			type:type,
-			manufacturer:manufacture,
 			supplier:supplier,
 			statusOfSparePart:statusOfSparePart,
 			addedBy:addedBy,
