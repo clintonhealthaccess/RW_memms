@@ -38,6 +38,6 @@
   <a class="next medium gray" href="${createLinkWithTargetURI(controller:'durationBasedOrder',action:'calendar',params:['dataLocation.id': dataLocation?.id])}">
     View Mapper
   </a>
-  <p class="question-help">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
+  <p class="question-help">Click on the view mapper button to view projection of current month and next months</p>
 </div>
 
