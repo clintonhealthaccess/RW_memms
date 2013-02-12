@@ -117,12 +117,16 @@ class SparePart {
 		serialNumber nullable: true, validator: { val, obj ->
 			if(!obj.statusOfSparePart.equals(StatusOfSparePart.PENDINGORDER)) return (val!=null)
 		}
+		//serialNumber nullable: false, blank: false,  unique: true
+		//serialNumber nullable: true, blank: false,  unique: true
 		purchaseDate nullable: true
 		purchaseCost nullable: true, validator: {val, obj ->
 		if(obj.currency!=null) return (val!=null)
 		}
 		
 		stockLocation  nullable: true, inList:[StockLocation.MMC, StockLocation.FACILITY]
+		
+		
 		dataLocation nullable: true, validator: {val,obj ->
 			if(obj.stockLocation.equals(StockLocation.FACILITY)) return (val!=null)
 		}
@@ -138,6 +142,7 @@ class SparePart {
 			if (obj.warranty!=null) return (val!=null) && (val.numberOfMonths >= 0)
 		}
 		sparePartPurchasedBy nullable: false, inList:[SparePartPurchasedBy.BYFACILITY,SparePartPurchasedBy.BYMOH]
+		//sparePartPurchasedBy nullable: true, inList:[SparePartPurchasedBy.BYFACILITY,SparePartPurchasedBy.BYMOH]
 		
 		currency  nullable: true, blank: true, inList: ["RWF","USD","EUR"], validator:{ val, obj ->
 			if(obj.purchaseCost != null) return (val != null)
@@ -145,6 +150,8 @@ class SparePart {
 		statusOfSparePart nullable:true,validator:{
 			if(it!=null) return it in [StatusOfSparePart.OPERATIONAL,StatusOfSparePart.INSTOCK,StatusOfSparePart.PENDINGORDER,StatusOfSparePart.DISPOSED]
 		}
+		model nullable: true
+		supplier nullable: true
 		
 	}
 	

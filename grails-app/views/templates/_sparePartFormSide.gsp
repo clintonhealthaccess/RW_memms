@@ -3,29 +3,28 @@
 	<a href="${createLinkWithTargetURI(controller:'sparePart', action:'edit', params:[id: sparePart.id])}" class="next small gray right pulled">
 		<g:message code="default.edit.label" args="[message(code:'spare.part.label')]" />
 	</a>
-	<h5><g:message code="sparePart.details.label" /></h5>
+	<h5><g:message code="spare.part.details.label" /></h5>
 	
 	<ul>
 		<li>
-			<h6>${message(code:"sparePart.section.basic.information.label")}</h6>
+			<h6>${message(code:"spare.part.section.basic.information.label")}</h6>
 			<ul>
 				<li>
-					<span class="label"><g:message code="sparePart.code.label" /></span>
+					<span class="label"><g:message code="spare.part.code.label" /></span>
 					<span class="text">${sparePart.code}</span>
-					<span class="label"><g:message code="sparePart.serial.number.label" /></span>
+					<span class="label"><g:message code="spare.part.serial.number.label" /></span>
 					<span class="text">${sparePart.serialNumber}</span>
-					<span class="label"><g:message code="sparePart.model.label" /></span>
+					<span class="label"><g:message code="spare.part.model.label" /></span>
 					<span class="text">${sparePart.model}</span>
 					<span class="label"><g:message code="datalocation.label"/>:</span>
-					<span class="text">${sparePart.dataLocation.names}</span>
-					
+					<span class="text">${sparePart.dataLocation}</span>
 					<span class="label"><g:message code="entity.in.system.since.label"/>:</span>
 					<span class="text"> ${Utils.formatDate(sparePart.dateCreated)}</span>
 				</li>
 			</ul>
 		</li>
 		<li>
-			<h6>${message(code:"sparePart.type.label")}</h6>
+			<h6>${message(code:"spare.part.type.label")}</h6>
 			<ul>
 				<li>
 					<span class="label"><g:message code="entity.code.label" /></span>
@@ -50,12 +49,12 @@
 			</ul>
 		</li>
 		<li>
-			<h6>${message(code:"sparePart.status.current.status")}</h6>
+			<h6>${message(code:"spare.part.status.current.status")}</h6>
 			<ul>
 				<li>
-					<span class="label"><g:message code="sparePart.status.label"/>:</span>
+					<span class="label"><g:message code="spare.part.status.label"/>:</span>
 					<span class="text">${message(code: sparePart.statusOfSparePart?.messageCode+'.'+sparePart.statusOfSparePart?.name)}</span>
-					<span class="label"><g:message code="sparePart.status.date.of.event.label"/>:</span>
+					<span class="label"><g:message code="spare.part.status.date.of.event.label"/>:</span>
 					<span class="text">${Utils.formatDate(sparePart.timeBasedStatus?.dateOfEvent)}</span>
 				</li>
 			</ul>

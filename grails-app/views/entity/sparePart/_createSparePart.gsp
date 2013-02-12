@@ -55,11 +55,11 @@
           <g:message code="sparePart.section.status.information.label" default="Status Information"/> 
         </h4>
       	<g:if test="${sparePart.id == null}">
-      			<g:selectFromEnum name="status" bean="${cmd}" values="${StatusOfSparePart.values()}" field="status" label="${message(code:'spare.part.status.label')}"/>
+      			<g:selectFromEnum name="statusOfSparePart" bean="${cmd}" values="${StatusOfSparePart.values()}" field="statusOfSparePart" label="${message(code:'spare.part.status.label')}"/>
       			<g:input name="dateOfEvent" dateClass="date-picker" label="${message(code:'spare.part.status.date.of.event.label')}" bean="${cmd}" field="dateOfEvent"/>
       			<g:inputBox name="sameAsManufacturer"  label="${message(code:'spare.part.same.as.manufacturer.label')}" bean="${sparePart}" field="sameAsManufacturer" value="${sparePart.sameAsManufacturer}" checked="${(sparePart.sameAsManufacturer)? true:false}"/>
       	</g:if>
-      	<g:if test="${sparePart?.status!=null}">
+      	<g:if test="${sparePart?.statusOfSparePart!=null}">
       	 	<g:inputBox name="sameAsManufacturer"  label="${message(code:'spare.part.sameAsManufacturer.label')}" bean="${sparePart}" field="sameAsManufacturer" value="${sparePart.sameAsManufacturer}" checked="${(sparePart.sameAsManufacturer)? true:false}"/>
 	    	<table class="items">
 	    		<tr>
@@ -69,20 +69,20 @@
 	    			<th>${message(code:'spare.part.status.recordedon.label')}</th>
 	    			<th>${message(code:'spare.part.status.current.label')}</th>
 	    		</tr>
-	    		<g:each in="${sparePart.status.sort{a,b -> (a.dateCreated > b.dateCreated) ? -1 : 1}}" status="i" var="status">
+	    		<g:each in="${sparePart.statusOfSparePart.sort{a,b -> (a.dateCreated > b.dateCreated) ? -1 : 1}}" status="i" var="status">
 		    		<g:if test="${i+1<numberOfStatusToDisplay}">
 			    		<tr>
 			    			<td>
 				    		<ul>
 								<li>
-									<a href="${createLinkWithTargetURI(controller:'sparePartStatus', action:'delete', params:[id: status.id,'sparePart': sparePart?.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');" class="delete-button"><g:message code="default.link.delete.label" /></a>
+									<a href="${createLinkWithTargetURI(controller:'sparePartStatus', action:'delete', params:[id: statusOfSparePart.id,'sparePart': sparePart?.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');" class="delete-button"><g:message code="default.link.delete.label" /></a>
 								</li>
 							</ul>
 			    			</td>
 			    			<td>${message(code: status?.status?.messageCode+'.'+status?.status?.name)}</td>
-			    			<td>${Utils.formatDate(status?.dateOfEvent)}</td>
-			    			<td>${Utils.formatDateWithTime(status?.dateCreated)}</td>
-			    			<td>${(status==sparePart.timeBasedStatus)? '\u2713':''}</td>
+			    			<td>${Utils.formatDate(statusOfSparePart?.dateOfEvent)}</td>
+			    			<td>${Utils.formatDateWithTime(statusOfSparePart?.dateCreated)}</td>
+			    			<td>${(statusOfSparePart==sparePart.timeBasedStatus)? '\u2713':''}</td>
 			    		</tr>
 		    		</g:if>
 	    		</g:each>
@@ -121,6 +121,7 @@
        		</g:if>
        	</div>
       </div>
+      
       <div class="form-section">
       	<fieldset class="form-content">
       	<h4 class="section-title">

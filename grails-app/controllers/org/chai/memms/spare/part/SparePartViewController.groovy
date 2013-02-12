@@ -137,15 +137,6 @@ class SparePartViewController extends AbstractController{
 		}
 	}
 	
-//	def search = {
-//		adaptParamsForList()
-//		List<EquipmentType> types = equipmentTypeService.searchEquipmentType(params['q'],null,params)
-//		if(!request.xhr)
-//			response.sendError(404)
-//		this.ajaxModel(types,params['q'])
-//	}
-	
-	
 	def filter = { FilterCommand cmd ->
 		if (log.isDebugEnabled()) log.debug("spareParts.filter, command "+cmd)
 		if (cmd.location != null && !user.canAccessCalculationLocation(cmd.location))

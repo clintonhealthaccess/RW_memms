@@ -104,7 +104,7 @@ class SparePartController extends AbstractEntityController{
 		SparePartStatus status
 		if(entity.dataLocation) hasAccess(entity.dataLocation)
 		if(entity.id==null){
-			entity.currentStatus = StatusOfSparePart."$params.cmd.status"
+			entity.statusOfSparePart = StatusOfSparePart."$params.cmd.status"
 			sparePartStatusService.createSparePartStatus(user,params.cmd.status,entity,params.cmd.dateOfEvent,[:])
 		}
 		else entity.save(failOnError:true)

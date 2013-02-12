@@ -7,6 +7,7 @@ import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
 class SparePartStatusController extends AbstractEntityController{
 	def sparePartStatusService
 	def sparePartService
+	def grailsApplication
 
     def index() {
 		
@@ -27,7 +28,7 @@ class SparePartStatusController extends AbstractEntityController{
 	
 	def getModel(def entity) {
 		[
-			status:entity,
+			statusOfSparePart:entity,
 			sparePart:entity.sparePart,
 			numberOfStatusToDisplay: grailsApplication.config.status.to.display.on.sparePart.form
 		]
@@ -60,17 +61,17 @@ class SparePartStatusController extends AbstractEntityController{
 	
 	def deleteEntity(def entity) {
 		def sparePart = entity.sparePart
-		if(sparePart.status && sparePart.status.size()==1)
+		if(sparePart.statusOfSparePart && sparePart.statusOfSparePart.size()==1)
 			flash.message = message(code: "sparePart.without.status", args: [message(code: getLabel(), default: 'entity'), params.id], default: 'Status {0} cannot be deleted')
 		else{
-			sparePart.status.remove(entity)
+			sparePart.statusOfSparePart.remove(entity)
 			super.deleteEntity(entity);
 			sparePartService.updateCurrentSparePartStatus(sparePart,null,user)
 		}
 	}
 	
 	def saveEntity(def entity) {
-		if(!entity.sparePart?.currentStatus?.equals(Status.DISPOSED))
+		if(!entity.sparePart?.statusOfSparePart?.equals(StatusOfSparePart.DISPOSED))
 			sparePartService.updateCurrentSparePartStatus(entity.sparePart,entity,user)
 		else flash.message = message(code: "error.cannot.modify.disposed.sparePart", default: 'Cannot modify a disposed sparePart, please reactivate it')
 	}
