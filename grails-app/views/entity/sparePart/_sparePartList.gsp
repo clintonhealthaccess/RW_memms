@@ -34,7 +34,7 @@
 				<td>${sparePart.type.names}</td>
 				<td>${sparePart.model}</td>
 				<td>
-					<g:message code="datalocation.label"/>: ${sparePart.dataLocation.names}<br/>
+					<g:message code="datalocation.label"/>: ${sparePart.dataLocation?.names}<br/>
 					
 				</td>
 				<td>

@@ -27,6 +27,7 @@
             <g:message code="equipment.section.basic.information.label" default="Basic Information"/>
           </h4>  			  		
       		<div class="row">
+      		<!-- To be viewed if there is no ? sign because in spare part this is not working unless you put ? after dataLocation property --> 
     			  <input type="hidden" name="dataLocation.id" value="${equipment.dataLocation.id}" />
     			  <label><g:message code="datalocation.label"/>:</label> ${equipment.dataLocation.names}
     		  </div>				

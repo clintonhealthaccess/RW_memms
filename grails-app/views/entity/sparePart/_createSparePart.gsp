@@ -23,13 +23,14 @@
             <span class="question-default">
               <img src="${resource(dir:'images/icons',file:'star_small.png')}">
             </span>
-            <g:message code="sparePart.section.basic.information.label" default="Basic Information"/>
+            <g:message code="spare.part.section.basic.information.label" default="Basic Information"/>
           </h4>
-          <!--  		  		
-      		<div class="row">
-    			 TO ADD THE DATA LOCATION
-    		  </div>
-    		  -->  					
+          		  		
+      			<div class="row">
+    			<input type="hidden" name="dataLocation.id" value="${sparePart.dataLocation?.id}" />
+    			  <label><g:message code="datalocation.label"/>:</label> ${sparePart.dataLocation?.names}
+    			</div>
+    	  					
         	<g:selectFromList name="type.id" label="${message(code:'spare.part.type.label')}" bean="${sparePart}" field="type" optionKey="id" multiple="false"
     			ajaxLink="${createLink(controller:'sparePartType', action:'getAjaxData', params: [type:'TYPE'])}"
     			from="${types}" value="${sparePart?.type?.id}" values="${types.collect{it.names}}" />
@@ -52,15 +53,15 @@
           <span class="question-default">
             <img src="${resource(dir:'images/icons',file:'star_small.png')}" alt="Section"/>
           </span>
-          <g:message code="sparePart.section.status.information.label" default="Status Information"/> 
+          <g:message code="spare.part.section.status.information.label" default="Status Information"/> 
         </h4>
       	<g:if test="${sparePart.id == null}">
       			<g:selectFromEnum name="statusOfSparePart" bean="${cmd}" values="${StatusOfSparePart.values()}" field="statusOfSparePart" label="${message(code:'spare.part.status.label')}"/>
       			<g:input name="dateOfEvent" dateClass="date-picker" label="${message(code:'spare.part.status.date.of.event.label')}" bean="${cmd}" field="dateOfEvent"/>
       			<g:inputBox name="sameAsManufacturer"  label="${message(code:'spare.part.same.as.manufacturer.label')}" bean="${sparePart}" field="sameAsManufacturer" value="${sparePart.sameAsManufacturer}" checked="${(sparePart.sameAsManufacturer)? true:false}"/>
       	</g:if>
-      	<g:if test="${sparePart?.statusOfSparePart!=null}">
-      	 	<g:inputBox name="sameAsManufacturer"  label="${message(code:'spare.part.sameAsManufacturer.label')}" bean="${sparePart}" field="sameAsManufacturer" value="${sparePart.sameAsManufacturer}" checked="${(sparePart.sameAsManufacturer)? true:false}"/>
+      	<g:if test="${sparePart?.status!=null}">
+      	 	<g:inputBox name="sameAsManufacturer"  label="${message(code:'spare.part.same.as.manufacturer.label')}" bean="${sparePart}" field="sameAsManufacturer" value="${sparePart.sameAsManufacturer}" checked="${(sparePart.sameAsManufacturer)? true:false}"/>
 	    	<table class="items">
 	    		<tr>
 	    			<th></th>
@@ -69,30 +70,30 @@
 	    			<th>${message(code:'spare.part.status.recordedon.label')}</th>
 	    			<th>${message(code:'spare.part.status.current.label')}</th>
 	    		</tr>
-	    		<g:each in="${sparePart.statusOfSparePart.sort{a,b -> (a.dateCreated > b.dateCreated) ? -1 : 1}}" status="i" var="status">
-		    		<g:if test="${i+1<numberOfStatusToDisplay}">
+	    		<g:each in="${sparePart.status.sort{a,b -> (a.dateCreated > b.dateCreated) ? -1 : 1}}" status="i" var="status">
+		    		
 			    		<tr>
 			    			<td>
 				    		<ul>
 								<li>
-									<a href="${createLinkWithTargetURI(controller:'sparePartStatus', action:'delete', params:[id: statusOfSparePart.id,'sparePart': sparePart?.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');" class="delete-button"><g:message code="default.link.delete.label" /></a>
+									<a href="${createLinkWithTargetURI(controller:'sparePartStatus', action:'delete', params:[id: status.id,'sparePart': sparePart?.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');" class="delete-button"><g:message code="default.link.delete.label" /></a>
 								</li>
 							</ul>
 			    			</td>
-			    			<td>${message(code: status?.status?.messageCode+'.'+status?.status?.name)}</td>
-			    			<td>${Utils.formatDate(statusOfSparePart?.dateOfEvent)}</td>
-			    			<td>${Utils.formatDateWithTime(statusOfSparePart?.dateCreated)}</td>
-			    			<td>${(statusOfSparePart==sparePart.timeBasedStatus)? '\u2713':''}</td>
+			    			<td>${message(code: status?.statusOfSparePart?.messageCode+'.'+status?.statusOfSparePart?.name)}</td>
+			    			<td>${Utils.formatDate(status?.dateOfEvent)}</td>
+			    			<td>${Utils.formatDateWithTime(status?.dateCreated)}</td>
+			    			<td>${(status==sparePart.timeBasedStatus)? '\u2713':''}</td>
 			    		</tr>
-		    		</g:if>
+		    		
 	    		</g:each>
 	    	</table>
 	    	<br />
 	  	    	<a href="${createLinkWithTargetURI(controller:'sparePartStatus', action:'create', params:['sparePart.id': sparePart?.id])}" class="next medium gray">
-	  	    		<g:message code="sparePart.change.status.label" default="Change Status"/>
+	  	    		<g:message code="spare.part.change.status.label" default="Change Status"/>
 	  	    	</a>
 	  	    	<a href="${createLinkWithTargetURI(controller:'sparePartStatus', action:'list', params:['sparePart.id': sparePart?.id])}">
-	  	    		<g:message code="sparePart.see.all.status.label" default="See all status"/>
+	  	    		<g:message code="spare.part.see.all.status.label" default="See all status"/>
 	  	    	</a>
   	    	<br />
      		</g:if>
@@ -105,7 +106,7 @@
           <span class="question-default">
            <img src="${resource(dir:'images/icons',file:'star_small.png')}">
           </span>
-          <g:message code="sparePart.section.supplier.information.label" default="Supplier Information"/>
+          <g:message code="spare.part.section.supplier.information.label" default="Supplier Information"/>
         </h4>
       	<g:selectFromList name="supplier.id" label="${message(code:'provider.type.supplier')}" bean="${sparePart}" field="supplier" optionKey="id" multiple="false"
   			ajaxLink="${createLink(controller:'provider', action:'getAjaxData', params: [type:'SUPPLIER'])}"
@@ -128,14 +129,15 @@
           <span class="question-default">
             <img src="${resource(dir:'images/icons',file:'star_small.png')}" alt="Section"/>
           </span>
-          <g:message code="sparePart.section.warranty.information.label" default="Warranty Information"/>
+          <g:message code="spare.part.section.warranty.information.label" default="Warranty Information"/>
         </h4>
         <g:inputBox name="warranty.sameAsSupplier"  label="${message(code:'spare.part.same.as.supplier.label')}" bean="${sparePart}" field="warranty.sameAsSupplier" checked="${(sparePart.warranty?.sameAsSupplier)? true:false}"/>
       	<g:input name="warranty.startDate" dateClass="date-picker" label="${message(code:'warranty.start.date.label')}" bean="${sparePart}" field="warranty.startDate"/>
     	<g:inputYearMonth name="warrantyPeriod" field="warrantyPeriod" years="${sparePart.warrantyPeriod?.years}" months="${sparePart.warrantyPeriod?.months}" bean="${sparePart}" label='spare.part.warranty.period.label'/>
-      	<!-- 
-      	WILL BE THEN ADDED (APHRORWA)
-      	-->
+      
+      	<g:address  bean="${sparePart}" warranty="true" field="warranty.contact"/>
+     	<g:i18nTextarea name="warranty.descriptions" bean="${sparePart}" label="${message(code:'warranty.descriptions.label')}" field="warranty.descriptions" height="150" width="300" maxHeight="150" />	 			
+  		
   		</fieldset> 
       </div>
   		<g:if test="${sparePart.id != null}">

@@ -142,7 +142,6 @@ class SparePart {
 			if (obj.warranty!=null) return (val!=null) && (val.numberOfMonths >= 0)
 		}
 		sparePartPurchasedBy nullable: false, inList:[SparePartPurchasedBy.BYFACILITY,SparePartPurchasedBy.BYMOH]
-		//sparePartPurchasedBy nullable: true, inList:[SparePartPurchasedBy.BYFACILITY,SparePartPurchasedBy.BYMOH]
 		
 		currency  nullable: true, blank: true, inList: ["RWF","USD","EUR"], validator:{ val, obj ->
 			if(obj.purchaseCost != null) return (val != null)
@@ -152,6 +151,11 @@ class SparePart {
 		}
 		model nullable: true
 		supplier nullable: true
+		expectedLifeTime nullable: true, validator:{
+			if(it==null) return true
+			else return (it.numberOfMonths >= 0)
+		}
+		manufactureDate nullable: true, blank: false, validator:{it <= new Date()}
 		
 	}
 	
