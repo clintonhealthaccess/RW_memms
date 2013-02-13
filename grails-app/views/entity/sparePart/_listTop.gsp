@@ -9,4 +9,3 @@
 	</a>
 	<g:searchBox action="search"  controller="sparePartView"/>
 </span>
-
