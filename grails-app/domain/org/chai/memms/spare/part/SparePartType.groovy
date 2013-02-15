@@ -56,12 +56,12 @@ class SparePartType {
 	static i18nFields = ["descriptions","names"]
 	static hasMany = [spareParts: SparePart]	
 	static constraints = {
-		code nullable: false, unique :true
+		code nullable: false, blank:false,unique :true
 		names nullable: true, blank: true
 		descriptions nullable: true, blank: true
-		partNumber nullable: false
+		partNumber nullable: false,blank:false
 		discontinuedDate nullable: true
-		manufacturer nullable: true
+		manufacturer nullable: false,blank:false
 	}
 	
 	static mapping = {

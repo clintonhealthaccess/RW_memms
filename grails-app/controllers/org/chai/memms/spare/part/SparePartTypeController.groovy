@@ -41,6 +41,7 @@ class SparePartTypeController  extends AbstractEntityController{
 	}
 
 	def createEntity() {
+
 		return new SparePartType();
 	}
 

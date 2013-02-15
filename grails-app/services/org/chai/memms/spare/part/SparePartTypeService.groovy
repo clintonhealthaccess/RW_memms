@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import org.chai.memms.spare.part.SparePartType;
 import org.chai.memms.util.Utils;
+import org.chai.memms.inventory.Provider;
 /**
  * @author Jean Kahigiso M.
  *
@@ -45,10 +46,13 @@ class SparePartTypeService {
 		def dbFieldDescritpion = 'descriptions_'+languageService.getCurrentLanguagePrefix();
 		def criteria = SparePartType.createCriteria()
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			
 			or{
 			ilike("code","%"+text+"%")
+			ilike("partNumber","%"+text+"%")
 		    ilike(dbFieldName,"%"+text+"%")
 			ilike(dbFieldDescritpion,"%"+text+"%")
+			
 			}	
 		}
 			

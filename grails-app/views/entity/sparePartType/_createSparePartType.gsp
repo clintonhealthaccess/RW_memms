@@ -19,8 +19,11 @@
         <g:input name="code" label="${message(code:'entity.code.label')}" bean="${type}" field="code"/>
         <g:input name="partNumber" label="${message(code:'entity.part.number.label')}" bean="${type}" field="partNumber"/>
   		<g:i18nInput name="names" label="${message(code:'entity.names.label')}" bean="${type}" field="names"/>
+  		<g:selectFromList name="manufacturer.id" label="${message(code:'provider.type.manufacturer')}" bean="${type}" field="manufacturer" optionKey="id" multiple="false"
+  			ajaxLink="${createLink(controller:'provider', action:'getAjaxData', params: [type:'MANUFACTURER'])}"
+  			from="${manufacturers}" value="${equipment?.manufacturer?.id}" values="${manufacturers.collect{it.contact?.contactName}}" />	
   		<g:input name="discontinuedDate" dateClass="date-picker" label="${message(code:'entity.discontinued.date.label')}" bean="${type}" field="discontinuedDate"/>
-  		<g:i18nTextarea name="descriptions" bean="${type}" label="${message(code:'entity.descriptions.label')}" field="descriptions" height="150" width="300" maxHeight="150" />
+  		<g:i18nTextarea name="descriptions" bean="${type}" label="${message(code:'entity.description.label')}" field="descriptions" height="150" width="300" maxHeight="150" />
   		<g:if test="${type.id != null}">
   			<input type="hidden" name="id" value="${type.id}"></input>
   		</g:if>
@@ -32,3 +35,8 @@
   	</g:form>
   </div>
 </div>
+<script type="text/javascript">
+	$(document).ready(function() {		
+		getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}")
+	});
+</script>
