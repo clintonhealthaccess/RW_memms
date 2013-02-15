@@ -104,8 +104,8 @@ class SparePartController extends AbstractEntityController{
 		SparePartStatus status
 		if(entity.dataLocation) hasAccess(entity.dataLocation)
 		if(entity.id==null){
-			entity.currentStatus = StatusOfSparePart."$params.cmd.status"
-			sparePartStatusService.createSparePartStatus(user,params.cmd.status,entity,params.cmd.dateOfEvent,[:])
+			entity.statusOfSparePart = StatusOfSparePart."$params.cmd.statusOfSparePart"
+			sparePartStatusService.createSparePartStatus(user,params.cmd.statusOfSparePart,entity,params.cmd.dateOfEvent,[:])
 		}
 		else entity.save(failOnError:true)
 	}
@@ -116,14 +116,15 @@ class SparePartController extends AbstractEntityController{
 	}
 
 	def getModel(def entity) {
-		def manufacturers = []; def suppliers = []; def types = []; def dataLocations = [];
-		if (entity.manufacturer != null) manufacturers << entity.manufacturer
+		//def manufacturers = []; 
+		def suppliers = []; def types = []; def dataLocations = [];
+		//if (entity.manufacturer != null) manufacturers << entity.manufacturer
 		if (entity.supplier != null) suppliers << entity.supplier
 		if (entity.type!=null) types << entity.type
 		if (entity.dataLocation!=null) dataLocations << entity.dataLocation
 		[
 					sparePart: entity,
-					manufacturers: manufacturers,
+					//manufacturers: manufacturers,
 					suppliers: suppliers,
 					types: types,
 					dataLocations: dataLocations,

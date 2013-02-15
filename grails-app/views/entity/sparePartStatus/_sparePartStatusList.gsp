@@ -4,10 +4,10 @@
 	<thead>
 		<tr>
 			<th></th>
-			<g:sortableColumn property="status" params="['sparePart.id': sparePart?.id]" title="${message(code: 'sparePart.status.label')}" />
-			<g:sortableColumn property="dateOfEvent" params="['sparePart.id': sparePart?.id]" title="${message(code: 'sparePart.status.date.of.event.label')}" />
-			<g:sortableColumn property="statusChangeDate" params="['sparePart.id': sparePart?.id]" title="${message(code: 'sparePart.status.recordedon.label')}" />
-			<th><g:message code="sparePart.status.current.label"/></th>
+			<g:sortableColumn property="status" params="['sparePart.id': sparePart?.id]" title="${message(code: 'spare.part.status.label')}" />
+			<g:sortableColumn property="dateOfEvent" params="['sparePart.id': sparePart?.id]" title="${message(code: 'spare.part.status.date.of.event.label')}" />
+			<g:sortableColumn property="statusChangeDate" params="['sparePart.id': sparePart?.id]" title="${message(code: 'spare.part.status.recordedon.label')}" />
+			<th><g:message code="spare.part.status.current.label"/></th>
 		</tr>
 	</thead>
 	<tbody>		
@@ -22,7 +22,7 @@
 						</li>
 					</ul>
     			</td>
-    			<td>${message(code: status?.status?.messageCode+'.'+status?.status?.name)}</td>
+    			<td>${message(code: status?.statusOfSparePart?.messageCode+'.'+status?.statusOfSparePart?.name)}</td>
     			<td>${Utils.formatDate(status?.dateOfEvent)}</td>
     			<td>${Utils.formatDateWithTime(status?.dateCreated)}</td>
     			<td>${(status==sparePart.timeBasedStatus)? '\u2713':''}</td>

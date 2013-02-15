@@ -5,5 +5,3 @@
 		</a>
 	</shiro:hasPermission>
 </span>
-
-

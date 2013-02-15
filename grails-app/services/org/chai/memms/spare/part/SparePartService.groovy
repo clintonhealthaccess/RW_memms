@@ -144,7 +144,7 @@ class SparePartService {
 		}
 	}
 	
-	public def filterSparePart(def user, def dataLocation, def supplier, def manufacturer, def sparePartType,
+	public def filterSparePart(def user, def dataLocation, def supplier, def sparePartType,
 		def sparePartPurchasedBy,def sameAsManufacturer,def sparePartStatus,Map<String, String> params){
 		
 		def dataLocations = []
@@ -161,8 +161,8 @@ class SparePartService {
 				inList('dataLocation',dataLocations)
 			if(supplier != null)
 				eq ("supplier", supplier)
-			if(manufacturer != null)
-				eq ("manufacturer", manufacturer)
+			/*if(manufacturer != null)
+				eq ("manufacturer", manufacturer)*/
 			if(sparePartType != null)
 				eq ("type", sparePartType)
 			if(sparePartPurchasedBy && !sparePartPurchasedBy.equals(SparePartPurchasedBy.NONE))
@@ -195,7 +195,7 @@ class SparePartService {
 						sparePart.serialNumber,sparePart.type.code,sparePart.type?.getNames(new Locale("en")),
 						sparePart.type?.getNames(new Locale("fr")),sparePart.model,sparePart.statusOfSparePart,
 						sparePart.dataLocation?.code,sparePart.dataLocation?.getNames(new Locale("en")),sparePart.dataLocation?.getNames(new Locale("fr")),
-						sparePart.manufacturer?.code,sparePart.manufacturer?.contact?.contactName,
+						//sparePart.manufacturer?.code,sparePart.manufacturer?.contact?.contactName,
 						sparePart.manufactureDate,sparePart.supplier?.code,sparePart.supplier?.contact?.contactName,sparePart.purchaseDate,
 						sparePart.purchaseCost?:"n/a",sparePart.currency?:"n/a",
 						sparePart.sparePartPurchasedBy.name(),sparePart.sameAsManufacturer,sparePart?.warranty?.startDate,sparePart?.warrantyPeriod?.numberOfMonths?:""
@@ -226,7 +226,7 @@ class SparePartService {
 			headers.add(ImportExportConstant.LOCATION_CODE)
 			headers.add(ImportExportConstant.LOCATION_NAME_EN)
 			headers.add(ImportExportConstant.LOCATION_NAME_FR)
-			headers.add(ImportExportConstant.MANUFACTURER_CODE)
+			//headers.add(ImportExportConstant.MANUFACTURER_CODE)
 			headers.add(ImportExportConstant.MANUFACTURER_CONTACT_NAME)
 			headers.add(ImportExportConstant.SPARE_PART_MANUFACTURE_DATE)
 			headers.add(ImportExportConstant.SUPPLIER_CODE)
@@ -235,7 +235,7 @@ class SparePartService {
 			headers.add(ImportExportConstant.SPARE_PART_PURCHASE_COST)
 			headers.add(ImportExportConstant.SPARE_PART_PURCHASE_COST_CURRENCY)
 			headers.add(ImportExportConstant.SPARE_PART_DONATION)
-			headers.add(ImportExportConstant.SPARE_PART_OBSOLETE)
+			headers.add(ImportExportConstant.SPARE_PART_SAME_AS_MANUFACTURER)
 			headers.add(ImportExportConstant.SPARE_PART_WARRANTY_START)
 			headers.add(ImportExportConstant.SPARE_PART_WARRANTY_END)
 			
