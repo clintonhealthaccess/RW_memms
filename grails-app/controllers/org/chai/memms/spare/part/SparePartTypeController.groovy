@@ -35,6 +35,7 @@ import org.chai.memms.spare.part.SparePartType;
 
 class SparePartTypeController  extends AbstractEntityController{
 	def sparePartTypeService
+	def languageService
 	
 	def getEntity(def id) {
 		return SparePartType.get(id);

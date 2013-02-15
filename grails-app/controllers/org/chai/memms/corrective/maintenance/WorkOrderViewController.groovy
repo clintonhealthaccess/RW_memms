@@ -192,7 +192,7 @@ class WorkOrderViewController extends AbstractController{
 		if (location != null) 
 			maintenances = maintenanceService.getMaintenancesByLocation(WorkOrder.class,location,dataLocationTypesFilter,params)
 		
-		log.debug("maintenances = " +maintenances?.maintenanceList)
+		if(log.isDebugEnabled()) log.debug("maintenances = " +maintenances?.maintenanceList)
 		render (view: '/orderSummaryPage/summaryPage', model: [
 					maintenances:maintenances?.maintenanceList,
 					currentLocation: location,

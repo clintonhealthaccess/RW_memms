@@ -1,5 +1,29 @@
-/**
+/** 
+ * Copyright (c) 2012, Clinton Health Access Initiative.
+ *
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the <organization> nor the
+ *       names of its contributors may be used to endorse or promote products
+ *       derived from this software without specific prior written permission.
  * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package org.chai.memms.spare.part
 
@@ -73,7 +97,6 @@ class SparePartViewController extends AbstractController{
 				entityClass: getEntityClass(),
 				code: getLabel(),
 				names:names,
-				//importTask:'EquipmentTypeImportTask',
 				//exportTask:'EquipmentTypeExportTask'
 			])
 		}
@@ -134,7 +157,7 @@ class SparePartViewController extends AbstractController{
 			if(!request.xhr)
 				response.sendError(404)
 			else
-				this.ajaxModel(spareParts,location,params['q'])
+				this.ajaxModel(spareParts,params['q'])
 		}
 	}
 	
@@ -144,15 +167,15 @@ class SparePartViewController extends AbstractController{
 			response.sendError(404)
 		else{
 			adaptParamsForList()
-			def spareParts = sparePartService.filterSparePart(user,cmd.location,cmd.supplier,cmd.manufacturer,cmd.sparePartType,cmd.purchaser,cmd.sameAsManufacturer,cmd.status,params)
+			def spareParts = sparePartService.filterSparePart(user,cmd.location,cmd.supplier,cmd.sparePartType,cmd.purchaser,cmd.sameAsManufacturer,cmd.status,params)
 			if(!request.xhr)
 				response.sendError(404)
 			else this.ajaxModel(spareParts,cmd.location,"")
 		}
 	}
 	
-	def ajaxModel(def entities,def location,def searchTerm) {
-		def model = [entities: entities,entityCount: entities.totalCount,location:location,q:searchTerm]
+	def ajaxModel(def entities,def searchTerm) {
+		def model = [entities: entities,entityCount: entities.totalCount,entityClass:getEntityClass(),names:names,q:searchTerm]
 		def listHtml = g.render(template:"/entity/sparePart/sparePartList",model:model)
 		render(contentType:"text/json") { results = [listHtml] }
 	}
@@ -212,15 +235,6 @@ class SparePartViewController extends AbstractController{
 		}
 		cmd.sparePartTypes = sparePartTypes
 
-		Set<Provider> manufacturers = new HashSet<Provider>()
-		params.list('manufacturerids').each { id ->
-			if (NumberUtils.isDigits(id)) {
-				def manufacturer = Provider.get(id)
-				if (manufacturer != null && !manufacturers.contains(manufacturer)) manufacturers.add(manufacturer);
-			}
-		}
-		cmd.manufacturers = manufacturers
-
 		Set<Provider> suppliers = new HashSet<Provider>()
 		params.list('supplierids').each { id ->
 			if (NumberUtils.isDigits(id)) {
@@ -235,7 +249,7 @@ class SparePartViewController extends AbstractController{
 
 		if(params.exported != null){
 			def sparePartExportTask = new SparePartExportFilter(calculationLocations:cmd.calculationLocations,locationTypes:cmd.locationTypes,
-					sparePartTypes:cmd.sparePartTypes,manufacturers:cmd.manufacturers,suppliers:cmd.suppliers,sparePartStatus:cmd.sparePartStatus,
+					sparePartTypes:cmd.sparePartTypes,suppliers:cmd.suppliers,sparePartStatus:cmd.sparePartStatus,
 					purchaser:cmd.purchaser,sameAsManufacturer:cmd.sameAsManufacturer).save(failOnError: true,flush: true)
 			params.exportFilterId = sparePartExportTask.id
 			params.class = "SparePartExportTask"
@@ -256,7 +270,7 @@ class SparePartViewController extends AbstractController{
 		def location = DataLocation.get(params.int('dataLocation.id'))
 		adaptParamsForList()
 
-		def spareParts = sparePartService.filterSparePart(user,location,cmd.supplier,cmd.manufacturer,cmd.sparePartType,cmd.purchaser,cmd.sameAsManufacturer,cmd.status,params)
+		def spareParts = sparePartService.filterSparePart(user,location,cmd.supplier,cmd.sparePartType,cmd.purchaser,cmd.sameAsManufacturer,cmd.status,params)
 		File file = sparePartService.exporter(location?:user.location,spareParts)
 
 		response.setHeader "Content-disposition", "attachment; filename=${file.name}.csv"
@@ -288,7 +302,7 @@ class SparePartViewController extends AbstractController{
 	}
 
 	def getAjaxData = {
-		List<SparePart> spareParts = sparePartService.searchSparePart(params['term'],user,null,[:])
+		List<SparePart> spareParts = sparePartService.searchSparePart(params['term'],null,[:])
 		render(contentType:"text/json") {
 			elements = array {
 				spareParts.each { sparePart ->
@@ -302,7 +316,7 @@ class SparePartViewController extends AbstractController{
 				spareParts.each { sparePart ->
 					elem (
 							key: sparePart.id,
-							html: g.render(template:"/templates/sparePartFormSide",model:[sparePart:sparePart,cssClass:"form-aside-hidden",field:"sparePart"])
+							html: g.render(template:"/templates/sparePartFormSide",model:[sparePart:sparePart,label:label,cssClass:"form-aside-hidden",field:"sparePart"])
 							)
 				}
 			}
@@ -314,7 +328,6 @@ class SparePartViewController extends AbstractController{
 class FilterCommand {
 	DataLocation location
 	SparePartType sparePartType
-	Provider manufacturer
 	Provider supplier
 	StatusOfSparePart status = StatusOfSparePart.NONE
 	SparePartPurchasedBy purchaser
@@ -330,20 +343,19 @@ class FilterCommand {
 	static constraints = {
 
 		sparePartType nullable:true
-		manufacturer nullable:true
 		supplier nullable:true
 		status nullable:true
 		purchaser nullable:true
 		sameAsManufacturer nullable:true
 
 		location nullable:false, validator:{val, obj ->
-			return (obj.sparePartType != null || obj.manufacturer != null ||obj.supplier != null || (obj.status != null && obj.status != StatusOfSparePart.NONE) || obj.purchaser || obj.sameAsManufacturer)?true:"select.atleast.one.value.text"
+			return (obj.sparePartType != null || obj.supplier != null || (obj.status != null && obj.status != StatusOfSparePart.NONE) || obj.purchaser || obj.sameAsManufacturer)?true:"select.atleast.one.value.text"
 		}
 	}
 
 	String toString() {
 		return "FilterCommand[DataLocation="+location+", SparePartType="+sparePartType+
-		", Manufacturer="+manufacturer+", Supplier="+supplier+", StatusOfSparePart="+status+", donated="+purchaser+", sameAsManufacturer="+sameAsManufacturer+
+		", Supplier="+supplier+", StatusOfSparePart="+status+", donated="+purchaser+", sameAsManufacturer="+sameAsManufacturer+
 		"]"
 	}
 }
@@ -352,7 +364,6 @@ class ExportFilterCommand {
 	Set<CalculationLocation> calculationLocations
 	Set<DataLocationType> locationTypes
 	Set<SparePartType> sparePartTypes
-	Set<Provider> manufacturers
 	Set<Provider> suppliers
 	StatusOfSparePart sparePartStatus
 	SparePartPurchasedBy purchaser
@@ -369,7 +380,6 @@ class ExportFilterCommand {
 		calculationLocations nullable:true
 		locationTypes nullable:true
 		sparePartTypes nullable:true
-		manufacturers nullable:true
 		suppliers nullable:true
 		sparePartStatus nullable:true
 		purchaser nullable:true
@@ -378,7 +388,7 @@ class ExportFilterCommand {
 
 	String toString() {
 		return "ExportFilterCommand[ CalculationLocations="+calculationLocations+", DataLocationTypes="+locationTypes+" , SparePartTypes="+sparePartTypes+
-		", Manufacturers="+manufacturers+", Suppliers="+suppliers+", StatusOfSparePart="+sparePartStatus+", donated="+purchaser+", sameAsManufacturer="+sameAsManufacturer+
+		", Suppliers="+suppliers+", StatusOfSparePart="+sparePartStatus+", donated="+purchaser+", sameAsManufacturer="+sameAsManufacturer+
 		"]"
 	}
 
