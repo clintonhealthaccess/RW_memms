@@ -149,8 +149,9 @@ public class Equipment {
 		warrantyPeriod nullable: true, validator:{val, obj ->
 			if (obj.warranty!=null) return (val!=null) && (val.numberOfMonths >= 0)
 		}
-		
-		serialNumber nullable: false, blank: false,  unique: true
+
+		//TODO nullable has to be false, but it is true for first iteration
+		serialNumber nullable: true ///blank: false,  unique: true
 
 		purchaseCost nullable: true, blank: true, validator:{ if(it!=null) return (it>0) }
 		//TODO nullable has to be false, but it is true for first iteration
