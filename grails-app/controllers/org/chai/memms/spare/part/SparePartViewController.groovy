@@ -167,7 +167,7 @@ class SparePartViewController extends AbstractController{
 			response.sendError(404)
 		else{
 			adaptParamsForList()
-			def spareParts = sparePartService.filterSparePart(user,cmd.location,cmd.supplier,cmd.sparePartType,cmd.purchaser,cmd.sameAsManufacturer,cmd.status,params)
+			def spareParts = sparePartService.filterSparePart(user,cmd.location,cmd.supplier,cmd.sparePartType,cmd.sparePartPurchasedBy,cmd.sameAsManufacturer,cmd.status,params)
 			if(!request.xhr)
 				response.sendError(404)
 			else this.ajaxModel(spareParts,cmd.location,"")
@@ -179,7 +179,15 @@ class SparePartViewController extends AbstractController{
 		def listHtml = g.render(template:"/entity/sparePart/sparePartList",model:model)
 		render(contentType:"text/json") { results = [listHtml] }
 	}
-
+	def model(def entities, def dataLocation) {
+		return [
+			entities: entities,
+			entityCount: entities.totalCount,
+			dataLocation:dataLocation,
+			code: getLabel()
+		]
+	}
+	
 	def summaryPage = {
 		if(user.location instanceof DataLocation) redirect(controller:"sparePartView",action:"list")
 
@@ -250,7 +258,7 @@ class SparePartViewController extends AbstractController{
 		if(params.exported != null){
 			def sparePartExportTask = new SparePartExportFilter(calculationLocations:cmd.calculationLocations,locationTypes:cmd.locationTypes,
 					sparePartTypes:cmd.sparePartTypes,suppliers:cmd.suppliers,sparePartStatus:cmd.sparePartStatus,
-					purchaser:cmd.purchaser,sameAsManufacturer:cmd.sameAsManufacturer).save(failOnError: true,flush: true)
+					sparePartPurchasedBy:cmd.sparePartPurchasedBy,sameAsManufacturer:cmd.sameAsManufacturer).save(failOnError: true,flush: true)
 			params.exportFilterId = sparePartExportTask.id
 			params.class = "SparePartExportTask"
 			params.targetURI = "/sparePartView/generalExport"
@@ -270,7 +278,7 @@ class SparePartViewController extends AbstractController{
 		def location = DataLocation.get(params.int('dataLocation.id'))
 		adaptParamsForList()
 
-		def spareParts = sparePartService.filterSparePart(user,location,cmd.supplier,cmd.sparePartType,cmd.purchaser,cmd.sameAsManufacturer,cmd.status,params)
+		def spareParts = sparePartService.filterSparePart(user,location,cmd.supplier,cmd.sparePartType,cmd.sparePartPurchasedBy,cmd.sameAsManufacturer,cmd.status,params)
 		File file = sparePartService.exporter(location?:user.location,spareParts)
 
 		response.setHeader "Content-disposition", "attachment; filename=${file.name}.csv"
@@ -330,7 +338,7 @@ class FilterCommand {
 	SparePartType sparePartType
 	Provider supplier
 	StatusOfSparePart status = StatusOfSparePart.NONE
-	SparePartPurchasedBy purchaser
+	SparePartPurchasedBy sparePartPurchasedBy
 	String sameAsManufacturer
 	 
 
@@ -345,17 +353,17 @@ class FilterCommand {
 		sparePartType nullable:true
 		supplier nullable:true
 		status nullable:true
-		purchaser nullable:true
+		sparePartPurchasedBy nullable:true
 		sameAsManufacturer nullable:true
 
 		location nullable:false, validator:{val, obj ->
-			return (obj.sparePartType != null || obj.supplier != null || (obj.status != null && obj.status != StatusOfSparePart.NONE) || obj.purchaser || obj.sameAsManufacturer)?true:"select.atleast.one.value.text"
+			return (obj.sparePartType != null || obj.supplier != null || (obj.status != null && obj.status != StatusOfSparePart.NONE) || obj.sparePartPurchasedBy || obj.sameAsManufacturer)?true:"select.atleast.one.value.text"
 		}
 	}
 
 	String toString() {
 		return "FilterCommand[DataLocation="+location+", SparePartType="+sparePartType+
-		", Supplier="+supplier+", StatusOfSparePart="+status+", donated="+purchaser+", sameAsManufacturer="+sameAsManufacturer+
+		", Supplier="+supplier+", StatusOfSparePart="+status+", donated="+sparePartPurchasedBy+", sameAsManufacturer="+sameAsManufacturer+
 		"]"
 	}
 }
@@ -366,7 +374,7 @@ class ExportFilterCommand {
 	Set<SparePartType> sparePartTypes
 	Set<Provider> suppliers
 	StatusOfSparePart sparePartStatus
-	SparePartPurchasedBy purchaser
+	SparePartPurchasedBy sparePartPurchasedBy
 	String sameAsManufacturer
 	 
 
@@ -382,13 +390,13 @@ class ExportFilterCommand {
 		sparePartTypes nullable:true
 		suppliers nullable:true
 		sparePartStatus nullable:true
-		purchaser nullable:true
+		sparePartPurchasedBy nullable:true
 		sameAsManufacturer nullable:true
 	}
 
 	String toString() {
 		return "ExportFilterCommand[ CalculationLocations="+calculationLocations+", DataLocationTypes="+locationTypes+" , SparePartTypes="+sparePartTypes+
-		", Suppliers="+suppliers+", StatusOfSparePart="+sparePartStatus+", donated="+purchaser+", sameAsManufacturer="+sameAsManufacturer+
+		", Suppliers="+suppliers+", StatusOfSparePart="+sparePartStatus+", donated="+sparePartPurchasedBy+", sameAsManufacturer="+sameAsManufacturer+
 		"]"
 	}
 

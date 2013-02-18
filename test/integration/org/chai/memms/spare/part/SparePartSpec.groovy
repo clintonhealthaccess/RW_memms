@@ -38,6 +38,7 @@ import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
 import org.chai.memms.spare.part.SparePart;
 import org.chai.memms.spare.part.SparePartType;
 import org.chai.memms.security.User;
+import org.chai.location.DataLocation;
 
 
 /**
@@ -54,26 +55,191 @@ class SparePartSpec extends IntegrationTests {
 
 		when:
 		def sparePart = new SparePart(serialNumber:"test123",sparePartPurchasedBy:SparePartPurchasedBy.BYMOH,sameAsManufacturer:false,expectedLifeTime:Initializer.newPeriod(20),
+				descriptions:['en':'Spare Part Descriptions'],manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),model:"sparePartModel",
+				type:sparePartType,statusOfSparePart:StatusOfSparePart.OPERATIONAL,dateCreated:Initializer.getDate(23,07,2010), addedBy: User.findByUsername("systemUser"))
+
+		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
+		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
+		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),false,[:])
+		
+		sparePart.supplier=supplier
+		sparePart.warranty = warranty
+		sparePart.warrantyPeriod = Initializer.newPeriod(4)
+		sparePart.save(failOnError: true)
+		
+		then:
+		SparePart.count() == 1
+	}
+	def "can get current spare part status based on time"(){
+		setup:
+		setupLocationTree()
+		setupSystemUser()
+		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",Provider.findByCode("ONE"),Initializer.now())
+		def user  = newUser("admin", "Admin UID")
+		def sparePart = new SparePart(serialNumber:"test123",sparePartPurchasedBy:SparePartPurchasedBy.BYMOH,sameAsManufacturer:false,expectedLifeTime:Initializer.newPeriod(20),
 				descriptions:['en':'SparePart Descriptions'],manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),model:"sparePartModel",
 				type:sparePartType,statusOfSparePart:StatusOfSparePart.OPERATIONAL,dateCreated:Initializer.getDate(23,07,2010), addedBy: User.findByUsername("systemUser"))
 
-		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
-
-		//def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
-
 		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
 		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),false,[:])
-
-		//sparePart.manufacturer=manufacture
+		
 		sparePart.supplier=supplier
-
 		sparePart.warranty = warranty
 		sparePart.warrantyPeriod = Initializer.newPeriod(4)
-
 		sparePart.save(failOnError: true)
+		
+		when:
+		def statusThree= Initializer.newSparePartStatus(Initializer.getDate(10, 12, 2010),User.findByUsername("admin"),StatusOfSparePart.INSTOCK,sparePart,[:])
+		def statusTwo= Initializer.newSparePartStatus(Initializer.getDate(10, 12, 2011),User.findByUsername("admin"),StatusOfSparePart.OPERATIONAL,sparePart,[:])
+		def statusOne= Initializer.newSparePartStatus(Initializer.getDate(10, 07, 2012),User.findByUsername("admin"),StatusOfSparePart.PENDINGORDER,sparePart,[:])
+		
 		then:
 		SparePart.count() == 1
+		SparePart.list()[0].timeBasedStatus.statusOfSparePart==statusOne.statusOfSparePart
+	}
+	def "can get current spare part status"(){
+		setup:
+		setupLocationTree()
+		setupSystemUser()
+		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",Provider.findByCode("ONE"),Initializer.now())
+		def user  = newUser("admin", "Admin UID")
+		def sparePart = new SparePart(serialNumber:"test123",sparePartPurchasedBy:SparePartPurchasedBy.BYMOH,sameAsManufacturer:false,expectedLifeTime:Initializer.newPeriod(20),
+				descriptions:['en':'SparePart Descriptions'],manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),model:"sparePartModel",
+				type:sparePartType,statusOfSparePart:StatusOfSparePart.OPERATIONAL,dateCreated:Initializer.getDate(23,07,2010), addedBy: User.findByUsername("systemUser"))
+
+		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
+		def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
+		def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),false,[:])
+		
+		sparePart.supplier=supplier
+		sparePart.warranty = warranty
+		sparePart.warrantyPeriod = Initializer.newPeriod(4)
+		sparePart.save(failOnError: true)
+		
+		when:
+		def statusThree= Initializer.newSparePartStatus(Initializer.getDate(10, 12, 2010),User.findByUsername("admin"),StatusOfSparePart.INSTOCK,sparePart,[:])
+		def statusTwo= Initializer.newSparePartStatus(Initializer.getDate(10, 12, 2011),User.findByUsername("admin"),StatusOfSparePart.OPERATIONAL,sparePart,[:])
+		def statusOne= Initializer.newSparePartStatus(Initializer.getDate(10, 07, 2012),User.findByUsername("admin"),StatusOfSparePart.PENDINGORDER,sparePart,[:])
+		then:
+		SparePart.count() == 1
+		SparePart.list()[0].timeBasedStatus.statusOfSparePart==statusOne.statusOfSparePart
+		
+		
+		when:
+		sparePart.statusOfSparePart=[]
+		sparePart.save(failOnError: true)
+		def statusSix= Initializer.newSparePartStatus(Initializer.getDate(10, 12, 2010),User.findByUsername("admin"),StatusOfSparePart.INSTOCK,sparePart,[:])
+		def statusFive= Initializer.newSparePartStatus(Initializer.getDate(10, 12, 2011),User.findByUsername("admin"),StatusOfSparePart.OPERATIONAL,sparePart,[:])
+		def statusFour= Initializer.newSparePartStatus(Initializer.getDate(10, 07, 2012),User.findByUsername("admin"),StatusOfSparePart.PENDINGORDER,sparePart,[:])
+		then:
+		SparePart.count() == 1
+		SparePart.list()[0].timeBasedStatus.is(statusFour)
+		
+		when:
+		sparePart.statusOfSparePart=[]
+		sparePart.save(failOnError: true)
+		def statusInStock= Initializer.newSparePartStatus(Initializer.getDate(10, 12, 2010),User.findByUsername("admin"),StatusOfSparePart.INSTOCK,sparePart,[:])
+		def statusOperational= Initializer.newSparePartStatus(Initializer.getDate(10, 12, 2011),User.findByUsername("admin"),StatusOfSparePart.OPERATIONAL,sparePart,[:])
+		def statusPendingOrder= Initializer.newSparePartStatus(Initializer.getDate(10, 07, 2012),User.findByUsername("admin"),StatusOfSparePart.PENDINGORDER,sparePart,[:])
+		then:
+		SparePart.count() == 1
+		SparePart.list()[0].timeBasedStatus.is(statusPendingOrder)
+	}
+	
+	def "can't create and save a spare part with a duplicate serial number"() {
+		
+				setup:
+				setupLocationTree()
+				setupSystemUser()
+				def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",Provider.findByCode("ONE"),Initializer.now())
+				
+				
+				def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+				
+				def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
+				Initializer.newSparePart("test123",SparePartPurchasedBy.BYFACILITY,false,Initializer.newPeriod(30),"16677",['en':'Spare Part Descriptions one'],Initializer.getDate(22,07,2010),Initializer.getDate(22,07,2011),"RWF",'sparePartModel',
+					DataLocation.list().first(),sparePartType,supplier,StatusOfSparePart.OPERATIONAL,User.findByUsername("systemUser"),null,null)
+					
+				when:
+				def sparePart = new SparePart(serialNumber:"test123",sparePartPurchasedBy:SparePartPurchasedBy.BYMOH,sameAsManufacturer:false,expectedLifeTime:Initializer.newPeriod(20),
+						descriptions:['en':'SparePart Descriptions'],manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),model:"sparePartModel",
+						type:sparePartType,statusOfSparePart:StatusOfSparePart.OPERATIONAL,dateCreated:Initializer.getDate(23,07,2010), addedBy: User.findByUsername("systemUser"))
+
+		
+				def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
+				def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),false,[:])
+		
+				sparePart.supplier=supplier
+				sparePart.warranty=warranty
+				sparePart.warrantyPeriod = Initializer.newPeriod(21)
+		
+				sparePart.save()
+				then:
+				SparePart.count() == 1
+				sparePart.errors.hasFieldErrors('serialNumber') == true
+			}
+	def "can't create and save an spare part with a duplicate code"() {
+		
+				setup:
+				setupLocationTree()
+				setupSystemUser()
+				def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",Provider.findByCode("ONE"),Initializer.now())
+				
+				def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+				def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
+				def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
+				def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),false,[:])
+		
+				def sparePartOne = Initializer.newSparePart("test123",SparePartPurchasedBy.BYFACILITY,false,Initializer.newPeriod(30),"16677",['en':"testDescription"],Initializer.getDate(22,07,2010), Initializer.getDate(22,07,2010),"RWF",
+						"sparePartModel",DataLocation.list().first(),sparePartType,supplier,StatusOfSparePart.OPERATIONAL,
+						User.findByUsername("systemUser"),null,null)
+					
+				when:
+				
+				def sparePart = new SparePart(serialNumber:"test124",sparePartPurchasedBy:SparePartPurchasedBy.BYMOH,sameAsManufacturer:false,expectedLifeTime:Initializer.newPeriod(20),
+					descriptions:['en':'Spare Part Descriptions'],manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),model:"sparePartModel",
+					type:sparePartType,code:sparePartOne.code,statusOfSparePart:StatusOfSparePart.OPERATIONAL,dateCreated:Initializer.getDate(23,07,2010), addedBy: User.findByUsername("systemUser"))
+				sparePart.supplier=supplier
+				sparePart.warranty=warranty
+				sparePart.warrantyPeriod = Initializer.newPeriod(21)
+		
+				sparePart.save()
+				then:
+				SparePart.count() == 1
+				sparePart.errors.hasFieldErrors('code') == true
+			}
+	def "can set current spare part status based on time"(){
+		setup:
+		setupLocationTree()
+		setupSystemUser()
+		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",Provider.findByCode("ONE"),Initializer.now())
+		def user  = newUser("admin", "Admin UID")
+		
+		def sparePart = new SparePart(serialNumber:"test123",sparePartPurchasedBy:SparePartPurchasedBy.BYFACILITY,sameAsManufacturer:false,expectedLifeTime:Initializer.newPeriod(20),
+			descriptions:['en':'SparePart Descriptions'],manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),model:"sparePartModel",
+			type:sparePartType,statusOfSparePart:StatusOfSparePart.OPERATIONAL,dateCreated:Initializer.getDate(23,07,2010), addedBy: User.findByUsername("systemUser"))
+
+		
+
+			def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+			def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
+			def contact = Initializer.newContact([:],"Contact","jk@yahoo.com","0768-888-787","Street 654","6353")
+			def warranty = Initializer.newWarranty(['en':'warranty'],'warranty name','email@gmail.com',"0768-889-787","Street 154","6353",Initializer.getDate(10, 12, 2010),false,[:])
+		
+		sparePart.supplier=supplier
+		sparePart.warranty=warranty
+		sparePart.warrantyPeriod = Initializer.newPeriod(3)
+		sparePart.save(failOnError: true)
+		when:
+		def statusThree= Initializer.newSparePartStatus(Initializer.getDate(10, 12, 2010),User.findByUsername("admin"),StatusOfSparePart.INSTOCK,sparePart,[:])
+		def statusTwo= Initializer.newSparePartStatus(Initializer.getDate(10, 12, 2011),User.findByUsername("admin"),StatusOfSparePart.OPERATIONAL,sparePart,[:])
+		def statusOne= Initializer.newSparePartStatus(Initializer.getDate(10, 07, 2012),User.findByUsername("admin"),StatusOfSparePart.PENDINGORDER,sparePart,[:])
+		then:
+		SparePart.count() == 1
+		SparePart.list()[0].timeBasedStatus.statusOfSparePart==statusOne.statusOfSparePart
 	}
 }

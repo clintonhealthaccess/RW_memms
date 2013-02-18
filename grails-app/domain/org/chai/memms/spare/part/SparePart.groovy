@@ -51,7 +51,7 @@ import i18nfields.I18nFields;
  */
 @i18nfields.I18nFields
 @EqualsAndHashCode(includes="code")
-class SparePart {
+public class SparePart {
 	
 	enum StockLocation{
 		
@@ -114,7 +114,7 @@ class SparePart {
 		code nullable: false, unique :true
 		names nullable: true, blank: true
 		descriptions nullable: true, blank: true
-		serialNumber nullable: true, validator: { val, obj ->
+		serialNumber nullable: true, unique: true, validator: { val, obj ->
 			if(!obj.statusOfSparePart.equals(StatusOfSparePart.PENDINGORDER)) return (val!=null)
 		}
 		//serialNumber nullable: false, blank: false,  unique: true

@@ -31,8 +31,10 @@ import java.util.Set;
 
 import org.chai.memms.AbstractEntityController;
 import org.chai.memms.spare.part.SparePartType;
-
-
+/**
+ * @author Aphrodice Rwagaju
+ *
+ */
 class SparePartTypeController  extends AbstractEntityController{
 	def sparePartTypeService
 	def languageService

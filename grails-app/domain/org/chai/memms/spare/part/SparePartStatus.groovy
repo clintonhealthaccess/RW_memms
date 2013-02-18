@@ -31,7 +31,6 @@ import java.util.Date;
 
 import org.chai.memms.security.User;
 import groovy.transform.EqualsAndHashCode;
-import org.chai.memms.spare.part.SparePart;
 import i18nfields.I18nFields;
 
 /**

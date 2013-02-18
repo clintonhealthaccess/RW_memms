@@ -37,7 +37,6 @@ import org.chai.memms.inventory.EquipmentType.Observation;
 import org.chai.location.DataLocation;
 import org.chai.memms.security.User;
 import org.chai.memms.IntegrationTests
-import org.chai.location.DataLocation;
 import org.chai.memms.inventory.Provider.Type;
 import org.chai.memms.inventory.Equipment;
 /**
