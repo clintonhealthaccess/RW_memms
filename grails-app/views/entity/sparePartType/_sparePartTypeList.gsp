@@ -6,10 +6,11 @@
 			<g:sortableColumn property="code" params="[q:q]" title="${message(code: 'entity.code.label')}" />
 			<g:sortableColumn property="partNumber" params="[q:q]" title="${message(code: 'entity.part.number.label')}" />
 			<g:sortableColumn property="${names}" params="[q:q]" title="${message(code: 'entity.name.label')}" />
-			<g:sortableColumn property="discontinedDate" params="[q:q]" title="${message(code: 'entity.discontinued.date.label')}" />
-			<th><g:message code="entity.description.label"/></th>
+			<g:sortableColumn property="manufacturer" params="[q:q]" title="${message(code: 'entity.manufacturer.label')}" />
+			<g:sortableColumn property="discontinuedDate" params="[q:q]" title="${message(code: 'entity.discontinued.date.label')}" />
+	        <g:sortableColumn property="${i18nField(field: 'descriptions')}" params="[q:q]" title="${message(code: 'entity.description.label')}" />
 			<g:sortableColumn property="dateCreated" params="[q:q]" title="${message(code: 'spare.part.type.added.on.label')}" />
-			<g:sortableColumn property="lastModifiedOn" params="[q:q]" title="${message(code:'spare.part.type.last.modified.on.label')}" />
+			<g:sortableColumn property="lastUpdated" params="[q:q]" title="${message(code:'spare.part.type.last.modified.on.label')}" />
        </tr>
 	</thead>
 	<tbody>
@@ -36,6 +37,9 @@
 				</td>
 				<td>
 					${type.names}
+				</td>
+				<td>
+					${type.manufacturer.contact.contactName}
 				</td>
 				<td>
 					${Utils.formatDateWithTime(type?.discontinuedDate)}
