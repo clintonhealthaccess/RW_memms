@@ -35,7 +35,7 @@ import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.AbstractEntityController;
 import org.chai.memms.spare.part.SparePartType;
 /**
- * @author Aphrodice Rwagaju
+ * @author Alain Inema
  *
  */
 class SparePartTypeController  extends AbstractEntityController{
@@ -86,8 +86,8 @@ class SparePartTypeController  extends AbstractEntityController{
 		if(request.xhr)
 			this.ajaxModel(types,"")
 		else{
-		
-		render(view:"/entity/list",model:model(types) << [
+
+		render(view:"/entity/list",model:model(types) <<[
 				template:"sparePartType/sparePartTypeList",
 				listTop:"sparePartType/listTop"
 //				entities: types,
@@ -100,14 +100,6 @@ class SparePartTypeController  extends AbstractEntityController{
 		}
 	}
 	
-//	def search = {
-//		adaptParamsForList()
-//		List<SparePartType> types = sparePartTypeService.searchSparePartType(params['q'],params)
-//		if(!request.xhr)
-//			response.sendError(404)
-//		this.ajaxModel(types,params['q'])
-//		
-//	}
 	
 	def search = {
 		adaptParamsForList()
@@ -129,18 +121,10 @@ class SparePartTypeController  extends AbstractEntityController{
 			entityCount: entities.totalCount,
 			entityClass:getEntityClass(),
    		    code: getLabel()
-//			names:names
-//			descriptions:descriptions
 		]
 	}
 	
-//	def ajaxModel(def entities,def searchTerm) {
-//		def model = [entities: entities,entityCount: entities.totalCount,entityClass:getEntityClass(),names:names,q:searchTerm]
-//		def model = [entities: entities,entityCount: entities.totalCount,entityClass:getEntityClass(),names:names,q:searchTerm]
-//		def listHtml = g.render(template:"/entity/sparePartType/sparePartTypeList",model:model)
-//		render(contentType:"text/json") { results = [listHtml] }
-//	}
-	
+
 	def ajaxModel(def entities,def searchTerm) {
 		def model = model(entities) << [q:searchTerm]
 		def listHtml = g.render(template:"/entity/sparePartType/sparePartTypeList",model:model)

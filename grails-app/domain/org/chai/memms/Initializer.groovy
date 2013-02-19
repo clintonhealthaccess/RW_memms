@@ -845,8 +845,7 @@ public class Initializer {
 			serialNumber:serialNumber,
 			sparePartPurchasedBy:sparePartPurchasedBy,
 			sameAsManufacturer:sameAsManufacturer,
-			expectedLifeTime:expectedLifeTime,
-			
+			expectedLifeTime:expectedLifeTime,		
 			purchaseCost:purchaseCost,
 			manufactureDate:manufactureDate,
 			purchaseDate:purchaseDate,
