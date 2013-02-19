@@ -5,7 +5,7 @@
 			<th/>
 			<g:sortableColumn property="code" params="[q:q]" title="${message(code: 'entity.code.label')}" />
 			<g:sortableColumn property="partNumber" params="[q:q]" title="${message(code: 'entity.part.number.label')}" />
-			<g:sortableColumn property="${names}" params="[q:q]" title="${message(code: 'entity.name.label')}" />
+			<g:sortableColumn property="${i18nField(field: 'names')}" params="[q:q]" title="${message(code: 'entity.name.label')}" />
 			<g:sortableColumn property="manufacturer" params="[q:q]" title="${message(code: 'entity.manufacturer.label')}" />
 			<g:sortableColumn property="discontinuedDate" params="[q:q]" title="${message(code: 'entity.discontinued.date.label')}" />
 	        <g:sortableColumn property="${i18nField(field: 'descriptions')}" params="[q:q]" title="${message(code: 'entity.description.label')}" />
@@ -47,6 +47,7 @@
 				<td>
 					${type.descriptions}
 				</td>
+				    
 				<td>
 					${Utils.formatDateWithTime(type?.dateCreated)}
 				</td>

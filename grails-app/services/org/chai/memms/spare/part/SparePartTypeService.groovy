@@ -30,7 +30,10 @@ import java.util.List;
 import java.util.Map;
 import org.chai.memms.spare.part.SparePartType;
 import org.chai.memms.util.Utils;
-import org.chai.memms.inventory.Provider;
+import org.chai.memms.inventory.Provider.Type;
+
+
+
 /**
  * @author Jean Kahigiso M.
  *
