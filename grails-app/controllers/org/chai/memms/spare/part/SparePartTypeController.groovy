@@ -83,7 +83,7 @@ class SparePartTypeController  extends AbstractEntityController{
 		if(request.xhr)
 			this.ajaxModel(types,"")
 		else{
-		render(view:"/entity/list",model:[
+		render(view:"/entity/list",model:model(types) <<[
 				template:"sparePartType/sparePartTypeList",
 				listTop:"sparePartType/listTop",
 				entities: types,
