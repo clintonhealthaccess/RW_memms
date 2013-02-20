@@ -134,7 +134,7 @@ public class SparePart {
 		usedOnEquipment nullable: true
 		lastModified nullable:true, validator:{ val, obj ->
 			if (val != null) return (obj.lastUpdated != null)
-		}
+		}	
 		warranty nullable:true, validator:{ val, obj ->
 			if(val!=null) return (val.startDate.after(obj.purchaseDate) || val.startDate.compareTo(obj.purchaseDate)==0)
 		}
