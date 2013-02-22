@@ -89,10 +89,10 @@ class SparePartTypeController  extends AbstractEntityController{
 
 		render(view:"/entity/list",model:model(types) <<[
 				template:"sparePartType/sparePartTypeList",
-				listTop:"sparePartType/listTop"
-//				entities: types,
+				listTop:"sparePartType/listTop",
+				entities: types,
 //				entityCount: types.totalCount,
-//				entityClass: getEntityClass(),
+				entityClass: getEntityClass()
 //				code: getLabel(),
 //				names:names,
 //			    descriptions:descriptions

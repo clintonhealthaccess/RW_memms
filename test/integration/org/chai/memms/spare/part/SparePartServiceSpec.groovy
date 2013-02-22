@@ -35,6 +35,7 @@ import org.chai.memms.inventory.Provider.Type;
 import org.chai.memms.security.User;
 import org.chai.memms.security.User.UserType;
 import org.chai.memms.spare.part.SparePart;
+import org.chai.memms.spare.part.SparePartType;
 import org.chai.memms.spare.part.SparePart.SparePartPurchasedBy;
 import org.chai.memms.spare.part.SparePartStatus;
 import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
@@ -53,13 +54,13 @@ class SparePartServiceSpec extends IntegrationTests{
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
 
-		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
+		def manufacturer = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
 		def userHc = newOtherUserWithType("userHc", "userHc", DataLocation .findByCode(KIVUYE), UserType .TITULAIREHC)
 		def techDH = newOtherUserWithType("techDH", "techDH", DataLocation.findByCode(BUTARO), UserType.TECHNICIANDH)
 		def techMMC = newOtherUserWithType("techMMC", "techMMC", DataLocation.findByCode(RWANDA), UserType.TECHNICIANMMC)
 
-		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],"CODE Spare Part",Provider.findByCode("ONE"),Initializer.now())
+		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],"CODE Spare Part",manufacturer,Initializer.now())
 
 
 		Initializer.newSparePart(CODE(123),SparePartPurchasedBy.BYMOH,false,Initializer.newPeriod(32),"",['en':'Spare Part Descriptions one'],Initializer.getDate(22,07,2010),Initializer.getDate(22,07,2011),"",'MODEL1',
@@ -136,9 +137,9 @@ class SparePartServiceSpec extends IntegrationTests{
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
 
-		def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
+		def manufacturer = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
-		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],"CODE Spare Part",Provider.findByCode("ONE"),Initializer.now())
+		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],"CODE Spare Part",manufacturer,Initializer.now())
 
 		Initializer.newSparePart(CODE(123),SparePartPurchasedBy.BYMOH,false,Initializer.newPeriod(32),"",['en':'Spare Part Descriptions one'],Initializer.getDate(22,07,2010),
 				Initializer.getDate(22,07,2011),"",'MODEL1',
@@ -172,11 +173,10 @@ class SparePartServiceSpec extends IntegrationTests{
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
 
-		//def manufacture = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
+		def manufacturer = Initializer.newProvider(CODE(123), Type.MANUFACTURER,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
 		def user  = newUser("admin", "Admin UID")
-		//def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Initializer.now())
-		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],"CODE Spare Part",Provider.findByCode("ONE"),Initializer.now())
+		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],"CODE Spare Part",manufacturer,Initializer.now())
 		
 		Initializer.newSparePart("SERIAL10",SparePartPurchasedBy.BYMOH,false,Initializer.newPeriod(32),"",['en':'Spare Part Descriptions one'],Initializer.getDate(22,07,2010)
 				,Initializer.getDate(10,10,2010),"","sparePartModel",
@@ -207,12 +207,12 @@ class SparePartServiceSpec extends IntegrationTests{
 		def kivuyeHC = DataLocation.findByCode('Kivuye HC')
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
-		def manufacture = Initializer.newProvider(CODE(111), Type.MANUFACTURER,manufactureContact)
+		def manufacturer = Initializer.newProvider(CODE(111), Type.MANUFACTURER,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(222), Type.SUPPLIER,supplierContact)
 
 		def user  = newUser("admin", "Admin UID")
 		//def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Initializer.now())
-		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],"CODE Spare Part",Provider.findByCode("ONE"),Initializer.now())
+		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],"CODE Spare Part",manufacturer,Initializer.now())
 		
 		def sparePartOne = Initializer.newSparePart("SERIAL10",SparePartPurchasedBy.BYMOH,false,Initializer.newPeriod(32),"",['en':'Spare Part Descriptions one'],Initializer.getDate(22,07,2010)
 				,Initializer.getDate(10,10,2010),"","sparePartModel",
@@ -274,7 +274,7 @@ class SparePartServiceSpec extends IntegrationTests{
 
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
-		//def manufacture = Initializer.newProvider(CODE(111), Type.MANUFACTURER,manufactureContact)
+		def manufacturer = Initializer.newProvider(CODE(111), Type.MANUFACTURER,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(222), Type.SUPPLIER,supplierContact)
 		def warrantyContact = Initializer.newContact(['fr':'Warranty Address Descriptions One'],"Warranty","jk@yahoo.com","0768-888-787","Street 654","8988")
 		def warranty = Initializer.newWarranty(warrantyContact,Initializer.getDate(10, 12, 2010),false,[:])
@@ -282,9 +282,9 @@ class SparePartServiceSpec extends IntegrationTests{
 		def user  = newUser("user", "user", true, true)
 		setupSecurityManager(user)
 		
-		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],"CODE Spare Part",Provider.findByCode("ONE"),Initializer.now())
-
-
+		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],"CODE Spare Part",manufacturer,Initializer.now())
+		if(log.isDebugEnabled()) log.debug("Spare Part Type Created in CAN EXPORT SPARE PARTS:" + sparePartType)
+		if(log.isDebugEnabled()) log.debug("Provider: Manufacturer Created in CAN EXPORT SPARE PARTS:" + manufacturer)
 		def sparePartOne = Initializer.newSparePart("SERIAL10",SparePartPurchasedBy.BYFACILITY,true,Initializer.newPeriod(32),"",['en':'Spare Part Descriptions two'],Initializer.getDate(22,07,2010)
 				,Initializer.getDate(10,10,2010),"","sparePartModel",
 				DataLocation.findByCode(KIVUYE),sparePartType,supplier,StatusOfSparePart.INSTOCK,
@@ -335,7 +335,7 @@ class SparePartServiceSpec extends IntegrationTests{
 		
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
-		//def manufacture = Initializer.newProvider(CODE(111), Type.MANUFACTURER,manufactureContact)
+		def manufacturer = Initializer.newProvider(CODE(111), Type.MANUFACTURER,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(222), Type.SUPPLIER,supplierContact)
 		def warrantyContact = Initializer.newContact(['fr':'Warranty Address Descriptions One'],"Warranty","jk@yahoo.com","0768-888-787","Street 654","8988")
 		def warranty = Initializer.newWarranty(warrantyContact,Initializer.getDate(10, 12, 2010),false,[:])
@@ -343,7 +343,7 @@ class SparePartServiceSpec extends IntegrationTests{
 		def user  = newUser("user", "user", true, true)
 		setupSecurityManager(user)
 		
-		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],"CODE Spare Part",Provider.findByCode("ONE"),Initializer.now())
+		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],"CODE Spare Part",manufacturer,Initializer.now())
 
 		def sparePart = Initializer.newSparePart("SERIAL10",SparePartPurchasedBy.BYFACILITY,true,Initializer.newPeriod(32),"",['en':'Spare Part Descriptions two'],Initializer.getDate(22,07,2010)
 				,Initializer.getDate(10,10,2010),"","sparePartModel",

@@ -16,6 +16,8 @@
 					<span class="text">${sparePart.serialNumber}</span>
 					<span class="label"><g:message code="spare.part.model.label" /></span>
 					<span class="text">${sparePart.model}</span>
+					<span class="label"><g:message code="stocklocation.label"/>:</span>
+					<span class="text">${sparePart.stockLocation?.name}</span>
 					<span class="label"><g:message code="datalocation.label"/>:</span>
 					<span class="text">${sparePart.dataLocation?.names}</span>
 					<span class="label"><g:message code="entity.in.system.since.label"/>:</span>

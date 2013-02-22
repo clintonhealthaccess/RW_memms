@@ -823,7 +823,7 @@ public class Initializer {
 		def type = new SparePartType(code:code,partNumber:partNumber,manufacturer:manufacturer,discontinuedDate:discontinuedDate)
 		Utils.setLocaleValueInMap(type,names,"Names")
 		Utils.setLocaleValueInMap(type,descriptions,"Descriptions")
-		return type.save(failOnError: false)
+		return type.save(failOnError: false, flush:true)
 	}
 
 	//Spare Part status
@@ -838,7 +838,7 @@ public class Initializer {
 		return status
 	}
 	// Spare part
-	static def newSparePart(def serialNumber,def sparePartPurchasedBy,def sameAsManufacturer,def expectedLifeTime,
+	public static def newSparePart(def serialNumber,def sparePartPurchasedBy,def sameAsManufacturer,def expectedLifeTime,
 		def purchaseCost,def descriptions,def manufactureDate, def purchaseDate,def currency,def model,def dataLocation,def type,
 		def supplier,def statusOfSparePart,def addedBy,def lastModifiedBy,def lastModifiedOn){
 		def sparePart = new SparePart(

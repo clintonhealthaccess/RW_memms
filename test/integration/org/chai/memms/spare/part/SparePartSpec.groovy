@@ -51,8 +51,11 @@ class SparePartSpec extends IntegrationTests {
 		setup:
 		setupLocationTree()
 		setupSystemUser()
-		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",Provider.findByCode("ONE"),Initializer.now())
-
+		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+		def manufacturer = Initializer.newProvider(CODE(111), Type.MANUFACTURER,manufactureContact)
+		
+		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",manufacturer,Initializer.now())
+		if(log.isDebugEnabled()) log.debug("Spare Part Type Created:" + sparePartType)
 		when:
 		def sparePart = new SparePart(serialNumber:"test123",sparePartPurchasedBy:SparePartPurchasedBy.BYMOH,sameAsManufacturer:false,expectedLifeTime:Initializer.newPeriod(20),
 				descriptions:['en':'Spare Part Descriptions'],manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),model:"sparePartModel",
@@ -75,7 +78,10 @@ class SparePartSpec extends IntegrationTests {
 		setup:
 		setupLocationTree()
 		setupSystemUser()
-		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",Provider.findByCode("ONE"),Initializer.now())
+		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+		def manufacturer = Initializer.newProvider(CODE(111), Type.MANUFACTURER,manufactureContact)
+		
+		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",manufacturer,Initializer.now())
 		def user  = newUser("admin", "Admin UID")
 		def sparePart = new SparePart(serialNumber:"test123",sparePartPurchasedBy:SparePartPurchasedBy.BYMOH,sameAsManufacturer:false,expectedLifeTime:Initializer.newPeriod(20),
 				descriptions:['en':'SparePart Descriptions'],manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),model:"sparePartModel",
@@ -104,7 +110,10 @@ class SparePartSpec extends IntegrationTests {
 		setup:
 		setupLocationTree()
 		setupSystemUser()
-		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",Provider.findByCode("ONE"),Initializer.now())
+		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+		def manufacturer = Initializer.newProvider(CODE(111), Type.MANUFACTURER,manufactureContact)
+		
+		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",manufacturer,Initializer.now())
 		def user  = newUser("admin", "Admin UID")
 		def sparePart = new SparePart(serialNumber:"test123",sparePartPurchasedBy:SparePartPurchasedBy.BYMOH,sameAsManufacturer:false,expectedLifeTime:Initializer.newPeriod(20),
 				descriptions:['en':'SparePart Descriptions'],manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),model:"sparePartModel",
@@ -155,7 +164,10 @@ class SparePartSpec extends IntegrationTests {
 				setup:
 				setupLocationTree()
 				setupSystemUser()
-				def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",Provider.findByCode("ONE"),Initializer.now())
+				def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+				def manufacturer = Initializer.newProvider(CODE(111), Type.MANUFACTURER,manufactureContact)
+				
+				def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",manufacturer,Initializer.now())
 				
 				
 				def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
@@ -187,7 +199,10 @@ class SparePartSpec extends IntegrationTests {
 				setup:
 				setupLocationTree()
 				setupSystemUser()
-				def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",Provider.findByCode("ONE"),Initializer.now())
+				def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+				def manufacturer = Initializer.newProvider(CODE(111), Type.MANUFACTURER,manufactureContact)
+				
+				def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",manufacturer,Initializer.now())
 				
 				def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
 				def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
@@ -216,7 +231,10 @@ class SparePartSpec extends IntegrationTests {
 		setup:
 		setupLocationTree()
 		setupSystemUser()
-		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",Provider.findByCode("ONE"),Initializer.now())
+		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+		def manufacturer = Initializer.newProvider(CODE(111), Type.MANUFACTURER,manufactureContact)
+		
+		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",manufacturer,Initializer.now())
 		def user  = newUser("admin", "Admin UID")
 		
 		def sparePart = new SparePart(serialNumber:"test123",sparePartPurchasedBy:SparePartPurchasedBy.BYFACILITY,sameAsManufacturer:false,expectedLifeTime:Initializer.newPeriod(20),

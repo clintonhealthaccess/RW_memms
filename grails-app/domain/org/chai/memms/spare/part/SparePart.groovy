@@ -42,6 +42,7 @@ import org.chai.memms.security.User;
 import org.chai.memms.spare.part.SparePartType;
 import org.chai.memms.spare.part.SparePartStatus;
 import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
+import org.apache.commons.io.filefilter.FalseFileFilter;
 import org.apache.commons.lang.math.RandomUtils;
 import i18nfields.I18nFields;
 
@@ -71,7 +72,7 @@ public class SparePart {
 		BYFACILITY("by.facility"),
 	
 		String messageCode = "spare.part.purchased"
-		
+
 		final String name
 		SparePartPurchasedBy(String name){ this.name=name }
 		String getKey() { return name() }
@@ -117,15 +118,13 @@ public class SparePart {
 		serialNumber nullable: true, unique: true, validator: { val, obj ->
 			if(!obj.statusOfSparePart.equals(StatusOfSparePart.PENDINGORDER)) return (val!=null)
 		}
-		//serialNumber nullable: false, blank: false,  unique: true
-		//serialNumber nullable: true, blank: false,  unique: true
 		purchaseDate nullable: true
 		purchaseCost nullable: true, validator: {val, obj ->
 		if(obj.currency!=null) return (val!=null)
 		}
 		
 		stockLocation  nullable: true, inList:[StockLocation.MMC, StockLocation.FACILITY]
-		
+		type nullable: false
 		
 		dataLocation nullable: true, validator: {val,obj ->
 			if(obj.stockLocation.equals(StockLocation.FACILITY)) return (val!=null)

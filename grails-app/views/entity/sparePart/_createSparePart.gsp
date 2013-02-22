@@ -1,6 +1,7 @@
 <%@ page import="org.chai.memms.util.Utils" %>
 <%@ page import="org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart" %>
 <%@ page import="org.chai.memms.spare.part.SparePart.SparePartPurchasedBy" %>
+<%@ page import="org.chai.memms.spare.part.SparePart.StockLocation" %>
 <div  class="entity-form-container togglable">
   <div class="heading1-bar">
 		<h1>
@@ -37,6 +38,9 @@
     			
     		<g:input name="serialNumber" label="${message(code:'spare.part.serial.number.label')}" bean="${sparePart}" field="serialNumber"/>
       		<g:input name="model" label="${message(code:'spare.part.model.label')}" bean="${sparePart}" field="model"/>
+      		
+      		<g:selectFromEnum name="stockLocation" bean="${sparePart}" values="${StockLocation.values()}" field="stockLocation" label="${message(code:'spare.part.stockLocation.label')}"/>
+      		
       		<g:i18nTextarea name="descriptions" bean="${sparePart}" label="${message(code:'entity.descriptions.label')}" field="descriptions" height="150" width="300" maxHeight="150" />
      
       	</fieldset>

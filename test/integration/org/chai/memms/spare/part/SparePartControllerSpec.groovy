@@ -53,7 +53,10 @@ class SparePartControllerSpec extends IntegrationTests{
 		setup:
 		setupLocationTree()
 		setupSystemUser()
-		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",Provider.findByCode("ONE"),Initializer.now())
+		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+		def manufacturer = Initializer.newProvider(CODE(111), Type.MANUFACTURER,manufactureContact)
+		
+		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",manufacturer,Initializer.now())
 
 		def supplierContact = Initializer.newContact(['en':'Address Descriptions '],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
 
@@ -105,9 +108,11 @@ class SparePartControllerSpec extends IntegrationTests{
 				setupSystemUser()
 		
 				def supplierContact = Initializer.newContact(['en':'Address Descriptions '],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+				def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+				def manufacturer = Initializer.newProvider(CODE(111), Type.MANUFACTURER,manufactureContact)
 				
 				def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
-				def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",Provider.findByCode("ONE"),Initializer.now())
+				def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",manufacturer,Initializer.now())
 				
 				sparePartController = new SparePartController();
 				when:

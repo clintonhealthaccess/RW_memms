@@ -292,6 +292,9 @@ class EquipmentServiceSpec extends IntegrationTests{
 		def department = Initializer.newDepartment(['en':"testName"], CODE(123),['en':"testDescription"])
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now())
 
+		if(log.isDebugEnabled()) log.debug("Equipment Type Created in CAN EXPORT Equipments:" + equipmentType)
+		if(log.isDebugEnabled()) log.debug("Provider:Manu Created in CAN EXPORT Equipment:" + manufacture)
+
 		def equipmentOne = Initializer.newEquipment("SERIAL10",PurchasedBy.BYFACILITY,null,null,true,Initializer.newPeriod(32),"ROOM A1","",['en':'Equipment Descriptions one'],Initializer.getDate(22,07,2010)
 				,Initializer.getDate(10,10,2010),"","equipmentModel",
 				DataLocation.findByCode(KIVUYE),department,equipmentType,manufacture,supplier,Status.INSTOCK,
