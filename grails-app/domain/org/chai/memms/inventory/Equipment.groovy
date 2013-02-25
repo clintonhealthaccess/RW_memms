@@ -151,7 +151,7 @@ public class Equipment {
 		}
 
 		//TODO nullable has to be false, but it is true for first iteration
-		serialNumber nullable: true ///blank: false,  unique: true
+		serialNumber nullable: true,  unique: true ///blank: false 
 
 		purchaseCost nullable: true, blank: true, validator:{ if(it!=null) return (it>0) }
 		//TODO nullable has to be false, but it is true for first iteration
