@@ -36,6 +36,8 @@ import org.chai.memms.security.User.UserType;
 import org.chai.memms.spare.part.SparePart.SparePartPurchasedBy;
 import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
 import org.chai.memms.inventory.FilterCommand;
+import org.chai.memms.security.User;
+import org.chai.memms.security.User.UserType
 
 
 /**
@@ -139,11 +141,10 @@ class SparePartViewControllerSpec extends IntegrationTests{
 		def supplier = Initializer.newProvider(CODE(222), Type.SUPPLIER,supplierContact)
 		
 		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",manufacturer,Initializer.now())
-
+	
 //		def sparePart = new SparePart(serialNumber:"test123",sparePartPurchasedBy:SparePartPurchasedBy.BYMOH,sameAsManufacturer:false,expectedLifeTime:Initializer.newPeriod(20),
 //			descriptions:['en':'SparePart Descriptions'],manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),model:"sparePartModel",
 //			type:sparePartType,statusOfSparePart:StatusOfSparePart.OPERATIONAL,dateCreated:Initializer.getDate(23,07,2010), addedBy: User.findByUsername("systemUser"))
-
 		
 		def sparePartOne = Initializer.newSparePart(CODE(123),SparePartPurchasedBy.BYFACILITY,false,Initializer.newPeriod(32),"2900.23",['en':'SparePart Descriptions one'],Initializer.getDate(22,07,2010)
 				,Initializer.getDate(10,10,2010),"USD","sparePartModel",DataLocation.findByCode(KIVUYE),sparePartType,supplier,StatusOfSparePart.INSTOCK,user,null,null)
@@ -166,5 +167,4 @@ class SparePartViewControllerSpec extends IntegrationTests{
 		then:
 		sparePartViewController.modelAndView.model.entities == [sparePartOne]
 	}
-
 }
