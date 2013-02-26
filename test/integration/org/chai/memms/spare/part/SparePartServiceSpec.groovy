@@ -361,4 +361,11 @@ class SparePartServiceSpec extends IntegrationTests{
 		SparePart.list()[0].statusOfSparePart == StatusOfSparePart.OPERATIONAL
 		
 	}
+	def "test getSparePartByUser"{
+
+	}
+
+	def "test search SparePart"{
+
+	}
 }
