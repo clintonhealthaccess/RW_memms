@@ -109,19 +109,16 @@ class MaintenanceService {
 	def getMaintenancesByLocation(Class clazz,def location,Set<DataLocationType> types,Map<String, String> params) {
 		if(log.isDebugEnabled()) log.debug("getMaintenancesByLocation url params: "+params)
 		List<Maintenance> maintenances = []
+		Maintenances maintenance = new Maintenances()
 		Set<LocationLevel> skipLevels = getSkipLocationLevels()
-
-		for(DataLocation dataLocation : location.collectDataLocations(types)){
+		
+		def locations = location.collectDataLocations(types)
+		for(DataLocation dataLocation : locations[(params.offset)..<(((params.offset + params.max) > locations.size()) ? locations.size() : (params.offset + params.max))]){
 			maintenances.add(new Maintenance(dataLocation:dataLocation,orderCount:this.getMaintenanceOrderByDataLocation(clazz,dataLocation,[:]).size()))
 		}
-		Maintenances maintenance = new Maintenances()
-		//If user specifies the pagination params, use them. Else return the whole list
-		if(params.offset != null && params.offset >= 0  && params.max != null && params.max > 0)
-			maintenance.maintenanceList = maintenances[(params.offset) ..< ((params.offset + params.max) > maintenances.size() ? maintenances.size() : (params.offset + params.max))]
-		else
-			maintenance.maintenanceList = maintenances
-
-		maintenance.totalCount = maintenances.size()
+		
+		maintenance.maintenanceList = maintenances
+		maintenance.totalCount = locations.size()
 		return maintenance
 	}
 
@@ -156,17 +153,18 @@ class MaintenanceService {
 		def equipments = []
 		def criteria = clazz.createCriteria();
 
-		if(location.instanceOf(DataLocation)){
-			equipments = equipmentService.getEquipmentsByDataLocationAndManages(location, [:])
-		}else{
+		if(location.instanceOf(DataLocation)) equipments = equipmentService.getEquipmentsByDataLocationAndManages(location, [:])
+		else{
 			def dataLocations = location.getDataLocations(null,null)
 			for(DataLocation dataLocation: dataLocations)
 				equipments.addAll(equipmentService.getEquipmentsByDataLocationAndManages(dataLocation, [:]))
 		}
 
-		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			inList("equipment",equipments)
-		}
+		if(!equipments.isEmpty())
+			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+				inList("equipment",equipments)
+			}
+		else return []
 
 	}
 }
