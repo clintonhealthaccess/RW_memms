@@ -60,7 +60,7 @@
 <g:render template="/templates/pagination" />
 <script type="text/javascript">
 	$(document).ready(function() {
-		updateEquipment("${createLink(controller:'sparePartView',action: 'updateObsolete')}");
+		updateSparePart("${createLink(controller:'sparePartView',action: 'updateSameAsManufacturer')}");
 	});
 </script>
 

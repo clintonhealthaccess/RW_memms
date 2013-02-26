@@ -85,7 +85,9 @@ class SparePartViewController extends AbstractController{
 	
 	def list = {
 		adaptParamsForList()
+		
 		List<SparePart> spareParts = SparePart.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc");
+		
 		if(request.xhr)
 			this.ajaxModel(spareParts,"")
 		else{
@@ -102,35 +104,7 @@ class SparePartViewController extends AbstractController{
 		}
 	}
 	
-	/*def list={
-		def location = DataLocation.get(params.int('location.id'))
-		def spareParts= sparePartService.getSparePartsByDataLocationAndManages(location,params)
-		adaptParamsForList()
-		
-		if (location != null){
-			if(!user.canAccessCalculationLocation(location)) response.sendError(404)
-			spareParts = sparePartService.getSparePartsByDataLocationAndManages(location,params)
-		}
-		else spareParts = sparePartService.getMySpareParts(user,params)
-		
-		if(request.xhr){
-			 this.ajaxModel(spareParts,location,"")
-		 }else{
-			 log.debug("not an ajax request"+params)
-			render(view:"/entity/list", model:[
-						template:"sparePart/sparePartList",
-						filterTemplate:"sparePart/sparePartFilter",
-						listTop:"sparePart/listTop",
-						location:location,
-						entities: spareParts,
-						entityCount: spareParts.totalCount,
-						entityClass: getEntityClass(),
-						code: getLabel()
-						
-						])
-		}
-
-	}*/
+	
 	
 	//TODO don't think we need ajax for this
 	def selectFacility = {
@@ -148,12 +122,13 @@ class SparePartViewController extends AbstractController{
 	}
 	
 	def search = {
-		DataLocation location = DataLocation.get(params.int("location.id"))
-		if (location != null && !user.canAccessCalculationLocation(location))
+		DataLocation dataLocation = DataLocation.get(params.int("dataLocation.id"))
+		
+		if (dataLocation != null && !user.canAccessCalculationLocation(dataLocation))
 			response.sendError(404)
 		else{
 			adaptParamsForList()
-			def spareParts = sparePartService.searchSparePart(params['q'],user,location,params)
+			def spareParts = sparePartService.searchSparePart(params['q'],user,dataLocation,params)
 			if(!request.xhr)
 				response.sendError(404)
 			else

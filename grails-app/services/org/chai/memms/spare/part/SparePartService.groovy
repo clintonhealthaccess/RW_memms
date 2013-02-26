@@ -129,10 +129,6 @@ class SparePartService {
 		def criteria = SparePart.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			inList('dataLocation',dataLocations)
-//			or{
-//				for(DataLocation dataLoc: dataLocations)
-//					eq('dataLocation',dataLoc)
-//			}
 		}
 	}
 	
@@ -161,8 +157,6 @@ class SparePartService {
 				inList('dataLocation',dataLocations)
 			if(supplier != null)
 				eq ("supplier", supplier)
-			/*if(manufacturer != null)
-				eq ("manufacturer", manufacturer)*/
 			if(sparePartType != null)
 				eq ("type", sparePartType)
 			if(sparePartPurchasedBy && !sparePartPurchasedBy.equals(SparePartPurchasedBy.NONE))
@@ -195,7 +189,6 @@ class SparePartService {
 						sparePart.serialNumber,sparePart.type.code,sparePart.type?.getNames(new Locale("en")),
 						sparePart.type?.getNames(new Locale("fr")),sparePart.model,sparePart.statusOfSparePart,
 						sparePart.dataLocation?.code,sparePart.dataLocation?.getNames(new Locale("en")),sparePart.dataLocation?.getNames(new Locale("fr")),
-						//sparePart.manufacturer?.code,sparePart.manufacturer?.contact?.contactName,
 						sparePart.manufactureDate,sparePart.supplier?.code,sparePart.supplier?.contact?.contactName,sparePart.purchaseDate,
 						sparePart.purchaseCost?:"n/a",sparePart.currency?:"n/a",
 						sparePart.sparePartPurchasedBy.name(),sparePart.sameAsManufacturer,sparePart?.warranty?.startDate,sparePart?.warrantyPeriod?.numberOfMonths?:""
@@ -226,7 +219,6 @@ class SparePartService {
 			headers.add(ImportExportConstant.LOCATION_CODE)
 			headers.add(ImportExportConstant.LOCATION_NAME_EN)
 			headers.add(ImportExportConstant.LOCATION_NAME_FR)
-			//headers.add(ImportExportConstant.MANUFACTURER_CODE)
 			headers.add(ImportExportConstant.MANUFACTURER_CONTACT_NAME)
 			headers.add(ImportExportConstant.SPARE_PART_MANUFACTURE_DATE)
 			headers.add(ImportExportConstant.SUPPLIER_CODE)
