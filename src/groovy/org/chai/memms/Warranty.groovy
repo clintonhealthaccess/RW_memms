@@ -36,7 +36,7 @@ import i18nfields.I18nFields
 class Warranty{
 	
 	Date startDate
-	Boolean sameAsSupplier
+	Boolean sameAsSupplier = false
 	String descriptions
 	Contact contact
 	
@@ -44,6 +44,7 @@ class Warranty{
 	static embedded = ["contact","numberOfMonth"]
 	
 	static constraints = {
+		importFrom Contact
 		startDate nullable:false, validator:{it <= new Date()} 
 		descriptions nullable: true, blank: true
 		contact nullable: true,validator:{val, obj ->

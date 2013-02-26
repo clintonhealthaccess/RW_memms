@@ -8,7 +8,6 @@
 	<g:layoutHead />	
 	<r:require module="core"/>
 	<r:layoutResources/>
-
 </head>
 <body>
   <div id="header">
@@ -52,7 +51,7 @@
 						</li>
 					</g:if>
 				</shiro:notUser>
-			</ul>
+		</ul>
       
       <h2>
         <span class="right">
@@ -100,9 +99,11 @@
 						<li><a class="${controllerName=='workOrderView'?'active':''}" href="${createLink(controller:'workOrderView', action:'summaryPage')}"><g:message code="header.navigation.corrective.maintenance"/></a></li>
 					</shiro:hasPermission>
 					<shiro:hasPermission permission="menu:preventivemaintenance">
-						<li><a class="${controllerName=='preventiveOrderView'?'active':''}" href="#"><g:message code="header.navigation.preventive.maintenance"/></a></li>
+						<li><a class="${controllerName=='preventiveOrderView'?'active':''}" href="${createLink(controller:'preventiveOrderView', action:'summaryPage')}"><g:message code="header.navigation.preventive.maintenance"/></a></li>
 					</shiro:hasPermission>
+					<shiro:hasPermission permission="menu:notificationWorkOrder">
 					<li><a class="${controllerName=='notificationWorkOrder'?'active':''}" href="${createLink(controller: 'notificationWorkOrder', action:'list')}"><g:message code="notification.work.order.label"/></a></li>
+					</shiro:hasPermission>
 	         	</ul>
          	</li>
 		</shiro:hasPermission>
@@ -112,30 +113,46 @@
 		<shiro:hasPermission permission="menu:admin">
 			<li><a href="#"><g:message code="header.navigation.administration"/></a>
 	         	<ul class="submenu">
-					<li><a href="${createLink(controller: 'equipmentType', action:'list')}"><g:message code="equipment.type.label"/></a></li>
-					<li><a href="${createLink(controller: 'equipmentView', action:'generalExport')}"><g:message code="equipment.export.label"/></a></li>
-					<shiro:hasPermission permission="menu:advanced">
-					<li><a href="#"><g:message code="location.label"/></a>
-						<div class="sub-submenu">
-							<ul class="submenu">
-								<li><a href="${createLink(controller: 'location', action:'list')}"><g:message code="location.label"/></a></li>
-								<li><a href="${createLink(controller: 'locationLevel', action:'list')}"><g:message code="location.level.label"/></a></li>
-								<li><a href="${createLink(controller: 'dataLocation', action:'list')}"><g:message code="datalocation.label"/></a></li>
-								<li><a href="${createLink(controller: 'dataLocationType', action:'list')}"><g:message code="datalocation.type.label"/></a></li>
-							</ul>
-						</div>
-					</li>
+	         		<shiro:hasPermission permission="menu:equipmentType">
+						<li><a href="${createLink(controller: 'equipmentType', action:'list')}"><g:message code="equipment.type.label"/></a></li>
 					</shiro:hasPermission>
-					<shiro:hasPermission permission="menu:advanced">
+					<shiro:hasPermission permission="menu:sparePartType">
+						<li><a href="${createLink(controller: 'sparePartType', action:'list')}"><g:message code="spare.part.type.label"/></a></li>
+					</shiro:hasPermission>
+					<shiro:hasPermission permission="menu:sparePart">
+						<li><a href="${createLink(controller: 'sparePartView', action:'list')}"><g:message code="spare.part.label"/></a></li>
+					</shiro:hasPermission>
+					<shiro:hasPermission permission="menu:equipmentExport">
+						<li><a href="${createLink(controller: 'equipmentView', action:'generalExport')}"><g:message code="equipment.export.label"/></a></li>
+					</shiro:hasPermission>
+					<shiro:hasPermission permission="menu:location">
+						<li><a href="#"><g:message code="location.label"/></a>
+							<div class="sub-submenu">
+								<ul class="submenu">
+									<li><a href="${createLink(controller: 'location', action:'list')}"><g:message code="location.label"/></a></li>
+									<li><a href="${createLink(controller: 'locationLevel', action:'list')}"><g:message code="location.level.label"/></a></li>
+									<li><a href="${createLink(controller: 'dataLocation', action:'list')}"><g:message code="datalocation.label"/></a></li>
+									<li><a href="${createLink(controller: 'dataLocationType', action:'list')}"><g:message code="datalocation.type.label"/></a></li>
+								</ul>
+							</div>
+						</li>
+					</shiro:hasPermission>
+					<shiro:hasPermission permission="menu:department">
 						<li><a href="${createLink(controller: 'department', action:'list')}"><g:message code="department.label"/></a></li>
+					</shiro:hasPermission>
+					<shiro:hasPermission permission="menu:provider">
 						<li><a href="${createLink(controller: 'provider', action:'list')}"><g:message code="header.navigation.manufacturer.and.supplier"/></a></li>
 					</shiro:hasPermission>
-					<shiro:hasPermission permission="menu:advanced:admin">
+					<shiro:hasPermission permission="menu:user">
 						<li><a href="#"><g:message code="user.manage.users.label"/></a>
 							<div class="sub-submenu">
 								<ul class="submenu">
-									<li><a href="${createLink(controller: 'role', action:'list')}"><g:message code="roles.label" /></a></li>
-									<li><a href="${createLink(controller: 'user', action:'list')}"><g:message code="users.label" /></a></li>
+									<shiro:hasPermission permission="menu:role">
+										<li><a href="${createLink(controller: 'role', action:'list')}"><g:message code="roles.label" /></a></li>
+									</shiro:hasPermission>
+									<shiro:hasPermission permission="menu:user">
+										<li><a href="${createLink(controller: 'user', action:'list')}"><g:message code="users.label" /></a></li>
+									</shiro:hasPermission>
 								</ul>
 							</div>
 						</li>
@@ -143,37 +160,36 @@
 	         	</ul>
         	 </li>
 		</shiro:hasPermission>
-        
       </ul>
     </div>
   </div>
   
-  <div class="flash-message">
+  	<div class="flash-message">
 		<g:if test="${flash.message}">
-      <p>${flash.message}</p>
+      		<p>${flash.message}</p>
 		</g:if>	
 	</div>
-	
+
 	<div id="content">
 	  <div class="wrapper">
 		  <g:layoutBody />
 		</div>
 	</div>
-	
+
 	<div id="footer">
-    <div class="wrapper">
-      &copy;<g:message code="footer.labels.chai"/>
-      <br>
-      <a href="#"><g:message code="footer.labels.about"/></a>
-      |
-      <a href="#"><g:message code="footer.labels.contact"/></a>
-      |
-      <a href="#"><g:message code="footer.labels.helpdesk"/></a>
-    </div>
-  </div>
+	    <div class="wrapper">
+	      &copy;<g:message code="footer.labels.chai"/>
+	      <br>
+	      <a href="#"><g:message code="footer.labels.about"/></a>
+	      |
+	      <a href="#"><g:message code="footer.labels.contact"/></a>
+	      |
+	      <a href="#"><g:message code="footer.labels.helpdesk"/></a>
+	    </div>
+  	</div>
 	<div class="build-info">
-        <build:buildInfo/>
-    </div>
+        <build:buildInfo/>
+    </div>
 <r:layoutResources/>
 
 </body>

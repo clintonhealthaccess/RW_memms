@@ -71,13 +71,6 @@ class EquipmentTypeController extends AbstractEntityController{
 	}
 
 	def bindParams(def entity) {
-		log.debug("Saving type with params:" + params)
-		if(!entity.id){
-			entity.addedOn= new Date()
-			entity.lastModifiedOn= new Date()
-		}else{
-			entity.lastModifiedOn= new Date()
-		}
 		entity.properties = params
 	}
 
@@ -96,14 +89,9 @@ class EquipmentTypeController extends AbstractEntityController{
 		if(request.xhr)
 			this.ajaxModel(types,"")
 		else{
-		render(view:"/entity/list",model:[
+		render(view:"/entity/list",model:model(types) << [
 				template:"equipmentType/equipmentTypeList",
 				listTop:"equipmentType/listTop",
-				entities: types,
-				entityCount: types.totalCount,
-				entityClass: getEntityClass(),
-				code: getLabel(),
-				names:names,
 				importTask:'EquipmentTypeImportTask',
 				exportTask:'EquipmentTypeExportTask'
 			])
@@ -113,13 +101,29 @@ class EquipmentTypeController extends AbstractEntityController{
 	def search = {
 		adaptParamsForList()
 		List<EquipmentType> types = equipmentTypeService.searchEquipmentType(params['q'],null,params)
-		if(!request.xhr)
-			response.sendError(404)
-		this.ajaxModel(types,params['q'])
+		if(request.xhr)
+			this.ajaxModel(types,params['q'])
+		else {
+			render(view:"/entity/list",model:model(types) << [
+				template:"equipmentType/equipmentTypeList",
+				listTop:"equipmentType/listTop",
+				importTask:'EquipmentTypeImportTask',
+				exportTask:'EquipmentTypeExportTask'
+			])
+		}
+	}
+	
+	def model(def entities) {
+		return [
+			entities: entities,
+			entityCount: entities.totalCount,
+			entityClass:getEntityClass(),
+			code: getLabel(),
+		]
 	}
 	
 	def ajaxModel(def entities,def searchTerm) {
-		def model = [entities: entities,entityCount: entities.totalCount,entityClass:getEntityClass(),names:names,q:searchTerm]
+		def model = model(entities) << [q:searchTerm]
 		def listHtml = g.render(template:"/entity/equipmentType/equipmentTypeList",model:model)
 		render(contentType:"text/json") { results = [listHtml] }
 	}

@@ -37,9 +37,6 @@ import org.apache.commons.logging.Log;
 */
 abstract class AbstractEntityController extends AbstractController {
 		
-	def languageService
-	def names = 'names_'+languageService.getCurrentLanguagePrefix();
-	def descriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
 	def entityExportService
 	
 	def languges = grailsApplication.config.i18nFields.locales
@@ -137,9 +134,9 @@ abstract class AbstractEntityController extends AbstractController {
 		else {
 			saveEntity(entity);
 			//TODO this depends on whether the flush is set to true, because if the object is not yet persisted we have no entity.id
-			log.debug("params id: " + params.id + " , entity id: " + entity.id)
+			if(log.isDebugEnabled()) log.debug("params id: " + params.id + " , entity id: " + entity.id)
 			flash.message = message(code: 'default.saved.message', args: [message(code: getLabel(), default: 'entity'), params.id ?: entity.id])
-			log.info ("getTargetURI() ${targetURI}")
+			if (log.isInfoEnabled())  log.info ("getTargetURI() ${targetURI}")
 			redirect(url: getTargetURI())
 		}
 	}	

@@ -36,7 +36,6 @@ import org.chai.memms.inventory.Equipment.PurchasedBy;
 import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.security.User;
 import org.chai.memms.security.User.UserType;
-import org.chai.task.EquipmentExportFilter;
 import org.chai.memms.util.Utils;
 import org.chai.memms.inventory.Equipment;
 import org.chai.memms.inventory.Provider;
@@ -45,6 +44,7 @@ import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocationType;
 import org.chai.location.Location
 import org.chai.location.LocationLevel
+import org.chai.memms.inventory.Provider.Type;
 
 import java.util.HashSet;
 import java.util.Set
@@ -54,8 +54,7 @@ import java.util.Set
  *
  */
 class EquipmentController extends AbstractEntityController{
-	
-	def grailsApplication
+
 	def equipmentStatusService
 
 
@@ -87,8 +86,10 @@ class EquipmentController extends AbstractEntityController{
 	def bindParams(def entity) {
 		if(log.isDebugEnabled()) log.debug("Equipment params: before bind "+params)
 		if(!entity.id){
-			entity.registeredOn = new Date()
+			entity.addedBy = user
 		}else{
+		    params.oldStatus =  entity.currentStatus
+			entity.lastModifiedBy = user
 			if(params["warranty.sameAsSupplier"]=="on"){
 				params["warranty.contact.contactName"]=""
 				params["warranty.contact.email"]=""
@@ -106,14 +107,21 @@ class EquipmentController extends AbstractEntityController{
 			params["donor"] =""
 			params["donorName"] = ""
 		}
-		bindData(entity,params,[exclude:["status","dateOfEvent"]])
+		//Making sure a disposed equipment cannot be modified 
+		//TODO add this check to method that modified an equipment
+		if(!params.oldStatus.equals(Status.DISPOSED))
+			bindData(entity,params,[exclude:["status","dateOfEvent"]])
 		if(log.isDebugEnabled()) log.debug("Equipment params: after bind  "+entity)
 	}
 
 	def validateEntity(def entity) {
 		boolean validStatus = true
 		if(entity.id==null){
-			validStatus = (!params.cmd.hasErrors())
+			//Checking if the dateOfEvent is not after parchase date and add error
+			//TODO to be uncommented after first data collection, as the date of purchase of old equipment might be unknown
+			//if(!(entity.purchaseDate?.before(params.cmd.dateOfEvent) || entity.purchaseDate?.compareTo(params.cmd.dateOfEvent)==0)) 
+			//	params.cmd.errors.rejectValue('dateOfEvent','date.of.event.before.parchase.date')
+			validStatus = (!params.cmd.hasErrors()) 
 			if(log.isDebugEnabled()) log.debug("Rejecting EquipmentStatus: "+params.cmd.errors)
 		}
 		entity.genarateAndSetEquipmentCode()
@@ -125,7 +133,7 @@ class EquipmentController extends AbstractEntityController{
 		if(entity.dataLocation) hasAccess(entity.dataLocation)
 		if(entity.id==null){
 			entity.currentStatus = Status."$params.cmd.status"
-			entity = equipmentStatusService.createEquipmentStatus(now,user,params.cmd.status,entity,params.cmd.dateOfEvent,[:])
+			equipmentStatusService.createEquipmentStatus(user,params.cmd.status,entity,params.cmd.dateOfEvent,[:])
 		}
 		else entity.save(failOnError:true)
 	}
@@ -136,13 +144,16 @@ class EquipmentController extends AbstractEntityController{
 	}
 
 	def getModel(def entity) {
-		def manufacturers = []; def suppliers = []; def serviceProviders = []; def departments = []; def types = []; def dataLocations = [];
-		if (entity.manufacturer != null) manufacturers << entity.manufacturer
-		if (entity.supplier != null) suppliers << entity.supplier
-		if (entity.serviceProvider != null) serviceProviders << entity.serviceProvider
-		if (entity.department!=null) departments << entity.department
+		def manufacturers = Provider.findAllByTypeInList([Type.MANUFACTURER,Type.BOTH],[sort:'contact.contactName']); 
+		def suppliers = Provider.findAllByTypeInList([Type.SUPPLIER,Type.BOTH],[sort:'contact.contactName']);  
+		def serviceProviders = Provider.findAllByType(Type.SERVICEPROVIDER,[sort:'contact.contactName']);  
+		def departments = Department.list(sort: names); 
+		
+		def types = []; 
+		def dataLocations = [];
 		if (entity.type!=null) types << entity.type
 		if (entity.dataLocation!=null) dataLocations << entity.dataLocation
+
 		[
 					equipment: entity,
 					departments: departments,
@@ -165,7 +176,10 @@ class StatusCommand {
 
 	static constraints = {
 		status nullable: false, inList: [Status.DISPOSED,Status.FORDISPOSAL,Status.PARTIALLYOPERATIONAL,Status.INSTOCK,Status.OPERATIONAL,Status.UNDERMAINTENANCE]
-		dateOfEvent nullable: false
+		dateOfEvent nullable: false, validator:{ val, obj ->
+			//TODO be uncomment after first data collection
+			return (val <= new Date()) //&&  (val.after(obj.equipment.purchaseDate) || (val.compareTo(obj.equipment.purchaseDate)==0))
+		}
 	}
 
 	String toString(){

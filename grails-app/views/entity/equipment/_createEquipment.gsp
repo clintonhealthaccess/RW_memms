@@ -27,12 +27,15 @@
             <g:message code="equipment.section.basic.information.label" default="Basic Information"/>
           </h4>  			  		
       		<div class="row">
+      		<!-- To be viewed if there is no ? sign because in spare part this is not working unless you put ? after dataLocation property --> 
     			  <input type="hidden" name="dataLocation.id" value="${equipment.dataLocation.id}" />
     			  <label><g:message code="datalocation.label"/>:</label> ${equipment.dataLocation.names}
-    		  </div>				
+    		  </div>
+    		  				
         	<g:selectFromList name="type.id" label="${message(code:'equipment.type.label')}" bean="${equipment}" field="type" optionKey="id" multiple="false"
     			ajaxLink="${createLink(controller:'equipmentType', action:'getAjaxData', params: [observation:'USEDINMEMMS'])}"
     			from="${types}" value="${equipment?.type?.id}" values="${types.collect{it.names}}" />
+    			
       		<g:inputYearMonth name="expectedLifeTime" field="expectedLifeTime" years="${equipment.expectedLifeTime?.years}" months="${equipment.expectedLifeTime?.months}" label='entity.expectedLifeTime.label' bean="${equipment}"/>
       		<g:input name="serialNumber" label="${message(code:'equipment.serial.number.label')}" bean="${equipment}" field="serialNumber"/>
       		<g:input name="model" label="${message(code:'equipment.model.label')}" bean="${equipment}" field="model"/>
@@ -72,7 +75,7 @@
 	    			<th>${message(code:'equipment.status.recordedon.label')}</th>
 	    			<th>${message(code:'equipment.status.current.label')}</th>
 	    		</tr>
-	    		<g:each in="${equipment.status.sort{a,b -> (a.statusChangeDate > b.statusChangeDate) ? -1 : 1}}" status="i" var="status">
+	    		<g:each in="${equipment.status.sort{a,b -> (a.dateCreated > b.dateCreated) ? -1 : 1}}" status="i" var="status">
 		    		<g:if test="${i+1<numberOfStatusToDisplay}">
 			    		<tr>
 			    			<td>
@@ -84,7 +87,7 @@
 			    			</td>
 			    			<td>${message(code: status?.status?.messageCode+'.'+status?.status?.name)}</td>
 			    			<td>${Utils.formatDate(status?.dateOfEvent)}</td>
-			    			<td>${Utils.formatDateWithTime(status?.statusChangeDate)}</td>
+			    			<td>${Utils.formatDateWithTime(status?.dateCreated)}</td>
 			    			<td>${(status==equipment.timeBasedStatus)? '\u2713':''}</td>
 			    		</tr>
 		    		</g:if>
@@ -154,6 +157,8 @@
           </span>
           <g:message code="equipment.section.warranty.information.label" default="Warranty Information"/>
         </h4>
+		<div class="error-list"><g:renderErrors bean="${equipment}" field="warranty"/></div>
+		
         <g:inputBox name="warranty.sameAsSupplier"  label="${message(code:'equipment.same.as.supplier.label')}" bean="${equipment}" field="warranty.sameAsSupplier" checked="${(equipment.warranty?.sameAsSupplier)? true:false}"/>
       	<g:input name="warranty.startDate" dateClass="date-picker" label="${message(code:'warranty.start.date.label')}" bean="${equipment}" field="warranty.startDate"/>
     	<g:inputYearMonth name="warrantyPeriod" field="warrantyPeriod" years="${equipment.warrantyPeriod?.years}" months="${equipment.warrantyPeriod?.months}" bean="${equipment}" label='equipment.warranty.period.label'/>

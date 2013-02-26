@@ -38,9 +38,9 @@ import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.exports.EquipmentExport;
 import org.chai.memms.inventory.Equipment;
 import org.chai.location.CalculationLocation;
-import org.chai.location.DataLocation
+import org.chai.location.DataLocation;
 import org.chai.location.DataLocationType;
-import org.chai.location.Location
+import org.chai.location.Location;
 import org.chai.location.LocationLevel;
 
 import org.chai.memms.util.Utils;
@@ -50,10 +50,10 @@ import org.hibernate.criterion.Order
 import org.hibernate.criterion.Projections
 import org.hibernate.criterion.Restrictions
 import org.apache.commons.lang.StringUtils
-import org.chai.memms.security.User
+import org.chai.memms.preventive.maintenance.PreventiveOrder;
+import org.chai.memms.security.User;
 import org.chai.memms.util.ImportExportConstant;
 import org.chai.memms.util.Utils;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -71,20 +71,22 @@ class EquipmentService {
 	def languageService;
 	def userService
 	
-	public void updateCurrentEquipmentStatus(Equipment equipment,EquipmentStatus status){
+	public void updateCurrentEquipmentStatus(Equipment equipment,EquipmentStatus status,User user){
 		if(status!=null){
 			equipment.currentStatus = status.status
 			equipment.addToStatus(status)
 		}else{
-			//This assume that there is no equipment without at least one status associated to it!
+			//This assume that there is no equipment without at least one status associated to it
 			equipment.currentStatus = equipment.timeBasedStatus.status
 		}
+		equipment.lastModifiedBy = user
 		if(log.isDebugEnabled()) log.debug("Updating Equipment status params: "+equipment)
 		equipment.save(failOnError:true)
 	}
-	public def searchEquipment(String text,User user,Map<String, String> params) {
+	public def searchEquipment(String text,User user,DataLocation currentDataLocation,Map<String, String> params) {
 		def dataLocations = []
-		if(user.location instanceof Location) dataLocations.addAll(user.location.getDataLocations([].toSet(), [].toSet()))
+		if(currentDataLocation) dataLocations.add(currentDataLocation)
+		else if(user.location instanceof Location) dataLocations.addAll(user.location.getDataLocations([].toSet(), [].toSet()))
 		else{
 			dataLocations = []
 			dataLocations.add(user.location as DataLocation)
@@ -109,30 +111,63 @@ class EquipmentService {
 		}
 	}
 		
-	public List<Equipment> getMyEquipments(User user,Map<String, String> params) {
+	public def getMyEquipments(User user,Map<String, String> params) {
 		def dataLocations = []
 		if(user.location instanceof Location) dataLocations.addAll(user.location.getDataLocations([:], [:]))
 		else{
 			dataLocations.add((DataLocation)user.location)
-			if(userService.canViewManagedEquipments(user)) dataLocations.addAll((user.location as DataLocation).manages)
+			if(userService.canViewManagedEquipments(user)) dataLocations.addAll((user.location as DataLocation).manages?.asList())
 		}
 		
 		if(log.isDebugEnabled()) log.debug("Current user = " + user + " , Current user's managed dataLocations = " + dataLocations)
 		
 		def criteria = Equipment.createCriteria();
-			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-				inList('dataLocation',dataLocations)
-			}
+
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			inList('dataLocation',dataLocations)
+		}
 	}
 	
+	public def getEquipmentsByDataLocationAndManages(DataLocation dataLocation,Map<String, String> params) {
+		if(log.isDebugEnabled()) log.debug("getEquipmentsByDataLocationAndManages  dataLocation= "+dataLocation)
+		List<DataLocation> dataLocations = [dataLocation]
+		(!dataLocation.manages)?:dataLocations.addAll(dataLocation.manages)
 
-	public def filterEquipment(def dataLocation, def supplier, def manufacturer,def serviceProvider, def equipmentType, 
+		def criteria = Equipment.createCriteria();
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			inList('dataLocation',dataLocations)
+//			or{
+//				for(DataLocation dataLoc: dataLocations)
+//					eq('dataLocation',dataLoc)
+//			}
+		}
+	}
+
+	public def getEquipmentsByDataLocation(DataLocation dataLocation,Map<String, String> params) {
+		if(log.isDebugEnabled()) log.debug("getEquipmentsByDataLocation  dataLocation= "+dataLocation)
+		def criteria = Equipment.createCriteria();
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			eq('dataLocation',dataLocation)
+		}
+	}
+
+	// fterrier: signature is very long
+	public def filterEquipment(def user, def dataLocation, def supplier, def manufacturer,def serviceProvider, def equipmentType, 
 		def purchaser,def donor,def obsolete,def status,Map<String, String> params){
+		log.debug("filterEquipment(user=${user}, dataLocation=${dataLocation}, ...)")
+		
+		def dataLocations = []
+		if(dataLocation) dataLocations.add(dataLocation)
+		else if(user.location instanceof Location) dataLocations.addAll(user.location.getDataLocations([:], [:]))
+		else{
+			dataLocations.add((DataLocation)user.location)
+			dataLocations.addAll((user.location as DataLocation).manages)
+		}
 		
 		def criteria = Equipment.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			if(dataLocation != null)
-				eq('dataLocation',dataLocation)
+			if(dataLocations != null)
+				inList('dataLocation',dataLocations)
 			if(supplier != null)
 				eq ("supplier", supplier)
 			if(manufacturer != null)

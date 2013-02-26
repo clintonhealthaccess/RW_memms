@@ -63,8 +63,8 @@ grails.project.dependency.resolution = {
 		* Configure our resolver.
 		*/
 		def libResolver = new GrailsRepoResolver(null, null);
-		libResolver.addArtifactPattern("https://github.com/fterrier/repository/raw/master/[organisation]/[module]/[type]s/[artifact]-[revision].[ext]")
-		libResolver.addIvyPattern("https://github.com/fterrier/repository/raw/master/[organisation]/[module]/ivys/ivy-[revision].xml")
+		libResolver.addArtifactPattern("https://github.com/clintonhealthaccess/repository/raw/master/[organisation]/[module]/[type]s/[artifact]-[revision].[ext]")
+		libResolver.addIvyPattern("https://github.com/clintonhealthaccess/repository/raw/master/[organisation]/[module]/ivys/ivy-[revision].xml")
 		libResolver.name = "github"
         //libResolver.settings = ivySettings
 		resolver libResolver
@@ -80,10 +80,12 @@ grails.project.dependency.resolution = {
     }
 
     plugins {
+	    build ":tomcat:$grailsVersion"
+    
         compile ":hibernate:$grailsVersion"
 		compile ":mail:1.0"
         compile ":jquery:1.7.1"
-        compile ":resources:1.2-RC1"
+        compile ":resources:1.2-RC1"	
 		compile ":cached-resources:1.0"
 		compile ":cache-headers:1.1.5"
 		compile ":shiro:1.1.5"
@@ -92,12 +94,10 @@ grails.project.dependency.resolution = {
 		compile ":mail:1.0"
 		compile ":i18n-fields:0.6.1-CHAI"
 		compile ":yui-minify-resources:0.1.5"
-        build ":tomcat:$grailsVersion"
 		compile ":rabbitmq-tasks:0.5.3-SNAPSHOT"
-		compile ":chai-locations:0.4-CHAI"
+		compile ":chai-locations:0.5.1-CHAI"
 		compile ":build-info-tag:0.3.1"
 		//compile ':cloud-foundry:1.2.3'
-		
 		test (":spock:0.6") {changing = false}
 		//		test ":geb:0.7.1"
 		compile ":csv:0.3.1"

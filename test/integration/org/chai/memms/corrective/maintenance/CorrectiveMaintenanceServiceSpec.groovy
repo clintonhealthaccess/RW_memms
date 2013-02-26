@@ -1,4 +1,4 @@
-/**
+	/**
  * Copyright (c) 2012, Clinton Health Access Initiative.
  *
  * All rights reserved.
@@ -31,18 +31,20 @@ package org.chai.memms.corrective.maintenance
 import org.chai.memms.Initializer;
 import org.chai.memms.IntegrationTests;
 import org.chai.memms.inventory.Equipment;
+import org.chai.memms.MaintenanceService
 import org.chai.memms.corrective.maintenance.WorkOrder.Criticality;
 import org.chai.memms.corrective.maintenance.WorkOrder.FailureReason;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
 import org.chai.memms.security.User;
 import org.chai.location.DataLocationType
 import org.chai.location.Location
+import java.util.HashSet
 
 class CorrectiveMaintenanceServiceSpec extends IntegrationTests{
-	def correctiveMaintenanceService
+	def maintenanceService
 	def "can retrieve all location levels to skip"() {
 		when:
-		def skipLevels = correctiveMaintenanceService.getSkipLocationLevels()
+		def skipLevels = maintenanceService.getSkipLocationLevels()
 
 		then:
 		skipLevels.size() == grailsApplication.config.location.sector.skip.level.size()
@@ -56,11 +58,11 @@ class CorrectiveMaintenanceServiceSpec extends IntegrationTests{
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		def burera= Location.findByCode(BURERA)
 		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,user,Initializer.now(),FailureReason.NOTSPECIFIED, OrderStatus.OPENATFOSA)		
-		def types = grailsApplication.config.site.datalocationtype.checked.collect{ DataLocationType.findByCode(it) }.toSet()
+		def types = new HashSet(DataLocationType.findAllByDefaultSelected(true))
 		when:
-		def correctiveMaintenances = correctiveMaintenanceService.getCorrectiveMaintenancesByLocation(burera,types,[:])
+		def correctiveMaintenances = maintenanceService.getMaintenancesByLocation(WorkOrder.class,burera,types,[:])
 		then:
-		correctiveMaintenances.correctiveMaintenanceList.size() == 3
+		correctiveMaintenances.maintenanceList.size() == 3
 		correctiveMaintenances.totalCount == 3
 	}
 	
@@ -72,11 +74,11 @@ class CorrectiveMaintenanceServiceSpec extends IntegrationTests{
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		def burera= Location.findByCode(BURERA)
 		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,user,Initializer.now(),FailureReason.NOTSPECIFIED, OrderStatus.OPENATFOSA)
-		def types = grailsApplication.config.site.datalocationtype.checked.collect{ DataLocationType.findByCode(it) }.toSet()
+		def types = new HashSet(DataLocationType.findAllByDefaultSelected(true))
 		when:
-		def correctiveMaintenances = correctiveMaintenanceService.getCorrectiveMaintenancesByLocation(burera,types,["offset":1,"max":0 ])
+		def correctiveMaintenances = maintenanceService.getMaintenancesByLocation(WorkOrder.class,burera,types,["offset":1,"max":0 ])
 		then:
-		correctiveMaintenances.correctiveMaintenanceList.size() == 0
-		correctiveMaintenances.totalCount == 0
+		correctiveMaintenances.maintenanceList.size() == 3
+		correctiveMaintenances.totalCount == 3
 	}
 }

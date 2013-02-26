@@ -60,7 +60,7 @@ class ProviderController  extends AbstractEntityController {
 	}
 	
 	def deleteEntity(def entity) {
-		if(entity.manufactures.size() > 0 || entity.suppliers.size() > 0 ){
+		if(entity.manufacturers.size() > 0 || entity.suppliers.size() > 0 ){
 			flash.message = message(code: 'provider.hasequipments', args: [message(code: getLabel(), default: 'entity'), params.id], default: '{0} still has associated equipments.')
 		}else super.deleteEntity(entity)
 	}
@@ -80,12 +80,9 @@ class ProviderController  extends AbstractEntityController {
 		if(request.xhr)
 			this.ajaxModel(providers,"")
 		else{
-		render(view:"/entity/list", model:[
-			template:"provider/providerList",
-			listTop:"provider/listTop",
-			entities: providers,
-			entityCount: providers.totalCount,
-			code: getLabel()
+			render(view:"/entity/list", model: model(providers) << [
+				template:"provider/providerList",
+				listTop:"provider/listTop",
 			])
 		}
 	}
@@ -93,13 +90,26 @@ class ProviderController  extends AbstractEntityController {
 	def search = {
 		adaptParamsForList()
 		List<Provider> providers = providerService.searchProvider(null, params['q'], params)		
-		if(!request.xhr)
-			response.sendError(404)
-		this.ajaxModel(providers,params['q'])
+		if(request.xhr)
+			this.ajaxModel(providers,params['q'])
+		else {
+			render(view:"/entity/list", model: model(providers) << [
+				template:"provider/providerList",
+				listTop:"provider/listTop",
+			])
+		}
+	}
+	
+	def model(def entities) {
+		return [
+			entities: entities,
+			entityCount: entities.totalCount,
+			code: getLabel(),
+		]
 	}
 	
 	def ajaxModel(def entities,def searchTerm) {
-		def model = [entities: entities,entityCount: entities.totalCount,names:names,q:searchTerm]
+		def model = model(entities) << [q:searchTerm]
 		def listHtml = g.render(template:"/entity/provider/providerList",model:model)
 		render(contentType:"text/json") { results = [listHtml] }
 	}
@@ -109,8 +119,11 @@ class ProviderController  extends AbstractEntityController {
 		def detailsLabel='';
 		def type =params['type']
 		type = Type."$type";
+
 		if(type.equals(Type.MANUFACTURER)) detailsLabel="provider.manufacturer.details"
-		else if(type.equals(Type.SUPPLIER)) detailsLabel="provider.supplier.details" else detailsLabel="provider.serviceProvider.details"
+		else if(type.equals(Type.SUPPLIER)) detailsLabel="provider.supplier.details" 
+		else detailsLabel="provider.serviceProvider.details"
+		
 		List<Provider> providers = providerService.searchProvider(type, params['term'], [:])
 		render(contentType:"text/json") {
 			elements = array {

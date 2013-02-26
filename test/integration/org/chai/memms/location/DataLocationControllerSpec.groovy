@@ -98,7 +98,7 @@ class DataLocationControllerSpec extends IntegrationTests{
 		setup:
 		setupLocationTree()
 		dataLocationController =  new DataLocationController()
-		
+
 		when: "none ajax"
 		dataLocationController.list()
 		
@@ -149,6 +149,6 @@ class DataLocationControllerSpec extends IntegrationTests{
 		dataLocationController.search()
 		then:
 		DataLocation.count() == 5
-		dataLocationController.response.status == 404
+		dataLocationController.modelAndView.model.entities == [DataLocation.findByCode(BUTARO)]
 	}
 }
