@@ -139,8 +139,6 @@ class SparePartSpec extends IntegrationTests {
 		
 		
 		when:
-		sparePart.statusOfSparePart=[]
-		sparePart.save(failOnError: true)
 		def statusSix= Initializer.newSparePartStatus(Initializer.getDate(10, 12, 2010),User.findByUsername("admin"),StatusOfSparePart.INSTOCK,sparePart,[:])
 		def statusFive= Initializer.newSparePartStatus(Initializer.getDate(10, 12, 2011),User.findByUsername("admin"),StatusOfSparePart.OPERATIONAL,sparePart,[:])
 		def statusFour= Initializer.newSparePartStatus(Initializer.getDate(10, 07, 2012),User.findByUsername("admin"),StatusOfSparePart.PENDINGORDER,sparePart,[:])
@@ -149,8 +147,6 @@ class SparePartSpec extends IntegrationTests {
 		SparePart.list()[0].timeBasedStatus.is(statusFour)
 		
 		when:
-		sparePart.statusOfSparePart=[]
-		sparePart.save(failOnError: true)
 		def statusInStock= Initializer.newSparePartStatus(Initializer.getDate(10, 12, 2010),User.findByUsername("admin"),StatusOfSparePart.INSTOCK,sparePart,[:])
 		def statusOperational= Initializer.newSparePartStatus(Initializer.getDate(10, 12, 2011),User.findByUsername("admin"),StatusOfSparePart.OPERATIONAL,sparePart,[:])
 		def statusPendingOrder= Initializer.newSparePartStatus(Initializer.getDate(10, 07, 2012),User.findByUsername("admin"),StatusOfSparePart.PENDINGORDER,sparePart,[:])
