@@ -65,21 +65,24 @@ class SparePartTypeController  extends AbstractEntityController{
 
 	def deleteEntity(def entity) {
 		if (entity.spareParts.size() != 0)
-			flash.message = message(code: 'spare.part.type.hasspare part', args: [message(code: getLabel(), default: 'entity'), params.id], default: '{0} still has associated spare part.')
+			flash.message = message(code: 'sparePart.type.hassparePart', args: [message(code: getLabel(), default: 'entity'), params.id], default: '{0} still has associated spare part.')
 		else
 			super.deleteEntity(entity);
 	}
 	def bindParams(def entity) {
 		entity.properties = params
 	}
+		
 	
-
 	def getModel(def entity) {
-		[
-			type: entity
-		]
+		def manufacturers = []
+		if (entity.manufacturer!=null) manufacturers << entity.manufacturer
+		
+		[ type: entity,
+		  manufacturers: manufacturers		
+         ]
 	}
-	
+				
 	def list = {
 		adaptParamsForList()
 		List<SparePartType> types = SparePartType.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc");
@@ -91,11 +94,7 @@ class SparePartTypeController  extends AbstractEntityController{
 				template:"sparePartType/sparePartTypeList",
 				listTop:"sparePartType/listTop",
 				entities: types,
-//				entityCount: types.totalCount,
 				entityClass: getEntityClass()
-//				code: getLabel(),
-//				names:names,
-//			    descriptions:descriptions
 			])
 		}
 	}
