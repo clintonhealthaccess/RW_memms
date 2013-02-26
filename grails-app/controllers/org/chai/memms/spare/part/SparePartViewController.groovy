@@ -76,17 +76,10 @@ class SparePartViewController extends AbstractController{
 		def html = g.render(template:"/templates/sparePartClueTip",model:[sparePart:sparePart])
 		render(contentType:"text/plain", text:html)
 	}
-	//TODO By Aphrodice View Page not yet having codes "/entity/sparePart/summary"
-	def view ={
-		SparePart sparePart = SparePart.get(params.int("sparePart.id"))
-		if(sparePart == null)	response.sendError(404)
-		else render(view:"/entity/sparePart/summary", model:[sparePart: sparePart])
-	}
 	
 	def list = {
 		adaptParamsForList()
-		
-		List<SparePart> spareParts = SparePart.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc");
+		def spareParts = sparePartService.getSparePartsByUser(user,params)
 		
 		if(request.xhr)
 			this.ajaxModel(spareParts,"")
@@ -104,8 +97,6 @@ class SparePartViewController extends AbstractController{
 		}
 	}
 	
-	
-	
 	//TODO don't think we need ajax for this
 	def selectFacility = {
 		adaptParamsForList()
@@ -122,19 +113,19 @@ class SparePartViewController extends AbstractController{
 	}
 	
 	def search = {
-		DataLocation dataLocation = DataLocation.get(params.int("dataLocation.id"))
-		
-		if (dataLocation != null && !user.canAccessCalculationLocation(dataLocation))
-			response.sendError(404)
-		else{
-			adaptParamsForList()
-			def spareParts = sparePartService.searchSparePart(params['q'],user,dataLocation,params)
-			if(!request.xhr)
-				response.sendError(404)
-			else
-				this.ajaxModel(spareParts,params['q'])
-		}
+		adaptParamsForList()
+		def spareParts = sparePartService.searchSparePart(params['q'],user,params)
+		if(!request.xhr)
+			render(view:"/entity/list", model: model(spareParts) << [
+				template:"sparePart/sparePartList",
+				filterTemplate:"sparePart/sparePartFilter",
+				listTop:"sparePart/listTop"
+			])
+		else
+			this.ajaxModel(spareParts,params['q'])
 	}
+
+	
 	
 	def filter = { FilterCommand cmd ->
 		if (log.isDebugEnabled()) log.debug("spareParts.filter, command "+cmd)
@@ -187,7 +178,6 @@ class SparePartViewController extends AbstractController{
 					locationSkipLevels: locationSkipLevels
 				])
 	}
-	
 	def updateSameAsManufacturer = {
 		if (log.isDebugEnabled()) log.debug("updateSameAsManufacturer sparePart.sameAsManufacturer "+params['sparePart.id'])
 		SparePart sparePart = SparePart.get(params.int(['sparePart.id']))

@@ -124,47 +124,4 @@ class SparePartViewControllerSpec extends IntegrationTests{
 		!sparePartViewController.response.json.results[0].contains(SparePart.findBySerialNumber(CODE(126)).code)
 	}
 	
-	def "cannot search spare parts without using ajax "(){
-		setup:
-		setupLocationTree()
-		def user = newOtherUser("user", "user", DataLocation.findByCode(KIVUYE))
-		user.userType = UserType.TITULAIREHC
-		user.save(failOnError:true)
-		
-		def techDh = newOtherUser("techDh", "techDh", DataLocation.findByCode(BUTARO))
-		techDh.userType = UserType.TECHNICIANDH
-		techDh.save(failOnError:true)
-		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
-		def manufacturer = Initializer.newProvider(CODE(111), Type.MANUFACTURER,manufactureContact)
-		
-		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
-		def supplier = Initializer.newProvider(CODE(222), Type.SUPPLIER,supplierContact)
-		
-		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",manufacturer,Initializer.now())
-	
-//		def sparePart = new SparePart(serialNumber:"test123",sparePartPurchasedBy:SparePartPurchasedBy.BYMOH,sameAsManufacturer:false,expectedLifeTime:Initializer.newPeriod(20),
-//			descriptions:['en':'SparePart Descriptions'],manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),model:"sparePartModel",
-//			type:sparePartType,statusOfSparePart:StatusOfSparePart.OPERATIONAL,dateCreated:Initializer.getDate(23,07,2010), addedBy: User.findByUsername("systemUser"))
-		
-		def sparePartOne = Initializer.newSparePart(CODE(123),SparePartPurchasedBy.BYFACILITY,false,Initializer.newPeriod(32),"2900.23",['en':'SparePart Descriptions one'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),"USD","sparePartModel",DataLocation.findByCode(KIVUYE),sparePartType,supplier,StatusOfSparePart.INSTOCK,user,null,null)
-		def sparePartTwo = Initializer.newSparePart(CODE(124),SparePartPurchasedBy.BYFACILITY,true,Initializer.newPeriod(32),"2900.23",['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),"EUR","sparePartModel",DataLocation.findByCode(BUTARO),sparePartType,supplier,StatusOfSparePart.INSTOCK,user,null,null)
-		
-		Initializer.newSparePart(CODE(125),SparePartPurchasedBy.BYFACILITY,true,Initializer.newPeriod(32),"2900.23",['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010)
-			,Initializer.getDate(10,10,2010),"RWF","sparePartModel",DataLocation.findByCode(MUSANZE),sparePartType,supplier,StatusOfSparePart.INSTOCK,user,null,null)
-		Initializer.newSparePart(CODE(126),SparePartPurchasedBy.BYFACILITY,true,Initializer.newPeriod(32),"2900.23",['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010)
-			,Initializer.getDate(10,10,2010),"RWF","sparePartModel",DataLocation.findByCode(GITWE),sparePartType,supplier,StatusOfSparePart.INSTOCK,user,null,null)
-	
-		sparePartViewController = new SparePartViewController()
-		setupSecurityManager(techDh)
-		
-		when: "fails when not using ajax"
-		sparePartViewController.params.q = CODE(123)
-		sparePartViewController.params."dataLocation.id" == techDh.location.id
-		sparePartViewController.search()
-		
-		then:
-		sparePartViewController.modelAndView.model.entities == [sparePartOne]
-	}
 }
