@@ -103,7 +103,7 @@ class SparePartService {
 					ilike("model","%"+text+"%")
 					ilike(dbFieldDescriptions,"%"+text+"%")
 					ilike(dbFieldTypeNames,"%"+text+"%")
-					//ilike("t."+dbFieldTypeNames,"%"+text+"%")
+					ilike("t."+dbFieldTypeNames,"%"+text+"%")
 				}
 		}
 	}

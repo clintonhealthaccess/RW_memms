@@ -1,5 +1,5 @@
-<%@ page import="org.chai.memms.spare.part.SparePartStatus.statusOfSparePart" %>
-<%@ page import="org.chai.memms.spare.part.SparePart.PurchasedBy" %>
+<%@ page import="org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart" %>
+<%@ page import="org.chai.memms.spare.part.SparePart.SparePartPurchasedBy" %>
 <div class="filters main">
 		  <h2><g:message code:"spare.part.filter.label" /><a href="#" id="showhide" class="right"><g:message code="entity.show.hide.filter.label" /></a></h2>
 
@@ -36,8 +36,8 @@
 								<option value="false" ${filterCmd?.sameAsManufacturer?.equals("false")? 'selected' : ''}><g:message code="sameAsManufacturer.boolean.false" /></option>
 						</select>
 					</li>
-					<li><g:selectFromEnum name="status" values="${Status.values()}" field="status" label="${message(code:'spare.part.status.label')}" /></li>
-					<li><g:selectFromEnum name="purchaser" values="${PurchasedBy.values()}" field="purchaser" label="${message(code:'spare.part.purchaser.label')}" /></li>
+					<li><g:selectFromEnum name="status" values="${StatusOfSparePart.values()}" field="status" label="${message(code:'spare.part.status.label')}" /></li>
+					<li><g:selectFromEnum name="purchaser" values="${SparePartPurchasedBy.values()}" field="purchaser" label="${message(code:'spare.part.purchaser.label')}" /></li>
 				</ul>
 				<input type="hidden" name="dataLocation.id" value="${dataLocation?.id}"/>
 				<button type="submit"><g:message code="entity.filter.label" /></button>
