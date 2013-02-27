@@ -25,61 +25,42 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.inventory
+package org.chai.memms.corrective.maintenance
 
-import java.util.List;
-import org.chai.memms.inventory.Provider.Type;
-import org.chai.memms.inventory.Provider;
+import org.chai.memms.preventive.maintenance.Prevention;
+import org.chai.memms.preventive.maintenance.PreventiveOrder;
 
 /**
  * @author Jean Kahigiso M.
  *
  */
-class ProviderService {
+class PreventionService {
+	
 	static transactional = true
 	
 	def languageService;
 	def sessionFactory;
-	
-	public List<Provider> searchProvider(Type type,String text, Map<String, String> params){
-		text = text.trim();
-		def dbFieldDescriptions = 'addressDescriptions_'+languageService.getCurrentLanguagePrefix();
-		def criteria = Provider.createCriteria()
+
+
+	public List<Prevention> getPreventionByOrder(PreventiveOrder order, Map<String,String> params){
+		def criteria =  Prevention.createCriteria()
 		
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			if(type!=null){
-				if(type==Type.SERVICEPROVIDER){
-					eq('type',type)
-				}else{
-					or{
-						eq('type',type)
-						eq('type',Type.BOTH)
-					}
-				}
-			}
-			or{
-				for(Type t: this.getEnumeMatcher(text))
-					eq("type",t)
-					
-				ilike("code","%"+text+"%")
-				ilike("phone","%"+text+"%")
-				ilike("contactName","%"+text+"%")
-				ilike("email","%"+text+"%")
-				ilike("street","%"+text+"%")
-				ilike("poBox","%"+text+"%")
-				ilike(dbFieldDescriptions,"%"+text+"%")
-			}
+			eq('order',order)
 		}
-	
-	}
-	public static List<Type> getEnumeMatcher(String text){
-		List<Type> observations=[]
-		if(text!=null && !text.equals(""))
-			for(Type ob: Type.values()){
-				if(ob.name.toLowerCase().contains(text.toLowerCase()))
-					observations.add(ob)
-			}
-		return observations
+
 	}
 
+	public List<Prevention> searchPrevention(String text, PreventiveOrder order, Map<String,String> params){
+		text =  text.trim()
+		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
+		def criteria =  Prevention.createCriteria()
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			    if(order!=null)
+					eq('order',order)
+				ilike(dbFieldDescriptions,"%"+text+"%") 
+		}
+
+	}
+	
 }

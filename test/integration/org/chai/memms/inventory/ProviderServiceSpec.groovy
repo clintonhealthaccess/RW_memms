@@ -14,7 +14,6 @@ class ProviderServiceSpec extends IntegrationTests{
 		
 		setup:
 		
-	
 		def manufactureContact = Initializer.newContact(['en':'Manufacture Address Descriptions One'],"Manufacture Nokia","jkl@yahoo.com","0768-889-787","Street 154","8988")
 		def supplierContact = Initializer.newContact(['en':'Supplier Address Descriptions Two'],"Supplier Siemens","jk2@yahoo.com","0768-432-787","Street 112654","89388")
 		def othersContact = Initializer.newContact(['en':'Unknown Address Descriptions Two'],"Unknown Other","jk1@yahoo.com","0768-111-787","Street 12","89288")
@@ -89,6 +88,15 @@ class ProviderServiceSpec extends IntegrationTests{
 		Provider.count()==4
 		providers.size()==4
 		providers.equals([servicePro,both,supplier,manufacturer])
+	}
+
+	def "test provider matcher"(){
+		when:
+		def text = "manufa"
+		List<Type> observations = providerService.getEnumeMatcher(text)
+		then:
+		observations.size()==1
+		observations[0].name.toLowerCase().contains(text.toLowerCase())
 	}
 
 

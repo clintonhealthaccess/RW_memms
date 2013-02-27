@@ -31,7 +31,7 @@ import org.chai.location.CalculationLocation;
 import org.chai.memms.AbstractEntityController;
 import org.chai.memms.inventory.Equipment;
 import org.chai.memms.security.User.UserType;
-import org.chai.memms.TimeDate
+import org.chai.memms.preventive.maintenance.PreventiveOrder
 
 
 /**
@@ -39,6 +39,7 @@ import org.chai.memms.TimeDate
  *
  */
 class PreventionController extends AbstractEntityController {
+	def preventionService
 
 	def bindParams(def entity) {
 		entity.properties = params
@@ -71,8 +72,51 @@ class PreventionController extends AbstractEntityController {
 	}
 
 	def list = {
-		def preventions =  Prevention.findByPreventiveOrder(params.long("order.id"));
+		def order =  PreventiveOrder.get(params.int("order.id"))
+		def preventions =  preventionService.getPreventionByOrder(order,params)
+
+		 if(request.xhr){
+			 this.ajaxModel(preventions,order,"")
+		 }else{
+			render (view: '/entity/list', model:model(preventions, order) << [
+				template:"prevention/preventionList",
+				filterTemplate:"prevention/preventionFilter",
+				listTop:"prevention/listTop",
+			])
+		}
 
 	}
+
+	def search = {
+		def order =  PreventiveOrder.get(params.int("order.id"))
+		def preventions =  preventionService.searchPrevention(params['q'],order,params)
+
+		 if(request.xhr){
+			 this.ajaxModel(preventions,order,params['q'])
+		 }else{
+			render (view: '/entity/list', model:model(preventions, order) << [
+				template:"prevention/preventionList",
+				filterTemplate:"prevention/preventionFilter",
+				listTop:"prevention/listTop",
+			])
+		}
+
+	}
+
+	def model(def entities, def order) {
+		return [
+			entities: entities,
+			entityCount: entities.totalCount,
+			order:order,
+			code:getLabel(),
+		]
+	}
+
+	def ajaxModel(def entities,def order, def searchTerm) {
+		def model = model(entities, order) << [q:searchTerm]
+		def listHtml = g.render(template:"/entity/prevention/preventionList",model:model)
+		render(contentType:"text/json") { results = [listHtml] }
+	}
+	
 	
 }
