@@ -124,8 +124,6 @@ class SparePartViewController extends AbstractController{
 		else
 			this.ajaxModel(spareParts,params['q'])
 	}
-
-	
 	
 	def filter = { FilterCommand cmd ->
 		if (log.isDebugEnabled()) log.debug("spareParts.filter, command "+cmd)
@@ -145,11 +143,10 @@ class SparePartViewController extends AbstractController{
 		def listHtml = g.render(template:"/entity/sparePart/sparePartList",model:model)
 		render(contentType:"text/json") { results = [listHtml] }
 	}
-	def model(def entities, def dataLocation) {
+	def model(def entities) {
 		return [
 			entities: entities,
 			entityCount: entities.totalCount,
-			dataLocation:dataLocation,
 			code: getLabel()
 		]
 	}

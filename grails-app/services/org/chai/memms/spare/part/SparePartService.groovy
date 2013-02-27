@@ -70,8 +70,7 @@ class SparePartService {
 			sparePart.statusOfSparePart = sparePartStatus.statusOfSparePart
 			sparePart.addToStatus(sparePartStatus)
 		}else{
-			//This assume that there is no sparePart without at least one sparePartStatus associated to it
-			sparePart.statusOfSparePart = sparePart.timeBasedStatus.sparePartStatus
+			sparePart.statusOfSparePart = sparePart.timeBasedStatus.statusOfSparePart
 		}
 		sparePart.lastModified = user
 		if(log.isDebugEnabled()) log.debug("Updating SparePart status params: "+sparePart)
@@ -104,7 +103,7 @@ class SparePartService {
 					ilike("model","%"+text+"%")
 					ilike(dbFieldDescriptions,"%"+text+"%")
 					ilike(dbFieldTypeNames,"%"+text+"%")
-					ilike("t."+dbFieldTypeNames,"%"+text+"%")
+					//ilike("t."+dbFieldTypeNames,"%"+text+"%")
 				}
 		}
 	}
@@ -130,8 +129,6 @@ class SparePartService {
 			}
 		}
 	}
-
-
 	public def filterSparePart(def user, def dataLocation, def supplier, def sparePartType,
 		def sparePartPurchasedBy,def sameAsManufacturer,def sparePartStatus,Map<String, String> params){
 		
