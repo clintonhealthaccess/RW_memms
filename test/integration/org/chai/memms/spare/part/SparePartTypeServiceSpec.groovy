@@ -47,7 +47,7 @@ class SparePartTypeServiceSpec extends IntegrationTests{
 		def manufacturer = Initializer.newProvider("TEST" + CODE(1), Type.MANUFACTURER,manufactureContact)
 		Initializer.newSparePartType(CODE(123),["en":"names spare part type one"],["en":"descriptions spare part type one"],"7654-HGT",manufacturer,new Date())
 		
-		def List<SparePartType>sparePartTypes
+		List<SparePartType>sparePartTypes
 		
 		when:"user can search by code without a space"
 		sparePartTypes = sparePartTypeService.searchSparePartType(CODE(123),[:])
@@ -68,7 +68,7 @@ class SparePartTypeServiceSpec extends IntegrationTests{
 		def manufacturer = Initializer.newProvider("TEST" + CODE(1), Type.MANUFACTURER,manufactureContact)
 		Initializer.newSparePartType(CODE(123),["en":"names spare part type one"],["en":"descriptions spare part type one"],"7654-HGT",manufacturer,new Date())
 		
-		def List<SparePartType>sparePartTypes
+		List<SparePartType>sparePartTypes
 		
 		when:"user can search by name without space"
 		sparePartTypes = sparePartTypeService.searchSparePartType("names spare part type one",[:])
@@ -88,7 +88,7 @@ class SparePartTypeServiceSpec extends IntegrationTests{
 		def manufacturer = Initializer.newProvider("TEST" + CODE(1), Type.MANUFACTURER,manufactureContact)
 		Initializer.newSparePartType(CODE(123),["en":"names spare part type one"],["en":"descriptions spare part type one"],"7654-HGT",manufacturer,new Date())
 		
-		def List<SparePartType>sparePartTypes
+		List<SparePartType>sparePartTypes
 		
 		when:"user can search by a part number without a space"
 		sparePartTypes = sparePartTypeService.searchSparePartType("7654-HGT",[:])
@@ -108,7 +108,7 @@ class SparePartTypeServiceSpec extends IntegrationTests{
 		def manufacturer = Initializer.newProvider("TEST" + CODE(1), Type.MANUFACTURER,manufactureContact)
 		Initializer.newSparePartType(CODE(123),["en":"names spare part type one"],["en":"descriptions spare part type one"],"7654-HGT",manufacturer,new Date())
 		
-		def List<SparePartType>sparePartTypes 
+		List<SparePartType>sparePartTypes 
 		
 		when:"user can search by description without a space"
 		sparePartTypes = sparePartTypeService.searchSparePartType("descriptions spare part type one",[:])

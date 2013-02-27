@@ -81,16 +81,12 @@ class SparePartTypeController  extends AbstractEntityController{
 		
 	
 	def getModel(def entity) {
-		def manufacturers = Provider.findAllByTypeInList([Type.MANUFACTURER,Type.BOTH],[sort:'contact.contactName'])
-		if (entity.manufacturer!=null) manufacturers << entity.manufacturer
-		
+		def manufacturers = Provider.findAllByTypeInList([Type.MANUFACTURER,Type.BOTH],[sort:'contact.contactName'])		
 		[ type: entity,
 		  manufacturers: manufacturers		
          ]
 	}
-		
-		
-			
+							
 	def list = {
 		adaptParamsForList()
 		List<SparePartType> types = SparePartType.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc");
