@@ -85,6 +85,7 @@ class EquipmentService {
 	}
 	public def searchEquipment(String text,User user,DataLocation currentDataLocation,Map<String, String> params) {
 		def dataLocations = []
+		text = text.trim()
 		if(currentDataLocation) dataLocations.add(currentDataLocation)
 		else if(user.location instanceof Location) dataLocations.addAll(user.location.getDataLocations([].toSet(), [].toSet()))
 		else{

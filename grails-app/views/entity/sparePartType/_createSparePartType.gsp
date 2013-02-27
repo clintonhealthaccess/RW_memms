@@ -9,10 +9,8 @@
 			<g:else>
 				<g:message code="default.new.label" args="[message(code:'spare.part.type.label')]" />
 			</g:else>
-		</h1>
-		
-	</div>
-	
+		</h1>		
+	</div>	
 	<div class="main">
   	<g:form url="[controller:'sparePartType', action:'save', params:[targetURI: targetURI]]" useToken="true" class="simple-list">
 	
@@ -20,8 +18,8 @@
         <g:input name="partNumber" label="${message(code:'entity.part.number.label')}" bean="${type}" field="partNumber"/>
   		<g:i18nInput name="names" label="${message(code:'entity.names.label')}" bean="${type}" field="names"/>
   		<g:selectFromList name="manufacturer.id" label="${message(code:'provider.type.manufacturer')}" bean="${type}" field="manufacturer" optionKey="id" multiple="false"
-  			ajaxLink="${createLink(controller:'provider', action:'getAjaxData', params: [type:'MANUFACTURER'])}"
-  			from="${manufacturers}" value="${equipment?.manufacturer?.id}" values="${manufacturers.collect{it.contact?.contactName}}" />	
+  		ajaxLink="${createLink(controller:'provider', action:'getAjaxData', params: [type:'MANUFACTURER'])}"
+  		from="${manufacturers}" value="${type.manufacturer?.id}" values="${manufacturers.collect{it.contact?.contactName}}" />			
   		<g:input name="discontinuedDate" dateClass="date-picker" label="${message(code:'entity.discontinued.date.label')}" bean="${type}" field="discontinuedDate"/>
   		<g:i18nTextarea name="descriptions" bean="${type}" label="${message(code:'entity.description.label')}" field="descriptions" height="150" width="300" maxHeight="150" />
   		<g:if test="${type.id != null}">
