@@ -47,7 +47,7 @@ import org.chai.memms.security.User.UserType
 class SparePartViewControllerSpec extends IntegrationTests{
 	def sparePartViewController
 	
-		def "can list spare parts using ajax"(){
+	def "can list spare parts using ajax"(){
 		setup:
 		setupLocationTree()
 		def user = newOtherUser("user", "user", DataLocation.findByCode(KIVUYE))
@@ -84,7 +84,9 @@ class SparePartViewControllerSpec extends IntegrationTests{
 		sparePartViewController.response.json.results[0].contains(SparePart.findBySerialNumber(CODE(123)).code)
 		sparePartViewController.response.json.results[0].contains(SparePart.findBySerialNumber(CODE(124)).code)
 	}
+
 	//TODO throwing a json parsing exception
+	
 	def "can search spare parts "(){
 		setup:
 		setupLocationTree()
@@ -123,5 +125,4 @@ class SparePartViewControllerSpec extends IntegrationTests{
 		!sparePartViewController.response.json.results[0].contains(SparePart.findBySerialNumber(CODE(125)).code)
 		!sparePartViewController.response.json.results[0].contains(SparePart.findBySerialNumber(CODE(126)).code)
 	}
-	
 }

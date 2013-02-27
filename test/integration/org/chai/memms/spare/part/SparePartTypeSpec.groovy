@@ -32,9 +32,8 @@ import org.chai.memms.IntegrationTests;
 import org.chai.memms.inventory.Provider.Type;
 import org.chai.memms.util.Utils;
 import org.chai.memms.spare.part.SparePartType;
-
 /**
- * @author Jean Kahigiso M.
+ * @author Alain Inema
  *
  */
 class SparePartTypeSpec extends IntegrationTests{

@@ -33,7 +33,10 @@ import org.chai.memms.spare.part.SparePartTypeController;
 import org.chai.memms.spare.part.SparePartType;
 import org.chai.memms.inventory.Provider.Type;
 import java.util.Date;
- 
+/**
+ * @author Alain Inema
+ *
+ */
 class SparePartTypeControllerSpec extends IntegrationTests {
 	
   def sparePartTypeController
