@@ -41,14 +41,18 @@ import org.chai.memms.preventive.maintenance.PreventiveOrder
 class PreventionController extends AbstractEntityController {
 	def preventionService
 
-	def bindParams(def entity) {
-		entity.properties = params
-	}
+	
 
 	def getModel(def entity) {
-		if(entity.id==null) entity.addedBy = user
 		
-		[prevention:entity]
+		[
+			prevention:entity
+		]
+	}
+
+	def bindParams(def entity) {
+		if(!entity.id) entity.addedBy = user
+		entity.properties = params
 	}
 
 	def getEntity(def id) {
@@ -60,11 +64,11 @@ class PreventionController extends AbstractEntityController {
 	}
 
 	def getTemplate() {
-		return "/entity/preventiveOrder/createPrevetion";
+		return "/entity/prevention/createPrevention";
 	}
 
 	def getLabel() {
-		return "prevention.order.label";
+		return "prevention.label";
 	}
 
 	def getEntityClass() {

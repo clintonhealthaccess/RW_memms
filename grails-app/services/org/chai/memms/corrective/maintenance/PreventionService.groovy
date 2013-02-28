@@ -45,19 +45,19 @@ class PreventionService {
 	public List<Prevention> getPreventionByOrder(PreventiveOrder order, Map<String,String> params){
 		def criteria =  Prevention.createCriteria()
 		
-		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order:params.'$order' ?:"desc"){
 			eq('order',order)
 		}
 
 	}
 
-	public List<Prevention> searchPrevention(String text, PreventiveOrder order, Map<String,String> params){
+	public List<Prevention> searchPrevention(String text, PreventiveOrder preventiveOrder, Map<String,String> params){
 		text =  text.trim()
 		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
 		def criteria =  Prevention.createCriteria()
-		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			    if(order!=null)
-					eq('order',order)
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.'$order' ?:"desc"){
+			    if(preventiveOrder!=null)
+					eq('order',preventiveOrder)
 				ilike(dbFieldDescriptions,"%"+text+"%") 
 		}
 
