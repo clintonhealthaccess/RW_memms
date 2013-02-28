@@ -78,6 +78,8 @@ class SparePartService {
 	}
 	
 	public def searchSparePart(String text,User user,Map<String, String> params) {
+		//Remove unnecessary blank space
+		text= text.trim()
 		def dbFieldTypeNames = 'names_'+languageService.getCurrentLanguagePrefix();
 		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
 		def dataLocations = []

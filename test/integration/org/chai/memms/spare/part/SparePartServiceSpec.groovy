@@ -71,50 +71,44 @@ class SparePartServiceSpec extends IntegrationTests{
 		def List<SparePart> spareParts
 
 		when: "user can view all those he manages"
-		spareParts = sparePartService.searchSparePart("Descriptions",techDH,null, [:])
+		spareParts = sparePartService.searchSparePart("Descriptions",techDH, [:])
 		then:
 		spareParts.size() == 2
 		spareParts[0] != spareParts[1]
 
 		when: "user cannot see those he doesn't manage"
-		spareParts = sparePartService.searchSparePart("Descriptions",userHc,null, [:])
+		spareParts = sparePartService.searchSparePart("Descriptions",userHc, [:])
 		then:
 		spareParts.size() == 1
 		spareParts[0].serialNumber.equals(CODE(124))
 
-		when: "user can search by dataLocaiton only if specified"
-		spareParts = sparePartService.searchSparePart("Descriptions",techMMC,DataLocation.findByCode(BUTARO), [:])
-		then:
-		spareParts.size() == 1
-		spareParts[0].serialNumber.equals(CODE(123))
-
 		when: "Searching by description"
 
-		spareParts = sparePartService.searchSparePart("one",techDH,null, [:])
+		spareParts = sparePartService.searchSparePart("one",techDH, [:])
 		then:
 		spareParts.size() == 1
 		spareParts[0].getDescriptions(new Locale("en")).equals('Spare Part Descriptions one')
 
 		when: "Searching by spare part name"
-		spareParts = sparePartService.searchSparePart("Accelerometers",techDH,null, [:])
+		spareParts = sparePartService.searchSparePart("Accelerometers",techDH, [:])
 		then:
 		spareParts.size() == 2
 		spareParts[0] != spareParts[1]
 
 		when: "Searching by code"
-		spareParts = sparePartService.searchSparePart(sparePartCodeToFind.code,techDH,null, [:])
+		spareParts = sparePartService.searchSparePart(sparePartCodeToFind.code+" ",techDH, [:])
 		then:
 		spareParts.size() == 1
 		spareParts[0].code.equals(sparePartCodeToFind.code)
 
 		when: "Searching by serial number"
-		spareParts = sparePartService.searchSparePart(CODE(124),techDH,null, [:])
+		spareParts = sparePartService.searchSparePart(CODE(124),techDH, [:])
 		then:
 		spareParts.size() == 1
 		spareParts[0].serialNumber.equals(CODE(124))
 
 		when: "Searching by model"
-		spareParts = sparePartService.searchSparePart("MODEL1",techDH,null, [:])
+		spareParts = sparePartService.searchSparePart("MODEL1",techDH, [:])
 		then:
 		spareParts.size() == 1
 		spareParts[0].serialNumber.equals(CODE(123))
