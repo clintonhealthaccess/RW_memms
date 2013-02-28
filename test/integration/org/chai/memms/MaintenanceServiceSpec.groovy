@@ -78,8 +78,8 @@ class MaintenanceServiceSpec extends IntegrationTests{
 		setupLocationTree()
 			
 		when:
-		def ordersOne = maintenanceService.getMaintenancesByLocation(PreventiveOrder.class,Location.findByCode(GITARAMA),null,[:])
-		def ordersTwo = maintenanceService.getMaintenancesByLocation(PreventiveOrder.class,Location.findByCode(BURERA),null,[:])
+		def ordersOne = maintenanceService.getMaintenancesByLocation(PreventiveOrder.class,Location.findByCode(GITARAMA),null,["offset":0,"max":5])
+		def ordersTwo = maintenanceService.getMaintenancesByLocation(PreventiveOrder.class,Location.findByCode(BURERA),null,["offset":0,"max":5])
 		then:
 		ordersOne.totalCount == 2
 		ordersOne.maintenanceList.size() == 2

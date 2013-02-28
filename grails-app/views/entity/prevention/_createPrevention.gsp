@@ -21,9 +21,8 @@
                   <g:message code="prevention.section.basic.information.label"/>
               </h4> 
               <div class="row">
-                 <input type="hidden" name="order.id" value="${prevention.order.id}" />
+                 <input type="hidden" name="id" value="${prevention.id}" />
               </div>
-            ${prevention.addedBy}
             <g:input name="eventDate" dateClass="date-picker" label="${message(code:'equipment.status.date.of.event.label')}" bean="${prevention}" field="eventDate"/>
             <g:inputHourMinute name="timeSpend" field="timeSpend" hours="${prevention.timeSpend?.hours}" minutes="${prevention.timeSpend?.minutes}" label='work.order.work.time.label' bean="${order}"/>
             <g:inputTimeDate name="scheduledOn" field="scheduledOn" date="${prevention.scheduledOn?.date}" time="${prevention.scheduledOn?.time}" label='preventive.starts.on.label' bean="${prevention}" dateClass="date-picker" timeClass="time-picker"/>

@@ -113,6 +113,9 @@ class MaintenanceService {
 		Set<LocationLevel> skipLevels = getSkipLocationLevels()
 		
 		def locations = location.collectDataLocations(types)
+
+		log.debug(" params.offset: "+(params.offset)+" params.max: "+(params.max)+" locations.size(): "+(locations.size())+" types: "+(types))
+
 		for(DataLocation dataLocation : locations[(params.offset)..<(((params.offset + params.max) > locations.size()) ? locations.size() : (params.offset + params.max))]){
 			maintenances.add(new Maintenance(dataLocation:dataLocation,orderCount:this.getMaintenanceOrderByDataLocation(clazz,dataLocation,[:]).size()))
 		}

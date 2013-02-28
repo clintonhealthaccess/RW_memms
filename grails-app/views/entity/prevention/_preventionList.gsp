@@ -1,14 +1,17 @@
 
+<%@ page import="org.chai.memms.util.Utils" %>
 <table class="items">
 	<thead>
 		<tr>
 			<th/>
-			<th><g:message code="prevention.label"/></th>
-			<th><g:message code="prevention.label"/></th>
+			<g:sortableColumn property="eventDate"  title="${message(code: 'prevention.event.date.label')}" params="[q:q,'order.id':order?.id]" />
+			<g:sortableColumn property="scheduledOn"  title="${message(code: 'prevention.scheduled.on.label')}" params="[q:q,'order.id':order?.id]" />
+			<g:sortableColumn property="timeSpend"  title="${message(code: 'prevention.time.spend.label')}" params="[q:q,'order.id':order?.id]" />
+			<th><g:message code="entity.descriptions.label"/></th>
 		</tr>
 	</thead>
 	<tbody>
-		<g:each in="${entities}" status="i" var="order">
+		<g:each in="${entities}" status="i" var="prevention">
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 				<td>
 					<ul class="horizontal">
@@ -27,10 +30,16 @@
 					</ul>
 				</td>
 				<td>
-					${prevention}
+					${Utils.formatDate(prevention.eventDate)}
 				</td>
 				<td>
-					<g:stripHtml field="${prevention.descriptions}" chars="30"/>
+					${prevention.scheduledOn.formatDate}
+				</td>
+				<td>
+					 ${prevention.timeSpend.hours ?prevention.timeSpend.hours:0}:${prevention.timeSpend.minutes}
+				</td>
+				<td>
+					<g:stripHtml field="${prevention.descriptions}" chars="40"/>
 				</td>
 			</tr>
 		</g:each>
