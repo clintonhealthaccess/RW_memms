@@ -1,7 +1,12 @@
 <%@ page import="org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart" %>
 <%@ page import="org.chai.memms.spare.part.SparePart.SparePartPurchasedBy" %>
 <div class="filters main">
-		  <h2><g:message code:"spare.part.filter.label" /><a href="#" id="showhide" class="right"><g:message code="entity.show.hide.filter.label" /></a></h2>
+		  <h2>
+		  		<g:message code="spare.part.filter.label" />
+			  	<a href="#" id="showhide" class="right">
+			  		<g:message code="entity.show.hide.filter.label" />
+			  	</a>
+		  </h2>
 
 			<g:hasErrors bean="${filterCmd}">
 				<ul>
@@ -29,7 +34,7 @@
 							/></li>
 					
 					<li>
-						<label><g:message code:"spare.part.sameAsManufacturer.label" /></label> 
+						<label><g:message code="spare.part.sameAsManufacturer.label" /></label> 
 						<select name="sameAsManufacturer">
 								<option value=""><g:message code="default.please.select" /></option>
 								<option value="true" ${filterCmd?.sameAsManufacturer?.equals("true")? 'selected' : ''} ><g:message code="sameAsManufacturer.boolean.true" /></option>

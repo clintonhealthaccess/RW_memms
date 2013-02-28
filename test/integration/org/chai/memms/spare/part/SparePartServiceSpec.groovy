@@ -72,21 +72,17 @@ class SparePartServiceSpec extends IntegrationTests{
 
 		when: "user can view all those he manages"
 		spareParts = sparePartService.searchSparePart("Descriptions",techDH,[:])
+
 		then:
 		spareParts.size() == 2
 		spareParts[0] != spareParts[1]
 
 		when: "user cannot see those he doesn't manage"
+
 		spareParts = sparePartService.searchSparePart("Descriptions",userHc,[:])
 		then:
 		spareParts.size() == 1
 		spareParts[0].serialNumber.equals(CODE(124))
-
-		when: "user can search by dataLocaiton only if specified"
-		spareParts = sparePartService.searchSparePart("Descriptions",techMMC,DataLocation.findByCode(BUTARO), [:])
-		then:
-		spareParts.size() == 1
-		spareParts[0].serialNumber.equals(CODE(123))
 
 		when: "Searching by description"
 
@@ -102,7 +98,7 @@ class SparePartServiceSpec extends IntegrationTests{
 		spareParts[0] != spareParts[1]
 
 		when: "Searching by code"
-		spareParts = sparePartService.searchSparePart(sparePartCodeToFind.code,techDH, [:])
+		spareParts = sparePartService.searchSparePart(sparePartCodeToFind.code+" ",techDH, [:])
 		then:
 		spareParts.size() == 1
 		spareParts[0].code.equals(sparePartCodeToFind.code)
