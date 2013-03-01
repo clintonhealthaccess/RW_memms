@@ -34,6 +34,7 @@ import org.chai.memms.inventory.Provider;
 import org.chai.memms.inventory.Provider.Type;
 import org.chai.memms.spare.part.SparePart.StockLocation;
 import org.chai.memms.spare.part.SparePart.SparePartPurchasedBy;
+import org.chai.memms.spare.part.SparePart.StockLocation;
 import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
 import org.chai.memms.spare.part.SparePart;
 import org.chai.memms.spare.part.SparePartType;
@@ -59,7 +60,7 @@ class SparePartSpec extends IntegrationTests {
 		when:
 		def sparePart = new SparePart(serialNumber:"test123",sparePartPurchasedBy:SparePartPurchasedBy.BYMOH,sameAsManufacturer:false,expectedLifeTime:Initializer.newPeriod(20),
 				descriptions:['en':'Spare Part Descriptions'],manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),model:"sparePartModel",
-				type:sparePartType,statusOfSparePart:StatusOfSparePart.OPERATIONAL,dateCreated:Initializer.getDate(23,07,2010), addedBy: User.findByUsername("systemUser"))
+				type:sparePartType,statusOfSparePart:StatusOfSparePart.OPERATIONAL,dateCreated:Initializer.getDate(23,07,2010), addedBy: User.findByUsername("systemUser"),stokLocation:StockLocation.MMC)
 
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
@@ -117,7 +118,7 @@ class SparePartSpec extends IntegrationTests {
 		def user  = newUser("admin", "Admin UID")
 		def sparePart = new SparePart(serialNumber:"test123",sparePartPurchasedBy:SparePartPurchasedBy.BYMOH,sameAsManufacturer:false,expectedLifeTime:Initializer.newPeriod(20),
 				descriptions:['en':'SparePart Descriptions'],manufactureDate:Initializer.getDate(22,07,2010),purchaseDate:Initializer.getDate(22,07,2010),model:"sparePartModel",
-				type:sparePartType,statusOfSparePart:StatusOfSparePart.OPERATIONAL,dateCreated:Initializer.getDate(23,07,2010), addedBy: User.findByUsername("systemUser"))
+				type:sparePartType,statusOfSparePart:StatusOfSparePart.OPERATIONAL,dateCreated:Initializer.getDate(23,07,2010), addedBy: User.findByUsername("systemUser"),stokLocation:StockLocation.MMC)
 
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
