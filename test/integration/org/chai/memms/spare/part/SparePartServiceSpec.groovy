@@ -71,13 +71,15 @@ class SparePartServiceSpec extends IntegrationTests{
 		def List<SparePart> spareParts
 
 		when: "user can view all those he manages"
-		spareParts = sparePartService.searchSparePart("Descriptions",techDH, [:])
+		spareParts = sparePartService.searchSparePart("Descriptions",techDH,[:])
+
 		then:
 		spareParts.size() == 2
 		spareParts[0] != spareParts[1]
 
 		when: "user cannot see those he doesn't manage"
-		spareParts = sparePartService.searchSparePart("Descriptions",userHc, [:])
+
+		spareParts = sparePartService.searchSparePart("Descriptions",userHc,[:])
 		then:
 		spareParts.size() == 1
 		spareParts[0].serialNumber.equals(CODE(124))
