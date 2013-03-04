@@ -209,33 +209,41 @@ class UserServiceSpec extends IntegrationTests{
 	}
 	
 	
-	    def "user can search an active user by type and Location"(){
-		
-		
+	    def "user can search an active and confirmed user by type and Location"(){
 		setup:
 		setupLocationTree()
 		setupSystemUser()
+						
+		def userOne = newOtherUserWithType("userOne", "userOne", DataLocation.findByCode(KIVUYE),UserType.TECHNICIANDH)
+		userOne.active=true
+		userOne.confirmed = true
+		userOne.save()
 		
-		def users=[]
+		def userTwo = newOtherUserWithType("userTwo", "userTwo", DataLocation.findByCode(BUTARO),UserType.TECHNICIANMMC)
+		userTwo.active=true
+		userTwo.confirmed = true
+		userTwo.save()
 		
-		users = newOtherUserWithType("userOne", "userOne", DataLocation.findByCode(KIVUYE),UserType.TECHNICIANDH)
-		users.active=true
-		users.confirmed = true
-		users.save()
-		users = newOtherUserWithType("userTwo", "userTwo", DataLocation.findByCode(BUTARO),UserType.TECHNICIANMMC)
-		users.active=true
-		users.confirmed = true
-		users.save()
-		users = newOtherUserWithType("userThree", "userThree", DataLocation.findByCode(BUTARO),UserType.HOSPITALDEPARTMENT)
-		users.active=true
-		users.confirmed = true
-		users.save()
-			
-		when:
+		def userThree = newOtherUserWithType("userThree", "userThree", DataLocation.findByCode(BUTARO),UserType.HOSPITALDEPARTMENT)
+		userThree.active=true
+		userThree.confirmed = true
+		userThree.save()
+		
+		List<User> users
+		
+		when:"user can search an active and confirmed user by type"
 	    users=userService.searchActiveUserByTypeAndLocation("userOne",[UserType.TECHNICIANDH],DataLocation.findByCode(KIVUYE));
 		then:
 		User.list().size()==4
+		users.size()==1
+    	users[0].userType.equals(UserType.TECHNICIANDH)	
 		
+		when:"user can search an active and confirmed user by location"
+		users=userService.searchActiveUserByTypeAndLocation("userOne",[UserType.TECHNICIANDH],DataLocation.findByCode(KIVUYE));
+		then:
+		User.list().size()==4
+		users.size()==1
+		users[0].location.equals(DataLocation.findByCode(KIVUYE))
 	
 	}				
 }	

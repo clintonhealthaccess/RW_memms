@@ -76,17 +76,19 @@ class UserService {
 	
 	List<User> searchActiveUserByTypeAndLocation(String text,List<UserType> userTypes, CalculationLocation location){
 		text = text.trim()
-		def criteria = User.createCriteria();
+		def criteria = User.createCriteria()
 		return criteria.list(){
-			eq ("active", true)
+			eq ("active",true)
 			if(location != null)
 				eq('location',location)
 			if(userTypes != null && userTypes.size()!=0)
-		inList ("userType", userTypes)
-      		ilike("username","%"+text+"%")
+		        inList ("userType",userTypes)
+      		or{    
+			ilike("username","%"+text+"%")
 			ilike("email","%"+text+"%")
 		    ilike("firstname","%"+text+"%")
 		    ilike("lastname","%"+text+"%")
+			}
 		}
 		
 	}
@@ -98,7 +100,7 @@ class UserService {
 			if(location != null)
 				eq('location',location)
 			if(userTypes != null && userTypes.size()!=0){
-					inList ("userType", userTypes)
+			    inList ("userType", userTypes)
 			}
 		}
 	}
