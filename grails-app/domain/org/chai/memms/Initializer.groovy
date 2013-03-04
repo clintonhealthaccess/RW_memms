@@ -782,7 +782,7 @@ public class Initializer {
 				SparePartType.findByCode("10035"),
 				
 				Provider.findByCode("SEVEN"),
-				StatusOfSparePart.PENDINGORDER,
+				StatusOfSparePart.DISPOSED,
 				User.findByUsername("admin"),
 				null,
 				null,
@@ -804,7 +804,7 @@ public class Initializer {
 				SparePartType.findByCode("20760"),
 				
 				Provider.findByCode("SIX"),
-				StatusOfSparePart.PENDINGORDER,
+				StatusOfSparePart.DISPOSED,
 				User.findByUsername("admin"),
 				null,
 				null,
