@@ -27,6 +27,7 @@
  */
 package org.chai.memms.security
 
+import java.util.List;
 import java.util.Map;
 
 import org.chai.memms.Initializer;
@@ -37,6 +38,7 @@ import org.chai.memms.corrective.maintenance.WorkOrder.Criticality;
 import org.chai.memms.corrective.maintenance.WorkOrder.FailureReason;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
 import org.chai.memms.security.User.UserType;
+import org.chai.memms.security.User;
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocation;
 import org.chai.location.Location;
@@ -62,9 +64,7 @@ class UserServiceSpec extends IntegrationTests{
 		def personUserTwo = newOtherUser("personUserTwo",UUID.randomUUID().toString(),dataLocation);
 		def systemUserOne = newSystemUser("systemUserOne",UUID.randomUUID().toString(),dataLocation);
 		def systemUserTwo = newSystemUser("systemUserTwo",UUID.randomUUID().toString(),dataLocation);
-
-
-
+		
 		when:
 		def users = userService.searchUser("user",[:]);
 		def sortUsersByFirstname = userService.searchUser("one",["sort":"firstname","order":"asc"]);
@@ -207,4 +207,37 @@ class UserServiceSpec extends IntegrationTests{
 		!userService.canViewManagedEquipments(techMMC)
 		!userService.canViewManagedEquipments(admin)
 	}
-}
+	
+	
+	    def "user can search an active user by type and Location"(){
+		
+		
+		setup:
+		setupLocationTree()
+		setupSystemUser()
+		
+		def users=[]
+		
+		users = newOtherUserWithType("userOne", "userOne", DataLocation.findByCode(KIVUYE),UserType.TECHNICIANDH)
+		users.active=true
+		users.confirmed = true
+		users.save()
+		users = newOtherUserWithType("userTwo", "userTwo", DataLocation.findByCode(BUTARO),UserType.TECHNICIANMMC)
+		users.active=true
+		users.confirmed = true
+		users.save()
+		users = newOtherUserWithType("userThree", "userThree", DataLocation.findByCode(BUTARO),UserType.HOSPITALDEPARTMENT)
+		users.active=true
+		users.confirmed = true
+		users.save()
+			
+		when:
+	    users=userService.searchActiveUserByTypeAndLocation("userOne",[UserType.TECHNICIANDH],DataLocation.findByCode(KIVUYE));
+		then:
+		User.list().size()==4
+		
+	
+	}				
+}	
+	
+

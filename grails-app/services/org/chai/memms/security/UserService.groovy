@@ -36,6 +36,7 @@ import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocation
 import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.memms.security.User.UserType;
+import org.chai.memms.security.User;
 import org.chai.memms.util.Utils
 import org.hibernate.criterion.MatchMode
 import org.hibernate.criterion.Order
@@ -71,6 +72,23 @@ class UserService {
 				ilike("phoneNumber","%"+text+"%")				
 			}
 		}
+	}
+	
+	List<User> searchActiveUserByTypeAndLocation(String text,List<UserType> userTypes, CalculationLocation location){
+		text = text.trim()
+		def criteria = User.createCriteria();
+		return criteria.list(){
+			eq ("active", true)
+			if(location != null)
+				eq('location',location)
+			if(userTypes != null && userTypes.size()!=0)
+		inList ("userType", userTypes)
+      		ilike("username","%"+text+"%")
+			ilike("email","%"+text+"%")
+		    ilike("firstname","%"+text+"%")
+		    ilike("lastname","%"+text+"%")
+		}
+		
 	}
 	
 	List<User> getActiveUserByTypeAndLocation(List<UserType> userTypes, CalculationLocation location, Map<String, String> params){
