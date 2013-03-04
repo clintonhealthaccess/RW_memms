@@ -782,7 +782,7 @@ public class Initializer {
 				SparePartType.findByCode("10035"),
 				
 				Provider.findByCode("SEVEN"),
-				StatusOfSparePart.PENDINGORDER,
+				StatusOfSparePart.DISPOSED,
 				User.findByUsername("admin"),
 				null,
 				null,
@@ -792,7 +792,7 @@ public class Initializer {
 			
 			def warrantyFour = newWarranty(['en':'warranty two'],'warranty name2','email2@gmail.com',"0768-222-787","Street 154","888",getDate(10, 12, 2011),false,[:])
 			def statusFour = newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.OPERATIONAL,sparePartFour,[:])
-			def statusFourOne = newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.PENDINGORDER,sparePartFour,[:])
+			def statusFourOne = newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.DISPOSED,sparePartFour,[:])
 			sparePartFour.warranty=warrantyFour
 			sparePartFour.warrantyPeriod = newPeriod(24)
 			sparePartFour.save(failOnError:true)
@@ -804,7 +804,7 @@ public class Initializer {
 				SparePartType.findByCode("20760"),
 				
 				Provider.findByCode("SIX"),
-				StatusOfSparePart.PENDINGORDER,
+				StatusOfSparePart.DISPOSED,
 				User.findByUsername("admin"),
 				null,
 				null,
@@ -814,7 +814,7 @@ public class Initializer {
 			def warrantyFive = newWarranty(['en':'warranty Five'],'warranty name3','email3@gmail.com',"0768-333-787","Street 154","988",getDate(10, 12, 2010),false,[:])
 			def statusFive= newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.INSTOCK,sparePartFive,[:])
 			def statusFiveOne = newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.OPERATIONAL,sparePartFive,[:])
-			def statusFiveTwo = newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.PENDINGORDER,sparePartFive,[:])
+			def statusFiveTwo = newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.DISPOSED,sparePartFive,[:])
 			sparePartFive.warranty=warrantyFour
 			sparePartFive.warrantyPeriod = newPeriod(8)
 			sparePartFive.save(failOnError:true)
