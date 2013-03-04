@@ -164,7 +164,6 @@ class SparePartServiceSpec extends IntegrationTests{
 
 		def user  = newUser("admin", "Admin UID")
 		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],"CODE Spare Part",manufacturer,Initializer.now())
-		//TODO to be reviewed for stock location MMC while dataLocation is Facility kivuyeHC
 		def sparePartOne = Initializer.newSparePart("SERIAL10",SparePartPurchasedBy.BYMOH,false,Initializer.newPeriod(32),"",['en':'Spare Part Descriptions one'],Initializer.getDate(22,07,2010)
 				,Initializer.getDate(10,10,2010),"","sparePartModel",
 				kivuyeHC,sparePartType,supplier,StatusOfSparePart.INSTOCK
