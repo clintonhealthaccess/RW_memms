@@ -140,7 +140,7 @@ function listLoadingFailed(jqXHR, exception, errorThrown){
     	  error = 'Uncaught Error.\n' + errorThrown;
       }
     	$(this).html("<span class='ajax-error'> "+ error +"</span>").show();
-    });
+    });	
 }
 
 /**
@@ -377,6 +377,7 @@ function removeComment(baseUrl){
  * Replace (refresh) any list with the provided class and hide ajax-spinner
  */
 function refreshList(html,cssClass){
+	alert(cssClass)
 	$(cssClass).slideUp().replaceWith(html).slideDown();
 	$(".ajax-spinner").hide();
 	$(".ajax-error").hide();	
@@ -433,7 +434,7 @@ function addPreventionProcess(baseUrl,prevention,errorMsg){
 		$.ajax({
 			type :'GET',
 			dataType: 'json',
-			data:{"prevention.id":order,"value":$(this).prevAll(".idle-field").attr('value')},
+			data:{"prevention.id":prevention,"value":$(this).prevAll(".idle-field").attr('value')},
 			url:baseUrl,
 			success: function(data) {
 				$(e.target).nextAll(".ajax-error").hide();

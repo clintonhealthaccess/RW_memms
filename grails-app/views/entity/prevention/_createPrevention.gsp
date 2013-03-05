@@ -1,3 +1,5 @@
+
+<r:require modules="tipsy"/>
 <div  class="entity-form-container togglable">
     <div class="heading1-bar">
     		<h1>
@@ -21,7 +23,7 @@
                   <g:message code="prevention.section.basic.information.label"/>
               </h4> 
               <div class="row">
-                 <input type="hidden" name="id" value="${prevention.id}" />
+                <input type="hidden" name="order.id" value="${prevention.order.id}" />
               </div>
             <g:input name="eventDate" dateClass="date-picker" label="${message(code:'equipment.status.date.of.event.label')}" bean="${prevention}" field="eventDate"/>
             <g:inputHourMinute name="timeSpend" field="timeSpend" hours="${prevention.timeSpend?.hours}" minutes="${prevention.timeSpend?.minutes}" label='work.order.work.time.label' bean="${order}"/>
@@ -40,6 +42,10 @@
             </div>
             </fieldset>
            </div>
+            <g:if test="${prevention.id != null}">
+              <input type="hidden" name="id" value="${prevention.id}" />
+            </g:if>
+            
       		<div class="buttons">
         			<button type="submit"><g:message code="default.button.save.label"/></button>
         			<a href="${createLink(uri: targetURI)}"><g:message code="default.link.cancel.label"/></a>

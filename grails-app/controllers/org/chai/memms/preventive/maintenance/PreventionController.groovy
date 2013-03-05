@@ -33,6 +33,7 @@ import org.chai.memms.inventory.Equipment;
 import org.chai.memms.security.User.UserType;
 import org.chai.memms.preventive.maintenance.PreventiveOrder
 import org.chai.memms.preventive.maintenance.PreventiveProcess
+import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatus
 
 
 
@@ -42,6 +43,7 @@ import org.chai.memms.preventive.maintenance.PreventiveProcess
  */
 class PreventionController extends AbstractEntityController {
 	def preventionService
+	def maintenanceProcessService
 
 	def getEntity(def id) {
 		return Prevention.get(id);
@@ -123,7 +125,6 @@ class PreventionController extends AbstractEntityController {
 	}
 
 	def addProcess = {
-		log.debug("hahahahha")
 		Prevention prevention = Prevention.get(params.int("prevention.id"))
 		log.debug("hahahahha"+prevention)
 		def value = params["value"]
@@ -136,14 +137,13 @@ class PreventionController extends AbstractEntityController {
 				maintenanceProcessService.addPreventionProcess(prevention,value,user)	
 				if(prevention!=null){
 					result=true
-					html = g.render(template:"/templates/processList",model:[processes:prevention.processes])
+					html = g.render(template:"/templates/processList",model:[processes:prevention.processes,type:'prevention'])
 				}
-				render(contentType:"text/json") { results = [result,html] }
+				render(contentType:"text/json") { results = [result,html,'prevention'] }
 		}
 	}
 
 	def removeProcess = {
-		log.debug("got here hahahahha")
 		PreventiveProcess  process = PreventiveProcess.get(params.int("process.id"))
 		def result = false
 		def html =""
@@ -152,9 +152,9 @@ class PreventionController extends AbstractEntityController {
 		else{
 			Prevention prevention = maintenanceProcessService.deletePreventionProcess(process,user)
 			result = true
-			html = g.render(template:"/templates/processList",model:[processes:prevention.processes])
+			html = g.render(template:"/templates/processList",model:[processes:prevention.processes,type:'prevention'])
 		}
-		render(contentType:"text/json") { results = [result,html]}
+		render(contentType:"text/json") { results = [result,html,'prevention']}
 	}
 	
 	

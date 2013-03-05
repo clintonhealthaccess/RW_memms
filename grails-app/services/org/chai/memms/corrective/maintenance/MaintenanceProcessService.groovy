@@ -66,10 +66,10 @@ class MaintenanceProcessService {
 
 	}
 	Prevention deletePreventionProcess(PreventiveProcess process,User deletedBy){
-		PreventiveProcess preventive = process.preventive		
-		preventive.removeFromProcesses(process)
+		Prevention prevention = process.prevention		
+		prevention.removeFromProcesses(process)
 		process.delete()
-		return preventive.save(failOnError:true)
+		return prevention.save(failOnError:true)
 	}
 
 }

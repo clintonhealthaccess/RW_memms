@@ -193,7 +193,7 @@ class WorkOrderViewController extends AbstractController{
 		if (location != null) 
 			maintenances = maintenanceService.getMaintenancesByLocation(WorkOrder.class,location,dataLocationTypesFilter,params)
 		
-		if(log.isDebugEnabled()) log.debug("maintenances = " +maintenances?.maintenanceList)
+		if(log.isDebugEnabled()) log.debug("maintenances: " +maintenances?.maintenanceList)
 		render (view: '/orderSummaryPage/summaryPage', model: [
 					maintenances:maintenances?.maintenanceList,
 					currentLocation: location,
@@ -260,7 +260,7 @@ class WorkOrderViewController extends AbstractController{
 				html = g.render(template:"/templates/comments",model:[order:order])
 			}
 		}
-		render(contentType:"text/json") { results = [result,html] }
+		render(contentType:"text/json") { results = [result,html]}
 	}
 	
 	def removeComment = {
@@ -275,7 +275,7 @@ class WorkOrderViewController extends AbstractController{
 			result = true
 			html = g.render(template:"/templates/comments",model:[order:order])
 		}
-		render(contentType:"text/json") { results = [result,html] }
+		render(contentType:"text/json") { results = [result,html]}
 	}
 }
 
