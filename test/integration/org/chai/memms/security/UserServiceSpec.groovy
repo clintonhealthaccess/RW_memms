@@ -237,14 +237,7 @@ class UserServiceSpec extends IntegrationTests{
 		User.list().size()==4
 		users.size()==1
     	users[0].userType.equals(UserType.TECHNICIANDH)	
-		
-		when:"user can search an active and confirmed user by location"
-		users=userService.searchActiveUserByTypeAndLocation("userOne",[UserType.TECHNICIANDH],DataLocation.findByCode(KIVUYE))
-		then:
-		User.list().size()==4
-		users.size()==1
 		users[0].location.equals(DataLocation.findByCode(KIVUYE))
-	
 	}				
 }	
 	
