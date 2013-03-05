@@ -31,6 +31,10 @@ import org.chai.memms.corrective.maintenance.CorrectiveProcess;
 import org.chai.memms.corrective.maintenance.CorrectiveProcess.ProcessType;
 import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.memms.security.User;
+import org.chai.memms.preventive.maintenance.Prevention;
+import org.chai.memms.preventive.maintenance.PreventiveProcess;
+
+
 
 /**
  * @author Jean Kahigiso M.
@@ -40,19 +44,32 @@ class MaintenanceProcessService {
 	static transactional = true	
 
 		
-	WorkOrder addProcess(WorkOrder workOrder,ProcessType type,String name,User addedBy){
+	WorkOrder addWorkOrderProcess(WorkOrder workOrder,ProcessType type,String name,User addedBy){
 		CorrectiveProcess process = new CorrectiveProcess(type: type,name:name,addedBy:addedBy)
 		workOrder.addToProcesses(process)
 		workOrder.lastModifiedBy = addedBy
 		return workOrder.save(failOnError:true)
 	}
 
-	WorkOrder deleteProcess(CorrectiveProcess process,User deletedBy){
+	WorkOrder deleteWorkOrderProcess(CorrectiveProcess process,User deletedBy){
 		WorkOrder workOrder = process.workOrder		
 		workOrder.removeFromProcesses(process)
 		workOrder.lastModifiedBy = deletedBy
 		process.delete()
 		return workOrder.save(failOnError:true)
+	}
+
+	Prevention addPreventionProcess(Prevention prevention,String name,User addedBy){
+		PreventiveProcess process = new PreventiveProcess(name:name,addedBy:addedBy)
+		prevention.addToProcesses(process)
+		return prevention.save(failOnError:true)
+
+	}
+	Prevention deletePreventionProcess(PreventiveProcess process,User deletedBy){
+		PreventiveProcess preventive = process.preventive		
+		preventive.removeFromProcesses(process)
+		process.delete()
+		return preventive.save(failOnError:true)
 	}
 
 }

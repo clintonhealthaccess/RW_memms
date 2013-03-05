@@ -23,13 +23,13 @@ class MaintenanceProcessServiceSpec  extends IntegrationTests{
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,user, Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		when:
-		def process = maintenanceProcessService.addProcess(workOrder,ProcessType.ACTION,"name test",user)
+		def process = maintenanceProcessService.addWorkOrderProcess(workOrder,ProcessType.ACTION,"name test",user)
 		process.save()
 		then:
 		CorrectiveProcess.count() == 1
 	}
 
-	def "can create a add maintenance process using create process method"(){
+	def "can create a add WorkOrder maintenance process using create process method"(){
 		setup:
 		setupLocationTree()
 		setupEquipment()
@@ -37,22 +37,50 @@ class MaintenanceProcessServiceSpec  extends IntegrationTests{
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,user, Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
 		when:
-		maintenanceProcessService.addProcess(workOrder,ProcessType.ACTION,"name test",user)
+		maintenanceProcessService.addWorkOrderProcess(workOrder,ProcessType.ACTION,"name test",user)
 		then:
 		CorrectiveProcess.count() == 1
 	}
 	
-	def "can delete  a maintenance process using delete process method"(){
+	def "can delete  a WorkOrder maintenance process using delete process method"(){
 		setup:
 		setupLocationTree()
 		setupEquipment()
 		def user = newUser("user", "user")
 		def equipment = Equipment.findBySerialNumber(CODE(123))
 		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,user, Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
-		maintenanceProcessService.addProcess(workOrder,ProcessType.ACTION,"name test",user)
+		maintenanceProcessService.addWorkOrderProcess(workOrder,ProcessType.ACTION,"name test",user)
 		when:
 		def processeSizeBefore = workOrder.processes.size()
-		maintenanceProcessService.deleteProcess(workOrder.processes.asList()[0],user)
+		maintenanceProcessService.deleteWorkOrderProcess(workOrder.processes.asList()[0],user)
+		then:
+		CorrectiveProcess.count() == 0
+		processeSizeBefore == 1
+	}
+	def "can create a add Prevention maintenance process using create process method"(){
+		setup:
+		setupLocationTree()
+		setupEquipment()
+		def user = newUser("user", "user")
+		def equipment = Equipment.findBySerialNumber(CODE(123))
+		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,user, Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		when:
+		maintenanceProcessService.addWorkOrderProcess(workOrder,ProcessType.ACTION,"name test",user)
+		then:
+		CorrectiveProcess.count() == 1
+	}
+	
+	def "can delete  a Prevention maintenance process using delete process method"(){
+		setup:
+		setupLocationTree()
+		setupEquipment()
+		def user = newUser("user", "user")
+		def equipment = Equipment.findBySerialNumber(CODE(123))
+		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet", Criticality.NORMAL,user, Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATFOSA)
+		maintenanceProcessService.addWorkOrderProcess(workOrder,ProcessType.ACTION,"name test",user)
+		when:
+		def processeSizeBefore = workOrder.processes.size()
+		maintenanceProcessService.deleteWorkOrderProcess(workOrder.processes.asList()[0],user)
 		then:
 		CorrectiveProcess.count() == 0
 		processeSizeBefore == 1

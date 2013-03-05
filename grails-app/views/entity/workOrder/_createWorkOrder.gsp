@@ -152,8 +152,8 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		numberOnlyField();
-		addProcess("${createLink(controller:'workOrderView',action: 'addProcess')}","${order.id}");
-		removeProcess("${createLink(controller:'workOrderView',action: 'removeProcess')}");
+		addWorkOrderProcess("${createLink(controller:'workOrderView',action: 'addProcess')}","${order.id}");
+		removeWorkOrderProcess("${createLink(controller:'workOrderView',action: 'removeProcess')}");
 		addComment("${createLink(controller:'workOrderView',action: 'addComment')}","${order.id}");
 		removeComment("${createLink(controller:'workOrderView',action: 'removeComment')}");
 		getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}");

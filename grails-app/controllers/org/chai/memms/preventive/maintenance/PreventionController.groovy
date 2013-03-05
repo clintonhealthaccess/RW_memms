@@ -32,6 +32,8 @@ import org.chai.memms.AbstractEntityController;
 import org.chai.memms.inventory.Equipment;
 import org.chai.memms.security.User.UserType;
 import org.chai.memms.preventive.maintenance.PreventiveOrder
+import org.chai.memms.preventive.maintenance.PreventiveProcess
+
 
 
 /**
@@ -40,20 +42,6 @@ import org.chai.memms.preventive.maintenance.PreventiveOrder
  */
 class PreventionController extends AbstractEntityController {
 	def preventionService
-
-	
-
-	def getModel(def entity) {
-		
-		[
-			prevention:entity
-		]
-	}
-
-	def bindParams(def entity) {
-		if(!entity.id) entity.addedBy = user
-		entity.properties = params
-	}
 
 	def getEntity(def id) {
 		return Prevention.get(id);
@@ -73,6 +61,18 @@ class PreventionController extends AbstractEntityController {
 
 	def getEntityClass() {
 		return Prevention.class;
+	}
+
+	def getModel(def entity) {
+		
+		[
+			prevention:entity
+		]
+	}
+
+	def bindParams(def entity) {
+		if(!entity.id) entity.addedBy = user
+		entity.properties = params
 	}
 
 	def list = {
@@ -120,6 +120,41 @@ class PreventionController extends AbstractEntityController {
 		def model = model(entities, order) << [q:searchTerm]
 		def listHtml = g.render(template:"/entity/prevention/preventionList",model:model)
 		render(contentType:"text/json") { results = [listHtml] }
+	}
+
+	def addProcess = {
+		log.debug("hahahahha")
+		Prevention prevention = Prevention.get(params.int("prevention.id"))
+		log.debug("hahahahha"+prevention)
+		def value = params["value"]
+		def result = false
+		def html =""
+		if (prevention == null || value.equals("") || prevention.order.status.equals(PreventiveOrderStatus.CLOSED))
+			response.sendError(404)
+		else {
+				if (log.isDebugEnabled()) log.debug("addPreventionProcess params: "+params)
+				maintenanceProcessService.addPreventionProcess(prevention,value,user)	
+				if(prevention!=null){
+					result=true
+					html = g.render(template:"/templates/processList",model:[processes:prevention.processes])
+				}
+				render(contentType:"text/json") { results = [result,html] }
+		}
+	}
+
+	def removeProcess = {
+		log.debug("got here hahahahha")
+		PreventiveProcess  process = PreventiveProcess.get(params.int("process.id"))
+		def result = false
+		def html =""
+		if(!process || process.prevention.order.status.equals(PreventiveOrderStatus.CLOSED)) 
+			response.sendError(404)
+		else{
+			Prevention prevention = maintenanceProcessService.deletePreventionProcess(process,user)
+			result = true
+			html = g.render(template:"/templates/processList",model:[processes:prevention.processes])
+		}
+		render(contentType:"text/json") { results = [result,html]}
 	}
 	
 	

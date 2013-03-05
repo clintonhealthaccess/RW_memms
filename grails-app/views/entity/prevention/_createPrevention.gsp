@@ -27,8 +27,19 @@
             <g:inputHourMinute name="timeSpend" field="timeSpend" hours="${prevention.timeSpend?.hours}" minutes="${prevention.timeSpend?.minutes}" label='work.order.work.time.label' bean="${order}"/>
             <g:inputTimeDate name="scheduledOn" field="scheduledOn" date="${prevention.scheduledOn?.date}" time="${prevention.scheduledOn?.time}" label='preventive.starts.on.label' bean="${prevention}" dateClass="date-picker" timeClass="time-picker"/>
             <g:i18nTextarea name="descriptions" bean="${prevention}" label="${message(code:'entity.descriptions.label')}" field="descriptions" height="150" width="300" maxHeight="150" />
-          </div>
-          </fieldset>
+            </fieldset>
+            <fieldset class="form-content">
+              <h4 class="section-title">
+                  <span class="question-default">
+                    <img src="${resource(dir:'images/icons',file:'star_small.png')}">
+                  </span>
+                  <g:message code="prevention.section.process.information.label"/>
+              </h4> 
+            <div class="row maintenance-process">
+              <g:render template="/templates/processes" model="['processes':prevention.processes,'processType':'prevention','label':'prevention.processes.label','readonly':closed]" /> 
+            </div>
+            </fieldset>
+           </div>
       		<div class="buttons">
         			<button type="submit"><g:message code="default.button.save.label"/></button>
         			<a href="${createLink(uri: targetURI)}"><g:message code="default.link.cancel.label"/></a>
@@ -39,8 +50,9 @@
 <script type="text/javascript">
   $(document).ready(function() {
     numberOnlyField();
+    addPreventionProcess("${createLink(controller:'prevention',action: 'addProcess')}","${prevention.id}","");
+    removePreventionProcess("${createLink(controller:'prevention',action: 'removeProcess')}");
     getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}");
-    getToHide()
   });
 </script>
 

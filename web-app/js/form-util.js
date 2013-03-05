@@ -253,9 +253,9 @@ function updateEquipment(baseUrl){
 }
 
 /**
- * Add maintenance process
+ * Add work order maintenance process
  */
-function addProcess(baseUrl,order,spinnerImgSrc,errorMsg){
+function addWorkOrderProcess(baseUrl,order,errorMsg){
 	$(".ajax-spinner").hide();
 	$(".ajax-error").hide()
 	$('.process').on("click",".add-process-button",function(e){
@@ -282,6 +282,9 @@ function addProcess(baseUrl,order,spinnerImgSrc,errorMsg){
 		});
 	})
 }
+/**
+* Add Expected Life Year Month
+*/
 function addExpectedLifeYearMonth(expectedLifeTime){
 	if(expectedLifeTime != null){
 		$("#expectedLifeTime_years").val( expectedLifeTime >= 12 ? Math.floor( expectedLifeTime/12 ) : null);
@@ -289,9 +292,9 @@ function addExpectedLifeYearMonth(expectedLifeTime){
 	}
 }
 /**
- * Remove Maintenance Process
+ * Remove Work Order Maintenance Process
  */
-function removeProcess(baseUrl){
+function removeWorkOrderProcess(baseUrl){
 	$(".ajax-spinner").hide();
 	$(".ajax-error").hide();
 	$('.process').on("click","a.delete-process",function(e){
@@ -416,5 +419,63 @@ function getToHide(parchaseCost,estimatedCost){
 		$("select[name=occurInterval]").nextAll("label.has-helper").html($(this).find("option:selected").text());
 		$("input[name=occurInterval]").nextAll("label.has-helper").html($(this).find("option:selected").text());
 	})
+}
+/**
+ * Add Prevention maintenance process
+ */
+function addPreventionProcess(baseUrl,prevention,errorMsg){
+	$(".ajax-spinner").hide();
+	$(".ajax-error").hide()
+	$('.process').on("click",".add-process-button",function(e){
+		e.preventDefault();
+		$(this).hide();
+		$(this).nextAll(".ajax-spinner").show();
+		$.ajax({
+			type :'GET',
+			dataType: 'json',
+			data:{"prevention.id":order,"value":$(this).prevAll(".idle-field").attr('value')},
+			url:baseUrl,
+			success: function(data) {
+				$(e.target).nextAll(".ajax-error").hide();
+				$(e.target).nextAll(".ajax-spinner").hide();
+				$(e.target).prevAll(".idle-field").val("")
+				$(e.target).fadeIn("slow");
+				refreshList(data.results[1],'.process-list-'+data.results[2])
+			}
+		});
+		$(this).ajaxError(function(){
+			$(this).nextAll(".ajax-error").show();	
+			$(this).nextAll(".ajax-spinner").hide();
+			$(this).fadeIn("slow");
+		});
+	})
+}
+/**
+ * Remove Prevention Maintenance Process
+ */
+function removePreventionProcess(baseUrl){
+	$(".ajax-spinner").hide();
+	$(".ajax-error").hide();
+	$('.process').on("click","a.delete-process",function(e){
+		e.preventDefault();
+		$(this).hide();
+		$(this).nextAll(".ajax-spinner").show();
+		$.ajax({
+			type :'GET',dataType: 'json',data:{"process.id":$(this).attr("name")},url:baseUrl,
+			success: function(data) {
+				$(e.target).nextAll(".ajax-error").hide();
+				$(e.target).nextAll(".ajax-spinner").hide();
+				$(e.target).fadeIn("slow");
+				refreshList(data.results[1],'.process-list-'+data.results[2])
+			}
+		});
+		
+		$(this).ajaxError(function(){
+			$(this).nextAll(".ajax-error").show();
+			$(this).nextAll(".ajax-spinner").hide();	
+			$(this).fadeIn("slow");
+		});
+		
+	});
 }
 
