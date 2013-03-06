@@ -64,6 +64,7 @@ class EquipmentType {
 	Period expectedLifeTime
 	Observation observation
 	
+	
 	Date dateCreated
 	Date lastUpdated
 	

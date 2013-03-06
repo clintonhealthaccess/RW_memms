@@ -113,6 +113,9 @@ class EquipmentController extends AbstractEntityController{
 			bindData(entity,params,[exclude:["status","dateOfEvent"]])
 		if(log.isDebugEnabled()) log.debug("Equipment params: after bind  "+entity)
 	}
+	
+	
+	
 
 	def validateEntity(def entity) {
 		boolean validStatus = true
@@ -168,6 +171,34 @@ class EquipmentController extends AbstractEntityController{
 
 				]
 	}
+	
+	
+
+	
+	def getAjaxData = {
+		List<EquipmentType> types = equipmentTypeService.searchEquipmentType(params['term'],Observation."$params.observation",[:])
+		render(contentType:"text/json") {
+			elements = array {
+				types.each { type ->
+					elem (
+							key: type.id,
+							value: type.getNames(languageService.getCurrentLanguage()) + ' ['+type.code+']'
+							)
+				}
+			}
+			htmls = array {
+				types.each { type ->
+					elem (
+							key: type.id,
+							html: g.render(template:"/templates/typeFormSide",model:[type:type,label:label,cssClass:"form-aside-hidden",field:'type'])
+							)
+				}
+			}
+		}
+	}
+	
+	
+	
 }
 
 class StatusCommand {
