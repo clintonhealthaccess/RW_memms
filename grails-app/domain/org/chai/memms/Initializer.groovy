@@ -913,11 +913,13 @@ public class Initializer {
 		equipment.save(failOnError:true)
 		return order.save(failOnError: true)
 	}
+	//Prevention
 	public static def newPrevention(def order,def addedBy,def scheduledOn,def eventDate,def timeSpend,def descriptions, def processes){
 		def prevention = new Prevention(order:order,addedBy:addedBy,scheduledOn:scheduledOn,eventDate:eventDate,timeSpend:timeSpend,processes:processes)
 		Utils.setLocaleValueInMap(prevention,descriptions,"Descriptions")
 		return prevention.save(failOnError:true)
 	}
+	//PreventiveProcess
 	public static def newPreventionProcess(def dateCreated, def name,def addedBy, def prevention){
 		return new PreventiveProcess(dateCreated:dateCreated,name:name,addedBy:addedBy,prevention:prevention).save(failOnError:true)
 	}

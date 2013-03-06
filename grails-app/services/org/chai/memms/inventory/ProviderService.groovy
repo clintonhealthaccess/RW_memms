@@ -41,9 +41,9 @@ class ProviderService {
 	def languageService;
 	def sessionFactory;
 	
-	public List<Provider> searchProvider(Type type,String text, Map<String, String>params){
-		text = text.trim()
-		def dbFieldDescriptions = 'addressDescriptions_'+languageService.getCurrentLanguagePrefix()
+	public List<Provider> searchProvider(Type type,String text, Map<String, String> params){
+		text = text.trim();
+		def dbFieldDescriptions = 'addressDescriptions_'+languageService.getCurrentLanguagePrefix();
 		def criteria = Provider.createCriteria()
 		
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
@@ -61,7 +61,6 @@ class ProviderService {
 				for(Type t: this.getEnumeMatcher(text))
 					eq("type",t)
 					
-				
 				ilike("code","%"+text+"%")
 				ilike("phone","%"+text+"%")
 				ilike("contactName","%"+text+"%")

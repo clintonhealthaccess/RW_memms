@@ -193,7 +193,7 @@ class WorkOrderViewController extends AbstractController{
 		if (location != null) 
 			maintenances = maintenanceService.getMaintenancesByLocation(WorkOrder.class,location,dataLocationTypesFilter,params)
 		
-		if(log.isDebugEnabled()) log.debug("maintenances = " +maintenances?.maintenanceList)
+		if(log.isDebugEnabled()) log.debug("maintenances: " +maintenances?.maintenanceList)
 		render (view: '/orderSummaryPage/summaryPage', model: [
 					maintenances:maintenances?.maintenanceList,
 					currentLocation: location,
@@ -218,7 +218,7 @@ class WorkOrderViewController extends AbstractController{
 			response.sendError(404)
 		else {
 				if (log.isDebugEnabled()) log.debug("addProcess params: "+params)
-				maintenanceProcessService.addProcess(order,type,value,user)	
+				maintenanceProcessService.addWorkOrderProcess(order,type,value,user)	
 				if(order!=null){
 					result=true
 					def processes = (type==ProcessType.ACTION)? order.actions:order.materials
@@ -237,7 +237,7 @@ class WorkOrderViewController extends AbstractController{
 			response.sendError(404)
 		else{
 			type = process.type
-			WorkOrder order = maintenanceProcessService.deleteProcess(process,user)
+			WorkOrder order = maintenanceProcessService.deleteWorkOrderProcess(process,user)
 			result = true
 			def processes = (type==ProcessType.ACTION)? order.actions:order.materials
 			html = g.render(template:"/templates/processList",model:[processes:processes,type:type.name])
@@ -260,7 +260,7 @@ class WorkOrderViewController extends AbstractController{
 				html = g.render(template:"/templates/comments",model:[order:order])
 			}
 		}
-		render(contentType:"text/json") { results = [result,html] }
+		render(contentType:"text/json") { results = [result,html]}
 	}
 	
 	def removeComment = {
@@ -275,7 +275,7 @@ class WorkOrderViewController extends AbstractController{
 			result = true
 			html = g.render(template:"/templates/comments",model:[order:order])
 		}
-		render(contentType:"text/json") { results = [result,html] }
+		render(contentType:"text/json") { results = [result,html]}
 	}
 }
 

@@ -12,7 +12,7 @@
 			<g:sortableColumn property="supplier"  title="${message(code: 'provider.type.supplier')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
 			<g:sortableColumn property="purchaser"  title="${message(code: 'equipment.purchaser.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
 			<th><g:message code="work.order.label"/></th>
-			<%--<th><g:message code="preventive.order.label"/></th>--%>
+			<th><g:message code="preventive.order.label"/></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -59,11 +59,11 @@
   	    				${equipment.workOrders?.size()}
   	    			</a>
 				</td>
-				<%--<td>
+				<td>
 					<a href="${createLinkWithTargetURI(controller:'preventiveOrderView', action:'list', params:['equipment.id': equipment?.id])}" title="${message(code: 'preventive.order.see.list.label')}" class="tooltip">
   	    				${equipment.preventiveOrders?.size()}
   	    			</a>
-				</td>--%>
+				</td>
 			</tr>
 		</g:each>
 	</tbody>	

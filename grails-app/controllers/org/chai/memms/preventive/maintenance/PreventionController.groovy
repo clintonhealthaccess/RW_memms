@@ -31,7 +31,10 @@ import org.chai.location.CalculationLocation;
 import org.chai.memms.AbstractEntityController;
 import org.chai.memms.inventory.Equipment;
 import org.chai.memms.security.User.UserType;
-import org.chai.memms.TimeDate
+import org.chai.memms.preventive.maintenance.PreventiveOrder
+import org.chai.memms.preventive.maintenance.PreventiveProcess
+import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatus
+
 
 
 /**
@@ -39,16 +42,8 @@ import org.chai.memms.TimeDate
  *
  */
 class PreventionController extends AbstractEntityController {
-
-	def bindParams(def entity) {
-		entity.properties = params
-	}
-
-	def getModel(def entity) {
-		if(entity.id==null) entity.addedBy = user
-		
-		[prevention:entity]
-	}
+	def preventionService
+	def maintenanceProcessService
 
 	def getEntity(def id) {
 		return Prevention.get(id);
@@ -59,20 +54,108 @@ class PreventionController extends AbstractEntityController {
 	}
 
 	def getTemplate() {
-		return "/entity/preventiveOrder/createPrevetion";
+		return "/entity/prevention/createPrevention";
 	}
 
 	def getLabel() {
-		return "prevention.order.label";
+		return "prevention.label";
 	}
 
 	def getEntityClass() {
 		return Prevention.class;
 	}
 
+	def getModel(def entity) {
+		
+		[
+			prevention:entity
+		]
+	}
+
+	def bindParams(def entity) {
+		if(!entity.id) entity.addedBy = user
+		entity.properties = params
+	}
+
 	def list = {
-		def preventions =  Prevention.findByPreventiveOrder(params.long("order.id"));
+		def order =  PreventiveOrder.get(params.int("order.id"))
+		def preventions =  preventionService.getPreventionByOrder(order,params)
+
+		 if(request.xhr){
+			 this.ajaxModel(preventions,order,"")
+		 }else{
+			render (view: '/entity/list', model:model(preventions, order) << [
+				template:"prevention/preventionList",
+				filterTemplate:"prevention/preventionFilter",
+				listTop:"prevention/listTop",
+			])
+		}
 
 	}
+
+	def search = {
+		def order =  PreventiveOrder.get(params.int("order.id"))
+		def preventions =  preventionService.searchPrevention(params['q'],order,params)
+
+		 if(request.xhr){
+			 this.ajaxModel(preventions,order,params['q'])
+		 }else{
+			render (view: '/entity/list', model:model(preventions, order) << [
+				template:"prevention/preventionList",
+				filterTemplate:"prevention/preventionFilter",
+				listTop:"prevention/listTop",
+			])
+		}
+
+	}
+
+	def model(def entities, def order) {
+		return [
+			entities: entities,
+			entityCount: entities.totalCount,
+			order:order,
+			code:getLabel(),
+		]
+	}
+
+	def ajaxModel(def entities,def order, def searchTerm) {
+		def model = model(entities, order) << [q:searchTerm]
+		def listHtml = g.render(template:"/entity/prevention/preventionList",model:model)
+		render(contentType:"text/json") { results = [listHtml] }
+	}
+
+	def addProcess = {
+		Prevention prevention = Prevention.get(params.int("prevention.id"))
+		log.debug("hahahahha"+prevention)
+		def value = params["value"]
+		def result = false
+		def html =""
+		if (prevention == null || value.equals("") || prevention.order.status.equals(PreventiveOrderStatus.CLOSED))
+			response.sendError(404)
+		else {
+				if (log.isDebugEnabled()) log.debug("addPreventionProcess params: "+params)
+				maintenanceProcessService.addPreventionProcess(prevention,value,user)	
+				if(prevention!=null){
+					result=true
+					html = g.render(template:"/templates/processList",model:[processes:prevention.processes,type:'prevention'])
+				}
+				render(contentType:"text/json") { results = [result,html,'prevention'] }
+		}
+	}
+
+	def removeProcess = {
+		PreventiveProcess  process = PreventiveProcess.get(params.int("process.id"))
+		def result = false
+		def html =""
+		if(!process || process.prevention.order.status.equals(PreventiveOrderStatus.CLOSED)) 
+			response.sendError(404)
+		else{
+			Prevention prevention = maintenanceProcessService.deletePreventionProcess(process,user)
+			result = true
+			html = g.render(template:"/templates/processList",model:[processes:prevention.processes,type:'prevention'])
+		}
+		render(contentType:"text/json") { results = [result,html,'prevention']}
+	}
+	
 	
 }

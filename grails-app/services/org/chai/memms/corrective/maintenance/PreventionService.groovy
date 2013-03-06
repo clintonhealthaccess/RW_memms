@@ -27,49 +27,40 @@
  */
 package org.chai.memms.corrective.maintenance
 
-import org.chai.memms.corrective.maintenance.CorrectiveProcess;
-import org.chai.memms.corrective.maintenance.CorrectiveProcess.ProcessType;
-import org.chai.memms.corrective.maintenance.WorkOrder;
-import org.chai.memms.security.User;
 import org.chai.memms.preventive.maintenance.Prevention;
-import org.chai.memms.preventive.maintenance.PreventiveProcess;
-
-
+import org.chai.memms.preventive.maintenance.PreventiveOrder;
 
 /**
  * @author Jean Kahigiso M.
  *
  */
-class MaintenanceProcessService {
-	static transactional = true	
+class PreventionService {
+	
+	static transactional = true
+	
+	def languageService;
+	def sessionFactory;
 
+
+	public List<Prevention> getPreventionByOrder(PreventiveOrder order, Map<String,String> params){
+		def criteria =  Prevention.createCriteria()
 		
-	WorkOrder addWorkOrderProcess(WorkOrder workOrder,ProcessType type,String name,User addedBy){
-		CorrectiveProcess process = new CorrectiveProcess(type: type,name:name,addedBy:addedBy)
-		workOrder.addToProcesses(process)
-		workOrder.lastModifiedBy = addedBy
-		return workOrder.save(failOnError:true)
-	}
-
-	WorkOrder deleteWorkOrderProcess(CorrectiveProcess process,User deletedBy){
-		WorkOrder workOrder = process.workOrder		
-		workOrder.removeFromProcesses(process)
-		workOrder.lastModifiedBy = deletedBy
-		process.delete()
-		return workOrder.save(failOnError:true)
-	}
-
-	Prevention addPreventionProcess(Prevention prevention,String name,User addedBy){
-		PreventiveProcess process = new PreventiveProcess(name:name,addedBy:addedBy)
-		prevention.addToProcesses(process)
-		return prevention.save(failOnError:true)
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order:params.'$order' ?:"desc"){
+			eq('order',order)
+		}
 
 	}
-	Prevention deletePreventionProcess(PreventiveProcess process,User deletedBy){
-		Prevention prevention = process.prevention		
-		prevention.removeFromProcesses(process)
-		process.delete()
-		return prevention.save(failOnError:true)
-	}
 
+	public List<Prevention> searchPrevention(String text, PreventiveOrder preventiveOrder, Map<String,String> params){
+		text =  text.trim()
+		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
+		def criteria =  Prevention.createCriteria()
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.'$order' ?:"desc"){
+			    if(preventiveOrder!=null)
+					eq('order',preventiveOrder)
+				ilike(dbFieldDescriptions,"%"+text+"%") 
+		}
+
+	}
+	
 }
