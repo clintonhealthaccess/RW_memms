@@ -28,6 +28,7 @@
 package org.chai.memms.inventory
 
 import org.chai.memms.Contact;
+import org.chai.memms.spare.part.SparePartType
 
 import groovy.transform.EqualsAndHashCode;
 import i18nfields.I18nFields
@@ -57,10 +58,11 @@ public class Provider{
 	Contact contact
 	Date dateCreated
 	Date lastUpdated
+
 	
 	static embedded = ["contact"]
 	static mappedBy = [manufacturers: "manufacturer",suppliers: "supplier",serviceProviders: "serviceProvider"]
-	static hasMany = [manufacturers: Equipment, suppliers: Equipment,serviceProviders: Equipment]
+	static hasMany = [manufacturers: Equipment, suppliers: Equipment,serviceProviders: Equipment,sparePartTypes: SparePartType]
    
 	static constraints ={
 		code nullable: false, blank: false, unique: true

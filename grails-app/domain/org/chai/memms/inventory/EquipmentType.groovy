@@ -31,6 +31,7 @@ package org.chai.memms.inventory
 import java.util.Date;
 
 import org.chai.memms.Period;
+import org.chai.memms.spare.part.SparePartType;
 
 import groovy.transform.EqualsAndHashCode;
 import i18nfields.I18nFields
@@ -70,7 +71,7 @@ class EquipmentType {
 	
 	static embedded = ["expectedLifeTime"]
 	static i18nFields = ["descriptions","names"]
-	static hasMany = [equipments: Equipment]
+	static hasMany = [equipments: Equipment,sparePartTypes: SparePartType]
 	
     static constraints = {
 		

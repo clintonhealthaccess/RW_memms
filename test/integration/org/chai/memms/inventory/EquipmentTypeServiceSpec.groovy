@@ -14,18 +14,30 @@ class EquipmentTypeServiceSpec extends IntegrationTests{
 		def observation = Observation.USEDINMEMMS;
 		Initializer.newEquipmentType(CODE(123),["en":"testName"],["en":"testObservations"],observation,Initializer.now())
 		when:
-		List<EquipmentType> equipmentTypes = equipmentTypeService.searchEquipmentType(CODE(123),null,[:])
+		List<EquipmentType> equipmentTypes = equipmentTypeService.searchEquipmentType(CODE(123),null,null,[:])
 		then:
 		equipmentTypes.size() == 1
 		equipmentTypes[0].code.equals(CODE(123))
 	}
+
+	/*def "can search an equipment type by code"() {
+		setup:
+		def observation = Observation.USEDINMEMMS;
+		Initializer.newEquipmentType(CODE(123),["en":"testName"],["en":"testObservations"],observation,Initializer.now())
+		when:
+		List<EquipmentType> equipmentTypes = equipmentTypeService.searchEquipmentType(CODE(123),null,SpareType,[:])
+		then:
+		equipmentTypes.size() == 1
+		equipmentTypes[0].code.equals(CODE(123))
+	}*/
+	
 	
 	def "can search an equipment type by name"() {
 		setup:
 		def observation = Observation.USEDINMEMMS;
 		Initializer.newEquipmentType(CODE(123),["en":"test Name"],["en":"testObservations"],observation,Initializer.now())
 		when:
-		List<EquipmentType> equipmentTypes = equipmentTypeService.searchEquipmentType("Na",null,[:])
+		List<EquipmentType> equipmentTypes = equipmentTypeService.searchEquipmentType("Na",null,null,[:])
 		then:
 		equipmentTypes.size() == 1
 		equipmentTypes[0].code.equals(CODE(123))
@@ -36,7 +48,7 @@ class EquipmentTypeServiceSpec extends IntegrationTests{
 		def observation = Observation.USEDINMEMMS;
 		Initializer.newEquipmentType(CODE(123),["en":"test Name"],["en":"testObservations"],observation,Initializer.now())
 		when:
-		List<EquipmentType> equipmentTypes = equipmentTypeService.searchEquipmentType("used",null,[:])
+		List<EquipmentType> equipmentTypes = equipmentTypeService.searchEquipmentType("used",null,null,[:])
 		then:
 		equipmentTypes.size() == 1
 		equipmentTypes[0].code.equals(CODE(123))
@@ -48,7 +60,7 @@ class EquipmentTypeServiceSpec extends IntegrationTests{
 		Initializer.newEquipmentType(CODE(1234),["en":"test Name"],["en":"testObservations"],Observation.USEDINMEMMS,Initializer.now())
 		when:
 		List<EquipmentType> equipmentTypes = EquipmentType.list()
-		List<EquipmentType> searchEquipmentTypes = equipmentTypeService.searchEquipmentType("test",Observation.USEDINMEMMS,[:])
+		List<EquipmentType> searchEquipmentTypes = equipmentTypeService.searchEquipmentType("test",Observation.USEDINMEMMS,null,[:])
 		then:
 		equipmentTypes.size() == 2
 		searchEquipmentTypes.size() == 1
@@ -61,7 +73,7 @@ class EquipmentTypeServiceSpec extends IntegrationTests{
 		Initializer.newEquipmentType(CODE(1234),["en":"test Name"],["en":"testObservations"],Observation.USEDINMEMMS,Initializer.now())
 		when:
 		List<EquipmentType> equipmentTypes = EquipmentType.list()
-		List<EquipmentType> searchEquipmentTypes = equipmentTypeService.searchEquipmentType("",Observation.RETIRED,[:])
+		List<EquipmentType> searchEquipmentTypes = equipmentTypeService.searchEquipmentType("",Observation.RETIRED,null,[:])
 		then:
 		equipmentTypes.size() == 2
 		searchEquipmentTypes.size() == 1

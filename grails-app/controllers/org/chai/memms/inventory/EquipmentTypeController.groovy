@@ -36,6 +36,7 @@ import org.chai.task.EquipmentTypeExportFilter;
 import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.inventory.EquipmentType;
 import org.chai.memms.inventory.EquipmentType.Observation;
+import org.chai.memms.spare.part.SparePartType
 
 /**
  * @author Eugene Munyaneza
@@ -83,13 +84,20 @@ class EquipmentTypeController extends AbstractEntityController{
 			type: entity
 		]
 	}
+	
 	def list = {
 		adaptParamsForList()
-		List<EquipmentType> types = EquipmentType.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc");
+		def sparePartType = null
+
+		if(params['sparePartType']!=null)
+			sparePartType =  SparePartType.get(params.int("sparePartType"))
+
+		def types = equipmentTypeService.getEquipmentTypes(sparePartType,params);
+
 		if(request.xhr)
-			this.ajaxModel(types,"")
+			this.ajaxModel(types,"",sparePartType)
 		else{
-		render(view:"/entity/list",model:model(types) << [
+		render(view:"/entity/list",model:model(types,sparePartType) << [
 				template:"equipmentType/equipmentTypeList",
 				listTop:"equipmentType/listTop",
 				importTask:'EquipmentTypeImportTask',
@@ -100,11 +108,16 @@ class EquipmentTypeController extends AbstractEntityController{
 	
 	def search = {
 		adaptParamsForList()
-		List<EquipmentType> types = equipmentTypeService.searchEquipmentType(params['q'],null,params)
+		def sparePartType = null
+		if(params['sparePartType']!=null)
+			sparePartType =  SparePartType.get(params.int('sparePartType'))
+
+		def types = equipmentTypeService.searchEquipmentType(params['q'],null,sparePartType,params)
+
 		if(request.xhr)
-			this.ajaxModel(types,params['q'])
+			this.ajaxModel(types,params['q'],sparePartType)
 		else {
-			render(view:"/entity/list",model:model(types) << [
+			render(view:"/entity/list",model:model(types,sparePartType) << [
 				template:"equipmentType/equipmentTypeList",
 				listTop:"equipmentType/listTop",
 				importTask:'EquipmentTypeImportTask',
@@ -113,17 +126,19 @@ class EquipmentTypeController extends AbstractEntityController{
 		}
 	}
 	
-	def model(def entities) {
+	def model(def entities,def sparePartType) {
 		return [
 			entities: entities,
 			entityCount: entities.totalCount,
 			entityClass:getEntityClass(),
 			code: getLabel(),
+			sparePartType:sparePartType?.id
+
 		]
 	}
 	
-	def ajaxModel(def entities,def searchTerm) {
-		def model = model(entities) << [q:searchTerm]
+	def ajaxModel(def entities,def searchTerm,def sparePartType) {
+		def model = model(entities,sparePartType) << [q:searchTerm]
 		def listHtml = g.render(template:"/entity/equipmentType/equipmentTypeList",model:model)
 		render(contentType:"text/json") { results = [listHtml] }
 	}

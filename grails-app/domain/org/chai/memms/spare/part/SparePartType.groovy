@@ -31,10 +31,12 @@ import javax.persistence.Transient;
 
 import groovy.transform.EqualsAndHashCode;
 import org.chai.memms.inventory.Provider;
+import org.chai.memms.inventory.EquipmentType;
 import org.chai.memms.inventory.Equipment;
 import org.chai.memms.spare.part.SparePartStatus;
 import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
 import org.chai.memms.spare.part.SparePart;
+
 import i18nfields.I18nFields;
 /**
  * @author Jean Kahigiso M.
@@ -51,13 +53,12 @@ class SparePartType {
 	Date dateCreated
 	Date lastUpdated
 	Provider manufacturer
-	
+
+	static belongsTo = [EquipmentType,Provider]
 
 	
-	
-	
 	static i18nFields = ["descriptions","names"]
-	static hasMany = [spareParts: SparePart,compatibleEquipmentTypes:Equipment,vendors:Provider]	
+	static hasMany = [spareParts: SparePart,compatibleEquipmentTypes:EquipmentType,vendors:Provider]	
 	static constraints = {
 		code nullable: false, blank:false,unique :true
 		names nullable: true, blank: true
@@ -95,24 +96,7 @@ class SparePartType {
 			}
 		return pendingSpareParts
 	}
-	
-	def getCompatibleEquipmentTypes(){
-		List<Equipment> compatibleEquipmentTypes =  []
-		if(!compatibleEquipmentTypes==null && !compatibleEquipmentTypes.isEmpty()){
-			for(Equipment equipment: compatibleEquipmentTypes)
-					compatibleEquipmentTypes.add(equipment)
-		}
-		return compatibleEquipmentTypes
-	}
-	
-	def getVendors(){
-		List<Provider> vendors =  []
-		if(!vendors==null && !vendors.isEmpty()){
-			for(Provider provider: vendors)
-					vendors.add(provider)
-		}
-		return vendors
-	}
+
 	
 	@Override
 	public String toString() {

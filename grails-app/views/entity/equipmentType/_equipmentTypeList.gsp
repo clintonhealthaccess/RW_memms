@@ -4,12 +4,12 @@
 		<tr>
 			<th/>
 			<g:sortableColumn property="code" params="[q:q]" title="${message(code: 'entity.code.label')}" />
-			<g:sortableColumn property="${i18nField(field: 'names')}" params="[q:q]" title="${message(code: 'entity.name.label')}" />
+			<g:sortableColumn property="${i18nField(field: 'names')}" params="[q:q,sparePartType:sparePartType]" title="${message(code: 'entity.name.label')}" />
 			<th><g:message code="entity.description.label"/></th>
-			<g:sortableColumn property="observation" params="[q:q]" title="${message(code: 'entity.observation.label')}" />
-			<g:sortableColumn property="expectedLifeTime" params="[q:q]" title="${message(code: 'equipmentType.expectedLifeTime.label')}" />
-			<g:sortableColumn property="dateCreated" params="[q:q]" title="${message(code: 'equipment.type.added.on.label')}" />
-			<g:sortableColumn property="lastModifiedOn" params="[q:q]" title="${message(code: 'equipment.type.last.modified.on.label')}" />
+			<g:sortableColumn property="observation" params="[q:q,sparePartType:sparePartType]" title="${message(code: 'entity.observation.label')}" />
+			<g:sortableColumn property="expectedLifeTime" params="[q:q,sparePartType:sparePartType]" title="${message(code: 'equipmentType.expectedLifeTime.label')}" />
+			<g:sortableColumn property="dateCreated" params="[q:q,sparePartType:sparePartType]" title="${message(code: 'equipment.type.added.on.label')}" />
+			<g:sortableColumn property="lastModifiedOn" params="[q:q,sparePartType:sparePartType]" title="${message(code: 'equipment.type.last.modified.on.label')}" />
 		</tr>
 	</thead>
 	<tbody>

@@ -33,6 +33,7 @@ import org.chai.memms.inventory.EquipmentType.Observation
 import org.chai.memms.inventory.Provider.Type;
 import org.chai.memms.inventory.EquipmentType;
 import org.chai.memms.util.Utils;
+import org.chai.memms.spare.part.SparePartType
 /**
  * @author Jean Kahigiso M.
  *
@@ -42,7 +43,7 @@ class EquipmentTypeService {
 	static transactional = true
 	def languageService;
 		
-	public def searchEquipmentType(String text,Observation observation, Map<String, String> params) {
+	public def searchEquipmentType(String text,Observation observation,SparePartType sparePartType,Map<String, String> params) {
 		def dbFieldName = 'names_'+languageService.getCurrentLanguagePrefix();
 		def dbFieldDescritpion = 'descriptions_'+languageService.getCurrentLanguagePrefix();
 		def criteria = EquipmentType.createCriteria()
@@ -50,8 +51,12 @@ class EquipmentTypeService {
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(observation!=null)
 				eq("observation",observation)
-			or
-			{
+			if(sparePartType!=null){
+				sparePartTypes{
+					eq('id',sparePartType.id)
+				}
+			}
+			or{
 				if(observation==null){
 					for(Observation obs: this.getEnumeMatcher(text))
 						eq("observation",obs)
@@ -61,6 +66,17 @@ class EquipmentTypeService {
 				ilike(dbFieldDescritpion,"%"+text+"%")
 			}
 			
+		}
+	}
+
+	public def getEquipmentTypes(SparePartType sparePartType, Map<String, String> params){
+		def criteria = EquipmentType.createCriteria()
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			if(sparePartType!=null){
+				sparePartTypes{
+					eq('id',sparePartType.id)
+				}
+			}
 		}
 	}
 	

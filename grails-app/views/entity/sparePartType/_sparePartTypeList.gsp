@@ -9,6 +9,9 @@
 			<g:sortableColumn property="manufacturer" params="[q:q]" title="${message(code: 'entity.manufacturer.label')}" />
 			<g:sortableColumn property="${i18nField(field: 'descriptions')}" params="[q:q]" title="${message(code: 'entity.description.label')}" />
 			<g:sortableColumn property="discontinuedDate" params="[q:q]" title="${message(code: 'entity.discontinued.date.label')}" />
+			<th/>
+			<th/>
+			<th/>
        </tr>
 	</thead>
 	<tbody>
@@ -49,10 +52,14 @@
 					${type.inStockSpareParts.size()}
 				</td>
 				<td>
-					compatible equipment type${type.compatibleEquipmentTypes.size()}
+					<a href="${createLinkWithTargetURI(controller:'equipmentType', action:'list', params:[sparePartType: type.id])}">
+						Compatible equipment type
+					</a>
 				</td> 
 				<td>
-					${type.vendors.size()}
+					<a href="${createLinkWithTargetURI(controller:'provider', action:'list', params:[sparePartType: type.id])}">
+						Vendors
+					</a>
 				</td>   
 			</tr>
 		</g:each>
