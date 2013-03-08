@@ -120,7 +120,6 @@ function addListAjaxResponse(data){
  * Handle ajax list loading error 
  */
 function listLoadingFailed(jqXHR, exception, errorThrown){
-	alert("errorThrown: " + errorThrown + " , jqXHR : " + jqXHR + " , jqXHR.status : "+ jqXHR.status + " , jqXHR.responseText:  , exception: " + exception)
 	$("div.spinner-container").hide();
     $("div.list-template").fadeOut(100, function() {
     	var error = "";
@@ -377,7 +376,6 @@ function removeComment(baseUrl){
  * Replace (refresh) any list with the provided class and hide ajax-spinner
  */
 function refreshList(html,cssClass){
-	alert(cssClass)
 	$(cssClass).slideUp().replaceWith(html).slideDown();
 	$(".ajax-spinner").hide();
 	$(".ajax-error").hide();	

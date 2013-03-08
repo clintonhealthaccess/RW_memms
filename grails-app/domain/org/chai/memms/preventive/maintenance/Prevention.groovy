@@ -72,9 +72,7 @@ public class Prevention {
 		timeSpend nullable: true
 		scheduledOn nullable: false, validator:{it.timeDate <= new Date()}
 		eventDate nullable: false, validator:{it <= new Date()}
-		lastUpdated nullable: true, validator:{if(it != null) return (it <= new Date())}
-
-		
+		lastUpdated nullable: true, validator:{if(it != null) return (it <= new Date())}		
 	}
 	
 	

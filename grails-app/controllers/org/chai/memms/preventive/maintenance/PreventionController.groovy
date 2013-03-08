@@ -126,7 +126,6 @@ class PreventionController extends AbstractEntityController {
 
 	def addProcess = {
 		Prevention prevention = Prevention.get(params.int("prevention.id"))
-		log.debug("hahahahha"+prevention)
 		def value = params["value"]
 		def result = false
 		def html =""
