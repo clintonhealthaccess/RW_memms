@@ -37,7 +37,7 @@
       		<g:i18nTextarea name="names" bean="${sparePart}" label="${message(code:'spare.part.names.label')}" field="names" height="50" width="300" maxHeight="100" />
       		
       		
-      		<g:i18nTextarea name="descriptions" bean="${sparePart}" label="${message(code:'entity.descriptions.label')}" field="descriptions" height="150" width="300" maxHeight="150" />
+      		<g:i18nTextarea name="descriptions" bean="${sparePart}" label="${message(code:'entity.comments.label')}" field="descriptions" height="150" width="300" maxHeight="150" />
      
       	</fieldset>
       	

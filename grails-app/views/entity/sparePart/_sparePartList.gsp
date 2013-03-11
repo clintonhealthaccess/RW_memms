@@ -45,7 +45,7 @@
 					
 				</td>
 				<td>${sparePart.purchaseDate}</td>
-				<td>${sparePart.purchaseCost}</td>
+				<td>${sparePart.purchaseCost} ${sparePart.currency}</td>
 				<td>
 					<g:if name="sameAsManufacturer" id="${sparePart.id}" test="${(sparePart.sameAsManufacturer==true)}">&radic;</g:if>
 					<g:else>&nbsp;</g:else>
