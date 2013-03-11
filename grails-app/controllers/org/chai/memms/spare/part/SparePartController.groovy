@@ -115,10 +115,7 @@ class SparePartController extends AbstractEntityController{
 	}
 
 	def validateEntity(def entity) {
-		log.debug("entity info => "+entity)
 		boolean validStatus = true
-		//Commented by Aphrodice to fullfill the conditions and replaced by the next condition
-		//if(entity.id==null){
 		if(entity.id==null){
 			//Checking if the dateOfEvent is not after parchase date and add error
 			if(!(entity.purchaseDate.before(params.cmd.dateOfEvent) || entity.purchaseDate.compareTo(params.cmd.dateOfEvent)==0)) 
@@ -132,7 +129,6 @@ class SparePartController extends AbstractEntityController{
 
 	def saveEntity(def entity) {
 		SparePartStatus status
-		//if(entity.dataLocation) hasAccess(entity.dataLocation)
 		if(entity.id==null){
 			entity.statusOfSparePart = StatusOfSparePart."$params.cmd.statusOfSparePart"
 			sparePartStatusService.createSparePartStatus(user,params.cmd.statusOfSparePart,entity,params.cmd.dateOfEvent,[:])
