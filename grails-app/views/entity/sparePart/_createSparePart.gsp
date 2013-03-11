@@ -85,7 +85,6 @@
       			<g:input name="dateOfEvent" dateClass="date-picker" label="${message(code:'spare.part.status.date.of.event.label')}" bean="${cmd}" field="dateOfEvent"/>
       	</g:if>
       	<g:if test="${sparePart?.status!=null}">
-      	 	<g:inputBox name="sameAsManufacturer"  label="${message(code:'spare.part.same.as.manufacturer.label')}" bean="${sparePart}" field="sameAsManufacturer" value="${sparePart.sameAsManufacturer}" checked="${(sparePart.sameAsManufacturer)? true:false}"/>
 	    	<table class="items">
 	    		<tr>
 	    			<th></th>
