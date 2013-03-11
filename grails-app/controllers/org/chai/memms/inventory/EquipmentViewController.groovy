@@ -93,7 +93,6 @@ class EquipmentViewController extends AbstractController {
 		if(request.xhr){
 			 this.ajaxModel(equipments,dataLocation,"")
 		 }else{
-		 	log.debug("not an ajax request"+params)
 			render(view:"/entity/list", model: model(equipments, dataLocation) << [
 				template:"equipment/equipmentList",
 				filterTemplate:"equipment/equipmentFilter",
