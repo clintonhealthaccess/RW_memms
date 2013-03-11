@@ -71,7 +71,7 @@ class UserController  extends  AbstractEntityController{
 	}
 	
 	def deleteEntity(def entity) {
-		//TODO Check if there are no record associate to this user before deleting
+		flash.message = message(code: 'user.cannot.be.delete', args: [message(code: getLabel(), default: 'entity'), params.id], default: '{0} cannot but can deactivated instead.')
 	}
 	
 	def getTemplate() {
