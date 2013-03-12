@@ -164,7 +164,7 @@ class StatusCommand {
 	Date dateOfEvent
 
 	static constraints = {
-		statusOfSparePart nullable: false, inList: [StatusOfSparePart.DISPOSED,StatusOfSparePart.INSTOCK,StatusOfSparePart.PENDINGORDER,StatusOfSparePart.OPERATIONAL]
+		statusOfSparePart nullable: false, inList: [StatusOfSparePart.INSTOCK, StatusOfSparePart.OPERATIONAL, StatusOfSparePart.PENDINGORDER,StatusOfSparePart.DISPOSED]
 		dateOfEvent nullable: false
 	}
 
