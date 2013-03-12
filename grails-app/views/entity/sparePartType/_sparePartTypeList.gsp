@@ -49,9 +49,6 @@
 					${Utils.formatDateWithTime(type?.discontinuedDate)}
 				</td>
 				<td>
-					${type.inStockSpareParts.size()}
-				</td>
-				<td>
 					<a href="${createLinkWithTargetURI(controller:'equipmentType', action:'list', params:[sparePartType: type.id])}">
 						Compatible equipment type
 					</a>

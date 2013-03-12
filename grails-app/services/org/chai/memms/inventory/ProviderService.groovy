@@ -28,8 +28,12 @@
 package org.chai.memms.inventory
 
 import java.util.List;
+import java.util.Map;
+
+import org.chai.memms.inventory.EquipmentType.Observation;
 import org.chai.memms.inventory.Provider.Type;
 import org.chai.memms.inventory.Provider;
+import org.chai.memms.spare.part.SparePartType;
 
 /**
  * @author Jean Kahigiso M.
@@ -41,7 +45,7 @@ class ProviderService {
 	def languageService;
 	def sessionFactory;
 	
-	public List<Provider> searchProvider(Type type,String text, Map<String, String> params){
+	public List<Provider> searchProvider(Type type,String text,SparePartType sparePartType, Map<String, String> params){
 		text = text.trim();
 		def dbFieldDescriptions = 'addressDescriptions_'+languageService.getCurrentLanguagePrefix();
 		def criteria = Provider.createCriteria()
@@ -50,6 +54,14 @@ class ProviderService {
 			if(type!=null){
 				if(type==Type.SERVICEPROVIDER){
 					eq('type',type)
+					
+								if(sparePartType!=null){
+									sparePartTypes{
+										eq('id',sparePartType.id)
+									}
+								}				
+					
+					
 				}else{
 					or{
 						eq('type',type)
@@ -72,6 +84,22 @@ class ProviderService {
 		}
 	
 	}
+		
+	
+	public def getProviders(SparePartType sparePartType, Map<String, String> params){
+		def criteria = Provider.createCriteria()
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			if(sparePartType!=null){
+				sparePartTypes{
+					eq('id',sparePartType.id)
+				}
+			}
+		}
+	}
+	
+	
+	
+	
 	public static List<Type> getEnumeMatcher(String text){
 		List<Type> observations=[]
 		if(text!=null && !text.equals(""))
@@ -83,3 +111,4 @@ class ProviderService {
 	}
 
 }
+

@@ -1,14 +1,18 @@
 package org.chai.memms.inventory
 
+import java.util.Map;
+
 import org.chai.memms.Initializer;
 import org.chai.memms.IntegrationTests
 import org.chai.memms.inventory.EquipmentType.Observation;
 import org.chai.memms.inventory.Provider.Type;
 import org.chai.memms.inventory.Provider;
+import org.chai.memms.spare.part.SparePartType;
 
 class ProviderServiceSpec extends IntegrationTests{
 	
 	def providerService	
+	def sparePartType
 	
 	def "test search provider based on type as text"(){
 		
@@ -28,7 +32,7 @@ class ProviderServiceSpec extends IntegrationTests{
 		List<Provider> providers
 		
 		when:"test search provider based on type as text not follwed by a space" 
-		providers = providerService.searchProvider(null,"Manu",["":""])
+		providers = providerService.searchProvider(null,"Manu",sparePartType,["":""])
 		
 		then:
 		Provider.count()==4
@@ -36,7 +40,7 @@ class ProviderServiceSpec extends IntegrationTests{
 		providers[0].code.equals("CODE123")
 		
 		when:
-		providers = providerService.searchProvider(null,"Manu  ",["":""])
+		providers = providerService.searchProvider(null,"Manu  ",sparePartType,["":""])
 		
 		then:"test search provider based on type as text followed by a space "
 		Provider.count()==4
@@ -61,7 +65,7 @@ class ProviderServiceSpec extends IntegrationTests{
 		
 		List<Provider> providers
 		when:
-		providers = providerService.searchProvider(Type.SERVICEPROVIDER,"",["":""])
+		providers = providerService.searchProvider(Type.SERVICEPROVIDER,"",sparePartType,["":""])
 		
 		then:
 		Provider.count()==4
@@ -69,7 +73,7 @@ class ProviderServiceSpec extends IntegrationTests{
 		providers[0].code.equals("CODE126")
 		
 		when:
-		providers = providerService.searchProvider(Type.SERVICEPROVIDER,"  ",["":""])
+		providers = providerService.searchProvider(Type.SERVICEPROVIDER,"  ",sparePartType,["":""])
 		
 		then:
 		Provider.count()==4
@@ -94,7 +98,7 @@ class ProviderServiceSpec extends IntegrationTests{
 		
 		List<Provider> providers
 		when:
-		providers = providerService.searchProvider(null,"address",["":""])
+		providers = providerService.searchProvider(null,"address",sparePartType,["":""])
 		
 		then:"user can search by provider not followed by a space"
 		Provider.count()==4
@@ -102,7 +106,7 @@ class ProviderServiceSpec extends IntegrationTests{
 		providers.equals([servicePro,both,supplier,manufacturer])
 		
 		when:"user can search by provider followed by a space"
-		providers = providerService.searchProvider(null,"address  ",["":""])
+		providers = providerService.searchProvider(null,"address  ",sparePartType,["":""])
 		
 		then:
 		Provider.count()==4

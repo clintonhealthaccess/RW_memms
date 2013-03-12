@@ -29,12 +29,14 @@ package org.chai.memms.spare.part
 
 import java.util.Set;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocationType;
 import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.AbstractEntityController;
 import org.chai.memms.spare.part.SparePartType;
 import org.chai.memms.inventory.Provider.Type;
+import org.chai.memms.inventory.EquipmentType;
 import org.chai.memms.inventory.Provider;
 import org.chai.memms.Contact
 
@@ -47,6 +49,7 @@ import org.chai.memms.Contact
 class SparePartTypeController  extends AbstractEntityController{
 	def sparePartTypeService
 	def languageService
+
 	
 	def getEntity(def id) {
 		return SparePartType.get(id);
@@ -66,7 +69,7 @@ class SparePartTypeController  extends AbstractEntityController{
 	}
 
 	def getEntityClass() {
-		return SparePartType.class;
+		return SparePartType.class;	
 	}
 
 	def deleteEntity(def entity) {
@@ -75,21 +78,59 @@ class SparePartTypeController  extends AbstractEntityController{
 		else
 			super.deleteEntity(entity);
 	}
+	
 	def bindParams(def entity) {
-		entity.properties = params
+		if(!entity.compatibleEquipmentTypes) entity.compatibleEquipmentTypes=[]
+		params.oldCompatibleEquipmentTypes = entity.compatibleEquipmentTypes
+		if(log.isDebugEnabled()) log.debug("oldCompatibleEquipmentTypes: "+entity.compatibleEquipmentTypes)
+		Set<EquipmentType> compatibleEquipmenTypes = new HashSet<EquipmentType>()
+		params.list('compatibleEquipmentTypes').each { id ->
+			if (NumberUtils.isDigits(id)) {
+				def equipmentType = EquipmentType.get(id)
+				if (equipmentType && !entity.compatibleEquipmentTypes.contains(equipmentType)) entity.compatibleEquipmentTypes.add(equipmentType);
+			}
+		}
+		if(log.isDebugEnabled()) log.debug("newManages: "+entity.compatibleEquipmentTypes)
+		bindData(entity,params,[exclude:["compatibleEquipmentTypes"]])
 	}
+	
+
+	def saveEntity(def entity) {
+////		entity.save(failOnError:true)
+//		def removedEquipment = (params.oldCompatibleEquipmentTypes)?(params.oldCompatibleEquipmentTypes - entity.compatibleEquipmentTypes):[]
+//		entity.compatibleEquipmentTypes.each{
+////			it.x=entity
+//			it.save(failOnError:true)
+//		}
+//		 removedEquipment.each{
+////		    it.x=entity
+//			it.save(failOnError:true)
+//		}
+//		if(log.isDebugEnabled()) log.debug("newCompatibleEquipmentTypes after save: "+entity.compatibleEquipmentTypes)
+		entity.save(failOnError:true)
 		
+	}
+
+	
 	
 	def getModel(def entity) {
-		def manufacturers = Provider.findAllByTypeInList([Type.MANUFACTURER,Type.BOTH],[sort:'contact.contactName'])		
-		[ type: entity,
-		  manufacturers: manufacturers		
+		def manufacturers = Provider.findAllByTypeInList([Type.MANUFACTURER,Type.BOTH],[sort:'contact.contactName'])
+		def vendors = []
+		def compatibleEquipmentTypes = []
+		if(entity.compatibleEquipmentTypes!= null)  compatibleEquipmentTypes = new ArrayList(entity.compatibleEquipmentTypes)
+		if (entity.vendors != null) vendors = new ArrayList(entity.vendors)
+		[
+			vendors: vendors,
+			compatibleEquipmentTypes:compatibleEquipmentTypes,
+			type: entity,
+		    manufacturers: manufacturers	
          ]
 	}
 							
-	def list = {
+	def list = {	
+	
 		adaptParamsForList()
-		List<SparePartType> types = SparePartType.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc");
+		List<SparePartType> types = SparePartType.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc")
 		if(request.xhr)
 			this.ajaxModel(types,"")
 		else{
@@ -100,7 +141,7 @@ class SparePartTypeController  extends AbstractEntityController{
 				entities: types,
 				entityClass: getEntityClass()
 			])
-		}
+		}			
 	}
 	
 	

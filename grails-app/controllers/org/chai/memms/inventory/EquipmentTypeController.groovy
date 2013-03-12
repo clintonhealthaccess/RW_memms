@@ -1,3 +1,6 @@
+package org.chai.memms.inventory
+
+
 /**
  * Copyright (c) 2012, Clinton Health Access Initiative.
  *
@@ -25,10 +28,9 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.inventory
 
+import java.util.Map;
 import java.util.Set;
-
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocationType;
 import org.chai.memms.AbstractEntityController;
@@ -75,6 +77,7 @@ class EquipmentTypeController extends AbstractEntityController{
 		entity.properties = params
 	}
 
+	
 	def getExportClass() {
 		return "EquipmentTypeExportTask"
 	}
@@ -84,6 +87,7 @@ class EquipmentTypeController extends AbstractEntityController{
 			type: entity
 		]
 	}
+		
 	
 	def list = {
 		adaptParamsForList()
@@ -95,20 +99,20 @@ class EquipmentTypeController extends AbstractEntityController{
 		def types = equipmentTypeService.getEquipmentTypes(sparePartType,params);
 
 		if(request.xhr)
-			this.ajaxModel(types,"",sparePartType)
+			this.ajaxModel(types,sparePartType,params)
 		else{
 		render(view:"/entity/list",model:model(types,sparePartType) << [
 				template:"equipmentType/equipmentTypeList",
 				listTop:"equipmentType/listTop",
-				importTask:'EquipmentTypeImportTask',
-				exportTask:'EquipmentTypeExportTask'
+			    importTask:'EquipmentTypeImportTask',
+			    exportTask:'EquipmentTypeExportTask'
 			])
 		}
-	}
-	
+	}	
+
 	def search = {
 		adaptParamsForList()
-		def sparePartType = null
+		def sparePartType
 		if(params['sparePartType']!=null)
 			sparePartType =  SparePartType.get(params.int('sparePartType'))
 
@@ -143,11 +147,15 @@ class EquipmentTypeController extends AbstractEntityController{
 		render(contentType:"text/json") { results = [listHtml] }
 	}
 
+	
 	def getAjaxData = {
-		List<EquipmentType> types = equipmentTypeService.searchEquipmentType(params['term'],Observation."$params.observation",[:])
+		def sparePartType = null
+		List<EquipmentType> types = equipmentTypeService.searchEquipmentType(params['term'],Observation."$params.observation",sparePartType,[:])
 		render(contentType:"text/json") {
 			elements = array {
 				types.each { type ->
+					
+					
 					elem (
 							key: type.id,
 							value: type.getNames(languageService.getCurrentLanguage()) + ' ['+type.code+']'
@@ -163,7 +171,10 @@ class EquipmentTypeController extends AbstractEntityController{
 				}
 			}
 		}
-	}
+	}	
+	
+	
+	
 	
 	def export = {
 		def equipmentTypeExportTask = new EquipmentTypeExportFilter().save(failOnError: true,flush: true)

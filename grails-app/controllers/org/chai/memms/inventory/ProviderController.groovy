@@ -1,3 +1,5 @@
+
+package org.chai.memms.inventory
 /** 
  * Copyright (c) 2012, Clinton Health Access Initiative.
  *
@@ -25,11 +27,14 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.inventory
 
-import org.chai.memms.AbstractEntityController;
+import java.util.List;
+import java.util.Map;
 import org.chai.memms.inventory.Provider.Type;
 import org.chai.memms.inventory.Provider;
+import org.chai.memms.spare.part.SparePartType;
+import org.chai.memms.AbstractEntityController;
+
 
 /**
  * @author Jean Kahigiso M.
@@ -74,45 +79,64 @@ class ProviderController  extends AbstractEntityController {
 		entity.properties = params
 	}
 	
+
+	
 	def list = {
 		adaptParamsForList()
-		List<Provider> providers = Provider.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc")
+		def sparePartType = null
+
+		if(params['sparePartType']!=null)
+			sparePartType =  SparePartType.get(params.int("sparePartType"))
+
+		def providers = providerService.getProviders(sparePartType,params);
+
 		if(request.xhr)
-			this.ajaxModel(providers,"")
+			this.ajaxModel(providers,"",sparePartType)
 		else{
-			render(view:"/entity/list", model: model(providers) << [
-				template:"provider/providerList",
-				listTop:"provider/listTop",
+		render(view:"/entity/list", model: model(providers,sparePartType) << [
+			    template:"provider/providerList",
+				listTop:"provider/listTop"
 			])
 		}
 	}
-	
 	def search = {
 		adaptParamsForList()
-		List<Provider> providers = providerService.searchProvider(null, params['q'], params)		
+		def sparePartType = null
+		if(params['sparePartType']!=null)
+			sparePartType =  SparePartType.get(params.int('sparePartType'))
+
+		def providers = providerService.searchProvider(null,params['q'],sparePartType,params)
+
 		if(request.xhr)
-			this.ajaxModel(providers,params['q'])
+			this.ajaxModel(providers,params['q'],sparePartType)
 		else {
-			render(view:"/entity/list", model: model(providers) << [
+			render(view:"/entity/list",model:model(providers,sparePartType) << [
 				template:"provider/providerList",
-				listTop:"provider/listTop",
+				listTop:"provider/listTop"
+				
 			])
 		}
 	}
+
 	
-	def model(def entities) {
-		return [
-			entities: entities,
-			entityCount: entities.totalCount,
-			code: getLabel(),
-		]
-	}
-	
-	def ajaxModel(def entities,def searchTerm) {
-		def model = model(entities) << [q:searchTerm]
+	def ajaxModel(def entities,def searchTerm,def sparePartType) {
+		def model = model(entities,sparePartType) << [q:searchTerm]
 		def listHtml = g.render(template:"/entity/provider/providerList",model:model)
 		render(contentType:"text/json") { results = [listHtml] }
 	}
+
+
+	def model(def entities,sparePartType) {
+		return [
+			entities: entities,
+			entityCount: entities.totalCount,
+			entityClass:getEntityClass(),
+			code: getLabel(),
+			sparePartType:sparePartType?.id
+		]
+	}
+		
+	
 	
 	def getAjaxData = {
 		if(log.isDebugEnabled()) log.debug("Provider getAjaxData Sent Params: " + params)
@@ -122,9 +146,9 @@ class ProviderController  extends AbstractEntityController {
 
 		if(type.equals(Type.MANUFACTURER)) detailsLabel="provider.manufacturer.details"
 		else if(type.equals(Type.SUPPLIER)) detailsLabel="provider.supplier.details" 
-		else detailsLabel="provider.serviceProvider.details"
-		
-		List<Provider> providers = providerService.searchProvider(type, params['term'], [:])
+		else detailsLabel="provider.serviceProvider.details"	
+		def sparePartType = null
+		List<Provider> providers = providerService.searchProvider(type, params['term'],sparePartType, [:])		
 		render(contentType:"text/json") {
 			elements = array {
 				providers.each { provider ->
@@ -143,5 +167,6 @@ class ProviderController  extends AbstractEntityController {
 				}
 			}
 		}
-	}
+	}	
+	
 }

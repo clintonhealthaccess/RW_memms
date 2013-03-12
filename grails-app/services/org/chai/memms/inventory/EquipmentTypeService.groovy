@@ -44,7 +44,6 @@ class EquipmentTypeService {
 	def languageService;
 		
 	public def searchEquipmentType(String text,Observation observation,SparePartType sparePartType,Map<String, String> params) {
-		def sparePartTypes; 
 		def dbFieldName = 'names_'+languageService.getCurrentLanguagePrefix();
 		def dbFieldDescritpion = 'descriptions_'+languageService.getCurrentLanguagePrefix();
 		def criteria = EquipmentType.createCriteria()
@@ -52,6 +51,7 @@ class EquipmentTypeService {
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(observation!=null)
 				eq("observation",observation)
+				
 			if(sparePartType!=null){
 				sparePartTypes{
 					eq('id',sparePartType.id)
