@@ -32,11 +32,8 @@
     			from="${types}" value="${sparePart?.type?.id}" values="${types.collect{it.names}}" />
     			
     		<g:input name="serialNumber" label="${message(code:'spare.part.serial.number.label')}" bean="${sparePart}" field="serialNumber"/>
-      		<g:input name="model" label="${message(code:'spare.part.model.label')}" bean="${sparePart}" field="model"/>
-      		
+      		<g:input name="model" label="${message(code:'spare.part.model.label')}" bean="${sparePart}" field="model"/>	
       		<g:i18nTextarea name="names" bean="${sparePart}" label="${message(code:'spare.part.names.label')}" field="names" height="50" width="300" maxHeight="100" />
-      		
-      		
       		<g:i18nTextarea name="descriptions" bean="${sparePart}" label="${message(code:'entity.comments.label')}" field="descriptions" height="150" width="300" maxHeight="150" />
      
       	</fieldset>
@@ -47,31 +44,6 @@
           </g:if>
         </div>
       </div>
-      <div class="form-section">
-      	<fieldset class="form-content">
-      	<h4 class="section-title">
-          <span class="question-default">
-           <img src="${resource(dir:'images/icons',file:'star_small.png')}">
-          </span>
-          <g:message code="spare.part.section.location.information.label" default="Location Information"/>
-        </h4>
-       <g:selectFromEnum name="stockLocation" bean="${sparePart}" values="${StockLocation.values()}" field="stockLocation" label="${message(code:'spare.part.stockLocation.label')}"/>
-      		
-      		<div class="facility-information">
-      		<g:selectFromList name="dataLocation.id" label="${message(code:'spare.part.dataLocation.label')}" bean="${sparePart}" field="dataLocation" optionKey="id" multiple="false"
-    			ajaxLink="${createLink(controller:'dataLocation', action:'getAjaxData', params: [dataLocation:'DATALOCATION'])}"
-    			from="${dataLocations}" value="${sparePart?.dataLocation?.id}" values="${dataLocations.collect{it.names}}" />
-    		</div>
-    			
-      		</fieldset>
-     	 <div id="form-aside-dataLocation" class="form-aside">
-     		<g:if test="${sparePart?.dataLocation != null}">
-     		<!-- To be reviewed why is not displaying -->
-     	  		 <g:render template="/templates/dataLocationFormSide" model="['dataLocation':sparePart?.dataLocation,'cssClass':'current','field':'dataLocation' ]" />
-       		</g:if>
-       	</div>
-      </div>
-      
       <div class="form-section">
       	<fieldset class="form-content">
       	<h4 class="section-title">
@@ -122,7 +94,30 @@
      		</g:if>
      	</fieldset>
       </div>   
-     
+     <div class="form-section">
+      	<fieldset class="form-content">
+      	<h4 class="section-title">
+          <span class="question-default">
+           <img src="${resource(dir:'images/icons',file:'star_small.png')}">
+          </span>
+          <g:message code="spare.part.section.location.information.label" default="Location Information"/>
+        </h4>
+       <g:selectFromEnum name="stockLocation" bean="${sparePart}" values="${StockLocation.values()}" field="stockLocation" label="${message(code:'spare.part.stockLocation.label')}"/>
+      		
+      		<div class="facility-information">
+      		<g:selectFromList name="dataLocation.id" label="${message(code:'spare.part.dataLocation.label')}" bean="${sparePart}" field="dataLocation" optionKey="id" multiple="false"
+    			ajaxLink="${createLink(controller:'dataLocation', action:'getAjaxData', params: [dataLocation:'DATALOCATION'])}"
+    			from="${dataLocations}" value="${sparePart?.dataLocation?.id}" values="${dataLocations.collect{it.names}}" />
+    		</div>
+    			
+      		</fieldset>
+     	 <div id="form-aside-dataLocation" class="form-aside">
+     		<g:if test="${sparePart?.dataLocation != null}">
+     		<!-- To be reviewed why is not displaying -->
+     	  		 <g:render template="/templates/dataLocationFormSide" model="['dataLocation':sparePart?.dataLocation,'cssClass':'current','field':'dataLocation' ]" />
+       		</g:if>
+       	</div>
+      </div>
       <div class="form-section">
       	<fieldset class="form-content">
       	<h4 class="section-title">
