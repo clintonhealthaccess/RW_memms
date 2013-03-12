@@ -80,45 +80,75 @@ class SparePartTypeController  extends AbstractEntityController{
 	}
 	
 	def bindParams(def entity) {
-		if(!entity.compatibleEquipmentTypes) entity.compatibleEquipmentTypes=[]
 		params.oldCompatibleEquipmentTypes = entity.compatibleEquipmentTypes
-		if(log.isDebugEnabled()) log.debug("oldCompatibleEquipmentTypes: "+entity.compatibleEquipmentTypes)
-		Set<EquipmentType> compatibleEquipmenTypes = new HashSet<EquipmentType>()
+		params.oldVendors = entity.vendors
+
+		def compatibleEquipmentTypes = new HashSet<EquipmentType>()
 		params.list('compatibleEquipmentTypes').each { id ->
 			if (NumberUtils.isDigits(id)) {
 				def equipmentType = EquipmentType.get(id)
-				if (equipmentType && !entity.compatibleEquipmentTypes.contains(equipmentType)) entity.compatibleEquipmentTypes.add(equipmentType);
+				if (equipmentType && !entity.compatibleEquipmentTypes.contains(equipmentType)) compatibleEquipmentTypes.add(equipmentType);
 			}
 		}
-		if(log.isDebugEnabled()) log.debug("newManages: "+entity.compatibleEquipmentTypes)
-		bindData(entity,params,[exclude:["compatibleEquipmentTypes"]])
+
+		def deffEquipmentTypes = params.oldCompatibleEquipmentTypes - compatibleEquipmentTypes
+		
+		entity.compatibleEquipmentTypes = deffEquipmentTypes
+
+
+		def vendors = new HashSet<Provider>()
+		params.list('vendors').each { id ->
+			if (NumberUtils.isDigits(id)) {
+				def vendor = Provider.get(id)
+				if (vendor && !entity.vendors.contains(vendor)) vendors.add(vendor);
+			}
+		}
+		def deffProviders = params.oldCompatibleEquipmentTypes - vendors
+		entity.vendors = deffProviders
+		
+		bindData(entity,params,[exclude:["compatibleEquipmentTypes","vendors"]])
 	}
 	
 
 	def saveEntity(def entity) {
-////		entity.save(failOnError:true)
-//		def removedEquipment = (params.oldCompatibleEquipmentTypes)?(params.oldCompatibleEquipmentTypes - entity.compatibleEquipmentTypes):[]
-//		entity.compatibleEquipmentTypes.each{
-////			it.x=entity
-//			it.save(failOnError:true)
-//		}
-//		 removedEquipment.each{
-////		    it.x=entity
-//			it.save(failOnError:true)
-//		}
-//		if(log.isDebugEnabled()) log.debug("newCompatibleEquipmentTypes after save: "+entity.compatibleEquipmentTypes)
 		entity.save(failOnError:true)
-		
+	
+		def rmCompatibleEquipmentTypes = (params.oldCompatibleEquipmentTypes)?(params.oldCompatibleEquipmentTypes - entity.compatibleEquipmentTypes):[]
+		def rmVendors = (params.oldVendors)?(params.oldVendors - entity.vendors):[]
+
+		entity.compatibleEquipmentTypes.each{
+			if(it.sparePartTypes && !it.sparePartTypes.contains(entity)) it.sparePartTypes.add(entity)
+			it.save(failOnError:true)
+		}
+
+		entity.vendors.each{
+			if(it.sparePartTypes && !it.sparePartTypes.contains(entity)) it.sparePartTypes.add(entity)
+			it.save(failOnError:true)
+		}
+
+
+		rmCompatibleEquipmentTypes.each{
+			if(it.sparePartTypes && !it.sparePartTypes.contains(entity)) it.sparePartTypes.remove(entity)
+			it.save(failOnError:true)
+		}
+
+		rmVendors.each{
+			if(it.sparePartTypes && !it.sparePartTypes.contains(entity)) it.sparePartTypes.remove(entity)
+			it.save(failOnError:true)
+		}
 	}
 
 	
 	
 	def getModel(def entity) {
-		def manufacturers = Provider.findAllByTypeInList([Type.MANUFACTURER,Type.BOTH],[sort:'contact.contactName'])
 		def vendors = []
 		def compatibleEquipmentTypes = []
-		if(entity.compatibleEquipmentTypes!= null)  compatibleEquipmentTypes = new ArrayList(entity.compatibleEquipmentTypes)
-		if (entity.vendors != null) vendors = new ArrayList(entity.vendors)
+
+		def manufacturers = Provider.findAllByTypeInList([Type.MANUFACTURER,Type.BOTH],[sort:'contact.contactName'])
+		if(entity.compatibleEquipmentTypes != null)  compatibleEquipmentTypes = new ArrayList(entity.compatibleEquipmentTypes)
+		if(entity.vendors != null) vendors = new ArrayList(entity.vendors)
+		log.debug("entity.compatibleEquipmentTypes ==========>:"+entity.compatibleEquipmentTypes)
+		log.debug("entity.vendors ==========>:"+entity.vendors)
 		[
 			vendors: vendors,
 			compatibleEquipmentTypes:compatibleEquipmentTypes,

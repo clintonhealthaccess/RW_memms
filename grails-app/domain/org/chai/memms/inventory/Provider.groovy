@@ -58,6 +58,7 @@ public class Provider{
 	Contact contact
 	Date dateCreated
 	Date lastUpdated
+	static belongsTo = [SparePartType]
 
 	
 	static embedded = ["contact"]

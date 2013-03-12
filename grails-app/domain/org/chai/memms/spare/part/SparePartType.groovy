@@ -54,7 +54,7 @@ class SparePartType {
 	Date lastUpdated
 	Provider manufacturer
 
-	static belongsTo = [EquipmentType,Provider]
+	//static belongsTo = [EquipmentType,Provider]
 
 	
 	static i18nFields = ["descriptions","names"]

@@ -64,6 +64,8 @@ class EquipmentType {
 	String descriptions
 	Period expectedLifeTime
 	Observation observation
+
+	static belongsTo = [SparePartType]
 	
 	
 	Date dateCreated
