@@ -77,7 +77,6 @@ class EquipmentTypeController extends AbstractEntityController{
 		entity.properties = params
 	}
 
-	
 	def getExportClass() {
 		return "EquipmentTypeExportTask"
 	}
@@ -87,17 +86,13 @@ class EquipmentTypeController extends AbstractEntityController{
 			type: entity
 		]
 	}
-		
-	
+			
 	def list = {
 		adaptParamsForList()
 		def sparePartType = null
-
 		if(params['sparePartType']!=null)
 			sparePartType =  SparePartType.get(params.int("sparePartType"))
-
 		def types = equipmentTypeService.getEquipmentTypes(sparePartType,params);
-
 		if(request.xhr)
 			this.ajaxModel(types,sparePartType,params)
 		else{
@@ -112,12 +107,10 @@ class EquipmentTypeController extends AbstractEntityController{
 
 	def search = {
 		adaptParamsForList()
-		def sparePartType
+		def sparePartType=null
 		if(params['sparePartType']!=null)
 			sparePartType =  SparePartType.get(params.int('sparePartType'))
-
 		def types = equipmentTypeService.searchEquipmentType(params['q'],null,sparePartType,params)
-
 		if(request.xhr)
 			this.ajaxModel(types,params['q'],sparePartType)
 		else {
@@ -137,7 +130,6 @@ class EquipmentTypeController extends AbstractEntityController{
 			entityClass:getEntityClass(),
 			code: getLabel(),
 			sparePartType:sparePartType?.id
-
 		]
 	}
 	
@@ -153,9 +145,7 @@ class EquipmentTypeController extends AbstractEntityController{
 		List<EquipmentType> types = equipmentTypeService.searchEquipmentType(params['term'],Observation."$params.observation",sparePartType,[:])
 		render(contentType:"text/json") {
 			elements = array {
-				types.each { type ->
-					
-					
+				types.each { type ->				
 					elem (
 							key: type.id,
 							value: type.getNames(languageService.getCurrentLanguage()) + ' ['+type.code+']'
@@ -173,9 +163,7 @@ class EquipmentTypeController extends AbstractEntityController{
 		}
 	}	
 	
-	
-	
-	
+		
 	def export = {
 		def equipmentTypeExportTask = new EquipmentTypeExportFilter().save(failOnError: true,flush: true)
 		params.exportFilterId = equipmentTypeExportTask.id

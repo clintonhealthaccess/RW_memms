@@ -91,10 +91,10 @@ class SparePartTypeController  extends AbstractEntityController{
 			}
 		}
 
-		def deffEquipmentTypes = params.oldCompatibleEquipmentTypes - compatibleEquipmentTypes
-		
-		entity.compatibleEquipmentTypes = deffEquipmentTypes
-
+//		def deffEquipmentTypes = params.oldCompatibleEquipmentTypes - compatibleEquipmentTypes
+//		
+//		entity.compatibleEquipmentTypes = deffEquipmentTypes
+//
 
 		def vendors = new HashSet<Provider>()
 		params.list('vendors').each { id ->

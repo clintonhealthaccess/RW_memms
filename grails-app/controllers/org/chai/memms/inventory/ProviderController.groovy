@@ -78,18 +78,13 @@ class ProviderController  extends AbstractEntityController {
 	def bindParams(def entity) {
 		entity.properties = params
 	}
-	
-
-	
+		
 	def list = {
 		adaptParamsForList()
 		def sparePartType = null
-
 		if(params['sparePartType']!=null)
 			sparePartType =  SparePartType.get(params.int("sparePartType"))
-
 		def providers = providerService.getProviders(sparePartType,params);
-
 		if(request.xhr)
 			this.ajaxModel(providers,"",sparePartType)
 		else{
@@ -104,20 +99,16 @@ class ProviderController  extends AbstractEntityController {
 		def sparePartType = null
 		if(params['sparePartType']!=null)
 			sparePartType =  SparePartType.get(params.int('sparePartType'))
-
 		def providers = providerService.searchProvider(null,params['q'],sparePartType,params)
-
 		if(request.xhr)
 			this.ajaxModel(providers,params['q'],sparePartType)
 		else {
 			render(view:"/entity/list",model:model(providers,sparePartType) << [
 				template:"provider/providerList",
-				listTop:"provider/listTop"
-				
+				listTop:"provider/listTop"				
 			])
 		}
 	}
-
 	
 	def ajaxModel(def entities,def searchTerm,def sparePartType) {
 		def model = model(entities,sparePartType) << [q:searchTerm]
@@ -134,16 +125,13 @@ class ProviderController  extends AbstractEntityController {
 			code: getLabel(),
 			sparePartType:sparePartType?.id
 		]
-	}
-		
-	
+	}	
 	
 	def getAjaxData = {
 		if(log.isDebugEnabled()) log.debug("Provider getAjaxData Sent Params: " + params)
 		def detailsLabel='';
 		def type =params['type']
 		type = Type."$type";
-
 		if(type.equals(Type.MANUFACTURER)) detailsLabel="provider.manufacturer.details"
 		else if(type.equals(Type.SUPPLIER)) detailsLabel="provider.supplier.details" 
 		else detailsLabel="provider.serviceProvider.details"	

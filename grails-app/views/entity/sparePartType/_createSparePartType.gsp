@@ -31,7 +31,8 @@
     			from="${compatibleEquipmentTypes}" value="${type.compatibleEquipmentTypes*.id}" 
     			values="${compatibleEquipmentTypes.collect{it.names}}"/>  
     		
-    	<g:selectFromList name="vendors" label="${message(code:'provider.vendors.label')}" bean="${type}" field="vendors" optionKey="id" multiple="true"
+    	<g:selectFromList name="vendors" label="${message(code:'provider.vendors.label')}" bean="${type}" 
+    	field="vendors" optionKey="id" multiple="true"
     			ajaxLink="${createLink(controller:'provider', action:'getAjaxData',params:['type':'SUPPLIER'])}"
     		    from="${vendors}" value="${type.vendors*.id}" values="${vendors.collect{it.contact.contactName}}"/>		
     		        		     			
