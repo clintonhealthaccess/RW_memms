@@ -12,7 +12,7 @@
       </h4> 
 
     	<g:selectFromList name="equipment.id" label="${message(code:'equipment.label')}" bean="${order}" field="equipment" optionKey="id" multiple="false"
-			ajaxLink="${createLink(controller:'equipmentView', action:'getAjaxData')}"
+			ajaxLink="${createLink(controller:'equipmentView', action:'getAjaxData',params:[dataLocation:dataLocation.id])}"
 			from="${equipments}" value="${order?.equipment?.id}" values="${equipments.collect{it.code}}" />	
   		
       <g:if test="${order.id != null}">

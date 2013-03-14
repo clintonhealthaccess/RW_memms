@@ -81,13 +81,13 @@ class UserService {
 			eq ("active",true)
 			if(location != null)
 				eq('location',location)
-			if(userTypes != null && userTypes.size()!=0)
+			if(userTypes != null && userTypes.size()>0)
 		        inList ("userType",userTypes)
       		or{    
-			ilike("username","%"+text+"%")
-			ilike("email","%"+text+"%")
-		    ilike("firstname","%"+text+"%")
-		    ilike("lastname","%"+text+"%")
+				ilike("username","%"+text+"%")
+				ilike("email","%"+text+"%")
+			    ilike("firstname","%"+text+"%")
+			    ilike("lastname","%"+text+"%")
 			}
 		}
 		
