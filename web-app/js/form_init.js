@@ -50,3 +50,12 @@ $(document).ready(function() {
   	$('.filters-box').toggle(500);
   });
 });
+
+$(document).ready(function() {
+	$('.v_tabs_name').click(function(){
+  	$('.v_tabs_nested, .v_tabs_nested_nav').toggle(500);
+  });
+  $(togglable).find('.v_tabs_name').each(function(key, value){
+		if (toggle != $(this).data('toggle')) $(this).addClass('selected');
+	});
+});

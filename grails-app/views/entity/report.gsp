@@ -6,6 +6,5 @@
 </head>
 <body>
 	<g:render template="${template}"/>
-	test
 </body>
 </html>

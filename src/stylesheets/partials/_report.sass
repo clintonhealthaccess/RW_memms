@@ -54,3 +54,154 @@
   .delete-link
     &:hover, &:focus
       color: $no
+
+
+// Reports dashboard
+
+.v_tabs
+  +pie-clearfix
+
+.v_tabs_nav
+  width: 100%
+  li
+    display: inline
+    float: left
+  a
+    color: #aaa
+    display: block
+    font-size: 12px
+    padding: 15px 20px
+    text-decoration: none
+    +text-shadow(#fff 0 1px 0)
+    &:hover, &:focus
+      color: $primary
+    &.active
+      background: #fff
+      border: 1px solid rgba(0, 0, 0, 0.1)
+      border-bottom: none
+      color: $primary
+      font-weight: bold
+      margin: 0 0 -1px 0
+      position: relative
+
+.v_tabs_content
+  background: #fff
+  border: 1px solid rgba(0, 0, 0, 0.1)
+  color: #666666
+  font-size: 12px
+  padding: 15px 0 0
+  width: 1000px - 2px /* minus the border */
+  .filters
+    border: none !important
+    margin-bottom: 0
+  #showhide
+    margin-right: 15px
+.v_tabs_row p
+  +pie-clearfix
+
+.v_tabs_filters
+  margin: 0 0 10px 15px
+  +pie-clearfix
+  li
+    display: inline
+    float: left
+    font-size: 12px
+    margin-right: 20px
+
+.v_tabs_list
+  border-top: 1px solid $primary
+  width: 100%
+  +pie-clearfix
+  li
+    border-top: 1px solid rgba(0, 0, 0, 0.1)
+    padding: 0 0 0 10px
+    vertical-align: middle
+    +pie-clearfix
+    &.selected
+      padding: 0
+      p
+        background: rgba(0, 0, 0, 0.02)
+        border-bottom: 1px solid rgba(0, 0, 0, 0.15)
+        color: $primary
+        margin-bottom: 5px
+        padding: 5px 10px
+      .v_tabs_switch img
+        +rotate(90deg)
+  >li
+    &:hover, &:focus, &.selected
+      border: 1px solid #ccc
+      margin: 0 -1px -1px
+      position: relative
+      z-index: 5
+      +box-shadow(rgba(0, 0, 0, 0.1) 0 0 5px)
+    &:first-child
+      border-top: none
+    p
+      padding: 0 20px 5px
+
+.v_tabs_nested
+  border-top: 1px solid rgba(0, 0, 0, 0.1)
+  display: none
+  margin: 0px 30px 15px
+  li
+    padding: 0
+    &:first-child
+      border-top: 0
+    &:last-child
+      //border-bottom: 1px solid rgba(0, 0, 0, 0.1)
+    &:hover, &:focus
+      background: rgba(0, 0, 0, 0.03)
+  .v_tabs_name
+    padding-top: 10px
+    padding-left: 10px
+    width: 660px
+
+.v_tabs_nested_nav
+  display: none
+  margin: 20px 10px 10px 30px
+  +pie-clearfix
+  li
+    border: none
+    border-right: 1px solid #ccc
+    display: inline
+    float: left
+    padding: 0 10px
+    +pie-clearfix
+    a
+      color: #aaa
+      display: block
+      font-size: 11px
+      padding: 0
+      text-decoration: none
+      &:hover, &:focus
+        color: $primary
+      &.active
+        color: $primary
+        font-weight: bold
+    &:last-child
+      border-right: none
+
+.v_tabs_switch, .v_tabs_name, .v_tabs_formula, .v_tabs_value
+  float: left
+.v_tabs_switch
+  height: 10px
+  margin: 10px
+  width: 10px
+.v_tabs_name
+  padding: 10px 0
+  width: 660px
+.v_tabs_formula
+  background: $yes
+  height: 12px
+  margin: 10px 20px
+  overflow: hidden
+  text-indent: -9999em
+  width: 12px
+  +border-radius(6px)
+
+.v_tabs_value
+  border-left: 1px solid rgba(0, 0, 0, 0.2)
+  font-size: 15px
+  font-weight: bold
+  padding: 10px 0 8px 20px
+  width: 180px
