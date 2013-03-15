@@ -27,7 +27,9 @@
  */
 package org.chai.memms.location;
 
+import org.chai.location.CalculationLocation;
 import org.chai.location.Location;
+import org.chai.location.DataLocation;
 import org.chai.location.LocationLevel;
 import org.chai.memms.AbstractEntityController;
 import java.io.File;
@@ -127,14 +129,14 @@ class LocationController extends AbstractEntityController {
 	}
 	
 	def getAjaxData = {		
-		List<Location> locations = locationService.searchLocation(Location.class, params['term'], [:])
+		List<Location> locations = locationService.searchLocation(CalculationLocation.class,params['term'],[:])
 		render(contentType:"text/json") {
 			elements = array {
 				locations.each { location ->
-					def parent = (location.parent)?location.parent.names:""
+					def parent = (location instanceof DataLocation)? location.location.names : location?.parent?.names 
 					elem (
 						key: location.id,
-						value: location.names +" ["+parent+"] " 
+						value: location.names +" ["+parent+"] "
 					)
 				}
 			}

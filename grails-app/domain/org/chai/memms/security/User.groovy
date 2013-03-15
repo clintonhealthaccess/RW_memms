@@ -41,8 +41,9 @@ class User {
 	enum UserType{		
 		ADMIN("admin"),
 		SYSTEM("system"),
-		TECHNICIANDH("technician.dh"),
 		TECHNICIANMMC("technician.mmc"),
+		TECHNICIANDH("technician.dh"),
+		ASSISTANTTECHHOSP("assistant.tech.hosp"),
 		TITULAIREHC("titulaire.hc"),
 		HOSPITALDEPARTMENT("department.hospital"),
 		OTHER("other");
@@ -136,7 +137,7 @@ class User {
 		location nullable: true 
 		registrationToken nullable: true 
 		passwordToken nullable: true 
-		userType nullable: false, blank: false, inList:[UserType.ADMIN,UserType.SYSTEM,UserType.TECHNICIANDH,UserType.TECHNICIANMMC,UserType.TITULAIREHC,UserType.HOSPITALDEPARTMENT,UserType.OTHER]
+		userType nullable: false, blank: false, inList:[UserType.ADMIN,UserType.SYSTEM,UserType.TECHNICIANDH,UserType.ASSISTANTTECHHOSP,UserType.TECHNICIANMMC,UserType.TITULAIREHC,UserType.HOSPITALDEPARTMENT,UserType.OTHER]
 		//TODO fix this
 		active validator: { val, obj ->
 			//return val ? obj.location != null && (obj.permissionString || obj.roles.size() > 0) : true

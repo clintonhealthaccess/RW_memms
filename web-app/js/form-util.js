@@ -120,7 +120,6 @@ function addListAjaxResponse(data){
  * Handle ajax list loading error 
  */
 function listLoadingFailed(jqXHR, exception, errorThrown){
-	alert("errorThrown: " + errorThrown + " , jqXHR : " + jqXHR + " , jqXHR.status : "+ jqXHR.status + " , jqXHR.responseText:  , exception: " + exception)
 	$("div.spinner-container").hide();
     $("div.list-template").fadeOut(100, function() {
     	var error = "";
