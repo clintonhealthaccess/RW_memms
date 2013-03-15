@@ -37,6 +37,7 @@ import org.chai.memms.spare.part.SparePartStatus;
 import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
 import org.chai.memms.spare.part.SparePart;
 
+
 import i18nfields.I18nFields;
 /**
  * @author Jean Kahigiso M.
@@ -54,9 +55,6 @@ class SparePartType {
 	Date lastUpdated
 	Provider manufacturer
 
-	//static belongsTo = [EquipmentType,Provider]
-
-	
 	static i18nFields = ["descriptions","names"]
 	static hasMany = [spareParts: SparePart,compatibleEquipmentTypes:EquipmentType,vendors:Provider]	
 
@@ -97,8 +95,8 @@ class SparePartType {
 			}
 		return pendingSpareParts
 	}
-
 	
+
 	@Override
 	public String toString() {
 		return "SparePartType [code=" + code + ", partNumber=" + partNumber + "]";

@@ -78,11 +78,13 @@ class SparePartViewController extends AbstractController{
 	}
 	
 	def list = {
-		adaptParamsForList()
-		def spareParts = sparePartService.getSparePartsByUser(user,params)
-		
+		adaptParamsForList()	
+		def sparePartType=null
+		if(params['sparePartType']!=null)
+			sparePartType =  SparePartType.get(params.int('sparePartType'))			
+		def spareParts = sparePartService.getSparePartsByUser(user,sparePartType,params)		
 		if(request.xhr)
-			this.ajaxModel(spareParts,"")
+			this.ajaxModel(spareParts,sparePartType,"")
 		else{
 		render(view:"/entity/list",model:[
 				template:"sparePart/sparePartList",
@@ -112,17 +114,22 @@ class SparePartViewController extends AbstractController{
 				])
 	}
 	
+	
 	def search = {
 		adaptParamsForList()
-		def spareParts = sparePartService.searchSparePart(params['q'],user,params)
+		def sparePartType=null
+		if(params['sparePartType']!=null)
+			sparePartType =  SparePartType.get(params.int('sparePartType'))
+		def spareParts = sparePartService.searchSparePart(params['q'],user,sparePartType,params)
 		if(!request.xhr)
+		this.ajaxModel(spareParts,sparePartType,params['q'])
+		else {
 			render(view:"/entity/list", model: model(spareParts) << [
 				template:"sparePart/sparePartList",
 				filterTemplate:"sparePart/sparePartFilter",
 				listTop:"sparePart/listTop"
 			])
-		else
-			this.ajaxModel(spareParts,params['q'])
+		}
 	}
 	
 	def filter = { FilterCommand cmd ->
@@ -138,16 +145,17 @@ class SparePartViewController extends AbstractController{
 		}
 	}
 	
-	def ajaxModel(def entities,def searchTerm) {
+	def ajaxModel(def entities,def searchTerm,def sparePart) {
 		def model = [entities: entities,entityCount: entities.totalCount,entityClass:getEntityClass(),names:names,q:searchTerm]
 		def listHtml = g.render(template:"/entity/sparePart/sparePartList",model:model)
 		render(contentType:"text/json") { results = [listHtml] }
 	}
-	def model(def entities) {
+	def model(def entities,def sparePartType) {
 		return [
 			entities: entities,
 			entityCount: entities.totalCount,
-			code: getLabel()
+			code: getLabel(),
+			sparePartType:sparePartType?.id
 		]
 	}
 	

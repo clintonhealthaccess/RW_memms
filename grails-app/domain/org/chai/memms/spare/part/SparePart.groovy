@@ -107,6 +107,9 @@ public class SparePart {
 	User lastModified
 	
 	static belongsTo = [type: SparePartType, stockLocation: StockLocation]
+
+	
+	
 	static hasMany = [status: SparePartStatus]	
 	static i18nFields = ["descriptions","names"]
 	static embedded = ["warranty","warrantyPeriod","expectedLifeTime"]

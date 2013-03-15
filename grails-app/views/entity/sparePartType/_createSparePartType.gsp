@@ -22,21 +22,21 @@
   		ajaxLink="${createLink(controller:'provider', action:'getAjaxData', params: [type:'MANUFACTURER'])}"
   		from="${manufacturers}" value="${type.manufacturer?.id}" values="${manufacturers.collect{it.contact?.contactName}}"/>
   		
-      <g:i18nTextarea name="descriptions" bean="${type}" label="${message(code:'entity.description.label')}" field="descriptions" height="150" width="300" maxHeight="150"/>
-  		<g:input name="discontinuedDate" dateClass="date-picker" label="${message(code:'entity.discontinued.date.label')}" bean="${type}" field="discontinuedDate"/>	
-    
-  		<g:selectFromList name="compatibleEquipmentTypes" label="${message(code:'equipmentType.compatible.equipment.types.label')}" bean="${type}" 
+  	  <g:selectFromList name="compatibleEquipmentTypes" label="${message(code:'equipmentType.compatible.equipment.types.label')}" bean="${type}" 
   		 field="compatibleEquipmentTypes" optionKey="id" multiple="true"
     			ajaxLink="${createLink(controller:'equipmentType', action:'getAjaxData',params:['observation':'USEDINMEMMS'])}"
     			from="${compatibleEquipmentTypes}" value="${type.compatibleEquipmentTypes*.id}" 
     			values="${compatibleEquipmentTypes.collect{it.names}}"/>  
     		
-    	<g:selectFromList name="vendors" label="${message(code:'provider.vendors.label')}" bean="${type}" 
+     <g:selectFromList name="vendors" label="${message(code:'provider.vendors.label')}" bean="${type}" 
     	field="vendors" optionKey="id" multiple="true"
     			ajaxLink="${createLink(controller:'provider', action:'getAjaxData',params:['type':'SUPPLIER'])}"
-    		    from="${vendors}" value="${type.vendors*.id}" values="${vendors.collect{it.contact.contactName}}"/>		
-    		        		     			
-      	  		
+    		    from="${vendors}" value="${type.vendors*.id}" values="${vendors.collect{it.contact.contactName}}"/>	
+    		    
+   <g:selectFromList name="spareParts" label="${message(code:'spare.part.label')}" bean="${type}" 
+    	field="spareParts" optionKey="id" multiple="true"
+    			ajaxLink="${createLink(controller:'sparePartView', action:'getAjaxData',params:['type':'INSTOCK'])}"
+    		    from="${spareParts}" value="${type.spareParts*.id}" values="${spareParts.collect{it.type.names}}"/>	 		        	  		
   		<g:if test="${type.id != null}">
   			<input type="hidden" name="id" value="${type.id}"></input>
   		</g:if>

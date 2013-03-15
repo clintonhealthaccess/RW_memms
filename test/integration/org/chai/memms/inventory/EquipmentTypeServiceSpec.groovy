@@ -31,9 +31,10 @@ class EquipmentTypeServiceSpec extends IntegrationTests{
 		def manufacturer = Initializer.newProvider("TEST" + CODE(1), Type.MANUFACTURER,manufactureContact)
 		Initializer.newEquipmentType(CODE(123),["en":"testName"],["en":"testObservations"],observation,Initializer.now())
 		Initializer.newSparePartType(CODE(123),["en":"names spare part type one"],["en":"descriptions spare part type one"],"7654-HGT",manufacturer,new Date())
+		
 		def equipmentType = EquipmentType.findByCode(CODE(123))
 		def sparePartType = SparePartType.findByCode(CODE(123))
-		sparePartType.addToCompatibleEquipmentTypes(equipmentType)
+		sparePartType.addToCompatibleEjquipmentTypes(equipmentType)
 		sparePartType.save(failOnError:true)
 		
 		when:

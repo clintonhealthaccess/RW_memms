@@ -48,25 +48,21 @@ class ProviderService {
 	public List<Provider> searchProvider(Type type,String text,SparePartType sparePartType, Map<String, String> params){
 		text = text.trim();
 		def dbFieldDescriptions = 'addressDescriptions_'+languageService.getCurrentLanguagePrefix();
-		def criteria = Provider.createCriteria()
-		
+		def criteria = Provider.createCriteria()	
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(type!=null){
 				if(type==Type.SERVICEPROVIDER){
-					eq('type',type)
-					
-								if(sparePartType!=null){
-									sparePartTypes{
-										eq('id',sparePartType.id)
-									}
-								}				
-					
-					
+					eq('type',type)								
 				}else{
 					or{
 						eq('type',type)
 						eq('type',Type.BOTH)
 					}
+				}
+			}
+			if(sparePartType!=null){
+				sparePartTypes{
+					eq('id',sparePartType.id)
 				}
 			}
 			or{
@@ -96,9 +92,6 @@ class ProviderService {
 			}
 		}
 	}
-	
-	
-	
 	
 	public static List<Type> getEnumeMatcher(String text){
 		List<Type> observations=[]

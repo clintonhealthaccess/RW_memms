@@ -37,6 +37,7 @@ import org.chai.memms.AbstractEntityController;
 import org.chai.memms.spare.part.SparePartType;
 import org.chai.memms.inventory.Provider.Type;
 import org.chai.memms.inventory.EquipmentType;
+import org.chai.memms.inventory.EquipmentType.Observation;
 import org.chai.memms.inventory.Provider;
 import org.chai.memms.Contact
 
@@ -87,64 +88,56 @@ class SparePartTypeController  extends AbstractEntityController{
 		params.list('compatibleEquipmentTypes').each { id ->
 			if (NumberUtils.isDigits(id)) {
 				def equipmentType = EquipmentType.get(id)
-				if (equipmentType && !entity.compatibleEquipmentTypes.contains(equipmentType)) compatibleEquipmentTypes.add(equipmentType);
+				(!equipmentType)?:compatibleEquipmentTypes.add(equipmentType);
 			}
 		}
-
-//		def deffEquipmentTypes = params.oldCompatibleEquipmentTypes - compatibleEquipmentTypes
-//		
-//		entity.compatibleEquipmentTypes = deffEquipmentTypes
-//
-
+		entity.compatibleEquipmentTypes = compatibleEquipmentTypes
+		
 		def vendors = new HashSet<Provider>()
 		params.list('vendors').each { id ->
 			if (NumberUtils.isDigits(id)) {
 				def vendor = Provider.get(id)
-				if (vendor && !entity.vendors.contains(vendor)) vendors.add(vendor);
+				(!vendor)?:vendors.add(vendor);
 			}
 		}
-		def deffProviders = params.oldCompatibleEquipmentTypes - vendors
-		entity.vendors = deffProviders
-		
+		entity.vendors = vendors
 		bindData(entity,params,[exclude:["compatibleEquipmentTypes","vendors"]])
 	}
 	
 
 	def saveEntity(def entity) {
 		entity.save(failOnError:true)
-	
-		def rmCompatibleEquipmentTypes = (params.oldCompatibleEquipmentTypes)?(params.oldCompatibleEquipmentTypes - entity.compatibleEquipmentTypes):[]
-		def rmVendors = (params.oldVendors)?(params.oldVendors - entity.vendors):[]
-
-		entity.compatibleEquipmentTypes.each{
-			if(it.sparePartTypes && !it.sparePartTypes.contains(entity)) it.sparePartTypes.add(entity)
-			it.save(failOnError:true)
+		if(entity.id==null){
+			entity.params.oldCompatibleEquipmentTypes = []
+			entity.params.oldVendors = []
 		}
-
-		entity.vendors.each{
-			if(it.sparePartTypes && !it.sparePartTypes.contains(entity)) it.sparePartTypes.add(entity)
-			it.save(failOnError:true)
-		}
-
-
-		rmCompatibleEquipmentTypes.each{
-			if(it.sparePartTypes && !it.sparePartTypes.contains(entity)) it.sparePartTypes.remove(entity)
-			it.save(failOnError:true)
-		}
-
-		rmVendors.each{
-			if(it.sparePartTypes && !it.sparePartTypes.contains(entity)) it.sparePartTypes.remove(entity)
-			it.save(failOnError:true)
-		}
+//		if(!params.oldCompatibleEquipmentTypes.isEmpty()){
+			params.oldCompatibleEquipmentTypes.each{ type ->
+				if(!entity.compatibleEquipmentTypes.contains(type)){
+					type.sparePartTypes.remove(entity)
+					type.save(failOnError:true)
+				}
+			}
+//		}
+		
+//		if(!params.oldVendors.isEmpty()){
+			params.oldVendors.each{ vendor ->
+				if(!entity.vendors.contains(vendor)){
+					vendor.sparePartTypes.remove(entity)
+					vendor.save(failOnError:true)
+				}
+			}
+//		}
 	}
-
-	
+		
 	
 	def getModel(def entity) {
 		def vendors = []
-		def compatibleEquipmentTypes = []
-
+	    def compatibleEquipmentTypes = []
 		def manufacturers = Provider.findAllByTypeInList([Type.MANUFACTURER,Type.BOTH],[sort:'contact.contactName'])
+		vendors = Provider.findAllByTypeInList([Type.SUPPLIER],[sort:'contact.contactName'])	
+		compatibleEquipmentTypes = EquipmentType.findAllByObservationInList([Observation.USEDINMEMMS])
+				
 		if(entity.compatibleEquipmentTypes != null)  compatibleEquipmentTypes = new ArrayList(entity.compatibleEquipmentTypes)
 		if(entity.vendors != null) vendors = new ArrayList(entity.vendors)
 		log.debug("entity.compatibleEquipmentTypes ==========>:"+entity.compatibleEquipmentTypes)

@@ -3,11 +3,11 @@
 	<thead>
 		<tr>
 			<th/>
-			<g:sortableColumn property="code" params="[q:q]" title="${message(code: 'entity.code.label')}" />
 			<g:sortableColumn property="${i18nField(field: 'names')}" params="[q:q]" title="${message(code: 'entity.name.label')}" />
 			<g:sortableColumn property="partNumber" params="[q:q]" title="${message(code: 'entity.part.number.label')}" />			
 			<g:sortableColumn property="manufacturer" params="[q:q]" title="${message(code: 'entity.manufacturer.label')}" />
-			<g:sortableColumn property="${i18nField(field: 'descriptions')}" params="[q:q]" title="${message(code: 'entity.description.label')}" />
+			<g:sortableColumn property="quantityInStock" params="[q:q]" title="${message(code: 'sparePartType.quantity.in.stock.label')}" />
+			<g:sortableColumn property="estimatedDateStockout" params="[q:q]" title="${message(code: 'sparePartType.estimated.date.stockout.label')}" />
 			<g:sortableColumn property="discontinuedDate" params="[q:q]" title="${message(code: 'entity.discontinued.date.label')}" />
 			<th/>
 			<th/>
@@ -31,9 +31,6 @@
 					</ul>
 				</td>
 				<td>
-					${type.code}
-				</td>
-				<td>
 					${type.names}
 				</td>
 				<td>
@@ -43,7 +40,10 @@
 					${type.manufacturer.contact.contactName}
 				</td>
 				<td>
-					${type.descriptions}
+					${type.inStockSpareParts.size()}
+				</td>
+				<td>
+					${}
 				</td>
 				<td>
 					${Utils.formatDateWithTime(type?.discontinuedDate)}
@@ -57,7 +57,12 @@
 					<a href="${createLinkWithTargetURI(controller:'provider', action:'list', params:[sparePartType: type.id])}">
 						Vendors
 					</a>
-				</td>   
+				</td>
+				<td>
+					<a href="${createLinkWithTargetURI(controller:'sparePart', action:'list', params:[sparePartType: type.id])}">
+						Spare parts
+					</a>
+				</td>      
 			</tr>
 		</g:each>
 	</tbody>

@@ -110,12 +110,19 @@ class SparePartService {
 		}
 	}
 
-	public def getSparePartsByUser(User user, Map<String,String> params) {
+	public def getSparePartsByUser(User user, SparePartType sparePartType,Map<String,String> params) {
 		def dataLocations = []
 		def criteria = SparePart.createCriteria();
+//		if(sparePartType!=null){
+//			sparePartTypes{
+//				eq('id',sparePartType.id)
+//			}
+//		}
 		
 		if(user.userType.equals(UserType.ADMIN) || user.userType.equals(UserType.TECHNICIANMMC) || user.userType.equals(UserType.SYSTEM))
-			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){}
+			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+				
+			}
 		else{
 			if(user.location instanceof Location) 
 				dataLocations.addAll(user.location.getDataLocations([:], [:]))
@@ -129,7 +136,10 @@ class SparePartService {
 			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){ 
 				inList('dataLocation',dataLocations) 
 			}
+			
 		}
+		
+		
 	}
 	public def filterSparePart(def user, def dataLocation, def supplier, def sparePartType,
 		def sparePartPurchasedBy,def sameAsManufacturer,def sparePartStatus,Map<String, String> params){

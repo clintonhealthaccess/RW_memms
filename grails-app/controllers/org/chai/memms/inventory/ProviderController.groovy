@@ -1,6 +1,4 @@
-
-package org.chai.memms.inventory
-/** 
+/**
  * Copyright (c) 2012, Clinton Health Access Initiative.
  *
  * All rights reserved.
@@ -15,7 +13,7 @@ package org.chai.memms.inventory
  *     * Neither the name of the <organization> nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -28,6 +26,12 @@ package org.chai.memms.inventory
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+ package org.chai.memms.inventory
+ 
+
+import org.chai.memms.inventory.EquipmentType.Observation;
+import org.chai.memms.inventory.Provider.Type;
+import org.chai.memms.spare.part.SparePartType;
 import java.util.List;
 import java.util.Map;
 import org.chai.memms.inventory.Provider.Type;
@@ -75,6 +79,7 @@ class ProviderController  extends AbstractEntityController {
 		 ]
 	}	
 	
+	
 	def bindParams(def entity) {
 		entity.properties = params
 	}
@@ -86,7 +91,8 @@ class ProviderController  extends AbstractEntityController {
 			sparePartType =  SparePartType.get(params.int("sparePartType"))
 		def providers = providerService.getProviders(sparePartType,params);
 		if(request.xhr)
-			this.ajaxModel(providers,"",sparePartType)
+//			this.ajaxModel(providers,"",sparePartType)
+		    this.ajaxModel(providers,sparePartType,params)
 		else{
 		render(view:"/entity/list", model: model(providers,sparePartType) << [
 			    template:"provider/providerList",
@@ -94,12 +100,13 @@ class ProviderController  extends AbstractEntityController {
 			])
 		}
 	}
+	
 	def search = {
 		adaptParamsForList()
 		def sparePartType = null
 		if(params['sparePartType']!=null)
 			sparePartType =  SparePartType.get(params.int('sparePartType'))
-		def providers = providerService.searchProvider(null,params['q'],sparePartType,params)
+		def providers = providerService.searchProvider(type,params['q'],sparePartType,params)
 		if(request.xhr)
 			this.ajaxModel(providers,params['q'],sparePartType)
 		else {
@@ -126,6 +133,7 @@ class ProviderController  extends AbstractEntityController {
 			sparePartType:sparePartType?.id
 		]
 	}	
+		
 	
 	def getAjaxData = {
 		if(log.isDebugEnabled()) log.debug("Provider getAjaxData Sent Params: " + params)

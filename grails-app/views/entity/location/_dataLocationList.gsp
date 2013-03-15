@@ -1,4 +1,4 @@
-R<table class="items">
+<table class="items">
 	<thead>
 		<tr>
 			<th/>
