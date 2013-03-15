@@ -54,6 +54,9 @@
         </h4>
       	<g:if test="${sparePart.id == null}">
       			<g:selectFromEnum name="statusOfSparePart" bean="${cmd}" values="${StatusOfSparePart.values()}" field="statusOfSparePart" label="${message(code:'spare.part.status.label')}"/>
+      			<g:selectFromList name="usedOnEquipment.id" label="${message(code:'spare.part.used.on.equipment.label')}" bean="${sparePart}" field="usedOnEquipment" optionKey="id" multiple="false"
+    			ajaxLink="${createLink(controller:'equipmentView', action:'getAjaxData', params: [type:'EQUIPMENT'])}"
+    			from="${equipments}" value="${sparePart?.usedOnEquipment?.id}" values="${equipments.collect{it.names}}" />
       			<g:input name="dateOfEvent" dateClass="date-picker" label="${message(code:'spare.part.status.date.of.event.label')}" bean="${cmd}" field="dateOfEvent"/>
       	</g:if>
       	<g:if test="${sparePart?.status!=null}">
@@ -109,7 +112,8 @@
     			ajaxLink="${createLink(controller:'dataLocation', action:'getAjaxData', params: [dataLocation:'DATALOCATION'])}"
     			from="${dataLocations}" value="${sparePart?.dataLocation?.id}" values="${dataLocations.collect{it.names}}" />
     		</div>
-    			
+    		<g:input name="room" label="${message(code:'spare.part.room.label')}" bean="${sparePart}" field="room"/>
+    		<g:input name="shelve" label="${message(code:'spare.part.shelve.label')}" bean="${sparePart}" field="shelve"/>	
       		</fieldset>
      	 <div id="form-aside-dataLocation" class="form-aside">
      		<g:if test="${sparePart?.dataLocation != null}">

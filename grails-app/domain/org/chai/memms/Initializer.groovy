@@ -667,6 +667,10 @@ public class Initializer {
 		}
 
 	public static def createSparePartStructure(){
+		
+		def equipment01 =Equipment.findBySerialNumber("SERIAL01")
+		def equipment09 =Equipment.findBySerialNumber("SERIAL09")
+		def equipment10 =Equipment.findBySerialNumber("SERIAL10")
 			
 		if(!SparePartType.count()){
 			//Add spare part types as defined in ecri
@@ -724,7 +728,8 @@ public class Initializer {
 				User.findByUsername("admin"),
 				null,
 				null,
-				StockLocation.MMC
+				StockLocation.MMC,
+				equipment09
 				)
 					
 			def warrantyContactOne = newContact(['fr':'Warranty Address Descriptions One'],"Warranty","jk@yahoo.com","0768-888-787","Street 654","8988")
@@ -746,7 +751,8 @@ public class Initializer {
 				User.findByUsername("admin"),
 				null,
 				null,
-				StockLocation.FACILITY
+				StockLocation.FACILITY,
+				equipment01
 				)
 			
 			def warrantyTwo = newWarranty(['en':'warranty one'],'warranty name1','email1@gmail.com',"0768-111-787","Street 154","898",getDate(10, 12, 2010),false,[:])
@@ -766,7 +772,8 @@ public class Initializer {
 				User.findByUsername("admin"),
 				null,
 				null,
-				StockLocation.FACILITY
+				StockLocation.FACILITY,
+				equipment10
 				)
 		
 			def warrantyThree = newWarranty(['en':'warranty two'],'warranty name2','email2@gmail.com',"0768-222-787","Street 154","88",getDate(10, 12, 2010),false,[:])
@@ -786,7 +793,8 @@ public class Initializer {
 				User.findByUsername("admin"),
 				null,
 				null,
-				StockLocation.MMC
+				StockLocation.MMC,
+				equipment01
 				)
 			
 			
@@ -808,7 +816,8 @@ public class Initializer {
 				User.findByUsername("admin"),
 				null,
 				null,
-				StockLocation.MMC
+				StockLocation.MMC,
+				null
 				)
 			
 			def warrantyFive = newWarranty(['en':'warranty Five'],'warranty name3','email3@gmail.com',"0768-333-787","Street 154","988",getDate(10, 12, 2010),false,[:])
@@ -835,18 +844,21 @@ public class Initializer {
 	//Spare Part status
 	public static def newSparePartStatus(def dateOfEvent,def changedBy,def value, def sparePart,def reasons){
 		def status = new SparePartStatus(dateOfEvent:dateOfEvent,changedBy:changedBy,statusOfSparePart:value)
+		//TODO this may be customized to add equipments according to the status
+		def equipment10 =Equipment.findBySerialNumber("SERIAL10")
 		Utils.setLocaleValueInMap(status,reasons,"Reasons")
 		sparePart.addToStatus(status)
 		sparePart.save(failOnError:true,flush:true)
 		sparePart.statusOfSparePart = value
 		sparePart.lastModified = changedBy
+		sparePart.usedOnEquipment=equipment10
 		sparePart.save(failOnError:true,flush:true)
 		return status
 	}
 	// Spare part
 	public static def newSparePart(def serialNumber,def sparePartPurchasedBy,def sameAsManufacturer,def expectedLifeTime,
 		def purchaseCost,def descriptions,def manufactureDate, def purchaseDate,def currency,def model,def dataLocation,def type,
-		def supplier,def statusOfSparePart,def addedBy,def lastModifiedBy,def lastModifiedOn, def stockLocation){
+		def supplier,def statusOfSparePart,def addedBy,def lastModifiedBy,def lastModifiedOn, def stockLocation, def usedOnEquipment){
 		def sparePart = new SparePart(
 			serialNumber:serialNumber,
 			sparePartPurchasedBy:sparePartPurchasedBy,
@@ -864,7 +876,8 @@ public class Initializer {
 			addedBy:addedBy,
 			lastModified:lastModifiedBy,
 			lastUpdated:lastModifiedOn,
-			stockLocation:stockLocation
+			stockLocation:stockLocation,
+			usedOnEquipment:usedOnEquipment
 			);
 		Utils.setLocaleValueInMap(sparePart,descriptions,"Descriptions")
 		return sparePart.save(failOnError: true,flush:true)

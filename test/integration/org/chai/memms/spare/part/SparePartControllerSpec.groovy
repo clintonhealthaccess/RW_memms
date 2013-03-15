@@ -115,6 +115,7 @@ class SparePartControllerSpec extends IntegrationTests{
 				
 				def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
 				def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",manufacturer,Initializer.now())
+				def equipment01 = newEquipment("SERIAL01",DataLocation.findByCode(KIVUYE))
 				
 				sparePartController = new SparePartController();
 				when:
@@ -148,6 +149,7 @@ class SparePartControllerSpec extends IntegrationTests{
 				sparePartController.params.dataLocation = DataLocation.list().first()
 				sparePartController.params.statusOfSparePart="OPERATIONAL"
 				sparePartController.params.dateOfEvent=Initializer.now()
+				sparePartController.params.usedOnEquipment=equipment01
 				sparePartController.save()
 		
 				then:

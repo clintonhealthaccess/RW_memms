@@ -109,6 +109,9 @@ public class SparePart {
 	User addedBy
 	User lastModified
 	
+	String room
+	String shelve
+	
 	static belongsTo = [type: SparePartType, stockLocation: StockLocation]
 	static hasMany = [status: SparePartStatus]	
 	static i18nFields = ["descriptions","names"]
@@ -117,6 +120,8 @@ public class SparePart {
 	static constraints = {
 		code nullable: false, unique :true
 		names nullable: true, blank: true
+		room nullable: true, blank: true
+		shelve nullable: true, blank: true
 		descriptions nullable: true, blank: true
 		serialNumber nullable: true, unique: true, validator: { val, obj ->
 			if(!obj.statusOfSparePart.equals(StatusOfSparePart.PENDINGORDER)) return (val!=null)
@@ -134,7 +139,9 @@ public class SparePart {
 			if(obj.stockLocation.equals(StockLocation.FACILITY)) return (val!=null)
 		}
 		addedBy nullable: false
-		usedOnEquipment nullable: true
+		usedOnEquipment nullable: true, validator:{val,obj ->
+			if(obj.statusOfSparePart.equals(StatusOfSparePart.OPERATIONAL)) return (val!=null)
+		}
 		lastModified nullable:true, validator:{ val, obj ->
 			if (val != null) return (obj.lastUpdated != null)
 		}	
