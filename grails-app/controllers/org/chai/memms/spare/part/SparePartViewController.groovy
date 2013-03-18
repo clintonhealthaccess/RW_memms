@@ -46,6 +46,7 @@ import org.chai.memms.spare.part.SparePart.SparePartPurchasedBy;
 import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
 
 
+
 import org.chai.memms.inventory.Provider;
 
 import org.chai.memms.security.User;
@@ -80,11 +81,18 @@ class SparePartViewController extends AbstractController{
 	def list = {
 		adaptParamsForList()	
 		def sparePartType=null
+		def statusOfSparePart=null
 		if(params['sparePartType']!=null)
-			sparePartType =  SparePartType.get(params.int('sparePartType'))			
-		def spareParts = sparePartService.getSparePartsByUser(user,sparePartType,params)		
+			sparePartType =  SparePartType.get(params.int('sparePartType'))	
+			
+			if(params['statusOfSparePart']!=null){
+				statusOfSparePart = params["statusOfSparePart"]
+				statusOfSparePart = StatusOfSparePart."$statusOfSparePart"
+			}
+			log.debug("==========>"+statusOfSparePart)
+		def spareParts = sparePartService.getSpareParts(user,sparePartType,statusOfSparePart,params)		
 		if(request.xhr)
-			this.ajaxModel(spareParts,sparePartType,"")
+			this.ajaxModel(spareParts,sparePartType,statusOfSparePart,"")
 		else{
 		render(view:"/entity/list",model:[
 				template:"sparePart/sparePartList",
@@ -118,11 +126,12 @@ class SparePartViewController extends AbstractController{
 	def search = {
 		adaptParamsForList()
 		def sparePartType=null
+		def sparePartStatus=null
 		if(params['sparePartType']!=null)
 			sparePartType =  SparePartType.get(params.int('sparePartType'))
-		def spareParts = sparePartService.searchSparePart(params['q'],user,sparePartType,params)
+		def spareParts = sparePartService.searchSparePart(params['q'],user,sparePartType,sparePartStatus,params)
 		if(!request.xhr)
-		this.ajaxModel(spareParts,sparePartType,params['q'])
+		this.ajaxModel(spareParts,sparePartType,sparePartStatus,params['q'])
 		else {
 			render(view:"/entity/list", model: model(spareParts) << [
 				template:"sparePart/sparePartList",
@@ -145,17 +154,19 @@ class SparePartViewController extends AbstractController{
 		}
 	}
 	
-	def ajaxModel(def entities,def searchTerm,def sparePart) {
+	def ajaxModel(def entities,def searchTerm,def sparePart, def sparePartType ,def sparePartStatus) {
 		def model = [entities: entities,entityCount: entities.totalCount,entityClass:getEntityClass(),names:names,q:searchTerm]
 		def listHtml = g.render(template:"/entity/sparePart/sparePartList",model:model)
 		render(contentType:"text/json") { results = [listHtml] }
 	}
-	def model(def entities,def sparePartType) {
+	
+	def model(def entities,def sparePartType,def sparePartStatus) {
 		return [
 			entities: entities,
 			entityCount: entities.totalCount,
 			code: getLabel(),
-			sparePartType:sparePartType?.id
+			sparePartType:sparePartType?.id,
+			sparePartStatus:sparePartStatus?.id
 		]
 	}
 	

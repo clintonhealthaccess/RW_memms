@@ -26,8 +26,7 @@
 						</li>
 						<li>
 							<a href="${createLinkWithTargetURI(controller:'sparePartType', action:'delete', params:[id: type.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');" class="delete-button"><g:message code="default.link.delete.label" /></a>
-						</li>
-						
+						</li>		
 					</ul>
 				</td>
 				<td>
@@ -59,7 +58,7 @@
 					</a>
 				</td>
 				<td>
-					<a href="${createLinkWithTargetURI(controller:'sparePart', action:'list', params:[sparePartType: type.id])}">
+					<a href="${createLinkWithTargetURI(controller:'sparePartView', action:'list', params:[sparePartType: type.id,statusOfSparePart:"INSTOCK"])}">
 						Spare parts
 					</a>
 				</td>      

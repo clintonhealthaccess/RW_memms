@@ -34,7 +34,7 @@ class EquipmentTypeServiceSpec extends IntegrationTests{
 		
 		def equipmentType = EquipmentType.findByCode(CODE(123))
 		def sparePartType = SparePartType.findByCode(CODE(123))
-		sparePartType.addToCompatibleEjquipmentTypes(equipmentType)
+		sparePartType.addToCompatibleEquipmentTypes(equipmentType)
 		sparePartType.save(failOnError:true)
 		
 		when:

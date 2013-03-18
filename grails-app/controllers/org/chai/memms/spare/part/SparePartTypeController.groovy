@@ -111,26 +111,20 @@ class SparePartTypeController  extends AbstractEntityController{
 			entity.params.oldCompatibleEquipmentTypes = []
 			entity.params.oldVendors = []
 		}
-//		if(!params.oldCompatibleEquipmentTypes.isEmpty()){
 			params.oldCompatibleEquipmentTypes.each{ type ->
 				if(!entity.compatibleEquipmentTypes.contains(type)){
 					type.sparePartTypes.remove(entity)
 					type.save(failOnError:true)
 				}
 			}
-//		}
-		
-//		if(!params.oldVendors.isEmpty()){
 			params.oldVendors.each{ vendor ->
 				if(!entity.vendors.contains(vendor)){
 					vendor.sparePartTypes.remove(entity)
 					vendor.save(failOnError:true)
 				}
 			}
-//		}
 	}
 		
-	
 	def getModel(def entity) {
 		def vendors = []
 	    def compatibleEquipmentTypes = []
@@ -151,7 +145,6 @@ class SparePartTypeController  extends AbstractEntityController{
 	}
 							
 	def list = {	
-	
 		adaptParamsForList()
 		List<SparePartType> types = SparePartType.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc")
 		if(request.xhr)

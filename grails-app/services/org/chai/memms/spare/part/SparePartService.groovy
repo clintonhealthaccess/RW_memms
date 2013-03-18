@@ -77,7 +77,7 @@ class SparePartService {
 		sparePart.save(failOnError:true)
 	}
 	
-	public def searchSparePart(String text,User user,Map<String, String> params) {
+	public def searchSparePart(String text,User user,SparePartStatus sparePartStatus,Map<String, String> params) {
 		//Remove unnecessary blank space
 		text= text.trim()
 		def dbFieldTypeNames = 'names_'+languageService.getCurrentLanguagePrefix();
@@ -110,15 +110,17 @@ class SparePartService {
 		}
 	}
 
-	public def getSparePartsByUser(User user, SparePartType sparePartType,Map<String,String> params) {
+	
+	public def getSpareParts(User user, SparePartType sparePartType,StatusOfSparePart statusOfSparePart,Map<String,String> params) {
 		def dataLocations = []
 		def criteria = SparePart.createCriteria();
-//		if(sparePartType!=null){
-//			sparePartTypes{
-//				eq('id',sparePartType.id)
-//			}
-//		}
-		
+	
+		if(sparePartType!=null && statusOfSparePart!=null){
+	         return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+				eq("type",sparePartType)
+				eq("statusOfSparePart",statusOfSparePart)
+			}
+		}
 		if(user.userType.equals(UserType.ADMIN) || user.userType.equals(UserType.TECHNICIANMMC) || user.userType.equals(UserType.SYSTEM))
 			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 				
@@ -137,8 +139,7 @@ class SparePartService {
 				inList('dataLocation',dataLocations) 
 			}
 			
-		}
-		
+		}	
 		
 	}
 	public def filterSparePart(def user, def dataLocation, def supplier, def sparePartType,

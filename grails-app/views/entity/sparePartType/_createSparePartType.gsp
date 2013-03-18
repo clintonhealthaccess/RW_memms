@@ -28,17 +28,13 @@
     			from="${compatibleEquipmentTypes}" value="${type.compatibleEquipmentTypes*.id}" 
     			values="${compatibleEquipmentTypes.collect{it.names}}"/>  
     		
-     <g:selectFromList name="vendors" label="${message(code:'provider.vendors.label')}" bean="${type}" 
+      <g:selectFromList name="vendors" label="${message(code:'provider.vendors.label')}" bean="${type}" 
     	field="vendors" optionKey="id" multiple="true"
     			ajaxLink="${createLink(controller:'provider', action:'getAjaxData',params:['type':'SUPPLIER'])}"
-    		    from="${vendors}" value="${type.vendors*.id}" values="${vendors.collect{it.contact.contactName}}"/>	
-    		    
-   <g:selectFromList name="spareParts" label="${message(code:'spare.part.label')}" bean="${type}" 
-    	field="spareParts" optionKey="id" multiple="true"
-    			ajaxLink="${createLink(controller:'sparePartView', action:'getAjaxData',params:['type':'INSTOCK'])}"
-    		    from="${spareParts}" value="${type.spareParts*.id}" values="${spareParts.collect{it.type.names}}"/>	 		        	  		
+    		    from="${vendors}" value="${type.vendors*.id}" values="${vendors.collect{it.contact.contactName}}"/>	 		        	  		
+  		
   		<g:if test="${type.id != null}">
-  			<input type="hidden" name="id" value="${type.id}"></input>
+  		<input type="hidden" name="id" value="${type.id}"></input>
   		</g:if>
   		<br />
   		<div class="buttons">

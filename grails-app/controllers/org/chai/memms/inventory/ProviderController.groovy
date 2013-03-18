@@ -91,7 +91,6 @@ class ProviderController  extends AbstractEntityController {
 			sparePartType =  SparePartType.get(params.int("sparePartType"))
 		def providers = providerService.getProviders(sparePartType,params);
 		if(request.xhr)
-//			this.ajaxModel(providers,"",sparePartType)
 		    this.ajaxModel(providers,sparePartType,params)
 		else{
 		render(view:"/entity/list", model: model(providers,sparePartType) << [
