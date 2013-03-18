@@ -73,6 +73,7 @@
     padding: 15px 20px
     text-decoration: none
     +text-shadow(#fff 0 1px 0)
+    +transition(color .2s)
     &:hover, &:focus
       color: $primary
     &.active
@@ -83,6 +84,26 @@
       font-weight: bold
       margin: 0 0 -1px 0
       position: relative
+
+.v_tabs_subnav
+  padding-left: 5px
+  +pie-clearfix
+  li
+    display: inline
+    float: left
+  a
+    color: #999
+    display: block
+    margin-bottom: -1px
+    padding: 2px 15px 15px
+    text-decoration: none
+    +transition(color .2s)
+    &.active
+      background: url('../images/bump.png') no-repeat bottom center
+      color: $primary
+    &:hover, &:focus
+      color: $primary
+
 
 .v_tabs_content
   background: #fff
@@ -95,7 +116,13 @@
     border: none !important
     margin-bottom: 0
   #showhide
+    font-size: 11px
     margin-right: 15px
+    opacity: 0.6
+    +transition(opacity .2s)
+    &:hover, &:focus
+      color: $primary
+      opacity: 1
 .v_tabs_row p
   +pie-clearfix
 

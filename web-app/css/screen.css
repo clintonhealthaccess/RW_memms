@@ -1173,93 +1173,108 @@ table.nice-table .cell { cursor: default; }
 /* line 66, ../../src/stylesheets/partials/_report.sass */
 .v_tabs_nav li { display: inline; float: left; }
 /* line 69, ../../src/stylesheets/partials/_report.sass */
-.v_tabs_nav a { color: #aaaaaa; display: block; font-size: 12px; padding: 15px 20px; text-decoration: none; text-shadow: white 0 1px 0; }
-/* line 76, ../../src/stylesheets/partials/_report.sass */
+.v_tabs_nav a { color: #aaaaaa; display: block; font-size: 12px; padding: 15px 20px; text-decoration: none; text-shadow: white 0 1px 0; -webkit-transition: color 0.2s; -moz-transition: color 0.2s; -o-transition: color 0.2s; transition: color 0.2s; }
+/* line 77, ../../src/stylesheets/partials/_report.sass */
 .v_tabs_nav a:hover, .v_tabs_nav a:focus { color: #258cd5; }
-/* line 78, ../../src/stylesheets/partials/_report.sass */
+/* line 79, ../../src/stylesheets/partials/_report.sass */
 .v_tabs_nav a.active { background: white; border: 1px solid rgba(0, 0, 0, 0.1); border-bottom: none; color: #258cd5; font-weight: bold; margin: 0 0 -1px 0; position: relative; }
 
-/* line 87, ../../src/stylesheets/partials/_report.sass */
-.v_tabs_content { background: white; border: 1px solid rgba(0, 0, 0, 0.1); color: #666666; font-size: 12px; padding: 15px 0 0; width: 998px; }
+/* line 88, ../../src/stylesheets/partials/_report.sass */
+.v_tabs_subnav { padding-left: 5px; *zoom: 1; }
+/* line 38, ../../../../.rvm/gems/ruby-1.9.3-p327/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
+.v_tabs_subnav:after { content: ""; display: table; clear: both; }
+/* line 91, ../../src/stylesheets/partials/_report.sass */
+.v_tabs_subnav li { display: inline; float: left; }
 /* line 94, ../../src/stylesheets/partials/_report.sass */
-.v_tabs_content .filters { border: none !important; margin-bottom: 0; }
-/* line 97, ../../src/stylesheets/partials/_report.sass */
-.v_tabs_content #showhide { margin-right: 15px; }
+.v_tabs_subnav a { color: #999999; display: block; margin-bottom: -1px; padding: 2px 15px 15px; text-decoration: none; -webkit-transition: color 0.2s; -moz-transition: color 0.2s; -o-transition: color 0.2s; transition: color 0.2s; }
+/* line 101, ../../src/stylesheets/partials/_report.sass */
+.v_tabs_subnav a.active { background: url("../images/bump.png") no-repeat bottom center; color: #258cd5; }
+/* line 104, ../../src/stylesheets/partials/_report.sass */
+.v_tabs_subnav a:hover, .v_tabs_subnav a:focus { color: #258cd5; }
 
-/* line 99, ../../src/stylesheets/partials/_report.sass */
+/* line 108, ../../src/stylesheets/partials/_report.sass */
+.v_tabs_content { background: white; border: 1px solid rgba(0, 0, 0, 0.1); color: #666666; font-size: 12px; padding: 15px 0 0; width: 998px; }
+/* line 115, ../../src/stylesheets/partials/_report.sass */
+.v_tabs_content .filters { border: none !important; margin-bottom: 0; }
+/* line 118, ../../src/stylesheets/partials/_report.sass */
+.v_tabs_content #showhide { font-size: 11px; margin-right: 15px; opacity: 0.6; -webkit-transition: opacity 0.2s; -moz-transition: opacity 0.2s; -o-transition: opacity 0.2s; transition: opacity 0.2s; }
+/* line 123, ../../src/stylesheets/partials/_report.sass */
+.v_tabs_content #showhide:hover, .v_tabs_content #showhide:focus { color: #258cd5; opacity: 1; }
+
+/* line 126, ../../src/stylesheets/partials/_report.sass */
 .v_tabs_row p { *zoom: 1; }
 /* line 38, ../../../../.rvm/gems/ruby-1.9.3-p327/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .v_tabs_row p:after { content: ""; display: table; clear: both; }
 
-/* line 102, ../../src/stylesheets/partials/_report.sass */
+/* line 129, ../../src/stylesheets/partials/_report.sass */
 .v_tabs_filters { margin: 0 0 10px 15px; *zoom: 1; }
 /* line 38, ../../../../.rvm/gems/ruby-1.9.3-p327/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .v_tabs_filters:after { content: ""; display: table; clear: both; }
-/* line 105, ../../src/stylesheets/partials/_report.sass */
+/* line 132, ../../src/stylesheets/partials/_report.sass */
 .v_tabs_filters li { display: inline; float: left; font-size: 12px; margin-right: 20px; }
 
-/* line 111, ../../src/stylesheets/partials/_report.sass */
+/* line 138, ../../src/stylesheets/partials/_report.sass */
 .v_tabs_list { border-top: 1px solid #258cd5; width: 100%; *zoom: 1; }
 /* line 38, ../../../../.rvm/gems/ruby-1.9.3-p327/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .v_tabs_list:after { content: ""; display: table; clear: both; }
-/* line 115, ../../src/stylesheets/partials/_report.sass */
+/* line 142, ../../src/stylesheets/partials/_report.sass */
 .v_tabs_list li { border-top: 1px solid rgba(0, 0, 0, 0.1); padding: 0 0 0 10px; vertical-align: middle; *zoom: 1; }
 /* line 38, ../../../../.rvm/gems/ruby-1.9.3-p327/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .v_tabs_list li:after { content: ""; display: table; clear: both; }
-/* line 120, ../../src/stylesheets/partials/_report.sass */
+/* line 147, ../../src/stylesheets/partials/_report.sass */
 .v_tabs_list li.selected { padding: 0; }
-/* line 122, ../../src/stylesheets/partials/_report.sass */
+/* line 149, ../../src/stylesheets/partials/_report.sass */
 .v_tabs_list li.selected p { background: rgba(0, 0, 0, 0.02); border-bottom: 1px solid rgba(0, 0, 0, 0.15); color: #258cd5; margin-bottom: 5px; padding: 5px 10px; }
-/* line 128, ../../src/stylesheets/partials/_report.sass */
+/* line 155, ../../src/stylesheets/partials/_report.sass */
 .v_tabs_list li.selected .v_tabs_switch img { -webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); -ms-transform: rotate(90deg); -o-transform: rotate(90deg); transform: rotate(90deg); }
-/* line 131, ../../src/stylesheets/partials/_report.sass */
+/* line 158, ../../src/stylesheets/partials/_report.sass */
 .v_tabs_list > li:hover, .v_tabs_list > li:focus, .v_tabs_list > li.selected { border: 1px solid #cccccc; margin: 0 -1px -1px; position: relative; z-index: 5; -webkit-box-shadow: rgba(0, 0, 0, 0.1) 0 0 5px; -moz-box-shadow: rgba(0, 0, 0, 0.1) 0 0 5px; box-shadow: rgba(0, 0, 0, 0.1) 0 0 5px; }
-/* line 137, ../../src/stylesheets/partials/_report.sass */
+/* line 164, ../../src/stylesheets/partials/_report.sass */
 .v_tabs_list > li:first-child { border-top: none; }
-/* line 139, ../../src/stylesheets/partials/_report.sass */
+/* line 166, ../../src/stylesheets/partials/_report.sass */
 .v_tabs_list > li p { padding: 0 20px 5px; }
 
-/* line 142, ../../src/stylesheets/partials/_report.sass */
+/* line 169, ../../src/stylesheets/partials/_report.sass */
 .v_tabs_nested { border-top: 1px solid rgba(0, 0, 0, 0.1); display: none; margin: 0px 30px 15px; }
-/* line 146, ../../src/stylesheets/partials/_report.sass */
+/* line 173, ../../src/stylesheets/partials/_report.sass */
 .v_tabs_nested li { padding: 0; }
-/* line 148, ../../src/stylesheets/partials/_report.sass */
+/* line 175, ../../src/stylesheets/partials/_report.sass */
 .v_tabs_nested li:first-child { border-top: 0; }
-/* line 152, ../../src/stylesheets/partials/_report.sass */
+/* line 179, ../../src/stylesheets/partials/_report.sass */
 .v_tabs_nested li:hover, .v_tabs_nested li:focus { background: rgba(0, 0, 0, 0.03); }
-/* line 154, ../../src/stylesheets/partials/_report.sass */
+/* line 181, ../../src/stylesheets/partials/_report.sass */
 .v_tabs_nested .v_tabs_name { padding-top: 10px; padding-left: 10px; width: 660px; }
 
-/* line 159, ../../src/stylesheets/partials/_report.sass */
+/* line 186, ../../src/stylesheets/partials/_report.sass */
 .v_tabs_nested_nav { display: none; margin: 20px 10px 10px 30px; *zoom: 1; }
 /* line 38, ../../../../.rvm/gems/ruby-1.9.3-p327/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .v_tabs_nested_nav:after { content: ""; display: table; clear: both; }
-/* line 163, ../../src/stylesheets/partials/_report.sass */
+/* line 190, ../../src/stylesheets/partials/_report.sass */
 .v_tabs_nested_nav li { border: none; border-right: 1px solid #cccccc; display: inline; float: left; padding: 0 10px; *zoom: 1; }
 /* line 38, ../../../../.rvm/gems/ruby-1.9.3-p327/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .v_tabs_nested_nav li:after { content: ""; display: table; clear: both; }
-/* line 170, ../../src/stylesheets/partials/_report.sass */
+/* line 197, ../../src/stylesheets/partials/_report.sass */
 .v_tabs_nested_nav li a { color: #aaaaaa; display: block; font-size: 11px; padding: 0; text-decoration: none; }
-/* line 176, ../../src/stylesheets/partials/_report.sass */
+/* line 203, ../../src/stylesheets/partials/_report.sass */
 .v_tabs_nested_nav li a:hover, .v_tabs_nested_nav li a:focus { color: #258cd5; }
-/* line 178, ../../src/stylesheets/partials/_report.sass */
+/* line 205, ../../src/stylesheets/partials/_report.sass */
 .v_tabs_nested_nav li a.active { color: #258cd5; font-weight: bold; }
-/* line 181, ../../src/stylesheets/partials/_report.sass */
+/* line 208, ../../src/stylesheets/partials/_report.sass */
 .v_tabs_nested_nav li:last-child { border-right: none; }
 
-/* line 184, ../../src/stylesheets/partials/_report.sass */
+/* line 211, ../../src/stylesheets/partials/_report.sass */
 .v_tabs_switch, .v_tabs_name, .v_tabs_formula, .v_tabs_value { float: left; }
 
-/* line 186, ../../src/stylesheets/partials/_report.sass */
+/* line 213, ../../src/stylesheets/partials/_report.sass */
 .v_tabs_switch { height: 10px; margin: 10px; width: 10px; }
 
-/* line 190, ../../src/stylesheets/partials/_report.sass */
+/* line 217, ../../src/stylesheets/partials/_report.sass */
 .v_tabs_name { padding: 10px 0; width: 660px; }
 
-/* line 193, ../../src/stylesheets/partials/_report.sass */
+/* line 220, ../../src/stylesheets/partials/_report.sass */
 .v_tabs_formula { background: #65c029; height: 12px; margin: 10px 20px; overflow: hidden; text-indent: -9999em; width: 12px; -webkit-border-radius: 6px; -moz-border-radius: 6px; -ms-border-radius: 6px; -o-border-radius: 6px; border-radius: 6px; }
 
-/* line 202, ../../src/stylesheets/partials/_report.sass */
+/* line 229, ../../src/stylesheets/partials/_report.sass */
 .v_tabs_value { border-left: 1px solid rgba(0, 0, 0, 0.2); font-size: 15px; font-weight: bold; padding: 10px 0 8px 20px; width: 180px; }
 
 /* line 3, ../../src/stylesheets/partials/_graphs.sass */
