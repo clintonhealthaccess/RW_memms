@@ -33,9 +33,11 @@ import org.chai.memms.IntegrationTests;
 import org.chai.memms.inventory.Provider;
 import org.chai.memms.inventory.Provider.Type;
 import org.chai.memms.security.User.UserType;
+import org.chai.memms.spare.part.SparePart;
 import org.chai.memms.spare.part.SparePart.SparePartPurchasedBy;
 import org.chai.memms.spare.part.SparePart.StockLocation;
 import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
+import org.chai.memms.spare.part.SparePartViewController;
 import org.chai.memms.inventory.FilterCommand;
 import org.chai.memms.security.User;
 import org.chai.memms.security.User.UserType

@@ -147,7 +147,7 @@ class SparePartControllerSpec extends IntegrationTests{
 				sparePartController.params.expectedLifeTime_months = "3"
 				sparePartController.params."supplier.id" = supplier.id
 				sparePartController.params.dataLocation = DataLocation.list().first()
-				sparePartController.params.statusOfSparePart="OPERATIONAL"
+				sparePartController.params.statusOfSparePart="INSTOCK"
 				sparePartController.params.dateOfEvent=Initializer.now()
 				sparePartController.params.usedOnEquipment=equipment01
 				sparePartController.save()

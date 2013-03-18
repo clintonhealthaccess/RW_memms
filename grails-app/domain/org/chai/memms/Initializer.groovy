@@ -734,7 +734,7 @@ public class Initializer {
 					
 			def warrantyContactOne = newContact(['fr':'Warranty Address Descriptions One'],"Warranty","jk@yahoo.com","0768-888-787","Street 654","8988")
 			def warrantyOne = newWarranty(warrantyContactOne,getDate(10, 12, 2010),false,[:])
-			def statusOne= newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.INSTOCK,sparePartOne,[:])
+			def statusOne= newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.INSTOCK,sparePartOne,[:],null)
 			
 			sparePartOne.warranty = warrantyOne
 			sparePartOne.warrantyPeriod = newPeriod(22)
@@ -756,7 +756,7 @@ public class Initializer {
 				)
 			
 			def warrantyTwo = newWarranty(['en':'warranty one'],'warranty name1','email1@gmail.com',"0768-111-787","Street 154","898",getDate(10, 12, 2010),false,[:])
-			def statusTwo= newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.OPERATIONAL,sparePartTwo,[:])
+			def statusTwo= newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.OPERATIONAL,sparePartTwo,[:],equipment01)
 			sparePartTwo.warranty=warrantyTwo
 			sparePartTwo.warrantyPeriod = newPeriod(14)
 			sparePartTwo.save(failOnError:true)
@@ -777,7 +777,7 @@ public class Initializer {
 				)
 		
 			def warrantyThree = newWarranty(['en':'warranty two'],'warranty name2','email2@gmail.com',"0768-222-787","Street 154","88",getDate(10, 12, 2010),false,[:])
-			def statusThree= newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.OPERATIONAL,sparePartThree,[:])
+			def statusThree= newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.OPERATIONAL,sparePartThree,[:],equipment10)
 			sparePartThree.warranty=warrantyTwo
 			sparePartThree.warrantyPeriod = newPeriod(12)
 			sparePartThree.save(failOnError:true)
@@ -799,8 +799,8 @@ public class Initializer {
 			
 			
 			def warrantyFour = newWarranty(['en':'warranty two'],'warranty name2','email2@gmail.com',"0768-222-787","Street 154","888",getDate(10, 12, 2011),false,[:])
-			def statusFour = newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.OPERATIONAL,sparePartFour,[:])
-			def statusFourOne = newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.DISPOSED,sparePartFour,[:])
+			def statusFour = newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.OPERATIONAL,sparePartFour,[:],equipment01)
+			def statusFourOne = newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.DISPOSED,sparePartFour,[:],null)
 			sparePartFour.warranty=warrantyFour
 			sparePartFour.warrantyPeriod = newPeriod(24)
 			sparePartFour.save(failOnError:true)
@@ -821,9 +821,9 @@ public class Initializer {
 				)
 			
 			def warrantyFive = newWarranty(['en':'warranty Five'],'warranty name3','email3@gmail.com',"0768-333-787","Street 154","988",getDate(10, 12, 2010),false,[:])
-			def statusFive= newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.INSTOCK,sparePartFive,[:])
-			def statusFiveOne = newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.OPERATIONAL,sparePartFive,[:])
-			def statusFiveTwo = newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.DISPOSED,sparePartFive,[:])
+			def statusFive= newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.INSTOCK,sparePartFive,[:], null)
+			def statusFiveOne = newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.OPERATIONAL,sparePartFive,[:], equipment09)
+			def statusFiveTwo = newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.DISPOSED,sparePartFive,[:],null)
 			sparePartFive.warranty=warrantyFour
 			sparePartFive.warrantyPeriod = newPeriod(8)
 			sparePartFive.save(failOnError:true)
@@ -842,18 +842,18 @@ public class Initializer {
 	}
 
 	//Spare Part status
-	public static def newSparePartStatus(def dateOfEvent,def changedBy,def value, def sparePart,def reasons){
+	public static def newSparePartStatus(def dateOfEvent,def changedBy,def value, def sparePart,def reasons, def usedOnEquipment){
 		def status = new SparePartStatus(dateOfEvent:dateOfEvent,changedBy:changedBy,statusOfSparePart:value)
 		//TODO this may be customized to add equipments according to the status
-		def equipment10 =Equipment.findBySerialNumber("SERIAL10")
+		
 		Utils.setLocaleValueInMap(status,reasons,"Reasons")
+		if (value.equals(StatusOfSparePart.OPERATIONAL))
+			sparePart.usedOnEquipment =usedOnEquipment
 		sparePart.addToStatus(status)
-		sparePart.save(failOnError:true,flush:true)
 		sparePart.statusOfSparePart = value
 		sparePart.lastModified = changedBy
-		sparePart.usedOnEquipment=equipment10
 		sparePart.save(failOnError:true,flush:true)
-		return status
+		return status.save(failOnError:true,flush:true)
 	}
 	// Spare part
 	public static def newSparePart(def serialNumber,def sparePartPurchasedBy,def sameAsManufacturer,def expectedLifeTime,
