@@ -16,7 +16,8 @@
   
       <g:input name="code" label="${message(code:'entity.code.label')}" bean="${type}" field="code"/>     
   		<g:i18nInput name="names" label="${message(code:'entity.names.label')}" bean="${type}" field="names"/> 		
-  		<g:input name="partNumber" label="${message(code:'entity.part.number.label')}" bean="${type}" field="partNumber"/> 		  		
+  		<g:input name="partNumber" label="${message(code:'entity.part.number.label')}" bean="${type}" field="partNumber"/> 	
+  		<g:input name="discontinuedDate" dateClass="date-picker" label="${message(code:'entity.discontinued.date.label')}" bean="${type}" field="discontinuedDate"/>	  		
   		
       <g:selectFromList name="manufacturer.id" label="${message(code:'provider.type.manufacturer')}" bean="${type}" field="manufacturer" optionKey="id" multiple="false"
   		ajaxLink="${createLink(controller:'provider', action:'getAjaxData', params: [type:'MANUFACTURER'])}"

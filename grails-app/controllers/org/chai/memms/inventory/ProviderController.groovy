@@ -30,8 +30,6 @@
  
 
 import org.chai.memms.inventory.EquipmentType.Observation;
-import org.chai.memms.inventory.Provider.Type;
-import org.chai.memms.spare.part.SparePartType;
 import java.util.List;
 import java.util.Map;
 import org.chai.memms.inventory.Provider.Type;
@@ -73,36 +71,77 @@ class ProviderController  extends AbstractEntityController {
 			flash.message = message(code: 'provider.hasequipments', args: [message(code: getLabel(), default: 'entity'), params.id], default: '{0} still has associated equipments.')
 		}else super.deleteEntity(entity)
 	}
+	
 	def getModel(def entity) {
 	     [
 			 provider: entity
 		 ]
-	}	
-	
+	}		
 	
 	def bindParams(def entity) {
 		entity.properties = params
 	}
 		
+	
+	
+//	def list = {
+//		adaptParamsForList()
+//		def sparePartType = null
+//		if(params['sparePartType']!=null)
+//			sparePartType =  SparePartType.get(params.int("sparePartType.id"))
+//		def providers = providerService.getProviders(sparePartType,params);
+//		if(request.xhr)
+//		    this.ajaxModel(providers,sparePartType,params)
+//		else{
+//		render(view:"/entity/list", model: model(providers,sparePartType) << [
+//			    template:"provider/providerList",
+//				listTop:"provider/listTop"
+//			])
+//		}
+//	}
+	
 	def list = {
 		adaptParamsForList()
-		def sparePartType = null
+		def sparePartType=null
+		def type=null
 		if(params['sparePartType']!=null)
-			sparePartType =  SparePartType.get(params.int("sparePartType"))
-		def providers = providerService.getProviders(sparePartType,params);
+			sparePartType =  SparePartType.get(params.int('sparePartType.id'))
+			
+			if(params['type']!=null){
+				type = params["type"]
+				type = Type."$type"
+			}
+			log.debug("==========>"+type)
+		def vendors = providerService.getProviders(sparePartType,type,params)
 		if(request.xhr)
-		    this.ajaxModel(providers,sparePartType,params)
+			this.ajaxModel(vendors,sparePartType,type,"")
 		else{
-		render(view:"/entity/list", model: model(providers,sparePartType) << [
-			    template:"provider/providerList",
-				listTop:"provider/listTop"
+		render(view:"/entity/list",model:[
+				template:"provider/providerList",
+				listTop:"provider/listTop",
+				entities: vendors,
+//				entityCount: vendors.totalCount,
+				entityClass: getEntityClass(),
+			    code: getLabel()
+//				names:names,
+				//exportTask:'EquipmentTypeExportTask'
 			])
 		}
 	}
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	def search = {
 		adaptParamsForList()
 		def sparePartType = null
+		def type =params['type']
 		if(params['sparePartType']!=null)
 			sparePartType =  SparePartType.get(params.int('sparePartType'))
 		def providers = providerService.searchProvider(type,params['q'],sparePartType,params)
@@ -115,6 +154,7 @@ class ProviderController  extends AbstractEntityController {
 			])
 		}
 	}
+	
 	
 	def ajaxModel(def entities,def searchTerm,def sparePartType) {
 		def model = model(entities,sparePartType) << [q:searchTerm]

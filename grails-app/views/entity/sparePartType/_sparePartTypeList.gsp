@@ -53,7 +53,7 @@
 					</a>
 				</td> 
 				<td>
-					<a href="${createLinkWithTargetURI(controller:'provider', action:'list', params:[sparePartType: type.id])}">
+					<a href="${createLinkWithTargetURI(controller:'provider', action:'list', params:[sparePartType: type.id,type:"SUPPLIER"])}">
 						Vendors
 					</a>
 				</td>
