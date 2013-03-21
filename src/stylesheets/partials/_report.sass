@@ -1,14 +1,14 @@
 // slister start: modified dsr -> report
 #report
   // slister end
-  
+
   #values
     overflow: auto
-    
+
   .parent-row
     background-color: $primary
     color: #fff
-    
+
   // slister start: modified dsr -> report
   .box-report-value
     background-color: #ffffff
@@ -23,7 +23,7 @@
     color: $primary
     text-align: left
   // slister end
-    
+
   .object-name-box
     background: $filler2
     border: 1px solid $filler - #111
@@ -35,7 +35,7 @@
     span a
       font-size: 10px
       font-weight: normal
-    
+
   .title-th
     width: 10px
     color: $primary
@@ -46,11 +46,11 @@
     a
       font-size: 10px
       font-weight: normal
-      
+
   .add-link, .edit-link
     &:hover, &:focus
       color: $yes
-      
+
   .delete-link
     &:hover, &:focus
       color: $no
@@ -163,12 +163,9 @@
       +box-shadow(rgba(0, 0, 0, 0.1) 0 0 5px)
     &:first-child
       border-top: none
-    p
-      padding: 0 20px 5px
 
 .v_tabs_nested
   border-top: 1px solid rgba(0, 0, 0, 0.1)
-  display: none
   margin: 0px 30px 15px
   li
     padding: 0
@@ -184,7 +181,6 @@
     width: 660px
 
 .v_tabs_nested_nav
-  display: none
   margin: 20px 10px 10px 30px
   +pie-clearfix
   li
@@ -232,3 +228,10 @@
   font-weight: bold
   padding: 10px 0 8px 20px
   width: 180px
+
+.v_tabs_fold_container
+  display: none
+
+
+div#comparison, div#geo_trend, div#info_facility
+  display: none
