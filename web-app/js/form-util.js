@@ -416,7 +416,15 @@ function getToHide(parchaseCost,estimatedCost){
 			$(".facility-information").slideUp()
 		}
 	})
-		
+	//Spare Part Status
+	if($("select[name=statusOfSparePart]").val()!="OPERATIONAL") $(".equipment-information").hide()
+	$("select[name=statusOfSparePart]").change(function(e){
+		if($(this).val()=="OPERATIONAL"){
+			$(".equipment-information").slideDown()
+		}else{
+			$(".equipment-information").slideUp()
+		}
+	})
 		
 	$("select[name=occurency]").change(function(e){
 		if($(this).val()=="DAYS_OF_WEEK"){ 

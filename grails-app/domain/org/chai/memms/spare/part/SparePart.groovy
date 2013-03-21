@@ -156,17 +156,19 @@ public class SparePart {
 		currency  nullable: true, blank: true, inList: ["RWF","USD","EUR"], validator:{ val, obj ->
 			if(obj.purchaseCost != null) return (val != null)
 		}
-		/*statusOfSparePart nullable:true,validator:{
+		statusOfSparePart nullable:true,validator:{
 			if(it!=null) return it in [StatusOfSparePart.OPERATIONAL,StatusOfSparePart.INSTOCK,StatusOfSparePart.PENDINGORDER,StatusOfSparePart.DISPOSED]
-		}*/
-		statusOfSparePart nullable:false,validator:{val, obj ->
-			if(obj.id==null) {
-				return val in [StatusOfSparePart.INSTOCK,StatusOfSparePart.PENDINGORDER]
+		}
+		/*statusOfSparePart nullable:false,validator:{ val, obj ->
+			if(obj.id!=null) {
+				if(log.isDebugEnabled()) log.debug("ID OF STATUS INSIDE IF: " + obj.id)
+				return val in [StatusOfSparePart.OPERATIONAL,StatusOfSparePart.INSTOCK,StatusOfSparePart.PENDINGORDER,StatusOfSparePart.DISPOSED]		
 			}
 			else{
-				return val in [StatusOfSparePart.OPERATIONAL,StatusOfSparePart.INSTOCK,StatusOfSparePart.PENDINGORDER,StatusOfSparePart.DISPOSED]
+				if(log.isDebugEnabled()) log.debug("ID OF STATUS INSIDE ELSE: " + obj.id)
+				return val in [StatusOfSparePart.INSTOCK,StatusOfSparePart.PENDINGORDER]			
 			}
-		}
+		}*/
 		model nullable: true
 		supplier nullable: true
 		expectedLifeTime nullable: true, validator:{

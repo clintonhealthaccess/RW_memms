@@ -54,9 +54,11 @@
         </h4>
       	<g:if test="${sparePart.id == null}">
       			<g:selectFromEnum name="statusOfSparePart" bean="${cmd}" values="${StatusOfSparePart.values()}" field="statusOfSparePart" label="${message(code:'spare.part.status.label')}"/>
+      			<div class="equipment-information">
       			<g:selectFromList name="usedOnEquipment.id" label="${message(code:'spare.part.used.on.equipment.label')}" bean="${sparePart}" field="usedOnEquipment" optionKey="id" multiple="false"
     			ajaxLink="${createLink(controller:'equipmentView', action:'getAjaxData', params: [type:'EQUIPMENT'])}"
-    			from="${equipments}" value="${sparePart?.usedOnEquipment?.id}" values="${equipments.collect{it.names}}" />
+    			from="${equipments}" value="${sparePart?.usedOnEquipment?.id}" values="${equipments.collect{it.descriptions}}" />
+    			</div>
       			<g:input name="dateOfEvent" dateClass="date-picker" label="${message(code:'spare.part.status.date.of.event.label')}" bean="${cmd}" field="dateOfEvent"/>
       	</g:if>
       	<g:if test="${sparePart?.status!=null}">
@@ -135,8 +137,12 @@
   			from="${suppliers}" value="${sparePart?.supplier?.id}" values="${suppliers.collect{it.contact?.contactName}}" />		
   			<g:input name="purchaseDate" dateClass="date-picker" label="${message(code:'spare.part.purchase.date.label')}" bean="${sparePart}" field="purchaseDate"/>
     		<g:selectFromEnum name="sparePartPurchasedBy" bean="${sparePart}" values="${SparePartPurchasedBy.values()}" field="sparePartPurchasedBy" label="${message(code:'spare.part.sparePartPurchasedBy.label')}"/>
-    		
-    		<g:currency costName="purchaseCost" id="purchase-cost" costLabel="${message(code:'spare.part.purchase.cost.label')}" bean="${sparePart}" costField="purchaseCost"  currencyName="currency" values="${currencies}" currencyField="currency" currencyLabel="${message(code:'spare.part.currency.label')}"/>
+    		<g:if test="${sparePart?.sparePartPurchasedBy != SparePartPurchasedBy.BYPARTNER}">
+    			<g:currency costName="purchaseCost" id="purchase-cost" costLabel="${message(code:'spare.part.purchase.cost.label')}" bean="${sparePart}" costField="purchaseCost"  currencyName="currency" values="${currencies}" currencyField="currency" currencyLabel="${message(code:'spare.part.currency.label')}"/>
+     		</g:if>
+     		<g:else>
+     		<g:currency costName="purchaseCost" id="purchase-cost" costLabel="${message(code:'spare.part.estimated.purchase.cost.label')}" bean="${sparePart}" costField="purchaseCost"  currencyName="currency" values="${currencies}" currencyField="currency" currencyLabel="${message(code:'spare.part.estmated.currency.label')}"/>
+     		</g:else>
      	</fieldset>
      	 <div id="form-aside-supplier" class="form-aside">
      		<g:if test="${sparePart?.supplier != null}">

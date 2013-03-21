@@ -41,7 +41,16 @@
   	    				${message(code: sparePart.statusOfSparePart?.messageCode+'.'+sparePart.statusOfSparePart?.name)}
   	    			</a>
 				</td>
-				<td>${sparePart.usedOnEquipment.code}</td>
+				<td>
+				<g:if test="${sparePart?.usedOnEquipment != null}">
+				${sparePart.usedOnEquipment.code}
+				</g:if>
+				<g:else>
+					<a href="${createLinkWithTargetURI(controller:'sparePart', action:'edit', params:[id: sparePart.id])}">
+						<g:message code="default.link.edit.label" />
+					</a>
+				</g:else>
+				</td>
 				<td>
 					<g:message code="datalocation.label"/>: ${sparePart.dataLocation?.names}<br/>
 					
@@ -51,14 +60,9 @@
 				<td>
 					<g:if name="sameAsManufacturer" id="${sparePart.id}" test="${(sparePart.sameAsManufacturer==true)}">&radic;</g:if>
 					<g:else>&nbsp;</g:else>
-				</td>
-		
-				
-				<td>${sparePart.supplier.contact.contactName}</td>
-				
-				
-				<td>${message(code: sparePart.sparePartPurchasedBy?.messageCode+'.'+sparePart.sparePartPurchasedBy?.name)}</td>
-				
+				</td>					
+				<td>${sparePart.supplier.contact.contactName}</td>				
+				<td>${message(code: sparePart.sparePartPurchasedBy?.messageCode+'.'+sparePart.sparePartPurchasedBy?.name)}</td>				
 			</tr>
 		</g:each>
 	</tbody>	
