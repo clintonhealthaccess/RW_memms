@@ -84,7 +84,7 @@ class WorkOrderController extends AbstractEntityController{
 		def equipments =  []
 		def dataLocation = DataLocation.get(params.long("dataLocation.id"))
 		dataLocation = (dataLocation)?dataLocation:entity.equipment?.dataLocation
-		def usersInCharge = userService.getActiveUserByTypeAndLocation([UserType.HOSPITALDEPARTMENT,UserType.TITULAIREHC,UserType.TECHNICIANDH],dataLocation,['sort':names])
+		def usersInCharge = userService.getActiveUserByTypeAndLocation([UserType.HOSPITALDEPARTMENT,UserType.TITULAIREHC,UserType.TECHNICIANDH],dataLocation,['sort':'firstname'])
 		if(entity.equipment) equipments << entity.equipment
 		[
 			order:entity,
