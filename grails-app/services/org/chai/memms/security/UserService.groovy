@@ -93,20 +93,21 @@ class UserService {
 		}
 		
 	}
-	
-	List<User> getActiveUserByTypeAndLocation(List<UserType> userTypes, CalculationLocation location, Map<String, String> params){
+	//@Transactional(readOnly = true)
+	def getActiveUserByTypeAndLocation(List<UserType> userTypes, CalculationLocation location, Map<String, String> params){
 		def criteria = User.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			eq ("active", true)
 			if(location != null)
 				eq('location',location)
 			if(userTypes != null && userTypes.size()!=0){
+				log.debug("userTypes==>"+userTypes)
 			    inList ("userType", userTypes)
 			}
 		}
 	}
 	
-	List<User> getNotificationWorkOrderGroup(WorkOrder workOrder,User sender,Boolean escalate){
+	def getNotificationWorkOrderGroup(WorkOrder workOrder,User sender,Boolean escalate){
 		def users = []
 		if(escalate) users.addAll(getActiveUserByTypeAndLocation([UserType.TECHNICIANMMC],null, [:]))
 		else if(sender.userType != UserType.TECHNICIANDH){
@@ -119,7 +120,7 @@ class UserService {
 		return users
 	}
 	
-	List<User> getNotificationEquipmentGroup(DataLocation dataLocation){
+	def getNotificationEquipmentGroup(DataLocation dataLocation){
 		def users;
 		
 		if(dataLocation.managedBy instanceof DataLocation){

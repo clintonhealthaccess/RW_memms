@@ -417,7 +417,7 @@ function getToHide(parchaseCost,estimatedCost){
 		}
 	})
 
-	//dataLocation
+	//user
 	if($("select[name=preventionResponsible]").val()!="HCTECHNICIAN") $(".prevention-responsible").hide()
 	$("select[name=preventionResponsible]").change(function(e){
 		if($(this).val()=="HCTECHNICIAN"){

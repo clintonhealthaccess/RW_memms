@@ -51,6 +51,11 @@ class WorkBasedOrderController extends AbstractEntityController {
 			entity.status = PreventiveOrderStatus.OPEN
 		}else{
 			entity.lastModifiedBy = user
+			if(!params['preventionResponsible'].equals('HCTECHNICIAN')){
+				params['technicianInCharge.id'] = ''
+				entity.technicianInCharge = null
+			}
+
 		}
 		entity.properties = params
 	}
@@ -59,8 +64,8 @@ class WorkBasedOrderController extends AbstractEntityController {
 		def equipments =  []
 		def dataLocation = DataLocation.get(params.long("dataLocation.id"))
 		dataLocation = (dataLocation)?dataLocation:entity.equipment?.dataLocation
-		def usersInCharge = userService.getActiveUserByTypeAndLocation([UserType.HOSPITALDEPARTMENT,UserType.TITULAIREHC,UserType.TECHNICIANDH],dataLocation,[:])
-		if(entity.lastModifiedBy != null) usersInCharge.add(entity.lastModifiedBy)
+		def usersInCharge = userService.getActiveUserByTypeAndLocation([UserType.HOSPITALDEPARTMENT,UserType.TITULAIREHC,UserType.TECHNICIANDH],dataLocation,['params.sort':names])
+		if(entity.technicianInCharge != null) usersInCharge.add(entity.technicianInCharge)
 		if(entity.equipment) equipments << entity.equipment
 
 		[

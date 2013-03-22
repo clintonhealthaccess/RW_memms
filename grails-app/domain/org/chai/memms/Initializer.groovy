@@ -658,15 +658,15 @@ public class Initializer {
 			def equipment09 = Equipment.findBySerialNumber("SERIAL09")
 			def equipment10 = Equipment.findBySerialNumber("SERIAL10")
 			
-			def dOrderOne = newDurationBasedOrder(equipment01,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'First Duration Order'],"First Duration Order",now()+1,null,OccurencyType.DAYS_OF_WEEK,1,[1,3,5])
+			def dOrderOne = newDurationBasedOrder(equipment01,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTITULAIRE,null,['en':'First Duration Order'],"First Duration Order",now()+1,null,OccurencyType.DAYS_OF_WEEK,1,[1,3,5])
 			
 			def dOrderTwo = newDurationBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'Secod Duration Order'],"Second Duration Order",now()+1,null,OccurencyType.MONTHLY,2,[])
 			
-			def dOrderThree = newDurationBasedOrder(equipment10,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'Three Duration Order'],"Second Duration Order",now()+1,null,OccurencyType.DAILY,2,[])
+			def dOrderThree = newDurationBasedOrder(equipment10,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.SERVICEPROVIDER,null,['en':'Three Duration Order'],"Second Duration Order",now()+1,null,OccurencyType.DAILY,2,[])
 			
-			def dOrderFour = newDurationBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'Four Duration Order'],"Second Duration Order",now()+1,null,OccurencyType.YEARLY,2,[])
+			def dOrderFour = newDurationBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTITULAIRE,null,['en':'Four Duration Order'],"Second Duration Order",now()+1,null,OccurencyType.YEARLY,2,[])
 
-			def dOrderFive = newWorkBasedOrder(equipment10,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'First Work Based Five'],"First Work Based Order",now()+1,null,WorkIntervalType.HOURS,22)
+			def dOrderFive = newWorkBasedOrder(equipment10,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTITULAIRE,null,['en':'First Work Based Five'],"First Work Based Order",now()+1,null,WorkIntervalType.HOURS,22)
 
 			def dOrderSix = newWorkBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'Second Work Based Six'],"Second Work Based Order",now()+1,null,WorkIntervalType.WEEK,2)
 

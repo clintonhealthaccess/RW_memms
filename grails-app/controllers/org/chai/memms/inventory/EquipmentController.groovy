@@ -147,7 +147,7 @@ class EquipmentController extends AbstractEntityController{
 		def manufacturers = Provider.findAllByTypeInList([Type.MANUFACTURER,Type.BOTH],[sort:'contact.contactName']); 
 		def suppliers = Provider.findAllByTypeInList([Type.SUPPLIER,Type.BOTH],[sort:'contact.contactName']);  
 		def serviceProviders = Provider.findAllByType(Type.SERVICEPROVIDER,[sort:'contact.contactName']);  
-		def departments = Department.list(cach:true,sort: names); 
+		def departments = Department.list(sort: names); 
 		
 		def types = []; 
 		def dataLocations = [];

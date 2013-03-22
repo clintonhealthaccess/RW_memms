@@ -33,6 +33,8 @@
    		   <g:selectFromEnum name="status" bean="${order}" values="${PreventiveOrderStatus.values()}" field="status"  label="${message(code:'entity.status.label')}"/>
       </g:if>
    		<g:selectFromEnum name="preventionResponsible" bean="${order}" values="${PreventionResponsible.values()}" field="preventionResponsible"  label="${message(code:'preventive.order.prevention.responsible.label')}"/>
+      ${order?.technicianInCharge}= ${order?.lastModifiedBy}==
+      ${order?.addedBy}==
       <div class="prevention-responsible">
    		   <g:selectFromList name="technicianInCharge.id" label="${message(code:'entity.name.label')}" bean="${order}" field="technicianInCharge" optionKey="id" multiple="false" ajaxLink="${createLink(controller:'user', action:'getAjaxData',params:[userTypes:['HOSPITALDEPARTMENT','TITULAIREHC','TECHNICIANDH'],dataLocation:(dataLocation)?dataLocation.id:order.equipment?.dataLocation?.id])}" from="${technicians}" value="${order?.technicianInCharge?.id}" values="${technicians.collect{it?.names}}" />
        </div>

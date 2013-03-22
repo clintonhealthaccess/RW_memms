@@ -309,7 +309,6 @@ class EquipmentViewController extends AbstractController {
 
 	def getAjaxData = {
 		def dataLocation =null
-		log.debug("params['dataLocation']:==>"+params['dataLocation'])
 		if(params['dataLocation']) dataLocation = DataLocation.get(params.int('dataLocation'))
 		List<Equipment> equipments = equipmentService.searchEquipment(params['term'],user,dataLocation,[:])
 		render(contentType:"text/json") {
