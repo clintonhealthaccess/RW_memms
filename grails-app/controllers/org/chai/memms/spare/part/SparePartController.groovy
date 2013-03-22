@@ -113,9 +113,9 @@ class SparePartController extends AbstractEntityController{
 			bindData(entity,params,[exclude:["statusOfSparePart","dateOfEvent"]])
 		if(log.isDebugEnabled()) log.debug("SparePart params: after bind  "+entity)
 		
-		//Verify dataLocation null at MMC NOT NULL at FACILITY
+		//Verify equipment null on status different to operational
 		if(!params["statusOfSparePart"].equals("OPERATIONAL")){
-			params["statusOfSparePart"] = null
+			params["equipment"] = null
 		}
 	}
 

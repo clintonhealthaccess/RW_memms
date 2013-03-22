@@ -132,6 +132,7 @@
           </span>
           <g:message code="spare.part.section.supplier.information.label" default="Supplier Information"/>
         </h4>
+        <g:inputBox name="sameAsManufacturer"  label="${message(code:'spare.part.same.as.supplier.label')}" bean="${sparePart}" field="sameAsManufacturer" checked="${(sparePart?.sameAsManufacturer)? true:false}"/>
       	<g:selectFromList name="supplier.id" label="${message(code:'provider.type.supplier')}" bean="${sparePart}" field="supplier" optionKey="id" multiple="false"
   			ajaxLink="${createLink(controller:'provider', action:'getAjaxData', params: [type:'SUPPLIER'])}"
   			from="${suppliers}" value="${sparePart?.supplier?.id}" values="${suppliers.collect{it.contact?.contactName}}" />		

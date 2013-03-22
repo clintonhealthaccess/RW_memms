@@ -313,8 +313,7 @@ class SparePartServiceSpec extends IntegrationTests{
 		def statusTwo = Initializer.newSparePartStatus(Initializer.now(),User.findByUsername("user"),StatusOfSparePart.OPERATIONAL,sparePart, [:],equipment01)
 		
 		when:
-		//sparePart.usedOnEquipment=equipment01
-		sparePart = sparePartService.updateCurrentSparePartStatus(SparePart.findBySerialNumber("SERIAL10"),statusTwo,user)
+		sparePart = sparePartService.updateCurrentSparePartStatus(SparePart.findBySerialNumber("SERIAL10"),statusTwo,user,equipment01)
 
 		then:
 		SparePart.count() == 1

@@ -1,3 +1,4 @@
+<%@ page import="org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart" %>
 <table class="items spaced">
 	<thead>
 		<tr>
@@ -43,12 +44,24 @@
 				</td>
 				<td>
 				<g:if test="${sparePart?.usedOnEquipment != null}">
-				${sparePart.usedOnEquipment.code}
+					<g:if test="${sparePart.statusOfSparePart.equals(StatusOfSparePart.DISPOSED)}">
+					</g:if>
+					<g:if test="${sparePart.statusOfSparePart.equals(StatusOfSparePart.OPERATIONAL)}">
+					${sparePart.usedOnEquipment.code}
+					</g:if>
 				</g:if>
+				<g:elseif test="${sparePart?.usedOnEquipment == null && sparePart.statusOfSparePart.equals(StatusOfSparePart.PENDINGORDER)}">
+					<a href="${createLinkWithTargetURI(controller:'sparePart', action:'edit', params:[id: sparePart.id])}">
+						<button class="escalate next small gray"><g:message code="spare.part.arrive.in.stock.link.label" /></button>
+					</a>
+				</g:elseif>
+				<g:elseif test="${sparePart?.usedOnEquipment == null && sparePart.statusOfSparePart.equals(StatusOfSparePart.DISPOSED)}">
+
+				</g:elseif>
 				<g:else>
 					<a href="${createLinkWithTargetURI(controller:'sparePart', action:'edit', params:[id: sparePart.id])}">
-						<g:message code="default.link.edit.label" />
-					</a>
+						<button class="escalate next small gray"><g:message code="spare.part.assign.equipment.link.label" /></button>
+					</a>		
 				</g:else>
 				</td>
 				<td>
