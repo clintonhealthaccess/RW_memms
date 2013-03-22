@@ -35,7 +35,7 @@ hibernate {
     cache.use_second_level_cache = true
     cache.use_query_cache = true
     cache.region.factory_class = 'net.sf.ehcache.hibernate.EhCacheRegionFactory'
-	show_sql = true
+	//show_sql = true
 }
 // environment specific settings
 environments {

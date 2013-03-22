@@ -44,19 +44,16 @@ class EquipmentTypeService {
 	def languageService;
 
 	public def searchEquipmentType(String text,Observation observation,SparePartType sparePartType,Map<String, String> params) {
+		text = text.trim()
 		def dbFieldName = 'names_'+languageService.getCurrentLanguagePrefix();
 		def dbFieldDescritpion = 'descriptions_'+languageService.getCurrentLanguagePrefix();
 		def criteria = EquipmentType.createCriteria()
-		text = text.trim()
+		log.debug("sparePartType ====>"+sparePartType)
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(observation!=null)
 				eq("observation",observation)
-
-			if(sparePartType!=null){
-				sparePartTypes{
-					eq('id',sparePartType.id)
-				}
-			}
+			if(sparePartType!=null) sparePartTypes{ eq('id',11) }
+			log.debug("sparePartType ====>"+sparePartType)
 			or{
 				if(observation==null){
 					for(Observation obs: this.getEnumeMatcher(text))

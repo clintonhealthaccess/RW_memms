@@ -94,7 +94,7 @@ class EquipmentTypeController extends AbstractEntityController{
 			sparePartType =  SparePartType.get(params.int("sparePartType"))
 		def types = equipmentTypeService.getEquipmentTypes(sparePartType,params);
 		if(request.xhr)
-			this.ajaxModel(types,sparePartType,params)
+			this.ajaxModel(types,"",sparePartType)
 		else{
 			render(view:"/entity/list",model:model(types,sparePartType) << [
 				template:"equipmentType/equipmentTypeList",
@@ -106,11 +106,18 @@ class EquipmentTypeController extends AbstractEntityController{
 	}
 
 	def search = {
+		log.debug("params ==>"+params)
 		adaptParamsForList()
 		def sparePartType=null
-		if(params['sparePartType']!=null)
+
+		log.debug("params['sparePartType']===>"+params['sparePartType'])
+
+		if(params['sparePartType']!=null){
 			sparePartType =  SparePartType.get(params.int('sparePartType'))
+		}
+
 		def types = equipmentTypeService.searchEquipmentType(params['q'],null,sparePartType,params)
+
 		if(request.xhr)
 			this.ajaxModel(types,params['q'],sparePartType)
 		else {
@@ -118,7 +125,7 @@ class EquipmentTypeController extends AbstractEntityController{
 				template:"equipmentType/equipmentTypeList",
 				listTop:"equipmentType/listTop",
 				importTask:'EquipmentTypeImportTask',
-				exportTask:'EquipmentTypeExportTask'
+				exportTask:'EquipmentTypeExportTask',
 			])
 		}
 	}
@@ -129,7 +136,7 @@ class EquipmentTypeController extends AbstractEntityController{
 			entityCount: entities.totalCount,
 			entityClass:getEntityClass(),
 			code: getLabel(),
-			sparePartType:sparePartType?.id
+			sparePartType:sparePartType
 		]
 	}
 	

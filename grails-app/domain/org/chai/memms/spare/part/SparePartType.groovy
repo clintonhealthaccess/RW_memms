@@ -57,6 +57,7 @@ class SparePartType {
 
 	static i18nFields = ["descriptions", "names"]
 	static hasMany = [spareParts: SparePart,compatibleEquipmentTypes:EquipmentType,vendors:Provider]
+	static mappedBy = [vendors: "sparePartTypes"]
 
 	static constraints = {
 		code nullable: false, blank:false,unique :true
@@ -76,9 +77,9 @@ class SparePartType {
 	@Transient
 	def getInStockSpareParts(){
 		List<SparePart> inStockSpareParts =  []
-		if(!spareParts==null && !spareParts.isEmpty()){
+		if(spareParts!=null && spareParts.size()>0){
 			for(SparePart sparePart: spareParts)
-				if(sparePart.usedOnEquipment == null && sparePart.statusOfSparePart.equals(StatusOfSparePart.INSTOCK))
+				if(sparePart.statusOfSparePart.equals(StatusOfSparePart.INSTOCK))
 					inStockSpareParts.add(sparePart)
 		}
 		return inStockSpareParts
@@ -87,9 +88,9 @@ class SparePartType {
 	@Transient
 	def getPendingSpareParts(){
 		List<SparePart> pendingSpareParts=[]
-		if(!spareParts==null && !spareParts.isEmpty()){
+		if(spareParts!=null && spareParts.size()>0){
 			for(SparePart sparePart:spareParts)
-				if(sparePart.usedOnEquipment == null && sparePart.statusOfSparePart.equals(StatusOfSparePart.PENDINGORDER))
+				if(sparePart.statusOfSparePart.equals(StatusOfSparePart.PENDINGORDER))
 					pendingSpareParts.add(sparePart)
 		}
 		return pendingSpareParts
@@ -98,6 +99,6 @@ class SparePartType {
 
 	@Override
 	public String toString() {
-		return "SparePartType [code=" + code + ", partNumber=" + partNumber + "]";
+		return "SparePartType [id ="+id+" code=" + code + ", partNumber=" + partNumber + "]";
 	}
 }

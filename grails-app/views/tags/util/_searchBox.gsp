@@ -2,5 +2,6 @@
 	<input type="text" name="q" value="${params.q}"/>
 	<input type="hidden" name="dataLocation" value="${dataLocation?.id}"/>
 	<input type="hidden" name="equipment" value="${equipment?.id}"/>
+	<input type="hidden" name="sparePartType" value="${sparePartType?.id}"/> ${sparePartType?.id}
 	<button type="submit" class="medium"><g:message code="default.button.search.label"/></button>
 </g:form>

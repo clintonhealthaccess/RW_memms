@@ -103,7 +103,6 @@ class SparePartTypeController  extends AbstractEntityController{
 		bindData(entity,params,[exclude:["compatibleEquipmentTypes","vendors"]])
 	}
 	
-//
 	def saveEntity(def entity) {
 		entity.save(failOnError:true)
 		if(entity.id==null){

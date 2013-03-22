@@ -88,6 +88,7 @@ class ProviderController  extends AbstractEntityController {
 	}
 
 	def list = {
+
 		adaptParamsForList()
 		def sparePartType=null
 		def type=null
@@ -97,10 +98,9 @@ class ProviderController  extends AbstractEntityController {
 			type = params["type"]
 			type = Type."$type"
 		}
-		log.debug("================================>"+sparePartType)
 		def vendors = providerService.getProviders(sparePartType,type,params)
 		if(request.xhr){		
-			this.ajaxModel(vendors,sparePartType,type,"")
+			this.ajaxModel(vendors,"",sparePartType,type)
 		}	
 		else{
 			render(view:"/entity/list",model:[
@@ -113,6 +113,7 @@ class ProviderController  extends AbstractEntityController {
 				names:names
 			])
 		}
+
 	}
 		
 
