@@ -383,6 +383,7 @@ function refreshList(html,cssClass){
 
 /**
  * Hide set of fields if an option is selected (purchaser==donor - supplier==warranty provider)
+ * This method has to be refactored to re-use code (I (Jean) will fix it)
  */
 function getToHide(parchaseCost,estimatedCost){
 	//supplier==warranty provider
@@ -413,6 +414,16 @@ function getToHide(parchaseCost,estimatedCost){
 			$(".facility-information").slideDown()
 		}else{
 			$(".facility-information").slideUp()
+		}
+	})
+
+	//dataLocation
+	if($("select[name=preventionResponsible]").val()!="HCTECHNICIAN") $(".prevention-responsible").hide()
+	$("select[name=preventionResponsible]").change(function(e){
+		if($(this).val()=="HCTECHNICIAN"){
+			$(".prevention-responsible").slideDown()
+		}else{
+			$(".prevention-responsible").slideUp()
 		}
 	})
 		

@@ -50,7 +50,11 @@ class DurationBasedOrderController extends AbstractEntityController {
 
 	def calendar = {
 		def dataLocation = DataLocation.get(params.long("dataLocation.id"))
-		render (view: '/entity/view', model: [template: "/templates/calendar",dataLocation:dataLocation])	
+		render (view: '/entity/view', model: [
+				template: "/templates/calendar",
+				dataLocation:dataLocation,
+				targetURI:getTargetURI()
+			])	
 	}
 
 	def projection = {
@@ -107,13 +111,15 @@ class DurationBasedOrderController extends AbstractEntityController {
 
 	def getModel(def entity) {
 		def equipments =  []
-		def usersInCharge = userService.getActiveUserByTypeAndLocation([UserType.HOSPITALDEPARTMENT,UserType.TITULAIREHC,UserType.TECHNICIANDH],entity.equipment?.dataLocation,[:])
+		def dataLocation = DataLocation.get(params.long("dataLocation.id"))
+		dataLocation = (dataLocation)?dataLocation:entity.equipment?.dataLocation
+		def usersInCharge = userService.getActiveUserByTypeAndLocation([UserType.HOSPITALDEPARTMENT,UserType.TITULAIREHC,UserType.TECHNICIANDH],dataLocation,[:])
 		if(entity.lastModifiedBy != null) usersInCharge.add(entity.lastModifiedBy)
 		if(entity.equipment) equipments << entity.equipment
 		[
 			order:entity,
 			equipments: equipments,
-			dataLocation: DataLocation.get(params.long("dataLocation.id")),
+			dataLocation: dataLocation,
 			currencies: grailsApplication.config.site.possible.currency,
 			technicians : usersInCharge
 		]
