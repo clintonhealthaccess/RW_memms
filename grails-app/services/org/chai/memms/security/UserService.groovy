@@ -93,7 +93,6 @@ class UserService {
 		}
 		
 	}
-	//@Transactional(readOnly = true)
 	def getActiveUserByTypeAndLocation(List<UserType> userTypes, CalculationLocation location, Map<String, String> params){
 		def criteria = User.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
@@ -101,7 +100,6 @@ class UserService {
 			if(location != null)
 				eq('location',location)
 			if(userTypes != null && userTypes.size()!=0){
-				log.debug("userTypes==>"+userTypes)
 			    inList ("userType", userTypes)
 			}
 		}
