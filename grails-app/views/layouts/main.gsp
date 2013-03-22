@@ -204,7 +204,7 @@
 						</li>
 					</shiro:hasPermission>
 					<shiro:hasPermission permission="menu:managehelp">
-						<li><a href="#"><g:message code="manage.help.label"/></a></li>
+						<li><a href="#"><g:message code="header.manage.help.label"/></a></li>
 					</shiro:hasPermission>
 	         	</ul>
         	 </li>

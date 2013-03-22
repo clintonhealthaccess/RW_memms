@@ -376,7 +376,6 @@ function removeComment(baseUrl){
  * Replace (refresh) any list with the provided class and hide ajax-spinner
  */
 function refreshList(html,cssClass){
-	alert(cssClass)
 	$(cssClass).slideUp().replaceWith(html).slideDown();
 	$(".ajax-spinner").hide();
 	$(".ajax-error").hide();	
@@ -384,6 +383,7 @@ function refreshList(html,cssClass){
 
 /**
  * Hide set of fields if an option is selected (purchaser==donor - supplier==warranty provider)
+ * This method has to be refactored to re-use code (I (Jean) will fix it)
  */
 function getToHide(parchaseCost,estimatedCost){
 	//supplier==warranty provider
@@ -425,7 +425,16 @@ function getToHide(parchaseCost,estimatedCost){
 			$(".equipment-information").slideUp()
 		}
 	})
-		
+	//user
+	if($("select[name=preventionResponsible]").val()!="HCTECHNICIAN") $(".prevention-responsible").hide()
+	$("select[name=preventionResponsible]").change(function(e){
+		if($(this).val()=="HCTECHNICIAN"){
+			$(".prevention-responsible").slideDown()
+		}else{
+			$(".prevention-responsible").slideUp()
+		}
+	})
+				
 	$("select[name=occurency]").change(function(e){
 		if($(this).val()=="DAYS_OF_WEEK"){ 
 			$(".week-days").slideDown()
