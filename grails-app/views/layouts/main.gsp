@@ -69,7 +69,7 @@
 	   			</li>
 				</shiro:hasPermission>
 				<li>
-					<a href="${createLink(uri:'/helpdesk')}">
+					<a href="#">
 					<g:message code="header.labels.helpdesk"/></a>
 				</li>
 			</ul>
@@ -132,17 +132,27 @@
 						</li>
 					</shiro:hasPermission>
 					<shiro:hasPermission permission="menu:notificationWorkOrder">
-					<li>
-						<a class="${controllerName=='notificationWorkOrder' ?'active':''}" href="${createLink(controller: 'notificationWorkOrder', action:'list')}">
-							<g:message code="notification.work.order.label"/>
-						</a>
-					</li>
+						<li>
+							<a class="${controllerName=='notificationWorkOrder' ?'active':''}" href="${createLink(controller: 'notificationWorkOrder', action:'list')}">
+								<g:message code="notification.work.order.label"/>
+							</a>
+						</li>
 					</shiro:hasPermission>
 	         	</ul>
          	</li>
 		</shiro:hasPermission>
 		<shiro:hasPermission permission="menu:reports">
-			<li><a class="${controllerName=='dashboard'?'active':''}" href="#"><g:message code="header.navigation.reports"/></a></li>
+			<li><a class="${controllerName=='equipmentView'?'active':''}" href="#"><g:message code="header.navigation.reports"/></a>
+				<ul class="submenu">
+					<shiro:hasPermission permission="menu:equipmentExport">
+							<li>
+								<a href="${createLink(controller: 'equipmentView', action:'generalExport')}">
+									<g:message code="equipment.export.label"/>
+								</a>
+							</li>
+					</shiro:hasPermission>
+				</ul>
+			</li>
 		</shiro:hasPermission>
 		<shiro:hasPermission permission="menu:admin">
 			<li><a href="#"><g:message code="header.navigation.administration"/></a>
@@ -160,9 +170,6 @@
 								<g:message code="spare.part.type.label"/>
 							</a>
 						</li>
-					</shiro:hasPermission>
-					<shiro:hasPermission permission="menu:equipmentExport">
-						<li><a href="${createLink(controller: 'equipmentView', action:'generalExport')}"><g:message code="equipment.export.label"/></a></li>
 					</shiro:hasPermission>
 					<shiro:hasPermission permission="menu:location">
 						<li><a href="#"><g:message code="location.label"/></a>
@@ -195,6 +202,9 @@
 								</ul>
 							</div>
 						</li>
+					</shiro:hasPermission>
+					<shiro:hasPermission permission="menu:managehelp">
+						<li><a href="#"><g:message code="header.manage.help.label"/></a></li>
 					</shiro:hasPermission>
 	         	</ul>
         	 </li>

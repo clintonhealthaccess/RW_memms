@@ -20,9 +20,6 @@
 		           		<li>
 		           			<a href="${createLinkWithTargetURI(controller:user.class.simpleName, action:'edit', params:[id: user.id])}" class="edit-button"><g:message code="default.link.edit.label" /></a>
 						</li>
-		           		<li>
-		           			<a href="${createLinkWithTargetURI(controller:'user', action:'delete', params:[id:user.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');" class="delete-button"><g:message code="default.link.delete.label" /></a>
-						</li>
 	           		</ul>
 				</td>
 				<td>${user.names}</td>

@@ -71,7 +71,7 @@ class UserController  extends  AbstractEntityController{
 	}
 	
 	def deleteEntity(def entity) {
-		//TODO Check if there are no record associate to this user before deleting
+		flash.message = message(code: 'user.cannot.be.delete', args: [message(code: getLabel(), default: 'entity'), params.id], default: '{0} cannot but can deactivated instead.')
 	}
 	
 	def getTemplate() {
@@ -148,7 +148,12 @@ class UserController  extends  AbstractEntityController{
 	}
 	
 	def getAjaxData = {
-       List<User> users = userService.searchActiveUserByTypeAndLocation( params['term'],[:],DataLocation.findByCode(KIVUYE))
+		def dataLocation = CalculationLocation.get(params["dataLocation"])
+		List<UserType> userTypes = []
+		for(def type: params['userTypes']) 
+			userTypes.add(UserType."$type")
+
+       	def users = userService.searchActiveUserByTypeAndLocation(params['term'],userTypes,dataLocation)
 		render(contentType:"text/json") {
 			elements = array {
 				users.each { user ->

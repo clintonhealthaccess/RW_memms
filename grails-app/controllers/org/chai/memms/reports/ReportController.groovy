@@ -25,41 +25,25 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.corrective.maintenance
+package org.chai.memms.reports
 
-import org.chai.memms.preventive.maintenance.Prevention;
-import org.chai.memms.preventive.maintenance.PreventiveOrder;
+import org.chai.memms.AbstractController;
 
 /**
  * @author Jean Kahigiso M.
  *
  */
-class PreventionService {
-	
-	static transactional = true
-	
-	def languageService;
-	def sessionFactory;
+class ReportController extends AbstractController{
 
+	def dashboard ={
+		render(view: '/entity/report',model: [
+				template:"/entity/reports/dashboard"
+				])
+	}	
 
-	public List<Prevention> getPreventionByOrder(PreventiveOrder order, Map<String,String> params){
-		def criteria =  Prevention.createCriteria()
-		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order:params.'$order' ?:"desc"){
-			eq('order',order)
-		}
-
-	}
-
-	public List<Prevention> searchPrevention(String text, PreventiveOrder preventiveOrder, Map<String,String> params){
-		text =  text.trim()
-		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
-		def criteria =  Prevention.createCriteria()
-		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.'$order' ?:"desc"){
-			    if(preventiveOrder!=null)
-					eq('order',preventiveOrder)
-				ilike(dbFieldDescriptions,"%"+text+"%") 
-		}
-
-	}
-	
+	def listing ={
+		render(view: '/entity/report',model: [
+				template:"/entity/reports/listing"
+				])
+	}	
 }
