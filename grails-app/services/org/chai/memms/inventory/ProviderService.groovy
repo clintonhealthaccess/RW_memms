@@ -29,7 +29,6 @@ package org.chai.memms.inventory
 
 import java.util.List;
 import java.util.Map;
-
 import org.chai.memms.inventory.EquipmentType.Observation;
 import org.chai.memms.inventory.Provider.Type;
 import org.chai.memms.inventory.Provider;
@@ -40,19 +39,19 @@ import org.chai.memms.spare.part.SparePartType;
  *
  */
 class ProviderService {
-	static transactional = true
 	
+	static transactional = true
 	def languageService;
 	def sessionFactory;
-	
+
 	public List<Provider> searchProvider(Type type,String text,SparePartType sparePartType, Map<String, String> params){
 		text = text.trim();
 		def dbFieldDescriptions = 'addressDescriptions_'+languageService.getCurrentLanguagePrefix();
-		def criteria = Provider.createCriteria()	
+		def criteria = Provider.createCriteria()
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(type!=null){
 				if(type==Type.SERVICEPROVIDER){
-					eq('type',type)								
+					eq('type',type)
 				}else{
 					or{
 						eq('type',type)
@@ -68,7 +67,7 @@ class ProviderService {
 			or{
 				for(Type t: this.getEnumeMatcher(text))
 					eq("type",t)
-					
+
 				ilike("code","%"+text+"%")
 				ilike("phone","%"+text+"%")
 				ilike("contactName","%"+text+"%")
@@ -78,25 +77,101 @@ class ProviderService {
 				ilike(dbFieldDescriptions,"%"+text+"%")
 			}
 		}
-	
 	}
-		
-	
+
+
 	public def getProviders(SparePartType sparePartType, Type type,Map<String, String> params){
 		def criteria = Provider.createCriteria()
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			if(type!=null){
+			if(type!=null)
 				if(type==Type.SUPPLIER){
 					eq('type',type)
-				}
-			}
-			if(sparePartType!=null){
+					log.debug("*******************************>"+type)
+				}	
+			if(sparePartType!=null)
 				sparePartTypes{
 					eq('id',sparePartType.id)
+					log.debug("================================>"+sparePartType)
+					
 				}
-			}
 		}
 	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+//	if(observation!=null)
+//	eq("observation",observation)
+//
+//if(sparePartType!=null){
+//	sparePartTypes{
+//		eq('id',sparePartType.id)
+//	}
+//}
+//or{
+//	if(observation==null){
+//		for(Observation obs: this.getEnumeMatcher(text))
+//			eq("observation",obs)
+//	}
+//	ilike("code","%"+text+"%")
+//	ilike(dbFieldName,"%"+text+"%")
+//	ilike(dbFieldDescritpion,"%"+text+"%")
+//}
+//	
+//	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+//	public def getEquipmentTypes(SparePartType sparePartType, Map<String, String> params){
+//		def criteria = EquipmentType.createCriteria()
+//		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+//			if(sparePartType!=null){
+//				sparePartTypes{
+//					eq('id',sparePartType.id)
+//				}
+//			}
+//		}
+//	}
+//	
+//	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	public static List<Type> getEnumeMatcher(String text){
 		List<Type> observations=[]
@@ -107,6 +182,5 @@ class ProviderService {
 			}
 		return observations
 	}
-
 }
 

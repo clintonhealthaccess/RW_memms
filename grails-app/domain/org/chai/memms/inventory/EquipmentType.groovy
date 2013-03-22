@@ -53,7 +53,6 @@ class EquipmentType {
 		NOTINSCOPE("not.in.scope")
 		
 		String messageCode = "equipment.type"	
-
 		String name
 		Observation(String name){ this.name=name }
 		String getKey() { return name() }
@@ -66,7 +65,6 @@ class EquipmentType {
 	Observation observation
 
 	static belongsTo = [SparePartType]
-	
 	
 	Date dateCreated
 	Date lastUpdated

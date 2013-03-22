@@ -96,14 +96,14 @@ class EquipmentTypeController extends AbstractEntityController{
 		if(request.xhr)
 			this.ajaxModel(types,sparePartType,params)
 		else{
-		render(view:"/entity/list",model:model(types,sparePartType) << [
+			render(view:"/entity/list",model:model(types,sparePartType) << [
 				template:"equipmentType/equipmentTypeList",
 				listTop:"equipmentType/listTop",
-			    importTask:'EquipmentTypeImportTask',
-			    exportTask:'EquipmentTypeExportTask'
+				importTask:'EquipmentTypeImportTask',
+				exportTask:'EquipmentTypeExportTask'
 			])
 		}
-	}	
+	}
 
 	def search = {
 		adaptParamsForList()

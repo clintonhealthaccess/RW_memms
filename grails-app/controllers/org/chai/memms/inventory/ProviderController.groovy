@@ -26,15 +26,17 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
- package org.chai.memms.inventory
- 
+package org.chai.memms.inventory
+
 
 import org.chai.memms.inventory.EquipmentType.Observation;
 import java.util.List;
 import java.util.Map;
 import org.chai.memms.inventory.Provider.Type;
 import org.chai.memms.inventory.Provider;
+import org.chai.memms.security.User;
 import org.chai.memms.spare.part.SparePartType;
+import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
 import org.chai.memms.AbstractEntityController;
 
 
@@ -43,9 +45,9 @@ import org.chai.memms.AbstractEntityController;
  *
  */
 class ProviderController  extends AbstractEntityController {
-	
-    def providerService
-	
+
+	def providerService
+
 	def  getEntity(def  id) {
 		return Provider.get(id);
 	}
@@ -65,79 +67,55 @@ class ProviderController  extends AbstractEntityController {
 	def getEntityClass() {
 		return Provider.class;
 	}
-	
+
 	def deleteEntity(def entity) {
 		if(entity.manufacturers.size() > 0 || entity.suppliers.size() > 0 ){
-			flash.message = message(code: 'provider.hasequipments', args: [message(code: getLabel(), default: 'entity'), params.id], default: '{0} still has associated equipments.')
+			flash.message = message(code: 'provider.hasequipments', args: [
+				message(code: getLabel(), default: 'entity'),
+				params.id
+			], default: '{0} still has associated equipments.')
 		}else super.deleteEntity(entity)
 	}
-	
+
 	def getModel(def entity) {
-	     [
-			 provider: entity
-		 ]
-	}		
-	
+		[
+			provider: entity
+		]
+	}
+
 	def bindParams(def entity) {
 		entity.properties = params
 	}
-		
-	
-	
-//	def list = {
-//		adaptParamsForList()
-//		def sparePartType = null
-//		if(params['sparePartType']!=null)
-//			sparePartType =  SparePartType.get(params.int("sparePartType.id"))
-//		def providers = providerService.getProviders(sparePartType,params);
-//		if(request.xhr)
-//		    this.ajaxModel(providers,sparePartType,params)
-//		else{
-//		render(view:"/entity/list", model: model(providers,sparePartType) << [
-//			    template:"provider/providerList",
-//				listTop:"provider/listTop"
-//			])
-//		}
-//	}
-	
+
 	def list = {
 		adaptParamsForList()
 		def sparePartType=null
 		def type=null
 		if(params['sparePartType']!=null)
-			sparePartType =  SparePartType.get(params.int('sparePartType.id'))
-			
-			if(params['type']!=null){
-				type = params["type"]
-				type = Type."$type"
-			}
-			log.debug("==========>"+type)
+			sparePartType =  SparePartType.get(params.int('sparePartType'))
+		if(params['type']!=null){
+			type = params["type"]
+			type = Type."$type"
+		}
+		log.debug("================================>"+sparePartType)
 		def vendors = providerService.getProviders(sparePartType,type,params)
-		if(request.xhr)
+		if(request.xhr){		
 			this.ajaxModel(vendors,sparePartType,type,"")
+		}	
 		else{
-		render(view:"/entity/list",model:[
+			render(view:"/entity/list",model:[
 				template:"provider/providerList",
 				listTop:"provider/listTop",
 				entities: vendors,
-//				entityCount: vendors.totalCount,
+				entityCount: vendors.totalCount,
 				entityClass: getEntityClass(),
-			    code: getLabel()
-//				names:names,
-				//exportTask:'EquipmentTypeExportTask'
+				code: getLabel(),
+				names:names
 			])
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+		
+
 	def search = {
 		adaptParamsForList()
 		def sparePartType = null
@@ -146,62 +124,61 @@ class ProviderController  extends AbstractEntityController {
 			sparePartType =  SparePartType.get(params.int('sparePartType'))
 		def providers = providerService.searchProvider(type,params['q'],sparePartType,params)
 		if(request.xhr)
-			this.ajaxModel(providers,params['q'],sparePartType)
+			this.ajaxModel(providers,sparePartType)
 		else {
 			render(view:"/entity/list",model:model(providers,sparePartType) << [
 				template:"provider/providerList",
-				listTop:"provider/listTop"				
+				listTop:"provider/listTop"
 			])
 		}
 	}
-	
-	
-	def ajaxModel(def entities,def searchTerm,def sparePartType) {
-		def model = model(entities,sparePartType) << [q:searchTerm]
+
+
+	def ajaxModel(def entities,def searchTerm,def sparePartType,def type) {
+		def model = model(entities,sparePartType,type) << [q:searchTerm]
 		def listHtml = g.render(template:"/entity/provider/providerList",model:model)
-		render(contentType:"text/json") { results = [listHtml] }
+		render(contentType:"text/json") { results = [listHtml]}
 	}
-
-
-	def model(def entities,sparePartType) {
+	
+	def model(def entities,def sparePartType,def type) {
 		return [
 			entities: entities,
 			entityCount: entities.totalCount,
 			entityClass:getEntityClass(),
 			code: getLabel(),
+			type:type,
 			sparePartType:sparePartType?.id
 		]
-	}	
-		
-	
+	}
+
+
 	def getAjaxData = {
 		if(log.isDebugEnabled()) log.debug("Provider getAjaxData Sent Params: " + params)
 		def detailsLabel='';
 		def type =params['type']
 		type = Type."$type";
 		if(type.equals(Type.MANUFACTURER)) detailsLabel="provider.manufacturer.details"
-		else if(type.equals(Type.SUPPLIER)) detailsLabel="provider.supplier.details" 
-		else detailsLabel="provider.serviceProvider.details"	
+		else if(type.equals(Type.SUPPLIER)) detailsLabel="provider.supplier.details"
+		else detailsLabel="provider.serviceProvider.details"
 		def sparePartType = null
-		List<Provider> providers = providerService.searchProvider(type, params['term'],sparePartType, [:])		
+		List<Provider> providers = providerService.searchProvider(type, params['term'],sparePartType, [:])
 		render(contentType:"text/json") {
 			elements = array {
 				providers.each { provider ->
 					elem (
-						key: provider.id,
-						value: provider.contact.contactName + ' ['+provider.code+']'
-					)
+							key: provider.id,
+							value: provider.contact.contactName + ' ['+provider.code+']'
+							)
 				}
 			}
 			htmls = array {
 				providers.each { provider ->
 					elem (
-						key: provider.id,
-						html: g.render(template:"/templates/providerFormSide",model:[provider:provider,type:type,label:detailsLabel,cssClass:"form-aside-hidden",field:type.name])						  
-					)
+							key: provider.id,
+							html: g.render(template:"/templates/providerFormSide",model:[provider:provider,type:type,label:detailsLabel,cssClass:"form-aside-hidden",field:type.name])
+							)
 				}
 			}
 		}
-	}	
-	
+	}
 }

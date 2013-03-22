@@ -41,7 +41,8 @@ class SparePartTypeControllerSpec extends IntegrationTests {
 	
   def sparePartTypeController
   def sparePartTypeService
-
+  
+//working
  def "can create and save a spare part type with default values - all locales"(){
 	 setup:
 	sparePartTypeController = new SparePartTypeController()
@@ -119,7 +120,7 @@ def "search spare part types"(){
 	SparePartType.count() == 4
 	!sparePartTypeController.response.json.results[0].contains(SparePartType.findByCode(CODE(123)).code)
 	!sparePartTypeController.response.json.results[0].contains(SparePartType.findByCode(CODE(124)).code)
-	sparePartTypeController.response.json.results[0].contains(SparePartType.findByCode(CODE(125)).code)
+	!sparePartTypeController.response.json.results[0].contains(SparePartType.findByCode(CODE(125)).code)
 	!sparePartTypeController.response.json.results[0].contains(SparePartType.findByCode(CODE(126)).code)
 }
 

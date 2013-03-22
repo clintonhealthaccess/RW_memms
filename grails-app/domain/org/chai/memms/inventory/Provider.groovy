@@ -29,7 +29,6 @@ package org.chai.memms.inventory
 
 import org.chai.memms.Contact;
 import org.chai.memms.spare.part.SparePartType
-
 import groovy.transform.EqualsAndHashCode;
 import i18nfields.I18nFields
 
@@ -39,47 +38,54 @@ import i18nfields.I18nFields
  */
 @EqualsAndHashCode(includes="code")
 public class Provider{
-	
+
 	enum Type{
 		NONE("none"),
 		MANUFACTURER("manufacturer"),
 		SUPPLIER("supplier"),
 		BOTH("both"),
 		SERVICEPROVIDER("serviceProvider")
-		
 		String messageCode = "provider.type"
 		final String name
-		Type(String name){ this.name = name }
-		String getKey() { return name() }
+		Type(String name){
+			this.name = name
+		}
+		String getKey() {
+			return name()
+		}
 	}
-	
+
 	String code
 	Type type
 	Contact contact
 	Date dateCreated
 	Date lastUpdated
-	static belongsTo = [SparePartType]
 
-	
+	static belongsTo = [SparePartType]
 	static embedded = ["contact"]
 	static mappedBy = [manufacturers: "manufacturer",suppliers: "supplier",serviceProviders: "serviceProvider"]
 	static hasMany = [manufacturers: Equipment, suppliers: Equipment,serviceProviders: Equipment,sparePartTypes: SparePartType]
-   
+
 	static constraints ={
 		code nullable: false, blank: false, unique: true
-		type nullable: false, inList: [Type.BOTH,Type.MANUFACTURER,Type.SUPPLIER,Type.SERVICEPROVIDER]
+		type nullable: false, inList: [
+			Type.BOTH,
+			Type.MANUFACTURER,
+			Type.SUPPLIER,
+			Type.SERVICEPROVIDER
+		]
 		contact nullable: false
 		lastUpdated nullable: true, validator:{
 			if(it != null) return (it <= new Date())
 		}
 	}
 	static mapping = {
-	    version false
-	    table "memms_provider"
+		version false
+		table "memms_provider"
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Provider [code=" + code + ", type=" + type + "]";
-	}	
+	}
 }

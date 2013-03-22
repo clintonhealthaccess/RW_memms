@@ -57,7 +57,6 @@ class SparePartTypeController  extends AbstractEntityController{
 	}
 
 	def createEntity() {
-
 		return new SparePartType();
 	}
 
@@ -104,20 +103,20 @@ class SparePartTypeController  extends AbstractEntityController{
 		bindData(entity,params,[exclude:["compatibleEquipmentTypes","vendors"]])
 	}
 	
-
+//
 	def saveEntity(def entity) {
 		entity.save(failOnError:true)
 		if(entity.id==null){
 			entity.params.oldCompatibleEquipmentTypes = []
 			entity.params.oldVendors = []
 		}
-			params.oldCompatibleEquipmentTypes.each{ type ->
+		params.oldCompatibleEquipmentTypes.each{ type ->
 				if(!entity.compatibleEquipmentTypes.contains(type)){
 					type.sparePartTypes.remove(entity)
 					type.save(failOnError:true)
 				}
 			}
-			params.oldVendors.each{ vendor ->
+		params.oldVendors.each{ vendor ->
 				if(!entity.vendors.contains(vendor)){
 					vendor.sparePartTypes.remove(entity)
 					vendor.save(failOnError:true)

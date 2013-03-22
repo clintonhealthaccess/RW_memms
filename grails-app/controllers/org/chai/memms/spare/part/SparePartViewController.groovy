@@ -79,34 +79,32 @@ class SparePartViewController extends AbstractController{
 	}
 	
 	def list = {
-		adaptParamsForList()	
+		adaptParamsForList()
 		def sparePartType=null
 		def statusOfSparePart=null
 		if(params['sparePartType']!=null)
-			sparePartType =  SparePartType.get(params.int('sparePartType'))	
-			
-			if(params['statusOfSparePart']!=null){
-				statusOfSparePart = params["statusOfSparePart"]
-				statusOfSparePart = StatusOfSparePart."$statusOfSparePart"
-			}
-			log.debug("==========>"+statusOfSparePart)
-		def spareParts = sparePartService.getSpareParts(user,sparePartType,statusOfSparePart,params)		
+			sparePartType =  SparePartType.get(params.int('sparePartType'))
+		if(params['statusOfSparePart']!=null){
+			statusOfSparePart = params["statusOfSparePart"]
+			statusOfSparePart = StatusOfSparePart."$statusOfSparePart"
+		}
+		log.debug("==========>"+statusOfSparePart)
+		def spareParts = sparePartService.getSpareParts(user,sparePartType,statusOfSparePart,params)
 		if(request.xhr)
 			this.ajaxModel(spareParts,sparePartType,statusOfSparePart,"")
 		else{
-		render(view:"/entity/list",model:[
+			render(view:"/entity/list",model:[
 				template:"sparePart/sparePartList",
 				listTop:"sparePart/listTop",
 				entities: spareParts,
 				entityCount: spareParts.totalCount,
 				entityClass: getEntityClass(),
 				code: getLabel(),
-				names:names,
-				//exportTask:'EquipmentTypeExportTask'
+				names:names
 			])
 		}
 	}
-	
+
 	//TODO don't think we need ajax for this
 	def selectFacility = {
 		adaptParamsForList()
@@ -153,20 +151,20 @@ class SparePartViewController extends AbstractController{
 			else this.ajaxModel(spareParts,cmd.location,"")
 		}
 	}
-	
-	def ajaxModel(def entities,def searchTerm,def sparePart, def sparePartType ,def sparePartStatus) {
+
+	def ajaxModel(def entities,def sparePartType,def sparePartStatus,def searchTerm) {
 		def model = [entities: entities,entityCount: entities.totalCount,entityClass:getEntityClass(),names:names,q:searchTerm]
 		def listHtml = g.render(template:"/entity/sparePart/sparePartList",model:model)
 		render(contentType:"text/json") { results = [listHtml] }
 	}
 	
-	def model(def entities,def sparePartType,def sparePartStatus) {
+	def model(def entities,def sparePartType) {
 		return [
 			entities: entities,
 			entityCount: entities.totalCount,
 			code: getLabel(),
 			sparePartType:sparePartType?.id,
-			sparePartStatus:sparePartStatus?.id
+			
 		]
 	}
 	
@@ -240,6 +238,7 @@ class SparePartViewController extends AbstractController{
 	}
 
 }
+
 class FilterCommand {
 	DataLocation location
 	SparePartType sparePartType
@@ -248,7 +247,6 @@ class FilterCommand {
 	SparePartPurchasedBy sparePartPurchasedBy
 	String sameAsManufacturer
 	 
-
 	public boolean getSameAsManufacturerStatus(){
 		if(sameAsManufacturer) return null
 		else if(sameAsManufacturer.equals("true")) return true

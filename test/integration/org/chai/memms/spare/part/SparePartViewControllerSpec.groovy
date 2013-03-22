@@ -121,7 +121,7 @@ class SparePartViewControllerSpec extends IntegrationTests{
 		sparePartViewController.search()
 		
 		then:
-		sparePartViewController.response.json.results[0].contains(SparePart.findBySerialNumber(CODE(123)).code)
+		 sparePartViewController.response.json.results[0].contains(SparePart.findBySerialNumber(CODE(123)).code)
 		!sparePartViewController.response.json.results[0].contains(SparePart.findBySerialNumber(CODE(124)).code)
 		!sparePartViewController.response.json.results[0].contains(SparePart.findBySerialNumber(CODE(125)).code)
 		!sparePartViewController.response.json.results[0].contains(SparePart.findBySerialNumber(CODE(126)).code)

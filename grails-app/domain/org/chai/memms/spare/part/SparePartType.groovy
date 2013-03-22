@@ -55,8 +55,8 @@ class SparePartType {
 	Date lastUpdated
 	Provider manufacturer
 
-	static i18nFields = ["descriptions","names"]
-	static hasMany = [spareParts: SparePart,compatibleEquipmentTypes:EquipmentType,vendors:Provider]	
+	static i18nFields = ["descriptions", "names"]
+	static hasMany = [spareParts: SparePart,compatibleEquipmentTypes:EquipmentType,vendors:Provider]
 
 	static constraints = {
 		code nullable: false, blank:false,unique :true
@@ -65,15 +65,14 @@ class SparePartType {
 		partNumber nullable: false,blank:false
 		discontinuedDate nullable: true
 		manufacturer nullable: false,blank:false
-
 	}
-	
+
 	static mapping = {
 		table "memms_spare_part_type"
 		version false
 		cache true
 	}
-	
+
 	@Transient
 	def getInStockSpareParts(){
 		List<SparePart> inStockSpareParts =  []
@@ -84,22 +83,21 @@ class SparePartType {
 		}
 		return inStockSpareParts
 	}
-	
+
 	@Transient
 	def getPendingSpareParts(){
 		List<SparePart> pendingSpareParts=[]
 		if(!spareParts==null && !spareParts.isEmpty()){
 			for(SparePart sparePart:spareParts)
-			if(sparePart.usedOnEquipment == null && sparePart.statusOfSparePart.equals(StatusOfSparePart.PENDINGORDER))
-			pendingSpareParts.add(sparePart)
-			}
+				if(sparePart.usedOnEquipment == null && sparePart.statusOfSparePart.equals(StatusOfSparePart.PENDINGORDER))
+					pendingSpareParts.add(sparePart)
+		}
 		return pendingSpareParts
 	}
-	
+
 
 	@Override
 	public String toString() {
 		return "SparePartType [code=" + code + ", partNumber=" + partNumber + "]";
 	}
-	
 }

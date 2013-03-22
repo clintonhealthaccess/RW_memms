@@ -42,7 +42,7 @@ class EquipmentTypeService {
 
 	static transactional = true
 	def languageService;
-		
+
 	public def searchEquipmentType(String text,Observation observation,SparePartType sparePartType,Map<String, String> params) {
 		def dbFieldName = 'names_'+languageService.getCurrentLanguagePrefix();
 		def dbFieldDescritpion = 'descriptions_'+languageService.getCurrentLanguagePrefix();
@@ -51,7 +51,7 @@ class EquipmentTypeService {
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(observation!=null)
 				eq("observation",observation)
-				
+
 			if(sparePartType!=null){
 				sparePartTypes{
 					eq('id',sparePartType.id)
@@ -66,7 +66,6 @@ class EquipmentTypeService {
 				ilike(dbFieldName,"%"+text+"%")
 				ilike(dbFieldDescritpion,"%"+text+"%")
 			}
-			
 		}
 	}
 
@@ -81,7 +80,6 @@ class EquipmentTypeService {
 		}
 	}
 
-	
 	public static List<Observation> getEnumeMatcher(String text){
 		List<Observation> observations=[]
 		if(text!=null && !text.equals(""))
@@ -91,13 +89,13 @@ class EquipmentTypeService {
 			}
 		return observations
 	}
-	
+
 	def importToBoolean = {
 		if(it.compareToIgnoreCase("no")) return false
 		else if(it.compareToIgnoreCase("yes")) return true
 		else return null
 	}
-	
+
 	def importToObservation = {
 		if (it == null) return Observation.USEDINMEMMS
 		else if(it?.compareToIgnoreCase("Retired concept")) return Observation.RETIRED

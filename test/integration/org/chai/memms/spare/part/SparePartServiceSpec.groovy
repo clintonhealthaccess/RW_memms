@@ -50,6 +50,8 @@ class SparePartServiceSpec extends IntegrationTests{
 	def "can search spare part by serial number, model, and description"() {
 		setup:
 		setupLocationTree()
+		
+		def sparePartStatus
 		def user = newOtherUser("user", "user", DataLocation.findByCode(KIVUYE))
 
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
@@ -72,7 +74,8 @@ class SparePartServiceSpec extends IntegrationTests{
 		def List<SparePart> spareParts
 
 		when: "user can view all those he manages"
-		spareParts = sparePartService.searchSparePart("Descriptions",techDH,[:])
+		spareParts = sparePartService.searchSparePart("Descriptions",techDH,sparePartStatus,[:])
+		                                              
 
 		then:
 		spareParts.size() == 2
@@ -80,38 +83,38 @@ class SparePartServiceSpec extends IntegrationTests{
 
 		when: "user cannot see those he doesn't manage"
 
-		spareParts = sparePartService.searchSparePart("Descriptions",userHc,[:])
+		spareParts = sparePartService.searchSparePart("Descriptions",userHc,sparePartStatus,[:])
 		then:
 		spareParts.size() == 1
 		spareParts[0].serialNumber.equals(CODE(124))
 
 		when: "Searching by description"
 
-		spareParts = sparePartService.searchSparePart("one",techDH, [:])
+		spareParts = sparePartService.searchSparePart("one",techDH,sparePartStatus, [:])
 		then:
 		spareParts.size() == 1
 		spareParts[0].getDescriptions(new Locale("en")).equals('Spare Part Descriptions one')
 
 		when: "Searching by spare part name"
-		spareParts = sparePartService.searchSparePart("Accelerometers",techDH, [:])
+		spareParts = sparePartService.searchSparePart("Accelerometers",techDH,sparePartStatus, [:])
 		then:
 		spareParts.size() == 2
 		spareParts[0] != spareParts[1]
 
 		when: "Searching by code"
-		spareParts = sparePartService.searchSparePart(sparePartCodeToFind.code+" ",techDH, [:])
+		spareParts = sparePartService.searchSparePart(sparePartCodeToFind.code+" ",techDH,sparePartStatus, [:])
 		then:
 		spareParts.size() == 1
 		spareParts[0].code.equals(sparePartCodeToFind.code)
 
 		when: "Searching by serial number"
-		spareParts = sparePartService.searchSparePart(CODE(124),techDH, [:])
+		spareParts = sparePartService.searchSparePart(CODE(124),techDH,sparePartStatus, [:])
 		then:
 		spareParts.size() == 1
 		spareParts[0].serialNumber.equals(CODE(124))
 
 		when: "Searching by model"
-		spareParts = sparePartService.searchSparePart("MODEL1",techDH, [:])
+		spareParts = sparePartService.searchSparePart("MODEL1",techDH,sparePartStatus, [:])
 		then:
 		spareParts.size() == 1
 		spareParts[0].serialNumber.equals(CODE(123))
@@ -119,6 +122,10 @@ class SparePartServiceSpec extends IntegrationTests{
 	def "user can only view his spare parts, if a technician at dh they can also view for the locations they manage"() {
 		setup:
 		setupLocationTree()
+		
+		def statusOfSparePart
+		def sparepartType
+		
 		def user = newOtherUser("user", "user", DataLocation.findByCode(KIVUYE))
 		user.userType = UserType.TITULAIREHC
 		user.save(failOnError:true)
@@ -144,8 +151,8 @@ class SparePartServiceSpec extends IntegrationTests{
 
 		def sparePartsTech, sparePartsUser
 		when:
-		sparePartsTech = sparePartService.getSparePartsByUser(techDh,[:])
-		sparePartsUser = sparePartService.getSparePartsByUser(user,[:])
+		sparePartsTech = sparePartService.getSpareParts(techDh,sparepartType,statusOfSparePart,[:])
+		sparePartsUser = sparePartService.getSpareParts(user,sparepartType,statusOfSparePart,[:])
 		then:
 		sparePartsTech.size() == 2
 		sparePartsUser.size() == 1
@@ -270,6 +277,7 @@ class SparePartServiceSpec extends IntegrationTests{
 		csvFile != null
 	}
 	
+	//Working
 	def "update spare part status"(){
 		setup:
 		

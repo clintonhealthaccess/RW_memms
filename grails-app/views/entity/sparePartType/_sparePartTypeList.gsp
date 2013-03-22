@@ -49,7 +49,7 @@
 				</td>
 				<td>
 					<a href="${createLinkWithTargetURI(controller:'equipmentType', action:'list', params:[sparePartType: type.id])}">
-						Compatible equipment type
+						Compatible equipment types
 					</a>
 				</td> 
 				<td>
