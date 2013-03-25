@@ -298,11 +298,156 @@
         </li>
 
         <li class="v_tabs_row">
-          <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
-          <a class="v_tabs_name v_tabs_fold_toggle">Lorem ipsum dolor sit amet</a>
-          <span class="v_tabs_formula">a</span>
-          <span class="v_tabs_value">53%</span>
-          <div class="v_tabs_fold_container"></div>
+          <p>
+          	<span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
+          	<a class="v_tabs_name v_tabs_fold_toggle">Lorem ipsum dolor sit amet</a>
+          	<span class="v_tabs_formula">a</span>
+          	<span class="v_tabs_value">53%</span>
+          </p>
+          <div class="v_tabs_fold_container">
+            <ul class="v_tabs_nested_nav">
+                    <li><a id='historic_trend' class='active' href="#">Historic Trend</a></li>
+                    <li><a id='comparison' href="#">Comparison To Other Facilities</a></li>
+                    <li><a id='geo_trend' href="#">Geographic Trend</a></li>
+                    <li><a id='info_facility' href="#">Information By Facility</a></li>
+            </ul>
+            <div id="historic_trend" class='toggled_tab'>
+              <ul class="v_tabs_nested">
+                <li class="v_tabs_row">
+                  <span class="v_tabs_name">Historic trend</span>
+                  <span class="v_tabs_formula">a</span>
+                  <span class="v_tabs_value">53%</span>
+                </li>
+                <li class="v_tabs_row">
+                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
+                  <span class="v_tabs_formula">a</span>
+                  <span class="v_tabs_value">53%</span>
+                </li>
+                <li class="v_tabs_row">
+                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
+                  <span class="v_tabs_formula">a</span>
+                  <span class="v_tabs_value">53%</span>
+                </li>
+                <li class="v_tabs_row">
+                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
+                  <span class="v_tabs_formula">a</span>
+                  <span class="v_tabs_value">53%</span>
+                </li>
+                <li class="v_tabs_row">
+                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
+                  <span class="v_tabs_formula">a</span>
+                  <span class="v_tabs_value">53%</span>
+                </li>
+                <li class="v_tabs_row">
+                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
+                  <span class="v_tabs_formula">a</span>
+                  <span class="v_tabs_value">53%</span>
+                </li>
+              </ul>
+            </div>
+            <div id="comparison">
+              <ul class="v_tabs_nested">
+                <li class="v_tabs_row">
+                  <span class="v_tabs_name">Comparison to other facilities</span>
+                  <span class="v_tabs_formula">a</span>
+                  <span class="v_tabs_value">53%</span>
+                </li>
+                <li class="v_tabs_row">
+                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
+                  <span class="v_tabs_formula">a</span>
+                  <span class="v_tabs_value">53%</span>
+                </li>
+                <li class="v_tabs_row">
+                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
+                  <span class="v_tabs_formula">a</span>
+                  <span class="v_tabs_value">53%</span>
+                </li>
+                <li class="v_tabs_row">
+                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
+                  <span class="v_tabs_formula">a</span>
+                  <span class="v_tabs_value">53%</span>
+                </li>
+                <li class="v_tabs_row">
+                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
+                  <span class="v_tabs_formula">a</span>
+                  <span class="v_tabs_value">53%</span>
+                </li>
+                <li class="v_tabs_row">
+                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
+                  <span class="v_tabs_formula">a</span>
+                  <span class="v_tabs_value">53%</span>
+                </li>
+              </ul>
+            </div>
+            <div id="geo_trend">
+              <ul class="v_tabs_nested">
+                <li class="v_tabs_row">
+                  <span class="v_tabs_name">Geographic Trend</span>
+                  <span class="v_tabs_formula">a</span>
+                  <span class="v_tabs_value">53%</span>
+                </li>
+                <li class="v_tabs_row">
+                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
+                  <span class="v_tabs_formula">a</span>
+                  <span class="v_tabs_value">53%</span>
+                </li>
+                <li class="v_tabs_row">
+                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
+                  <span class="v_tabs_formula">a</span>
+                  <span class="v_tabs_value">53%</span>
+                </li>
+                <li class="v_tabs_row">
+                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
+                  <span class="v_tabs_formula">a</span>
+                  <span class="v_tabs_value">53%</span>
+                </li>
+                <li class="v_tabs_row">
+                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
+                  <span class="v_tabs_formula">a</span>
+                  <span class="v_tabs_value">53%</span>
+                </li>
+                <li class="v_tabs_row">
+                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
+                  <span class="v_tabs_formula">a</span>
+                  <span class="v_tabs_value">53%</span>
+                </li>
+              </ul>
+            </div>
+            <div id="info_facility">
+              <ul class="v_tabs_nested">
+                <li class="v_tabs_row">
+                  <span class="v_tabs_name">Information by Facility</span>
+                  <span class="v_tabs_formula">a</span>
+                  <span class="v_tabs_value">53%</span>
+                </li>
+                <li class="v_tabs_row">
+                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
+                  <span class="v_tabs_formula">a</span>
+                  <span class="v_tabs_value">53%</span>
+                </li>
+                <li class="v_tabs_row">
+                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
+                  <span class="v_tabs_formula">a</span>
+                  <span class="v_tabs_value">53%</span>
+                </li>
+                <li class="v_tabs_row">
+                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
+                  <span class="v_tabs_formula">a</span>
+                  <span class="v_tabs_value">53%</span>
+                </li>
+                <li class="v_tabs_row">
+                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
+                  <span class="v_tabs_formula">a</span>
+                  <span class="v_tabs_value">53%</span>
+                </li>
+                <li class="v_tabs_row">
+                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
+                  <span class="v_tabs_formula">a</span>
+                  <span class="v_tabs_value">53%</span>
+                </li>
+              </ul>
+            </div>
+          </div>
         </li>
         <li class="v_tabs_row">
           <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
