@@ -157,16 +157,6 @@ public class SparePart {
 		statusOfSparePart nullable:true,validator:{
 			if(it!=null) return it in [StatusOfSparePart.OPERATIONAL,StatusOfSparePart.INSTOCK,StatusOfSparePart.PENDINGORDER,StatusOfSparePart.DISPOSED]
 		}
-		/*statusOfSparePart nullable:false,validator:{ val, obj ->
-			if(obj.id!=null) {
-				if(log.isDebugEnabled()) log.debug("ID OF STATUS INSIDE IF: " + obj.id)
-				return val in [StatusOfSparePart.OPERATIONAL,StatusOfSparePart.INSTOCK,StatusOfSparePart.PENDINGORDER,StatusOfSparePart.DISPOSED]		
-			}
-			else{
-				if(log.isDebugEnabled()) log.debug("ID OF STATUS INSIDE ELSE: " + obj.id)
-				return val in [StatusOfSparePart.INSTOCK,StatusOfSparePart.PENDINGORDER]			
-			}
-		}*/
 		model nullable: true
 		supplier nullable: true
 		expectedLifeTime nullable: true, validator:{
