@@ -407,6 +407,20 @@ function getToHide(parchaseCost,estimatedCost){
 			$(".donor-information").slideUp()
 		}
 	})
+	//purchaser==partner 
+	if($("select[name=sparePartPurchasedBy]").val()!="BYPARTNER") $(".partner-information").hide()	
+	else{
+		$("label[for=sparePartPurchasedBy]").html(estimatedCost)
+	}
+	$("select[name=sparePartPurchasedBy]").change(function(e){
+		if($(this).val()=="BYPARTNER"){ 
+			$("label[for=purchaseCost]").html(estimatedCost)
+			$(".partner-information").slideDown()
+		}else{
+			$("label[for=purchaseCost]").html(parchaseCost)
+			$(".partner-information").slideUp()
+		}
+	})
 	//dataLocation
 	if($("select[name=stockLocation]").val()!="FACILITY") $(".facility-information").hide()
 	$("select[name=stockLocation]").change(function(e){

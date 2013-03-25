@@ -229,7 +229,4 @@ class SparePartService {
 			
 			return headers;
 		}
-		
-		
-
 }
