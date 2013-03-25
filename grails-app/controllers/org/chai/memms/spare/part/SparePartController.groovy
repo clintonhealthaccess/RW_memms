@@ -160,7 +160,8 @@ class SparePartController extends AbstractEntityController{
 					equipments:equipments,
 					numberOfStatusToDisplay: grailsApplication.config.status.to.display.on.spare.part.form,
 					cmd:params.cmd,
-					currencies: grailsApplication.config.site.possible.currency
+					currencies: grailsApplication.config.site.possible.currency,
+					now:now
 
 				]
 	}
