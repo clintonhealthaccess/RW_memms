@@ -435,8 +435,10 @@ function getToHide(parchaseCost,estimatedCost){
 	$("select[name=statusOfSparePart]").change(function(e){
 		if($(this).val()=="OPERATIONAL"){
 			$(".equipment-information").slideDown()
+			$(".form-section-to-hide").slideUp()
 		}else{
 			$(".equipment-information").slideUp()
+			$(".form-section-to-hide").slideDown()
 		}
 	})
 	//user

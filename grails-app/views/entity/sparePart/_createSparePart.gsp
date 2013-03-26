@@ -104,7 +104,8 @@
       	 	  <g:render template="/templates/assignedEquipmentFormSide" model="['equipment':sparePart?.usedOnEquipment,'cssClass':'current','field':'usedOnEquipment' ]" />
           </g:if>
         </div>
-      </div>   
+      </div>
+     <div class="form-section-to-hide">
      <div class="form-section">
       	<fieldset class="form-content">
       	<h4 class="section-title">
@@ -129,6 +130,7 @@
        		</g:if>
        	</div>
       </div>
+      </div> 
       <div class="form-section">
       	<fieldset class="form-content">
       	<h4 class="section-title">
