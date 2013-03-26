@@ -26,7 +26,7 @@
     		ajaxLink="${createLink(controller:'equipmentView', action:'getAjaxData', params: [type:'EQUIPMENT'])}"
     		from="${equipments}" value="${sparePart?.usedOnEquipment?.id}" values="${equipments.collect{it.descriptions}}" />
     	</div>
-		<g:input name="dateOfEvent" dateClass="date-picker" label="${message(code:'spare.part.status.of.spare.part.date.of.event.label')}" bean="${statusOfSparePart}" field="dateOfEvent"/>
+		<g:input name="dateOfEvent" dateClass="date-picker" label="${message(code:'spare.part.status.of.spare.part.date.of.event.label')}" bean="${statusOfSparePart}" field="dateOfEvent" value="${(status.id!=null)?:Utils.formatDate(now)}"/>
     	<g:i18nTextarea name="reasons" bean="${statusOfSparePart}" label="${message(code:'spare.part.status.of.spare.part.reason')}" field="reasons" height="150" width="300" maxHeight="150" />
 		
 		<g:if test="${status.id != null}">

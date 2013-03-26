@@ -40,11 +40,7 @@ class SparePartStatusController extends AbstractEntityController{
 	def sparePartStatusService
 	def sparePartService
 	def usedOnEquipment
-	
-	
-    def index() {
-		
-	}
+
 	
 	def bindParams(def entity) {
 		if(log.isDebugEnabled()) log.debug("Spare part status params: "+params)
@@ -65,7 +61,8 @@ class SparePartStatusController extends AbstractEntityController{
 			status:entity,
 			sparePart:entity.sparePart,
 			equipments:equipments,
-			numberOfStatusToDisplay: grailsApplication.config.status.to.display.on.sparePart.form
+			numberOfStatusToDisplay: grailsApplication.config.status.to.display.on.sparePart.form,
+			now:now
 		]
 	}
 
