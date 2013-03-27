@@ -3,7 +3,10 @@ package org.chai.memms.inventory
 import org.chai.memms.Initializer;
 import org.chai.memms.IntegrationTests;
 import org.chai.memms.inventory.EquipmentTypeController;
+import org.chai.memms.inventory.EquipmentTypeService;
 import org.chai.memms.inventory.EquipmentType.Observation;
+import org.chai.memms.inventory.Provider.Type;
+import org.chai.memms.spare.part.SparePartType;
 
 class EquipmentTypeControllerSpec extends IntegrationTests{
 
@@ -96,7 +99,49 @@ class EquipmentTypeControllerSpec extends IntegrationTests{
 		equipmentTypeController.response.json.results[0].contains(EquipmentType.findByCode(CODE(125)).code)
 		equipmentTypeController.response.json.results[0].contains(EquipmentType.findByCode(CODE(126)).code)
 	}
+
 	
+	def "list equipment types compatible with a spare part type"(){
+		setup:
+		
+		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+		def manufacturer = Initializer.newProvider("TEST" + CODE(1), Type.MANUFACTURER,manufactureContact)
+		
+//		equipmentTypeController = new EquipmentTypeController();
+		equipmentTypeService = new EquipmentTypeService();
+		Initializer.newEquipmentType(CODE(123), ["en":"names equipment type one"], ["en":"descriptions equipment type one"],Observation.RETIRED ,  Initializer.now(),)
+		Initializer.newEquipmentType(CODE(124), ["en":"names equipment type two"], ["en":"descriptions equipment type two"],Observation.NOTINSCOPE ,  Initializer.now(),)
+		Initializer.newEquipmentType(CODE(125), ["en":"names equipment type three"], ["en":"descriptions equipment type three"],Observation.TOODETAILED ,  Initializer.now(),)
+		Initializer.newEquipmentType(CODE(126), ["en":"names equipment type four"], ["en":"descriptions equipment type four"],Observation.USEDINMEMMS ,  Initializer.now(),)
+		
+		Initializer.newSparePartType(CODE(126),["en":"names spare part type one"],["en":"descriptions spare part type one"],"7654-HGT",manufacturer,new Date())
+		
+		def equipmentType = EquipmentType.findByCode(CODE(126))
+		def sparePartType = SparePartType.findByCode(CODE(126))
+		sparePartType.addToCompatibleEquipmentTypes(equipmentType)
+		equipmentType.addToCompatibleSparePartTypes(sparePartType)
+		sparePartType.save(failOnError:true)
+		equipmentType.save(failOnError:true)
+		
+		when: "none ajax"
+//		equipmentTypeController.list()
+		equipmentType=equipmentTypeService.getEquipmentTypes(sparePartType,[:]);
+
+		then:
+//		EquipmentType.count() == 4
+		equipmentType.size()==1
+		
+		when: "with ajax"
+		equipmentTypeController.request.makeAjaxRequest()
+		equipmentTypeController.list()
+		
+		then:
+		equipmentTypeController.response.json.results[0].contains(EquipmentType.findByCode(CODE(123)).code)
+		equipmentTypeController.response.json.results[0].contains(EquipmentType.findByCode(CODE(124)).code)
+		equipmentTypeController.response.json.results[0].contains(EquipmentType.findByCode(CODE(125)).code)
+		equipmentTypeController.response.json.results[0].contains(EquipmentType.findByCode(CODE(126)).code)
+	}
+			
 	def "search equipment types"(){
 		setup:
 		equipmentTypeController = new EquipmentTypeController();

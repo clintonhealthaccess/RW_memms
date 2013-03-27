@@ -92,8 +92,6 @@ class ProviderService {
 			}
 			if(sparePartType!=null)
 				sparePartTypes{ eq('id',sparePartType.id) }
-
-			log.debug(" type:"+type+" sparePartType:"+sparePartType)
 		}
 	}
 

@@ -100,35 +100,35 @@ class EquipmentTypeController extends AbstractEntityController{
 				template:"equipmentType/equipmentTypeList",
 				listTop:"equipmentType/listTop",
 				importTask:'EquipmentTypeImportTask',
-				exportTask:'EquipmentTypeExportTask'
+				exportTask:'EquipmentTypeExportTask',
+				entities: types,
+				entityClass: getEntityClass()
 			])
 		}
 	}
-
+	
 	def search = {
 		log.debug("params ==>"+params)
 		adaptParamsForList()
-		def sparePartType=null
-
-		log.debug("params['sparePartType']===>"+params['sparePartType'])
-
-		if(params['sparePartType']!=null){
+		def sparePartType = null
+		log.debug("params['sparePartType']---------->"+params['sparePartType'])
+		if(params['sparePartType']!=null)
 			sparePartType =  SparePartType.get(params.int('sparePartType'))
-		}
-
 		def types = equipmentTypeService.searchEquipmentType(params['q'],null,sparePartType,params)
-
-		if(request.xhr)
+		if(request.xhr){
+		log.debug("params['sparePartType']##########>"+params['sparePartType'])
 			this.ajaxModel(types,params['q'],sparePartType)
+		}	
 		else {
 			render(view:"/entity/list",model:model(types,sparePartType) << [
 				template:"equipmentType/equipmentTypeList",
 				listTop:"equipmentType/listTop",
 				importTask:'EquipmentTypeImportTask',
-				exportTask:'EquipmentTypeExportTask',
+				exportTask:'EquipmentTypeExportTask'
 			])
 		}
-	}
+	}	
+		
 	
 	def model(def entities,def sparePartType) {
 		return [

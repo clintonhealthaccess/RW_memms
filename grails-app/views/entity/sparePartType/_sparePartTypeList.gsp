@@ -4,10 +4,10 @@
 		<tr>
 			<th/>
 			<g:sortableColumn property="${i18nField(field: 'names')}" params="[q:q]" title="${message(code: 'entity.name.label')}" />
-			<g:sortableColumn property="partNumber" params="[q:q]" title="${message(code: 'entity.part.number.label')}" />			
-			<g:sortableColumn property="manufacturer" params="[q:q]" title="${message(code: 'entity.manufacturer.label')}" />
-			<g:sortableColumn property="quantityInStock" params="[q:q]" title="${message(code: 'sparePartType.quantity.in.stock.label')}" />
-			<g:sortableColumn property="estimatedDateStockout" params="[q:q]" title="${message(code: 'sparePartType.estimated.date.stockout.label')}" />
+			<g:sortableColumn property="partNumber" params="[q:q]" title="${message(code: 'entity.part.number.label')}" />	
+			<th><g:message code="entity.manufacturer.label"/></th>
+			<th><g:message code="sparePartType.quantity.in.stock.label"/></th>	
+			<th><g:message code="sparePartType.estimated.date.stockout.label"/></th>
 			<g:sortableColumn property="discontinuedDate" params="[q:q]" title="${message(code: 'entity.discontinued.date.label')}" />
 			<th/>
 			<th/>
@@ -49,17 +49,17 @@
 				</td>
 				<td>
 					<a href="${createLinkWithTargetURI(controller:'equipmentType', action:'list', params:[sparePartType: type.id])}">
-						Compatible equipment types
+						<g:message code="equipmentType.compatible.equipment.types.label" />
 					</a>
 				</td> 
 				<td>
 					<a href="${createLinkWithTargetURI(controller:'provider', action:'list', params:[sparePartType: type.id,type:"SUPPLIER"])}">
-						Vendors
+						<g:message code="provider.vendors.label" />
 					</a>
 				</td>
 				<td>
 					<a href="${createLinkWithTargetURI(controller:'sparePartView', action:'list', params:[sparePartType: type.id,statusOfSparePart:"INSTOCK"])}">
-						Spare parts
+						<g:message code="spare.parts.label" />
 					</a>
 				</td>      
 			</tr>

@@ -52,8 +52,8 @@ class EquipmentTypeService {
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(observation!=null)
 				eq("observation",observation)
-			if(sparePartType!=null) sparePartTypes{ eq('id',11) }
-			log.debug("sparePartType ====>"+sparePartType)
+			if(sparePartType!=null) sparePartTypes{ eq('id',sparePartType.id) }
+			log.debug("sparePartType +++++++>"+sparePartType)
 			or{
 				if(observation==null){
 					for(Observation obs: this.getEnumeMatcher(text))
@@ -71,12 +71,12 @@ class EquipmentTypeService {
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(sparePartType!=null){
 				sparePartTypes{
-					eq('id',sparePartType.id)
+					eq('id',sparePartType.id)	
 				}
 			}
 		}
 	}
-
+	
 	public static List<Observation> getEnumeMatcher(String text){
 		List<Observation> observations=[]
 		if(text!=null && !text.equals(""))

@@ -3,15 +3,15 @@
 		<tr>
 			<th/>
 			<g:sortableColumn property="code"  title="${message(code: 'spare.part.code.label')}" params="[q:q]" />
-			<g:sortableColumn property="type"  title="${message(code: 'spare.part.type.label')}" params="[q:q]" />
-			<g:sortableColumn property="model"  title="${message(code: 'spare.part.model.label')}" params="[q:q]" />
-			<g:sortableColumn property="statusOfSparePart"  title="${message(code: 'spare.part.status.label')}" params="[q:q]" />
+			<g:sortableColumn property="type"  title="${message(code: 'spare.part.type.label')}" params="[q:q,sparePartType:sparePartType?.id,statusOfSparePart:statusOfSparePart]" />
+			<g:sortableColumn property="model"  title="${message(code: 'spare.part.model.label')}" params="[q:q,sparePartType:sparePartType?.id,statusOfSparePart:statusOfSparePart]" />
+			<g:sortableColumn property="statusOfSparePart"  title="${message(code: 'spare.part.status.label')}" params="[q:q,sparePartType:sparePartType?.id,statusOfSparePart:statusOfSparePart]" />
 			<th><g:message code="location.label"/></th>
-			<g:sortableColumn property="purchaseDate"  title="${message(code: 'spare.part.purchase.date.label')}" params="[q:q]" />
-			<g:sortableColumn property="purchaseCost"  title="${message(code: 'spare.part.purchase.cost.label')}" params="[q:q]" />
-			<g:sortableColumn property="sameAsManufacturer"  title="${message(code: 'spare.part.same.as.manufacturer.label')}" params="[q:q]" />
-			<g:sortableColumn property="supplier"  title="${message(code: 'provider.type.supplier')}" params="[q:q]" />
-			<g:sortableColumn property="sparePartPurchasedBy"  title="${message(code: 'spare.part.purchaser.label')}" params="[q:q]" />
+			<g:sortableColumn property="purchaseDate"  title="${message(code: 'spare.part.purchase.date.label')}" params="[q:q,sparePartType:sparePartType?.id,statusOfSparePart:statusOfSparePart]" />
+			<g:sortableColumn property="purchaseCost"  title="${message(code: 'spare.part.purchase.cost.label')}" params="[q:q,sparePartType:sparePartType?.id,statusOfSparePart:statusOfSparePart]" />
+			<g:sortableColumn property="sameAsManufacturer"  title="${message(code: 'spare.part.same.as.manufacturer.label')}" params="[q:q,sparePartType:sparePartType?.id,statusOfSparePart:statusOfSparePart]" />
+			<g:sortableColumn property="supplier"  title="${message(code: 'provider.type.supplier')}" params="[q:q,sparePartType:sparePartType?.id,statusOfSparePart:statusOfSparePart]" />
+			<g:sortableColumn property="sparePartPurchasedBy"  title="${message(code: 'spare.part.purchaser.label')}" params="[q:q,sparePartType:sparePartType?.id,statusOfSparePart:statusOfSparePart]" />
 			
 		</tr>
 	</thead>

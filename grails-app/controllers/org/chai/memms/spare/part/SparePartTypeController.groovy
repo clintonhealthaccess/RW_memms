@@ -148,7 +148,6 @@ class SparePartTypeController  extends AbstractEntityController{
 		if(request.xhr)
 			this.ajaxModel(types,"")
 		else{
-
 		render(view:"/entity/list",model:model(types) <<[
 				template:"sparePartType/sparePartTypeList",
 				listTop:"sparePartType/listTop",
@@ -156,8 +155,7 @@ class SparePartTypeController  extends AbstractEntityController{
 				entityClass: getEntityClass()
 			])
 		}			
-	}
-	
+	}	
 	
 	def search = {
 		adaptParamsForList()

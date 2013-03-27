@@ -65,7 +65,9 @@ class ProviderServiceSpec extends IntegrationTests{
 		supplier = Provider.findByCode(CODE(124))
 		sparePartType = SparePartType.findByCode(CODE(124))
         sparePartType.addToVendors(supplier)
+		supplier.addToSparePartTypes(sparePartType)
 		sparePartType.save(failOnError:true)
+		supplier.save(failOnError:true)
 		
 		
 		def both = new Provider(code:CODE(125), type: Type.BOTH, contact:othersContact)

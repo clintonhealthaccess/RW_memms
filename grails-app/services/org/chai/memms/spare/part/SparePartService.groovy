@@ -68,14 +68,14 @@ class SparePartService {
 			sparePart.statusOfSparePart = sparePartStatus.statusOfSparePart
 			sparePart.addToStatus(sparePartStatus)
 		}else{
-			sparePart.statusOfSparePart = sparePart.timeBasedStatus.statusOfSparePart
+			sparePart.statusOfSparePart = sparePart.timeBasedStatus.sparePartStatus
 		}
 		sparePart.lastModified = user
 		if(log.isDebugEnabled()) log.debug("Updating SparePart status params: "+sparePart)
 		sparePart.save(failOnError:true)
 	}
 
-	public def searchSparePart(String text,User user,SparePartStatus sparePartStatus,SparePartType sparePartType,Map<String, String> params) {
+	public def searchSparePart(String text,User user,SparePartStatus statusOfSparePart,SparePartType sparePartType,Map<String, String> params) {
 		//Remove unnecessary blank space
 		text= text.trim()
 		def dbFieldTypeNames = 'names_'+languageService.getCurrentLanguagePrefix();
@@ -96,9 +96,9 @@ class SparePartService {
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			createAlias("type","t")
 			
-			if(sparePartType!=null && sparePartStatus!=null){
+			if(statusOfSparePart!=null && statusOfSparePart!=null){
 			eq("type",sparePartType)
-			eq("statusOfSparePart",sparePartStatus)
+			eq("statusOfSparePart",statusOfSparePart)
 			}
 		
 			if(!dataLocations.isEmpty())

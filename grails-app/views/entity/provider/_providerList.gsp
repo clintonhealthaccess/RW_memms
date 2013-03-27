@@ -2,15 +2,15 @@
 	<thead>
 		<tr>
 			<th/>
-			<g:sortableColumn property="code" title="${message(code: 'entity.code.label', default: 'Code')}" params="[q:q]" />
-			<g:sortableColumn property="contact.contactName" title="${message(code: 'entity.name.label', default: 'Name')}" params="[q:q,sparePartType:sparePartType]" />
-			<g:sortableColumn property="type" title="${message(code: 'entity.type.label', default: 'Type')}" params="[q:q,sparePartType:sparePartType]" />
-			<g:sortableColumn property="contact.email" title="${message(code: 'contact.email.label', default: 'Email')}" params="[q:q,sparePartType:sparePartType]" />
+			<g:sortableColumn property="code" title="${message(code: 'entity.code.label', default: 'Code')}" params="[q:q,sparePartType:sparePartType?.id,type:type]" />
+			<g:sortableColumn property="contact.contactName" title="${message(code: 'entity.name.label', default: 'Name')}" params="[q:q,sparePartType:sparePartType?.id,type:type]" />
+			<g:sortableColumn property="type" title="${message(code: 'entity.type.label', default: 'Type')}" params="[q:q,sparePartType:sparePartType?.id,type:type]" />
+			<g:sortableColumn property="contact.email" title="${message(code: 'contact.email.label', default: 'Email')}" params="[q:q,sparePartType:sparePartType?.id,type:type]" />
 			<th><g:message code="contact.phone.label"/></th>
 			<th><g:message code="contact.pobox.label"/></th>
-			<g:sortableColumn property="contact.street" title="${message(code: 'contact.street.label', default: 'Street')}" params="[q:q,sparePartType:sparePartType]" />
-			<g:sortableColumn property="contact.city" title="${message(code: 'contact.city.label', default: 'City')}" params="[q:q,sparePartType:sparePartType]" />
-			<g:sortableColumn property="contact.country" title="${message(code: 'contact.country.label', default: 'Country')}" params="[q:q,sparePartType:sparePartType]" />
+			<g:sortableColumn property="contact.street" title="${message(code: 'contact.street.label', default: 'Street')}" params="[q:q,sparePartType:sparePartType?.id,type:type]" />
+			<g:sortableColumn property="contact.city" title="${message(code: 'contact.city.label', default: 'City')}" params="[q:q,sparePartType:sparePartType?.id,type:type]" />
+			<g:sortableColumn property="contact.country" title="${message(code: 'contact.country.label', default: 'Country')}" params="[q:q,sparePartType:sparePartType?.id,type:type]" />
 			<th><g:message code="contact.address.descriptions.label"/></th>
 		</tr>
 	</thead>
