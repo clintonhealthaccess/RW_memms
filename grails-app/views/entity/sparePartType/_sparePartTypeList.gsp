@@ -39,12 +39,12 @@
 					${type.manufacturer.contact.contactName}
 				</td>
 				<td>
-					
-				</td>
-				<td>
-				    <a href="${createLinkWithTargetURI(controller:'sparePartView', action:'list', params:[sparePartType: type.id,statusOfSparePart:"INSTOCK"])}">
+					 <a href="${createLinkWithTargetURI(controller:'sparePartView', action:'list', params:[sparePartType: type.id,statusOfSparePart:"INSTOCK"])}">
 					     ${type.inStockSpareParts.size()}
 					</a>
+				</td>
+				<td>
+				   
 				</td>
 				<td>
 					${Utils.formatDateWithTime(type?.discontinuedDate)}
