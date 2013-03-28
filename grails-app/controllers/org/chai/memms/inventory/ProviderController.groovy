@@ -88,15 +88,9 @@ class ProviderController  extends AbstractEntityController {
 	}
 
 	def list = {
-		
 		adaptParamsForList()
-		log.debug("params ==>"+params)
-		
 		def sparePartType=null
-		log.debug("params['sparePartType']---------->"+params['sparePartType'])
 		def type=null
-		log.debug("params['type']---------->"+params['type'])
-		
 		if(params['sparePartType']!=null)
 			sparePartType =  SparePartType.get(params.int('sparePartType'))
 		if(params['type']!=null)
@@ -104,13 +98,11 @@ class ProviderController  extends AbstractEntityController {
 			type = Type."$type"
 		def vendors = providerService.getProviders(sparePartType,type,params)
 		if(request.xhr)
-		log.debug("params['sparePartType']##########>"+params['sparePartType']+"params['type']##########>"+params['type'])
 		{		
 			this.ajaxModel(vendors,"",sparePartType,type)
 		}	
 		else{
-		    render(view:"/entity/list",model:[
-//			render(view:"/entity/list",model:model(vendors,sparePartType,type) << [
+		    render(view:"/entity/list",model:  [
 				template:"provider/providerList",
 				listTop:"provider/listTop",
 				entities: vendors,

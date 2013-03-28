@@ -39,10 +39,12 @@
 					${type.manufacturer.contact.contactName}
 				</td>
 				<td>
-					${type.inStockSpareParts.size()}
+					
 				</td>
 				<td>
-					${}
+				    <a href="${createLinkWithTargetURI(controller:'sparePartView', action:'list', params:[sparePartType: type.id,statusOfSparePart:"INSTOCK"])}">
+					     ${type.inStockSpareParts.size()}
+					</a>
 				</td>
 				<td>
 					${Utils.formatDateWithTime(type?.discontinuedDate)}
@@ -57,11 +59,6 @@
 						<g:message code="provider.vendors.label" />
 					</a>
 				</td>
-				<td>
-					<a href="${createLinkWithTargetURI(controller:'sparePartView', action:'list', params:[sparePartType: type.id,statusOfSparePart:"INSTOCK"])}">
-						<g:message code="spare.parts.label" />
-					</a>
-				</td>      
 			</tr>
 		</g:each>
 	</tbody>

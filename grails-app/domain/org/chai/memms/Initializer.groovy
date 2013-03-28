@@ -683,9 +683,9 @@ public class Initializer {
 			
 		if(!SparePartType.count()){
 			//Add spare part types as defined in ecri
-			def sparePartOne = newSparePartType("4323", ['en':'first spare part','fr':' premiere piece de rechange'],['en':'first spare part description','fr':' description de la premiere piece de rechange'],"4323-XYZ",Provider.findByCode("ONE"),now())
-			def sparePartTwo = newSparePartType("4324", ['en':'second spare part','fr':' deuxieme piece de rechange'],['en':'second spare part description','fr':' description de la deuxieme piece de rechange'],"4324-ABC",Provider.findByCode("TWO"),now())
-			def sparePartThree = newSparePartType("4325", ['en':'third spare part','fr':' troisieme piece de rechange'],['en':'third spare part description','fr':' description de la troisieme piece de rechange'],"4325-IJK",Provider.findByCode("THREE"),now())
+			def spPtTypOne = newSparePartType("4323", ['en':'first spare part','fr':' premiere piece de rechange'],['en':'first spare part description','fr':' description de la premiere piece de rechange'],"4323-XYZ",Provider.findByCode("ONE"),now())
+			def spPtTypTwo = newSparePartType("4324", ['en':'second spare part','fr':' deuxieme piece de rechange'],['en':'second spare part description','fr':' description de la deuxieme piece de rechange'],"4324-ABC",Provider.findByCode("TWO"),now())
+			def spPtTypThree = newSparePartType("4325", ['en':'third spare part','fr':' troisieme piece de rechange'],['en':'third spare part description','fr':' description de la troisieme piece de rechange'],"4325-IJK",Provider.findByCode("THREE"),now())
    
 			
 			def sparePartTypeOne = newSparePartType("15810", ['en':'first spare part','fr':'premier sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part",Provider.findByCode("ONE"),now())
@@ -698,6 +698,36 @@ public class Initializer {
 			def sparePartTypeEight = newSparePartType("10124", ['en':'Eighth spare part','fr':'Huitieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 8",Provider.findByCode("EIGHT"),now())
 			def sparePartTypeNine = newSparePartType("10155", ['en':'Ninth spare part','fr':'Neuvieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 9",Provider.findByCode("NINE"),now())
 			def sparePartTypeTen = newSparePartType("10426", ['en':'Tenth spare part','fr':'Dixieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 10",Provider.findByCode("TEN"),now())
+			
+			
+			def typeOne = newEquipmentType("158101", ["en":"Accelerometers","fr":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,now(),25)
+			def typeTwo = newEquipmentType("158191", ["en":"X-Ray Film Cutter"],["en":"used in memms"],Observation.USEDINMEMMS,now(),13)
+			def typeThree = newEquipmentType("159661", ["en":"Video Systems"],["en":"used in memms"],Observation.USEDINMEMMS,now(),12)
+			def typeFour = newEquipmentType("100351", ["en":"Adhesives, Aerosol"],["en":"not used in memms"],Observation.RETIRED,now(),34)
+			
+			def contactFive = newContact(['en':'Address Descriptions Five'],"Supplier Company 1","jkl4@yahoo.com","0768-657-787","Street 153","8988")
+			def contactSix = newContact(['en':'Address Descriptions Six'],"Supplier Company 2","jkl5@yahoo.com","0768-342-787","Street 155","8988")
+			def contactSeven = newContact(['en':'Address Descriptions Seven'],"Supplier Company 3","jkl6@yahoo.com","0768-123-787","Street 156","8988")
+			def contactEight = newContact(['en':'Address Descriptions Eight'],"Manufacture and Supplier Ericson","jkl6@yahoo.com","0768-123-787","Street 156","8988")
+			
+			
+			def supplierOne = newProvider("FIVES",Type.SUPPLIER,contactFive)
+			def supplierTwo = newProvider("SIXES",Type.SUPPLIER,contactSix)
+			def supplierThree = newProvider("SEVENS",Type.SUPPLIER,contactSeven)
+			def both = newProvider("EIGHTS",Type.BOTH,contactEight)
+
+			sparePartTypeEight.addToCompatibleEquipmentTypes(typeOne)
+			sparePartTypeEight.addToCompatibleEquipmentTypes(typeTwo)
+			sparePartTypeEight.addToCompatibleEquipmentTypes(typeThree)
+			sparePartTypeEight.addToCompatibleEquipmentTypes(typeFour)
+			
+			
+			sparePartTypeEight.addToVendors(supplierOne)
+			sparePartTypeEight.addToVendors(supplierTwo)
+			sparePartTypeEight.addToVendors(supplierThree)
+			sparePartTypeEight.addToVendors(both)
+			sparePartTypeEight.save(failOnError:true)
+			
 			
 		}
 		

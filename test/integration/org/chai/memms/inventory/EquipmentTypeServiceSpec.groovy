@@ -36,6 +36,8 @@ class EquipmentTypeServiceSpec extends IntegrationTests{
 		def sparePartType = SparePartType.findByCode(CODE(123))
 		sparePartType.addToCompatibleEquipmentTypes(equipmentType)
 		sparePartType.save(failOnError:true)
+		equipmentType.addToSparePartTypes(sparePartType)
+		equipmentType.save(failOnError:true)
 		
 		when:
 		List<EquipmentType> equipmentTypes= equipmentTypeService.searchEquipmentType(CODE(123),null,sparePartType,[:])
@@ -66,10 +68,13 @@ class EquipmentTypeServiceSpec extends IntegrationTests{
 		def manufacturer = Initializer.newProvider("TEST" + CODE(1), Type.MANUFACTURER,manufactureContact)
 		Initializer.newEquipmentType(CODE(123),["en":"test Name"],["en":"testObservations"],observation,Initializer.now())
 		Initializer.newSparePartType(CODE(123),["en":"names spare part type one"],["en":"descriptions spare part type one"],"7654-HGT",manufacturer,new Date())
+		
 		def equipmentType = EquipmentType.findByCode(CODE(123))
 		def sparePartType = SparePartType.findByCode(CODE(123))
 		sparePartType.addToCompatibleEquipmentTypes(equipmentType)
 		sparePartType.save(failOnError:true)
+		equipmentType.addToSparePartTypes(sparePartType)
+		equipmentType.save(failOnError:true)
 		
 		when:
 		List<EquipmentType> equipmentTypes = equipmentTypeService.searchEquipmentType("Na",null,sparePartType,[:])
@@ -98,10 +103,15 @@ class EquipmentTypeServiceSpec extends IntegrationTests{
 		def manufacturer = Initializer.newProvider("TEST" + CODE(1), Type.MANUFACTURER,manufactureContact)
 		Initializer.newEquipmentType(CODE(123),["en":"testName"],["en":"testObservations"],observation,Initializer.now())
 		Initializer.newSparePartType(CODE(123),["en":"names spare part type one"],["en":"descriptions spare part type one"],"7654-HGT",manufacturer,new Date())
+		
 		def equipmentType = EquipmentType.findByCode(CODE(123))
 		def sparePartType = SparePartType.findByCode(CODE(123))
 		sparePartType.addToCompatibleEquipmentTypes(equipmentType)
 		sparePartType.save(failOnError:true)
+		equipmentType.addToSparePartTypes(sparePartType)
+		equipmentType.save(failOnError:true)
+		
+		
 		when:
 		List<EquipmentType> equipmentTypes = equipmentTypeService.searchEquipmentType("used",null,sparePartType,[:])
 		then:
@@ -134,18 +144,21 @@ class EquipmentTypeServiceSpec extends IntegrationTests{
 		Initializer.newEquipmentType(CODE(123),["en":"retired equipment"],["en":"retired equipment Type"],Observation.RETIRED,Initializer.now())
 		Initializer.newEquipmentType(CODE(1234),["en":"test Name"],["en":"testObservations"],Observation.USEDINMEMMS,Initializer.now())
 		
-		def equipmentType = EquipmentType.findByCode(CODE(123))
+		def equipmentTypeOne = EquipmentType.findByCode(CODE(123))
 		def equipmentTypeTwo = EquipmentType.findByCode(CODE(1234))
 		
-		def sparePartType = SparePartType.findByCode(CODE(123))
+		def sparePartTypeOne = SparePartType.findByCode(CODE(123))
 		def sparePartTypeTwo = SparePartType.findByCode(CODE(1234))
 		
-		sparePartType.addToCompatibleEquipmentTypes(equipmentType)
+		equipmentTypeOne.addToSpareParts(sparePartTypeOne)
+		equipmentTypeTwo.addToSpareParts(sparePartTypeTwo)
+		equipmentTypeOne.save(failOnError:true)
+		equipmentTypeOne.save(failOnError:true)
+		
+		sparePartTypeOne.addToCompatibleEquipmentTypes(equipmentTypeOne)
 		sparePartTypeTwo.addToCompatibleEquipmentTypes(equipmentTypeTwo)
-		
-		sparePartType.save(failOnError:true)
+		sparePartTypeOne.save(failOnError:true)
 		sparePartTypeTwo.save(failOnError:true)
-		
 		
 		when:
 		List<EquipmentType> equipmentTypes = EquipmentType.list()
@@ -180,21 +193,25 @@ class EquipmentTypeServiceSpec extends IntegrationTests{
 		Initializer.newSparePartType(CODE(123),["en":"names spare part type one"],["en":"descriptions spare part type one"],"7654-HGT",manufacturer,new Date())
 		Initializer.newSparePartType(CODE(1234),["en":"names spare part type one"],["en":"descriptions spare part type one"],"7654-HGT",manufacturer,new Date())
 		
-		def equipmentType = EquipmentType.findByCode(CODE(123))
+		def equipmentTypeOne = EquipmentType.findByCode(CODE(123))
 		def equipmentTypeTwo = EquipmentType.findByCode(CODE(1234))
 		
-		def sparePartType = SparePartType.findByCode(CODE(123))
+		def sparePartTypeOne = SparePartType.findByCode(CODE(123))
 		def sparePartTypeTwo = SparePartType.findByCode(CODE(1234))
 		
-		sparePartType.addToCompatibleEquipmentTypes(equipmentType)
-		sparePartType.addToCompatibleEquipmentTypes(equipmentType)
+		equipmentTypeOne.addToSpareParts(sparePartTypeOne)
+		equipmentTypeTwo.addToSpareParts(sparePartTypeTwo)
+		equipmentTypeOne.save(failOnError:true)
+		equipmentTypeOne.save(failOnError:true)
 		
-		sparePartType.save(failOnError:true)
+		sparePartTypeOne.addToCompatibleEquipmentTypes(equipmentTypeOne)
+		sparePartTypeTwo.addToCompatibleEquipmentTypes(equipmentTypeTwo)
+		sparePartTypeOne.save(failOnError:true)
 		sparePartTypeTwo.save(failOnError:true)
-				
+			
 		when:
 		List<EquipmentType> equipmentTypes = EquipmentType.list()
-		List<EquipmentType> searchEquipmentTypes = equipmentTypeService.searchEquipmentType("",Observation.RETIRED,sparePartType,[:])
+		List<EquipmentType> searchEquipmentTypes = equipmentTypeService.searchEquipmentType("",Observation.RETIRED,sparePartTypeOne,[:])
 		then:
 		equipmentTypes.size() == 2
 		searchEquipmentTypes.size() == 1

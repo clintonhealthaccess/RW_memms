@@ -108,15 +108,13 @@ class EquipmentTypeController extends AbstractEntityController{
 	}
 	
 	def search = {
-		log.debug("params ==>"+params)
+
 		adaptParamsForList()
 		def sparePartType = null
-		log.debug("params['sparePartType']---------->"+params['sparePartType'])
 		if(params['sparePartType']!=null)
 			sparePartType =  SparePartType.get(params.int('sparePartType'))
 		def types = equipmentTypeService.searchEquipmentType(params['q'],null,sparePartType,params)
 		if(request.xhr){
-		log.debug("params['sparePartType']##########>"+params['sparePartType'])
 			this.ajaxModel(types,params['q'],sparePartType)
 		}	
 		else {

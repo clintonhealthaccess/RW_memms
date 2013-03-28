@@ -12,20 +12,14 @@ import org.chai.memms.spare.part.SparePartType;
 class ProviderControllerSpec extends IntegrationTests{
 	
 	def providerController
-	
-
-	
-	
-	
-	
-	
+		
 	
 	def "test list provider"(){
 		
 }
 	
 	
-	def "test list providers of type supplier(vendors) with compatible spare part type"(){
+	def "test list supplier with compatible spare part type"(){
 	
 }
 	

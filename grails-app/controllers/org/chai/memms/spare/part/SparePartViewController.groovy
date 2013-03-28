@@ -80,29 +80,20 @@ class SparePartViewController extends AbstractController{
 	
 	def list = {
 		adaptParamsForList()
-		log.debug("params ==>"+params)
-		
-		def sparePartType=null
-		log.debug("params['sparePartType']---------->"+params['sparePartType'])
-		
+		def sparePartType=null	
 		def statusOfSparePart=null
-		log.debug("params['statusOfSparePart']---------->"+params['statusOfSparePart'])
-		
 		if(params['sparePartType']!=null)
 			sparePartType =  SparePartType.get(params.int('sparePartType'))
 		if(params['statusOfSparePart']!=null){
 			statusOfSparePart = params["statusOfSparePart"]
 			statusOfSparePart = StatusOfSparePart."$statusOfSparePart"
 		}
-		log.debug("==========>"+statusOfSparePart)
 		def spareParts = sparePartService.getSpareParts(user,sparePartType,statusOfSparePart,params)
 		if(request.xhr)
-		log.debug("params['sparePartType']##########>"+params['sparePartType']+"params['statusOfSparePart']##########>"+params['statusOfSparePart'])
 		{
 			this.ajaxModel(spareParts,"",sparePartType,statusOfSparePart)
 		}
 		else{
-//			render(view:"/entity/list",model: model(spareParts,sparePartType,statusOfSparePart) << [
 			render(view:"/entity/list",model:[
 				template:"sparePart/sparePartList",
 				listTop:"sparePart/listTop",
