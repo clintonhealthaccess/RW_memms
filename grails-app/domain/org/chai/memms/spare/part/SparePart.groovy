@@ -73,7 +73,6 @@ public class SparePart {
 		BYFACILITY("by.facility"),
 		BYPARTNER("by.partner"),
 		
-	
 		String messageCode = "spare.part.purchased"
 
 		final String name
@@ -88,11 +87,9 @@ public class SparePart {
 	String currency
 	String serialNumber
 	String model
-	
 	Double purchaseCost
 	Period warrantyPeriod
 	Period expectedLifeTime
-	
 	Equipment usedOnEquipment
 	Boolean sameAsManufacturer = false
 	Provider supplier
@@ -103,12 +100,9 @@ public class SparePart {
 	Date dateCreated
 	Date lastUpdated
 	Date manufactureDate
-
 	StatusOfSparePart statusOfSparePart
-	
 	User addedBy
 	User lastModified
-	
 	String room
 	String shelve
 	

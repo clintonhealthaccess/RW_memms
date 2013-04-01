@@ -56,7 +56,6 @@ class SparePartSpec extends IntegrationTests {
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def manufacturer = Initializer.newProvider(CODE(111), Type.MANUFACTURER,manufactureContact)
 		
-		
 		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",manufacturer,Initializer.now())
 		def equipment01 = newEquipment("SERIAL01",DataLocation.findByCode(KIVUYE))
 		if(log.isDebugEnabled()) log.debug("Spare Part Type Created:" + sparePartType)

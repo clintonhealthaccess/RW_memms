@@ -321,7 +321,4 @@ class SparePartServiceSpec extends IntegrationTests{
 		
 	}
 
-	def "test search SparePart"(){
-
-	}
 }
