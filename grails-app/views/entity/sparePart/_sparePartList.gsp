@@ -1,4 +1,5 @@
 <%@ page import="org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart" %>
+<%@ page import="org.chai.memms.util.Utils" %>
 <table class="items spaced">
 	<thead>
 		<tr>
@@ -47,7 +48,7 @@
 					<g:if test="${sparePart.statusOfSparePart.equals(StatusOfSparePart.DISPOSED)}">
 					</g:if>
 					<g:if test="${sparePart.statusOfSparePart.equals(StatusOfSparePart.OPERATIONAL)}">
-					${sparePart.usedOnEquipment.code}
+						${sparePart.usedOnEquipment.code}
 					</g:if>
 				</g:if>
 				<g:elseif test="${sparePart?.usedOnEquipment == null && sparePart.statusOfSparePart.equals(StatusOfSparePart.PENDINGORDER)}">
@@ -68,7 +69,7 @@
 					<g:message code="datalocation.label"/>: ${sparePart.dataLocation?.names}<br/>
 					
 				</td>
-				<td>${sparePart.purchaseDate}</td>
+				<td>${Utils.formatDateWithTime(sparePart.purchaseDate)}</td>
 				<td>${sparePart.purchaseCost} ${sparePart.currency}</td>
 				<td>
 					<g:if name="sameAsManufacturer" id="${sparePart.id}" test="${(sparePart.sameAsManufacturer==true)}">&radic;</g:if>

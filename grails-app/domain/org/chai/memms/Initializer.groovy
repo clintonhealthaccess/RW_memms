@@ -789,7 +789,7 @@ public class Initializer {
 					
 			def warrantyContactOneT = newContact(['fr':'Warranty Address Descriptions One'],"Warranty","jk@yahoo.com","0768-888-787","Street 654","8988")
 			def warrantyOneT = newWarranty(warrantyContactOneT,getDate(10, 12, 2010),false,[:])
-			def statusOneT= newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.INSTOCK,sparePartOneT,[:])
+			def statusOneT= newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.INSTOCK,sparePartOneT,[:],null)
 			
 			sparePartOneT.warranty = warrantyOneT
 			sparePartOneT.warrantyPeriod = newPeriod(22)

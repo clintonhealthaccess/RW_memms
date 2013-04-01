@@ -118,7 +118,7 @@ def "search spare part types"(){
 	
 	then:
 	SparePartType.count() == 4
-	sparePartTypeController.modelAndView.model.entities.size() == 1
+	sparePartTypeController.modelAndView.model.entities.size() == 1 
 	sparePartTypeController.response.json.results[0].contains(CODE(125))
 	!sparePartTypeController.response.json.results[0].contains(CODE(124))
 	!sparePartTypeController.response.json.results[0].contains(CODE(123))
