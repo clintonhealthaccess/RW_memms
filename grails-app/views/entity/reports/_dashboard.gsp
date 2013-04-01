@@ -36,6 +36,9 @@
         <script src="/memms/static/js/form_init.js" type="text/javascript" ></script>
         <script src="/memms/static/js/dashboard/foldable.js" type="text/javascript" ></script>
         <script src="/memms/static/js/dashboard/list_tabs.js" type="text/javascript" ></script>
+        <!-- Load & initialize Tipsy -->
+        <script src="/memms/static/js/jquery/tipsy/src/javascripts/jquery.tipsy.js" type="text/javascript" ></script>
+        <script src="/memms/static/js/tipsy_init.js" type="text/javascript" ></script>
 
         <form class="filters-box" method="get" action="/memms/equipmentView/filter" style="display: none;">
           <ul class="filters-list">
@@ -151,7 +154,7 @@
                     <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
                     Lorem ipsum dolor sit amet
                   </a>
-                  <span class="v_tabs_formula">a</span>
+                  <span class="tooltip v_tabs_formula " original-title="Enter text here!">Something</span>
                   <span class="v_tabs_value">53%</span>
             </p>
             <div class="v_tabs_fold_container">
@@ -180,9 +183,9 @@
             <p>
                   <a class="v_tabs_name v_tabs_fold_toggle">
                     <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
-                    Lorem ipsum dolor sit amet
+                    Lorem ipsum dolor sit amet 1
                   </a>
-                  <span class="v_tabs_formula">a</span>
+                  <span class="tooltip v_tabs_formula " original-title="Enter text here!">Something</span>
                   <span class="v_tabs_value">53%</span>
             </p>
             <div class="v_tabs_fold_container">
@@ -213,7 +216,7 @@
                 <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
                 Lorem ipsum dolor sit amet
               </a>
-              <span class="v_tabs_formula">a</span>
+              <span class="tooltip v_tabs_formula " original-title="Enter text here!">Something</span>
               <span class="v_tabs_value">53%</span>
             </p>
             <div class="v_tabs_fold_container">
@@ -249,7 +252,7 @@
                 <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
                 Lorem ipsum dolor sit amet
               </a>
-              <span class="v_tabs_formula">a</span>
+              <span class="tooltip v_tabs_formula " original-title="Enter text here!">Something</span>
               <span class="v_tabs_value">53%</span>
             </p>
             <div class="v_tabs_fold_container">
@@ -280,7 +283,7 @@
                 <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
                 Lorem ipsum dolor sit amet
               </a>
-              <span class="v_tabs_formula">a</span>
+              <span class="tooltip v_tabs_formula " original-title="Enter text here!">Something</span>
               <span class="v_tabs_value">53%</span>
             </p>
             <div class="v_tabs_fold_container">
@@ -316,7 +319,7 @@
                 <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
                 Lorem ipsum dolor sit amet
               </a>
-              <span class="v_tabs_formula">a</span>
+              <span class="tooltip v_tabs_formula " original-title="Enter text here!">Something</span>
               <span class="v_tabs_value">53%</span>
             </p>
             <div class="v_tabs_fold_container">
@@ -347,7 +350,7 @@
                 <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
                 Lorem ipsum dolor sit amet
               </a>
-              <span class="v_tabs_formula">a</span>
+              <span class="tooltip v_tabs_formula " original-title="Enter text here!">Something</span>
               <span class="v_tabs_value">53%</span>
             </p>
 
@@ -378,7 +381,7 @@
                 <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
                 Lorem ipsum dolor sit amet
               </a>
-              <span class="v_tabs_formula">a</span>
+              <span class="tooltip v_tabs_formula " original-title="Enter text here!">Something</span>
               <span class="v_tabs_value">53%</span>
             </p>
             <div class="v_tabs_fold_container">
@@ -414,7 +417,7 @@
                 <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
                 Lorem ipsum dolor sit amet
               </a>
-              <span class="v_tabs_formula">a</span>
+              <span class="tooltip v_tabs_formula " original-title="Enter text here!">Something</span>
               <span class="v_tabs_value">53%</span>
             </p>
 
@@ -446,7 +449,7 @@
                 <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
                 Lorem ipsum dolor sit amet
               </a>
-              <span class="v_tabs_formula">a</span>
+              <span class="tooltip v_tabs_formula " original-title="Enter text here!">Something</span>
               <span class="v_tabs_value">53%</span>
             </p>
 
@@ -483,7 +486,7 @@
                 <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
                 Lorem ipsum dolor sit amet
               </a>
-              <span class="v_tabs_formula">a</span>
+              <span class="tooltip v_tabs_formula " original-title="Enter text here!">Something</span>
               <span class="v_tabs_value">53%</span>
             </p>
 
@@ -515,7 +518,7 @@
                 <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
                 Lorem ipsum dolor sit amet
               </a>
-              <span class="v_tabs_formula">a</span>
+              <span class="tooltip v_tabs_formula " original-title="Enter text here!">Something</span>
               <span class="v_tabs_value">53%</span>
             </p>
 
@@ -547,7 +550,7 @@
                 <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
                 Lorem ipsum dolor sit amet
               </a>
-              <span class="v_tabs_formula">a</span>
+              <span class="tooltip v_tabs_formula " original-title="Enter text here!">Something</span>
               <span class="v_tabs_value">53%</span>
             </p>
 
