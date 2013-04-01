@@ -29,16 +29,23 @@
 package org.chai.memms.security
 
 import java.util.List;
+import java.util.Map;
 
-import org.chai.location.CalculationLocation;
-import org.chai.memms.AbstractEntityController
+import org.chai.memms.AbstractEntityController;
 import org.apache.shiro.crypto.hash.Sha256Hash;
+import org.chai.memms.inventory.EquipmentType;
+import org.chai.memms.inventory.Provider;
+import org.chai.memms.inventory.Equipment.Donor;
+import org.chai.memms.inventory.Equipment.PurchasedBy;
+import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.security.User;
 import org.chai.memms.security.User.UserType;
 
 import org.chai.location.DataLocation;
 import org.chai.location.Location;
 import org.chai.location.CalculationLocation;
+import org.chai.memms.security.Role
+
 
 class UserController  extends  AbstractEntityController{
 	def userService
@@ -56,15 +63,17 @@ class UserController  extends  AbstractEntityController{
 	}
 	
 	def getModel(def entity) {
-		def dataLocations = []
-		if (entity.location != null) dataLocations << entity.location
+		def locations = []
+		def roles = []
+		if (entity.location != null) locations << entity.location
 		[
 			user:entity,
 			roles: Role.list(),
-			dataLocations: dataLocations,
+			locations: DataLocation.list(),
 			cmd: params['cmd']
 		]
 	}
+	
 	
 	def getEntityClass(){
 		return User.class;
@@ -86,8 +95,10 @@ class UserController  extends  AbstractEntityController{
 	}
 	
 	def saveEntity(def entity) {
-		entity.save()
+		if(entity.location) hasAccess(entity.location)
+		entity.save(failOnError:true)
 	}
+	
 	
 	def bindParams(def entity) {
 		if (log.isDebugEnabled()) log.debug('binding params: '+params)
@@ -100,11 +111,15 @@ class UserController  extends  AbstractEntityController{
 			entity.passwordHash = new Sha256Hash(params['cmd'].password).toHex();
 	}
 	
+
+	
 	def save = { PasswordCommand cmd ->
 		if (log.isDebugEnabled()) log.debug("create.userPassword, params:"+params+"command"+cmd)
 		params['cmd'] = cmd;
 		super.save()
 	}
+	
+	
 	
 	def list = {
 		adaptParamsForList()
@@ -114,30 +129,52 @@ class UserController  extends  AbstractEntityController{
 		else{
 			render (view: '/entity/list', model: model(users) << [
 				template:"user/userList",
+				filterTemplate:"user/userFilter",
 				listTop:"user/listTop",				
 			])
 		}
 	}
-
+	
+	
 	def search = {
 		adaptParamsForList()
 		def users = userService.searchUser(params['q'], params);
 		if(request.xhr)
 			this.ajaxModel(users,params['q'])
 		else {
-			render (view: '/entity/list', model: model(users) << [
+			render (view: '/entity/list', model:[
 				template:"user/userList",
-				listTop:"user/listTop",				
+				filterTemplate:"user/userFilter",
+				listTop:"user/listTop",
 			])
 		}
 	}
+
+
+	def filter = { FilterCommand cmd ->
+			adaptParamsForList()
+			def users = userService.filterUser(user,cmd.location,cmd.roles,cmd.active,cmd.confirmed,params)
+			if(request.xhr)
+				this.ajaxModel(users)
+			else {
+				render(view:"/entity/list", model: model(users) << [
+					template:"user/userList",
+					filterTemplate:"user/userFilter",
+					listTop:"user/listTop"
+				])
+			}
+	}
 	
+	
+		
 	def model(def entities) {
 		return [
 			entities: entities,
 			entityCount: entities.totalCount,
 			code: getLabel(),
-			entityClass: getEntityClass()
+			entityClass: getEntityClass(),
+			roles:Role.list(),
+			locations: DataLocation.list()
 		]
 	}
 	
@@ -147,13 +184,52 @@ class UserController  extends  AbstractEntityController{
 		render(contentType:"text/json") { results = [listHtml] }
 	}
 	
+	def updateActive = {
+		if (log.isDebugEnabled()) log.debug("updateActive user.active "+params['user.id'])
+		User user = User.get(params.int(['user.id']))
+		def property = params['field'];
+		if (user == null || property ==null)
+			response.sendError(404)
+		else {
+			def value= false; def entity = null;
+			if(property.equals("active")){
+				if(user.active) user.active = false
+				else {
+					user.active = true		
+				}
+				entity = user.save(flush:true)
+			}
+			if(entity!=null) value=true
+			render(contentType:"text/json") { results = [value]}
+		}
+	}
+	
+	def updateConfirmed = {
+		if (log.isDebugEnabled()) log.debug("updateActive user.confirmed "+params['user.id'])
+		User user = User.get(params.int(['user.id']))
+		def property = params['field'];
+		if (user == null || property ==null)
+			response.sendError(404)
+		else {
+			def value= false; def entity = null;
+			if(property.equals("confirmed")){
+				if(user.confirmed) user.confirmed = false
+				else {
+					user.confirmed = true
+				}
+				entity = user.save(flush:true)
+			}
+			if(entity!=null) value=true
+			render(contentType:"text/json") { results = [value]}
+		}
+	}
+	
 	def getAjaxData = {
-		def dataLocation = CalculationLocation.get(params["dataLocation"])
+		def location = CalculationLocation.get(params["location"])
 		List<UserType> userTypes = []
 		for(def type: params['userTypes']) 
 			userTypes.add(UserType."$type")
-
-       	def users = userService.searchActiveUserByTypeAndLocation(params['term'],userTypes,dataLocation)
+       	def users = userService.searchActiveUserByTypeAndLocation(params['term'],userTypes,location)
 		render(contentType:"text/json") {
 			elements = array {
 				users.each { user ->
@@ -167,7 +243,6 @@ class UserController  extends  AbstractEntityController{
 		}
 		
 	}		
-	
 }
 
 class PasswordCommand {
@@ -183,5 +258,43 @@ class PasswordCommand {
 	
 	String toString() {
 		return "PasswordCommand[password="+password+", repeat="+repeat+"]"
+	}
+}
+
+class FilterCommand {
+	CalculationLocation location
+	UserType userType
+	Role roles
+	String active
+	String confirmed
+	
+
+	public boolean getActiveStatus(){
+		if(active) return null
+		else if(active.equals("true")) return true
+		else if(active.equals("false")) return false
+	}
+	
+	public boolean getConfirmedStatus(){
+		if(confirmed) return null
+		else if(confirmed.equals("true")) return true
+		else if(confirmed.equals("false")) return false
+	}
+
+	static constraints = {
+
+		userType nullable:true
+		roles nullable:true
+		active nullable:true
+		confirmed nullable: true
+		location nullable:false, validator:{val, obj ->
+			return (obj.userType != null || obj.roles != null || obj.active || obj.confirmed)?true:"select.atleast.one.value.text"
+		}
+	}
+
+	String toString() {
+		return "FilterCommand[CalculationLocation="+location+", UserType="+userType+
+		", Role="+roles+", active="+active+
+		", confirmed=" + confirmed + "]"
 	}
 }
