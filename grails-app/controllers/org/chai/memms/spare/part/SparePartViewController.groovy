@@ -197,7 +197,7 @@ class SparePartViewController extends AbstractController{
 	}
 
 	def getAjaxData = {
-		List<SparePart> spareParts = sparePartService.searchSparePart(params['term'],null,[:])
+		List<SparePart> spareParts = sparePartService.searchSparePart(params['term'],user,[:])
 		render(contentType:"text/json") {
 			elements = array {
 				spareParts.each { sparePart ->
