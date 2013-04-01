@@ -323,7 +323,7 @@ class SparePartSpec extends IntegrationTests {
 				SparePart.count() == 1
 				sparePart.errors.hasFieldErrors('usedOnEquipment') == true
 			}
-		def "Can create spare part with a null stock location parameter while the equipment set and the current status changed to operational"(){
+		def "Can create spare part with a null stock location parameter while the equipment set and the status set to operational"(){
 			
 					setup:
 					setupLocationTree()
@@ -354,6 +354,5 @@ class SparePartSpec extends IntegrationTests {
 					sparePart.save()
 					then:
 					SparePart.count() == 2
-					//sparePart.errors.hasFieldErrors('stockLocation') == true
 				}
 }
