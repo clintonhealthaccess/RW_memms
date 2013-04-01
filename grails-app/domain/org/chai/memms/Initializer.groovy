@@ -767,6 +767,28 @@ public class Initializer {
 			sparePartOne.warrantyPeriod = newPeriod(22)
 			sparePartOne.save(failOnError:true)
 
+			def sparePartOneT = newSparePart("SERIAL013",SparePartPurchasedBy.BYMOH,false,newPeriod(24),"",['en':'Spare Part Instock two Descriptions'],
+				getDate(22,07,2010),getDate(10,10,2010),"",
+				'MODEL1',
+				DataLocation.findByCode(NYANZA),
+				SparePartType.findByCode("15810"),
+		
+				Provider.findByCode("FIVE"),
+				StatusOfSparePart.INSTOCK,
+				User.findByUsername("admin"),
+				null,
+				null,
+				StockLocation.MMC
+				)
+					
+			def warrantyContactOneT = newContact(['fr':'Warranty Address Descriptions One'],"Warranty","jk@yahoo.com","0768-888-787","Street 654","8988")
+			def warrantyOneT = newWarranty(warrantyContactOneT,getDate(10, 12, 2010),false,[:])
+			def statusOneT= newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.INSTOCK,sparePartOneT,[:])
+			
+			sparePartOneT.warranty = warrantyOneT
+			sparePartOneT.warrantyPeriod = newPeriod(22)
+			sparePartOneT.save(failOnError:true)
+
 			def sparePartTwo = newSparePart("SERIAL02",SparePartPurchasedBy.BYFACILITY,false,newPeriod(12),"34900",['en':'Spare Part Descriptions two'],
 				getDate(12,01,2009),getDate(10,10,2009),"USD",
 				'MODEL2',

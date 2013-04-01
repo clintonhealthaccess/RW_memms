@@ -32,7 +32,7 @@
 						</li>
 					</ul>
 				</td>
-				<td>${sparePart.code}</td>
+				<td>${sparePart.serialNumber}</td>
 				<td>${sparePart.type.names}</td>
 				<td>${sparePart.model}</td>
 				<td>
