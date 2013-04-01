@@ -1,4 +1,4 @@
-<g:form class="search-form" url="[controller: controller, action: action]" method="GET">
+<g:form class="search-form" url="[controller: controller, action: action]">
 	<!--Start-->
 	<!--Note that the following hidden fields are being handled by ajax in form-utils-->
 	<input type="text" name="q" value="${params.q}"/>

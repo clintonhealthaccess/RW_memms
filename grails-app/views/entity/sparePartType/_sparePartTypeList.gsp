@@ -87,4 +87,18 @@
 		</g:each>
 	</tbody>
 </table>
-<g:render template="/templates/pagination" />		
+<g:render template="/templates/pagination" />	
+<script type="text/javascript">
+/**
+ * Show/Hide Sub-List
+ */
+$(document).ready(function() {
+	$(".sub-list").hide();
+	$(".toggle-list").click(function(e){
+		e.preventDefault();
+		var nextElement = ($(this).hasClass("type"))?'tr.types:first':'tr.vendors:first'
+		$(this).parents('tr').nextAll(nextElement).slideToggle(500);
+	});
+});
+</script>
+

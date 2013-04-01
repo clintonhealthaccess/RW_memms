@@ -108,7 +108,7 @@ class SparePartViewController extends AbstractController{
 			status = StatusOfSparePart."$status"
 		}
 		def spareParts = sparePartService.searchSparePart(params['q'],user,type,status,params)
-		if(!request.xhr)
+		if(request.xhr)
 			this.ajaxModel(spareParts,type,status,params['q'])
 		else {
 			render(view:"/entity/list", model: model(spareParts,type,status) << [
@@ -121,12 +121,12 @@ class SparePartViewController extends AbstractController{
 	
 	def ajaxModel(def entities,def type,def status,def searchTerm) {
 		def model = model(entities,type,status) << [q:searchTerm]
-		log.debug("model==>"+model)
 		def listHtml = g.render(template:"/entity/sparePart/sparePartList",model:model)
 		render(contentType:"text/json") { results = [listHtml] }
 	}
 	
 	def model(def entities,def type,def status) {
+		log.debug("entities = "+entities+" type= "+type+" status= "+status)
 		return [
 			entities: entities,
 			entityCount: entities.totalCount,
@@ -213,7 +213,8 @@ class SparePartViewController extends AbstractController{
 	}
 
 	def getAjaxData = {
-		List<SparePart> spareParts = sparePartService.searchSparePart(params['term'],null,null,[:])
+		def type = SparePartType.get(params.long('type.id'))
+		List<SparePart> spareParts = sparePartService.searchSparePart(params['term'],type,null,[:])
 		render(contentType:"text/json") {
 			elements = array {
 				spareParts.each { sparePart ->

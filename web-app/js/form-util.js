@@ -55,7 +55,7 @@ function searchFormAjax(){
 	        $.ajax({
 	            type: 'GET',
 	            url: url,
-	            data: {"dataLocation.id":dataLocation,"equipment.id":equipment,"type.id":type,"status":status,"q":term},
+	            data: {"dataLocation.id":dataLocation,"equipment.id":equipment,"q":term,"type.id":type,"status":status},
 	            success: function(data) {
 	            	addListAjaxResponse(data)
 	            },

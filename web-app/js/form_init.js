@@ -50,17 +50,6 @@ $(document).ready(function() {
   	$('.filters-box').toggle(500);
   });
 });
-/**
- * Show/Hide Sub-List
- */
-$(document).ready(function() {
-	$(".sub-list").hide();
-	$(".toggle-list").click(function(e){
-		e.preventDefault();
-		var nextElement = ($(this).hasClass("type"))?'tr.types:first':'tr.vendors:first'
-		$(this).parents('tr').nextAll(nextElement).slideToggle(500);
-	});
-});
 
 
 
