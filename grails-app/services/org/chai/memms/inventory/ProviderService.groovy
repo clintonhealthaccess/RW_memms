@@ -44,7 +44,7 @@ class ProviderService {
 	def languageService;
 	def sessionFactory;
 
-	public List<Provider> searchProvider(Type type,String text,SparePartType sparePartType, Map<String, String> params){
+	public def searchProvider(Type type,String text,Map<String, String> params){
 		text = text.trim();
 		def dbFieldDescriptions = 'addressDescriptions_'+languageService.getCurrentLanguagePrefix();
 		def criteria = Provider.createCriteria()
@@ -59,12 +59,8 @@ class ProviderService {
 					}
 				}
 			}
-			if(sparePartType!=null){
-				sparePartTypes{
-					eq('id',sparePartType.id)
-				}
-			}
 			or{
+
 				for(Type t: this.getEnumeMatcher(text))
 					eq("type",t)
 
@@ -78,25 +74,6 @@ class ProviderService {
 			}
 		}
 	}
-
-
-	public def getProviders(SparePartType sparePartType, Type type,Map<String, String> params){
-		def criteria = Provider.createCriteria()
-		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			if(type!=null)
-				if(type==Type.SUPPLIER){
-				 or{
-					eq('type',type)
-					eq('type',Type.BOTH)
-				}
-			}
-			if(sparePartType!=null)
-				sparePartTypes{ eq('id',sparePartType.id) }
-		}
-	}
-
-	
-	
 	
 	public static List<Type> getEnumeMatcher(String text){
 		List<Type> observations=[]

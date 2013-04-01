@@ -124,16 +124,13 @@ class SparePartTypeController  extends AbstractEntityController{
 	}
 		
 	def getModel(def entity) {
-		def vendors = []
-	    def compatibleEquipmentTypes = []
+		def compatibleEquipmentTypes = []
+
+		def vendors = Provider.findAllByTypeInList([Type.SUPPLIER,Type.BOTH],[sort:'contact.contactName'])
 		def manufacturers = Provider.findAllByTypeInList([Type.MANUFACTURER,Type.BOTH],[sort:'contact.contactName'])
-		vendors = Provider.findAllByTypeInList([Type.SUPPLIER],[sort:'contact.contactName'])	
-		compatibleEquipmentTypes = EquipmentType.findAllByObservationInList([Observation.USEDINMEMMS])
-				
+						
 		if(entity.compatibleEquipmentTypes != null)  compatibleEquipmentTypes = new ArrayList(entity.compatibleEquipmentTypes)
 		if(entity.vendors != null) vendors = new ArrayList(entity.vendors)
-		log.debug("entity.compatibleEquipmentTypes ==========>:"+entity.compatibleEquipmentTypes)
-		log.debug("entity.vendors ==========>:"+entity.vendors)
 		[
 			vendors: vendors,
 			compatibleEquipmentTypes:compatibleEquipmentTypes,

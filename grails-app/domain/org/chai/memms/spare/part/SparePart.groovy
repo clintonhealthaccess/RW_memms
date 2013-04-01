@@ -108,8 +108,9 @@ public class SparePart {
 	
 	User addedBy
 	User lastModified
+	StockLocation stockLocation
 	
-	static belongsTo = [type: SparePartType, stockLocation: StockLocation]
+	static belongsTo = [type: SparePartType]
 
 	
 	

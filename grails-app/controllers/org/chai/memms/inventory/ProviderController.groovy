@@ -69,11 +69,8 @@ class ProviderController  extends AbstractEntityController {
 	}
 
 	def deleteEntity(def entity) {
-		if(entity.manufacturers.size() > 0 || entity.suppliers.size() > 0 ){
-			flash.message = message(code: 'provider.hasequipments', args: [
-				message(code: getLabel(), default: 'entity'),
-				params.id
-			], default: '{0} still has associated equipments.')
+		if(entity.manufacturers.size() > 0 || entity.suppliers.size() > 0 || entity.sparePartTypes.size()>0 || entity.serviceProviders.size()>0){
+			flash.message = message(code: 'provider.hasequipments', args: [ message(code: getLabel(), default: 'entity'), params.id], default: '{0} still has associated equipments or Spare part type.')
 		}else super.deleteEntity(entity)
 	}
 
@@ -88,76 +85,59 @@ class ProviderController  extends AbstractEntityController {
 	}
 
 	def list = {
-		adaptParamsForList()
-		def sparePartType=null
-		def type=null
-		if(params['sparePartType']!=null)
-			sparePartType =  SparePartType.get(params.int('sparePartType'))
-		if(params['type']!=null)
-			type = params["type"]
-			type = Type."$type"
-		def vendors = providerService.getProviders(sparePartType,type,params)
-		if(request.xhr)
-		{		
-			this.ajaxModel(vendors,"",sparePartType,type)
-		}	
+		adaptParamsForList()		
+		def providers = Provider.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc")
+		if(request.xhr)		
+			this.ajaxModel(providers,"")
 		else{
-		    render(view:"/entity/list",model:  [
+		    render(view:"/entity/list",model:model(providers) << [
 				template:"provider/providerList",
-				listTop:"provider/listTop",
-				entities: vendors,
-				entityClass: getEntityClass()
+				listTop:"provider/listTop"
 			])
 		}
 
 	}
 		
-
 	def search = {
 		adaptParamsForList()
-		def sparePartType = null
-		def type =params['type']
-		if(params['sparePartType']!=null)
-			sparePartType =  SparePartType.get(params.int('sparePartType'))
-		def providers = providerService.searchProvider(type,params['q'],sparePartType,params)
+		def providers = providerService.searchProvider(null,params['q'], params)		
 		if(request.xhr)
-			this.ajaxModel(providers,sparePartType)
+			this.ajaxModel(providers,params['q'])
 		else {
-			render(view:"/entity/list",model: [
+			render(view:"/entity/list", model: model(providers) << [
 				template:"provider/providerList",
-				listTop:"provider/listTop"
+				listTop:"provider/listTop",
 			])
 		}
 	}
 
 
-	def ajaxModel(def entities,def searchTerm,def sparePartType,def type) {
-		def model = model(entities,sparePartType,type) << [q:searchTerm]
+	def ajaxModel(def entities,def searchTerm) {
+		def model = model(entities) << [q:searchTerm]
 		def listHtml = g.render(template:"/entity/provider/providerList",model:model)
-		render(contentType:"text/json") { results = [listHtml]}
+		render(contentType:"text/json") { results = [listHtml] }
 	}
+
 	
-	def model(def entities,def sparePartType,def type) {
+	def model(def entities) {
 		return [
 			entities: entities,
-			entityClass:getEntityClass(),
-			code: getLabel(),
-			type:type,
-			sparePartType:sparePartType?.id
+			entityCount: entities.totalCount,
+			code: getLabel()
 		]
 	}
 
-
 	def getAjaxData = {
 		if(log.isDebugEnabled()) log.debug("Provider getAjaxData Sent Params: " + params)
+
 		def detailsLabel='';
 		def type =params['type']
 		type = Type."$type";
 		if(type.equals(Type.MANUFACTURER)) detailsLabel="provider.manufacturer.details"
 		else if(type.equals(Type.SUPPLIER)) detailsLabel="provider.supplier.details"
 		else detailsLabel="provider.serviceProvider.details"
-		def sparePartType = null
-		List<Provider> providers = providerService.searchProvider(type, params['term'],sparePartType, [:])
+		
+		def providers = providerService.searchProvider(type,params['term'],[:])
 		render(contentType:"text/json") {
 			elements = array {
 				providers.each { provider ->

@@ -67,8 +67,8 @@ class EquipmentTypeController extends AbstractEntityController{
 		return EquipmentType.class;
 	}
 	def deleteEntity(def entity) {
-		if (entity.equipments.size() != 0)
-			flash.message = message(code: 'equipment.type.hasequipment', args: [message(code: getLabel(), default: 'entity'), params.id], default: '{0} still has associated equipment.')
+		if (entity.equipments.size() != 0 || entity.sparePartTypes.size() != 0)
+			flash.message = message(code: 'equipment.type.hasequipment', args: [message(code: getLabel(), default: 'entity'), params.id], default: '{0} still has associated equipment or spare part type.')
 		else
 			super.deleteEntity(entity);
 	}
@@ -89,36 +89,27 @@ class EquipmentTypeController extends AbstractEntityController{
 			
 	def list = {
 		adaptParamsForList()
-		def sparePartType = null
-		if(params['sparePartType']!=null)
-			sparePartType =  SparePartType.get(params.int("sparePartType"))
-		def types = equipmentTypeService.getEquipmentTypes(sparePartType,params);
+		def types = EquipmentType.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc");
 		if(request.xhr)
-			this.ajaxModel(types,"",sparePartType)
+			this.ajaxModel(types,"")
 		else{
-			render(view:"/entity/list",model:model(types,sparePartType) << [
+			render(view:"/entity/list",model:model(types) << [
 				template:"equipmentType/equipmentTypeList",
 				listTop:"equipmentType/listTop",
 				importTask:'EquipmentTypeImportTask',
 				exportTask:'EquipmentTypeExportTask',
-				entities: types,
-				entityClass: getEntityClass()
 			])
 		}
 	}
 	
 	def search = {
-
 		adaptParamsForList()
-		def sparePartType = null
-		if(params['sparePartType']!=null)
-			sparePartType =  SparePartType.get(params.int('sparePartType'))
-		def types = equipmentTypeService.searchEquipmentType(params['q'],null,sparePartType,params)
-		if(request.xhr){
-			this.ajaxModel(types,params['q'],sparePartType)
-		}	
+		def types  = equipmentTypeService.searchEquipmentType(params['q'],null,params)
+
+		if(request.xhr)
+			this.ajaxModel(types,params['q'])	
 		else {
-			render(view:"/entity/list",model:model(types,sparePartType) << [
+			render(view:"/entity/list",model:model(types) << [
 				template:"equipmentType/equipmentTypeList",
 				listTop:"equipmentType/listTop",
 				importTask:'EquipmentTypeImportTask',
@@ -128,26 +119,24 @@ class EquipmentTypeController extends AbstractEntityController{
 	}	
 		
 	
-	def model(def entities,def sparePartType) {
+	def model(def entities) {
 		return [
 			entities: entities,
 			entityCount: entities.totalCount,
 			entityClass:getEntityClass(),
-			code: getLabel(),
-			sparePartType:sparePartType
+			code: getLabel()
 		]
 	}
 	
-	def ajaxModel(def entities,def searchTerm,def sparePartType) {
-		def model = model(entities,sparePartType) << [q:searchTerm]
+	def ajaxModel(def entities,def searchTerm) {
+		def model = model(entities) << [q:searchTerm]
 		def listHtml = g.render(template:"/entity/equipmentType/equipmentTypeList",model:model)
 		render(contentType:"text/json") { results = [listHtml] }
 	}
 
 	
 	def getAjaxData = {
-		def sparePartType = null
-		List<EquipmentType> types = equipmentTypeService.searchEquipmentType(params['term'],Observation."$params.observation",sparePartType,[:])
+		def types = equipmentTypeService.searchEquipmentType(params['term'],Observation."$params.observation",[:])
 		render(contentType:"text/json") {
 			elements = array {
 				types.each { type ->				

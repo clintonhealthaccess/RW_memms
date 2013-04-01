@@ -49,11 +49,13 @@ function searchFormAjax(){
 		    var url = $(this).parents(".heading1-bar").find("form").attr("action");
 		    var dataLocation = $(this).parents(".heading1-bar").find("input[name=dataLocation]").attr("value");
 		    var equipment = $(this).parents(".heading1-bar").find("input[name=equipment]").attr("value");
+		    var type = $(this).parents(".heading1-bar").find("input[name=type]").attr("value");
+		    var status = $(this).parents(".heading1-bar").find("input[name=status]").attr("value");
 		    var term = $(this).parents(".heading1-bar").find("input[name=q]").attr("value");
 	        $.ajax({
 	            type: 'GET',
 	            url: url,
-	            data: {"dataLocation.id":dataLocation,"equipment.id":equipment,"q":term},
+	            data: {"dataLocation.id":dataLocation,"equipment.id":equipment,"type.id":type,"status":status,"q":term},
 	            success: function(data) {
 	            	addListAjaxResponse(data)
 	            },

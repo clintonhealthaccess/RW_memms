@@ -42,6 +42,7 @@ import org.chai.memms.Parts;
 import org.chai.memms.Part;
 import org.chai.memms.inventory.Equipment;
 import org.chai.memms.spare.part.SparePart;
+import org.chai.memms.spare.part.SparePart.StockLocation;
 import org.chai.memms.spare.part.SparePartStatus;
 import org.chai.memms.security.User;
 import org.chai.memms.spare.part.SparePart.SparePartPurchasedBy;
@@ -75,7 +76,8 @@ class SparePartService {
 		sparePart.save(failOnError:true)
 	}
 
-	public def searchSparePart(String text,User user,SparePartStatus statusOfSparePart,SparePartType sparePartType,Map<String, String> params) {
+	public def searchSparePart(String text,User user, SparePartType type,StatusOfSparePart status,Map<String,String> params) {
+		log.debug("gotcha status =>"+status+" type =>"+type)
 		//Remove unnecessary blank space
 		text= text.trim()
 		def dbFieldTypeNames = 'names_'+languageService.getCurrentLanguagePrefix();
@@ -96,13 +98,16 @@ class SparePartService {
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			createAlias("type","t")
 			
-			if(statusOfSparePart!=null && statusOfSparePart!=null){
-			eq("type",sparePartType)
-			eq("statusOfSparePart",statusOfSparePart)
+			if(type!=null && status!=null){
+				eq("type",type)
+				eq("statusOfSparePart",status)
 			}
-		
-			if(!dataLocations.isEmpty())
+			//TODO check with antonio spec.
+			if(!dataLocations.isEmpty() && !user.userType.equals(UserType.TECHNICIANMMC))
 				inList('dataLocation',dataLocations)
+			else
+				eq("stockLocation",StockLocation.MMC)
+
 			or{
 				ilike("code","%"+text+"%")
 				ilike("serialNumber","%"+text+"%")
@@ -115,19 +120,20 @@ class SparePartService {
 	}
 
 
-	public def getSpareParts(User user, SparePartType sparePartType,StatusOfSparePart statusOfSparePart,Map<String,String> params) {
+	public def getSpareParts(User user, SparePartType type,StatusOfSparePart status,Map<String,String> params) {
 		def dataLocations = []
 		def criteria = SparePart.createCriteria();
-		if(sparePartType!=null && statusOfSparePart!=null){
-			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-				eq("type",sparePartType)
-				eq("statusOfSparePart",statusOfSparePart)
-			}
-		}
+
 		if(user.userType.equals(UserType.ADMIN) || user.userType.equals(UserType.TECHNICIANMMC) || user.userType.equals(UserType.SYSTEM))
 			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-
-			}
+				if(type!=null && status!=null){
+					eq("type",type)
+					eq("statusOfSparePart",status)	
+				}
+				//TODO check with antonio spec.
+				if(user.userType.equals(UserType.TECHNICIANMMC))
+					eq("stockLocation",StockLocation.MMC)
+		}
 		else{
 			if(user.location instanceof Location)
 				dataLocations.addAll(user.location.getDataLocations([:], [:]))
@@ -143,7 +149,7 @@ class SparePartService {
 		}
 
 	}
-	public def filterSparePart(def user, def dataLocation, def supplier, def sparePartType,
+	public def filterSparePart(def user, def dataLocation, def supplier, def type,
 			def sparePartPurchasedBy,def sameAsManufacturer,def sparePartStatus,Map<String, String> params){
 
 		def dataLocations = []
@@ -160,8 +166,8 @@ class SparePartService {
 				inList('dataLocation',dataLocations)
 			if(supplier != null)
 				eq ("supplier", supplier)
-			if(sparePartType != null)
-				eq ("type", sparePartType)
+			if(type != null)
+				eq ("type", type)
 			if(sparePartPurchasedBy && !sparePartPurchasedBy.equals(SparePartPurchasedBy.NONE))
 				eq ("sparePartPurchasedBy",sparePartPurchasedBy)
 			if(sameAsManufacturer)

@@ -36,6 +36,7 @@ import org.chai.memms.inventory.Equipment;
 import org.chai.memms.spare.part.SparePartStatus;
 import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
 import org.chai.memms.spare.part.SparePart;
+import org.chai.memms.inventory.Provider.Type
 
 
 import i18nfields.I18nFields;
@@ -65,7 +66,9 @@ class SparePartType {
 		descriptions nullable: true, blank: true
 		partNumber nullable: false,blank:false
 		discontinuedDate nullable: true
-		manufacturer nullable: false,blank:false
+		manufacturer nullable:false,blank:false, validator:{
+			return it.type in [Type.BOTH, Type.MANUFACTURER]		
+		}
 	}
 
 	static mapping = {

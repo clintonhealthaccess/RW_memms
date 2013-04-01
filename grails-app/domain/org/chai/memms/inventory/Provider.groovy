@@ -68,12 +68,7 @@ public class Provider{
 
 	static constraints ={
 		code nullable: false, blank: false, unique: true
-		type nullable: false, inList: [
-			Type.BOTH,
-			Type.MANUFACTURER,
-			Type.SUPPLIER,
-			Type.SERVICEPROVIDER
-		]
+		type nullable: false, inList: [Type.BOTH, Type.MANUFACTURER,Type.SUPPLIER,Type.SERVICEPROVIDER]
 		contact nullable: false
 		lastUpdated nullable: true, validator:{
 			if(it != null) return (it <= new Date())

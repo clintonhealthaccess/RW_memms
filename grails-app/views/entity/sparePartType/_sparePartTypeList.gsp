@@ -9,9 +9,8 @@
 			<th><g:message code="sparePartType.quantity.in.stock.label"/></th>	
 			<th><g:message code="sparePartType.estimated.date.stockout.label"/></th>
 			<g:sortableColumn property="discontinuedDate" params="[q:q]" title="${message(code: 'entity.discontinued.date.label')}" />
-			<th/>
-			<th/>
-			<th/>
+			<th><g:message code="equipmentType.compatible.equipment.types.label" /></th>
+			<th><g:message code="provider.vendors.label" /></th>
        </tr>
 	</thead>
 	<tbody>
@@ -39,9 +38,12 @@
 					${type.manufacturer.contact.contactName}
 				</td>
 				<td>
-					 <a href="${createLinkWithTargetURI(controller:'sparePartView', action:'list', params:[sparePartType: type.id,statusOfSparePart:"INSTOCK"])}">
-					     ${type.inStockSpareParts.size()}
-					</a>
+					<g:if test="${(type.inStockSpareParts?.size()>0)}">
+						<a href="${createLinkWithTargetURI(controller:'sparePartView', action:'list', params:['type.id': type.id,status:"INSTOCK"])}">
+							${type.inStockSpareParts.size()}
+						</a>
+					</g:if>
+					<g:else>0</g:else>
 				</td>
 				<td>
 				   
@@ -50,22 +52,39 @@
 					${Utils.formatDateWithTime(type?.discontinuedDate)}
 				</td>
 				<td>
-					<a href="${createLinkWithTargetURI(controller:'equipmentType', action:'list', params:[sparePartType: type.id])}">
-						<g:message code="equipmentType.compatible.equipment.types.label" />
-					</a>
+					<g:if test="${(type.compatibleEquipmentTypes?.size()>0)}">
+						<a href="#" class="toggle-list type"> 
+							${type.compatibleEquipmentTypes.size()}
+						</a>
+					</g:if>
+					<g:else>0</g:else>
 				</td> 
 				<td>
-					<a href="${createLinkWithTargetURI(controller:'provider', action:'list', params:[sparePartType: type.id,type:"SUPPLIER"])}">
-						<g:message code="provider.vendors.label" />
-					</a>
-				</td>
+					<g:if test="${(type.vendors?.size()>0)}">
+						<a href="#" class="toggle-list vendor"> 
+							${type.vendors.size()} 
+						</a>
+					</g:if>
+					<g:else>0</g:else>
+				</td>    
 			</tr>
+			<g:if test="${(type.compatibleEquipmentTypes?.size()>0)}">
+				<tr class="sub-list types">
+					<td colspan="9">
+						<h3><g:message code="equipmentType.compatible.equipment.types.label" /></h3>
+						<g:render template="/entity/sparePartType/compatibleEquipmentTypeList" model="[entities: type.compatibleEquipmentTypes]"/>
+					</td>
+				</tr>
+			</g:if >
+			<g:if test="${(type.vendors?.size()>0)}">
+				<tr class="sub-list vendors">
+					<td colspan="9">
+						<h3><g:message code="provider.vendors.label" /></h3>
+						<g:render template="/entity/sparePartType/vendorList" model="[entities: type.vendors]"/>
+					</td>
+				</tr>
+			</g:if >
 		</g:each>
 	</tbody>
 </table>
-<g:render template="/templates/pagination" />
-
-
-
-	
-		
+<g:render template="/templates/pagination" />		

@@ -43,7 +43,7 @@ class EquipmentTypeService {
 	static transactional = true
 	def languageService;
 
-	public def searchEquipmentType(String text,Observation observation,SparePartType sparePartType,Map<String, String> params) {
+	public def searchEquipmentType(String text,Observation observation,Map<String, String> params) {
 		text = text.trim()
 		def dbFieldName = 'names_'+languageService.getCurrentLanguagePrefix();
 		def dbFieldDescritpion = 'descriptions_'+languageService.getCurrentLanguagePrefix();
@@ -51,7 +51,6 @@ class EquipmentTypeService {
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(observation!=null)
 				eq("observation",observation)
-			if(sparePartType!=null) sparePartTypes{ eq('id',sparePartType.id) }
 			or{
 				if(observation==null){
 					for(Observation obs: this.getEnumeMatcher(text))
@@ -64,16 +63,6 @@ class EquipmentTypeService {
 		}
 	}
 
-	public def getEquipmentTypes(SparePartType sparePartType, Map<String, String> params){
-		def criteria = EquipmentType.createCriteria()
-		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			if(sparePartType!=null){
-				sparePartTypes{
-					eq('id',sparePartType.id)	
-				}
-			}
-		}
-	}
 	
 	public static List<Observation> getEnumeMatcher(String text){
 		List<Observation> observations=[]

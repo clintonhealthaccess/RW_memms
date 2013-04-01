@@ -306,14 +306,14 @@ public class Initializer {
 			
 		if(!EquipmentType.count()){
 			//Add equipment types as defined in ecri
-			def typeOne = newEquipmentType("15810", ["en":"Accelerometers","fr":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,now(),25)
-			def typeTwo = newEquipmentType("15819", ["en":"X-Ray Film Cutter"],["en":"used in memms"],Observation.USEDINMEMMS,now(),13)
-			def typeThree = newEquipmentType("15966", ["en":"Video Systems"],["en":"used in memms"],Observation.USEDINMEMMS,now(),12)
-			def typeFour = newEquipmentType("10035", ["en":"Adhesives, Aerosol"],["en":"not used in memms"],Observation.RETIRED,now(),34)
+			def typeOne = newEquipmentType("15810", ["en":"Inclinometers","fr":"Inclinometers"],["en":"used in memms"],Observation.USEDINMEMMS,now(),25)
+			def typeTwo = newEquipmentType("15819", ["en":"Infusion Pumps, Insulin"],["en":"used in memms"],Observation.USEDINMEMMS,now(),23)
+			def typeThree = newEquipmentType("15966", ["en":"Cryotherapy Systems"],["en":"used in memms"],Observation.USEDINMEMMS,now(),12)
+			def typeFour = newEquipmentType("10035", ["en":"Sponge Counters, Bar-Code Identification"],["en":"not used in memms"],Observation.RETIRED,now(),34)
 			def typeFive = newEquipmentType("20760", ["en":"Pancreatic Drainage Tubes"],["en":"not used in memms"],Observation.RETIRED,now(),54)
 			def typeSix = newEquipmentType("20729", ["en":"PCR Test Tubes"],["en":"not used in memms"],Observation.RETIRED,now(),67)
 			def typeSeven = newEquipmentType("10026", ["en":"Adhesive Strips"],["en":"used in memms"],Observation.USEDINMEMMS,now(),12)
-			def typeEight = newEquipmentType("10124", ["en":"Anesthesia Kits"],["en":"used in memms"],Observation.USEDINMEMMS,now(),7)
+			def typeEight = newEquipmentType("10124", ["en":"AnesthInfusion Pumps, Insulinesia Kits"],["en":"used in memms"],Observation.USEDINMEMMS,now(),7)
 			def typeNine = newEquipmentType("10155", ["en":"Anklets"],["en":"used in memms"],Observation.USEDINMEMMS,now(),60)
 			def typeTen = newEquipmentType("10426", ["en":"Blood Donor Sets"],["en":"used in memms"],Observation.USEDINMEMMS,now(),34)
 		}
@@ -692,12 +692,12 @@ public class Initializer {
 			def sparePartTypeTwo = newSparePartType("15819", ['en':'Second spare part','fr':'Second sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 2",Provider.findByCode("TWO"),now())
 			def sparePartTypeThree = newSparePartType("15966", ['en':'Third spare part','fr':'Troisieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 3",Provider.findByCode("THREE"),now())
 			def sparePartTypeFour = newSparePartType("10035", ['en':'Forth spare part','fr':'Quatrieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 4",Provider.findByCode("FOUR"),now())
-			def sparePartTypeFive = newSparePartType("20760", ['en':'Fifth spare part','fr':'Cinquieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 5",Provider.findByCode("FIVE"),now())
-			def sparePartTypeSix = newSparePartType("20729", ['en':'Sixth spare part','fr':'Sixieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 6",Provider.findByCode("SIX"),now())
-			def sparePartTypeSeven = newSparePartType("10026", ['en':'Seventh spare part','fr':'premier sp'], ['en':'Septieme spare part','fr':'premier sp'],"CODE Spare Part 7",Provider.findByCode("SEVEN"),now())
+			def sparePartTypeFive = newSparePartType("20760", ['en':'Fifth spare part','fr':'Cinquieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 5",Provider.findByCode("ONE"),now())
+			def sparePartTypeSix = newSparePartType("20729", ['en':'Sixth spare part','fr':'Sixieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 6",Provider.findByCode("ONE"),now())
+			def sparePartTypeSeven = newSparePartType("10026", ['en':'Seventh spare part','fr':'premier sp'], ['en':'Septieme spare part','fr':'premier sp'],"CODE Spare Part 7",Provider.findByCode("THREE"),now())
 			def sparePartTypeEight = newSparePartType("10124", ['en':'Eighth spare part','fr':'Huitieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 8",Provider.findByCode("EIGHT"),now())
-			def sparePartTypeNine = newSparePartType("10155", ['en':'Ninth spare part','fr':'Neuvieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 9",Provider.findByCode("NINE"),now())
-			def sparePartTypeTen = newSparePartType("10426", ['en':'Tenth spare part','fr':'Dixieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 10",Provider.findByCode("TEN"),now())
+			def sparePartTypeNine = newSparePartType("10155", ['en':'Ninth spare part','fr':'Neuvieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 9",Provider.findByCode("THREE"),now())
+			def sparePartTypeTen = newSparePartType("10426", ['en':'Tenth spare part','fr':'Dixieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 10",Provider.findByCode("FOUR"),now())
 			
 			
 			def typeOne = newEquipmentType("158101", ["en":"Accelerometers","fr":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,now(),25)
@@ -711,23 +711,36 @@ public class Initializer {
 			def contactEight = newContact(['en':'Address Descriptions Eight'],"Manufacture and Supplier Ericson","jkl6@yahoo.com","0768-123-787","Street 156","8988")
 			
 			
-			def supplierOne = newProvider("FIVES",Type.SUPPLIER,contactFive)
-			def supplierTwo = newProvider("SIXES",Type.SUPPLIER,contactSix)
-			def supplierThree = newProvider("SEVENS",Type.SUPPLIER,contactSeven)
-			def both = newProvider("EIGHTS",Type.BOTH,contactEight)
+			def supplierOne = newProvider("SUPPLIERONE",Type.SUPPLIER,contactFive)
+			def supplierTwo = newProvider("SUPPLIERTWO",Type.SUPPLIER,contactSix)
+			def supplierThree = newProvider("SUPPLIERTHREE",Type.SUPPLIER,contactSeven)
+			def both = newProvider("SUPPLIERBOTH",Type.BOTH,contactEight)
 
-			sparePartTypeEight.addToCompatibleEquipmentTypes(typeOne)
-			sparePartTypeEight.addToCompatibleEquipmentTypes(typeTwo)
+		
 			sparePartTypeEight.addToCompatibleEquipmentTypes(typeThree)
 			sparePartTypeEight.addToCompatibleEquipmentTypes(typeFour)
-			
-			
-			sparePartTypeEight.addToVendors(supplierOne)
-			sparePartTypeEight.addToVendors(supplierTwo)
 			sparePartTypeEight.addToVendors(supplierThree)
 			sparePartTypeEight.addToVendors(both)
 			sparePartTypeEight.save(failOnError:true)
+
+			sparePartTypeOne.addToCompatibleEquipmentTypes(typeOne)
+			sparePartTypeOne.addToCompatibleEquipmentTypes(typeTwo)
+			sparePartTypeOne.addToVendors(supplierOne)
+			sparePartTypeOne.addToVendors(supplierTwo)
+			sparePartTypeOne.save(failOnError:true)
+
+			sparePartTypeTwo.addToCompatibleEquipmentTypes(typeOne)
+			sparePartTypeTwo.addToCompatibleEquipmentTypes(typeTwo)
+			sparePartTypeTwo.save(failOnError:true)
 			
+
+			sparePartTypeThree.addToCompatibleEquipmentTypes(typeFour)
+			sparePartTypeThree.addToCompatibleEquipmentTypes(typeTwo)
+			sparePartTypeThree.save(failOnError:true)
+
+			sparePartTypeSeven.addToVendors(supplierThree)
+			sparePartTypeSeven.addToVendors(both)
+			sparePartTypeSeven.save(failOnError:true)
 			
 		}
 		

@@ -80,28 +80,62 @@ class SparePartViewController extends AbstractController{
 	
 	def list = {
 		adaptParamsForList()
-		def sparePartType=null	
-		def statusOfSparePart=null
-		if(params['sparePartType']!=null)
-			sparePartType =  SparePartType.get(params.int('sparePartType'))
-		if(params['statusOfSparePart']!=null){
-			statusOfSparePart = params["statusOfSparePart"]
-			statusOfSparePart = StatusOfSparePart."$statusOfSparePart"
+		def type = SparePartType.get(params.long('type.id'))	
+		def status = null
+		if(params['status']){
+			status = params["status"]
+			status = StatusOfSparePart."$status"
 		}
-		def spareParts = sparePartService.getSpareParts(user,sparePartType,statusOfSparePart,params)
+		def spareParts = sparePartService.getSpareParts(user,type,status,params)
 		if(request.xhr)
-		{
-			this.ajaxModel(spareParts,"",sparePartType,statusOfSparePart)
-		}
+			this.ajaxModel(spareParts,type,status,"")
 		else{
-			render(view:"/entity/list",model:[
+			render(view:"/entity/list",model: model(spareParts,type,status) << [
 				template:"sparePart/sparePartList",
 				listTop:"sparePart/listTop",
 				entities: spareParts,
-				entityClass: getEntityClass(),
 				code: getLabel()
 			])
 		}
+	}
+
+	def search = {
+		adaptParamsForList()
+		def type = SparePartType.get(params.long('type.id'))	
+		def status = null
+		if(params['status']){
+			status = params["status"]
+			status = StatusOfSparePart."$status"
+		}
+		def spareParts = sparePartService.searchSparePart(params['q'],user,type,status,params)
+		if(!request.xhr)
+			this.ajaxModel(spareParts,type,status,params['q'])
+		else {
+			render(view:"/entity/list", model: model(spareParts,type,status) << [
+				template:"sparePart/sparePartList",
+				filterTemplate:"sparePart/sparePartFilter",
+				listTop:"sparePart/listTop"
+			])
+		}
+	}
+	
+	def ajaxModel(def entities,def type,def status,def searchTerm) {
+		def model = model(entities,type,status) << [q:searchTerm]
+		log.debug("model==>"+model)
+		def listHtml = g.render(template:"/entity/sparePart/sparePartList",model:model)
+		render(contentType:"text/json") { results = [listHtml] }
+	}
+	
+	def model(def entities,def type,def status) {
+		return [
+			entities: entities,
+			entityCount: entities.totalCount,
+			entityClass:getEntityClass(),
+			code: getLabel(),
+			status:status,
+			type:type
+			
+		]
 	}
 
 	//TODO don't think we need ajax for this
@@ -111,33 +145,13 @@ class SparePartViewController extends AbstractController{
 		locations.add(user.location as DataLocation)
 		if((user.location as DataLocation).manages)
 			locations.addAll((user.location as DataLocation).manages)
-			
 		render(view:"/entity/list", model:[
 					listTop:"sparePart/listTop",
 					template:"sparePart/selectFacility",
 					locations:locations
 				])
 	}
-	
-	
-	def search = {
-		adaptParamsForList()
-		def sparePartType=null
-		def statusOfSparePart=null
-		if(params['sparePartType']!=null)
-			sparePartType =  SparePartType.get(params.int('sparePartType'))
-		def spareParts = sparePartService.searchSparePart(params['q'],user,sparePartType,statusOfSparePart,params)
-		if(!request.xhr)
-		this.ajaxModel(spareParts,sparePartType,statusOfSparePart,params['q'])
-		else {
-			render(view:"/entity/list", model: model(spareParts,sparePartType,statusOfSparePart) << [
-				template:"sparePart/sparePartList",
-				filterTemplate:"sparePart/sparePartFilter",
-				listTop:"sparePart/listTop"
-			])
-		}
-	}
-	
+
 	def filter = { FilterCommand cmd ->
 		if (log.isDebugEnabled()) log.debug("spareParts.filter, command "+cmd)
 		if (cmd.location != null && !user.canAccessCalculationLocation(cmd.location))
@@ -149,22 +163,6 @@ class SparePartViewController extends AbstractController{
 				response.sendError(404)
 			else this.ajaxModel(spareParts,cmd.location,"")
 		}
-	}
-
-	def ajaxModel(def entities,def sparePartType,def sparePartStatus,def searchTerm) {
-		def model = [entities: entities,entityCount: entities.totalCount,entityClass:getEntityClass(),names:names,q:searchTerm]
-		def listHtml = g.render(template:"/entity/sparePart/sparePartList",model:model)
-		render(contentType:"text/json") { results = [listHtml] }
-	}
-	
-	def model(def entities,def sparePartType,def statusOfSparePart ) {
-		return [
-			entities: entities,
-			code: getLabel(),
-			statusOfSparePart:statusOfSparePart,
-			sparePartType:sparePartType?.id
-			
-		]
 	}
 	
 	def summaryPage = {
@@ -191,6 +189,7 @@ class SparePartViewController extends AbstractController{
 					locationSkipLevels: locationSkipLevels
 				])
 	}
+
 	def updateSameAsManufacturer = {
 		if (log.isDebugEnabled()) log.debug("updateSameAsManufacturer sparePart.sameAsManufacturer "+params['sparePart.id'])
 		SparePart sparePart = SparePart.get(params.int(['sparePart.id']))
@@ -214,7 +213,7 @@ class SparePartViewController extends AbstractController{
 	}
 
 	def getAjaxData = {
-		List<SparePart> spareParts = sparePartService.searchSparePart(params['term'],null,[:])
+		List<SparePart> spareParts = sparePartService.searchSparePart(params['term'],null,null,[:])
 		render(contentType:"text/json") {
 			elements = array {
 				spareParts.each { sparePart ->

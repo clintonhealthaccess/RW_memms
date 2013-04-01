@@ -32,7 +32,7 @@ class ProviderServiceSpec extends IntegrationTests{
 		List<Provider> providers
 		
 		when:"test search provider based on type as text not follwed by a space" 
-		providers = providerService.searchProvider(null,"Manu",sparePartType,["":""])
+		providers = providerService.searchProvider(null,"Manu",["":""])
 		
 		then:
 		Provider.count()==4
@@ -40,7 +40,7 @@ class ProviderServiceSpec extends IntegrationTests{
 		providers[0].code.equals("CODE123")
 		
 		when:
-		providers = providerService.searchProvider(null,"Manu  ",sparePartType,["":""])
+		providers = providerService.searchProvider(null,"Manu  ",["":""])
 		
 		then:"test search provider based on type as text followed by a space "
 		Provider.count()==4
@@ -78,7 +78,7 @@ class ProviderServiceSpec extends IntegrationTests{
 		List<Provider> providers
 		
 		when:"test search provider with a compatible spare part type based on type as text not follwed by a space"
-		providers = providerService.searchProvider(null,"Manu",sparePartType,["":""])
+		providers = providerService.searchProvider(null,"Manu",["":""])
 		
 		then:
 		Provider.count()==4
@@ -86,7 +86,7 @@ class ProviderServiceSpec extends IntegrationTests{
 		providers[0].code.equals("CODE123")
 		
 		when:
-		providers = providerService.searchProvider(null,"Manu  ",sparePartType,["":""])
+		providers = providerService.searchProvider(null,"Manu  ",["":""])
 		
 		then:"test search provider with a compatible spare part type based on type as text followed by a space "
 		Provider.count()==4
@@ -113,7 +113,7 @@ class ProviderServiceSpec extends IntegrationTests{
 		
 		List<Provider> providers
 		when:
-		providers = providerService.searchProvider(Type.SERVICEPROVIDER,"",sparePartType,["":""])
+		providers = providerService.searchProvider(Type.SERVICEPROVIDER,"",["":""])
 		
 		then:"test search provider based on type as object not follwed by a space"
 		Provider.count()==4
@@ -121,7 +121,7 @@ class ProviderServiceSpec extends IntegrationTests{
 		providers[0].code.equals("CODE126")
 		
 		when:
-		providers = providerService.searchProvider(Type.SERVICEPROVIDER,"  ",sparePartType,["":""])
+		providers = providerService.searchProvider(Type.SERVICEPROVIDER,"  ",["":""])
 		
 		then:"test search provider based on type as object follwed by a space"
 		Provider.count()==4
@@ -159,7 +159,7 @@ class ProviderServiceSpec extends IntegrationTests{
 		
 		List<Provider> providers
 		when:
-		providers = providerService.searchProvider(Type.SERVICEPROVIDER,"",sparePartType,["":""])
+		providers = providerService.searchProvider(Type.SERVICEPROVIDER,"",["":""])
 		
 		then:"test search provider with a compatible spare part type based on type as object not followed by a space"
 		Provider.count()==4
@@ -167,7 +167,7 @@ class ProviderServiceSpec extends IntegrationTests{
 		providers[0].code.equals("CODE126")
 		
 		when:"test search provider with a compatible spare part type based on type as object followed by a space"
-		providers = providerService.searchProvider(Type.SERVICEPROVIDER,"  ",sparePartType,["":""])
+		providers = providerService.searchProvider(Type.SERVICEPROVIDER,"  ",["":""])
 		
 		then:
 		Provider.count()==4
@@ -193,7 +193,7 @@ class ProviderServiceSpec extends IntegrationTests{
 		
 		List<Provider> providers
 		when:
-		providers = providerService.searchProvider(null,"address",sparePartType,["":""])
+		providers = providerService.searchProvider(null,"address",["":""])
 		
 		then:"user can search by provider not followed by a space"
 		Provider.count()==4
@@ -201,7 +201,7 @@ class ProviderServiceSpec extends IntegrationTests{
 		providers.equals([servicePro,both,supplier,manufacturer])
 		
 		when:"user can search by provider followed by a space"
-		providers = providerService.searchProvider(null,"address  ",sparePartType,["":""])
+		providers = providerService.searchProvider(null,"address  ",["":""])
 		
 		then:
 		Provider.count()==4
@@ -237,7 +237,7 @@ class ProviderServiceSpec extends IntegrationTests{
 		
 		List<Provider> providers
 		when:
-		providers = providerService.searchProvider(null,"address",sparePartType,["":""])
+		providers = providerService.searchProvider(null,"address",["":""])
 		
 		then:"user can search by provider with a compatible spare part type not followed by a space"
 		Provider.count()==4
@@ -245,7 +245,7 @@ class ProviderServiceSpec extends IntegrationTests{
 		providers.equals([servicePro,both,supplier,manufacturer])
 		
 		when:"user can search by provider with a compatible spare part type followed by a space"
-		providers = providerService.searchProvider(null,"address  ",sparePartType,["":""])
+		providers = providerService.searchProvider(null,"address  ",["":""])
 		
 		then:
 		Provider.count()==4

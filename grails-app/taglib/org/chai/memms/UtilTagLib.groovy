@@ -59,11 +59,7 @@ class UtilTagLib {
 	def createLinkWithTargetURI = {attrs, body ->
 		if (attrs['params'] == null) attrs['params'] = [:]
 		else attrs['params'] = new HashMap(attrs['params'])
-		
-		log.debug("found query string: ${request.queryString}")
-		attrs['params'] << [targetURI: request.forwardURI - request.contextPath + (request.queryString==null?'':'?'+request.queryString)];
-		
-		log.debug('creating link with attrs: '+attrs)
+				attrs['params'] << [targetURI: request.forwardURI - request.contextPath + (request.queryString==null?'':'?'+request.queryString)];		
 		out << createLink(attrs, body)
 	}		
 	
