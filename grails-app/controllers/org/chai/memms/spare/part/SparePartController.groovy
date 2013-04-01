@@ -161,17 +161,17 @@ class SparePartController extends AbstractEntityController{
 		if (entity.dataLocation!=null) dataLocations << entity.dataLocation
 		if (entity.usedOnEquipment!=null) equipments << entity.usedOnEquipment
 		[
-					sparePart: entity,
-					suppliers: suppliers,
-					types: types,
-					dataLocations: dataLocations,
-					equipments:equipments,
-					numberOfStatusToDisplay: grailsApplication.config.status.to.display.on.spare.part.form,
-					cmd:params.cmd,
-					currencies: grailsApplication.config.site.possible.currency,
-					now:now
+			sparePart: entity,
+			suppliers: suppliers,
+			types: types,
+			dataLocations: dataLocations,
+			equipments:equipments,
+			numberOfStatusToDisplay: grailsApplication.config.status.to.display.on.spare.part.form,
+			cmd:params.cmd,
+			currencies: grailsApplication.config.site.possible.currency,
+			now:now
 
-				]
+		]
 	}
 }
 
