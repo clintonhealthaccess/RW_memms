@@ -87,10 +87,10 @@ def "list spare part types"(){
 	
 	then:
 	SparePartType.count() == 4
-	sparePartTypeController.response.json.results[0].contains(SparePartType.findByCode(CODE(123)).code)
-	sparePartTypeController.response.json.results[0].contains(SparePartType.findByCode(CODE(124)).code)
-	sparePartTypeController.response.json.results[0].contains(SparePartType.findByCode(CODE(125)).code)
-	sparePartTypeController.response.json.results[0].contains(SparePartType.findByCode(CODE(126)).code)
+	sparePartTypeController.response.json.results[0].contains(CODE(123))
+	sparePartTypeController.response.json.results[0].contains(CODE(124))
+	sparePartTypeController.response.json.results[0].contains(CODE(125))
+	sparePartTypeController.response.json.results[0].contains(CODE(126))
 }
 
 def "search spare part types"(){
@@ -118,13 +118,12 @@ def "search spare part types"(){
 	
 	then:
 	SparePartType.count() == 4
-	!sparePartTypeController.response.json.results[0].contains(SparePartType.findByCode(CODE(123)).code)
-	!sparePartTypeController.response.json.results[0].contains(SparePartType.findByCode(CODE(124)).code)
-	!sparePartTypeController.response.json.results[0].contains(SparePartType.findByCode(CODE(125)).code)
-	!sparePartTypeController.response.json.results[0].contains(SparePartType.findByCode(CODE(126)).code)
+	sparePartTypeController.modelAndView.model.entities.size() == 1
+	sparePartTypeController.response.json.results[0].contains(CODE(125))
+	!sparePartTypeController.response.json.results[0].contains(CODE(124))
+	!sparePartTypeController.response.json.results[0].contains(CODE(123))
+	!sparePartTypeController.response.json.results[0].contains(CODE(126))
 }
 
-//TODO find a way to test if the export works by calling the task plugin. Task plugin is supposed to have it's own tests
 }
-
 
