@@ -78,16 +78,13 @@ class SparePartControllerSpec extends IntegrationTests{
 		sparePartController.params.descriptions_en = "test_english_descriptions"
 		sparePartController.params.manufactureDate = Initializer.getDate(1,1,2012)
 		sparePartController.params.purchaseDate = Initializer.getDate(2,1,2012)
-
 		sparePartController.params.type = sparePartType
-
 		sparePartController.params."warranty.startDate" = Initializer.getDate(10,1,2012)
 		sparePartController.params."warranty.sameAsSupplier" = true
 		sparePartController.params."warranty.descriptions_en" = "new warranty for testing"
 		sparePartController.params.warrantyPeriod = "struct"
 		sparePartController.params.warrantyPeriod_years = "1"
 		sparePartController.params.warrantyPeriod_months = "4"
-
 		sparePartController.params."supplier.id" = supplier.id
 		sparePartController.params.expectedLifeTime = "struct"
 		sparePartController.params.expectedLifeTime_years = "1"
@@ -164,4 +161,61 @@ class SparePartControllerSpec extends IntegrationTests{
 					SparePart."findByDescriptions_$it"("test descriptions $it").getDescriptions(new Locale("$it")).equals("test descriptions $it")
 				}
 			}
+	
+	def "Can create spare part with status OPERATIONAL when all location's parameters are null"(){
+		
+				setup:
+				setupLocationTree()
+				setupSystemUser()
+				def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+				def manufacturer = Initializer.newProvider(CODE(111), Type.MANUFACTURER,manufactureContact)
+				
+				def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",manufacturer,Initializer.now())
+		
+				def supplierContact = Initializer.newContact(['en':'Address Descriptions '],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+		
+				def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
+				
+				def equipment = newEquipment("SERIAL01",DataLocation.findByCode(KIVUYE))
+		
+		
+				sparePartController = new SparePartController();
+				when:
+				sparePartController.params.serialNumber = 'SERIAL12129'
+				sparePartController.params.purchaseCost = "32000"
+				sparePartController.params.currency = "USD"
+				sparePartController.params.model = "model one"
+				sparePartController.params.sparePartPurchasedBy = SparePartPurchasedBy.BYMOH
+				sparePartController.params.stockLocation = null
+				sparePartController.params.dataLocation = null
+				sparePartController.params.room = null
+				sparePartController.params.shelve = null
+				sparePartController.params.sameAsManufacturer = false
+				sparePartController.params.descriptions_en = "test_english_descriptions"
+				sparePartController.params.manufactureDate = Initializer.getDate(1,1,2012)
+				sparePartController.params.purchaseDate = Initializer.getDate(2,1,2012)
+				sparePartController.params.type = sparePartType
+				sparePartController.params."warranty.startDate" = Initializer.getDate(10,1,2012)
+				sparePartController.params."warranty.sameAsSupplier" = true
+				sparePartController.params."warranty.descriptions_en" = "new warranty for testing"
+				sparePartController.params.warrantyPeriod = "struct"
+				sparePartController.params.warrantyPeriod_years = "1"
+				sparePartController.params.warrantyPeriod_months = "4"
+				sparePartController.params."supplier.id" = supplier.id
+				sparePartController.params.expectedLifeTime = "struct"
+				sparePartController.params.expectedLifeTime_years = "1"
+				sparePartController.params.expectedLifeTime_months = "3"
+				sparePartController.params.statusOfSparePart="OPERATIONAL"
+				sparePartController.params.dateOfEvent=Initializer.now()
+				sparePartController.params.usedOnEquipment=equipment
+				sparePartController.save()
+		
+				then:
+				SparePart.count() == 1;
+				SparePart.findBySerialNumber("SERIAL12129").serialNumber.equals("SERIAL12129")
+				SparePart.findBySerialNumber("SERIAL12129").expectedLifeTime.numberOfMonths == 15
+				SparePart.findBySerialNumber("SERIAL12129").warrantyPeriod.numberOfMonths == 16
+				SparePart.findByDescriptions_en("test_english_descriptions").getDescriptions(new Locale("en")).equals("test_english_descriptions")
+			}
+	
 }

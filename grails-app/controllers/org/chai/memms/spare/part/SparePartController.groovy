@@ -118,10 +118,12 @@ class SparePartController extends AbstractEntityController{
 			params["usedOnEquipment"] = null
 		}
 		
-		//Verify room and shelve are null on OPERATIONAL status
-		if(params["statusOfSparePart"].equals("OPERATIONAL")){
+		//Verify stockLocation, dataLocation, room and shelve are null on OPERATIONAL status
+		if((params["statusOfSparePart"].equals("OPERATIONAL")) && (params["statusOfSparePart"].equals("DISPOSED"))){
 			params["room"] = null
 			params["shelve"] = null
+			params["stockLocation"] = null
+			params["dataLocation"] = null
 		}
 	}
 
@@ -144,7 +146,7 @@ class SparePartController extends AbstractEntityController{
 			entity.statusOfSparePart = StatusOfSparePart."$params.cmd.statusOfSparePart"
 			sparePartStatusService.createSparePartStatus(user,params.cmd.statusOfSparePart,entity,params.cmd.dateOfEvent,[:])
 		}
-		else entity.save(failOnError:true)
+		else entity.save()
 	}
 
 	def save = { StatusCommand cmd ->

@@ -227,7 +227,6 @@ class FilterCommand {
 	StatusOfSparePart status = StatusOfSparePart.NONE
 	SparePartPurchasedBy sparePartPurchasedBy
 	String sameAsManufacturer
-	 
 
 	public boolean getSameAsManufacturerStatus(){
 		if(sameAsManufacturer) return null

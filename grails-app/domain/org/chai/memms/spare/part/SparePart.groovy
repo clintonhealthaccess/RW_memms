@@ -130,7 +130,9 @@ public class SparePart {
 		purchaseCost nullable: true, validator: {val, obj ->
 		if(obj.currency!=null) return (val!=null)
 		}		
-		stockLocation  nullable: true, inList:[StockLocation.MMC, StockLocation.FACILITY]
+		stockLocation  nullable: true,validator:{
+			if(it!=null) it in [StockLocation.MMC, StockLocation.FACILITY]
+		}
 		type nullable: false
 		
 		dataLocation nullable: true, validator: {val,obj ->
