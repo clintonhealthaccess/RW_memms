@@ -17,12 +17,12 @@
 	<!-- <div class="spinner-container">
       <img src="${resource(dir:'images',file:'list-spinner.gif')}" class="ajax-big-spinner"/>
     </div> -->
-    <ul class="v_tabs_nav left">
-      <li><a class="active" href="#">Corrective Maintenance</a></li>
-      <li><a href="#">Preventive Maintenance</a></li>
-      <li><a href="#">Management Medical Equipment</a></li>
-      <li><a href="#">Management Of Spare Parts</a></li>
-      <li><a href="#">Monitoring Of MEMMS Use</a></li>
+    <ul id='top_tabs' class="v_tabs_nav left">
+      <li><a class="active" id="#corrective">Corrective Maintenance</a></li>
+      <li><a id="#preventive">Preventive Maintenance</a></li>
+      <li><a id="#equipment">Management Medical Equipment</a></li>
+      <li><a id="#spare_parts">Management Of Spare Parts</a></li>
+      <li><a id="#monitoring">Monitoring Of MEMMS Use</a></li>
     </ul>
     <div class="v_tabs_content right">
     	<a id="showhide" class="right" href="#">Show / Hide filters</a>
@@ -143,320 +143,437 @@
         </form>
       </div>
 
-      <ul class="v_tabs_list">
-        <li class="v_tabs_row">
-          <p>
-          	<span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
-          	<a class="v_tabs_name v_tabs_fold_toggle">Lorem ipsum dolor sit amet</a>
-          	<span class="v_tabs_formula">a</span>
-          	<span class="v_tabs_value">53%</span>
-          </p>
-          <div class="v_tabs_fold_container">
-            <ul class="v_tabs_nested_nav">
-                    <li><a id='historic_trend' class='active' href="#">Historic Trend</a></li>
-                    <li><a id='comparison' href="#">Comparison To Other Facilities</a></li>
-                    <li><a id='geo_trend' href="#">Geographic Trend</a></li>
-                    <li><a id='info_facility' href="#">Information By Facility</a></li>
-            </ul>
-            <div id="historic_trend" class='toggled_tab'>
-              <ul class="v_tabs_nested">
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Historic trend</span>
+      <div id="corrective">
+        <ul class="v_tabs_list">
+          <li class="v_tabs_row">
+            <p>
+                  <a class="v_tabs_name v_tabs_fold_toggle">
+                    <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
+                    Lorem ipsum dolor sit amet
+                  </a>
                   <span class="v_tabs_formula">a</span>
                   <span class="v_tabs_value">53%</span>
-                </li>
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
+            </p>
+            <div class="v_tabs_fold_container">
+              <ul class="v_tabs_nested_nav">
+                      <li><a id='historic_trend' class='active' href="#">Historic Trend</a></li>
+                      <li><a id='comparison' href="#">Comparison To Other Facilities</a></li>
+                      <li><a id='geo_trend' href="#">Geographic Trend</a></li>
+                      <li><a id='info_facility' href="#">Information By Facility</a></li>
               </ul>
+              <div id="historic_trend" class='toggled_tab'>
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+              <div id="comparison">
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+              <div id="geo_trend">
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+              <div id="info_facility">
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
             </div>
-            <div id="comparison">
-              <ul class="v_tabs_nested">
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Comparison to other facilities</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-              </ul>
-            </div>
-            <div id="geo_trend">
-              <ul class="v_tabs_nested">
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Geographic Trend</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-              </ul>
-            </div>
-            <div id="info_facility">
-              <ul class="v_tabs_nested">
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Information by Facility</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </li>
+          </li>
 
-        <li class="v_tabs_row">
-          <p>
-          	<span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
-          	<a class="v_tabs_name v_tabs_fold_toggle">Lorem ipsum dolor sit amet</a>
-          	<span class="v_tabs_formula">a</span>
-          	<span class="v_tabs_value">53%</span>
-          </p>
-          <div class="v_tabs_fold_container">
-            <ul class="v_tabs_nested_nav">
-                    <li><a id='historic_trend' class='active' href="#">Historic Trend</a></li>
-                    <li><a id='comparison' href="#">Comparison To Other Facilities</a></li>
-                    <li><a id='geo_trend' href="#">Geographic Trend</a></li>
-                    <li><a id='info_facility' href="#">Information By Facility</a></li>
-            </ul>
-            <div id="historic_trend" class='toggled_tab'>
-              <ul class="v_tabs_nested">
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Historic trend</span>
+          <li class="v_tabs_row">
+            <p>
+                  <a class="v_tabs_name v_tabs_fold_toggle">
+                    <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
+                    Lorem ipsum dolor sit amet
+                  </a>
                   <span class="v_tabs_formula">a</span>
                   <span class="v_tabs_value">53%</span>
-                </li>
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
+            </p>
+            <div class="v_tabs_fold_container">
+              <ul class="v_tabs_nested_nav">
+                      <li><a id='historic_trend' class='active' href="#">Historic Trend</a></li>
+                      <li><a id='comparison' href="#">Comparison To Other Facilities</a></li>
+                      <li><a id='geo_trend' href="#">Geographic Trend</a></li>
+                      <li><a id='info_facility' href="#">Information By Facility</a></li>
               </ul>
+              <div id="historic_trend" class='toggled_tab'>
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+              <div id="comparison">
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+              <div id="geo_trend">
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+              <div id="info_facility">
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
             </div>
-            <div id="comparison">
-              <ul class="v_tabs_nested">
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Comparison to other facilities</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
+          </li>
+
+          <li class="v_tabs_row">
+            <p>
+              <a class="v_tabs_name v_tabs_fold_toggle">
+                <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
+                Lorem ipsum dolor sit amet
+              </a>
+              <span class="v_tabs_formula">a</span>
+              <span class="v_tabs_value">53%</span>
+            </p>
+            <div class="v_tabs_fold_container">
+              <ul class="v_tabs_nested_nav">
+                      <li><a id='historic_trend' class='active' href="#">Historic Trend</a></li>
+                      <li><a id='comparison' href="#">Comparison To Other Facilities</a></li>
+                      <li><a id='geo_trend' href="#">Geographic Trend</a></li>
+                      <li><a id='info_facility' href="#">Information By Facility</a></li>
               </ul>
+              <div id="historic_trend" class='toggled_tab'>
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+              <div id="comparison">
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+              <div id="geo_trend">
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+              <div id="info_facility">
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
             </div>
-            <div id="geo_trend">
-              <ul class="v_tabs_nested">
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Geographic Trend</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
+          </li>
+        </ul>
+      </div> <!-- end of Corrective Maintenance -->
+
+
+      <div id="preventive">
+        <ul class="v_tabs_list">
+          <li class="v_tabs_row">
+            <p>
+              <a class="v_tabs_name v_tabs_fold_toggle">
+                <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
+                Lorem ipsum dolor sit amet
+              </a>
+              <span class="v_tabs_formula">a</span>
+              <span class="v_tabs_value">53%</span>
+            </p>
+            <div class="v_tabs_fold_container">
+              <ul class="v_tabs_nested_nav">
+                      <li><a id='historic_trend' class='active' href="#">Historic Trend</a></li>
+                      <li><a id='comparison' href="#">Comparison To Other Facilities</a></li>
+                      <li><a id='geo_trend' href="#">Geographic Trend</a></li>
+                      <li><a id='info_facility' href="#">Information By Facility</a></li>
               </ul>
+              <div id="historic_trend" class='toggled_tab'>
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+              <div id="comparison">
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+              <div id="geo_trend">
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+              <div id="info_facility">
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
             </div>
-            <div id="info_facility">
-              <ul class="v_tabs_nested">
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Information by Facility</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
-                <li class="v_tabs_row">
-                  <span class="v_tabs_name">Lorem ipsum dolor sit amet</span>
-                  <span class="v_tabs_formula">a</span>
-                  <span class="v_tabs_value">53%</span>
-                </li>
+          </li>
+
+          <li class="v_tabs_row">
+            <p>
+              <a class="v_tabs_name v_tabs_fold_toggle">
+                <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
+                Lorem ipsum dolor sit amet
+              </a>
+              <span class="v_tabs_formula">a</span>
+              <span class="v_tabs_value">53%</span>
+            </p>
+            <div class="v_tabs_fold_container">
+              <ul class="v_tabs_nested_nav">
+                      <li><a id='historic_trend' class='active' href="#">Historic Trend</a></li>
+                      <li><a id='comparison' href="#">Comparison To Other Facilities</a></li>
+                      <li><a id='geo_trend' href="#">Geographic Trend</a></li>
+                      <li><a id='info_facility' href="#">Information By Facility</a></li>
               </ul>
+              <div id="historic_trend" class='toggled_tab'>
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+              <div id="comparison">
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+              <div id="geo_trend">
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+              <div id="info_facility">
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
             </div>
-          </div>
-        </li>
-        <li class="v_tabs_row">
-          <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
-          <a class="v_tabs_name">Lorem ipsum dolor sit amet</a>
-          <span class="v_tabs_formula">a</span>
-          <span class="v_tabs_value">53%</span>
-          <div class="v_tabs_fold_container"></div>
-        </li>
-      </ul>
+          </li>
+        </ul>
+      </div> <!-- end of Preventive Maintenance -->
+
+
+      <div id="equipment">
+        <ul class="v_tabs_list">
+          <li class="v_tabs_row">
+            <p>
+              <a class="v_tabs_name v_tabs_fold_toggle">
+                <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
+                Lorem ipsum dolor sit amet
+              </a>
+              <span class="v_tabs_formula">a</span>
+              <span class="v_tabs_value">53%</span>
+            </p>
+            <div class="v_tabs_fold_container">
+              <ul class="v_tabs_nested_nav">
+                      <li><a id='historic_trend' class='active' href="#">Historic Trend</a></li>
+                      <li><a id='comparison' href="#">Comparison To Other Facilities</a></li>
+                      <li><a id='geo_trend' href="#">Geographic Trend</a></li>
+                      <li><a id='info_facility' href="#">Information By Facility</a></li>
+              </ul>
+              <div id="historic_trend" class='toggled_tab'>
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+              <div id="comparison">
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+              <div id="geo_trend">
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+              <div id="info_facility">
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+            </div>
+          </li>
+
+          <li class="v_tabs_row">
+            <p>
+              <a class="v_tabs_name v_tabs_fold_toggle">
+                <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
+                Lorem ipsum dolor sit amet
+              </a>
+              <span class="v_tabs_formula">a</span>
+              <span class="v_tabs_value">53%</span>
+            </p>
+
+            <div class="v_tabs_fold_container">
+              <ul class="v_tabs_nested_nav">
+                      <li><a id='historic_trend' class='active' href="#">Historic Trend</a></li>
+                      <li><a id='comparison' href="#">Comparison To Other Facilities</a></li>
+                      <li><a id='geo_trend' href="#">Geographic Trend</a></li>
+                      <li><a id='info_facility' href="#">Information By Facility</a></li>
+              </ul>
+              <div id="historic_trend" class='toggled_tab'>
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+              <div id="comparison">
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+              <div id="geo_trend">
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+              <div id="info_facility">
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+            </div>
+          </li>
+          <li class="v_tabs_row">
+            <p>
+              <a class="v_tabs_name v_tabs_fold_toggle">
+                <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
+                Lorem ipsum dolor sit amet
+              </a>
+              <span class="v_tabs_formula">a</span>
+              <span class="v_tabs_value">53%</span>
+            </p>
+            <div class="v_tabs_fold_container">
+              <ul class="v_tabs_nested_nav">
+                      <li><a id='historic_trend' class='active' href="#">Historic Trend</a></li>
+                      <li><a id='comparison' href="#">Comparison To Other Facilities</a></li>
+                      <li><a id='geo_trend' href="#">Geographic Trend</a></li>
+                      <li><a id='info_facility' href="#">Information By Facility</a></li>
+              </ul>
+              <div id="historic_trend" class='toggled_tab'>
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+              <div id="comparison">
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+              <div id="geo_trend">
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+              <div id="info_facility">
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div> <!-- end of Management Medical Equipment -->
+
+
+      <div id="spare_parts">
+        <ul class="v_tabs_list">
+          <li class="v_tabs_row">
+            <p>
+              <a class="v_tabs_name v_tabs_fold_toggle">
+                <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
+                Lorem ipsum dolor sit amet
+              </a>
+              <span class="v_tabs_formula">a</span>
+              <span class="v_tabs_value">53%</span>
+            </p>
+
+            <div class="v_tabs_fold_container">
+              <ul class="v_tabs_nested_nav">
+                      <li><a id='historic_trend' class='active' href="#">Historic Trend</a></li>
+                      <li><a id='comparison' href="#">Comparison To Other Facilities</a></li>
+                      <li><a id='geo_trend' href="#">Geographic Trend</a></li>
+                      <li><a id='info_facility' href="#">Information By Facility</a></li>
+              </ul>
+              <div id="historic_trend" class='toggled_tab'>
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+              <div id="comparison">
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+              <div id="geo_trend">
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+              <div id="info_facility">
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+            </div>
+          </li>
+
+          <li class="v_tabs_row">
+            <p>
+              <a class="v_tabs_name v_tabs_fold_toggle">
+                <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
+                Lorem ipsum dolor sit amet
+              </a>
+              <span class="v_tabs_formula">a</span>
+              <span class="v_tabs_value">53%</span>
+            </p>
+
+            <div class="v_tabs_fold_container">
+              <ul class="v_tabs_nested_nav">
+                      <li><a id='historic_trend' class='active' href="#">Historic Trend</a></li>
+                      <li><a id='comparison' href="#">Comparison To Other Facilities</a></li>
+                      <li><a id='geo_trend' href="#">Geographic Trend</a></li>
+                      <li><a id='info_facility' href="#">Information By Facility</a></li>
+              </ul>
+              <div id="historic_trend" class='toggled_tab'>
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+              <div id="comparison">
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+              <div id="geo_trend">
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+              <div id="info_facility">
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div> <!-- end of Spare parts -->
+
+
+      <div id="monitoring">
+        <ul class="v_tabs_list">
+          <li class="v_tabs_row">
+            <p>
+              <a class="v_tabs_name v_tabs_fold_toggle">
+                <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
+                Lorem ipsum dolor sit amet
+              </a>
+              <span class="v_tabs_formula">a</span>
+              <span class="v_tabs_value">53%</span>
+            </p>
+
+            <div class="v_tabs_fold_container">
+              <ul class="v_tabs_nested_nav">
+                      <li><a id='historic_trend' class='active' href="#">Historic Trend</a></li>
+                      <li><a id='comparison' href="#">Comparison To Other Facilities</a></li>
+                      <li><a id='geo_trend' href="#">Geographic Trend</a></li>
+                      <li><a id='info_facility' href="#">Information By Facility</a></li>
+              </ul>
+              <div id="historic_trend" class='toggled_tab'>
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+              <div id="comparison">
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+              <div id="geo_trend">
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+              <div id="info_facility">
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+            </div>
+          </li>
+
+          <li class="v_tabs_row">
+            <p>
+              <a class="v_tabs_name v_tabs_fold_toggle">
+                <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
+                Lorem ipsum dolor sit amet
+              </a>
+              <span class="v_tabs_formula">a</span>
+              <span class="v_tabs_value">53%</span>
+            </p>
+
+            <div class="v_tabs_fold_container">
+              <ul class="v_tabs_nested_nav">
+                      <li><a id='historic_trend' class='active' href="#">Historic Trend</a></li>
+                      <li><a id='comparison' href="#">Comparison To Other Facilities</a></li>
+                      <li><a id='geo_trend' href="#">Geographic Trend</a></li>
+                      <li><a id='info_facility' href="#">Information By Facility</a></li>
+              </ul>
+              <div id="historic_trend" class='toggled_tab'>
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+              <div id="comparison">
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+              <div id="geo_trend">
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+              <div id="info_facility">
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+            </div>
+          </li>
+
+          <li class="v_tabs_row">
+            <p>
+              <a class="v_tabs_name v_tabs_fold_toggle">
+                <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
+                Lorem ipsum dolor sit amet
+              </a>
+              <span class="v_tabs_formula">a</span>
+              <span class="v_tabs_value">53%</span>
+            </p>
+
+            <div class="v_tabs_fold_container">
+              <ul class="v_tabs_nested_nav">
+                      <li><a id='historic_trend' class='active' href="#">Historic Trend</a></li>
+                      <li><a id='comparison' href="#">Comparison To Other Facilities</a></li>
+                      <li><a id='geo_trend' href="#">Geographic Trend</a></li>
+                      <li><a id='info_facility' href="#">Information By Facility</a></li>
+              </ul>
+              <div id="historic_trend" class='toggled_tab'>
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+              <div id="comparison">
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+              <div id="geo_trend">
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+              <div id="info_facility">
+                <g:render template="/entity/reports/nested_tabs" />
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div> <!-- end of Monitoring MEMMS Use -->
     </div>
   </div>
   <!-- End of template -->
