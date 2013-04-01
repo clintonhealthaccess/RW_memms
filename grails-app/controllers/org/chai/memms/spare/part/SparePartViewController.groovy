@@ -82,11 +82,13 @@ class SparePartViewController extends AbstractController{
 		adaptParamsForList()
 		def type = SparePartType.get(params.long('type.id'))	
 		def status = null
+		log.debug("params ===>"+params)
 		if(params['status']){
 			status = params["status"]
 			status = StatusOfSparePart."$status"
 		}
 		def spareParts = sparePartService.getSpareParts(user,type,status,params)
+		log.debug("spareParts ===>"+spareParts)
 		if(request.xhr)
 			this.ajaxModel(spareParts,type,status,"")
 		else{
@@ -103,11 +105,13 @@ class SparePartViewController extends AbstractController{
 		adaptParamsForList()
 		def type = SparePartType.get(params.long('type.id'))	
 		def status = null
+		log.debug("params ===>"+params)
 		if(params['status']){
 			status = params["status"]
 			status = StatusOfSparePart."$status"
 		}
 		def spareParts = sparePartService.searchSparePart(params['q'],user,type,status,params)
+		log.debug("spareParts ===>"+spareParts)
 		if(request.xhr)
 			this.ajaxModel(spareParts,type,status,params['q'])
 		else {

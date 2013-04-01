@@ -876,9 +876,7 @@ public class Initializer {
 		return status
 	}
 	// Spare part
-	public static def newSparePart(def serialNumber,def sparePartPurchasedBy,def sameAsManufacturer,def expectedLifeTime,
-		def purchaseCost,def descriptions,def manufactureDate, def purchaseDate,def currency,def model,def dataLocation,def type,
-		def supplier,def statusOfSparePart,def addedBy,def lastModifiedBy,def lastModifiedOn, def stockLocation){
+	public static def newSparePart(def serialNumber,def sparePartPurchasedBy,def sameAsManufacturer,def expectedLifeTime,def purchaseCost,def descriptions,def manufactureDate, def purchaseDate,def currency,def model,def dataLocation,def type,def supplier,def statusOfSparePart,def addedBy,def lastModifiedBy,def lastModifiedOn, def stockLocation){
 		def sparePart = new SparePart(
 			serialNumber:serialNumber,
 			sparePartPurchasedBy:sparePartPurchasedBy,

@@ -77,7 +77,6 @@ class SparePartService {
 	}
 
 	public def searchSparePart(String text,User user, SparePartType type,StatusOfSparePart status,Map<String,String> params) {
-		log.debug("gotcha status =>"+status+" type =>"+type)
 		//Remove unnecessary blank space
 		text= text.trim()
 		def dbFieldTypeNames = 'names_'+languageService.getCurrentLanguagePrefix();
@@ -97,17 +96,12 @@ class SparePartService {
 
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			createAlias("type","t")
-			
-			if(type!=null && status!=null){
+			if(type!=null)
 				eq("type",type)
+			if(status!=null)
 				eq("statusOfSparePart",status)
-			}
-			//TODO check with antonio spec.
-			if(!dataLocations.isEmpty() && !user.userType.equals(UserType.TECHNICIANMMC))
+			if(!dataLocations.isEmpty())
 				inList('dataLocation',dataLocations)
-			else
-				eq("stockLocation",StockLocation.MMC)
-
 			or{
 				ilike("code","%"+text+"%")
 				ilike("serialNumber","%"+text+"%")
@@ -115,6 +109,7 @@ class SparePartService {
 				ilike(dbFieldDescriptions,"%"+text+"%")
 				ilike(dbFieldTypeNames,"%"+text+"%")
 				ilike("t."+dbFieldTypeNames,"%"+text+"%")
+				ilike("t."+dbFieldDescriptions,"%"+text+"%")
 			}
 		}
 	}
@@ -126,13 +121,10 @@ class SparePartService {
 
 		if(user.userType.equals(UserType.ADMIN) || user.userType.equals(UserType.TECHNICIANMMC) || user.userType.equals(UserType.SYSTEM))
 			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-				if(type!=null && status!=null){
+				if(type!=null)
 					eq("type",type)
-					eq("statusOfSparePart",status)	
-				}
-				//TODO check with antonio spec.
-				if(user.userType.equals(UserType.TECHNICIANMMC))
-					eq("stockLocation",StockLocation.MMC)
+				if(status!=null)
+					eq("statusOfSparePart",status)
 		}
 		else{
 			if(user.location instanceof Location)
@@ -149,8 +141,7 @@ class SparePartService {
 		}
 
 	}
-	public def filterSparePart(def user, def dataLocation, def supplier, def type,
-			def sparePartPurchasedBy,def sameAsManufacturer,def sparePartStatus,Map<String, String> params){
+	public def filterSparePart(def user, def dataLocation, def supplier, def type,def sparePartPurchasedBy,def sameAsManufacturer,def sparePartStatus, Map<String, String> params){
 
 		def dataLocations = []
 		if(dataLocation) dataLocations.add(dataLocation)
