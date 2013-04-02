@@ -31,6 +31,7 @@ import java.util.Date;
 
 import org.apache.shiro.SecurityUtils;
 import org.chai.memms.AbstractEntityController;
+import org.chai.memms.spare.part.SparePart.StockLocation;
 import org.chai.memms.spare.part.SparePartStatus;
 import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
 import org.chai.memms.Contact

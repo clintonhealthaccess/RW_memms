@@ -86,7 +86,7 @@ class SparePartService {
 		def dataLocations = []
 		def criteria = SparePart.createCriteria();
 
-		if(!user.userType.equals(UserType.ADMIN) && !user.userType.equals(UserType.TECHNICIANMMC) && !user.userType.equals(UserType.SYSTEM))
+		if(!user.userType.equals(UserType.ADMIN) && !user.userType.equals(UserType.TECHNICIANMMC) && !user.userType.equals(UserType.SYSTEM) && !user.userType.equals(UserType.TECHNICIANDH))
 		{
 			if(user.location instanceof Location) 
 				dataLocations.addAll(user.location.getDataLocations([:], [:]))
@@ -115,7 +115,7 @@ class SparePartService {
 		def dataLocations = []
 		def criteria = SparePart.createCriteria();
 		
-		if(user.userType.equals(UserType.ADMIN) || user.userType.equals(UserType.TECHNICIANMMC) || user.userType.equals(UserType.SYSTEM))
+		if(user.userType.equals(UserType.ADMIN) || user.userType.equals(UserType.TECHNICIANMMC) || user.userType.equals(UserType.SYSTEM) || user.userType.equals(UserType.TECHNICIANDH))
 			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){}
 		else{
 			if(user.location instanceof Location) 
