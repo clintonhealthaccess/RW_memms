@@ -203,7 +203,7 @@ class SparePartViewController extends AbstractController{
 				spareParts.each { sparePart ->
 					elem (
 							key: sparePart.id,
-							value: sparePart.code
+							value: "["+sparePart.code+"] - ["+sparePart.serialNumber+"] - ["+sparePart.names+"]"
 							)
 				}
 			}

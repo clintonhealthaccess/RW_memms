@@ -141,7 +141,7 @@ class SparePartTypeController  extends AbstractEntityController{
 				types.each { type ->
 					elem (
 							key: type.id,
-							value: type.getNames(languageService.getCurrentLanguage()) + ' ['+type.code+']'
+							value: type.getNames(languageService.getCurrentLanguage()) + ' - ['+type.code+']'
 							)
 				}
 			}
