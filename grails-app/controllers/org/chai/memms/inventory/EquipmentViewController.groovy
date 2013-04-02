@@ -158,6 +158,7 @@ class EquipmentViewController extends AbstractController {
 			entities: entities,
 			entityCount: entities.totalCount,
 			dataLocation:dataLocation,
+			entityClass:getEntityClass(),
 			code: getLabel()
 		]
 	}

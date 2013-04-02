@@ -1,20 +1,20 @@
 <%@ page import="org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart" %>
+<%@ page import="org.chai.memms.util.Utils" %>
 <table class="items spaced">
 	<thead>
 		<tr>
 			<th/>
-			<g:sortableColumn property="code"  title="${message(code: 'spare.part.code.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
-			<g:sortableColumn property="type"  title="${message(code: 'spare.part.type.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
-			<g:sortableColumn property="model"  title="${message(code: 'spare.part.model.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
-			<g:sortableColumn property="statusOfSparePart"  title="${message(code: 'spare.part.status.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
-			<g:sortableColumn property="usedOnEquipment"  title="${message(code: 'spare.part.used.on.equipment.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
+			<g:sortableColumn property="code"  title="${message(code: 'spare.part.code.label')}" params="[q:q,'type.id':type?.id,status:status]" />
+			<g:sortableColumn property="type"  title="${message(code: 'spare.part.type.label')}" params="[q:q,'type.id':type?.id,status:status]" />
+			<g:sortableColumn property="model"  title="${message(code: 'spare.part.model.label')}" params="[q:q,'type.id':type?.id,status:status]" />
+			<g:sortableColumn property="statusOfSparePart"  title="${message(code: 'spare.part.status.label')}" params="[q:q,'type.id':type?.id,status:status]" />
+			<g:sortableColumn property="usedOnEquipment"  title="${message(code: 'spare.part.used.on.equipment.label')}" params="[q:q,'type.id':type?.id,status:status]" />
 			<th><g:message code="location.label"/></th>
-			<g:sortableColumn property="purchaseDate"  title="${message(code: 'spare.part.purchase.date.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
-			<g:sortableColumn property="purchaseCost"  title="${message(code: 'spare.part.purchase.cost.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
-			<g:sortableColumn property="sameAsManufacturer"  title="${message(code: 'spare.part.same.as.manufacturer.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
-			<g:sortableColumn property="supplier"  title="${message(code: 'provider.type.supplier')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
-			<g:sortableColumn property="sparePartPurchasedBy"  title="${message(code: 'spare.part.purchaser.label')}" params="[q:q,'dataLocation.id':dataLocation?.id]" />
-			
+			<g:sortableColumn property="purchaseDate"  title="${message(code: 'spare.part.purchase.date.label')}" params="[q:q,'type.id':type?.id,status:status]" />
+			<g:sortableColumn property="purchaseCost"  title="${message(code: 'spare.part.purchase.cost.label')}" params="[q:q,'type.id':type?.id,status:status]" />
+			<g:sortableColumn property="sameAsManufacturer"  title="${message(code: 'spare.part.same.as.manufacturer.label')}" params="[q:q,'type.id':type?.id,status:status]" />
+			<g:sortableColumn property="supplier"  title="${message(code: 'provider.type.supplier')}" params="[q:q,'type.id':type?.id,status:status]" />
+			<g:sortableColumn property="sparePartPurchasedBy"  title="${message(code: 'spare.part.purchaser.label')}" params="[q:q,'type.id':type?.id,status:status]" />	
 		</tr>
 	</thead>
 	<tbody>
@@ -34,7 +34,7 @@
 						</li>
 					</ul>
 				</td>
-				<td>${sparePart.code}</td>
+				<td>${sparePart.serialNumber}</td>
 				<td>${sparePart.type.names}</td>
 				<td>${sparePart.model}</td>
 				<td>
@@ -47,7 +47,7 @@
 					<g:if test="${sparePart.statusOfSparePart.equals(StatusOfSparePart.DISPOSED)}">
 					</g:if>
 					<g:if test="${sparePart.statusOfSparePart.equals(StatusOfSparePart.OPERATIONAL)}">
-					${sparePart.usedOnEquipment.code}
+						${sparePart.usedOnEquipment.code}
 					</g:if>
 				</g:if>
 				<g:elseif test="${sparePart?.usedOnEquipment == null && sparePart.statusOfSparePart.equals(StatusOfSparePart.PENDINGORDER)}">
@@ -68,7 +68,7 @@
 					<g:message code="datalocation.label"/>: ${sparePart.dataLocation?.names}<br/>
 					
 				</td>
-				<td>${sparePart.purchaseDate}</td>
+				<td>${Utils.formatDateWithTime(sparePart.purchaseDate)}</td>
 				<td>${sparePart.purchaseCost} ${sparePart.currency}</td>
 				<td>
 					<g:if name="sameAsManufacturer" id="${sparePart.id}" test="${(sparePart.sameAsManufacturer==true)}">&radic;</g:if>

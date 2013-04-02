@@ -3,7 +3,10 @@ package org.chai.memms.inventory
 import org.chai.memms.Initializer;
 import org.chai.memms.IntegrationTests;
 import org.chai.memms.inventory.EquipmentTypeController;
+import org.chai.memms.inventory.EquipmentTypeService;
 import org.chai.memms.inventory.EquipmentType.Observation;
+import org.chai.memms.inventory.Provider.Type;
+import org.chai.memms.spare.part.SparePartType;
 
 class EquipmentTypeControllerSpec extends IntegrationTests{
 
@@ -65,7 +68,8 @@ class EquipmentTypeControllerSpec extends IntegrationTests{
 		equipmentTypeController.response.json.results[0].contains(EquipmentType.findByCode(CODE(125)).code)
 		equipmentTypeController.response.json.results[0].contains(EquipmentType.findByCode(CODE(126)).code)
 	}
-	
+
+			
 	def "search equipment types"(){
 		setup:
 		equipmentTypeController = new EquipmentTypeController();
@@ -92,6 +96,7 @@ class EquipmentTypeControllerSpec extends IntegrationTests{
 		equipmentTypeController.response.json.results[0].contains(EquipmentType.findByCode(CODE(125)).code)
 		!equipmentTypeController.response.json.results[0].contains(EquipmentType.findByCode(CODE(126)).code)
 	}
+	
 	
 	//TODO find a way to test if the export works by calling the task plugin. Task plugin is supposed to have it's own tests
 }

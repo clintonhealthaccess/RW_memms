@@ -42,14 +42,13 @@ import org.chai.memms.Parts;
 import org.chai.memms.Part;
 import org.chai.memms.inventory.Equipment;
 import org.chai.memms.spare.part.SparePart;
+import org.chai.memms.spare.part.SparePart.StockLocation;
 import org.chai.memms.spare.part.SparePartStatus;
 import org.chai.memms.security.User;
 import org.chai.memms.spare.part.SparePart.SparePartPurchasedBy;
 import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
 import org.chai.memms.spare.part.SparePartType;
 import org.chai.memms.security.User.UserType;
-
-
 import org.supercsv.io.CsvListWriter;
 import org.supercsv.io.ICsvListWriter;
 import org.supercsv.prefs.CsvPreference;
@@ -69,7 +68,7 @@ class SparePartService {
 			sparePart.statusOfSparePart = sparePartStatus.statusOfSparePart
 			sparePart.addToStatus(sparePartStatus)
 		}else{
-			sparePart.statusOfSparePart = sparePart.timeBasedStatus.statusOfSparePart
+			sparePart.statusOfSparePart = sparePart.timeBasedStatus.sparePartStatus
 		}
 		sparePart.lastModified = user
 		sparePart.usedOnEquipment=equipment
@@ -77,8 +76,8 @@ class SparePartService {
 		if(log.isDebugEnabled()) log.debug("Updating SparePart status params: "+sparePart)
 		sparePart.save(failOnError:true)
 	}
-	
-	public def searchSparePart(String text,User user,Map<String, String> params) {
+
+	public def searchSparePart(String text,User user, SparePartType type,StatusOfSparePart status,Map<String,String> params) {
 		//Remove unnecessary blank space
 		text= text.trim()
 		def dbFieldTypeNames = 'names_'+languageService.getCurrentLanguagePrefix();
@@ -88,37 +87,48 @@ class SparePartService {
 
 		if(!user.userType.equals(UserType.ADMIN) && !user.userType.equals(UserType.TECHNICIANMMC) && !user.userType.equals(UserType.SYSTEM) && !user.userType.equals(UserType.TECHNICIANDH))
 		{
-			if(user.location instanceof Location) 
+			if(user.location instanceof Location)
 				dataLocations.addAll(user.location.getDataLocations([:], [:]))
 			else{
 				dataLocations.add((DataLocation)user.location)
 				if(userService.canViewManagedSpareParts(user)) dataLocations.addAll((user.location as DataLocation).manages?.asList())
 			}
 		}
-		
+
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-				createAlias("type","t")
-				if(!dataLocations.isEmpty())
-					inList('dataLocation',dataLocations)
-				or{
-					ilike("code","%"+text+"%")
-					ilike("serialNumber","%"+text+"%")
-					ilike("model","%"+text+"%")
-					ilike(dbFieldDescriptions,"%"+text+"%")
-					ilike(dbFieldTypeNames,"%"+text+"%")
-					ilike("t."+dbFieldTypeNames,"%"+text+"%")
-				}
+			createAlias("type","t")
+			if(type!=null)
+				eq("type",type)
+			if(status!=null)
+				eq("statusOfSparePart",status)
+			if(!dataLocations.isEmpty())
+				inList('dataLocation',dataLocations)
+			or{
+				ilike("code","%"+text+"%")
+				ilike("serialNumber","%"+text+"%")
+				ilike("model","%"+text+"%")
+				ilike(dbFieldDescriptions,"%"+text+"%")
+				ilike(dbFieldTypeNames,"%"+text+"%")
+				ilike("t."+dbFieldTypeNames,"%"+text+"%")
+				ilike("t."+dbFieldDescriptions,"%"+text+"%")
+			}
 		}
 	}
 
-	public def getSparePartsByUser(User user, Map<String,String> params) {
+
+	public def getSpareParts(User user, SparePartType type,StatusOfSparePart status,Map<String,String> params) {
 		def dataLocations = []
 		def criteria = SparePart.createCriteria();
-		
+
 		if(user.userType.equals(UserType.ADMIN) || user.userType.equals(UserType.TECHNICIANMMC) || user.userType.equals(UserType.SYSTEM) || user.userType.equals(UserType.TECHNICIANDH))
-			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){}
+			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+				if(type!=null)
+					eq("type",type)
+				if(status!=null)
+					eq("statusOfSparePart",status)
+		}
 		else{
-			if(user.location instanceof Location) 
+			if(user.location instanceof Location)
 				dataLocations.addAll(user.location.getDataLocations([:], [:]))
 			else{
 				dataLocations.add((DataLocation)user.location)
@@ -127,14 +137,13 @@ class SparePartService {
 
 			if(log.isDebugEnabled()) log.debug("Current user: " + user + " Current user's managed dataLocations: " + dataLocations)
 
-			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){ 
-				inList('dataLocation',dataLocations) 
-			}
+			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){  inList('dataLocation',dataLocations)  }
+
 		}
+
 	}
-	public def filterSparePart(def user, def dataLocation, def supplier, def sparePartType,
-		def sparePartPurchasedBy,def sameAsManufacturer,def sparePartStatus,Map<String, String> params){
-		
+	public def filterSparePart(def user, def dataLocation, def supplier, def type,def sparePartPurchasedBy,def sameAsManufacturer,def sparePartStatus, Map<String, String> params){
+
 		def dataLocations = []
 		if(dataLocation) dataLocations.add(dataLocation)
 		else if(user.location instanceof Location) dataLocations.addAll(user.location.getDataLocations([:], [:]))
@@ -142,15 +151,15 @@ class SparePartService {
 			dataLocations.add((DataLocation)user.location)
 			dataLocations.addAll((user.location as DataLocation).manages)
 		}
-		
+
 		def criteria = SparePart.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(dataLocations != null)
 				inList('dataLocation',dataLocations)
 			if(supplier != null)
 				eq ("supplier", supplier)
-			if(sparePartType != null)
-				eq ("type", sparePartType)
+			if(type != null)
+				eq ("type", type)
 			if(sparePartPurchasedBy && !sparePartPurchasedBy.equals(SparePartPurchasedBy.NONE))
 				eq ("sparePartPurchasedBy",sparePartPurchasedBy)
 			if(sameAsManufacturer)
@@ -159,70 +168,84 @@ class SparePartService {
 				eq ("statusOfSparePart",sparePartStatus)
 		}
 	}
-		public File exporter(DataLocation dataLocation,List<SparePart> spareParts){
-			if (log.isDebugEnabled()) log.debug("sparePartService.exporter, dataLocation code: "+dataLocation.code + ", ImportExportConstant: "+ImportExportConstant.CSV_FILE_EXTENSION)
-			File csvFile = File.createTempFile(dataLocation.code+"_export",ImportExportConstant.CSV_FILE_EXTENSION);
-			FileWriter csvFileWriter = new FileWriter(csvFile);
-			ICsvListWriter writer = new CsvListWriter(csvFileWriter, CsvPreference.EXCEL_PREFERENCE);
-			this.writeFile(writer,spareParts);
-			return csvFile;
-		}
-		
-		private void writeFile(ICsvListWriter writer,List<SparePart> spareParts) throws IOException {
-			try{
-				String[] csvHeaders = null;
-				// headers
-				if(csvHeaders == null){
-					csvHeaders = this.getExportDataHeaders()
-					writer.writeHeader(csvHeaders);
-				}
-				for(SparePart sparePart: spareParts){
-					List<String> line = [
-						sparePart.serialNumber,sparePart.type.code,sparePart.type?.getNames(new Locale("en")),
-						sparePart.type?.getNames(new Locale("fr")),sparePart.model,sparePart.statusOfSparePart,
-						sparePart.dataLocation?.code,sparePart.dataLocation?.getNames(new Locale("en")),sparePart.dataLocation?.getNames(new Locale("fr")),
-						sparePart.manufactureDate,sparePart.supplier?.code,sparePart.supplier?.contact?.contactName,sparePart.purchaseDate,
-						sparePart.purchaseCost?:"n/a",sparePart.currency?:"n/a",
-						sparePart.sparePartPurchasedBy.name(),sparePart.sameAsManufacturer,sparePart?.warranty?.startDate,sparePart?.warrantyPeriod?.numberOfMonths?:""
-						]
-					writer.write(line)
-				}
-			} catch (IOException ioe){
-				// TODO throw something that make sense
-				throw ioe;
-			} finally {
-				writer.close();
+	public File exporter(DataLocation dataLocation,List<SparePart> spareParts){
+		if (log.isDebugEnabled()) log.debug("sparePartService.exporter, dataLocation code: "+dataLocation.code + ", ImportExportConstant: "+ImportExportConstant.CSV_FILE_EXTENSION)
+		File csvFile = File.createTempFile(dataLocation.code+"_export",ImportExportConstant.CSV_FILE_EXTENSION);
+		FileWriter csvFileWriter = new FileWriter(csvFile);
+		ICsvListWriter writer = new CsvListWriter(csvFileWriter, CsvPreference.EXCEL_PREFERENCE);
+		this.writeFile(writer,spareParts);
+		return csvFile;
+	}
+
+	private void writeFile(ICsvListWriter writer,List<SparePart> spareParts) throws IOException {
+		try{
+			String[] csvHeaders = null;
+			// headers
+			if(csvHeaders == null){
+				csvHeaders = this.getExportDataHeaders()
+				writer.writeHeader(csvHeaders);
 			}
+			for(SparePart sparePart: spareParts){
+				List<String> line = [
+					sparePart.serialNumber,
+					sparePart.type.code,
+					sparePart.type?.getNames(new Locale("en")),
+					sparePart.type?.getNames(new Locale("fr")),
+					sparePart.model,
+					sparePart.statusOfSparePart,
+					sparePart.dataLocation?.code,
+					sparePart.dataLocation?.getNames(new Locale("en")),
+					sparePart.dataLocation?.getNames(new Locale("fr")),
+					sparePart.manufactureDate,
+					sparePart.supplier?.code,
+					sparePart.supplier?.contact?.contactName,
+					sparePart.purchaseDate,
+					sparePart.purchaseCost?:"n/a",
+					sparePart.currency?:"n/a",
+					sparePart.sparePartPurchasedBy.name(),
+					sparePart.sameAsManufacturer,
+					sparePart?.warranty?.startDate,
+					sparePart?.warrantyPeriod?.numberOfMonths?:""
+				]
+				writer.write(line)
+			}
+		} catch (IOException ioe){
+			// TODO throw something that make sense
+			throw ioe;
+		} finally {
+			writer.close();
 		}
-		public List<String> getBasicInfo(){
-			List<String> basicInfo = new ArrayList<String>();
-			basicInfo.add("sparePart.export")
-			return basicInfo;
-		}
-		public List<String> getExportDataHeaders() {
-			List<String> headers = new ArrayList<String>();
-			
-			headers.add(ImportExportConstant.SPARE_PART_SERIAL_NUMBER)
-			headers.add(ImportExportConstant.DEVICE_CODE)
-			headers.add(ImportExportConstant.DEVICE_NAME_EN)
-			headers.add(ImportExportConstant.DEVICE_NAME_FR)
-			headers.add(ImportExportConstant.SPARE_PART_MODEL)
-			headers.add(ImportExportConstant.SPARE_PART_STATUS)
-			headers.add(ImportExportConstant.LOCATION_CODE)
-			headers.add(ImportExportConstant.LOCATION_NAME_EN)
-			headers.add(ImportExportConstant.LOCATION_NAME_FR)
-			headers.add(ImportExportConstant.MANUFACTURER_CONTACT_NAME)
-			headers.add(ImportExportConstant.SPARE_PART_MANUFACTURE_DATE)
-			headers.add(ImportExportConstant.SUPPLIER_CODE)
-			headers.add(ImportExportConstant.SUPPLIER_CONTACT_NAME)
-			headers.add(ImportExportConstant.SUPPLIER_DATE)
-			headers.add(ImportExportConstant.SPARE_PART_PURCHASE_COST)
-			headers.add(ImportExportConstant.SPARE_PART_PURCHASE_COST_CURRENCY)
-			headers.add(ImportExportConstant.SPARE_PART_DONATION)
-			headers.add(ImportExportConstant.SPARE_PART_SAME_AS_MANUFACTURER)
-			headers.add(ImportExportConstant.SPARE_PART_WARRANTY_START)
-			headers.add(ImportExportConstant.SPARE_PART_WARRANTY_END)
-			
-			return headers;
-		}
+	}
+	public List<String> getBasicInfo(){
+		List<String> basicInfo = new ArrayList<String>();
+		basicInfo.add("sparePart.export")
+		return basicInfo;
+	}
+	public List<String> getExportDataHeaders() {
+		List<String> headers = new ArrayList<String>();
+
+		headers.add(ImportExportConstant.SPARE_PART_SERIAL_NUMBER)
+		headers.add(ImportExportConstant.DEVICE_CODE)
+		headers.add(ImportExportConstant.DEVICE_NAME_EN)
+		headers.add(ImportExportConstant.DEVICE_NAME_FR)
+		headers.add(ImportExportConstant.SPARE_PART_MODEL)
+		headers.add(ImportExportConstant.SPARE_PART_STATUS)
+		headers.add(ImportExportConstant.LOCATION_CODE)
+		headers.add(ImportExportConstant.LOCATION_NAME_EN)
+		headers.add(ImportExportConstant.LOCATION_NAME_FR)
+		headers.add(ImportExportConstant.MANUFACTURER_CONTACT_NAME)
+		headers.add(ImportExportConstant.SPARE_PART_MANUFACTURE_DATE)
+		headers.add(ImportExportConstant.SUPPLIER_CODE)
+		headers.add(ImportExportConstant.SUPPLIER_CONTACT_NAME)
+		headers.add(ImportExportConstant.SUPPLIER_DATE)
+		headers.add(ImportExportConstant.SPARE_PART_PURCHASE_COST)
+		headers.add(ImportExportConstant.SPARE_PART_PURCHASE_COST_CURRENCY)
+		headers.add(ImportExportConstant.SPARE_PART_DONATION)
+		headers.add(ImportExportConstant.SPARE_PART_SAME_AS_MANUFACTURER)
+		headers.add(ImportExportConstant.SPARE_PART_WARRANTY_START)
+		headers.add(ImportExportConstant.SPARE_PART_WARRANTY_END)
+
+		return headers;
+	}
+
 }

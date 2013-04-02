@@ -31,9 +31,14 @@ import javax.persistence.Transient;
 
 import groovy.transform.EqualsAndHashCode;
 import org.chai.memms.inventory.Provider;
+import org.chai.memms.inventory.EquipmentType;
+import org.chai.memms.inventory.Equipment;
 import org.chai.memms.spare.part.SparePartStatus;
 import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
 import org.chai.memms.spare.part.SparePart;
+import org.chai.memms.inventory.Provider.Type
+
+
 import i18nfields.I18nFields;
 /**
  * @author Jean Kahigiso M.
@@ -50,9 +55,10 @@ class SparePartType {
 	Date dateCreated
 	Date lastUpdated
 	Provider manufacturer
-	
-	static i18nFields = ["descriptions","names"]
-	static hasMany = [spareParts: SparePart]	
+
+	static i18nFields = ["descriptions", "names"]
+	static hasMany = [spareParts: SparePart,compatibleEquipmentTypes:EquipmentType,vendors:Provider]
+	static mappedBy = [vendors: "sparePartTypes"]
 
 	static constraints = {
 		code nullable: false, blank:false,unique :true
@@ -60,40 +66,42 @@ class SparePartType {
 		descriptions nullable: true, blank: true
 		partNumber nullable: false,blank:false
 		discontinuedDate nullable: true
-		manufacturer nullable: false,blank:false
+		manufacturer nullable:false,blank:false, validator:{
+			return it.type in [Type.BOTH, Type.MANUFACTURER]		
+		}
 	}
-	
+
 	static mapping = {
 		table "memms_spare_part_type"
 		version false
 		cache true
 	}
-	
+
 	@Transient
 	def getInStockSpareParts(){
 		List<SparePart> inStockSpareParts =  []
-		if(!spareParts==null && !spareParts.isEmpty()){
+		if(spareParts!=null && spareParts.size()>0){
 			for(SparePart sparePart: spareParts)
-				if(sparePart.usedOnEquipment == null && sparePart.statusOfSparePart.equals(StatusOfSparePart.INSTOCK))
+				if(sparePart.statusOfSparePart.equals(StatusOfSparePart.INSTOCK))
 					inStockSpareParts.add(sparePart)
 		}
 		return inStockSpareParts
 	}
-	
+
 	@Transient
 	def getPendingSpareParts(){
 		List<SparePart> pendingSpareParts=[]
-		if(!spareParts==null && !spareParts.isEmpty()){
+		if(spareParts!=null && spareParts.size()>0){
 			for(SparePart sparePart:spareParts)
-			if(sparePart.usedOnEquipment == null && sparePart.statusOfSparePart.equals(StatusOfSparePart.PENDINGORDER))
-			pendingSpareParts.add(sparePart)
-			}
+				if(sparePart.statusOfSparePart.equals(StatusOfSparePart.PENDINGORDER))
+					pendingSpareParts.add(sparePart)
+		}
 		return pendingSpareParts
 	}
-	
+
+
 	@Override
 	public String toString() {
-		return "SparePartType [code=" + code + ", partNumber=" + partNumber + "]";
+		return "SparePartType [id ="+id+" code=" + code + ", partNumber=" + partNumber + "]";
 	}
-	
 }

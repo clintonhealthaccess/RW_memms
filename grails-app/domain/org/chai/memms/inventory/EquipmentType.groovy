@@ -31,6 +31,7 @@ package org.chai.memms.inventory
 import java.util.Date;
 
 import org.chai.memms.Period;
+import org.chai.memms.spare.part.SparePartType;
 
 import groovy.transform.EqualsAndHashCode;
 import i18nfields.I18nFields
@@ -52,7 +53,6 @@ class EquipmentType {
 		NOTINSCOPE("not.in.scope")
 		
 		String messageCode = "equipment.type"	
-
 		String name
 		Observation(String name){ this.name=name }
 		String getKey() { return name() }
@@ -63,13 +63,15 @@ class EquipmentType {
 	String descriptions
 	Period expectedLifeTime
 	Observation observation
+
+	static belongsTo = [SparePartType]
 	
 	Date dateCreated
 	Date lastUpdated
 	
 	static embedded = ["expectedLifeTime"]
 	static i18nFields = ["descriptions","names"]
-	static hasMany = [equipments: Equipment]
+	static hasMany = [equipments: Equipment,sparePartTypes: SparePartType]
 	
     static constraints = {
 		

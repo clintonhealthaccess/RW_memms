@@ -4,13 +4,17 @@ import org.chai.memms.Initializer;
 import org.chai.memms.IntegrationTests
 import org.chai.memms.inventory.EquipmentType.Observation;
 import org.chai.memms.inventory.EquipmentType;
+import org.chai.memms.inventory.Provider.Type;
+import org.chai.memms.spare.part.SparePartType;
 
 class EquipmentTypeServiceSpec extends IntegrationTests{
 	
 	def equipmentTypeService
 	
+	
 	def "can search an equipment type by code"() {
 		setup:
+		def sparePartType
 		def observation = Observation.USEDINMEMMS;
 		Initializer.newEquipmentType(CODE(123),["en":"testName"],["en":"testObservations"],observation,Initializer.now())
 		when:
@@ -22,6 +26,7 @@ class EquipmentTypeServiceSpec extends IntegrationTests{
 	
 	def "can search an equipment type by name"() {
 		setup:
+		def sparePartType
 		def observation = Observation.USEDINMEMMS;
 		Initializer.newEquipmentType(CODE(123),["en":"test Name"],["en":"testObservations"],observation,Initializer.now())
 		when:
@@ -33,6 +38,7 @@ class EquipmentTypeServiceSpec extends IntegrationTests{
 	
 	def "can search an equipment type by observation"() {
 		setup:
+		def sparePartType
 		def observation = Observation.USEDINMEMMS;
 		Initializer.newEquipmentType(CODE(123),["en":"test Name"],["en":"testObservations"],observation,Initializer.now())
 		when:
@@ -44,6 +50,7 @@ class EquipmentTypeServiceSpec extends IntegrationTests{
 	
 	def "can search an equipment type by specified observation"() {
 		setup:
+		def sparePartType
 		Initializer.newEquipmentType(CODE(123),["en":"retired equipment"],["en":"retired equipment Type"],Observation.RETIRED,Initializer.now())
 		Initializer.newEquipmentType(CODE(1234),["en":"test Name"],["en":"testObservations"],Observation.USEDINMEMMS,Initializer.now())
 		when:
@@ -57,6 +64,7 @@ class EquipmentTypeServiceSpec extends IntegrationTests{
 	
 	def "can search an equipment type by specified observation only"() {
 		setup:
+		def sparePartType
 		Initializer.newEquipmentType(CODE(123),["en":"retired equipment"],["en":"retired equipment Type"],Observation.RETIRED,Initializer.now())
 		Initializer.newEquipmentType(CODE(1234),["en":"test Name"],["en":"testObservations"],Observation.USEDINMEMMS,Initializer.now())
 		when:
