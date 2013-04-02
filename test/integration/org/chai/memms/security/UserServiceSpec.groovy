@@ -110,6 +110,7 @@ class UserServiceSpec extends IntegrationTests{
 		usersOne.size()==1
 		usersTwo.size()==1
 	}
+		
 	
 	def "get notificationWorkOrder group"(){
 		setup:

@@ -132,21 +132,20 @@ class UserService {
 		return users
 	}
 	
-	public def filterUser(def user, def location, def role, def active,def confirmed, def userType,Map<String, String> params){
-		if(log.isDebugEnabled()) log.debug("filterUser(user=${user}, location=${location}, ...)")
-		
+	public def filterUser(def userType,def location, def role, def active,def confirmed,Map<String, String> params){	
 		def criteria = User.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			if(userType != null)
+			    eq('userType', userType)
 			if(location != null)
-				eq('location',location)
+				eq('locations',location)
 			if(role != null)
 				eq ("roles", role)
 			if(active)
 				eq ("active", (active.equals('true'))?true:false)
 			if(confirmed)
 				eq ("confirmed", (confirmed.equals('true'))?true:false)
-			if(userType != null)
-				eq ("userType", userType)
+			
 		}
 	}
 		

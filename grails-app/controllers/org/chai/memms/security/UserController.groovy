@@ -28,11 +28,15 @@
 
 package org.chai.memms.security
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.chai.memms.AbstractEntityController;
 import org.apache.shiro.crypto.hash.Sha256Hash;
+import org.chai.memms.corrective.maintenance.WorkOrder.Criticality;
+import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
+import org.chai.memms.inventory.Equipment;
 import org.chai.memms.inventory.EquipmentType;
 import org.chai.memms.inventory.Provider;
 import org.chai.memms.inventory.Equipment.Donor;
@@ -64,12 +68,11 @@ class UserController  extends  AbstractEntityController{
 	
 	def getModel(def entity) {
 		def locations = []
-		def roles = []
 		if (entity.location != null) locations << entity.location
 		[
 			user:entity,
-			roles: Role.list(),
-			locations: DataLocation.list(),
+			dataLocations:locations,
+			roles:Role.list(),
 			cmd: params['cmd']
 		]
 	}
@@ -142,7 +145,7 @@ class UserController  extends  AbstractEntityController{
 		if(request.xhr)
 			this.ajaxModel(users,params['q'])
 		else {
-			render (view: '/entity/list', model:[
+			render (view: '/entity/list',model: model(users) << [
 				template:"user/userList",
 				filterTemplate:"user/userFilter",
 				listTop:"user/listTop",
@@ -152,20 +155,24 @@ class UserController  extends  AbstractEntityController{
 
 
 	def filter = { FilterCommand cmd ->
+		
+		if(log.isDebugEnabled()) log.debug("user filter command object:"+cmd)
 			adaptParamsForList()
-			def users = userService.filterUser(user,cmd.location,cmd.roles,cmd.active,cmd.confirmed,params)
+			def users = userService.filterUser(cmd.userType,cmd.location,cmd.role,cmd.active,cmd.confirmed,params)
 			if(request.xhr)
-				this.ajaxModel(users)
+				this.ajaxModel(users,"")
 			else {
 				render(view:"/entity/list", model: model(users) << [
 					template:"user/userList",
 					filterTemplate:"user/userFilter",
-					listTop:"user/listTop"
+					listTop:"user/listTop",
+					userType:UserType.values(),
+				    roles:Role.list(),
+				    locations: [],
+					cmd:params['filterCmd']
 				])
 			}
 	}
-	
-	
 		
 	def model(def entities) {
 		return [
@@ -173,8 +180,9 @@ class UserController  extends  AbstractEntityController{
 			entityCount: entities.totalCount,
 			code: getLabel(),
 			entityClass: getEntityClass(),
+			userType:UserType.values(),
 			roles:Role.list(),
-			locations: DataLocation.list()
+			locations:[]			
 		]
 	}
 	
@@ -183,6 +191,7 @@ class UserController  extends  AbstractEntityController{
 		def listHtml = g.render(template:"/entity/user/userList",model:model)
 		render(contentType:"text/json") { results = [listHtml] }
 	}
+	
 	
 	def updateActive = {
 		if (log.isDebugEnabled()) log.debug("updateActive user.active "+params['user.id'])
@@ -264,11 +273,10 @@ class PasswordCommand {
 class FilterCommand {
 	CalculationLocation location
 	UserType userType
-	Role roles
+	Role role
 	String active
 	String confirmed
 	
-
 	public boolean getActiveStatus(){
 		if(active) return null
 		else if(active.equals("true")) return true
@@ -284,17 +292,15 @@ class FilterCommand {
 	static constraints = {
 
 		userType nullable:true
-		roles nullable:true
+		role nullable:true
 		active nullable:true
 		confirmed nullable: true
-		location nullable:false, validator:{val, obj ->
-			return (obj.userType != null || obj.roles != null || obj.active || obj.confirmed)?true:"select.atleast.one.value.text"
-		}
+		location nullable:true
 	}
 
 	String toString() {
 		return "FilterCommand[CalculationLocation="+location+", UserType="+userType+
-		", Role="+roles+", active="+active+
+		", Role="+role+", active="+active+
 		", confirmed=" + confirmed + "]"
 	}
 }
