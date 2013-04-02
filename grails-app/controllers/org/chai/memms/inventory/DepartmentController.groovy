@@ -110,7 +110,7 @@ class DepartmentController extends AbstractEntityController{
 	}
 	
 	def ajaxModel(def entities,def searchTerm) {
-		def model = model(entities) << [q:searchTerm,entityClass: getEntityClass(),]
+		def model = model(entities) << [q:searchTerm,entityClass: getEntityClass()]
 		def listHtml = g.render(template:"/entity/department/departmentList",model:model)
 		render(contentType:"text/json") { results = [listHtml] }
 	}

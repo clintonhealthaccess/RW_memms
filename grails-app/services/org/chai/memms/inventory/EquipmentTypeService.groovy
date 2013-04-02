@@ -33,6 +33,7 @@ import org.chai.memms.inventory.EquipmentType.Observation
 import org.chai.memms.inventory.Provider.Type;
 import org.chai.memms.inventory.EquipmentType;
 import org.chai.memms.util.Utils;
+import org.chai.memms.spare.part.SparePartType
 /**
  * @author Jean Kahigiso M.
  *
@@ -41,17 +42,16 @@ class EquipmentTypeService {
 
 	static transactional = true
 	def languageService;
-		
-	public def searchEquipmentType(String text,Observation observation, Map<String, String> params) {
+
+	public def searchEquipmentType(String text,Observation observation,Map<String, String> params) {
+		text = text.trim()
 		def dbFieldName = 'names_'+languageService.getCurrentLanguagePrefix();
 		def dbFieldDescritpion = 'descriptions_'+languageService.getCurrentLanguagePrefix();
 		def criteria = EquipmentType.createCriteria()
-		text = text.trim()
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(observation!=null)
 				eq("observation",observation)
-			or
-			{
+			or{
 				if(observation==null){
 					for(Observation obs: this.getEnumeMatcher(text))
 						eq("observation",obs)
@@ -60,9 +60,9 @@ class EquipmentTypeService {
 				ilike(dbFieldName,"%"+text+"%")
 				ilike(dbFieldDescritpion,"%"+text+"%")
 			}
-			
 		}
 	}
+
 	
 	public static List<Observation> getEnumeMatcher(String text){
 		List<Observation> observations=[]
@@ -73,13 +73,13 @@ class EquipmentTypeService {
 			}
 		return observations
 	}
-	
+
 	def importToBoolean = {
 		if(it.compareToIgnoreCase("no")) return false
 		else if(it.compareToIgnoreCase("yes")) return true
 		else return null
 	}
-	
+
 	def importToObservation = {
 		if (it == null) return Observation.USEDINMEMMS
 		else if(it?.compareToIgnoreCase("Retired concept")) return Observation.RETIRED

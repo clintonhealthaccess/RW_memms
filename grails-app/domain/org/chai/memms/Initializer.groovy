@@ -306,14 +306,14 @@ public class Initializer {
 			
 		if(!EquipmentType.count()){
 			//Add equipment types as defined in ecri
-			def typeOne = newEquipmentType("15810", ["en":"Accelerometers","fr":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,now(),25)
-			def typeTwo = newEquipmentType("15819", ["en":"X-Ray Film Cutter"],["en":"used in memms"],Observation.USEDINMEMMS,now(),13)
-			def typeThree = newEquipmentType("15966", ["en":"Video Systems"],["en":"used in memms"],Observation.USEDINMEMMS,now(),12)
-			def typeFour = newEquipmentType("10035", ["en":"Adhesives, Aerosol"],["en":"not used in memms"],Observation.RETIRED,now(),34)
+			def typeOne = newEquipmentType("15810", ["en":"Inclinometers","fr":"Inclinometers"],["en":"used in memms"],Observation.USEDINMEMMS,now(),25)
+			def typeTwo = newEquipmentType("15819", ["en":"Infusion Pumps, Insulin"],["en":"used in memms"],Observation.USEDINMEMMS,now(),23)
+			def typeThree = newEquipmentType("15966", ["en":"Cryotherapy Systems"],["en":"used in memms"],Observation.USEDINMEMMS,now(),12)
+			def typeFour = newEquipmentType("10035", ["en":"Sponge Counters, Bar-Code Identification"],["en":"not used in memms"],Observation.RETIRED,now(),34)
 			def typeFive = newEquipmentType("20760", ["en":"Pancreatic Drainage Tubes"],["en":"not used in memms"],Observation.RETIRED,now(),54)
 			def typeSix = newEquipmentType("20729", ["en":"PCR Test Tubes"],["en":"not used in memms"],Observation.RETIRED,now(),67)
 			def typeSeven = newEquipmentType("10026", ["en":"Adhesive Strips"],["en":"used in memms"],Observation.USEDINMEMMS,now(),12)
-			def typeEight = newEquipmentType("10124", ["en":"Anesthesia Kits"],["en":"used in memms"],Observation.USEDINMEMMS,now(),7)
+			def typeEight = newEquipmentType("10124", ["en":"AnesthInfusion Pumps, Insulinesia Kits"],["en":"used in memms"],Observation.USEDINMEMMS,now(),7)
 			def typeNine = newEquipmentType("10155", ["en":"Anklets"],["en":"used in memms"],Observation.USEDINMEMMS,now(),60)
 			def typeTen = newEquipmentType("10426", ["en":"Blood Donor Sets"],["en":"used in memms"],Observation.USEDINMEMMS,now(),34)
 		}
@@ -685,20 +685,65 @@ public class Initializer {
 		def equipment10 =Equipment.findBySerialNumber("SERIAL10")
 			
 		if(!SparePartType.count()){
-			def sparePartOne = newSparePartType("4323", ['en':'first spare part','fr':' premiere piece de rechange'],['en':'first spare part description','fr':' description de la premiere piece de rechange'],"4323-XYZ",Provider.findByCode("ONE"),now())
-			def sparePartTwo = newSparePartType("4324", ['en':'second spare part','fr':' deuxieme piece de rechange'],['en':'second spare part description','fr':' description de la deuxieme piece de rechange'],"4324-ABC",Provider.findByCode("TWO"),now())
-			def sparePartThree = newSparePartType("4325", ['en':'third spare part','fr':' troisieme piece de rechange'],['en':'third spare part description','fr':' description de la troisieme piece de rechange'],"4325-IJK",Provider.findByCode("THREE"),now())
-   	
+
+			//Add spare part types as defined in ecri
+			def spPtTypOne = newSparePartType("4323", ['en':'first spare part','fr':' premiere piece de rechange'],['en':'first spare part description','fr':' description de la premiere piece de rechange'],"4323-XYZ",Provider.findByCode("ONE"),now())
+			def spPtTypTwo = newSparePartType("4324", ['en':'second spare part','fr':' deuxieme piece de rechange'],['en':'second spare part description','fr':' description de la deuxieme piece de rechange'],"4324-ABC",Provider.findByCode("TWO"),now())
+			def spPtTypThree = newSparePartType("4325", ['en':'third spare part','fr':' troisieme piece de rechange'],['en':'third spare part description','fr':' description de la troisieme piece de rechange'],"4325-IJK",Provider.findByCode("THREE"),now())
+   
 			def sparePartTypeOne = newSparePartType("15810", ['en':'first spare part','fr':'premier sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part",Provider.findByCode("ONE"),now())
 			def sparePartTypeTwo = newSparePartType("15819", ['en':'Second spare part','fr':'Second sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 2",Provider.findByCode("TWO"),now())
 			def sparePartTypeThree = newSparePartType("15966", ['en':'Third spare part','fr':'Troisieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 3",Provider.findByCode("THREE"),now())
 			def sparePartTypeFour = newSparePartType("10035", ['en':'Forth spare part','fr':'Quatrieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 4",Provider.findByCode("FOUR"),now())
-			def sparePartTypeFive = newSparePartType("20760", ['en':'Fifth spare part','fr':'Cinquieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 5",Provider.findByCode("FIVE"),now())
-			def sparePartTypeSix = newSparePartType("20729", ['en':'Sixth spare part','fr':'Sixieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 6",Provider.findByCode("SIX"),now())
-			def sparePartTypeSeven = newSparePartType("10026", ['en':'Seventh spare part','fr':'premier sp'], ['en':'Septieme spare part','fr':'premier sp'],"CODE Spare Part 7",Provider.findByCode("SEVEN"),now())
+			def sparePartTypeFive = newSparePartType("20760", ['en':'Fifth spare part','fr':'Cinquieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 5",Provider.findByCode("ONE"),now())
+			def sparePartTypeSix = newSparePartType("20729", ['en':'Sixth spare part','fr':'Sixieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 6",Provider.findByCode("ONE"),now())
+			def sparePartTypeSeven = newSparePartType("10026", ['en':'Seventh spare part','fr':'premier sp'], ['en':'Septieme spare part','fr':'premier sp'],"CODE Spare Part 7",Provider.findByCode("THREE"),now())
 			def sparePartTypeEight = newSparePartType("10124", ['en':'Eighth spare part','fr':'Huitieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 8",Provider.findByCode("EIGHT"),now())
-			def sparePartTypeNine = newSparePartType("10155", ['en':'Ninth spare part','fr':'Neuvieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 9",Provider.findByCode("NINE"),now())
-			def sparePartTypeTen = newSparePartType("10426", ['en':'Tenth spare part','fr':'Dixieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 10",Provider.findByCode("TEN"),now())
+			def sparePartTypeNine = newSparePartType("10155", ['en':'Ninth spare part','fr':'Neuvieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 9",Provider.findByCode("THREE"),now())
+			def sparePartTypeTen = newSparePartType("10426", ['en':'Tenth spare part','fr':'Dixieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 10",Provider.findByCode("FOUR"),now())
+			
+			
+			def typeOne = newEquipmentType("158101", ["en":"Accelerometers","fr":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,now(),25)
+			def typeTwo = newEquipmentType("158191", ["en":"X-Ray Film Cutter"],["en":"used in memms"],Observation.USEDINMEMMS,now(),13)
+			def typeThree = newEquipmentType("159661", ["en":"Video Systems"],["en":"used in memms"],Observation.USEDINMEMMS,now(),12)
+			def typeFour = newEquipmentType("100351", ["en":"Adhesives, Aerosol"],["en":"not used in memms"],Observation.RETIRED,now(),34)
+			
+			def contactFive = newContact(['en':'Address Descriptions Five'],"Supplier Company 1","jkl4@yahoo.com","0768-657-787","Street 153","8988")
+			def contactSix = newContact(['en':'Address Descriptions Six'],"Supplier Company 2","jkl5@yahoo.com","0768-342-787","Street 155","8988")
+			def contactSeven = newContact(['en':'Address Descriptions Seven'],"Supplier Company 3","jkl6@yahoo.com","0768-123-787","Street 156","8988")
+			def contactEight = newContact(['en':'Address Descriptions Eight'],"Manufacture and Supplier Ericson","jkl6@yahoo.com","0768-123-787","Street 156","8988")
+			
+			
+			def supplierOne = newProvider("SUPPLIERONE",Type.SUPPLIER,contactFive)
+			def supplierTwo = newProvider("SUPPLIERTWO",Type.SUPPLIER,contactSix)
+			def supplierThree = newProvider("SUPPLIERTHREE",Type.SUPPLIER,contactSeven)
+			def both = newProvider("SUPPLIERBOTH",Type.BOTH,contactEight)
+
+		
+			sparePartTypeEight.addToCompatibleEquipmentTypes(typeThree)
+			sparePartTypeEight.addToCompatibleEquipmentTypes(typeFour)
+			sparePartTypeEight.addToVendors(supplierThree)
+			sparePartTypeEight.addToVendors(both)
+			sparePartTypeEight.save(failOnError:true)
+
+			sparePartTypeOne.addToCompatibleEquipmentTypes(typeOne)
+			sparePartTypeOne.addToCompatibleEquipmentTypes(typeTwo)
+			sparePartTypeOne.addToVendors(supplierOne)
+			sparePartTypeOne.addToVendors(supplierTwo)
+			sparePartTypeOne.save(failOnError:true)
+
+			sparePartTypeTwo.addToCompatibleEquipmentTypes(typeOne)
+			sparePartTypeTwo.addToCompatibleEquipmentTypes(typeTwo)
+			sparePartTypeTwo.save(failOnError:true)
+			
+
+			sparePartTypeThree.addToCompatibleEquipmentTypes(typeFour)
+			sparePartTypeThree.addToCompatibleEquipmentTypes(typeTwo)
+			sparePartTypeThree.save(failOnError:true)
+
+			sparePartTypeSeven.addToVendors(supplierThree)
+			sparePartTypeSeven.addToVendors(both)
+			sparePartTypeSeven.save(failOnError:true)
 			
 		}
 		
@@ -725,6 +770,29 @@ public class Initializer {
 			sparePartOne.warranty = warrantyOne
 			sparePartOne.warrantyPeriod = newPeriod(22)
 			sparePartOne.save(failOnError:true)
+
+			def sparePartOneT = newSparePart("SERIAL013",SparePartPurchasedBy.BYMOH,false,newPeriod(24),"",['en':'Spare Part Instock two Descriptions'],
+				getDate(22,07,2010),getDate(10,10,2010),"",
+				'MODEL1',
+				DataLocation.findByCode(NYANZA),
+				SparePartType.findByCode("15810"),
+		
+				Provider.findByCode("FIVE"),
+				StatusOfSparePart.INSTOCK,
+				User.findByUsername("admin"),
+				null,
+				null,
+				StockLocation.MMC,
+				null
+				)
+					
+			def warrantyContactOneT = newContact(['fr':'Warranty Address Descriptions One'],"Warranty","jk@yahoo.com","0768-888-787","Street 654","8988")
+			def warrantyOneT = newWarranty(warrantyContactOneT,getDate(10, 12, 2010),false,[:])
+			def statusOneT= newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.INSTOCK,sparePartOneT,[:],null)
+			
+			sparePartOneT.warranty = warrantyOneT
+			sparePartOneT.warrantyPeriod = newPeriod(22)
+			sparePartOneT.save(failOnError:true)
 
 			def sparePartTwo = newSparePart("SERIAL02",SparePartPurchasedBy.BYFACILITY,false,newPeriod(12),"34900",['en':'Spare Part Descriptions two'],
 				getDate(12,01,2009),getDate(10,10,2009),"USD",
@@ -840,9 +908,7 @@ public class Initializer {
 		return status.save(failOnError:true,flush:true)
 	}
 	// Spare part
-	public static def newSparePart(def serialNumber,def sparePartPurchasedBy,def sameAsManufacturer,def expectedLifeTime,
-		def purchaseCost,def descriptions,def manufactureDate, def purchaseDate,def currency,def model,def dataLocation,def type,
-		def supplier,def statusOfSparePart,def addedBy,def lastModifiedBy,def lastModifiedOn, def stockLocation, def usedOnEquipment){
+	public static def newSparePart(def serialNumber,def sparePartPurchasedBy,def sameAsManufacturer,def expectedLifeTime,def purchaseCost,def descriptions,def manufactureDate, def purchaseDate,def currency,def model,def dataLocation,def type,def supplier,def statusOfSparePart,def addedBy,def lastModifiedBy,def lastModifiedOn, def stockLocation, def usedOnEquipment){
 		def sparePart = new SparePart(
 			serialNumber:serialNumber,
 			sparePartPurchasedBy:sparePartPurchasedBy,

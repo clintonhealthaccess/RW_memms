@@ -103,10 +103,14 @@ public class SparePart {
 	StatusOfSparePart statusOfSparePart
 	User addedBy
 	User lastModified
+
+	StockLocation stockLocation
 	String room
 	String shelve
+
+	static belongsTo = [type: SparePartType]
+
 	
-	static belongsTo = [type: SparePartType, stockLocation: StockLocation]
 	static hasMany = [status: SparePartStatus]	
 	static i18nFields = ["descriptions","names"]
 	static embedded = ["warranty","warrantyPeriod","expectedLifeTime"]

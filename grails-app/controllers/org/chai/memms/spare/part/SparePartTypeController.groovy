@@ -29,12 +29,15 @@ package org.chai.memms.spare.part
 
 import java.util.Set;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocationType;
 import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.AbstractEntityController;
 import org.chai.memms.spare.part.SparePartType;
 import org.chai.memms.inventory.Provider.Type;
+import org.chai.memms.inventory.EquipmentType;
+import org.chai.memms.inventory.EquipmentType.Observation;
 import org.chai.memms.inventory.Provider;
 import org.chai.memms.Contact
 
@@ -47,13 +50,13 @@ import org.chai.memms.Contact
 class SparePartTypeController  extends AbstractEntityController{
 	def sparePartTypeService
 	def languageService
+
 	
 	def getEntity(def id) {
 		return SparePartType.get(id);
 	}
 
 	def createEntity() {
-
 		return new SparePartType();
 	}
 
@@ -66,7 +69,7 @@ class SparePartTypeController  extends AbstractEntityController{
 	}
 
 	def getEntityClass() {
-		return SparePartType.class;
+		return SparePartType.class;	
 	}
 
 	def deleteEntity(def entity) {
@@ -75,34 +78,81 @@ class SparePartTypeController  extends AbstractEntityController{
 		else
 			super.deleteEntity(entity);
 	}
+	
 	def bindParams(def entity) {
-		entity.properties = params
+		params.oldCompatibleEquipmentTypes = entity.compatibleEquipmentTypes
+		params.oldVendors = entity.vendors
+
+		def compatibleEquipmentTypes = new HashSet<EquipmentType>()
+		params.list('compatibleEquipmentTypes').each { id ->
+			if (NumberUtils.isDigits(id)) {
+				def equipmentType = EquipmentType.get(id)
+				(!equipmentType)?:compatibleEquipmentTypes.add(equipmentType);
+			}
+		}
+		entity.compatibleEquipmentTypes = compatibleEquipmentTypes
+		
+		def vendors = new HashSet<Provider>()
+		params.list('vendors').each { id ->
+			if (NumberUtils.isDigits(id)) {
+				def vendor = Provider.get(id)
+				(!vendor)?:vendors.add(vendor);
+			}
+		}
+		entity.vendors = vendors
+		bindData(entity,params,[exclude:["compatibleEquipmentTypes","vendors"]])
+	}
+	
+	def saveEntity(def entity) {
+		entity.save(failOnError:true)
+		if(entity.id==null){
+			entity.params.oldCompatibleEquipmentTypes = []
+			entity.params.oldVendors = []
+		}
+		params.oldCompatibleEquipmentTypes.each{ type ->
+				if(!entity.compatibleEquipmentTypes.contains(type)){
+					type.sparePartTypes.remove(entity)
+					type.save(failOnError:true)
+				}
+			}
+		params.oldVendors.each{ vendor ->
+				if(!entity.vendors.contains(vendor)){
+					vendor.sparePartTypes.remove(entity)
+					vendor.save(failOnError:true)
+				}
+			}
 	}
 		
-	
 	def getModel(def entity) {
-		def manufacturers = Provider.findAllByTypeInList([Type.MANUFACTURER,Type.BOTH],[sort:'contact.contactName'])		
-		[ type: entity,
-		  manufacturers: manufacturers		
+		def compatibleEquipmentTypes = []
+
+		def vendors = Provider.findAllByTypeInList([Type.SUPPLIER,Type.BOTH],[sort:'contact.contactName'])
+		def manufacturers = Provider.findAllByTypeInList([Type.MANUFACTURER,Type.BOTH],[sort:'contact.contactName'])
+						
+		if(entity.compatibleEquipmentTypes != null)  compatibleEquipmentTypes = new ArrayList(entity.compatibleEquipmentTypes)
+		if(entity.vendors != null) vendors = new ArrayList(entity.vendors)
+		[
+			vendors: vendors,
+			compatibleEquipmentTypes:compatibleEquipmentTypes,
+			type: entity,
+		    manufacturers: manufacturers	
          ]
 	}
 							
-	def list = {
+	def list = {	
 		adaptParamsForList()
-		List<SparePartType> types = SparePartType.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc");
+		List<SparePartType> types = SparePartType.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc")
 		if(request.xhr)
 			this.ajaxModel(types,"")
 		else{
-
 		render(view:"/entity/list",model:model(types) <<[
 				template:"sparePartType/sparePartTypeList",
 				listTop:"sparePartType/listTop",
 				entities: types,
 				entityClass: getEntityClass()
 			])
-		}
-	}
-	
+		}			
+	}	
 	
 	def search = {
 		adaptParamsForList()

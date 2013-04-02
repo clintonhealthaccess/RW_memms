@@ -1,3 +1,6 @@
+package org.chai.memms.inventory
+
+
 /**
  * Copyright (c) 2012, Clinton Health Access Initiative.
  *
@@ -25,10 +28,9 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.inventory
 
+import java.util.Map;
 import java.util.Set;
-
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocationType;
 import org.chai.memms.AbstractEntityController;
@@ -36,6 +38,7 @@ import org.chai.task.EquipmentTypeExportFilter;
 import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.inventory.EquipmentType;
 import org.chai.memms.inventory.EquipmentType.Observation;
+import org.chai.memms.spare.part.SparePartType
 
 /**
  * @author Eugene Munyaneza
@@ -64,8 +67,8 @@ class EquipmentTypeController extends AbstractEntityController{
 		return EquipmentType.class;
 	}
 	def deleteEntity(def entity) {
-		if (entity.equipments.size() != 0)
-			flash.message = message(code: 'equipment.type.hasequipment', args: [message(code: getLabel(), default: 'entity'), params.id], default: '{0} still has associated equipment.')
+		if (entity.equipments.size() != 0 || entity.sparePartTypes.size() != 0)
+			flash.message = message(code: 'equipment.type.hasequipment', args: [message(code: getLabel(), default: 'entity'), params.id], default: '{0} still has associated equipment or spare part type.')
 		else
 			super.deleteEntity(entity);
 	}
@@ -83,26 +86,28 @@ class EquipmentTypeController extends AbstractEntityController{
 			type: entity
 		]
 	}
+			
 	def list = {
 		adaptParamsForList()
-		List<EquipmentType> types = EquipmentType.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc");
+		def types = EquipmentType.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc");
 		if(request.xhr)
 			this.ajaxModel(types,"")
 		else{
-		render(view:"/entity/list",model:model(types) << [
+			render(view:"/entity/list",model:model(types) << [
 				template:"equipmentType/equipmentTypeList",
 				listTop:"equipmentType/listTop",
 				importTask:'EquipmentTypeImportTask',
-				exportTask:'EquipmentTypeExportTask'
+				exportTask:'EquipmentTypeExportTask',
 			])
 		}
 	}
 	
 	def search = {
 		adaptParamsForList()
-		List<EquipmentType> types = equipmentTypeService.searchEquipmentType(params['q'],null,params)
+		def types  = equipmentTypeService.searchEquipmentType(params['q'],null,params)
+
 		if(request.xhr)
-			this.ajaxModel(types,params['q'])
+			this.ajaxModel(types,params['q'])	
 		else {
 			render(view:"/entity/list",model:model(types) << [
 				template:"equipmentType/equipmentTypeList",
@@ -111,14 +116,15 @@ class EquipmentTypeController extends AbstractEntityController{
 				exportTask:'EquipmentTypeExportTask'
 			])
 		}
-	}
+	}	
+		
 	
 	def model(def entities) {
 		return [
 			entities: entities,
 			entityCount: entities.totalCount,
 			entityClass:getEntityClass(),
-			code: getLabel(),
+			code: getLabel()
 		]
 	}
 	
@@ -128,11 +134,12 @@ class EquipmentTypeController extends AbstractEntityController{
 		render(contentType:"text/json") { results = [listHtml] }
 	}
 
+	
 	def getAjaxData = {
-		List<EquipmentType> types = equipmentTypeService.searchEquipmentType(params['term'],Observation."$params.observation",[:])
+		def types = equipmentTypeService.searchEquipmentType(params['term'],Observation."$params.observation",[:])
 		render(contentType:"text/json") {
 			elements = array {
-				types.each { type ->
+				types.each { type ->				
 					elem (
 							key: type.id,
 							value: type.getNames(languageService.getCurrentLanguage()) + ' ['+type.code+']'
@@ -148,8 +155,9 @@ class EquipmentTypeController extends AbstractEntityController{
 				}
 			}
 		}
-	}
+	}	
 	
+		
 	def export = {
 		def equipmentTypeExportTask = new EquipmentTypeExportFilter().save(failOnError: true,flush: true)
 		params.exportFilterId = equipmentTypeExportTask.id
