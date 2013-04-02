@@ -56,10 +56,41 @@
       color: $no
 
 
+// Pagination
+
+.paginate
+  margin: 14px
+  +pie-clearfix
+  li
+    display: inline
+    float: left
+  a
+    background: $filler
+    border: 1px solid rgba(0, 0, 0, 0.1)
+    display: block
+    margin-right: 4px
+    padding: 6px 9px
+    text-decoration: none
+    &:hover, &:focus
+      background: $filler2
+      border: 1px solid $primary
+    &.active
+      background: $primary
+      color: #fff
+
+
 // Reports dashboard
 
 .v_tabs
+  position: relative
   +pie-clearfix
+
+  a
+    cursor: pointer
+
+  .custom
+    position: absolute
+    right: 0
 
 .v_tabs_nav
   width: 100%
@@ -70,7 +101,7 @@
     color: #aaa
     display: block
     font-size: 12px
-    padding: 15px 20px
+    padding: 14px 18px
     text-decoration: none
     +text-shadow(#fff 0 1px 0)
     +transition(color .2s)
@@ -86,6 +117,7 @@
       position: relative
 
 .v_tabs_subnav
+  border-bottom: 1px solid $primary
   padding-left: 5px
   +pie-clearfix
   li
@@ -95,7 +127,7 @@
     color: #999
     display: block
     margin-bottom: -1px
-    padding: 2px 15px 15px
+    padding: 2px 14px 15px
     text-decoration: none
     +transition(color .2s)
     &.active
@@ -103,6 +135,13 @@
       color: $primary
     &:hover, &:focus
       color: $primary
+  .right
+    float: right !important
+    margin-right: 14px
+    margin-top: -3px
+    a
+      font-size: 14px
+      font-weight: bold
 
 
 .v_tabs_content
@@ -127,7 +166,8 @@
   +pie-clearfix
 
 .v_tabs_filters
-  margin: 0 0 10px 15px
+  border-bottom: 1px solid $primary
+  padding: 0 0 10px 15px
   +pie-clearfix
   li
     display: inline
@@ -135,8 +175,25 @@
     font-size: 12px
     margin-right: 20px
 
+.v_tabs_overview
+  +pie-clearfix
+  li
+    display: inline
+    float: left
+    padding: 25px 10px 20px 40px
+  a
+    display: block
+    font-size: 30px
+    font-weight: bold
+    line-height: 1.2
+    text-decoration: none
+  span
+    color: #999
+    display: block
+    font-size: 12px
+    font-weight: normal
+
 .v_tabs_list
-  border-top: 1px solid $primary
   width: 100%
   +pie-clearfix
   li
@@ -163,6 +220,8 @@
       +box-shadow(rgba(0, 0, 0, 0.1) 0 0 5px)
     &:first-child
       border-top: none
+  &.border
+    border-top: 1px solid #ccc
 
 .v_tabs_nested
   border-top: 1px solid rgba(0, 0, 0, 0.1)
@@ -209,7 +268,7 @@
 .v_tabs_switch
   margin: 1px 10px 0 10px
 .v_tabs_name
-  padding: 10px 0
+  padding: 12px 0 8px
   width: 689px
 .v_tabs_formula
   background: $yes
@@ -234,3 +293,46 @@
 div#comparison, div#geo_trend, div#info_facility, div#preventive, div#equipment, div#spare_parts, div#monitoring
   display: none
 
+
+// Customize reports overlay
+
+#dialog-form
+  display: none
+
+.ui-dialog
+  background: #fff
+  border: 1px solid rgba(0, 0, 0, 0.2)
+  padding: 25px
+  width: 420px !important
+  +border-radius(3px)
+  +box-shadow(rgba(0, 0, 0, 0.1) 0 0 5px, rgba(0, 0, 0, 0.1) 0 0 200px)
+  .ui-dialog-title
+    color: $primary
+    display: block
+    font-size: 18px
+    font-weight: bold
+    margin: 10px 0 15px
+  .ui-dialog-titlebar-close
+    background: url('../images/icon_close.png') no-repeat center
+    border: none
+    height: 18px
+    padding: 0
+    position: absolute
+    right: -8px
+    text-indent: -9999em
+    top: -8px
+    width: 18px
+  form
+    +pie-clearfix
+  label
+    color: #777
+    display: block
+    font-size: 12px
+    margin-bottom: 2px
+    width: 400px
+  input, select, textarea
+    margin-bottom: 10px
+    padding: 5px 7px
+    width: 400px
+  .ui-widget-previous, .ui-widget-next
+    margin: 15px 0 0
