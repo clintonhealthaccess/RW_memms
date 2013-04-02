@@ -51,7 +51,7 @@
 					</g:if>
 				</g:if>
 				<g:elseif test="${sparePart?.usedOnEquipment == null && sparePart.statusOfSparePart.equals(StatusOfSparePart.PENDINGORDER)}">
-					<a href="${createLinkWithTargetURI(controller:'sparePartStatus', action:'create', params:['sparePart.id': sparePart?.id])}" title="${message(code: 'tooltip.click.update.status')}" class="tooltip">
+					<a href="${createLinkWithTargetURI(controller:'sparePartStatus', action:'create', params:['sparePart.id': sparePart?.id])}">
 						<button class="escalate next small gray"><g:message code="spare.part.arrive.in.stock.link.label" /></button>
 					</a>
 				</g:elseif>
@@ -59,7 +59,7 @@
 
 				</g:elseif>
 				<g:else>
-					<a href="${createLinkWithTargetURI(controller:'sparePartStatus', action:'create', params:['sparePart.id': sparePart?.id])}" title="${message(code: 'tooltip.click.update.status')}" class="tooltip">
+					<a href="${createLinkWithTargetURI(controller:'sparePartStatus', action:'create', params:['sparePart.id': sparePart?.id])}" >
   	    				<button class="escalate next small gray"><g:message code="spare.part.assign.equipment.link.label" /></button>
   	    			</a>		
 				</g:else>
@@ -81,9 +81,3 @@
 	</tbody>	
 </table>
 <g:render template="/templates/pagination" />
-<script type="text/javascript">
-	$(document).ready(function() {
-		updateEquipment("${createLink(controller:'sparePartView',action: 'updateSameAsManufacturer')}");
-	});
-</script>
-

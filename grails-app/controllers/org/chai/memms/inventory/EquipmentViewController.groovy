@@ -317,7 +317,8 @@ class EquipmentViewController extends AbstractController {
 				equipments.each { equipment ->
 					elem (
 							key: equipment.id,
-							value: "["+equipment.serialNumber +"] - ["+equipment.type.names+"] - ["+equipment.dataLocation.names+"]"							)
+							value: "["+equipment.serialNumber +"] - ["+equipment.type.names+"] - ["+equipment.dataLocation.names+"]"					
+						)
 				}
 			}
 			htmls = array {

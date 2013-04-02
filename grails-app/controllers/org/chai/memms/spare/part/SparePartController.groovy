@@ -137,7 +137,6 @@ class SparePartController extends AbstractEntityController{
 			validStatus = (!params.cmd.hasErrors()) 
 			if(log.isDebugEnabled()) log.debug("Rejecting SparePartStatus: "+params.cmd.errors)
 		}
-		entity.getGenerateAndSetCode()
 		return (validStatus & entity.validate())
 	}
 
