@@ -58,7 +58,7 @@
       			<div class="equipment-information">
       			<g:selectFromList name="usedOnEquipment.id" label="${message(code:'spare.part.used.on.equipment.label')}" bean="${sparePart}" field="usedOnEquipment" optionKey="id" multiple="false"
     			ajaxLink="${createLink(controller:'equipmentView', action:'getAjaxData', params: [type:'EQUIPMENT'])}"
-    			from="${equipments}" value="${sparePart?.usedOnEquipment?.id}" values="${equipments.collect{it.type.names}} ${equipments.collect{it?.serialNumber}} ${equipments.collect{it.dataLocation.names}}" />
+    			from="${equipments}" value="${sparePart?.usedOnEquipment?.id}" values="${equipments.collect{it.type.names}} ${equipments.collect{it.serialNumber}} ${equipments.collect{it.dataLocation.names}}" />
     			</div>
       			<g:input name="dateOfEvent" dateClass="date-picker" label="${message(code:'spare.part.status.date.of.event.label')}" bean="${cmd}" field="dateOfEvent" value="${(sparePart.id!=null)?:Utils.formatDate(now)}"/>
       	</g:if>
