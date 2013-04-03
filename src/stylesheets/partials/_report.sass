@@ -59,7 +59,7 @@
 // Pagination
 
 .paginate
-  margin: 14px
+  margin: 14px 14px 25px
   +pie-clearfix
   li
     display: inline
@@ -84,13 +84,16 @@
 .v_tabs
   position: relative
   +pie-clearfix
-
+  .tipsy-inner
+    font-weight: regular
   a
     cursor: pointer
 
   .custom
     position: absolute
     right: 0
+  .items
+    margin-top: 5px
 
 .v_tabs_nav
   width: 100%
@@ -98,9 +101,9 @@
     display: inline
     float: left
   a
-    color: #aaa
+    color: #888
     display: block
-    font-size: 12px
+    font-size: 13px
     padding: 14px 18px
     text-decoration: none
     +text-shadow(#fff 0 1px 0)
@@ -124,7 +127,7 @@
     display: inline
     float: left
   a
-    color: #999
+    color: #bbb
     display: block
     margin-bottom: -1px
     padding: 2px 14px 15px
@@ -155,13 +158,8 @@
     border: none !important
     margin-bottom: 0
   #showhide
-    font-size: 11px
-    margin-right: 15px
-    opacity: 0.6
-    +transition(opacity .2s)
-    &:hover, &:focus
-      color: $primary
-      opacity: 1
+    font-weight: bold
+
 .v_tabs_row p
   +pie-clearfix
 
@@ -175,23 +173,73 @@
     font-size: 12px
     margin-right: 20px
 
-.v_tabs_overview
+.v_tabs_summary
+  border: 10px solid $filler1
+  border-bottom-width: 4px
+  padding: 5px 0 7px
+  text-align: center
+  +box-shadow($primary_dark 0 0 1px 0 inset)
   +pie-clearfix
+  h2
+    background: #fff
+    bottom: -10px
+    color: #999
+    display: inline-block
+    font: bold 12px/1 'Droid Sans', sans-serif
+    margin: 9px auto 0
+    padding: 3px 10px
+    position: relative
+    text-align: center
+    text-transform: uppercase
+    z-index: 1
+  hr
+    background: #eaeaea
+    border: none
+    height: 1px
+    margin: 0 30px 3px
+  ul
+    text-align: center
   li
-    display: inline
-    float: left
-    padding: 25px 10px 20px 40px
+    display: inline-block
+    padding: 20px 25px 25px 25px
   a
     display: block
-    font-size: 30px
-    font-weight: bold
-    line-height: 1.2
+    font: bold 30px/1.2 'Droid Sans', sans-serif
     text-decoration: none
   span
     color: #999
     display: block
     font-size: 12px
     font-weight: normal
+
+.v_tabs_criteria
+  background: $filler1
+  border: none
+  padding-bottom: 10px
+  +background(linear-gradient($filler1, #fff))
+  +pie-clearfix
+  .tooltip
+    color: $primary
+    text-decoration: underline
+  li
+    border-right: 1px solid #e5e5e5
+    display: inline-block
+    float: left
+    line-height: 1.5
+    margin: 10px 0
+    padding: 0 25px
+    text-align: left
+    +text-shadow(#fff 0 1px 0)
+    &:last-child
+      border: none
+  a
+    color: #555
+    cursor: default
+    text-decoration: none
+  span
+    color: #999
+    display: block
+    font-style: italic
 
 .v_tabs_list
   width: 100%
@@ -303,7 +351,9 @@ div#comparison, div#geo_trend, div#info_facility, div#preventive, div#equipment,
   background: #fff
   border: 1px solid rgba(0, 0, 0, 0.2)
   padding: 25px
+  position: absolute
   width: 420px !important
+  z-index: 10
   +border-radius(3px)
   +box-shadow(rgba(0, 0, 0, 0.1) 0 0 5px, rgba(0, 0, 0, 0.1) 0 0 200px)
   .ui-dialog-title

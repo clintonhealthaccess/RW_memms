@@ -1,3 +1,5 @@
+<link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700&subset=latin' rel='stylesheet' type='text/css'>
+
 <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
 <script>
@@ -26,14 +28,12 @@ $(document).ready(function(){
 
   <!-- List Template goes here -->
   <div id ="list-grid" class="v_tabs">
-  <!-- <div class="spinner-container">
+    <!-- <div class="spinner-container">
       <img src="${resource(dir:'images',file:'list-spinner.gif')}" class="ajax-big-spinner"/>
     </div> -->
-    <div class="custom"><a id="customize-toggle" class="btn gray medium" href="#">Customize reports</a></div>
+    <div class="custom"><a id="customize-toggle" class="btn gray medium" href="#">Create customized report</a></div>
 
     <div id="dialog-form" title="Create customized report">
-      <!-- <div id="dialog-form-bg"></div> -->
-      
       <form>
       <fieldset>
       <label for="name">Name</label>
@@ -63,133 +63,169 @@ $(document).ready(function(){
         <li><a href="#">Fourth predefined report</a></li>
         <li><a href="#">Fifth predefined report</a></li>
         <li><a href="#">Sixth predefined report</a></li>
-        <li class="right"><a class="btn small gray" href="#">+</a></li>
+        <!-- <li class="right"><a class="btn small gray" href="#">+</a></li> -->
       </ul>
 
-      <!-- <div class="filters main">
-        <script src="/memms/static/js/form_init.js" type="text/javascript" ></script>
-        <script src="/memms/static/js/dashboard/foldable.js" type="text/javascript" ></script>
-        <script src="/memms/static/js/dashboard/list_tabs.js" type="text/javascript" ></script>
-
-        <form class="filters-box" method="get" action="/memms/equipmentView/filter" style="display: none;">
-          <ul class="filters-list">
-
-            <li>
-              <div class="row ">
-                <label for="equipmentType.id">Equipment Type :</label>
-                <select name="obsolete">
-                  <option value="">Please select</option>
-                  <option value="true">obsolete</option>
-                  <option value="false">not obsolete</option>
-                </select>
-              </div>
-            </li>
-
-            <li>
-              <div class="row ">
-                <label for="manufacturer.id">Manufacturer :</label>
-                <select name="obsolete">
-                  <option value="">Please select</option>
-                  <option value="true">obsolete</option>
-                  <option value="false">not obsolete</option>
-                </select>
-              </div>
-            </li>
-
-            <li>
-              <div class="row ">
-                <label for="supplier.id">Supplier :</label>
-                <select name="obsolete">
-                  <option value="">Please select</option>
-                  <option value="true">obsolete</option>
-                  <option value="false">not obsolete</option>
-                </select>
-              </div>
-            </li>
-
-            <li>
-              <div class="row ">
-                <label for="serviceProvider.id">Service Provider :</label>
-                <select name="obsolete">
-                  <option value="">Please select</option>
-                  <option value="true">obsolete</option>
-                  <option value="false">not obsolete</option>
-                </select>
-              </div>
-            </li>
-
-            <li>
-              <label>Obsolete</label>
-              <select name="obsolete">
-                <option value="">Please select</option>
-                <option value="true">obsolete</option>
-                <option value="false">not obsolete</option>
-              </select>
-            </li>
-
-            <li>
-              <div class="row ">
-                <label for="status">Status :</label>
-                <select name="status">
-                  <option value="NONE">Please select</option>
-                  <option value="OPERATIONAL">Operational</option>
-                  <option value="PARTIALLYOPERATIONAL">Partially Operational</option>
-                  <option value="INSTOCK">In Stock</option>
-                  <option value="UNDERMAINTENANCE">Under Maintenance</option>
-                  <option value="FORDISPOSAL">For Disposal</option>
-                  <option value="DISPOSED">Disposed</option>
-                </select>
-                <div class="error-list"></div>
-              </div>
-            </li>
-
-            <li>
-              <div class="row ">
-                <label for="purchaser">Purchaser :</label>
-                <select name="purchaser">
-                  <option value="NONE">Please select</option>
-                  <option value="BYMOH">Ministry of Health</option>
-                  <option value="BYFACILITY">Facility</option>
-                  <option value="BYDONOR">Donor</option>
-                </select>
-                <div class="error-list"></div>
-              </div>
-            </li>
-
-            <li>
-              <div class="row ">
-                <label for="donor">Donor :</label>
-                <select name="donor">
-                  <option value="NONE">Please select</option>
-                  <option value="MOHPARTNER">MoH Partner</option>
-                  <option value="OTHERNGO">Other NGO</option>
-                  <option value="INDIVIDUAL">Individual</option>
-                  <option value="OTHERS">Others</option>
-                </select>
-                <div class="error-list"></div>
-              </div>
-            </li>
-
-          </ul>
-          <input type="hidden" value="13" name="dataLocation.id">
-          <button type="submit">Filter</button>
-          <a class="clear-form" href="#">Clear</a>
-        </form>
-      </div> -->
-
       <div id="corrective">
-        <ul class="v_tabs_overview">
-          <li><a href="#">32.020<span>Some label</span></a></li>
-          <li><a href="#">12.345<span>Some longer label</span></a></li>
-          <li><a href="#">75.501<span>Some very long label</span></a></li>
-          <li><a href="#">12.944<span>Some label</span></a></li>
-          <li><a href="#">22.300<span>Some long label</span></a></li>
-          <li><a href="#">11.478<span>Some very long label</span></a></li>
-        </ul>
-        <table class="items spaced">
+        <div class="v_tabs_summary">
+          <h2>Summary</h2>
+          <hr />
+          <ul>
+            <li><a href="#">32.020<span>Some label</span></a></li>
+            <li><a href="#">12.345<span>Some longer label</span></a></li>
+            <li><a href="#">75.501<span>Some very long label</span></a></li>
+            <li><a href="#">12.944<span>Some label</span></a></li>
+            <li><a href="#">22.300<span>Some long label</span></a></li>
+            <li><a href="#">11.478<span>Some very long label</span></a></li>
+          </ul>
+        </div>
+
+        <div class="v_tabs_criteria">
+          <!-- Load & initialize Tipsy -->
+          <script src="/memms/static/js/jquery/tipsy/src/javascripts/jquery.tipsy.js" type="text/javascript" ></script>
+          <script src="/memms/static/js/tipsy_init.js" type="text/javascript" ></script>
+          <ul class="left">
+            <li>
+              <span>Report type:</span>
+              <a href="#">Lorem Ipsum 1234</a>
+            </li>
+            <li>
+              <span>Report subtype:</span>
+              <a href="#">Dolor Sit Amet 1234</a>
+            </li>
+            <li>
+              <span>Ordering:</span>
+              <a href="#">by Location</a>
+            </li>
+            <li>
+              <span>Filters:</span>
+              <a href="#">There are <a href="#" id="showhide" class="tooltip" original-title="click to view them all">133</a> filters applied</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="filters main">
+          <script src="/memms/static/js/form_init.js" type="text/javascript" ></script>
+          <script src="/memms/static/js/dashboard/foldable.js" type="text/javascript" ></script>
+          <script src="/memms/static/js/dashboard/list_tabs.js" type="text/javascript" ></script>
+
+          <form class="filters-box" method="get" action="/memms/equipmentView/filter" style="display: none;">
+            <ul class="applied-filters-list">
+              <li>
+                <h3>Filters category</h3>
+                <ul class="applied-filters">
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                </ul>
+              </li>
+              <li>
+                <h3>Filters category</h3>
+                <ul class="applied-filters">
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                </ul>
+              </li>
+              <li>
+                <h3>Filters category</h3>
+                <ul class="applied-filters">
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                </ul>
+              </li>
+              <li>
+                <h3>Filters category</h3>
+                <ul class="applied-filters">
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                </ul>
+              </li>
+              <li>
+                <h3>Filters category</h3>
+                <ul class="applied-filters">
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                </ul>
+              </li>
+              <li>
+                <h3>Filters category</h3>
+                <ul class="applied-filters">
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                  <li>Lorem ipsum dolor</li>
+                </ul>
+              </li>
+
+            </ul>
+          </form>
+        </div>
+
+        <table class="items spaced ralign">
           <thead>
             <tr>
-              <th>Column name</th>
               <th>Column name</th>
               <th>Column name</th>
               <th>Column name</th>
@@ -212,22 +248,8 @@ $(document).ready(function(){
               <td>12.345</td>
               <td>12.345</td>
               <td>12.345</td>
-              <td>12.345</td>
             </tr>
             <tr>
-              <td>12.345</td>
-              <td>12.345</td>
-              <td>12.345</td>
-              <td>12.345</td>
-              <td>12.345</td>
-              <td>12.345</td>
-              <td>12.345</td>
-              <td>12.345</td>
-              <td>12.345</td>
-              <td>12.345</td>
-            </tr>
-            <tr>
-              <td>12.345</td>
               <td>12.345</td>
               <td>12.345</td>
               <td>12.345</td>
@@ -248,10 +270,19 @@ $(document).ready(function(){
               <td>12.345</td>
               <td>12.345</td>
               <td>12.345</td>
-              <td>12.345</td>
             </tr>
             <tr>
               <td>12.345</td>
+              <td>12.345</td>
+              <td>12.345</td>
+              <td>12.345</td>
+              <td>12.345</td>
+              <td>12.345</td>
+              <td>12.345</td>
+              <td>12.345</td>
+              <td>12.345</td>
+            </tr>
+            <tr>
               <td>12.345</td>
               <td>12.345</td>
               <td>12.345</td>
@@ -275,7 +306,6 @@ $(document).ready(function(){
           <li><a href="#">Next</a></li>
         </ul>
       </div> <!-- end of Corrective Maintenance -->
-
 
       <div id="preventive">
         <ul class="v_tabs_list">
@@ -342,7 +372,6 @@ $(document).ready(function(){
           </li>
         </ul>
       </div> <!-- end of Preventive Maintenance -->
-
 
       <div id="equipment">
         <ul class="v_tabs_list">
@@ -440,7 +469,6 @@ $(document).ready(function(){
           </li>
         </ul>
       </div> <!-- end of Management Medical Equipment -->
-
 
       <div id="spare_parts">
         <ul class="v_tabs_list">
