@@ -31,6 +31,7 @@ import java.util.Date;
 
 import org.apache.shiro.SecurityUtils;
 import org.chai.memms.AbstractEntityController;
+import org.chai.memms.spare.part.SparePart.StockLocation;
 import org.chai.memms.spare.part.SparePartStatus;
 import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
 import org.chai.memms.Contact
@@ -113,9 +114,17 @@ class SparePartController extends AbstractEntityController{
 			bindData(entity,params,[exclude:["statusOfSparePart","dateOfEvent"]])
 		if(log.isDebugEnabled()) log.debug("SparePart params: after bind  "+entity)
 		
-		//Verify equipment null on status different to operational
+		//Verify equipment is null on status different to operational
 		if(!params["statusOfSparePart"].equals("OPERATIONAL")){
-			params["equipment"] = null
+			params["usedOnEquipment"] = null
+		}
+		
+		//Verify stockLocation, dataLocation, room and shelve are null on OPERATIONAL status
+		if((params["statusOfSparePart"].equals("OPERATIONAL")) && (params["statusOfSparePart"].equals("DISPOSED"))){
+			params["room"] = null
+			params["shelve"] = null
+			params["stockLocation"] = null
+			params["dataLocation"] = null
 		}
 	}
 
@@ -128,7 +137,6 @@ class SparePartController extends AbstractEntityController{
 			validStatus = (!params.cmd.hasErrors()) 
 			if(log.isDebugEnabled()) log.debug("Rejecting SparePartStatus: "+params.cmd.errors)
 		}
-		entity.getGenerateAndSetCode()
 		return (validStatus & entity.validate())
 	}
 
@@ -138,7 +146,7 @@ class SparePartController extends AbstractEntityController{
 			entity.statusOfSparePart = StatusOfSparePart."$params.cmd.statusOfSparePart"
 			sparePartStatusService.createSparePartStatus(user,params.cmd.statusOfSparePart,entity,params.cmd.dateOfEvent,[:])
 		}
-		else entity.save(failOnError:true)
+		else entity.save()
 	}
 
 	def save = { StatusCommand cmd ->
@@ -153,17 +161,17 @@ class SparePartController extends AbstractEntityController{
 		if (entity.dataLocation!=null) dataLocations << entity.dataLocation
 		if (entity.usedOnEquipment!=null) equipments << entity.usedOnEquipment
 		[
-					sparePart: entity,
-					suppliers: suppliers,
-					types: types,
-					dataLocations: dataLocations,
-					equipments:equipments,
-					numberOfStatusToDisplay: grailsApplication.config.status.to.display.on.spare.part.form,
-					cmd:params.cmd,
-					currencies: grailsApplication.config.site.possible.currency,
-					now:now
+			sparePart: entity,
+			suppliers: suppliers,
+			types: types,
+			dataLocations: dataLocations,
+			equipments:equipments,
+			numberOfStatusToDisplay: grailsApplication.config.status.to.display.on.spare.part.form,
+			cmd:params.cmd,
+			currencies: grailsApplication.config.site.possible.currency,
+			now:now
 
-				]
+		]
 	}
 }
 

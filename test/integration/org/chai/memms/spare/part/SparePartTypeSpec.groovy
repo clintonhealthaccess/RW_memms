@@ -65,6 +65,7 @@ class SparePartTypeSpec extends IntegrationTests{
 		SparePartType.count() == 1
 		sparePartType.errors.hasFieldErrors('code') == true
 	}
+	
 	def "can't create and save an spare part type with a duplicate code"(){
 		setup:
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
@@ -79,6 +80,7 @@ class SparePartTypeSpec extends IntegrationTests{
 		SparePartType.count() == 1
 		sparePartType.errors.hasFieldErrors('code') == true
 	}
+	
 	def "can't create and save an spare part type without a manufacturer"() {
 		setup:
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")

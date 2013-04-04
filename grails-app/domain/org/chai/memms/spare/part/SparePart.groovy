@@ -73,7 +73,6 @@ public class SparePart {
 		BYFACILITY("by.facility"),
 		BYPARTNER("by.partner"),
 		
-	
 		String messageCode = "spare.part.purchased"
 
 		final String name
@@ -88,11 +87,9 @@ public class SparePart {
 	String currency
 	String serialNumber
 	String model
-	
 	Double purchaseCost
 	Period warrantyPeriod
 	Period expectedLifeTime
-	
 	Equipment usedOnEquipment
 	Boolean sameAsManufacturer = false
 	Provider supplier
@@ -103,16 +100,17 @@ public class SparePart {
 	Date dateCreated
 	Date lastUpdated
 	Date manufactureDate
-
 	StatusOfSparePart statusOfSparePart
-	
 	User addedBy
 	User lastModified
-	
+
+	StockLocation stockLocation
 	String room
 	String shelve
+
+	static belongsTo = [type: SparePartType]
+
 	
-	static belongsTo = [type: SparePartType, stockLocation: StockLocation]
 	static hasMany = [status: SparePartStatus]	
 	static i18nFields = ["descriptions","names"]
 	static embedded = ["warranty","warrantyPeriod","expectedLifeTime"]
@@ -130,7 +128,9 @@ public class SparePart {
 		purchaseCost nullable: true, validator: {val, obj ->
 		if(obj.currency!=null) return (val!=null)
 		}		
-		stockLocation  nullable: false, inList:[StockLocation.MMC, StockLocation.FACILITY]
+		stockLocation  nullable: true,validator:{
+			if(it!=null) it in [StockLocation.MMC, StockLocation.FACILITY]
+		}
 		type nullable: false
 		
 		dataLocation nullable: true, validator: {val,obj ->
@@ -157,16 +157,6 @@ public class SparePart {
 		statusOfSparePart nullable:true,validator:{
 			if(it!=null) return it in [StatusOfSparePart.OPERATIONAL,StatusOfSparePart.INSTOCK,StatusOfSparePart.PENDINGORDER,StatusOfSparePart.DISPOSED]
 		}
-		/*statusOfSparePart nullable:false,validator:{ val, obj ->
-			if(obj.id!=null) {
-				if(log.isDebugEnabled()) log.debug("ID OF STATUS INSIDE IF: " + obj.id)
-				return val in [StatusOfSparePart.OPERATIONAL,StatusOfSparePart.INSTOCK,StatusOfSparePart.PENDINGORDER,StatusOfSparePart.DISPOSED]		
-			}
-			else{
-				if(log.isDebugEnabled()) log.debug("ID OF STATUS INSIDE ELSE: " + obj.id)
-				return val in [StatusOfSparePart.INSTOCK,StatusOfSparePart.PENDINGORDER]			
-			}
-		}*/
 		model nullable: true
 		supplier nullable: true
 		expectedLifeTime nullable: true, validator:{
