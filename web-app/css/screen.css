@@ -1360,32 +1360,34 @@ div#comparison, div#geo_trend, div#info_facility, div#preventive, div#equipment,
 /* line 386, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog .ui-dialog-titlebar-close:hover, .ui-dialog .ui-dialog-titlebar-close:focus { color: #555555; }
 /* line 389, ../../src/stylesheets/partials/_report.sass */
-.ui-dialog h2 { border-bottom: 1px solid #dddddd; color: #258cd5; font-size: 18px; margin: 30px 0 25px; padding-bottom: 10px; }
+.ui-dialog h2 { border-bottom: 1px solid #dddddd; color: #258cd5; font-size: 18px; margin: 30px 0 0; padding-bottom: 10px; }
 /* line 395, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog h2 span { color: #aaaaaa; font-size: 15px; font-weight: normal; margin-top: 3px; text-transform: uppercase; }
 /* line 401, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog h2 b { color: #666666; font-weight: bold; }
 /* line 404, ../../src/stylesheets/partials/_report.sass */
-.ui-dialog form { clear: both; *zoom: 1; }
+.ui-dialog p { background: #fcfcfc; border-bottom: 1px solid #e9e9e9; color: #888888; font-size: 12px; padding: 8px; }
+/* line 410, ../../src/stylesheets/partials/_report.sass */
+.ui-dialog form { clear: both; margin-top: 25px; *zoom: 1; }
 /* line 38, ../../../../.rvm/gems/ruby-1.9.3-p327/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .ui-dialog form:after { content: ""; display: table; clear: both; }
-/* line 407, ../../src/stylesheets/partials/_report.sass */
-.ui-dialog label { background: #f9f9f9; border: 1px solid #dddddd; border-right: 0; color: #777777; display: inline-block; float: left; font-size: 11px; height: 12px; margin-bottom: 2px; padding: 7px; width: 135px; }
-/* line 419, ../../src/stylesheets/partials/_report.sass */
+/* line 414, ../../src/stylesheets/partials/_report.sass */
+.ui-dialog label { background: #f9f9f9; border: 1px solid #dddddd; border-right: 0; color: #777777; display: inline-block; float: left; font-size: 11px; height: 12px; margin-bottom: 2px; padding: 7px; width: 135px; -webkit-border-radius: 5px 0 0 5px; }
+/* line 427, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog input, .ui-dialog select, .ui-dialog textarea { display: inline-block; float: left; margin-bottom: 10px; padding: 5px 7px; }
-/* line 424, ../../src/stylesheets/partials/_report.sass */
+/* line 432, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog input, .ui-dialog textarea { width: 350px; }
-/* line 426, ../../src/stylesheets/partials/_report.sass */
+/* line 434, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog input, .ui-dialog select { height: 28px; }
-/* line 428, ../../src/stylesheets/partials/_report.sass */
-.ui-dialog select { color: #258cd5; width: 370px; }
-/* line 431, ../../src/stylesheets/partials/_report.sass */
+/* line 436, ../../src/stylesheets/partials/_report.sass */
+.ui-dialog select { color: #258cd5; width: 370px; -webkit-border-radius: 0; -moz-border-radius: 0; -ms-border-radius: 0; -o-border-radius: 0; border-radius: 0; }
+/* line 440, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog select:hover, .ui-dialog select:focus, .ui-dialog select:active { outline: none; }
-/* line 433, ../../src/stylesheets/partials/_report.sass */
+/* line 442, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog .ui-widget-previous, .ui-dialog .ui-widget-next { margin: 15px 0 0; }
-/* line 435, ../../src/stylesheets/partials/_report.sass */
+/* line 444, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog .ui-widget-previous { color: #bbbbbb; }
-/* line 437, ../../src/stylesheets/partials/_report.sass */
+/* line 446, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog .ui-dialog-content { padding: 10px 30px 45px; }
 
 /* line 3, ../../src/stylesheets/partials/_graphs.sass */

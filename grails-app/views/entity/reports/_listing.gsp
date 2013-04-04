@@ -31,14 +31,32 @@ $(document).ready(function(){
     </div> -->
     <div class="custom"><a id="customize-toggle" class="btn gray medium" href="#">Create customized report</a></div>
 
-    <div id="dialog-form">
+    <!-- <div id="dialog-form">
       <h2>Select the type of customized report<span class="right">Step <b>1</b> of <b>4</b></span></h2>
-      
       <form>
       <fieldset>
         <label for="report_type">Report Type</label>
         <select><option>Please select</option></select>
         <label for="report_type">Report Subtype</label>
+        <select><option>Please select</option></select>
+      </fieldset>
+      <a href="#" class="ui-widget-previous left btn gray">Go back</a>
+      <a href="#" class="ui-widget-next right btn">Continue</a>
+      </form>
+    </div> -->
+
+    <div id="dialog-form">
+      <h2>Apply filters<span class="right">Step <b>2</b> of <b>4</b></span></h2>
+      <p>Type: Inventory > List of inventory</p>
+      <form>
+      <fieldset>
+        <label for="report_type">Facility</label>
+        <select><option>Please select</option></select>
+        <label for="report_type">Department</label>
+        <select><option>Please select</option></select>
+        <label for="report_type">Equipment type</label>
+        <select><option>Please select</option></select>
+        <label for="report_type">Equipment status</label>
         <select><option>Please select</option></select>
       <!-- <label for="name">Name</label>
       <input type="text" name="name" id="name" class="text ui-widget-content ui-corner-all" />
