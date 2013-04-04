@@ -34,14 +34,6 @@ import java.util.Map;
 
 import org.chai.memms.AbstractEntityController;
 import org.apache.shiro.crypto.hash.Sha256Hash;
-import org.chai.memms.corrective.maintenance.WorkOrder.Criticality;
-import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
-import org.chai.memms.inventory.Equipment;
-import org.chai.memms.inventory.EquipmentType;
-import org.chai.memms.inventory.Provider;
-import org.chai.memms.inventory.Equipment.Donor;
-import org.chai.memms.inventory.Equipment.PurchasedBy;
-import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.security.User;
 import org.chai.memms.security.User.UserType;
 
@@ -98,8 +90,7 @@ class UserController  extends  AbstractEntityController{
 	}
 	
 	def saveEntity(def entity) {
-		if(entity.location) hasAccess(entity.location)
-		entity.save(failOnError:true)
+		entity.save()
 	}
 	
 	
@@ -193,52 +184,12 @@ class UserController  extends  AbstractEntityController{
 	}
 	
 	
-	def updateActive = {
-		if (log.isDebugEnabled()) log.debug("updateActive user.active "+params['user.id'])
-		User user = User.get(params.int(['user.id']))
-		def property = params['field'];
-		if (user == null || property ==null)
-			response.sendError(404)
-		else {
-			def value= false; def entity = null;
-			if(property.equals("active")){
-				if(user.active) user.active = false
-				else {
-					user.active = true		
-				}
-				entity = user.save(flush:true)
-			}
-			if(entity!=null) value=true
-			render(contentType:"text/json") { results = [value]}
-		}
-	}
-	
-	def updateConfirmed = {
-		if (log.isDebugEnabled()) log.debug("updateActive user.confirmed "+params['user.id'])
-		User user = User.get(params.int(['user.id']))
-		def property = params['field'];
-		if (user == null || property ==null)
-			response.sendError(404)
-		else {
-			def value= false; def entity = null;
-			if(property.equals("confirmed")){
-				if(user.confirmed) user.confirmed = false
-				else {
-					user.confirmed = true
-				}
-				entity = user.save(flush:true)
-			}
-			if(entity!=null) value=true
-			render(contentType:"text/json") { results = [value]}
-		}
-	}
-	
 	def getAjaxData = {
-		def location = CalculationLocation.get(params["location"])
+		 def dataLocation = CalculationLocation.get(params["dataLocation"])
 		List<UserType> userTypes = []
 		for(def type: params['userTypes']) 
 			userTypes.add(UserType."$type")
-       	def users = userService.searchActiveUserByTypeAndLocation(params['term'],userTypes,location)
+       	def users = userService.searchActiveUserByTypeAndLocation(params['term'],userTypes,dataLocation)
 		render(contentType:"text/json") {
 			elements = array {
 				users.each { user ->

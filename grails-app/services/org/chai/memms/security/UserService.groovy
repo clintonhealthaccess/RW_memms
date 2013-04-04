@@ -132,15 +132,15 @@ class UserService {
 		return users
 	}
 	
-	public def filterUser(def userType,def location, def role, def active,def confirmed,Map<String, String> params){	
+	public def filterUser(def userType, def dataLocation, def role, def active,def confirmed, Map<String, String> params){	
 		def criteria = User.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(userType != null)
 			    eq('userType', userType)
 			if(location != null)
-				eq('locations',location)
+				eq('location',dataLocation)
 			if(role != null)
-				eq ("roles", role)
+				inList("roles",[role])
 			if(active)
 				eq ("active", (active.equals('true'))?true:false)
 			if(confirmed)
