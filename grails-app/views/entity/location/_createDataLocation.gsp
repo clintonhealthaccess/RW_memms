@@ -20,15 +20,15 @@
   			from="${types}" value="${location.type?.id}" values="${types.collect{it.names}}" optionKey="id"/>
   			
   		<g:selectFromList name="location.id" label="${message(code:'location.label')}" bean="${location}" field="location" optionKey="id" multiple="false"
-  			ajaxLink="${createLink(controller:'location', action:'getAjaxData', params: [class: 'Location'])}"
+  			ajaxLink="${createLink(controller:'dataLocation', action:'getAjaxData', params: [class: 'location'])}"
   			from="${locations}" value="${location.location?.id}" values="${locations.collect{it.names}}" />	
   			
   		<g:i18nInput name="names" label="${message(code:'entity.names.label')}" bean="${location}" field="names"/>
   		<g:input name="code" label="${message(code:'entity.code.label')}" bean="${location}" field="code"/>		
   		<g:if test="${location.id != null}">
   			<label>${message(code:'dataLocation.managed.by.label')}</label>
-  			<input name="" disabled class="idle-field" value="${location.managedBy?.names}">	
-  			<input type="hidden" name="id" value="${location.id}"></input>
+  			${location.managedBy?.names}
+  			<input type="hidden" name="id" value="${location.id}"/>
   		</g:if>		
   		<g:selectFromList name="managesIds" label="${message(code:'dataLocation.manages.label')}" field="manages" 
 					optionKey="id" multiple="true" ajaxLink="${createLink(controller:'dataLocation', action:'getAjaxData')}" 
