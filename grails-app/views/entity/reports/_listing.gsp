@@ -9,14 +9,12 @@ $(document).ready(function(){
     $( "#dialog-form" ).dialog();
   });
 });
-  
 </script>
 
 <div class="entity-list">
   <!-- List Top Header Template goes here -->
   <div class="heading1-bar">
     <h1>Detailed Reports</h1>
-
   </div>
   <!-- End of template -->
 
@@ -33,17 +31,23 @@ $(document).ready(function(){
     </div> -->
     <div class="custom"><a id="customize-toggle" class="btn gray medium" href="#">Create customized report</a></div>
 
-    <div id="dialog-form" title="Create customized report">
+    <div id="dialog-form">
+      <h2>Select the type of customized report<span class="right">Step <b>1</b> of <b>4</b></span></h2>
+      
       <form>
       <fieldset>
-      <label for="name">Name</label>
+        <label for="report_type">Report Type</label>
+        <select><option>Please select</option></select>
+        <label for="report_type">Report Subtype</label>
+        <select><option>Please select</option></select>
+      <!-- <label for="name">Name</label>
       <input type="text" name="name" id="name" class="text ui-widget-content ui-corner-all" />
       <label for="email">Email</label>
       <input type="text" name="email" id="email" value="" class="text ui-widget-content ui-corner-all" />
       <label for="password">Password</label>
-      <input type="password" name="password" id="password" value="" class="text ui-widget-content ui-corner-all" />
+      <input type="password" name="password" id="password" value="" class="text ui-widget-content ui-corner-all" /> -->
       </fieldset>
-      <a href="#" class="ui-widget-previous left">Go back</a>
+      <a href="#" class="ui-widget-previous left btn gray">Go back</a>
       <a href="#" class="ui-widget-next right btn">Continue</a>
       </form>
     </div>
