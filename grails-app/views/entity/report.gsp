@@ -12,8 +12,9 @@
 
 	<!-- Load ChosenJS -->
 	
-	
-	
+	<link rel="stylesheet" href="../js/jquery/jquery-ui/css/cupertino/jquery-ui-1.9.2.custom.min.css">
+	<link href="../temp_reports/chosen.css" rel="stylesheet">
+
 </head>
 <body>
 	<g:render template="${template}"/>

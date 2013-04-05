@@ -1,8 +1,12 @@
 
-<!-- Load jQueryUI Dialog Box overlay -->
+<!-- Load jQueryUI -->
 <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+
+<!-- Load jQueryUI Dialog Box overlay -->
 <script>
   $(document).ready(function(){
+
+
 
     $( "#customize-toggle").click(function(e) {
         e.preventDefault();
@@ -39,7 +43,15 @@
     });
   });
 </script>
-<!-- end load -->
+
+<!-- Load JQueryUI Time picker -->
+<script>
+$(function() {
+$( "#datepicker" ).datepicker();
+});
+</script>
+
+
 
 <div class="entity-list">
   <!-- List Top Header Template goes here -->
@@ -104,7 +116,7 @@
             </li>
             <li>
               <label for="report_type">Timespan</label>
-              <input class="date-picker hasDatepicker" />
+              <input id="datepicker" />
             </li>
           </ul>
           <!-- <label for="name">Name</label>
@@ -747,7 +759,7 @@
 </div>
 
 <script src="../temp_reports/chosen.js"></script>
-<link href="../temp_reports/chosen.css" rel="stylesheet">
+
 
 <script type="text/javascript">
   $(".chzn-select").chosen();
