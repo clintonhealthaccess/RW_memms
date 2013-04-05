@@ -82,16 +82,21 @@ class ImportExportConstant {
 	//Importing/exporting Spare part
 	public final static String SPARE_PART_SERIAL_NUMBER = "Serial number"
 	public final static String SPARE_PART_TYPE = "Type"
-	/** model to be checked */
 	public final static String SPARE_PART_MODEL = "Model"
-	
 	public final static String SPARE_PART_MANUFACTURE_DATE = "Manufacture date"
 	public final static String SPARE_PART_PURCHASE_COST = "Cost"
 	public final static String SPARE_PART_PURCHASE_COST_CURRENCY = "Currency"
-	public final static String SPARE_PART_STATUS = "StatusOfSparePart"
-	public final static String SPARE_PART_DONATION = "Donation"
-	public final static String SPARE_PART_SAME_AS_MANUFACTURER = "Same as Manufacturer"
+	public final static String SPARE_PART_STATUS = "Status of spare part"
+	public final static String SPARE_PART_PURCHASED_BY = "Purchaser"
+	public final static String SPARE_PART_SAME_AS_MANUFACTURER = "Same as mnufacturer"
 	public final static String SPARE_PART_WARRANTY_START = "Warranty start"
-	public final static String SPARE_PART_WARRANTY_END = "Warranty end"
+	public final static String SPARE_PART_WARRANTY_PERIOD = "Warranty period (Months)"
+	
+	//Importing/exporting spare part types
+	public final static String SPARE_PART_TYPE_CODE = "spare part type code"
+	public final static String SPARE_PART_TYPE_NAME_EN = "spare part type name_en"
+	public final static String SPARE_PART_TYPE_NAME_FR = "spare part type name_fr"
+	public final static String SPARE_PART_TYPE_DESCRIPTION_EN = "spare part type description_en"
+	public final static String SPARE_PART_TYPE_DESCRIPTION_FR = "spare part type description_fr"
 	
 }
