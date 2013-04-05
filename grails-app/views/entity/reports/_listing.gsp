@@ -6,8 +6,6 @@
 <script>
   $(document).ready(function(){
 
-
-
     $( "#customize-toggle").click(function(e) {
         e.preventDefault();
       $( "#dialog-form" ).dialog();
@@ -22,11 +20,7 @@
         $('#step-' + step_counter).hide();
         $('#step-' + (step_counter + 1)).slideToggle();
         step_counter++;
-        $(this).removeClass('disabled-btn');
-      }else{
-        $(this).addClass('disabled-btn');
       }
-      console.log(this)
     });
 
     $('#prev-step-1, #prev-step-2, #prev-step-3, #prev-step-4').click(function(e) {
@@ -35,11 +29,7 @@
         $('#step-' + step_counter).hide();
         $('#step-' + (step_counter - 1)).slideToggle();
         step_counter--;
-        $(this).removeClass('disabled-btn');
-      }else {
-        $(this).addClass('disabled-btn');
       }
-      console.log(this)
     });
   });
 </script>
@@ -47,11 +37,9 @@
 <!-- Load JQueryUI Time picker -->
 <script>
 $(function() {
-$( "#datepicker" ).datepicker();
+$( ".js-date-picker" ).datepicker();
 });
 </script>
-
-
 
 <div class="entity-list">
   <!-- List Top Header Template goes here -->
@@ -80,15 +68,21 @@ $( "#datepicker" ).datepicker();
         <h2>Select the type of customized report<span class="right">Step <b>1</b> of <b>4</b></span></h2>
         <form>
         <fieldset>
-          <label for="report_type">Report Type</label>
-          <select><option>Please select</option></select>
-          <label for="report_type">Report Subtype</label>
-          <select><option>Please select</option></select>
+          <ul>
+            <li>
+              <label for="report_type">Report Type</label>
+              <select><option>Please select</option></select>
+            </li>
+            <li>
+              <label for="report_type">Report Subtype</label>
+              <select><option>Please select</option></select>
+            </li>
+          </ul>
         </fieldset>
-        <a href="#" class="ui-widget-previous left btn gray medium" id='prev-step-1'>Previous step</a>
         <a href="#" class="ui-widget-next right btn" id='next-step-1'>Next step</a>
         </form>
       </div>
+      <!-- end step 1 -->
 
       <!-- Step 2 -->
       <div class="dialog-form step-2" id='step-2'>
@@ -115,8 +109,17 @@ $( "#datepicker" ).datepicker();
               <input type="checkbox"><span>Show only obsolete equipment</span>
             </li>
             <li>
-              <label for="report_type">Timespan</label>
-              <input id="datepicker" />
+              <label for="report_type">Acquisition period</label>
+              <input class="js-date-picker date-picker idle-field" /> <span class="dash">-</span> <input class="js-date-picker date-picker idle-field" />
+            </li>
+            <li>
+              <label for="report_type">Which cost</label>
+              <input class="js-date-picker date-picker idle-field" /> <span class="dash">-</span> <input class="js-date-picker date-picker idle-field" />
+              <input type="checkbox"><span>Include equipment without cost</span>
+            </li>
+            <li>
+              <label>Warranty</label>
+              <input type="checkbox"><span>Under warranty</span>
             </li>
           </ul>
           <!-- <label for="name">Name</label>
@@ -130,6 +133,7 @@ $( "#datepicker" ).datepicker();
         <a href="#" class="ui-widget-next right btn" id='next-step-2'>Next step</a>
         </form>
       </div>
+      <!-- end step 2 -->
 
       <!-- Step 3 -->
       <div class="dialog-form step-3" id='step-3'>
@@ -137,32 +141,49 @@ $( "#datepicker" ).datepicker();
         <p>Type: Inventory > List of inventory</p>
         <form>
           <fieldset>
-            <label for="report_type">Report Type</label>
-            <select><option>Please select</option></select>
-            <label for="report_type">Report Subtype</label>
-            <select><option>Please select</option></select>
+            <ul>
+              <li>
+                <label for="report_type">Order by</label>
+                <select><option>Please select</option></select>
+              </li>
+            </ul>
           </fieldset>
         </form>
         <a href="#" class="ui-widget-previous left btn gray medium" id='prev-step-3'>Previous step</a>
         <a href="#" class="ui-widget-next right btn" id='next-step-3'>Next step</a>
       </div>
+      <!-- end step 3 -->
 
       <!-- Step 4 -->
       <div class="dialog-form step-4" id='step-4'>
-        <h2>Information to present<span class="right">Step <b>4</b> of <b>4</b></span></h2>
+        <h2>Select information to present<span class="right">Step <b>4</b> of <b>4</b></span></h2>
         <p>Type: Inventory > List of inventory</p>
         <form>
           <fieldset>
-            <label for="report_type">Report Type</label>
-            <select><option>Please select</option></select>
-            <label for="report_type">Report Subtype</label>
-            <select><option>Please select</option></select>
+            <ul class="twocol-checkboxes">
+              <li><input type="checkbox"><span>Lorem ipsum dolor sit amet</span></li>
+              <li><input type="checkbox"><span>Lorem ipsum dolor sit amet</span></li>
+              <li><input type="checkbox"><span>Lorem ipsum dolor sit amet</span></li>
+              <li><input type="checkbox"><span>Lorem ipsum dolor sit amet</span></li>
+              <li><input type="checkbox"><span>Lorem ipsum dolor sit amet</span></li>
+              <li><input type="checkbox"><span>Lorem ipsum dolor sit amet</span></li>
+              <li><input type="checkbox"><span>Lorem ipsum dolor sit amet</span></li>
+              <li><input type="checkbox"><span>Lorem ipsum dolor sit amet</span></li>
+              <li><input type="checkbox"><span>Lorem ipsum dolor sit amet</span></li>
+              <li><input type="checkbox"><span>Lorem ipsum dolor sit amet</span></li>
+              <li><input type="checkbox"><span>Lorem ipsum dolor sit amet</span></li>
+              <li><input type="checkbox"><span>Lorem ipsum dolor sit amet</span></li>
+              <li><input type="checkbox"><span>Lorem ipsum dolor sit amet</span></li>
+              <li><input type="checkbox"><span>Lorem ipsum dolor sit amet</span></li>
+              <li><input type="checkbox"><span>Lorem ipsum dolor sit amet</span></li>
+            </ul>
           </fieldset>
         </form>
         <a href="#" class="ui-widget-previous left btn gray medium" id='prev-step-4'>Previous step</a>
-        <a href="#" class="ui-widget-next right btn" id='next-step-4'>Next step</a>
+        <a href="#" class="ui-widget-next right btn" id='next-step-4'>Submit</a>
       </div>
     </div>
+    <!-- end step 4 -->
 
     <ul id='top_tabs' class="v_tabs_nav left">
       <li><a class="active" id="#corrective">Inventory</a></li>
