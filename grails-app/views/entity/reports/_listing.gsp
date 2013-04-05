@@ -85,6 +85,30 @@
       </form>
     </div>
 
+    <!-- Step 3 -->
+    <!-- <div id="dialog-form">
+      <h2>Choose the order<span class="right">Step <b>2</b> of <b>4</b></span></h2>
+      <p>Type: Inventory > List of inventory</p>
+      <form>
+        <fieldset>
+        </fieldset>
+      </form>
+      <a href="#" class="ui-widget-previous left btn gray medium">Previous step</a>
+      <a href="#" class="ui-widget-next right btn">Next step</a>
+    </div> -->
+
+    <!-- Step 4 -->
+    <!-- <div id="dialog-form">
+      <h2>Information to present<span class="right">Step <b>2</b> of <b>4</b></span></h2>
+      <p>Type: Inventory > List of inventory</p>
+      <form>
+        <fieldset>
+        </fieldset>
+      </form>
+      <a href="#" class="ui-widget-previous left btn gray medium">Previous step</a>
+      <a href="#" class="ui-widget-next right btn">Next step</a>
+    </div> -->
+
     <ul id='top_tabs' class="v_tabs_nav left">
       <li><a class="active" id="#corrective">Inventory</a></li>
       <li><a id="#preventive">Corrective Maintenance</a></li>
