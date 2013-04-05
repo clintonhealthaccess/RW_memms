@@ -3,9 +3,39 @@
 <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
 <script>
   $(document).ready(function(){
+
     $( "#customize-toggle").click(function(e) {
         e.preventDefault();
       $( "#dialog-form" ).dialog();
+    });
+
+    var step_counter = 1;
+    $('#step-2, #step-3, #step-4').hide();
+
+    $('#next-step-1, #next-step-2, #next-step-3, #next-step-4').click(function(e) {
+      e.preventDefault();
+      if(step_counter < 4) {
+        $('#step-' + step_counter).hide();
+        $('#step-' + (step_counter + 1)).slideToggle();
+        step_counter++;
+        $(this).removeClass('disabled-btn');
+      }else{
+        $(this).addClass('disabled-btn');
+      }
+      console.log(this)
+    });
+
+    $('#prev-step-1, #prev-step-2, #prev-step-3, #prev-step-4').click(function(e) {
+      e.preventDefault();
+      if(step_counter > 1) {
+        $('#step-' + step_counter).hide();
+        $('#step-' + (step_counter - 1)).slideToggle();
+        step_counter--;
+        $(this).removeClass('disabled-btn');
+      }else {
+        $(this).addClass('disabled-btn');
+      }
+      console.log(this)
     });
   });
 </script>
@@ -34,7 +64,7 @@
     <div id="dialog-form">
 
       <!-- Step 1 -->
-      <!-- <div class="dialog-form step-1">
+      <div class="dialog-form step-1" id='step-1'>
         <h2>Select the type of customized report<span class="right">Step <b>1</b> of <b>4</b></span></h2>
         <form>
         <fieldset>
@@ -43,13 +73,13 @@
           <label for="report_type">Report Subtype</label>
           <select><option>Please select</option></select>
         </fieldset>
-        <a href="#" class="ui-widget-previous left btn gray medium">Previous step</a>
-        <a href="#" class="ui-widget-next right btn">Next step</a>
+        <a href="#" class="ui-widget-previous left btn gray medium" id='prev-step-1'>Previous step</a>
+        <a href="#" class="ui-widget-next right btn" id='next-step-1'>Next step</a>
         </form>
-      </div> -->
+      </div>
 
       <!-- Step 2 -->
-      <div class="dialog-form step-2">
+      <div class="dialog-form step-2" id='step-2'>
         <h2>Apply filters<span class="right">Step <b>2</b> of <b>4</b></span></h2>
         <p>Type: Inventory > List of inventory</p>
         <form>
@@ -84,34 +114,42 @@
           <label for="password">Password</label>
           <input type="password" name="password" id="password" value="" class="text ui-widget-content ui-corner-all" /> -->
         </fieldset>
-        <a href="#" class="ui-widget-previous left btn gray medium">Previous step</a>
-        <a href="#" class="ui-widget-next right btn">Next step</a>
+        <a href="#" class="ui-widget-previous left btn gray medium" id='prev-step-2'>Previous step</a>
+        <a href="#" class="ui-widget-next right btn" id='next-step-2'>Next step</a>
         </form>
       </div>
 
       <!-- Step 3 -->
-      <!-- <div class="dialog-form step-3">
+      <div class="dialog-form step-3" id='step-3'>
         <h2>Choose the order<span class="right">Step <b>3</b> of <b>4</b></span></h2>
         <p>Type: Inventory > List of inventory</p>
         <form>
           <fieldset>
+            <label for="report_type">Report Type</label>
+            <select><option>Please select</option></select>
+            <label for="report_type">Report Subtype</label>
+            <select><option>Please select</option></select>
           </fieldset>
         </form>
-        <a href="#" class="ui-widget-previous left btn gray medium">Previous step</a>
-        <a href="#" class="ui-widget-next right btn">Next step</a>
-      </div> -->
+        <a href="#" class="ui-widget-previous left btn gray medium" id='prev-step-3'>Previous step</a>
+        <a href="#" class="ui-widget-next right btn" id='next-step-3'>Next step</a>
+      </div>
 
       <!-- Step 4 -->
-      <!-- <div class="dialog-form step-4">
+      <div class="dialog-form step-4" id='step-4'>
         <h2>Information to present<span class="right">Step <b>4</b> of <b>4</b></span></h2>
         <p>Type: Inventory > List of inventory</p>
         <form>
           <fieldset>
+            <label for="report_type">Report Type</label>
+            <select><option>Please select</option></select>
+            <label for="report_type">Report Subtype</label>
+            <select><option>Please select</option></select>
           </fieldset>
         </form>
-        <a href="#" class="ui-widget-previous left btn gray medium">Previous step</a>
-        <a href="#" class="ui-widget-next right btn">Next step</a>
-      </div> -->
+        <a href="#" class="ui-widget-previous left btn gray medium" id='prev-step-4'>Previous step</a>
+        <a href="#" class="ui-widget-next right btn" id='next-step-4'>Next step</a>
+      </div>
     </div>
 
     <ul id='top_tabs' class="v_tabs_nav left">
