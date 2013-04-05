@@ -1372,32 +1372,34 @@ div#comparison, div#geo_trend, div#info_facility, div#preventive, div#equipment,
 /* line 38, ../../../../.rvm/gems/ruby-1.9.3-p327/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .ui-dialog form:after { content: ""; display: table; clear: both; }
 /* line 414, ../../src/stylesheets/partials/_report.sass */
-.ui-dialog form li { border-bottom: 1px solid whitesmoke; margin-bottom: 5px; padding-bottom: 5px; }
-/* line 418, ../../src/stylesheets/partials/_report.sass */
+.ui-dialog form li { border-bottom: 1px solid whitesmoke; margin-bottom: 5px; padding-bottom: 5px; *zoom: 1; }
+/* line 38, ../../../../.rvm/gems/ruby-1.9.3-p327/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
+.ui-dialog form li:after { content: ""; display: table; clear: both; }
+/* line 419, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog form li:last-child { border: none; }
-/* line 420, ../../src/stylesheets/partials/_report.sass */
+/* line 421, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog label { color: #258cd5; display: inline-block; float: left; font-size: 12px; height: 12px; padding: 7px; width: 115px; }
-/* line 428, ../../src/stylesheets/partials/_report.sass */
+/* line 429, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog input, .ui-dialog select, .ui-dialog textarea { display: inline-block; float: left; margin-bottom: 10px; padding: 5px 7px; }
-/* line 433, ../../src/stylesheets/partials/_report.sass */
+/* line 434, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog input, .ui-dialog textarea { width: 350px; }
-/* line 435, ../../src/stylesheets/partials/_report.sass */
+/* line 436, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog input, .ui-dialog select { height: 28px; }
-/* line 437, ../../src/stylesheets/partials/_report.sass */
+/* line 438, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog select { color: #258cd5; width: 370px; -webkit-border-radius: 0; -moz-border-radius: 0; -ms-border-radius: 0; -o-border-radius: 0; border-radius: 0; }
-/* line 441, ../../src/stylesheets/partials/_report.sass */
+/* line 442, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog select:hover, .ui-dialog select:focus, .ui-dialog select:active { outline: none; }
-/* line 443, ../../src/stylesheets/partials/_report.sass */
+/* line 444, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog select + input[type=checkbox] { margin-bottom: 5px; }
-/* line 445, ../../src/stylesheets/partials/_report.sass */
+/* line 446, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog input[type=checkbox] { height: auto; margin-top: 5px; margin-left: 128px; width: auto; }
-/* line 450, ../../src/stylesheets/partials/_report.sass */
+/* line 451, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog input[type=checkbox] + span { color: #666666; display: inline-block; font-size: 11px; margin-top: 5px; }
-/* line 455, ../../src/stylesheets/partials/_report.sass */
+/* line 456, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog .ui-widget-next { margin-top: 15px; }
-/* line 457, ../../src/stylesheets/partials/_report.sass */
+/* line 458, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog .ui-widget-previous { margin-top: 18px; }
-/* line 459, ../../src/stylesheets/partials/_report.sass */
+/* line 460, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog .ui-dialog-content { padding: 10px 30px 45px; }
 
 /* line 3, ../../src/stylesheets/partials/_graphs.sass */

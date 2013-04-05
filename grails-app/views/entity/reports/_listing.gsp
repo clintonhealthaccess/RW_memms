@@ -31,83 +31,88 @@
     </div> -->
     <div class="custom"><a id="customize-toggle" class="btn gray medium" href="#">Create customized report</a></div>
 
-    <!-- <div id="dialog-form">
-      <h2>Select the type of customized report<span class="right">Step <b>1</b> of <b>4</b></span></h2>
-      <form>
-      <fieldset>
-        <label for="report_type">Report Type</label>
-        <select><option>Please select</option></select>
-        <label for="report_type">Report Subtype</label>
-        <select><option>Please select</option></select>
-      </fieldset>
-      <a href="#" class="ui-widget-previous left btn gray medium">Previous step</a>
-      <a href="#" class="ui-widget-next right btn">Next step</a>
-      </form>
-    </div> -->
-
     <div id="dialog-form">
-      <h2>Apply filters<span class="right">Step <b>2</b> of <b>4</b></span></h2>
-      <p>Type: Inventory > List of inventory</p>
-      <form>
-      <fieldset>
-        <ul>
-          <li>
-            <label>Facility</label>
-            <select style="width:384px;" class="chzn-select"><option>Please select</option><option>Please select</option><option>Please select</option><option>Please select</option><option>Please select</option></select>
-          </li>
-          <li>
-            <label>Department</label>
-            <select style="width:384px;" class="chzn-select"><option>Please select</option><option>Please select</option><option>Please select</option><option>Please select</option><option>Please select</option></select>
-          </li>
-          <li>
-            <label>Equipment type</label>
-            <select style="width:384px;" class="chzn-select"><option>Please select</option><option>Please select</option><option>Please select</option><option>Please select</option><option>Please select</option></select>
-          </li>
-          <li>
-            <label>Equipment status</label>
-            <select style="width:384px;" class="chzn-select"><option>Please select</option><option>Please select</option><option>Please select</option><option>Please select</option><option>Please select</option></select>
-            <input type="checkbox"><span>Show only obsolete equipment</span>
-          </li>
-          <li>
-            <label for="report_type">Timespan</label>
-            <input class="date-picker hasDatepicker idle-field" />
-          </li>
-        </ul>
-        <!-- <label for="name">Name</label>
-        <input type="text" name="name" id="name" class="text ui-widget-content ui-corner-all" />
-        <label for="email">Email</label>
-        <input type="text" name="email" id="email" value="" class="text ui-widget-content ui-corner-all" />
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password" value="" class="text ui-widget-content ui-corner-all" /> -->
-      </fieldset>
-      <a href="#" class="ui-widget-previous left btn gray medium">Previous step</a>
-      <a href="#" class="ui-widget-next right btn">Next step</a>
-      </form>
+
+      <!-- Step 1 -->
+      <!-- <div class="dialog-form step-1">
+        <h2>Select the type of customized report<span class="right">Step <b>1</b> of <b>4</b></span></h2>
+        <form>
+        <fieldset>
+          <label for="report_type">Report Type</label>
+          <select><option>Please select</option></select>
+          <label for="report_type">Report Subtype</label>
+          <select><option>Please select</option></select>
+        </fieldset>
+        <a href="#" class="ui-widget-previous left btn gray medium">Previous step</a>
+        <a href="#" class="ui-widget-next right btn">Next step</a>
+        </form>
+      </div> -->
+
+      <!-- Step 2 -->
+      <div class="dialog-form step-2">
+        <h2>Apply filters<span class="right">Step <b>2</b> of <b>4</b></span></h2>
+        <p>Type: Inventory > List of inventory</p>
+        <form>
+        <fieldset>
+          <ul>
+            <li>
+              <label>Facility</label>
+              <select style="width:384px;" class="chzn-select"><option>Please select</option><option>Please select</option><option>Please select</option><option>Please select</option><option>Please select</option></select>
+            </li>
+            <li>
+              <label>Department</label>
+              <select style="width:384px;" class="chzn-select"><option>Please select</option><option>Please select</option><option>Please select</option><option>Please select</option><option>Please select</option></select>
+            </li>
+            <li>
+              <label>Equipment type</label>
+              <select style="width:384px;" class="chzn-select"><option>Please select</option><option>Please select</option><option>Please select</option><option>Please select</option><option>Please select</option></select>
+            </li>
+            <li>
+              <label>Equipment status</label>
+              <select style="width:384px;" class="chzn-select"><option>Please select</option><option>Please select</option><option>Please select</option><option>Please select</option><option>Please select</option></select>
+              <input type="checkbox"><span>Show only obsolete equipment</span>
+            </li>
+            <li>
+              <label for="report_type">Timespan</label>
+              <input class="date-picker hasDatepicker" />
+            </li>
+          </ul>
+          <!-- <label for="name">Name</label>
+          <input type="text" name="name" id="name" class="text ui-widget-content ui-corner-all" />
+          <label for="email">Email</label>
+          <input type="text" name="email" id="email" value="" class="text ui-widget-content ui-corner-all" />
+          <label for="password">Password</label>
+          <input type="password" name="password" id="password" value="" class="text ui-widget-content ui-corner-all" /> -->
+        </fieldset>
+        <a href="#" class="ui-widget-previous left btn gray medium">Previous step</a>
+        <a href="#" class="ui-widget-next right btn">Next step</a>
+        </form>
+      </div>
+
+      <!-- Step 3 -->
+      <!-- <div class="dialog-form step-3">
+        <h2>Choose the order<span class="right">Step <b>3</b> of <b>4</b></span></h2>
+        <p>Type: Inventory > List of inventory</p>
+        <form>
+          <fieldset>
+          </fieldset>
+        </form>
+        <a href="#" class="ui-widget-previous left btn gray medium">Previous step</a>
+        <a href="#" class="ui-widget-next right btn">Next step</a>
+      </div> -->
+
+      <!-- Step 4 -->
+      <!-- <div class="dialog-form step-4">
+        <h2>Information to present<span class="right">Step <b>4</b> of <b>4</b></span></h2>
+        <p>Type: Inventory > List of inventory</p>
+        <form>
+          <fieldset>
+          </fieldset>
+        </form>
+        <a href="#" class="ui-widget-previous left btn gray medium">Previous step</a>
+        <a href="#" class="ui-widget-next right btn">Next step</a>
+      </div> -->
     </div>
-
-    <!-- Step 3 -->
-    <!-- <div id="dialog-form">
-      <h2>Choose the order<span class="right">Step <b>3</b> of <b>4</b></span></h2>
-      <p>Type: Inventory > List of inventory</p>
-      <form>
-        <fieldset>
-        </fieldset>
-      </form>
-      <a href="#" class="ui-widget-previous left btn gray medium">Previous step</a>
-      <a href="#" class="ui-widget-next right btn">Next step</a>
-    </div> -->
-
-    <!-- Step 4 -->
-    <!-- <div id="dialog-form">
-      <h2>Information to present<span class="right">Step <b>4</b> of <b>4</b></span></h2>
-      <p>Type: Inventory > List of inventory</p>
-      <form>
-        <fieldset>
-        </fieldset>
-      </form>
-      <a href="#" class="ui-widget-previous left btn gray medium">Previous step</a>
-      <a href="#" class="ui-widget-next right btn">Next step</a>
-    </div> -->
 
     <ul id='top_tabs' class="v_tabs_nav left">
       <li><a class="active" id="#corrective">Inventory</a></li>
