@@ -70,7 +70,7 @@
           </li>
           <li>
             <label for="report_type">Timespan</label>
-            <input type="date"></div>
+            <input class="date-picker hasDatepicker idle-field" />
           </li>
         </ul>
         <!-- <label for="name">Name</label>
@@ -87,7 +87,7 @@
 
     <!-- Step 3 -->
     <!-- <div id="dialog-form">
-      <h2>Choose the order<span class="right">Step <b>2</b> of <b>4</b></span></h2>
+      <h2>Choose the order<span class="right">Step <b>3</b> of <b>4</b></span></h2>
       <p>Type: Inventory > List of inventory</p>
       <form>
         <fieldset>
@@ -99,7 +99,7 @@
 
     <!-- Step 4 -->
     <!-- <div id="dialog-form">
-      <h2>Information to present<span class="right">Step <b>2</b> of <b>4</b></span></h2>
+      <h2>Information to present<span class="right">Step <b>4</b> of <b>4</b></span></h2>
       <p>Type: Inventory > List of inventory</p>
       <form>
         <fieldset>
