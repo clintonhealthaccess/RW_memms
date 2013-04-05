@@ -356,6 +356,7 @@ div#comparison, div#geo_trend, div#info_facility, div#preventive, div#equipment,
 .ui-dialog
   background: #fff
   border: 1px solid rgba(0, 0, 0, 0.2)
+  outline: none
   position: absolute
   width: 580px !important
   z-index: 10
@@ -371,7 +372,6 @@ div#comparison, div#geo_trend, div#info_facility, div#preventive, div#equipment,
     +transition(background .4s)
     &:hover, &:focus
       background: #f5f5f5
-  
 
   .ui-dialog-titlebar-close
     background: none
@@ -389,7 +389,7 @@ div#comparison, div#geo_trend, div#info_facility, div#preventive, div#equipment,
   h2
     border-bottom: 1px solid #ddd
     color: $primary
-    font-size: 18px
+    font-size: 20px
     margin: 30px 0 0
     padding-bottom: 10px
     span
@@ -411,19 +411,20 @@ div#comparison, div#geo_trend, div#info_facility, div#preventive, div#equipment,
     clear: both
     margin-top: 25px
     +pie-clearfix
+    li
+      border-bottom: 1px solid #f5f5f5
+      margin-bottom: 5px
+      padding-bottom: 5px
+      &:last-child
+        border: none
   label
-    background: #f9f9f9
-    border: 1px solid #ddd
-    border-right: 0
-    color: #777
+    color: $primary
     display: inline-block
     float: left
-    font-size: 11px
+    font-size: 12px
     height: 12px
-    margin-bottom: 2px
     padding: 7px
-    width: 135px
-    -webkit-border-radius: 5px 0 0 5px
+    width: 115px
   input, select, textarea
     display: inline-block
     float: left
@@ -439,9 +440,21 @@ div#comparison, div#geo_trend, div#info_facility, div#preventive, div#equipment,
     +border-radius(0)
     &:hover, &:focus, &:active
       outline: none
-  .ui-widget-previous, .ui-widget-next
-    margin: 15px 0 0
+    + input[type=checkbox]
+      margin-bottom: 5px
+  input[type=checkbox]
+    height: auto
+    margin-top: 5px
+    margin-left: 128px
+    width: auto
+    + span
+      color: #666
+      display: inline-block
+      font-size: 11px
+      margin-top: 5px
+  .ui-widget-next
+    margin-top: 15px
   .ui-widget-previous
-    color: #bbb
+    margin-top: 18px
   .ui-dialog-content
     padding: 10px 30px 45px

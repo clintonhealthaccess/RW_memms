@@ -1,15 +1,15 @@
-<link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700&subset=latin' rel='stylesheet' type='text/css'>
 
-<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<!-- Load jQueryUI Dialog Box overlay -->
 <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
 <script>
-$(document).ready(function(){
-  $( "#customize-toggle").click(function(e) {
-      e.preventDefault();
-    $( "#dialog-form" ).dialog();
+  $(document).ready(function(){
+    $( "#customize-toggle").click(function(e) {
+        e.preventDefault();
+      $( "#dialog-form" ).dialog();
+    });
   });
-});
 </script>
+<!-- end load -->
 
 <div class="entity-list">
   <!-- List Top Header Template goes here -->
@@ -40,8 +40,8 @@ $(document).ready(function(){
         <label for="report_type">Report Subtype</label>
         <select><option>Please select</option></select>
       </fieldset>
-      <a href="#" class="ui-widget-previous left btn gray">Go back</a>
-      <a href="#" class="ui-widget-next right btn">Continue</a>
+      <a href="#" class="ui-widget-previous left btn gray medium">Previous step</a>
+      <a href="#" class="ui-widget-next right btn">Next step</a>
       </form>
     </div> -->
 
@@ -50,23 +50,38 @@ $(document).ready(function(){
       <p>Type: Inventory > List of inventory</p>
       <form>
       <fieldset>
-        <label for="report_type">Facility</label>
-        <select><option>Please select</option></select>
-        <label for="report_type">Department</label>
-        <select><option>Please select</option></select>
-        <label for="report_type">Equipment type</label>
-        <select><option>Please select</option></select>
-        <label for="report_type">Equipment status</label>
-        <select><option>Please select</option></select>
-      <!-- <label for="name">Name</label>
-      <input type="text" name="name" id="name" class="text ui-widget-content ui-corner-all" />
-      <label for="email">Email</label>
-      <input type="text" name="email" id="email" value="" class="text ui-widget-content ui-corner-all" />
-      <label for="password">Password</label>
-      <input type="password" name="password" id="password" value="" class="text ui-widget-content ui-corner-all" /> -->
+        <ul>
+          <li>
+            <label>Facility</label>
+            <select style="width:384px;" class="chzn-select"><option>Please select</option><option>Please select</option><option>Please select</option><option>Please select</option><option>Please select</option></select>
+          </li>
+          <li>
+            <label>Department</label>
+            <select style="width:384px;" class="chzn-select"><option>Please select</option><option>Please select</option><option>Please select</option><option>Please select</option><option>Please select</option></select>
+          </li>
+          <li>
+            <label>Equipment type</label>
+            <select style="width:384px;" class="chzn-select"><option>Please select</option><option>Please select</option><option>Please select</option><option>Please select</option><option>Please select</option></select>
+          </li>
+          <li>
+            <label>Equipment status</label>
+            <select style="width:384px;" class="chzn-select"><option>Please select</option><option>Please select</option><option>Please select</option><option>Please select</option><option>Please select</option></select>
+            <input type="checkbox"><span>Show only obsolete equipment</span>
+          </li>
+          <li>
+            <label for="report_type">Timespan</label>
+            <input type="date"></div>
+          </li>
+        </ul>
+        <!-- <label for="name">Name</label>
+        <input type="text" name="name" id="name" class="text ui-widget-content ui-corner-all" />
+        <label for="email">Email</label>
+        <input type="text" name="email" id="email" value="" class="text ui-widget-content ui-corner-all" />
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" value="" class="text ui-widget-content ui-corner-all" /> -->
       </fieldset>
-      <a href="#" class="ui-widget-previous left btn gray">Go back</a>
-      <a href="#" class="ui-widget-next right btn">Continue</a>
+      <a href="#" class="ui-widget-previous left btn gray medium">Previous step</a>
+      <a href="#" class="ui-widget-next right btn">Next step</a>
       </form>
     </div>
 
@@ -85,7 +100,6 @@ $(document).ready(function(){
         <li><a href="#">Fourth predefined report</a></li>
         <li><a href="#">Fifth predefined report</a></li>
         <li><a href="#">Sixth predefined report</a></li>
-        <!-- <li class="right"><a class="btn small gray" href="#">+</a></li> -->
       </ul>
 
       <div id="corrective">
@@ -664,3 +678,10 @@ $(document).ready(function(){
   </div>
   <!-- End of template -->
 </div>
+
+<script src="../temp_reports/chosen.js"></script>
+<link href="../temp_reports/chosen.css" rel="stylesheet">
+
+<script type="text/javascript">
+  $(".chzn-select").chosen();
+</script>
