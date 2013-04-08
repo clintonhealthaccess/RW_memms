@@ -28,10 +28,11 @@
 
 package org.chai.memms.security
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
-import org.chai.location.CalculationLocation;
-import org.chai.memms.AbstractEntityController
+import org.chai.memms.AbstractEntityController;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.chai.memms.security.User;
 import org.chai.memms.security.User.UserType;
@@ -39,6 +40,8 @@ import org.chai.memms.security.User.UserType;
 import org.chai.location.DataLocation;
 import org.chai.location.Location;
 import org.chai.location.CalculationLocation;
+import org.chai.memms.security.Role
+
 
 class UserController  extends  AbstractEntityController{
 	def userService
@@ -56,15 +59,16 @@ class UserController  extends  AbstractEntityController{
 	}
 	
 	def getModel(def entity) {
-		def dataLocations = []
-		if (entity.location != null) dataLocations << entity.location
+		def locations = []
+		if (entity.location != null) locations << entity.location
 		[
 			user:entity,
-			roles: Role.list(),
-			dataLocations: dataLocations,
+			locations:locations,
+			roles:Role.list(),
 			cmd: params['cmd']
 		]
 	}
+	
 	
 	def getEntityClass(){
 		return User.class;
@@ -85,10 +89,6 @@ class UserController  extends  AbstractEntityController{
 		return valid;
 	}
 	
-	def saveEntity(def entity) {
-		entity.save()
-	}
-	
 	def bindParams(def entity) {
 		if (log.isDebugEnabled()) log.debug('binding params: '+params)
 		bindData(entity,params,[exclude:['uuid','passwordHash']])
@@ -100,11 +100,15 @@ class UserController  extends  AbstractEntityController{
 			entity.passwordHash = new Sha256Hash(params['cmd'].password).toHex();
 	}
 	
+
+	
 	def save = { PasswordCommand cmd ->
 		if (log.isDebugEnabled()) log.debug("create.userPassword, params:"+params+"command"+cmd)
 		params['cmd'] = cmd;
 		super.save()
 	}
+	
+	
 	
 	def list = {
 		adaptParamsForList()
@@ -114,30 +118,51 @@ class UserController  extends  AbstractEntityController{
 		else{
 			render (view: '/entity/list', model: model(users) << [
 				template:"user/userList",
+				filterTemplate:"user/userFilter",
 				listTop:"user/listTop",				
 			])
 		}
 	}
-
+	
+	
 	def search = {
 		adaptParamsForList()
 		def users = userService.searchUser(params['q'], params);
 		if(request.xhr)
 			this.ajaxModel(users,params['q'])
 		else {
-			render (view: '/entity/list', model: model(users) << [
+			render (view: '/entity/list',model: model(users) << [
 				template:"user/userList",
-				listTop:"user/listTop",				
+				filterTemplate:"user/userFilter",
+				listTop:"user/listTop",
 			])
 		}
 	}
-	
+
+
+	def filter = { FilterCommand filterCmd ->
+		adaptParamsForList()
+		def users = userService.filterUser(filterCmd.userType,filterCmd.location,filterCmd.role,filterCmd.active,filterCmd.confirmed,params)
+		if(request.xhr)
+			this.ajaxModel(users,"")
+		else {
+			render(view:"/entity/list", model: model(users) << [
+				template:"user/userList",
+				filterTemplate:"user/userFilter",
+				listTop:"user/listTop",
+				filterCmd:filterCmd
+
+			])
+		}
+	}
+		
 	def model(def entities) {
 		return [
 			entities: entities,
 			entityCount: entities.totalCount,
 			code: getLabel(),
-			entityClass: getEntityClass()
+			entityClass: getEntityClass(),
+			roles:Role.list()			
 		]
 	}
 	
@@ -147,13 +172,13 @@ class UserController  extends  AbstractEntityController{
 		render(contentType:"text/json") { results = [listHtml] }
 	}
 	
+	
 	def getAjaxData = {
-		def dataLocation = CalculationLocation.get(params["dataLocation"])
+		 def location = CalculationLocation.get(params["location"])
 		List<UserType> userTypes = []
 		for(def type: params['userTypes']) 
 			userTypes.add(UserType."$type")
-
-       	def users = userService.searchActiveUserByTypeAndLocation(params['term'],userTypes,dataLocation)
+       	def users = userService.searchActiveUserByTypeAndLocation(params['term'],userTypes,location)
 		render(contentType:"text/json") {
 			elements = array {
 				users.each { user ->
@@ -167,7 +192,6 @@ class UserController  extends  AbstractEntityController{
 		}
 		
 	}		
-	
 }
 
 class PasswordCommand {
@@ -183,5 +207,40 @@ class PasswordCommand {
 	
 	String toString() {
 		return "PasswordCommand[password="+password+", repeat="+repeat+"]"
+	}
+}
+
+class FilterCommand {
+	CalculationLocation location
+	UserType userType
+	Role role
+	String active
+	String confirmed
+	
+	public boolean getActiveStatus(){
+		if(active) return null
+		else if(active.equals("true")) return true
+		else if(active.equals("false")) return false
+	}
+	
+	public boolean getConfirmedStatus(){
+		if(confirmed) return null
+		else if(confirmed.equals("true")) return true
+		else if(confirmed.equals("false")) return false
+	}
+
+	static constraints = {
+
+		userType nullable:true
+		role nullable:true
+		active nullable:true
+		confirmed nullable: true
+		location nullable:true
+	}
+
+	String toString() {
+		return "FilterCommand[CalculationLocation="+location+", UserType="+userType+
+		", Role="+role+", active="+active+
+		", confirmed=" + confirmed + "]"
 	}
 }

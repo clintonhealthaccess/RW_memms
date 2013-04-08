@@ -102,6 +102,64 @@ class UserServiceSpec extends IntegrationTests{
 		Initializer.createDummyStructure()
 		Initializer.createUsers()
 		Initializer.createInventoryStructure()
+		def locationOne = Location.findByCode(RWANDA);
+		def locationTwo = DataLocation.findByCode(KIVUYE);
+		def locationThree = DataLocation.findByCode(BURERA);
+		def role = newRole("roleOne","permission")
+
+	
+		def userOne = newSystemUser("userOneT",UUID.randomUUID().toString(),locationOne);
+		def userTwo = newUser("userTwo", "jhgashgaSHAjaFSG", true, false)
+		userTwo.location = locationOne;
+		userTwo.save(failOnError:true);
+		def userThree =  newOtherUserWithType("userThree",UUID.randomUUID().toString(),locationTwo,UserType.ADMIN)
+		def userFour = newOtherUser("userFour",UUID.randomUUID().toString(),locationThree);
+		userFour.addToRoles(role)
+		userFour.save(failOnError:true)
+		def userFive = newOtherUser("userFive",UUID.randomUUID().toString(),locationThree);
+		def userSix = newOtherUser("userSix",UUID.randomUUID().toString(),locationThree);
+		def userSeven = newOtherUser("userSeven",UUID.randomUUID().toString(),locationTwo);
+		def userEight = newOtherUser("userEight",UUID.randomUUID().toString(),locationTwo);
+
+		def userAll =  newOtherUserWithType("userAll",UUID.randomUUID().toString(),locationThree,UserType.SYSTEM)
+		userAll.addToRoles(role)
+		userAll.active =  true
+		userAll.confirmed = true
+		userAll.save(failOnError:true)
+
+		when:
+
+		def users = User.list()
+		def userByTypeFilters = userService.filterUser(UserType.ADMIN,null,null,null,null,[:])
+		def userByLocationFilters = userService.filterUser(null,locationOne,null,null,null,[:])
+		def userByRoleFilters = userService.filterUser(null,null,role,null,null,[:])
+		def userByActiveFilters = userService.filterUser(null,null,null,'false',null,[:])
+		def userByConfirmedFilters = userService.filterUser(null,null,null,null,'false',[:])
+		def userBySWithoutAllVariableFilters = userService.filterUser(null,null,null,null,null,[:])
+		def userBySWithAllVariableFilters = userService.filterUser(UserType.SYSTEM,locationThree,role,'true','true',[:])
+		def ude = User.findByUsername("userAll")
+		
+		then:
+		//Because there are other users created from IntegrationTests parent class
+		users.size() == 17
+		userBySWithoutAllVariableFilters.size() == 17
+		ude.location.equals(locationThree)
+		userBySWithAllVariableFilters.size()==1
+		userBySWithAllVariableFilters[0].username.equals("userAll")
+		userByTypeFilters.size() == 2
+		userByLocationFilters.size() == 4
+		userByRoleFilters.size() == 2
+		userByActiveFilters.size() == 1
+		userByConfirmedFilters.size() == 8
+
+
+	}
+
+	def "can find user test"(){
+		setup:
+		Initializer.createDummyStructure()
+		Initializer.createUsers()
+		Initializer.createInventoryStructure()
 
 		when:
 		def usersOne = userService.getActiveUserByTypeAndLocation([UserType.TECHNICIANDH], CalculationLocation.findByCode(Initializer.NYANZA), [:])
@@ -110,6 +168,7 @@ class UserServiceSpec extends IntegrationTests{
 		usersOne.size()==1
 		usersTwo.size()==1
 	}
+		
 	
 	def "get notificationWorkOrder group"(){
 		setup:
