@@ -26,7 +26,7 @@
 			<g:input name="password" label="${message(code:'user.password.label')}" type="password" bean="${cmd}" field="password"/>
 			<g:input name="repeat" label="${message(code:'user.repeat.password.label')}" type="password" bean="${cmd}"  field="repeat"/>			
 			<g:selectFromEnum name="userType" bean="${user}" values="${UserType.values()}" field="userType" label="${message(code:'user.type.label')}"/>			
-			<g:selectFromList name="location.id" label="${message(code:'datalocation.label')}" bean="${user}" field="location" optionKey="id" multiple="false"
+			<g:selectFromList name="location.id" label="${message(code:'location.label')}" bean="${user}" field="location" optionKey="id" multiple="false"
 				ajaxLink="${createLink(controller:'location', action:'getAjaxData', params:[class: 'CalculationLocation'])}"
 				from="${dataLocations}" value="${user.location?.id}" values="${dataLocations.collect{it.names}}" />	
 			<g:inputBox name="confirmed"  label="${message(code:'user.confirmed.label')}" bean="${user}" field="confirmed" value="${user.confirmed}" checked="${(user.confirmed)? true:false}"/>			

@@ -63,7 +63,7 @@ class UserController  extends  AbstractEntityController{
 		if (entity.location != null) locations << entity.location
 		[
 			user:entity,
-			dataLocations:locations,
+			locations:locations,
 			roles:Role.list(),
 			cmd: params['cmd']
 		]
@@ -88,11 +88,6 @@ class UserController  extends  AbstractEntityController{
 		if (log.isDebugEnabled()) log.debug ("validation for command object ${params['cmd']}: ${params['cmd'].errors}}")
 		return valid;
 	}
-	
-	def saveEntity(def entity) {
-		entity.save()
-	}
-	
 	
 	def bindParams(def entity) {
 		if (log.isDebugEnabled()) log.debug('binding params: '+params)
@@ -145,24 +140,20 @@ class UserController  extends  AbstractEntityController{
 	}
 
 
-	def filter = { FilterCommand cmd ->
-		
-		if(log.isDebugEnabled()) log.debug("user filter command object:"+cmd)
-			adaptParamsForList()
-			def users = userService.filterUser(cmd.userType,cmd.location,cmd.role,cmd.active,cmd.confirmed,params)
-			if(request.xhr)
-				this.ajaxModel(users,"")
-			else {
-				render(view:"/entity/list", model: model(users) << [
-					template:"user/userList",
-					filterTemplate:"user/userFilter",
-					listTop:"user/listTop",
-					userType:UserType.values(),
-				    roles:Role.list(),
-				    locations: [],
-					cmd:params['filterCmd']
-				])
-			}
+	def filter = { FilterCommand filterCmd ->
+		adaptParamsForList()
+		def users = userService.filterUser(filterCmd.userType,filterCmd.location,filterCmd.role,filterCmd.active,filterCmd.confirmed,params)
+		if(request.xhr)
+			this.ajaxModel(users,"")
+		else {
+			render(view:"/entity/list", model: model(users) << [
+				template:"user/userList",
+				filterTemplate:"user/userFilter",
+				listTop:"user/listTop",
+				filterCmd:filterCmd
+
+			])
+		}
 	}
 		
 	def model(def entities) {
@@ -171,9 +162,7 @@ class UserController  extends  AbstractEntityController{
 			entityCount: entities.totalCount,
 			code: getLabel(),
 			entityClass: getEntityClass(),
-			userType:UserType.values(),
-			roles:Role.list(),
-			locations:[]			
+			roles:Role.list()			
 		]
 	}
 	
@@ -185,11 +174,11 @@ class UserController  extends  AbstractEntityController{
 	
 	
 	def getAjaxData = {
-		 def dataLocation = CalculationLocation.get(params["dataLocation"])
+		 def location = CalculationLocation.get(params["location"])
 		List<UserType> userTypes = []
 		for(def type: params['userTypes']) 
 			userTypes.add(UserType."$type")
-       	def users = userService.searchActiveUserByTypeAndLocation(params['term'],userTypes,dataLocation)
+       	def users = userService.searchActiveUserByTypeAndLocation(params['term'],userTypes,location)
 		render(contentType:"text/json") {
 			elements = array {
 				users.each { user ->

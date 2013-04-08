@@ -1,6 +1,5 @@
 <%@ page import="org.chai.memms.security.User" %>
 <%@ page import="org.chai.memms.security.User.UserType" %>
-
 <div class="filters main">
 		  <h2><g:message code="user.filter.label" /><a href="#" id="showhide" class="right"><g:message code="entity.show.hide.filter.label" /></a></h2>
 			<g:hasErrors bean="${filterCmd}">
@@ -12,15 +11,15 @@
 			</g:hasErrors>
 			<g:form url="[controller:'user', action:'filter']" method="get" useToken="false" class="filters-box">
 				<ul class="filters-list">
+
+					 <li><g:selectFromList name="location.id" label="${message(code:'location.label')}" bean="${filterCmd}" field="location" optionKey="id" multiple="false"						
+							from="${locations}" value="${filterCmd?.location?.id}" ajaxLink="${createLink(controller:'location', action:'getAjaxData', params:[class: 'CalculationLocation'])}"
+							values="${locations.collect{it.name}}"/></li>
+
                     <li><g:selectFromEnum name="userType" values="${UserType.values()}" field="userType" label="${message(code:'user.type.label')}" /></li>                  
-					<li><g:selectFromList name="roles.id"
-							label="${message(code:'roles.label')}" bean="${filterCmd}" field="role" optionKey="id" multiple="false"
-							from="${roles}" value="${filterCmd?.role?.id}" 
-							values="${roles.collect{it.name}}"/></li>											
-				   <li><g:selectFromList name="location.id"
-							label="${message(code:'location.label')}" bean="${filterCmd}" field="location" optionKey="id" multiple="false"						
-							from="${locations}" value="${filterCmd?.location?.id}" 
-							values="${locations.collect{it.name}}"/></li>											
+					<li><g:selectFromList name="role.id" label="${message(code:'roles.label')}" bean="${filterCmd}" field="role" optionKey="id" multiple="false"
+							from="${roles}" value="${filterCmd?.role?.id}" values="${roles.collect{it.name}}"/></li>											
+				  											
 					<li>
 						<label><g:message code="user.active.label" /></label> 
 						<select name="active">
