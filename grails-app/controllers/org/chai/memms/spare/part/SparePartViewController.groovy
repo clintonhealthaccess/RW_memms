@@ -250,8 +250,8 @@ class SparePartViewController extends AbstractController{
 		
 		adaptParamsForList()
 
-		def spareParts = sparePartService.filterSparePart(user.location,cmd.supplier,cmd.sparePartType,cmd.sparePartPurchasedBy,cmd.sameAsManufacturer,cmd.status,params)
-		File file = sparePartService.exporter(location:location.names,spareParts)
+		def spareParts = sparePartService.filterSparePart(location,cmd.supplier,cmd.sparePartType,cmd.sparePartPurchasedBy,cmd.sameAsManufacturer,cmd.status,params)
+		File file = sparePartService.exporter(user.location,spareParts)
 
 		response.setHeader "Content-disposition", "attachment; filename=${file.name}.csv"
 		response.contentType = 'text/csv'

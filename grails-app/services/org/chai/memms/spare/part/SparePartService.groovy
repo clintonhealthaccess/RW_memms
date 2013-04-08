@@ -150,7 +150,8 @@ class SparePartService {
 			dataLocations.addAll(location.getDataLocations(null,null))
 		else{
 			dataLocations.add(location)
-			dataLocations.addAll(location.manages)
+			//It always takes null value WHY? What logic behind? Will we need to remove this line or not?
+			//dataLocations.addAll(location.manages)
 		}
 		def criteria = SparePart.createCriteria();
 		
@@ -170,9 +171,9 @@ class SparePartService {
 				eq ("statusOfSparePart",sparePartStatus)
 		}
 	}
-	public File exporter(Location location,List<SparePart> spareParts){
-		if (log.isDebugEnabled()) log.debug("sparePartService.exporter, location code: "+location.names + ", ImportExportConstant: "+ImportExportConstant.CSV_FILE_EXTENSION)
-		File csvFile = File.createTempFile(location.names+"_export",ImportExportConstant.CSV_FILE_EXTENSION);
+	public File exporter(def location,List<SparePart> spareParts){
+		if (log.isDebugEnabled()) log.debug("sparePartService.exporter, location code: "+location.code + ", ImportExportConstant: "+ImportExportConstant.CSV_FILE_EXTENSION)
+		File csvFile = File.createTempFile(location.code+"_export",ImportExportConstant.CSV_FILE_EXTENSION);
 		FileWriter csvFileWriter = new FileWriter(csvFile);
 		ICsvListWriter writer = new CsvListWriter(csvFileWriter, CsvPreference.EXCEL_PREFERENCE);
 		this.writeFile(writer,spareParts);
