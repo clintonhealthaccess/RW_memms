@@ -81,7 +81,7 @@
 
 // Reports dashboard
 
-.v_tabs
+.v-tabs
   position: relative
   +pie-clearfix
   .tipsy-inner
@@ -93,7 +93,7 @@
     position: absolute
     right: 0
 
-.v_tabs_nav
+.v-tabs-nav
   width: 100%
   li
     display: inline
@@ -117,7 +117,7 @@
       margin: 0 0 -1px 0
       position: relative
 
-.v_tabs_subnav
+.v-tabs-subnav
   border-bottom: 1px solid $primary
   padding-left: 5px
   +pie-clearfix
@@ -145,7 +145,7 @@
       font-weight: bold
 
 
-.v_tabs_content
+.v-tabs-content
   background: #fff
   border: 1px solid rgba(0, 0, 0, 0.1)
   color: #666666
@@ -164,11 +164,17 @@
     opacity: 0.5
     &:hover, &:focus
       opacity: 1
+  .filters-close
+    float: right
+    margin: 10px 20px 0 0
+    opacity: 0.4
+    &:hover, &:focus
+      opacity: 1
 
-.v_tabs_row p
+.v-tabs-row p
   +pie-clearfix
 
-.v_tabs_filters
+.v-tabs-filters
   border-bottom: 1px solid $primary
   padding: 0 0 10px 15px
   +pie-clearfix
@@ -178,7 +184,7 @@
     font-size: 12px
     margin-right: 20px
 
-.v_tabs_summary
+.v-tabs-summary
   border: 10px solid $filler1
   border-bottom-width: 4px
   padding: 6px 0 9px
@@ -218,7 +224,7 @@
     font-size: 12px
     font-weight: normal
 
-.v_tabs_criteria
+.v-tabs-criteria
   background: $filler1
   border: none
   padding-bottom: 20px
@@ -251,7 +257,7 @@
     font-size: 13px
     font-weight: bold
 
-.v_tabs_list
+.v-tabs-list
   width: 100%
   +pie-clearfix
   li
@@ -267,7 +273,7 @@
         color: $primary
         margin-bottom: 5px
         padding: 5px 10px
-      .v_tabs_switch img
+      .v-tabs-switch img
         +rotate(90deg)
   >li
     &:hover, &:focus, &.selected
@@ -281,7 +287,7 @@
   &.border
     border-top: 1px solid #ccc
 
-.v_tabs_nested
+.v-tabs-nested
   border-top: 1px solid rgba(0, 0, 0, 0.1)
   margin: 0px 30px 15px
   li
@@ -292,12 +298,12 @@
       //border-bottom: 1px solid rgba(0, 0, 0, 0.1)
     &:hover, &:focus
       background: rgba(0, 0, 0, 0.03)
-  .v_tabs_name
+  .v-tabs-name
     padding-top: 10px
     padding-left: 10px
     width: 660px
 
-.v_tabs_nested_nav
+.v-tabs-nested-nav
   margin: 20px 10px 10px 30px
   +pie-clearfix
   li
@@ -321,14 +327,14 @@
     &:last-child
       border-right: none
 
-.v_tabs_switch, .v_tabs_name, .v_tabs_formula, .v_tabs_value
+.v-tabs-switch, .v-tabs-name, .v-tabs-formula, .v-tabs-value
   float: left
-.v_tabs_switch
+.v-tabs-switch
   margin: 1px 10px 0 10px
-.v_tabs_name
+.v-tabs-name
   padding: 12px 0 8px
   width: 689px
-.v_tabs_formula
+.v-tabs-formula
   background: $yes
   height: 12px
   margin: 10px 20px
@@ -337,18 +343,21 @@
   width: 12px
   +border-radius(6px)
 
-.v_tabs_value
+.v-tabs-value
   border-left: 1px solid rgba(0, 0, 0, 0.2)
   font-size: 15px
   font-weight: bold
   padding: 10px 0 8px 20px
   width: 180px
 
-.v_tabs_fold_container
+.v-tabs-fold-container
   display: none
 
 
 div#comparison, div#geo_trend, div#info_facility, div#preventive, div#equipment, div#spare_parts, div#monitoring
+  display: none
+
+div#report-2, div#report-3, div#report-4, div#report-5, div#report-6
   display: none
 
 
