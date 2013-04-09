@@ -128,8 +128,13 @@ class LocationController extends AbstractEntityController {
 		}
 	}
 	
-	def getAjaxData = {		
-		List<Location> locations = locationService.searchLocation(CalculationLocation.class,params['term'],[:])
+	def getAjaxData = {	
+		def clazz = null
+		if(params["class"]=="dataLocation") clazz = DataLocation.class 
+		else if(params["class"]=="location") clazz = Location.class
+		else clazz = CalculationLocation.class
+
+		List<Location> locations = locationService.searchLocation(clazz,params['term'],[:])
 		render(contentType:"text/json") {
 			elements = array {
 				locations.each { location ->

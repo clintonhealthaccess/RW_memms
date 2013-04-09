@@ -34,6 +34,7 @@ import org.apache.commons.lang.StringUtils
 import org.hibernate.Criteria;
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocation
+import org.chai.location.Location;
 import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.memms.security.User.UserType;
 import org.chai.memms.security.User;
@@ -42,6 +43,7 @@ import org.hibernate.criterion.MatchMode
 import org.hibernate.criterion.Order
 import org.hibernate.criterion.Projections
 import org.hibernate.criterion.Restrictions
+
 
 /**
  * @author Jean Kahigiso M.
@@ -129,6 +131,28 @@ class UserService {
 		if(log.isDebugEnabled()) log.debug("Users in notificationEquipment group: " + users)
 		return users
 	}
+	
+	public def filterUser(def userType, def location, def role, def active,def confirmed, Map<String, String> params){	
+		def criteria = User.createCriteria();
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			
+			if(userType != null && !userType.equals(UserType.NONE) )
+			    eq('userType', userType)
+			if(location != null)
+				eq('location',location)
+			if(role != null){
+				roles{
+					eq('id',role.id)
+				}
+			}
+			if(active)
+				eq ("active", (active.equals('true'))?true:false)
+			if(confirmed)
+				eq ("confirmed", (confirmed.equals('true'))?true:false)
+		}
+	}
+		
+	
 	boolean canViewManagedSpareParts(User user){
 		return ((user.userType == UserType.TECHNICIANDH) && (user.location instanceof DataLocation) && (user.location as DataLocation).manages)
 	}
