@@ -117,7 +117,7 @@
       		
       		<div class="facility-information">
       		<g:selectFromList name="dataLocation.id" label="${message(code:'spare.part.dataLocation.label')}" bean="${sparePart}" field="dataLocation" optionKey="id" multiple="false"
-    			ajaxLink="${createLink(controller:'dataLocation', action:'getAjaxData', params: [dataLocation:'DATALOCATION'])}"
+    			ajaxLink="${createLink(controller:'dataLocation', action:'getAjaxData', params: [class:'dataLocation'])}"
     			from="${dataLocations}" value="${sparePart?.dataLocation?.id}" values="${dataLocations.collect{it.names}}" />
     		</div>
     		<g:input name="room" label="${message(code:'spare.part.room.label')}" bean="${sparePart}" field="room"/>
