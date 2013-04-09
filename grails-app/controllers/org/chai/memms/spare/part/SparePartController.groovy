@@ -130,7 +130,7 @@ class SparePartController extends AbstractEntityController{
 
 	def validateEntity(def entity) {
 		boolean validStatus = true
-		if(entity.purchaseDate!=null && !(entity.purchaseDate.before(params.cmd.dateOfEvent) || entity.purchaseDate.compareTo(params.cmd.dateOfEvent)==0)){ 
+		if(entity.id==null && entity.purchaseDate!=null && !(entity.purchaseDate.before(params.cmd.dateOfEvent) || entity.purchaseDate.compareTo(params.cmd.dateOfEvent)==0)){ 
 			params.cmd.errors.rejectValue('dateOfEvent','date.of.event.before.purchase.date')
 			validStatus = (!params.cmd.hasErrors()) 
 			if(log.isDebugEnabled()) log.debug("Rejecting SparePartStatus: "+params.cmd.errors)
