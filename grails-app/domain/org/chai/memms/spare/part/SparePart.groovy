@@ -121,7 +121,10 @@ public class SparePart {
 		shelve nullable: true, blank: true
 		descriptions nullable: true, blank: true
 		serialNumber nullable: true, unique: true
-		purchaseDate nullable: true
+		purchaseDate nullable: true, validator:{ val, obj ->
+			if(val!=null && obj.warranty!=null && obj.warranty.startDate!=null)
+				return (obj.warranty.startDate.after(val) || obj.warranty.startDate.compareTo(val)==0)
+		}
 		purchaseCost nullable: true, validator: {val, obj ->
 		if(obj.currency!=null) return (val!=null)
 		}		
@@ -140,9 +143,8 @@ public class SparePart {
 		lastModified nullable:true, validator:{ val, obj ->
 			if (val != null) return (obj.lastUpdated != null)
 		}	
-		warranty nullable:true, validator:{ val, obj ->
-			if(val!=null) return (val.startDate.after(obj.purchaseDate) || val.startDate.compareTo(obj.purchaseDate)==0)
-		}
+		warranty nullable:true
+
 		warrantyPeriod nullable: true, validator:{val, obj ->
 			if (obj.warranty!=null) return (val!=null) && (val.numberOfMonths >= 0)
 		}
