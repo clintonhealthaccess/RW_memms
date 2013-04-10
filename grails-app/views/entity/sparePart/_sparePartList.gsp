@@ -72,7 +72,7 @@
 					<g:if name="sameAsManufacturer" id="${sparePart.id}" test="${(sparePart.sameAsManufacturer==true)}">&radic;</g:if>
 					<g:else>&nbsp;</g:else>
 				</td>					
-				<td>${sparePart.supplier.contact.contactName}</td>				
+				<td>${sparePart.supplier?.contact?.contactName}</td>				
 				<td>${message(code: sparePart.sparePartPurchasedBy?.messageCode+'.'+sparePart.sparePartPurchasedBy?.name)}</td>				
 			</tr>
 		</g:each>
