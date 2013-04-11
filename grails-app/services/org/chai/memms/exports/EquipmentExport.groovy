@@ -149,7 +149,8 @@ class EquipmentExport implements Exporter{
 				createAlias("status","t")
 				and{
 					eq ("t.status", equipmentExportFilter.equipmentStatus)
-					eq ("t.current", true)
+					//Why this property "current". It not found while exporting equipments
+					//eq ("t.current", true)
 				}
 			}
 				
