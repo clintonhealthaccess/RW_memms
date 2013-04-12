@@ -386,8 +386,9 @@ div#report-2, div#report-3, div#report-4, div#report-5, div#report-6
   outline: none
   padding: 0
   position: absolute
+  top: 17%
   width: 580px !important
-  z-index: 10
+  z-index: 51
   +border-radius(3px)
   +box-shadow(rgba(0, 0, 0, 0.1) 0 0 5px, rgba(0, 0, 0, 0.15) 0 0 200px)
   .ui-dialog-titlebar
@@ -399,7 +400,7 @@ div#report-2, div#report-3, div#report-4, div#report-5, div#report-6
     position: absolute
     text-align: center
     width: 100%
-    z-index: 10
+    z-index: 52
     +border-radius(0)
     +transition(background .4s)
     &:hover, &:focus
@@ -514,3 +515,6 @@ div#report-2, div#report-3, div#report-4, div#report-5, div#report-6
       width: 50%
     input[type=checkbox]
       margin-left: 0
+
+.ui-widget-overlay
+  z-index: 51

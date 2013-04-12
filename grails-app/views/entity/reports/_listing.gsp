@@ -9,7 +9,7 @@
 
     $( "#js-customize-toggle").click(function(e) {
         e.preventDefault();
-      $( "#dialog-form" ).dialog();
+      $( "#dialog-form" ).dialog({ modal: true });
       $('.ui-dialog').resizable('destroy');
     });
 
