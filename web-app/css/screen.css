@@ -1406,39 +1406,41 @@ div#report-2, div#report-3, div#report-4, div#report-5, div#report-6 { display: 
 /* line 473, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog label + input[type=checkbox] { margin-left: 0; }
 /* line 475, ../../src/stylesheets/partials/_report.sass */
+.ui-dialog .no-margin { margin-left: 0 !important; }
+/* line 478, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog input, .ui-dialog select, .ui-dialog textarea { display: inline-block; float: left; padding: 5px 7px; }
-/* line 479, ../../src/stylesheets/partials/_report.sass */
+/* line 482, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog input, .ui-dialog textarea { width: 350px; }
-/* line 481, ../../src/stylesheets/partials/_report.sass */
-.ui-dialog input, .ui-dialog select { height: 28px; }
 /* line 484, ../../src/stylesheets/partials/_report.sass */
+.ui-dialog input, .ui-dialog select { height: 28px; }
+/* line 487, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog .chzn-search input { float: none; height: auto; }
-/* line 488, ../../src/stylesheets/partials/_report.sass */
+/* line 491, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog select { color: #258cd5; font-size: 12px; width: 390px; -webkit-border-radius: 0; -moz-border-radius: 0; -ms-border-radius: 0; -o-border-radius: 0; border-radius: 0; }
-/* line 493, ../../src/stylesheets/partials/_report.sass */
+/* line 496, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog select:hover, .ui-dialog select:focus, .ui-dialog select:active { outline: none; }
-/* line 495, ../../src/stylesheets/partials/_report.sass */
+/* line 498, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog select + input[type=checkbox] { margin-bottom: 5px; }
-/* line 497, ../../src/stylesheets/partials/_report.sass */
+/* line 500, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog input[type=checkbox] { height: auto; margin-top: 5px; margin-left: 128px; width: auto; }
-/* line 502, ../../src/stylesheets/partials/_report.sass */
+/* line 505, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog input[type=checkbox] + span { color: #666666; display: inline-block; font-size: 11px; margin-top: 5px; }
-/* line 507, ../../src/stylesheets/partials/_report.sass */
-.ui-dialog .ui-widget-next { color: white; margin-top: 15px; }
 /* line 510, ../../src/stylesheets/partials/_report.sass */
+.ui-dialog .ui-widget-next { color: white; margin-top: 15px; }
+/* line 513, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog .ui-widget-previous { margin-top: 18px; }
-/* line 512, ../../src/stylesheets/partials/_report.sass */
-.ui-dialog .ui-dialog-content { background: none; padding: 10px 30px 45px; }
 /* line 515, ../../src/stylesheets/partials/_report.sass */
+.ui-dialog .ui-dialog-content { background: none; padding: 10px 30px 45px; }
+/* line 518, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog .twocol-checkboxes { *zoom: 1; }
 /* line 38, ../../../../../../../var/lib/gems/1.9.1/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .ui-dialog .twocol-checkboxes:after { content: ""; display: table; clear: both; }
-/* line 517, ../../src/stylesheets/partials/_report.sass */
+/* line 520, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog .twocol-checkboxes li { display: inline; float: left; width: 50%; }
-/* line 521, ../../src/stylesheets/partials/_report.sass */
+/* line 524, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog .twocol-checkboxes input[type=checkbox] { margin-left: 0; }
 
-/* line 524, ../../src/stylesheets/partials/_report.sass */
+/* line 527, ../../src/stylesheets/partials/_report.sass */
 .ui-widget-overlay { z-index: 51; }
 
 /* line 3, ../../src/stylesheets/partials/_graphs.sass */
