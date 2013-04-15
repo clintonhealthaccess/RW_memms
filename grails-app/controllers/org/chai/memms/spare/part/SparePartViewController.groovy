@@ -186,22 +186,15 @@ class SparePartViewController extends AbstractController{
 	def generalExport = { ExportFilterCommand cmd ->
 
 		Set<CalculationLocation> calculationLocations = new HashSet<CalculationLocation>()
-			params.list('calculationLocationids').each { id ->
+
+			Set<DataLocation> dataLocations = new HashSet<DataLocation>()
+			params.list('dataLocationids').each { id ->
 				if (NumberUtils.isDigits(id)) {
-					def calculationLocation = CalculationLocation.get(id)
-					if (calculationLocation != null && !calculationLocations.contains(calculationLocation)) calculationLocations.add(calculationLocation);
+					def dataLocation = DataLocation.get(id)
+					if (dataLocation != null && !dataLocations.contains(dataLocation)) dataLocations.add(dataLocation);
 				}
 			}
-			cmd.calculationLocations = calculationLocations
-		
-			Set<DataLocationType> locationTypes = new HashSet<DataLocationType>()
-			params.list('dataLocationTypeids').each { id ->
-				if (NumberUtils.isDigits(id)) {
-					def dataLocationType = DataLocationType.get(id)
-					if (dataLocationType != null && !locationTypes.contains(dataLocationType)) locationTypes.add(dataLocationType);
-				}
-			}
-			cmd.locationTypes = locationTypes
+			cmd.dataLocations = dataLocations
 		
 			Set<SparePartType> sparePartTypes = new HashSet<SparePartType>()
 			params.list('sparePartTypeids').each { id ->
@@ -225,7 +218,7 @@ class SparePartViewController extends AbstractController{
 		
 		
 			if(params.exported != null){
-				def sparePartExportTask = new SparePartExportFilter(calculationLocations:cmd.calculationLocations,dataLocationTypes:cmd.locationTypes,
+				def sparePartExportTask = new SparePartExportFilter(dataLocations:cmd.dataLocations,
 						sparePartTypes:cmd.sparePartTypes,suppliers:cmd.suppliers,statusOfSparePart:cmd.statusOfSparePart,sparePartPurchasedBy:cmd.sparePartPurchasedBy,
 						sameAsManufacturer:cmd.sameAsManufacturer).save(failOnError: true,flush: true)
 				params.exportFilterId = sparePartExportTask.id
@@ -339,8 +332,7 @@ class FilterCommand {
 }
 
 class ExportFilterCommand {
-	Set<CalculationLocation> calculationLocations
-	Set<DataLocationType> locationTypes
+	Set<DataLocation> dataLocations
 	Set<SparePartType> sparePartTypes
 	Set<Provider> suppliers
 	StatusOfSparePart statusOfSparePart
@@ -355,8 +347,7 @@ class ExportFilterCommand {
 	}
 
 	static constraints = {
-		calculationLocations nullable:true
-		locationTypes nullable:true
+		dataLocations nullable:true
 		sparePartTypes nullable:true
 		suppliers nullable:true
 		statusOfSparePart nullable:true
@@ -365,7 +356,7 @@ class ExportFilterCommand {
 	}
 
 	String toString() {
-		return "ExportFilterCommand[ CalculationLocations="+calculationLocations+", DataLocationTypes="+locationTypes+" , SparePartTypes="+sparePartTypes+
+		return "ExportFilterCommand[ DataLocations="+dataLocations+" , SparePartTypes="+sparePartTypes+
 		", Suppliers="+suppliers+", StatusOfSparePart="+statusOfSparePart+", SparePartPurchasedBy="+sparePartPurchasedBy+", sameAsManufacturer="+sameAsManufacturer+
 		"]"
 	}

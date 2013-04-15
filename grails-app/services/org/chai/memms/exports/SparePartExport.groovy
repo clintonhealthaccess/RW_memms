@@ -68,7 +68,7 @@ class SparePartExport implements Exporter{
 			for(SparePart sparePart: spareParts){
 				if (log.isDebugEnabled()) log.debug("exporting spare part = " + sparePart)
 				List<String> line = [sparePart.serialNumber,sparePart.type.code,sparePart.type?.getNames(new Locale("en")),sparePart.type?.getNames(new Locale("fr")),
-					//sparePart.getCurrentState()?.statusOfSparePart,
+					sparePart.getTimeBasedStatus()?.statusOfSparePart,
 					sparePart.dataLocation?.code,sparePart.dataLocation?.getNames(new Locale("en")),sparePart.dataLocation?.getNames(new Locale("fr")),
 					sparePart.room,sparePart.manufactureDate,sparePart.supplier?.code,sparePart.supplier?.contact?.contactName,
 					sparePart.purchaseDate,sparePart.purchaseCost?:"n/a",sparePart.currency?:"n/a",sparePart.sameAsManufacturer,sparePart.warranty?.startDate,sparePart.warranty?.period?.numberOfMonths]
@@ -87,8 +87,8 @@ class SparePartExport implements Exporter{
 		
 		def criteria = SparePart.createCriteria();
 		return criteria.list(sort:"id",order:"desc"){
-			if(sparePartExportFilter.calculationLocations != null && sparePartExportFilter.calculationLocations.size() > 0)
-				('dataLocation' in sparePartExportFilter.calculationLocations)
+			if(sparePartExportFilter.dataLocations != null && sparePartExportFilter.dataLocations.size() > 0)
+				('dataLocation' in sparePartExportFilter.dataLocations)
 			if(sparePartExportFilter.suppliers != null && sparePartExportFilter.suppliers.size() > 0)
 				("supplier" in sparePartExportFilter.suppliers)
 			if(sparePartExportFilter.sparePartTypes != null && sparePartExportFilter.sparePartTypes.size() > 0)
@@ -97,13 +97,13 @@ class SparePartExport implements Exporter{
 				("sparePartPurchasedBy" in sparePartExportFilter.sparePartPurchasedBy)
 			if(sparePartExportFilter.sameAsManufacturer)
 				eq ("sameAsManufacturer", (sparePartExportFilter.sameAsManufacturer.equals('true'))?true:false)
-			/*if(!sparePartExportFilter.statusOfSparePart.equals(StatusOfSparePart.NONE)){
+			if(!sparePartExportFilter.statusOfSparePart.equals(StatusOfSparePart.NONE)){
 				createAlias("statusOfSparePart","t")
 				and{
 					eq ("t.statusOfSparePart", sparePartExportFilter.statusOfSparePart)
 				//	eq ("t.current", true)
 				}
-			}*/
+			}
 				
 		}
 	}
