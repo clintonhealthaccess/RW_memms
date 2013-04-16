@@ -49,7 +49,7 @@ import org.chai.memms.util.Utils;
 @EqualsAndHashCode(includes='id')
 class EquipmentExportFilter extends ExportFilter{
 	Status equipmentStatus
-	String donated
+	String donor
 	String obsolete
 	
 	static hasMany = [equipmentTypes:EquipmentType,manufacturers:Provider,suppliers:Provider,serviceProviders:Provider,dataLocations:DataLocation]
@@ -59,7 +59,7 @@ class EquipmentExportFilter extends ExportFilter{
 		suppliers nullable: true, blank: true
 		serviceProviders nullable: true, blank: true
 		equipmentStatus nullable: true
-		donated nullable: true, blank: true
+		donor nullable: true, blank: true
 		obsolete nullable: true, blank: true
 	}
 	static mapping = {

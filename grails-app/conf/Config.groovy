@@ -107,6 +107,21 @@ environments {
 	}
 }
 
+// rabbitmq
+rabbitmq {
+	connectionfactory {
+		username = 'guest'
+		password = 'guest'
+		hostname = '127.0.0.1'
+		consumers = 1
+	}
+	queues = {
+		adminQueue durable: true, autoDelete: false
+	}
+}
+rabbitmq.concurrentConsumers = 1
+rabbitmq.retryPolicy.maxAttempts = 1
+
 security.shiro.authc.required = false
 
 // log4j configuration

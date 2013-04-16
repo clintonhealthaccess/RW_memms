@@ -44,6 +44,7 @@ import org.chai.task.Progress;
 import org.chai.task.Task;
 import org.chai.memms.inventory.Equipment;
 import org.chai.memms.inventory.EquipmentStatus.Status;
+import org.chai.memms.inventory.Equipment.Donor;
 import org.chai.memms.inventory.EquipmentType
 import org.chai.memms.util.ImportExportConstant;
 import org.chai.memms.util.Utils;
@@ -82,11 +83,15 @@ class EquipmentExport implements Exporter{
 			
 			for(Equipment equipment: equipments){
 				if (log.isDebugEnabled()) log.debug("exporting equipment=" + equipment)
-				List<String> line = [equipment.serialNumber,equipment.type.code,equipment.type?.getNames(new Locale("en")),equipment.type?.getNames(new Locale("fr")),equipment.model,
-					equipment.getTimeBasedStatus()?.status,equipment.dataLocation?.code,equipment.dataLocation?.getNames(new Locale("en")),equipment.dataLocation?.getNames(new Locale("fr")),
+				List<String> line = 
+					[
+					equipment.serialNumber,equipment.type.code,equipment.type?.getNames(new Locale("en")),equipment.type?.getNames(new Locale("fr")),equipment.model,
+					equipment.currentStatus,equipment.dataLocation?.code,equipment.dataLocation?.getNames(new Locale("en")),equipment.dataLocation?.getNames(new Locale("fr")),
 					equipment.department?.code,equipment.department?.getNames(new Locale("en")),equipment.department?.getNames(new Locale("fr")),equipment.room,
 					equipment.manufacturer?.code,equipment.manufacturer?.contact?.contactName,equipment.manufactureDate,equipment.supplier?.code,equipment.supplier?.contact?.contactName,
-					equipment.purchaseDate,equipment.purchaseCost?:"n/a",equipment.currency?:"n/a",equipment.donorName?:"n/a",equipment.obsolete,equipment.warranty?.startDate,equipment.warranty?.period?.numberOfMonths]
+					equipment.purchaseDate,equipment.purchaseCost?:"n/a",equipment.currency?:"n/a",equipment.donorName?:"n/a",equipment.obsolete,equipment.warranty?.startDate,
+					equipment.warrantyPeriod?.numberOfMonths
+					]
 				log.debug("exporting line=" + line)
 				writer.write(line)
 				progress.incrementProgress()
@@ -141,17 +146,12 @@ class EquipmentExport implements Exporter{
 				("manufacturer" in equipmentExportFilter.manufacturers)
 			if(equipmentExportFilter.equipmentTypes != null && equipmentExportFilter.equipmentTypes.size() > 0)
 				("type" in equipmentExportFilter.equipmentTypes)
-			if(equipmentExportFilter.donated)
-				eq ("donation", (equipmentExportFilter.donated.equals('true'))?true:false)
+			if(!equipmentExportFilter.donor.equals(Donor.NONE))
+				eq ("donor", equipmentExportFilter.donor)
 			if(equipmentExportFilter.obsolete)
 				eq ("obsolete", (equipmentExportFilter.obsolete.equals('true'))?true:false)
 			if(!equipmentExportFilter.equipmentStatus.equals(Status.NONE)){
-				createAlias("status","t")
-				and{
-					eq ("t.status", equipmentExportFilter.equipmentStatus)
-					//Why this property "current". It not found while exporting equipments
-					//eq ("t.current", true)
-				}
+				eq ("currentStatus", equipmentExportFilter.equipmentStatus)
 			}
 				
 		}
