@@ -13,18 +13,18 @@
   <!-- End of template -->
 
   <!-- List Template goes here -->
-  <div id ="list-grid" class="v_tabs">
+  <div id ="list-grid" class="v-tabs">
 	<!-- <div class="spinner-container">
       <img src="${resource(dir:'images',file:'list-spinner.gif')}" class="ajax-big-spinner"/>
     </div> -->
-    <ul id='top_tabs' class="v_tabs_nav left">
+    <ul id='top_tabs' class="v-tabs-nav left">
       <li><a class="active" id="#corrective">Corrective Maintenance</a></li>
       <li><a id="#preventive">Preventive Maintenance</a></li>
       <li><a id="#equipment">Management Medical Equipment</a></li>
       <li><a id="#spare_parts">Management Of Spare Parts</a></li>
       <li><a id="#monitoring">Monitoring Of MEMMS Use</a></li>
     </ul>
-    <div class="v_tabs_content right">
+    <div class="v-tabs_content right">
     	<a id="showhide" class="right" href="#">Show / Hide filters</a>
       <ul class="v_tabs_filters">
         <li><input type="checkbox" /><label>option 1</label></li>
@@ -147,18 +147,18 @@
       </div>
 
       <div id="corrective">
-        <ul class="v_tabs_list">
-          <li class="v_tabs_row">
+        <ul class="v-tabs-list">
+          <li class="v-tabs-row">
             <p>
-                  <a class="v_tabs_name v_tabs_fold_toggle">
-                    <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
+                  <a class="v-tabs-name v-tabs-fold-toggle">
+                    <span class="v-tabs-switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
                     Lorem ipsum dolor sit amet
                   </a>
-                  <span class="tooltip v_tabs_formula " original-title="Enter text here!">Something</span>
-                  <span class="v_tabs_value">53%</span>
+                  <span class="tooltip v-tabs-formula " original-title="Enter text here!">Something</span>
+                  <span class="v-tabs-value">53%</span>
             </p>
-            <div class="v_tabs_fold_container">
-              <ul class="v_tabs_nested_nav">
+            <div class="v-tabs-fold-container">
+              <ul class="v-tabs-nested-nav">
                       <li><a id='historic_trend' class='active' href="#">Historic Trend</a></li>
                       <li><a id='comparison' href="#">Comparison To Other Facilities</a></li>
                       <li><a id='geo_trend' href="#">Geographic Trend</a></li>
@@ -179,17 +179,17 @@
             </div>
           </li>
 
-          <li class="v_tabs_row">
+          <li class="v-tabs-row">
             <p>
-                  <a class="v_tabs_name v_tabs_fold_toggle">
-                    <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
+                  <a class="v-tabs-name v-tabs-fold-toggle">
+                    <span class="v-tabs-switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
                     Lorem ipsum dolor sit amet 1
                   </a>
-                  <span class="tooltip v_tabs_formula " original-title="Enter text here!">Something</span>
-                  <span class="v_tabs_value">53%</span>
+                  <span class="tooltip v-tabs-formula " original-title="Enter text here!">Something</span>
+                  <span class="v-tabs-value">53%</span>
             </p>
-            <div class="v_tabs_fold_container">
-              <ul class="v_tabs_nested_nav">
+            <div class="v-tabs-fold-container">
+              <ul class="v-tabs-nested-nav">
                       <li><a id='historic_trend' class='active' href="#">Historic Trend</a></li>
                       <li><a id='comparison' href="#">Comparison To Other Facilities</a></li>
                       <li><a id='geo_trend' href="#">Geographic Trend</a></li>
@@ -212,15 +212,15 @@
 
           <li class="v_tabs_row">
             <p>
-              <a class="v_tabs_name v_tabs_fold_toggle">
-                <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
+              <a class="v-tabs-name v-tabs-fold-toggle">
+                <span class="v-tabs-switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
                 Lorem ipsum dolor sit amet
               </a>
-              <span class="tooltip v_tabs_formula " original-title="Enter text here!">Something</span>
-              <span class="v_tabs_value">53%</span>
+              <span class="tooltip v-tabs-formula " original-title="Enter text here!">Something</span>
+              <span class="v-tabs-value">53%</span>
             </p>
-            <div class="v_tabs_fold_container">
-              <ul class="v_tabs_nested_nav">
+            <div class="v-tabs-fold-container">
+              <ul class="v-tabs-nested-nav">
                       <li><a id='historic_trend' class='active' href="#">Historic Trend</a></li>
                       <li><a id='comparison' href="#">Comparison To Other Facilities</a></li>
                       <li><a id='geo_trend' href="#">Geographic Trend</a></li>
@@ -245,18 +245,18 @@
 
 
       <div id="preventive">
-        <ul class="v_tabs_list">
-          <li class="v_tabs_row">
+        <ul class="v-tabs-list">
+          <li class="v-tabs-row">
             <p>
-              <a class="v_tabs_name v_tabs_fold_toggle">
-                <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
+              <a class="v-tabs-name v-tabs-fold-toggle">
+                <span class="v-tabs-switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
                 Lorem ipsum dolor sit amet
               </a>
-              <span class="tooltip v_tabs_formula " original-title="Enter text here!">Something</span>
-              <span class="v_tabs_value">53%</span>
+              <span class="tooltip v-tabs-formula " original-title="Enter text here!">Something</span>
+              <span class="v-tabs-value">53%</span>
             </p>
-            <div class="v_tabs_fold_container">
-              <ul class="v_tabs_nested_nav">
+            <div class="v-tabs-fold-container">
+              <ul class="v-tabs-nested-nav">
                       <li><a id='historic_trend' class='active' href="#">Historic Trend</a></li>
                       <li><a id='comparison' href="#">Comparison To Other Facilities</a></li>
                       <li><a id='geo_trend' href="#">Geographic Trend</a></li>
@@ -277,17 +277,17 @@
             </div>
           </li>
 
-          <li class="v_tabs_row">
+          <li class="v-tabs-row">
             <p>
-              <a class="v_tabs_name v_tabs_fold_toggle">
-                <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
+              <a class="v-tabs-name v-tabs-fold-toggle">
+                <span class="v-tabs-switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
                 Lorem ipsum dolor sit amet
               </a>
-              <span class="tooltip v_tabs_formula " original-title="Enter text here!">Something</span>
-              <span class="v_tabs_value">53%</span>
+              <span class="tooltip v-tabs-formula " original-title="Enter text here!">Something</span>
+              <span class="v-tabs-value">53%</span>
             </p>
-            <div class="v_tabs_fold_container">
-              <ul class="v_tabs_nested_nav">
+            <div class="v-tabs-fold-container">
+              <ul class="v-tabs-nested-nav">
                       <li><a id='historic_trend' class='active' href="#">Historic Trend</a></li>
                       <li><a id='comparison' href="#">Comparison To Other Facilities</a></li>
                       <li><a id='geo_trend' href="#">Geographic Trend</a></li>
@@ -312,18 +312,18 @@
 
 
       <div id="equipment">
-        <ul class="v_tabs_list">
-          <li class="v_tabs_row">
+        <ul class="v-tabs-list">
+          <li class="v-tabs-row">
             <p>
-              <a class="v_tabs_name v_tabs_fold_toggle">
-                <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
+              <a class="v-tabs-name v-tabs-fold-toggle">
+                <span class="v-tabs-switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
                 Lorem ipsum dolor sit amet
               </a>
-              <span class="tooltip v_tabs_formula " original-title="Enter text here!">Something</span>
-              <span class="v_tabs_value">53%</span>
+              <span class="tooltip v-tabs-formula " original-title="Enter text here!">Something</span>
+              <span class="v-tabs-value">53%</span>
             </p>
-            <div class="v_tabs_fold_container">
-              <ul class="v_tabs_nested_nav">
+            <div class="v-tabs-fold-container">
+              <ul class="v-tabs-nested-nav">
                       <li><a id='historic_trend' class='active' href="#">Historic Trend</a></li>
                       <li><a id='comparison' href="#">Comparison To Other Facilities</a></li>
                       <li><a id='geo_trend' href="#">Geographic Trend</a></li>
@@ -344,18 +344,18 @@
             </div>
           </li>
 
-          <li class="v_tabs_row">
+          <li class="v-tabs-row">
             <p>
-              <a class="v_tabs_name v_tabs_fold_toggle">
-                <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
+              <a class="v-tabs-name v-tabs-fold-toggle">
+                <span class="v-tabs-switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
                 Lorem ipsum dolor sit amet
               </a>
-              <span class="tooltip v_tabs_formula " original-title="Enter text here!">Something</span>
-              <span class="v_tabs_value">53%</span>
+              <span class="tooltip v-tabs-formula " original-title="Enter text here!">Something</span>
+              <span class="v-tabs-value">53%</span>
             </p>
 
-            <div class="v_tabs_fold_container">
-              <ul class="v_tabs_nested_nav">
+            <div class="v-tabs-fold-container">
+              <ul class="v-tabs-nested-nav">
                       <li><a id='historic_trend' class='active' href="#">Historic Trend</a></li>
                       <li><a id='comparison' href="#">Comparison To Other Facilities</a></li>
                       <li><a id='geo_trend' href="#">Geographic Trend</a></li>
@@ -375,17 +375,17 @@
               </div>
             </div>
           </li>
-          <li class="v_tabs_row">
+          <li class="v-tabs-row">
             <p>
-              <a class="v_tabs_name v_tabs_fold_toggle">
-                <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
+              <a class="v-tabs-name v-tabs-fold-toggle">
+                <span class="v-tabs-switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
                 Lorem ipsum dolor sit amet
               </a>
-              <span class="tooltip v_tabs_formula " original-title="Enter text here!">Something</span>
-              <span class="v_tabs_value">53%</span>
+              <span class="tooltip v-tabs-formula " original-title="Enter text here!">Something</span>
+              <span class="v-tabs-value">53%</span>
             </p>
-            <div class="v_tabs_fold_container">
-              <ul class="v_tabs_nested_nav">
+            <div class="v-tabs-fold-container">
+              <ul class="v-tabs-nested-nav">
                       <li><a id='historic_trend' class='active' href="#">Historic Trend</a></li>
                       <li><a id='comparison' href="#">Comparison To Other Facilities</a></li>
                       <li><a id='geo_trend' href="#">Geographic Trend</a></li>
@@ -410,19 +410,19 @@
 
 
       <div id="spare_parts">
-        <ul class="v_tabs_list">
-          <li class="v_tabs_row">
+        <ul class="v-tabs-list">
+          <li class="v-tabs-row">
             <p>
-              <a class="v_tabs_name v_tabs_fold_toggle">
-                <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
+              <a class="v-tabs-name v-tabs-fold-toggle">
+                <span class="v-tabs-switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
                 Lorem ipsum dolor sit amet
               </a>
-              <span class="tooltip v_tabs_formula " original-title="Enter text here!">Something</span>
-              <span class="v_tabs_value">53%</span>
+              <span class="tooltip v-tabs-formula " original-title="Enter text here!">Something</span>
+              <span class="v-tabs-value">53%</span>
             </p>
 
-            <div class="v_tabs_fold_container">
-              <ul class="v_tabs_nested_nav">
+            <div class="v-tabs-fold-container">
+              <ul class="v-tabs-nested-nav">
                       <li><a id='historic_trend' class='active' href="#">Historic Trend</a></li>
                       <li><a id='comparison' href="#">Comparison To Other Facilities</a></li>
                       <li><a id='geo_trend' href="#">Geographic Trend</a></li>
@@ -443,18 +443,18 @@
             </div>
           </li>
 
-          <li class="v_tabs_row">
+          <li class="v-tabs-row">
             <p>
-              <a class="v_tabs_name v_tabs_fold_toggle">
-                <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
+              <a class="v-tabs-name v-tabs-fold-toggle">
+                <span class="v-tabs-switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
                 Lorem ipsum dolor sit amet
               </a>
-              <span class="tooltip v_tabs_formula " original-title="Enter text here!">Something</span>
-              <span class="v_tabs_value">53%</span>
+              <span class="tooltip v-tabs-formula " original-title="Enter text here!">Something</span>
+              <span class="v-tabs-value">53%</span>
             </p>
 
-            <div class="v_tabs_fold_container">
-              <ul class="v_tabs_nested_nav">
+            <div class="v-tabs-fold-container">
+              <ul class="v-tabs-nested-nav">
                       <li><a id='historic_trend' class='active' href="#">Historic Trend</a></li>
                       <li><a id='comparison' href="#">Comparison To Other Facilities</a></li>
                       <li><a id='geo_trend' href="#">Geographic Trend</a></li>
@@ -480,18 +480,18 @@
 
       <div id="monitoring">
         <ul class="v_tabs_list">
-          <li class="v_tabs_row">
+          <li class="v-tabs-row">
             <p>
-              <a class="v_tabs_name v_tabs_fold_toggle">
-                <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
+              <a class="v-tabs-name v-tabs-fold-toggle">
+                <span class="v-tabs-switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
                 Lorem ipsum dolor sit amet
               </a>
-              <span class="tooltip v_tabs_formula " original-title="Enter text here!">Something</span>
-              <span class="v_tabs_value">53%</span>
+              <span class="tooltip v-tabs-formula " original-title="Enter text here!">Something</span>
+              <span class="v-tabs-value">53%</span>
             </p>
 
-            <div class="v_tabs_fold_container">
-              <ul class="v_tabs_nested_nav">
+            <div class="v-tabs-fold-container">
+              <ul class="v-tabs-nested-nav">
                       <li><a id='historic_trend' class='active' href="#">Historic Trend</a></li>
                       <li><a id='comparison' href="#">Comparison To Other Facilities</a></li>
                       <li><a id='geo_trend' href="#">Geographic Trend</a></li>
@@ -512,18 +512,18 @@
             </div>
           </li>
 
-          <li class="v_tabs_row">
+          <li class="v-tabs-row">
             <p>
-              <a class="v_tabs_name v_tabs_fold_toggle">
-                <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
+              <a class="v-tabs-name v-tabs-fold-toggle">
+                <span class="v-tabs-switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
                 Lorem ipsum dolor sit amet
               </a>
-              <span class="tooltip v_tabs_formula " original-title="Enter text here!">Something</span>
-              <span class="v_tabs_value">53%</span>
+              <span class="tooltip v-tabs-formula " original-title="Enter text here!">Something</span>
+              <span class="v-tabs-value">53%</span>
             </p>
 
-            <div class="v_tabs_fold_container">
-              <ul class="v_tabs_nested_nav">
+            <div class="v-tabs-fold-container">
+              <ul class="v-tabs-nested-nav">
                       <li><a id='historic_trend' class='active' href="#">Historic Trend</a></li>
                       <li><a id='comparison' href="#">Comparison To Other Facilities</a></li>
                       <li><a id='geo_trend' href="#">Geographic Trend</a></li>
@@ -544,18 +544,18 @@
             </div>
           </li>
 
-          <li class="v_tabs_row">
+          <li class="v-tabs-row">
             <p>
-              <a class="v_tabs_name v_tabs_fold_toggle">
-                <span class="v_tabs_switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
+              <a class="v-tabs-name v-tabs-fold-toggle">
+                <span class="v-tabs-switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
                 Lorem ipsum dolor sit amet
               </a>
-              <span class="tooltip v_tabs_formula " original-title="Enter text here!">Something</span>
-              <span class="v_tabs_value">53%</span>
+              <span class="tooltip v-tabs-formula " original-title="Enter text here!">Something</span>
+              <span class="v-tabs-value">53%</span>
             </p>
 
-            <div class="v_tabs_fold_container">
-              <ul class="v_tabs_nested_nav">
+            <div class="v-tabs-fold-container">
+              <ul class="v-tabs-nested-nav">
                       <li><a id='historic_trend' class='active' href="#">Historic Trend</a></li>
                       <li><a id='comparison' href="#">Comparison To Other Facilities</a></li>
                       <li><a id='geo_trend' href="#">Geographic Trend</a></li>
