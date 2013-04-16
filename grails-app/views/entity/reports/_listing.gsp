@@ -57,6 +57,19 @@
       $('.filters-box').slideToggle();
     });
 
+    /* Select/deselect all dropdown */
+
+    $('.js-select-all').click(function(e) {
+      var options = $(this).parents('li').find('select').find('option');
+      var select = $(this).parents('li').find('select')
+      if($(this).is(':checked')) {
+        options.prop('selected', true);
+      }else{
+        options.prop('selected', false);
+      }
+      select.trigger('liszt:updated');
+    });
+
   });
 </script>
 
@@ -121,20 +134,28 @@ $( ".js-date-picker" ).datepicker();
           <ul>
             <li>
               <label>Facility</label>
-              <select style="width:384px;" class="chzn-select"><option>Please select</option><option>Please select</option><option>Please select</option><option>Please select</option><option>Please select</option></select>
+              <select multiple style="width:384px;" class="chzn-select">
+                <option>Please select</option>
+                <option>Please select</option>
+                <option>Please select</option>
+                <option>Please select</option>
+                <option>Please select</option>
+              </select>
+              <input type='checkbox' class='js-select-all'><span>Select all</span>
             </li>
             <li>
               <label>Department</label>
-              <select style="width:384px;" class="chzn-select"><option>Please select</option><option>Please select</option><option>Please select</option><option>Please select</option><option>Please select</option></select>
+              <select multiple style="width:384px;" class="chzn-select"><option>Please select</option><option>Please select</option><option>Please select</option><option>Please select</option><option>Please select</option></select>
+            <input type='checkbox' class='js-select-all'><span>Select all</span>
             </li>
             <li>
               <label>Equipment type</label>
               <select style="width:384px;" class="chzn-select"><option>Please select</option><option>Please select</option><option>Please select</option><option>Please select</option><option>Please select</option></select>
-            </li>
+          </li>
             <li>
               <label>Equipment status</label>
               <select style="width:384px;" class="chzn-select"><option>Please select</option><option>Please select</option><option>Please select</option><option>Please select</option><option>Please select</option></select>
-              <input type="checkbox"><span>Show only obsolete equipment</span>
+              <input type="checkbox" class="no-margin"><span>Show only obsolete equipment</span>
             </li>
             <li>
               <label for="report_type">Acquisition period</label>

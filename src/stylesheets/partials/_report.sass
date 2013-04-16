@@ -472,6 +472,9 @@ div#report-2, div#report-3, div#report-4, div#report-5, div#report-6
     +
       input[type=checkbox]
         margin-left: 0
+  .no-margin
+    margin-left: 0 !important
+
   input, select, textarea
     display: inline-block
     float: left
@@ -480,6 +483,11 @@ div#report-2, div#report-3, div#report-4, div#report-5, div#report-6
     width: 350px
   input, select
     height: 28px
+
+  .chzn-search input /* Chosenjs override */
+    float: none
+    height: auto
+
   select
     color: $primary
     font-size: 12px
