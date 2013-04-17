@@ -1,6 +1,6 @@
 $(document).ready(function(){
-  $('.v_tabs_nested_nav').children('li').children('a').click(function(e) {
-    var tabs = $(this).parents('div').children('.v_tabs_nested_nav').children('li').children('a');
+  $('.v-tabs-nested-nav').children('li').children('a').click(function(e) {
+    var tabs = $(this).parents('div').children('.v-tabs-nested-nav').children('li').children('a');
     var clicked_tab = $(this);
     var parent_div = $(this).parents('div');
     e.preventDefault();
