@@ -24,9 +24,9 @@
       <li><a id="#spare_parts">Management Of Spare Parts</a></li>
       <li><a id="#monitoring">Monitoring Of MEMMS Use</a></li>
     </ul>
-    <div class="v-tabs_content right">
+    <div class="v-tabs-content right">
     	<a id="showhide" class="right" href="#">Show / Hide filters</a>
-      <ul class="v_tabs_filters">
+      <ul class="v-tabs-filters">
         <li><input type="checkbox" /><label>option 1</label></li>
         <li><input type="checkbox" /><label>option 2</label></li>
         <li><input type="checkbox" /><label>option 3</label></li>
@@ -210,7 +210,7 @@
             </div>
           </li>
 
-          <li class="v_tabs_row">
+          <li class="v-tabs-row">
             <p>
               <a class="v-tabs-name v-tabs-fold-toggle">
                 <span class="v-tabs-switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
@@ -479,7 +479,7 @@
 
 
       <div id="monitoring">
-        <ul class="v_tabs_list">
+        <ul class="v-tabs-list">
           <li class="v-tabs-row">
             <p>
               <a class="v-tabs-name v-tabs-fold-toggle">
