@@ -245,13 +245,13 @@ $( ".js-date-picker" ).datepicker();
     <!-- end step 4 -->
 
     <ul id='js-top-tabs' class="v-tabs-nav left">
-      <li><a class="active" id="#inventory">Inventory</a></li>
-      <li><a id="#corrective">Corrective Maintenance</a></li>
-      <li><a id="#preventive">Preventive Maintenance</a></li>
-      <li><a id="#spare_parts">Spare Parts</a></li>
+      <li><a class="active" id="#js-inventory">Inventory</a></li>
+      <li><a id="#js-corrective">Corrective Maintenance</a></li>
+      <li><a id="#js-preventive">Preventive Maintenance</a></li>
+      <li><a id="#js-spare-parts">Spare Parts</a></li>
     </ul>
 
-    <div id='inventory' class="v-tabs-content right shown">
+    <div id='js-inventory' class="v-tabs-content right shown">
       <ul class="v-tabs-subnav">
         <li><a class="active" href="#" id="report-1">First predefined report</a></li>
         <li><a href="#" id="report-2">Second predefined report</a></li>
@@ -531,7 +531,7 @@ $( ".js-date-picker" ).datepicker();
         </div>
       </div> <!-- end of Inventory -->
 
-      <div id="corrective" class="v-tabs-content right">
+      <div id="js-corrective" class="v-tabs-content right">
       <ul class="v-tabs-subnav">
         <li><a class="active" href="#" id="report-1">First predefined report</a></li>
         <li><a href="#" id="report-2">Second predefined report</a></li>
@@ -793,13 +793,13 @@ $( ".js-date-picker" ).datepicker();
         </div>
       </div> <!-- end of Corrective Maintenance -->
 
-      <div id="preventive" class="v-tabs-content right">
+      <div id="js-preventive" class="v-tabs-content right">
         <p>
           Preventive Maintenance
         </p>
       </div> <!-- end of Preventive Maintenance -->
 
-      <div id="spare_parts" class="v-tabs-content right">
+      <div id="js-spare-parts" class="v-tabs-content right">
         <p>
           Spare Parts
         </p>

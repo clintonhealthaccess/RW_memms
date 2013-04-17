@@ -1356,7 +1356,7 @@ div#comparison, div#geo_trend, div#info_facility, div#preventive, div#equipment,
 div#report-2, div#report-3, div#report-4, div#report-5, div#report-6 { display: none; }
 
 /* line 363, ../../src/stylesheets/partials/_report.sass */
-div#corrective, div#preventive, div#spare_parts { display: none; }
+div#js-corrective, div#js-preventive, div#js-spare-parts { display: none; }
 
 /* line 369, ../../src/stylesheets/partials/_report.sass */
 #dialog-form { display: none; top: 25%; }
