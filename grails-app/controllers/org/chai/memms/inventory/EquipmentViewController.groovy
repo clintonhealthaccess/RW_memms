@@ -237,7 +237,7 @@ class EquipmentViewController extends AbstractController {
 		cmd.suppliers = suppliers
 		
 		Set<Provider> serviceProviders = new HashSet<Provider>()
-		params.list('serviceProvidersids').each { id ->
+		params.list('serviceProviderids').each { id ->
 			if (NumberUtils.isDigits(id)) {
 				def serviceProvider = Provider.get(id)
 				if (serviceProvider != null && !serviceProviders.contains(serviceProvider)) serviceProviders.add(serviceProvider);
@@ -247,10 +247,9 @@ class EquipmentViewController extends AbstractController {
 
 		if (log.isDebugEnabled()) log.debug("equipments.export, command="+cmd+", params"+params)
 
-
 		if(params.exported != null){
 			def equipmentExportTask = new EquipmentExportFilter(dataLocations:cmd.dataLocations,
-					equipmentTypes:cmd.equipmentTypes,serviceProviders:cmd.serviceProviders,manufacturers:cmd.manufacturers,suppliers:cmd.suppliers,equipmentStatus:cmd.equipmentStatus,
+					equipmentTypes:cmd.equipmentTypes,serviceProviders:cmd.serviceProviders,manufacturers:cmd.manufacturers,suppliers:cmd.suppliers,equipmentStatus:cmd.equipmentStatus, donor:cmd.donor,
 					purchaser:cmd.purchaser,obsolete:cmd.obsolete).save(failOnError: true,flush: true)
 			params.exportFilterId = equipmentExportTask.id
 			params.class = "EquipmentExportTask"

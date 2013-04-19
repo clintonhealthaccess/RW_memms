@@ -43,6 +43,7 @@ import org.chai.task.EquipmentExportFilter;
 import org.chai.task.Progress;
 import org.chai.task.Task;
 import org.chai.memms.inventory.Equipment;
+import org.chai.memms.inventory.Equipment.PurchasedBy;
 import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.inventory.Equipment.Donor;
 import org.chai.memms.inventory.EquipmentType
@@ -124,7 +125,7 @@ class EquipmentExport implements Exporter{
 		headers.add(ImportExportConstant.SUPPLIER_DATE)//
 		headers.add(ImportExportConstant.EQUIPMENT_PURCHASE_COST)
 		headers.add(ImportExportConstant.EQUIPMENT_PURCHASE_COST_CURRENCY)
-		headers.add(ImportExportConstant.EQUIPMENT_DONATION)
+		headers.add(ImportExportConstant.EQUIPMENT_DONOR)
 		headers.add(ImportExportConstant.EQUIPMENT_OBSOLETE)
 		headers.add(ImportExportConstant.EQUIPMENT_WARRANTY_START)
 		headers.add(ImportExportConstant.EQUIPMENT_WARRANTY_END)
@@ -141,16 +142,19 @@ class EquipmentExport implements Exporter{
 				("supplier" in equipmentExportFilter.suppliers)
 			if(equipmentExportFilter.manufacturers != null && equipmentExportFilter.manufacturers.size() > 0)
 				("manufacturer" in equipmentExportFilter.manufacturers)
+			if(equipmentExportFilter.serviceProviders != null && equipmentExportFilter.serviceProviders.size() > 0)
+				("serviceProvider" in equipmentExportFilter.serviceProviders)
 			if(equipmentExportFilter.equipmentTypes != null && equipmentExportFilter.equipmentTypes.size() > 0)
 				("type" in equipmentExportFilter.equipmentTypes)
+			if(!equipmentExportFilter.purchaser.equals(PurchasedBy.NONE))
+				eq ("purchaser", equipmentExportFilter.purchaser)
 			if(!equipmentExportFilter.donor.equals(Donor.NONE))
 				eq ("donor", equipmentExportFilter.donor)
 			if(equipmentExportFilter.obsolete)
 				eq ("obsolete", (equipmentExportFilter.obsolete.equals('true'))?true:false)
 			if(!equipmentExportFilter.equipmentStatus.equals(Status.NONE)){
 				eq ("currentStatus", equipmentExportFilter.equipmentStatus)
-			}
-				
+			}		
 		}
 	}
 	

@@ -74,7 +74,7 @@ class ImportExportConstant {
 	public final static String EQUIPMENT_PURCHASE_COST = "Cost"
 	public final static String EQUIPMENT_PURCHASE_COST_CURRENCY = "Currency"
 	public final static String EQUIPMENT_STATUS = "Status"
-	public final static String EQUIPMENT_DONATION = "Donation" 
+	public final static String EQUIPMENT_DONOR= "Donor" 
 	public final static String EQUIPMENT_OBSOLETE = "Obsolete"
 	public final static String EQUIPMENT_WARRANTY_START = "Warranty start"
 	public final static String EQUIPMENT_WARRANTY_END = "Warranty period (Months)"
