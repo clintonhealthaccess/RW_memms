@@ -1,95 +1,3 @@
-<!-- Load jQueryUI -->
-<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
-
-<!-- Load jQueryUI Dialog Box overlay -->
-<script>
-  $(document).ready(function(){
-
-    /* Customized reports form steps */
-
-    $( "#js-customize-toggle").click(function(e) {
-        e.preventDefault();
-      $( "#dialog-form" ).dialog({ modal: true });
-      $('.ui-dialog').resizable('destroy');
-    });
-
-    var step_counter = 1;
-    $('#js-step-2, #js-step-3, #js-step-4').hide();
-
-    $('#js-next-step-1, #js-next-step-2, #js-next-step-3, #js-next-step-4').click(function(e) {
-      e.preventDefault();
-      if(step_counter < 4) {
-        $('#js-step-' + step_counter).hide();
-        $('#js-step-' + (step_counter + 1)).slideToggle();
-        step_counter++;
-      }
-    });
-
-    $('#js-prev-step-1, #js-prev-step-2, #js-prev-step-3, #js-prev-step-4').click(function(e) {
-      e.preventDefault();
-      if(step_counter > 1) {
-        $('#js-step-' + step_counter).hide();
-        $('#js-step-' + (step_counter - 1)).slideToggle();
-        step_counter--;
-      }
-    });
-
-    /* Select/deselect all dropdown */
-
-    $('.js-select-all').click(function(e) {
-      var options = $(this).parents('li').find('select').find('option');
-      var select = $(this).parents('li').find('select')
-      if($(this).is(':checked')) {
-        options.prop('selected', true);
-      }else{
-        options.prop('selected', false);
-      }
-      select.trigger('liszt:updated');
-    });
-
-    /* Subnavigation */
-
-    $('.v-tabs-subnav a').click(function(e) {
-      e.preventDefault();
-      $(this).parents('ul').find('.active').removeClass('active');
-      $(this).addClass('active');
-      var id = $(this).attr('id');
-      $(this).parents('div').children('.js-shown-report').hide().removeClass('js-shown-report');
-      $(this).parents('div').children('div#' + id).show().addClass('js-shown-report');
-    });
-
-    /* Filters show/hide */
-
-    $('#js-filters-toggle').click(function(e) {
-      e.preventDefault();
-      $('.filters-box').slideToggle();
-    });
-
-    $('#js-filters-close').click(function(e) {
-      e.preventDefault();
-      $('.filters-box').slideToggle();
-    });
-
-    /* Top tabs navigation */
-    $('#js-top-tabs a').click(function(e){
-      e.preventDefault();
-      $(this).parents('ul').find('.active').removeClass('active');
-      $(this).addClass('active');
-      var id = $(this).attr('id');
-      $('div.shown').hide().removeClass('shown');
-      $('div#' + id).show().addClass('shown');
-    });
-
-  });
-</script>
-
-<!-- Load JQueryUI Time picker -->
-<script>
-$(function() {
-$( ".js-date-picker" ).datepicker();
-});
-</script>
-
 <div class="entity-list">
   <!-- List Top Header Template goes here -->
   <div class="heading1-bar">
@@ -276,9 +184,6 @@ $( ".js-date-picker" ).datepicker();
           </div>
 
           <div class="v-tabs-criteria">
-            <!-- Load & initialize Tipsy -->
-            <script src="/memms/static/js/jquery/tipsy/src/javascripts/jquery.tipsy.js" type="text/javascript" ></script>
-            <script src="/memms/static/js/tipsy_init.js" type="text/javascript" ></script>
             <ul class="left">
               <li>
                 <span>Report type:</span>
@@ -300,10 +205,6 @@ $( ".js-date-picker" ).datepicker();
           </div>
 
           <div class="filters main">
-            <script src="/memms/static/js/form_init.js" type="text/javascript" ></script>
-            <script src="/memms/static/js/dashboard/foldable.js" type="text/javascript" ></script>
-            <script src="/memms/static/js/dashboard/list_tabs.js" type="text/javascript" ></script>
-
             <form class="filters-box" method="get" action="/memms/equipmentView/filter" style="display: none;">
               <a href="#" class='filters-close' id='js-filters-close'>
                 <img src="${resource(dir:'images',file:'icon_close.png')}" />
@@ -553,9 +454,6 @@ $( ".js-date-picker" ).datepicker();
           </div>
 
           <div class="v-tabs-criteria">
-            <!-- Load & initialize Tipsy -->
-            <script src="/memms/static/js/jquery/tipsy/src/javascripts/jquery.tipsy.js" type="text/javascript" ></script>
-            <script src="/memms/static/js/tipsy_init.js" type="text/javascript" ></script>
             <ul class="left">
               <li>
                 <span>Report type:</span>
@@ -577,10 +475,6 @@ $( ".js-date-picker" ).datepicker();
           </div>
 
           <div class="filters main">
-            <script src="/memms/static/js/form_init.js" type="text/javascript" ></script>
-            <script src="/memms/static/js/dashboard/foldable.js" type="text/javascript" ></script>
-            <script src="/memms/static/js/dashboard/list_tabs.js" type="text/javascript" ></script>
-
             <form class="filters-box" method="get" action="/memms/equipmentView/filter" style="display: none;">
               <a href="#" class='filters-close' id='js-filters-close'>
                 <img src="${resource(dir:'images',file:'icon_close.png')}" />
@@ -807,10 +701,3 @@ $( ".js-date-picker" ).datepicker();
   </div>
   <!-- End of template -->
 </div>
-
-<script src="../temp_reports/chosen.js"></script>
-
-
-<script type="text/javascript">
-  $(".chzn-select").chosen();
-</script>
