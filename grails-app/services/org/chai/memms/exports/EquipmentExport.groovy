@@ -80,18 +80,15 @@ class EquipmentExport implements Exporter{
 				equipments = filterEquipment(equipmentExportFilter)
 			}
 			progress.setMaximum(equipments.size())
-			
+			if (log.isDebugEnabled()) log.debug("Equipment size to be exported= " + equipments.size())
 			for(Equipment equipment: equipments){
 				if (log.isDebugEnabled()) log.debug("exporting equipment=" + equipment)
-				List<String> line = 
-					[
-					equipment.serialNumber,equipment.type.code,equipment.type?.getNames(new Locale("en")),equipment.type?.getNames(new Locale("fr")),equipment.model,
+				List<String> line = [equipment.serialNumber,equipment.type.code,equipment.type?.getNames(new Locale("en")),equipment.type?.getNames(new Locale("fr")),equipment.model,
 					equipment.currentStatus,equipment.dataLocation?.code,equipment.dataLocation?.getNames(new Locale("en")),equipment.dataLocation?.getNames(new Locale("fr")),
 					equipment.department?.code,equipment.department?.getNames(new Locale("en")),equipment.department?.getNames(new Locale("fr")),equipment.room,
 					equipment.manufacturer?.code,equipment.manufacturer?.contact?.contactName,equipment.manufactureDate,equipment.supplier?.code,equipment.supplier?.contact?.contactName,
 					equipment.purchaseDate,equipment.purchaseCost?:"n/a",equipment.currency?:"n/a",equipment.donorName?:"n/a",equipment.obsolete,equipment.warranty?.startDate,
-					equipment.warrantyPeriod?.numberOfMonths
-					]
+					equipment.warrantyPeriod?.numberOfMonths]
 				log.debug("exporting line=" + line)
 				writer.write(line)
 				progress.incrementProgress()

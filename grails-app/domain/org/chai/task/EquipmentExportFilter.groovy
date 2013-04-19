@@ -35,6 +35,7 @@ import java.util.Set;
 
 import org.chai.memms.inventory.EquipmentType;
 import org.chai.memms.inventory.Provider;
+import org.chai.memms.inventory.Equipment.Donor;
 import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.exports.EquipmentExport;
 import org.chai.memms.exports.EquipmentTypeExport;
@@ -49,7 +50,7 @@ import org.chai.memms.util.Utils;
 @EqualsAndHashCode(includes='id')
 class EquipmentExportFilter extends ExportFilter{
 	Status equipmentStatus
-	String donor
+	Donor donor
 	String obsolete
 	
 	static hasMany = [equipmentTypes:EquipmentType,manufacturers:Provider,suppliers:Provider,serviceProviders:Provider,dataLocations:DataLocation]

@@ -78,15 +78,10 @@ class SparePartExport implements Exporter{
 			for(SparePart sparePart: spareParts){
 				if (log.isDebugEnabled()) log.debug("exporting spare part = " + sparePart)
 				List<String> line = [sparePart.serialNumber,sparePart.type.code,sparePart.type?.getNames(new Locale("en")),sparePart.type?.getNames(new Locale("fr")),
-					sparePart.statusOfSparePart,sparePart.sparePartPurchasedBy,
-					sparePart.dataLocation?.code,sparePart.dataLocation?.getNames(new Locale("en")),sparePart.dataLocation?.getNames(new Locale("fr")),			
-					sparePart.type?.manufacturer?.contact?.contactName,
-					sparePart.manufactureDate,
-					sparePart.supplier?.code,
-					sparePart.supplier?.contact?.contactName,
-					sparePart.purchaseDate,sparePart.purchaseCost?:"n/a",sparePart.currency?:"n/a",sparePart.sameAsManufacturer,sparePart.warranty?.startDate
-					,sparePart.warrantyPeriod?.numberOfMonths
-					]
+					sparePart.statusOfSparePart,sparePart.sparePartPurchasedBy,sparePart.dataLocation?.code,sparePart.dataLocation?.getNames(new Locale("en")),
+					sparePart.dataLocation?.getNames(new Locale("fr")),sparePart.type?.manufacturer?.contact?.contactName,sparePart.manufactureDate,sparePart.supplier?.code,
+					sparePart.supplier?.contact?.contactName,sparePart.purchaseDate,sparePart.purchaseCost?:"n/a",sparePart.currency?:"n/a",sparePart.sameAsManufacturer,
+					sparePart.warranty?.startDate,sparePart.warrantyPeriod?.numberOfMonths]
 				log.debug("exporting line=" + line)
 				writer.write(line)
 				progress.incrementProgress()

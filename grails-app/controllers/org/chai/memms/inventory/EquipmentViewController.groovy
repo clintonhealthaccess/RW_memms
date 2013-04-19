@@ -196,21 +196,12 @@ class EquipmentViewController extends AbstractController {
 
 	def generalExport = { ExportFilterCommand cmd ->
 
-		// we do this because automatic data binding does not work with polymorphic elements
-		/*Set<CalculationLocation> calculationLocations = new HashSet<CalculationLocation>()
-		params.list('calculationLocationids').each { id ->
-			if (NumberUtils.isDigits(id)) {
-				def calculationLocation = CalculationLocation.get(id)
-				if (calculationLocation != null && !calculationLocations.contains(calculationLocation)) calculationLocations.add(calculationLocation);
-			}
-		}
-		cmd.calculationLocations = calculationLocations*/
-
 		Set<DataLocation> dataLocations = new HashSet<DataLocation>()
 		params.list('dataLocationids').each { id ->
 			if (NumberUtils.isDigits(id)) {
 				def dataLocation = DataLocation.get(id)
-				if (dataLocation != null && !dataLocations.contains(dataLocation)) dataLocations.add(dataLocation);
+				if (dataLocation != null && !dataLocations.contains(dataLocation)) 
+				dataLocations.add(dataLocation);
 			}
 		}
 		cmd.dataLocations = dataLocations
@@ -219,7 +210,8 @@ class EquipmentViewController extends AbstractController {
 		params.list('equipmentTypeids').each { id ->
 			if (NumberUtils.isDigits(id)) {
 				def equipmentType = EquipmentType.get(id)
-				if (equipmentType != null && !equipmentTypes.contains(equipmentType)) equipmentTypes.add(equipmentType);
+				if (equipmentType != null && !equipmentTypes.contains(equipmentType)) 
+				equipmentTypes.add(equipmentType);
 			}
 		}
 		cmd.equipmentTypes = equipmentTypes
@@ -228,7 +220,8 @@ class EquipmentViewController extends AbstractController {
 		params.list('manufacturerids').each { id ->
 			if (NumberUtils.isDigits(id)) {
 				def manufacturer = Provider.get(id)
-				if (manufacturer != null && !manufacturers.contains(manufacturer)) manufacturers.add(manufacturer);
+				if (manufacturer != null && !manufacturers.contains(manufacturer)) 
+				manufacturers.add(manufacturer);
 			}
 		}
 		cmd.manufacturers = manufacturers
@@ -237,13 +230,14 @@ class EquipmentViewController extends AbstractController {
 		params.list('supplierids').each { id ->
 			if (NumberUtils.isDigits(id)) {
 				def supplier = Provider.get(id)
-				if (supplier != null && !suppliers.contains(supplier)) suppliers.add(supplier);
+				if (supplier != null && !suppliers.contains(supplier)) 
+				suppliers.add(supplier);
 			}
 		}
 		cmd.suppliers = suppliers
 		
 		Set<Provider> serviceProviders = new HashSet<Provider>()
-		params.list('serviceProvidersIds').each { id ->
+		params.list('serviceProvidersids').each { id ->
 			if (NumberUtils.isDigits(id)) {
 				def serviceProvider = Provider.get(id)
 				if (serviceProvider != null && !serviceProviders.contains(serviceProvider)) serviceProviders.add(serviceProvider);
@@ -267,7 +261,7 @@ class EquipmentViewController extends AbstractController {
 		render(view:"/entity/equipment/equipmentExportPage", model:[
 					template:"/entity/equipment/equipmentExportFilter",
 					filterCmd:cmd,
-					dataLocationTypes:DataLocationType.list(),
+					dataLocations:DataLocation.list(),
 					code: getLabel()
 				])
 	}
@@ -369,7 +363,7 @@ class FilterCommand {
 
 	String toString() {
 		return "FilterCommand[DataLocation="+dataLocation+", EquipmentType="+equipmentType+
-		", Manufacturer="+manufacturer+", Supplier="+supplier+", ServiceProvider="+serviceProvider+", Status="+status+", donated="+purchaser+", obsolete="+obsolete+
+		", Manufacturer="+manufacturer+", Supplier="+supplier+", ServiceProvider="+serviceProvider+", Status="+status+", purchaser="+purchaser+", obsolete="+obsolete+
 		", donor=" + donor + "]"
 	}
 }
@@ -405,7 +399,7 @@ class ExportFilterCommand {
 
 	String toString() {
 		return "ExportFilterCommand[ DataLocationTypes="+dataLocations+" , EquipmentTypes="+equipmentTypes+
-		", Manufacturers="+manufacturers+", Suppliers="+suppliers+", ServiceProviders="+serviceProviders+", Status="+equipmentStatus+", donated="+purchaser+", obsolete="+obsolete+
+		", Manufacturers="+manufacturers+", Suppliers="+suppliers+", ServiceProviders="+serviceProviders+", Status="+equipmentStatus+", purchaser="+purchaser+", obsolete="+obsolete+
 		", donor=" + donor + "]"
 	}
 }
