@@ -30,7 +30,7 @@ $(document).ready(function(){
     }
   });
 
-  /* delect/deselect all dropdown */
+  /* select/deselect all dropdown */
 
   $('.js-select-all').click(function(e) {
     var options = $(this).parents('li').find('select').find('option');
@@ -85,3 +85,8 @@ $(function() {
 
 // load chosen
 $(".chzn-select").chosen();
+
+$(function(){
+  customizedlisting_init();
+});
+
