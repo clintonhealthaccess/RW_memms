@@ -6,5 +6,5 @@
 </div>
 
 <div id="dialog-form">
-  <g:render template="/entity/reports/step1" />
+  <g:render template="/entity/reports/step1"/>
 </div>

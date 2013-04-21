@@ -8,35 +8,26 @@
     <fieldset>
       <ul>
         <li>
-          <!-- TODO -->
-          <label for="report_type">Report Type</label>
-          <select name="reportType" class="js-custom-report-type">
-            <option value="0">Please select</option>
-            <option value="inventory" ${reportType == 'inventory'?'selected':''}>
-              <g:message code="header.navigation.inventory"/></option>
-            <option value="corrective" ${reportType == 'corrective'?'selected':''}>
-              <g:message code="header.navigation.corrective.maintenance"/></option>
-            <option value="preventive" ${reportType == 'preventive'?'selected':''}>
-              <g:message code="header.navigation.preventive.maintenance"/></option>
-            <option value="spareParts" ${reportType == 'spareParts'?'selected':''}>
-              <g:message code="header.navigation.sparePart"/></option>
-          </select>
+          <div id="custom-report-type">
+            <label for="report_type">Report Type</label>
+            <select name="reportType" style="width:384px;" class="js-custom-report-type" 
+              onchange="${remoteFunction(action: 'customizedReportSubType', update: 'custom-report-subtype', params: '\'reportType=\' + this.value')}">
+              <option value="0">Please select</option>
+              <option value="inventory" ${reportType == 'inventory'?'selected':''}>
+                <g:message code="header.navigation.inventory"/></option>
+              <option value="corrective" ${reportType == 'corrective'?'selected':''}>
+                <g:message code="header.navigation.corrective.maintenance"/></option>
+              <option value="preventive" ${reportType == 'preventive'?'selected':''}>
+                <g:message code="header.navigation.preventive.maintenance"/></option>
+              <option value="spareParts" ${reportType == 'spareParts'?'selected':''}>
+                <g:message code="header.navigation.sparePart"/></option>
+            </select>
+          </div>
         </li>
         <li>
-          <label for="report_type">Report Subtype</label>
-          <select name="reportSubType" class="js-custom-report-subtype">
-            <option value="0">Please select</option>
-            <option data-report-type="inventory,spareParts" value="inventory">
-              List of Inventory</option>
-            <option data-report-type="corrective,preventive" value="workdOrders">
-              List of Work Orders</option>
-            <option data-report-type="inventory,corrective,preventive,spareParts" value="statusChanges">
-              List of Status Changes</option>
-            <option data-report-type="spareParts" value="useRate">
-              Spare Part Use Rate</option>
-            <option data-report-type="spareParts" value="stockOut">
-              Forecast Stock Out</option>
-          </select>
+          <div id="custom-report-subtype">
+            <g:render template="/entity/reports/customizedReportSubType" />
+          </div>
         </li>
       </ul>
     </fieldset>

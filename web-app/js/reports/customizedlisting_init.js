@@ -1,5 +1,8 @@
 function customizedlisting_init(){
 
+  /* replaced with g:formRemote for "next" */
+  /* replaced with g:remoteLink for "previous" */
+
   /* customized reports form steps */
 
   // var step_counter = 1;
@@ -52,28 +55,6 @@ function customizedlisting_init(){
 }
 
 function step1_init(){
-
-  // var reportType = $('.js-custom-report-type').val();
-  // var reportSubType = $('.js-custom-report-subtype').val();
-
-  // if(reportType != "0"){
-  //   $('.js-custom-report-subtype > option[data-report-type]').each(function(){
-  //     var reportTypes = $(this).data('report-type').split(',');
-  //     if(reportTypes.indexOf(reportType) < 0) $(this).attr('disabled', 'disabled'); 
-  //     // else $(this).removeAttr('disabled');
-  //   });
-  // }
-  // else $('.js-custom-report-subtype > option').attr('disabled', 'disabled');
-
-  // $('.js-custom-report-type').change(function() {
-  //   var reportType = $(this).val();
-  //   $('.js-custom-report-subtype > option[data-report-type]').each(function(){
-  //     var reportTypes = $(this).data('report-type').split(',');
-  //     if(reportTypes.indexOf(reportType) < 0) $(this).attr('disabled', 'disabled'); 
-  //     else $(this).removeAttr('disabled');
-  //   });
-  // });
-
   $('#js-next-step-1').click(function(e) {
     $('#formRemoteStep1').submit();
   });

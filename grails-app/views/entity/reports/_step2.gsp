@@ -48,7 +48,7 @@
         </li>
       </ul>
     </fieldset>
-    <g:remoteLink id='js-prev-step-2' class="ui-widget-previous left btn gray medium" action="step1" 
+    <g:remoteLink class="ui-widget-previous left btn gray medium" action="step1" 
       update="dialog-form" params="${params}" onSuccess="customizedlisting_init();">
       Previous Step</g:remoteLink>
     <a href="#" class="ui-widget-next right btn" id='js-next-step-2'>Next step</a>

@@ -15,7 +15,7 @@
       </ul>
     </fieldset>
   </g:formRemote>
-  <g:remoteLink id='js-prev-step-3' class="ui-widget-previous left btn gray medium" action="step2" 
+  <g:remoteLink class="ui-widget-previous left btn gray medium" action="step2" 
     update="dialog-form" params="${params}" onSuccess="customizedlisting_init();">
     Previous Step</g:remoteLink>
   <a href="#" class="ui-widget-next right btn" id='js-next-step-3'>Next step</a>
