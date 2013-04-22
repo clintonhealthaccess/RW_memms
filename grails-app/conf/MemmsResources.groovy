@@ -52,10 +52,10 @@ modules = {
 	chosen {
 		dependsOn 'jquery'
 
-		resource url: '/js/jquery/chosen/chosen.css', bundle: 'core'
 		resource url: '/js/jquery/chosen/chosen.js', bundle: 'core'
-		resource url: '/js/jquery/chosen/chosen.jquery.js', bundle: 'core'
+		// resource url: '/js/jquery/chosen/chosen.jquery.js', bundle: 'core'
 		resource url: '/js/jquery/chosen/ajax-chosen.js', bundle: 'core'
+		resource url: '/js/jquery/chosen/chosen.css', bundle: 'core'
 	}
 	
 	jqueryui {
@@ -134,7 +134,7 @@ modules = {
 	}
 
 	reports {
-		dependsOn 'core,form,tipsy,chosen,jqueryui'
+		dependsOn 'core,form,tipsy,jquery,jqueryui,chosen'
 
 		// TODO ? 
 		// Load Droid Sans remotely from Google Webfonts
