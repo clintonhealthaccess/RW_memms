@@ -5,7 +5,7 @@
 <head>
 	<title><g:layoutTitle /></title>
 	<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
-	<g:layoutHead />	
+	<g:layoutHead />
 	<r:require module="core"/>
 	<r:layoutResources/>
 </head>
