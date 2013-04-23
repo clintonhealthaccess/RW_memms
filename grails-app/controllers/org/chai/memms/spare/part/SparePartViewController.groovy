@@ -185,13 +185,12 @@ class SparePartViewController extends AbstractController{
 	
 	def generalExport = { ExportFilterCommand cmd ->
 
-		Set<CalculationLocation> calculationLocations = new HashSet<CalculationLocation>()
-
 			Set<DataLocation> dataLocations = new HashSet<DataLocation>()
 			params.list('dataLocationids').each { id ->
 				if (NumberUtils.isDigits(id)) {
 					def dataLocation = DataLocation.get(id)
-					if (dataLocation != null && !dataLocations.contains(dataLocation)) dataLocations.add(dataLocation);
+					if (dataLocation != null && !dataLocations.contains(dataLocation)) 
+					dataLocations.add(dataLocation);
 				}
 			}
 			cmd.dataLocations = dataLocations
@@ -200,7 +199,8 @@ class SparePartViewController extends AbstractController{
 			params.list('sparePartTypeids').each { id ->
 				if (NumberUtils.isDigits(id)) {
 					def sparePartType = SparePartType.get(id)
-					if (sparePartType != null && !sparePartTypes.contains(sparePartType)) sparePartTypes.add(sparePartType);
+					if (sparePartType != null && !sparePartTypes.contains(sparePartType)) 
+					sparePartTypes.add(sparePartType);
 				}
 			}
 			cmd.sparePartTypes = sparePartTypes
@@ -209,7 +209,8 @@ class SparePartViewController extends AbstractController{
 			params.list('supplierids').each { id ->
 				if (NumberUtils.isDigits(id)) {
 					def supplier = Provider.get(id)
-					if (supplier != null && !suppliers.contains(supplier)) suppliers.add(supplier);
+					if (supplier != null && !suppliers.contains(supplier)) 
+					suppliers.add(supplier);
 				}
 			}
 			cmd.suppliers = suppliers
@@ -219,8 +220,8 @@ class SparePartViewController extends AbstractController{
 		
 			if(params.exported != null){
 				def sparePartExportTask = new SparePartExportFilter(dataLocations:cmd.dataLocations,
-						sparePartTypes:cmd.sparePartTypes,suppliers:cmd.suppliers,statusOfSparePart:cmd.statusOfSparePart,sparePartPurchasedBy:cmd.sparePartPurchasedBy,
-						sameAsManufacturer:cmd.sameAsManufacturer).save(failOnError: true,flush: true)
+						sparePartTypes:cmd.sparePartTypes,suppliers:cmd.suppliers,statusOfSparePart:cmd.statusOfSparePart,
+						sparePartPurchasedBy:cmd.sparePartPurchasedBy,sameAsManufacturer:cmd.sameAsManufacturer).save(failOnError: true,flush: true)
 				params.exportFilterId = sparePartExportTask.id
 				params.class = "SparePartExportTask"
 				params.targetURI = "/sparePartView/generalExport"
@@ -230,7 +231,7 @@ class SparePartViewController extends AbstractController{
 			render(view:"/entity/sparePart/sparePartExportPage", model:[
 					template:"/entity/sparePart/sparePartExportFilter",
 					filterCmd:cmd,
-					dataLocationTypes:DataLocationType.list(),
+					dataLocations:DataLocation.list(),
 					code: getLabel()
 			])
 	}
