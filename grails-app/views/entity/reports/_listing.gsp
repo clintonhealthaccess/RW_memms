@@ -14,6 +14,7 @@
   <!-- List Template goes here -->
   <div id ="list-grid" class="v-tabs">
 
+    <!-- Create Customized Report Template goes here -->
     <g:render template="/entity/reports/createCustomizedReport" />
 
     <ul id='js-top-tabs' class="v-tabs-nav left">

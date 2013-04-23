@@ -1,7 +1,7 @@
-<!-- Step 3 -->
 <div class="dialog-form step-3" id='js-step-3'>
-  <p>ReportType: ${reportType}</p>
-  <p>ReportSubType: ${reportSubType}</p>
+  <!-- Step 3 -->
+%{--   <p>ReportType: ${reportType}</p>
+  <p>ReportSubType: ${reportSubType}</p> --}%
   <h2>Choose the order<span class="right">Step <b>3</b> of <b>4</b></span></h2>
   <p>Type: Inventory > List of inventory</p>
   <g:formRemote name="formRemoteStep3" url="[action:'step4', params: params]" update="dialog-form"

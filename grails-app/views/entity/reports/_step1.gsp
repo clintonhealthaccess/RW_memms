@@ -1,7 +1,7 @@
 <div class="dialog-form step-1" id='js-step-1'>
   <!-- Step 1 -->
-  <p>ReportType: ${reportType}</p>
-  <p>ReportSubType: ${reportSubType}</p>
+%{--   <p>ReportType: ${reportType}</p>
+  <p>ReportSubType: ${reportSubType}</p> --}%
   <h2>Select the type of customized report<span class="right">Step <b>1</b> of <b>4</b></span></h2>
   <g:formRemote name="formRemoteStep1" url="[action:'step2']" update="dialog-form" 
     onSuccess="customizedlisting_init();">
@@ -10,7 +10,7 @@
         <li>
           <div id="custom-report-type">
             <label for="report_type">Report Type</label>
-            <select name="reportType" style="width:384px;" class="js-custom-report-type" 
+            <select name="reportType" class="js-custom-report-type" 
               onchange="${remoteFunction(action: 'customizedReportSubType', update: 'custom-report-subtype', params: '\'reportType=\' + this.value')}">
               <option value="0">Please select</option>
               <option value="inventory" ${reportType == 'inventory'?'selected':''}>
