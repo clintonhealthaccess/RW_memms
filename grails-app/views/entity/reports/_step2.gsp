@@ -9,15 +9,16 @@
     <fieldset>
       <ul>
         <li>
-          <label>Facility</label>
-          <select multiple style="width:384px;" class="chzn-select">
-            <option>Please select</option>
-            <option>Please select</option>
-            <option>Please select</option>
-            <option>Please select</option>
-            <option>Please select</option>
-          </select>
+          <g:selectFromList name="dataLocationids" style="width:384px;" class="chzn-select"
+							label="${message(code:'filter.facility.label')}" bean="${filterCmd}"
+							field="dataLocation" optionKey="id" multiple="true"
+							ajaxLink="${createLink(controller:'dataLocation', action:'getAjaxData', params:[class: 'dataLocation'])}"
+							from="${dataLocations}" value="${filterCmd?.dataLocations*.id}" 
+							values="${dataLocations*.names}"/>
+          
           <input type='checkbox' class='js-select-all'><span>Select all</span>
+          
+          
         </li>
         <li>
           <label>Department</label>
