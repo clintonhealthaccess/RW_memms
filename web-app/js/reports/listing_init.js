@@ -5,7 +5,7 @@ $(document).ready(function(){
 
   $( "#js-customize-toggle").click(function(e) {
       e.preventDefault();
-    $( "#dialog-form" ).dialog({ modal: true });
+    $( "#dialog-form" ).dialog();
     $('.ui-dialog').resizable('destroy');
   });
 
