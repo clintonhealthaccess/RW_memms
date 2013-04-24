@@ -78,7 +78,7 @@ class ImportExportConstant {
 	public final static String EQUIPMENT_OBSOLETE = "Obsolete"
 	public final static String EQUIPMENT_WARRANTY_START = "Warranty start"
 	public final static String EQUIPMENT_WARRANTY_END = "Warranty period (Months)"
-	
+	public final static String EQUIPMENT_ID = "Id"
 	//Importing/exporting Spare part
 	public final static String SPARE_PART_SERIAL_NUMBER = "Serial number"
 	public final static String SPARE_PART_TYPE = "Type"

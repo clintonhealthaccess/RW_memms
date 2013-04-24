@@ -35,6 +35,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Date;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -46,13 +47,14 @@ import org.chai.memms.inventory.Equipment;
 import org.chai.memms.inventory.Equipment.PurchasedBy;
 import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.inventory.Equipment.Donor;
-import org.chai.memms.inventory.EquipmentType
+import org.chai.memms.inventory.EquipmentType;
 import org.chai.memms.util.ImportExportConstant;
 import org.chai.memms.util.Utils;
 import org.supercsv.io.CsvListWriter;
 import org.supercsv.io.ICsvListWriter;
 import org.supercsv.prefs.CsvPreference;
-import org.chai.memms.task.Exporter
+import org.chai.memms.task.Exporter;
+import org.chai.memms.inventory.Provider;
 
 class EquipmentExport implements Exporter{
 	def equipmentService
@@ -84,12 +86,14 @@ class EquipmentExport implements Exporter{
 			if (log.isDebugEnabled()) log.debug("Equipment size to be exported= " + equipments.size())
 			for(Equipment equipment: equipments){
 				if (log.isDebugEnabled()) log.debug("exporting equipment=" + equipment)
-				List<String> line = [equipment.serialNumber,equipment.type.code,equipment.type?.getNames(new Locale("en")),equipment.type?.getNames(new Locale("fr")),equipment.model,
-					equipment.currentStatus,equipment.dataLocation?.code,equipment.dataLocation?.getNames(new Locale("en")),equipment.dataLocation?.getNames(new Locale("fr")),
-					equipment.department?.code,equipment.department?.getNames(new Locale("en")),equipment.department?.getNames(new Locale("fr")),equipment.room,
-					equipment.manufacturer?.code,equipment.manufacturer?.contact?.contactName,equipment.manufactureDate,equipment.supplier?.code,equipment.supplier?.contact?.contactName,
-					equipment.purchaseDate,equipment.purchaseCost?:"n/a",equipment.currency?:"n/a",equipment.donorName?:"n/a",equipment.obsolete,equipment.warranty?.startDate,
-					equipment.warrantyPeriod?.numberOfMonths]
+				List<String> line = [
+					equipment.id,equipment.serialNumber?:"n/a",equipment.type.code,equipment.type?.getNames(new Locale("en")),equipment.type?.getNames(new Locale("fr")),equipment.model?:"n/a",
+					equipment.currentStatus,equipment.dataLocation?.code,equipment.dataLocation?.getNames(new Locale("en")),equipment.dataLocation?.getNames(new Locale("fr"))?:"n/a",
+					equipment.department?.code,equipment.department?.getNames(new Locale("en")),equipment.department?.getNames(new Locale("fr"))?:"n/a",equipment.room?:"n/a",equipment.manufacturer?.code?:"n/a",
+					equipment.manufacturer?.contact?.contactName?:"n/a",equipment.manufactureDate?:"n/a",equipment.supplier?.code?:"n/a",equipment.supplier?.contact?.contactName?:"n/a",
+					equipment.purchaseDate?:"n/a",equipment.purchaseCost?:"n/a",equipment.currency?:"n/a",equipment.donorName?:"n/a",equipment.obsolete,equipment.warranty?.startDate?:"n/a",
+					equipment.warrantyPeriod?.numberOfMonths?:"n/a"
+					]
 				log.debug("exporting line=" + line)
 				writer.write(line)
 				progress.incrementProgress()
@@ -104,6 +108,7 @@ class EquipmentExport implements Exporter{
 	
 	public List<String> getExportDataHeaders() {
 		List<String> headers = new ArrayList<String>()
+		headers.add(ImportExportConstant.EQUIPMENT_ID)
 		headers.add(ImportExportConstant.EQUIPMENT_SERIAL_NUMBER)
 		headers.add(ImportExportConstant.DEVICE_CODE)
 		headers.add(ImportExportConstant.DEVICE_NAME_EN)
