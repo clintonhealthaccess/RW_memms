@@ -77,7 +77,7 @@ class EquipmentServiceSpec extends IntegrationTests{
 		def equipmentCodeToFind = Initializer.newEquipment(CODE(124),PurchasedBy.BYMOH,null,null,false,Initializer.newPeriod(32),"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
 				,Initializer.getDate(10,10,2010),"RWF","equipmentModel",DataLocation.findByCode(KIVUYE),department,equipmentType,manufacture,supplier,Status.OPERATIONAL,user,null,null)
 
-		def List<Equipment> equipments
+		List<Equipment> equipments
 
 		when: "user can view all those he manages"
 		equipments = equipmentService.searchEquipment("Descriptions",techDH,null, [:])
@@ -189,7 +189,7 @@ class EquipmentServiceSpec extends IntegrationTests{
 		Initializer.newEquipment("SERIAL11",PurchasedBy.BYFACILITY,null,null,false,Initializer.newPeriod(32),"ROOM A1","2900.23",['en':'Equipment Descriptions two'],Initializer.getDate(22,07,2010)
 				,Initializer.getDate(10,10,2010),"USD","equipmentModel",butaro,department,equipmentType,manufacture,supplier,Status.OPERATIONAL
 				,user,null,null)
-		def List<Equipment> equipments
+		List<Equipment> equipments
 
 		when:
 		equipments = equipmentService.getEquipmentsByDataLocationAndManages(butaro, [:])
@@ -235,7 +235,7 @@ class EquipmentServiceSpec extends IntegrationTests{
 		equipmentOne.save(failOnError:true)
 		equipmentTwo.save(failOnError:true)
 		
-		def List<Equipment> equipmentsOne, equipmentsTwo, equipmentsThree
+		List<Equipment> equipmentsOne, equipmentsTwo, equipmentsThree
 		def equipmentStatusOneActive = Initializer.newEquipmentStatus(Initializer.now(),user,Status.INSTOCK,equipmentOne,[:])
 		def equipmentStatusOneInActive = Initializer.newEquipmentStatus(Initializer.now(),user,Status.OPERATIONAL,equipmentOne,[:])
 		def equipmentStatusTwo = Initializer.newEquipmentStatus(Initializer.now(),user,Status.DISPOSED,equipmentOne,[:])
@@ -313,7 +313,7 @@ class EquipmentServiceSpec extends IntegrationTests{
 			,user,null,null)
 	
 		
-		def List<Equipment> equipmentsOne, equipmentsTwo, equipmentsThree
+		List<Equipment> equipmentsOne, equipmentsTwo, equipmentsThree
 		def equipmentStatusOneActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("user"),Status.INSTOCK,equipmentOne,[:])
 		def equipmentStatusOneInActive = Initializer.newEquipmentStatus(Initializer.now(),User.findByUsername("user"),Status.OPERATIONAL,equipmentOne,[:])
 		

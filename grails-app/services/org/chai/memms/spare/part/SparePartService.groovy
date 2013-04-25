@@ -41,10 +41,8 @@ import org.chai.location.LocationLevel;
 import org.chai.memms.inventory.Equipment;
 import org.chai.memms.spare.part.SparePart;
 import org.chai.memms.spare.part.SparePart.StockLocation;
-import org.chai.memms.spare.part.SparePartStatus;
 import org.chai.memms.security.User;
 import org.chai.memms.spare.part.SparePart.SparePartPurchasedBy;
-import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
 import org.chai.memms.spare.part.SparePartType;
 import org.chai.memms.security.User.UserType;
 import org.supercsv.io.CsvListWriter;
@@ -61,24 +59,11 @@ class SparePartService {
 	def languageService;
 	def userService
 	
-	public void updateCurrentSparePartStatus(SparePart sparePart,SparePartStatus sparePartStatus,User user, Equipment equipment){
-		if(sparePartStatus!=null){
-			sparePart.statusOfSparePart = sparePartStatus.statusOfSparePart
-			sparePart.addToStatus(sparePartStatus)
-		}else{
-			sparePart.statusOfSparePart = sparePart.timeBasedStatus.sparePartStatus
-		}
-		sparePart.lastModified = user
-		sparePart.usedOnEquipment=equipment
-		if(log.isDebugEnabled()) log.debug("VALUE OF EQUIPMENT FROM THE FORM: " + equipment)
-		if(log.isDebugEnabled()) log.debug("Updating SparePart status params: "+sparePart)
-		sparePart.save(failOnError:true)
-	}
+	
 
-	public def searchSparePart(String text,User user, SparePartType type,StatusOfSparePart status,Map<String,String> params) {
+	public def searchSparePart(String text,User user, SparePartType type,Map<String,String> params) {
 		//Remove unnecessary blank space
 		text= text.trim()
-		def dbFieldTypeNames = 'names_'+languageService.getCurrentLanguagePrefix();
 		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
 		def dataLocations = []
 		def criteria = SparePart.createCriteria();
@@ -97,15 +82,10 @@ class SparePartService {
 			createAlias("type","t")
 			if(type!=null)
 				eq("type",type)
-			if(status!=null)
-				eq("statusOfSparePart",status)
 			if(!dataLocations.isEmpty())
 				inList('dataLocation',dataLocations)
 			or{
-				ilike("code","%"+text+"%")
-				ilike("serialNumber","%"+text+"%")
 				ilike(dbFieldDescriptions,"%"+text+"%")
-				ilike(dbFieldTypeNames,"%"+text+"%")
 				ilike("t."+dbFieldTypeNames,"%"+text+"%")
 				ilike("t."+dbFieldDescriptions,"%"+text+"%")
 				ilike("t.partNumber","%"+text+"%")
@@ -115,16 +95,13 @@ class SparePartService {
 	}
 
 
-	public def getSpareParts(User user, SparePartType type,StatusOfSparePart status,Map<String,String> params) {
+	public def getSpareParts(User user, SparePartType type,Map<String,String> params) {
 		def dataLocations = []
 		def criteria = SparePart.createCriteria();
 
 		if(user.userType.equals(UserType.ADMIN) || user.userType.equals(UserType.TECHNICIANMMC) || user.userType.equals(UserType.SYSTEM) || user.userType.equals(UserType.TECHNICIANDH))
 			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-				if(type!=null)
-					eq("type",type)
-				if(status!=null)
-					eq("statusOfSparePart",status)
+				if(type!=null) eq("type",type)
 		}
 		else{
 			if(user.location instanceof Location)
@@ -141,7 +118,7 @@ class SparePartService {
 		}
 
 	}
-	public def filterSparePart(def location, def supplier, def type,def sparePartPurchasedBy,def sameAsManufacturer,def sparePartStatus, Map<String, String> params){
+	public def filterSparePart(def location, def supplier, def type,def sparePartPurchasedBy,Map<String, String> params){
 
 		def dataLocations = []		
 			
@@ -165,10 +142,6 @@ class SparePartService {
 				eq ("type", type)
 			if(sparePartPurchasedBy && !sparePartPurchasedBy.equals(SparePartPurchasedBy.NONE))
 				eq ("sparePartPurchasedBy",sparePartPurchasedBy)
-			if(sameAsManufacturer)
-				eq ("sameAsManufacturer", (sameAsManufacturer.equals('true'))?true:false)
-			if(sparePartStatus && !sparePartStatus.equals(StatusOfSparePart.NONE))
-				eq ("statusOfSparePart",sparePartStatus)
 		}
 	}
 	public File exporter(def location,List<SparePart> spareParts){
@@ -190,26 +163,20 @@ class SparePartService {
 			}
 			for(SparePart sparePart: spareParts){
 				List<String> line = [
-					sparePart.serialNumber,
 					sparePart.type.code,
 					sparePart.type?.getNames(new Locale("en")),
 					sparePart.type?.getNames(new Locale("fr")),
-
-					sparePart.statusOfSparePart,
 					sparePart.sparePartPurchasedBy.name(),
 					sparePart.dataLocation?.code,
 					sparePart.dataLocation?.getNames(new Locale("en")),
 					sparePart.dataLocation?.getNames(new Locale("fr")),
 					sparePart.type?.manufacturer?.contact?.contactName,
-					sparePart.manufactureDate,
 					sparePart.supplier?.code,
 					sparePart.supplier?.contact?.contactName,
 					sparePart.purchaseDate,
 					sparePart.purchaseCost?:"n/a",
 					sparePart.currency?:"n/a",
-					sparePart.sameAsManufacturer,
-					sparePart?.warranty?.startDate,
-					sparePart?.warrantyPeriod?.numberOfMonths?:""
+					sparePart.quantity
 				]
 				writer.write(line)
 			}
@@ -228,25 +195,20 @@ class SparePartService {
 	public List<String> getExportDataHeaders() {
 		List<String> headers = new ArrayList<String>();
 
-		headers.add(ImportExportConstant.SPARE_PART_SERIAL_NUMBER)
 		headers.add(ImportExportConstant.SPARE_PART_TYPE_CODE)
 		headers.add(ImportExportConstant.SPARE_PART_TYPE_NAME_EN)
 		headers.add(ImportExportConstant.SPARE_PART_TYPE_NAME_FR)
-		headers.add(ImportExportConstant.SPARE_PART_MODEL)
-		headers.add(ImportExportConstant.SPARE_PART_STATUS)
 		headers.add(ImportExportConstant.SPARE_PART_PURCHASED_BY)
 		headers.add(ImportExportConstant.LOCATION_CODE)
 		headers.add(ImportExportConstant.LOCATION_NAME_EN)
+		headers.add(ImportExportConstant.LOCATION_NAME_FR)
 		headers.add(ImportExportConstant.MANUFACTURER_CONTACT_NAME)
-		headers.add(ImportExportConstant.SPARE_PART_MANUFACTURE_DATE)
 		headers.add(ImportExportConstant.SUPPLIER_CODE)
 		headers.add(ImportExportConstant.SUPPLIER_CONTACT_NAME)
 		headers.add(ImportExportConstant.SUPPLIER_DATE)
 		headers.add(ImportExportConstant.SPARE_PART_PURCHASE_COST)
 		headers.add(ImportExportConstant.SPARE_PART_PURCHASE_COST_CURRENCY)
-		headers.add(ImportExportConstant.SPARE_PART_SAME_AS_MANUFACTURER)
-		headers.add(ImportExportConstant.SPARE_PART_WARRANTY_START)
-		headers.add(ImportExportConstant.SPARE_PART_WARRANTY_PERIOD)
+		headers.add(ImportExportConstant.SPARE_PART_QUANTITY)
 
 		return headers;
 	}

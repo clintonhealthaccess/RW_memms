@@ -4,7 +4,7 @@
 		<tr>
 			<g:sortableColumn property="sender"  title="${message(code: 'notification.sender.label')}" params="[q:q]" />
 			<g:sortableColumn property="dataLocation"  title="${message(code: 'datalocation.label')}" params="[q:q]" />
-			<g:sortableColumn property="writtenOn"  title="${message(code: 'notification.writtenOn.label')}" params="[q:q]" />
+			<g:sortableColumn property="dateCreated"  title="${message(code: 'notification.writtenOn.label')}" params="[q:q]" />
 			<th><g:message code="notification.content.label"/></th>
 			<th/>
 			<th/>

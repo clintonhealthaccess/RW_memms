@@ -80,17 +80,12 @@ class ImportExportConstant {
 	public final static String EQUIPMENT_WARRANTY_END = "Warranty end"
 	
 	//Importing/exporting Spare part
-	public final static String SPARE_PART_SERIAL_NUMBER = "Serial number"
 	public final static String SPARE_PART_TYPE = "Type"
-	public final static String SPARE_PART_MODEL = "Model"
 	public final static String SPARE_PART_MANUFACTURE_DATE = "Manufacture date"
 	public final static String SPARE_PART_PURCHASE_COST = "Cost"
 	public final static String SPARE_PART_PURCHASE_COST_CURRENCY = "Currency"
-	public final static String SPARE_PART_STATUS = "Status of spare part"
 	public final static String SPARE_PART_PURCHASED_BY = "Purchaser"
-	public final static String SPARE_PART_SAME_AS_MANUFACTURER = "warranty same as mnufacturer"
-	public final static String SPARE_PART_WARRANTY_START = "Warranty start"
-	public final static String SPARE_PART_WARRANTY_PERIOD = "Warranty period (Months)"
+	ImportExportConstant String SPARE_PART_QUANTITY = "Quantity"
 	
 	//Importing/exporting spare part types
 	public final static String SPARE_PART_TYPE_CODE = "spare part type code"

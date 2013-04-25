@@ -21,7 +21,6 @@ import org.chai.memms.util.Utils;
 @EqualsAndHashCode(includes='id')
 class SparePartExportFilter extends ExportFilter{
 	StatusOfSparePart sparePartStatus
-	String sameAsManufacturer
 	
 	static hasMany = [sparePartTypes:SparePartType,manufacturers:Provider,suppliers:Provider]
 	static constraints = {
