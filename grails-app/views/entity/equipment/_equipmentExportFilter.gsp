@@ -14,7 +14,7 @@
 
 			<g:form url="[controller:'equipmentView', action:'generalExport']" method="get" useToken="false" class="filters-box">
 				<ul class="filters-list">
-					<li><g:selectFromList name="equipmentTypeids"
+					<li><g:selectFromList name="equipmentTypeids" 
 							label="${message(code:'equipment.type.label')}" bean="${filterCmd}"
 							field="type" optionKey="id" multiple="true"
 							ajaxLink="${createLink(controller:'EquipmentType', action:'getAjaxData', params:[observation:'USEDINMEMMS'])}"
