@@ -196,15 +196,25 @@ class EquipmentViewController extends AbstractController {
 
 	def generalExport = { ExportFilterCommand cmd ->
 
-		Set<DataLocation> dataLocations = new HashSet<DataLocation>()
-		params.list('dataLocationids').each { id ->
+		Set<DataLocation> dataLocationTypes = new HashSet<DataLocationType>()
+		params.list('dataLocationTypeids').each { id ->
 			if (NumberUtils.isDigits(id)) {
-				def dataLocation = DataLocation.get(id)
-				if (dataLocation != null && !dataLocations.contains(dataLocation)) 
-				dataLocations.add(dataLocation);
+				def dataLocationType = DataLocationType.get(id)
+				if (dataLocationType != null && !dataLocationTypes.contains(dataLocationType)) 
+				dataLocationTypes.add(dataLocationType);
 			}
 		}
-		cmd.dataLocations = dataLocations
+		cmd.dataLocationTypes = dataLocationTypes
+		
+		Set<CalculationLocation> calculationLocations = new HashSet<CalculationLocation>()
+		params.list('locationids').each { id ->
+			if (NumberUtils.isDigits(id)) {
+				def calculationLocation = CalculationLocation.get(id)
+				if (CalculationLocation != null && !calculationLocations.contains(calculationLocation))
+				calculationLocations.add(calculationLocation);
+			}
+		}
+		cmd.calculationLocations = calculationLocations
 
 		Set<EquipmentType> equipmentTypes = new HashSet<EquipmentType>()
 		params.list('equipmentTypeids').each { id ->
@@ -248,7 +258,7 @@ class EquipmentViewController extends AbstractController {
 		if (log.isDebugEnabled()) log.debug("equipments.export, command="+cmd+", params"+params)
 
 		if(params.exported != null){
-			def equipmentExportTask = new EquipmentExportFilter(dataLocations:cmd.dataLocations,
+			def equipmentExportTask = new EquipmentExportFilter(dataLocationTypes:cmd.dataLocationTypes,
 					equipmentTypes:cmd.equipmentTypes,serviceProviders:cmd.serviceProviders,manufacturers:cmd.manufacturers,suppliers:cmd.suppliers,equipmentStatus:cmd.equipmentStatus, donor:cmd.donor,
 					purchaser:cmd.purchaser,obsolete:cmd.obsolete).save(failOnError: true,flush: true)
 			params.exportFilterId = equipmentExportTask.id
@@ -260,7 +270,7 @@ class EquipmentViewController extends AbstractController {
 		render(view:"/entity/equipment/equipmentExportPage", model:[
 					template:"/entity/equipment/equipmentExportFilter",
 					filterCmd:cmd,
-					dataLocations:DataLocation.list(),
+					dataLocationTypes:DataLocationType.list(),
 					code: getLabel()
 				])
 	}
@@ -368,6 +378,8 @@ class FilterCommand {
 }
 
 class ExportFilterCommand {
+	Set<DataLocationType> dataLocationTypes
+	Set<CalculationLocation> calculationLocations
 	Set<DataLocation> dataLocations
 	Set<EquipmentType> equipmentTypes
 	Set<Provider> manufacturers
@@ -394,10 +406,12 @@ class ExportFilterCommand {
 		purchaser nullable:true
 		obsolete nullable:true
 		donor nullable:true
+		dataLocationTypes nullable:true
+		calculationLocations nullable:true
 	}
 
 	String toString() {
-		return "ExportFilterCommand[ DataLocationTypes="+dataLocations+" , EquipmentTypes="+equipmentTypes+
+		return "ExportFilterCommand[ DataLocationTypes="+dataLocationTypes+" ,CalculationLocations="+calculationLocations+" , EquipmentTypes="+equipmentTypes+
 		", Manufacturers="+manufacturers+", Suppliers="+suppliers+", ServiceProviders="+serviceProviders+", Status="+equipmentStatus+", purchaser="+purchaser+", obsolete="+obsolete+
 		", donor=" + donor + "]"
 	}
