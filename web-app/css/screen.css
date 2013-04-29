@@ -157,6 +157,9 @@ ul.horizontal li.last { margin-right: 0; }
 /* line 234, ../../src/stylesheets/partials/_shared.sass */
 .dropdown .dropdown-list li a:hover { color: #1f7cbd; }
 
+/* line 237, ../../src/stylesheets/partials/_shared.sass */
+.clear-left { clear: left; }
+
 /* line 1, ../../src/stylesheets/partials/_layout.sass */
 .wrapper, .clearfix, .half, .full, .row { position: relative; *zoom: 1; }
 /* line 38, ../../../../../../../var/lib/gems/1.9.1/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
@@ -785,11 +788,11 @@ form.search-form button { height: 23px; margin: 0 0 0 -1px; -moz-border-radius-t
 /* line 609, ../../src/stylesheets/partials/_forms.sass */
 .filters h2 a:hover, .filters h2 a:focus { color: #147bc4; opacity: 1; text-decoration: underline; }
 /* line 613, ../../src/stylesheets/partials/_forms.sass */
-.filters ul.filters-list { padding: 10px 15px 0; *zoom: 1; }
+.filters ul.filters-list { padding: 10px 0 0; *zoom: 1; }
 /* line 38, ../../../../../../../var/lib/gems/1.9.1/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .filters ul.filters-list:after { content: ""; display: table; clear: both; }
 /* line 616, ../../src/stylesheets/partials/_forms.sass */
-.filters ul.filters-list > li { display: inline; float: left; height: 50px; margin-right: 1%; width: 32%; }
+.filters ul.filters-list > li { display: inline; float: left; height: 50px; margin-left: 5%; width: 94%; }
 /* line 623, ../../src/stylesheets/partials/_forms.sass */
 .filters ul.filters-list .date select { min-width: 31%; width: 31%; }
 /* line 626, ../../src/stylesheets/partials/_forms.sass */
