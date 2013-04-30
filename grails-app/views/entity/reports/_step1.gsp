@@ -1,9 +1,14 @@
 <div class="dialog-form step-1" id='js-step-1'>
   <!-- Step 1 -->
-%{--   <p>ReportType: ${reportType}</p>
-  <p>ReportSubType: ${reportSubType}</p> --}%
-  <h2>Select the type of customized report<span class="right">Step <b>1</b> of <b>4</b></span></h2>
-  <g:formRemote name="formRemoteStep1" url="[action:'step2']" update="dialog-form" 
+  <p>${dataLocations}</p>
+  <%
+    step1Params = [:]
+    step1Params.putAll params
+    step1Params.remove 'reportType'
+    step1Params.remove 'reportSubType'
+  %>
+  <h2>Select the type of customized report<span class="right">Step <b>1</b> of <b>3</b></span></h2>
+  <g:formRemote name="formRemoteStep1Next" url="[action:'step2', params: step1Params]" update="dialog-form" 
     onSuccess="customizedlisting_init();">
     <fieldset>
       <ul>
@@ -19,7 +24,7 @@
                 <g:message code="header.navigation.corrective.maintenance"/></option>
               <option value="preventive" ${reportType == 'preventive'?'selected':''}>
                 <g:message code="header.navigation.preventive.maintenance"/></option>
-              <option value="spareParts" ${reportType == 'spareParts'?'selected':''}>
+              <option value="spareparts" ${reportType == 'spareparts'?'selected':''}>
                 <g:message code="header.navigation.sparePart"/></option>
             </select>
           </div>

@@ -50,30 +50,29 @@ function customizedlisting_init(){
   step1_init();
   step2_init();
   step3_init();
-  step4_init();
 
 }
 
 function step1_init(){
   $('#js-next-step-1').click(function(e) {
-    $('#formRemoteStep1').submit();
+    $('#formRemoteStep1Next').submit();
   });
 }
 
 function step2_init(){
   $('#js-next-step-2').click(function(e) {
-    $('#formRemoteStep2').submit();
+    $('#formRemoteStep2Next').submit();
+  });
+  $('#js-prev-step-2').click(function(e) {
+    $('#formRemoteStep2Prev').submit();
   });
 }
 
 function step3_init(){
   $('#js-next-step-3').click(function(e) {
-    $('#formRemoteStep3').submit();
+    $('#formRemoteStep3Next').submit();
   });
-}
-
-function step4_init(){
-  $('#js-next-step-4').click(function(e) {
-    $('#formRemoteStep4').submit();
+  $('#js-prev-step-3').click(function(e) {
+    $('#formRemoteStep3Prev').submit();
   });
 }

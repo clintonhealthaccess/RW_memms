@@ -27,7 +27,11 @@
  */
 package org.chai.memms.reports
 
+import org.chai.location.DataLocation;
+import org.chai.location.DataLocationType;
+import org.chai.location.Location;
 import org.chai.memms.AbstractController;
+import org.chai.memms.util.Utils;
 
 /**
  * @author Jean Kahigiso M.
@@ -35,7 +39,13 @@ import org.chai.memms.AbstractController;
  */
 class ReportsController extends AbstractController{
 
+	def locationService
+
 	def dashboard ={
+		if (log.isDebugEnabled()) log.debug("reports.dashboard, params:"+params)
+
+		//TODO Pivot Access
+
 		render(view: '/entity/reports', model: 
 			[
 				template:"/entity/reports/dashboard"
@@ -43,9 +53,20 @@ class ReportsController extends AbstractController{
 	}	
 
 	def listing ={
+		if (log.isDebugEnabled()) log.debug("reports.listing, params:"+params)
+
+		def reportType = getReportType('reportType')
+		def reportSubType = getReportType('reportSubType')
+		def dataLocations = getDataLocations()
+
+		//TODO Rwagaju
+
 		render(view: '/entity/reports', model: 
 			[
-				template:"/entity/reports/listing"
+				template:"/entity/reports/listing",
+				reportType: reportType,
+				reportSubType: reportSubType,
+				dataLocations: dataLocations
 			])
 	}
 
@@ -54,12 +75,15 @@ class ReportsController extends AbstractController{
 
 		def reportType = getReportType('reportType')
 		def reportSubType = getReportType('reportSubType')
+		def dataLocations = getDataLocations()
 
 		render(template:"/entity/reports/step1", 
 			model: 
 			[
 				reportType: reportType,
-				reportSubType: reportSubType		
+				reportSubType: reportSubType,
+				dataLocations: dataLocations
+				// TODO linkParams
 			])
 	}
 
@@ -69,44 +93,51 @@ class ReportsController extends AbstractController{
 		def reportType = getReportType('reportType')
 		def reportSubType = getReportType('reportSubType')
 
+		//report type inventory, report subtype list of inventory
+
+		//facilities (list)
+		def dataLocations = getDataLocations()
+		def dataLocationTree = locationService.getRootLocation().collectDataLocations(DataLocationType.list())
+
+		//departments (list)
+
+		//equipment type (list)
+
+		//equipment status (list)
+
+		//obsolete equipment (boolean)
+
+		//period of acquisition (2 to/from dates)
+
+		//cost (2 to/from numbers, 1 currency string)
+
 		render(template:"/entity/reports/step2", 
 			model: 
 			[
 				reportType: reportType,
-				reportSubType: reportSubType		
+				reportSubType: reportSubType,
+				dataLocations: dataLocations,
+				dataLocationTree: dataLocationTree
+				// TODO linkParams
 			])
 	}
 
 	def step3 ={
 		if (log.isDebugEnabled()) log.debug("reports.step3, params:"+params)
 
-		def reportType = params.get('reportType')
-		def reportSubType = params.get('reportSubType')
+		def reportType = getReportType('reportType')
+		def reportSubType = getReportType('reportSubType')
+
+		def dataLocations = getDataLocations()
 
 		render(template:"/entity/reports/step3", 
 			model: 
 			[
 				reportType: reportType,
-				reportSubType: reportSubType		
+				reportSubType: reportSubType,
+				dataLocations: dataLocations
+				// TODO linkParams
 			])
-	}
-
-	def step4 ={
-		if (log.isDebugEnabled()) log.debug("reports.step4, params:"+params)
-
-		def reportType = params.get('reportType')
-		def reportSubType = params.get('reportSubType')
-
-		render(template:"/entity/reports/step4", 
-			model: 
-			[
-				reportType: reportType,
-				reportSubType: reportSubType		
-			])
-	}
-
-	def customizedListing ={
-		// TODO
 	}
 
 	def customizedReportSubType ={
@@ -120,5 +151,27 @@ class ReportsController extends AbstractController{
 			[
 				reportType: reportType
 			])
+	}
+
+	def getAjaxData = {		
+		List<DataLocation> dataLocations = locationService.searchLocation(DataLocation.class, params['term'], [:])
+		render(contentType:"text/json") {
+			elements = array {
+				dataLocations.each { dataLocation ->
+					elem (
+						key: dataLocation.id,
+						value: dataLocation.names + ' ['+dataLocation.location.names+']'
+					)
+				}
+			}
+			htmls = array {
+				dataLocations.each { dataLocation ->
+					elem (
+							key: dataLocation.id,
+							html: g.render(template:"/templates/dataLocationFormSide",model:[dataLocation:dataLocation,label:label,cssClass:"form-aside-hidden",field:'dataLocation'])
+							)
+				}
+			}
+		}
 	}
 }

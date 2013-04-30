@@ -31,6 +31,7 @@ import java.util.Set;
 
 import org.apache.commons.lang.math.NumberUtils
 import org.apache.shiro.SecurityUtils;
+import org.chai.location.DataLocation;
 import org.chai.location.DataLocationType;
 import org.chai.memms.security.User
 import org.chai.location.CalculationLocation;
@@ -73,6 +74,20 @@ public abstract class AbstractController {
 		if (location == null)
 			location = locationService.getRootLocation()
 		return location
+	}
+
+	public Set<DataLocation> getDataLocations() {
+		if(log.isDebugEnabled()) log.debug("abstract.dataLocations params:"+params)
+		Set<DataLocation> dataLocations = new HashSet<DataLocation>()
+		if (params.list('dataLocations') != null && !params.list('dataLocations').empty) {
+			def types = params.list('dataLocations')
+			dataLocations.addAll(types.collect{ it ->
+				if(log.isDebugEnabled()) log.debug("abstract.dataLocations dataLocation:"+it+", isNumber:"+NumberUtils.isNumber(it as String))
+				NumberUtils.isNumber(it as String) ? DataLocation.get(it) : null 
+			} - null)
+		}
+		
+		return dataLocations
 	}
 	
 	public Set<DataLocationType> getLocationTypes() {
