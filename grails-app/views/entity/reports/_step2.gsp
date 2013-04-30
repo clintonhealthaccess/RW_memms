@@ -1,36 +1,36 @@
+<%@ page import="org.chai.memms.util.Utils" %>
+<%@ page import="org.chai.memms.inventory.EquipmentStatus.Status" %>
 <div class="dialog-form step-2" id='js-step-2'>
   <!-- Step 2 -->
 %{--   <p>ReportType: ${reportType}</p>
   <p>ReportSubType: ${reportSubType}</p> --}%
   <h2>Apply filters<span class="right">Step <b>2</b> of <b>4</b></span></h2>
-  <p>Type: Inventory > List of inventory</p>
+  <p>Type: Inventory &gt; List of inventory</p>
   <g:formRemote name="formRemoteStep2" url="[action:'step3', params: params]" update="dialog-form"
     onSuccess="customizedlisting_init();">
     <fieldset>
       <ul>
         <li>
-          <label>Facility</label>
-          <select multiple style="width:384px;" class="chzn-select">
-            <option>Please select</option>
-            <option>Please select</option>
-            <option>Please select</option>
-            <option>Please select</option>
-            <option>Please select</option>
-          </select>
+          <g:selectFromList name="dataLocationIds" style="width:384px;" class="chzn-select" label="${message(code:'spare.part.dataLocation.label')}" bean="${equipment}" field="dataLocations" optionKey="id" multiple="true"
+    			ajaxLink="${createLink(controller:'dataLocation', action:'getAjaxData', params: [class:'dataLocation'])}"
+    			from="${dataLocations}" value="${equipment?.dataLocation?.id}" values="${dataLocations.collect{it.names}}" />
           <input type='checkbox' class='js-select-all'><span>Select all</span>
         </li>
         <li>
-          <label>Department</label>
-          <select multiple style="width:384px;" class="chzn-select"><option>Please select</option><option>Please select</option><option>Please select</option><option>Please select</option><option>Please select</option></select>
+          <g:selectFromList name="departmentIds" style="width:384px;" class="chzn-select" label="${message(code:'department.label')}" bean="${equipment}" field="department" optionKey="id" multiple="true"
+    			ajaxLink="${createLink(controller:'department', action:'getAjaxData')}"
+    			from="${departments}" value="${equipment?.department?.id}" values="${departments.collect{it.names}}" />
         <input type='checkbox' class='js-select-all'><span>Select all</span>
         </li>
         <li>
-          <label>Equipment type</label>
-          <select style="width:384px;" class="chzn-select"><option>Please select</option><option>Please select</option><option>Please select</option><option>Please select</option><option>Please select</option></select>
+          <g:selectFromList name="typeIds" style="width:384px;" class="chzn-select" label="${message(code:'equipment.type.label')}" bean="${equipment}" field="type" optionKey="id" multiple="true"
+    			ajaxLink="${createLink(controller:'equipmentType', action:'getAjaxData', params: [observation:'USEDINMEMMS'])}"
+    			from="${types}" value="${type?.id}" values="${types.collect{it.names}}" />
       </li>
         <li>
-          <label>Equipment status</label>
-          <select style="width:384px;" class="chzn-select"><option>Please select</option><option>Please select</option><option>Please select</option><option>Please select</option><option>Please select</option></select>
+          <g:selectFromEnum name="equipmentStatus" bean="${equipment}" values="${Status.values()}" field="equipmentStatus" label="${message(code:'equipment.status.label')}" optionKey="id" multiple="true" />
+        </li>
+        <li>
           <input type="checkbox" class="no-margin"><span>Show only obsolete equipment</span>
         </li>
         <li>
