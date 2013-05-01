@@ -77,12 +77,19 @@ class ReportsController extends AbstractController{
 		def reportSubType = getReportType('reportSubType')
 		def dataLocations = getDataLocations()
 
+		def step1Params = [:]
+    	step1Params.putAll params
+    	step1Params.remove 'reportType'
+    	step1Params.remove 'reportSubType'
+    	//TODO remove everything? or keep some "static params" ex. dataLocations ???
+
 		render(template:"/entity/reports/step1", 
 			model: 
 			[
 				reportType: reportType,
 				reportSubType: reportSubType,
-				dataLocations: dataLocations
+				dataLocations: dataLocations,
+				step1Params: step1Params
 				// TODO linkParams
 			])
 	}
@@ -97,7 +104,6 @@ class ReportsController extends AbstractController{
 
 		//facilities (list)
 		def dataLocations = getDataLocations()
-		def dataLocationTree = locationService.getRootLocation().collectDataLocations(DataLocationType.list())
 
 		//departments (list)
 
@@ -111,14 +117,18 @@ class ReportsController extends AbstractController{
 
 		//cost (2 to/from numbers, 1 currency string)
 
+		//TODO for each report subtype
+	    def step2Params = [:]
+	    step2Params.putAll params
+	    step2Params.remove 'dataLocations'
+
 		render(template:"/entity/reports/step2", 
 			model: 
 			[
 				reportType: reportType,
 				reportSubType: reportSubType,
 				dataLocations: dataLocations,
-				dataLocationTree: dataLocationTree
-				// TODO linkParams
+				step2Params: step2Params
 			])
 	}
 
@@ -140,6 +150,11 @@ class ReportsController extends AbstractController{
 			])
 	}
 
+	def customizedListing ={
+		if (log.isDebugEnabled()) log.debug("reports.customizedListing, params:"+params)
+
+	}
+
 	def customizedReportSubType ={
 		if (log.isDebugEnabled()) 
 			log.debug("reports.step1.customizedReportSubType, params:"+params)
@@ -151,27 +166,5 @@ class ReportsController extends AbstractController{
 			[
 				reportType: reportType
 			])
-	}
-
-	def getAjaxData = {		
-		List<DataLocation> dataLocations = locationService.searchLocation(DataLocation.class, params['term'], [:])
-		render(contentType:"text/json") {
-			elements = array {
-				dataLocations.each { dataLocation ->
-					elem (
-						key: dataLocation.id,
-						value: dataLocation.names + ' ['+dataLocation.location.names+']'
-					)
-				}
-			}
-			htmls = array {
-				dataLocations.each { dataLocation ->
-					elem (
-							key: dataLocation.id,
-							html: g.render(template:"/templates/dataLocationFormSide",model:[dataLocation:dataLocation,label:label,cssClass:"form-aside-hidden",field:'dataLocation'])
-							)
-				}
-			}
-		}
 	}
 }

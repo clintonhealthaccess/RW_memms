@@ -1,12 +1,6 @@
 <div class="dialog-form step-1" id='js-step-1'>
   <!-- Step 1 -->
   <p>${dataLocations}</p>
-  <%
-    step1Params = [:]
-    step1Params.putAll params
-    step1Params.remove 'reportType'
-    step1Params.remove 'reportSubType'
-  %>
   <h2>Select the type of customized report<span class="right">Step <b>1</b> of <b>3</b></span></h2>
   <g:formRemote name="formRemoteStep1Next" url="[action:'step2', params: step1Params]" update="dialog-form" 
     onSuccess="customizedlisting_init();">
