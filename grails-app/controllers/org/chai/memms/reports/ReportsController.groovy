@@ -102,22 +102,15 @@ class ReportsController extends AbstractController{
 
 		//report type inventory, report subtype list of inventory
 
-		//facilities (list)
+		//inventory - facilities, TODO departments, equipment type, cost
 		def dataLocations = getDataLocations()
+			//inventory - TODO equipment status, period of acquisition, obsolete, warranty
+			//status changes - TODO status changes, period of status changes
 
-		//departments (list)
+		//TODO corrective
+		//TODO preventive
+		//TODO spare parts
 
-		//equipment type (list)
-
-		//equipment status (list)
-
-		//obsolete equipment (boolean)
-
-		//period of acquisition (2 to/from dates)
-
-		//cost (2 to/from numbers, 1 currency string)
-
-		//TODO for each report subtype
 	    def step2Params = [:]
 	    step2Params.putAll params
 	    step2Params.remove 'dataLocations'
