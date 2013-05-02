@@ -31,7 +31,11 @@ import org.chai.location.DataLocation;
 import org.chai.location.DataLocationType;
 import org.chai.location.Location;
 import org.chai.memms.AbstractController;
-import org.chai.memms.util.Utils;
+import org.chai.memms.inventory.Department;
+import org.chai.memms.inventory.EquipmentType;
+import org.chai.memms.util.Utils
+import org.chai.memms.util.Utils.ReportType
+import org.chai.memms.util.Utils.ReportSubType
 
 /**
  * @author Jean Kahigiso M.
@@ -55,11 +59,9 @@ class ReportsController extends AbstractController{
 	def listing ={
 		if (log.isDebugEnabled()) log.debug("reports.listing, params:"+params)
 
-		def reportType = getReportType('reportType')
-		def reportSubType = getReportType('reportSubType')
+		def reportType = getReportType()
+		def reportSubType = getReportSubType()
 		def dataLocations = getDataLocations()
-
-		//TODO Rwagaju
 
 		render(view: '/entity/reports', model: 
 			[
@@ -73,15 +75,16 @@ class ReportsController extends AbstractController{
 	def step1 ={
 		if (log.isDebugEnabled()) log.debug("reports.step1, params:"+params)
 
-		def reportType = getReportType('reportType')
-		def reportSubType = getReportType('reportSubType')
+		def reportType = getReportType()
+		def reportSubType = getReportSubType()
+
 		def dataLocations = getDataLocations()
 
 		def step1Params = [:]
     	step1Params.putAll params
     	step1Params.remove 'reportType'
     	step1Params.remove 'reportSubType'
-    	//TODO remove everything? or keep some "static params" ex. dataLocations ???
+    	//TODO remove everything? or keep some params ex. dataLocations ???
 
 		render(template:"/entity/reports/step1", 
 			model: 
@@ -90,26 +93,59 @@ class ReportsController extends AbstractController{
 				reportSubType: reportSubType,
 				dataLocations: dataLocations,
 				step1Params: step1Params
-				// TODO linkParams
 			])
 	}
 
 	def step2 ={
 		if (log.isDebugEnabled()) log.debug("reports.step2, params:"+params)
 
-		def reportType = getReportType('reportType')
-		def reportSubType = getReportType('reportSubType')
+		def reportType = getReportType()
+		def reportSubType = getReportSubType()
 
-		//report type inventory, report subtype list of inventory
+		switch(reportType){
+			case ReportType.INVENTORY:
+				//inventory - facilities, departments, equipment type, cost
+				def dataLocations = getDataLocations()
+				def departments = getDepartments()
+				def equipmentTypes = getEquipmentTypes()
+				// TODO def fromCost = getCostPeriod('fromCost')
+				// TODO def toCost = getCostPeriod('toCost')
+				def costCurrency = params.get('costCurrency')
+				switch(reportSubType){
+					case ReportSubType.INVENTORY:
+						//inventory x inventory - equipment status, period of acquisition, obsolete, warranty
+						// TODO def equipmentStatus = getStatus('equipmentStatus')
+						// TODO def fromPeriod = getPeriods('fromAcquisitionPeriod')
+						// TODO def toPeriod = getPeriods('toAcquisitionPeriod')
+						def obsolete = params.get('obsolete')
+						def warranty = params.get('warranty')
+						break;
+					case ReportSubType.STATUSCHANGES:
+						//inventory x status changes - get status changes, period of status changes
+						// TODO def statusChanges = getStatus('statusChanges')
+						// TODO def statusChangePeriod = getStatusChangePeriod()
+						break;
 
-		//inventory - facilities, TODO departments, equipment type, cost
-		def dataLocations = getDataLocations()
-			//inventory - TODO equipment status, period of acquisition, obsolete, warranty
-			//status changes - TODO status changes, period of status changes
-
-		//TODO corrective
-		//TODO preventive
-		//TODO spare parts
+				}
+				break;
+			// TODO ...
+			case ReportType.CORRECTIVE:
+				switch(reportSubType){
+					case ReportSubType.WORKORDERS:
+						//TODO corrective x work orders
+						break;
+					case ReportSubType.STATUSCHANGES:
+						//TODO corrective x status changes
+						break;
+				}
+				break;
+			case ReportType.PREVENTIVE:
+				break;
+			case ReportType.SPAREPARTS:
+				break;
+			default:
+				break;
+		}
 
 	    def step2Params = [:]
 	    step2Params.putAll params
@@ -121,15 +157,20 @@ class ReportsController extends AbstractController{
 				reportType: reportType,
 				reportSubType: reportSubType,
 				dataLocations: dataLocations,
-				step2Params: step2Params
+				departments: departments,
+				equipmentTypes: equipmentTypes,
+				// TODO equipmentCost: equipmentCost,
+				step2Params: step2Params,
+
+				currencies: grailsApplication.config.site.possible.currency
 			])
 	}
 
 	def step3 ={
 		if (log.isDebugEnabled()) log.debug("reports.step3, params:"+params)
 
-		def reportType = getReportType('reportType')
-		def reportSubType = getReportType('reportSubType')
+		def reportType = getReportType()
+		def reportSubType = getReportSubType()
 
 		def dataLocations = getDataLocations()
 
@@ -139,22 +180,25 @@ class ReportsController extends AbstractController{
 				reportType: reportType,
 				reportSubType: reportSubType,
 				dataLocations: dataLocations
-				// TODO linkParams
 			])
 	}
 
 	def customizedListing ={
 		if (log.isDebugEnabled()) log.debug("reports.customizedListing, params:"+params)
 
+		// TODO
 	}
 
 	def customizedReportSubType ={
 		if (log.isDebugEnabled()) 
 			log.debug("reports.step1.customizedReportSubType, params:"+params)
 
-		def reportType = getReportType('reportType')
+		def reportType = getReportType()
 
-		render(template:"/entity/reports/customizedReportSubType", 
+		if (log.isDebugEnabled()) 
+			log.debug("reports.step1.customizedReportSubType, reportType:"+reportType)
+
+		render(template:"/entity/reports/customizedReportSubType",
 			model: 
 			[
 				reportType: reportType

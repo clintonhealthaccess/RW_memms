@@ -253,29 +253,29 @@ public class Utils {
 		return calendar.getTime();
 	}
 
-	//TODO use in step 1 of listing wizard instead of strings
-
-	enum ReportType{
-		INVENTORY("Inventory"),
-		CORRECTIVE("Corrective Maintenance"),
-		PREVENTIVE("Preventive Maintenance"),
-		SPAREPARTS("Spare Parts")
+	//message.properties, ex. reports.type.inventory
+	public enum ReportType{
+		INVENTORY("inventory"),
+		CORRECTIVE("correctiveMaintenance"),
+		PREVENTIVE("preventiveMaintenance"),
+		SPAREPARTS("spareParts")
 		
 		final String reportType
 		ReportType(String reportType){ this.reportType=reportType }
-		String getReportType() { return reportType() }
+		String getReportType() { return reportType }
 	}
 
-	enum ReportSubType{
-		INVENTORY("List of Inventory"),
-		WORKORDERS("List of Work Orders"),
-		STATUSCHANGES("List of Status Changes"),
-		USERATE("Spare Part Use Rate"),
-		STOCKOUT("Forecast Stock Out")
+	//message.properties, ex. reports.subType.inventory
+	public enum ReportSubType{
+		INVENTORY("inventory"),
+		WORKORDERS("workOrders"),
+		STATUSCHANGES("statusChanges"),
+		USERATE("useRate"),
+		STOCKOUT("stockOut")
 		
 		final String reportSubType
 		ReportSubType(String reportSubType){ this.reportSubType=reportSubType }
-		String getReportSubType() { return reportSubType() }
+		String getReportSubType() { return reportSubType }
 	}
 	
 }

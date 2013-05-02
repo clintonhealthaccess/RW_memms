@@ -1,16 +1,29 @@
 <%@ page import="org.chai.memms.inventory.EquipmentStatus.Status" %>
 <ul>
   <li>
-    <g:selectFromEnum name="equipmentStatus" values="${Status.values()}" field="equipmentStatus" label="Equipment Status" />
+    %{-- TODO fix styles !!! --}%
+    <label for="statusChanges"><g:message code="reports.inventory.inventory.equipmentStatus"/>:</label>
+    <g:each in="${Status.values() - Status.NONE}" var="statusEnum">
+        <input name="equipmentStatus" type="checkbox" value="${statusEnum.key}"/>
+        <label for="${statusEnum.key}">${message(code: statusEnum?.messageCode+'.'+statusEnum?.name)}</label>
+    </g:each>
   </li>
   <li>
-    <label for="report_type">Period of Acquisition:</label>
-    <input class="js-date-picker date-picker idle-field" /> <span class="dash">-</span> <input class="js-date-picker date-picker idle-field" />
+    <label for="acquisitionPeriod"><g:message code="reports.inventory.inventory.acquisitionPeriod"/>:</label>
+    <input name="fromAcquisitionPeriod" class="js-date-picker date-picker idle-field" />
+    <span class="dash">-</span>
+    <input name="toAcquisitionPeriod" class="js-date-picker date-picker idle-field" />
+    <g:checkBox name="noAcquisitionPeriod"/>
+    <span><g:message code="reports.inventory.inventory.noAcquisitionPeriod"/></span>
   </li>
   <li>
-    <input name="obsolete" type='checkbox'><span><g:message code="equipment.obsolete.label" /></span>
+    %{-- TODO fix styles !!! --}%
+    <label for="obsolete"><g:message code="reports.inventory.inventory.obsolete" />:</label>
+    <input name="obsolete" type="checkbox"/>
   </li>
   <li>
-    <input name="warranty" type='checkbox'><span>Under Warranty</span>
+    %{-- TODO fix styles !!! --}%
+    <label for="warranty"><g:message code="reports.inventory.inventory.warranty"/>:</label>
+    <input name="warranty" type="checkbox"/>
   </li>
 </ul>
