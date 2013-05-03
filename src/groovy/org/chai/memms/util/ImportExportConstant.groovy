@@ -85,7 +85,7 @@ class ImportExportConstant {
 	public final static String SPARE_PART_PURCHASE_COST = "Cost"
 	public final static String SPARE_PART_PURCHASE_COST_CURRENCY = "Currency"
 	public final static String SPARE_PART_PURCHASED_BY = "Purchaser"
-	ImportExportConstant String SPARE_PART_QUANTITY = "Quantity"
+	public final static String SPARE_PART_QUANTITY = "Quantity"
 	
 	//Importing/exporting spare part types
 	public final static String SPARE_PART_TYPE_CODE = "spare part type code"

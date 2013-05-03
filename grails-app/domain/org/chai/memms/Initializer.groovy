@@ -116,7 +116,7 @@ public class Initializer {
 	static final String KAYONZA = "Kayonza HC"
 	static final String RUHINDO = "Ruhindo HC"
 	
-	static def createUsers() {
+	public static createUsers() {
 		if(!User.count()){
 			//Default roles
 			def defaultAdminRole = new Role(name: "Admin")
@@ -279,7 +279,7 @@ public class Initializer {
 		}
 	}
 	
-	static def createDummyStructure() {
+	public static createDummyStructure() {
 		
 		if (!Location.count()) {
 			//Add Location types
@@ -330,7 +330,7 @@ public class Initializer {
 			nyange.save(failOnError:true)
 		}		
 	}
-	static def createInventoryStructure(){
+	public static createInventoryStructure(){
 		
 		if(!Department.count()){
 			//Add Department
@@ -610,7 +610,7 @@ public class Initializer {
 		}
 	}
 	
-	static def createCorrectiveMaintenanceStructure(){
+	public static createCorrectiveMaintenanceStructure(){
 
 		if(!WorkOrder.list()){
 			def admin = User.findByUsername("admin")
@@ -684,7 +684,7 @@ public class Initializer {
 		}
 	}
 	
-	static def createPreventiveMaintenanceStructure(){
+	public static createPreventiveMaintenanceStructure(){
 		//TODO the users and what they can
 		if(!PreventiveOrder.count()){
 			def admin = User.findByUsername("admin")
@@ -717,7 +717,7 @@ public class Initializer {
 		
 	}
 
-	public static def createSparePartStructure(){
+	public static createSparePartStructure(){
 		
 		def equipment01 =Equipment.findBySerialNumber("SERIAL01")
 		def equipment09 =Equipment.findBySerialNumber("SERIAL09")
@@ -798,7 +798,7 @@ public class Initializer {
 				Provider.findByCode("FIVE"),
 				User.findByUsername("admin"),
 				StockLocation.MMC,
-				9
+				9,0
 				)
 
 			def sparePartOneT = newSparePart(
@@ -812,7 +812,7 @@ public class Initializer {
 				Provider.findByCode("FIVE"),
 				User.findByUsername("admin"),
 				StockLocation.MMC,
-				89
+				89,80
 				)
 
 			def sparePartTwo = newSparePart(
@@ -826,7 +826,7 @@ public class Initializer {
 				Provider.findByCode("FIVE"),
 				User.findByUsername("admin"),
 				StockLocation.FACILITY,
-				8
+				8,0
 				)
 			
 			def sparePartThree = newSparePart(
@@ -840,7 +840,7 @@ public class Initializer {
 				Provider.findByCode("FIVE"),
 				User.findByUsername("admin"),
 				StockLocation.FACILITY,
-				92
+				92,70
 				)
 			
 			def sparePartFour = newSparePart(
@@ -854,7 +854,7 @@ public class Initializer {
 				Provider.findByCode("SEVEN"),
 				User.findByUsername("admin"),
 				StockLocation.MMC,
-				100
+				100,1
 				)	
 			
 			def sparePartFive = newSparePart(
@@ -868,14 +868,14 @@ public class Initializer {
 				Provider.findByCode("SIX"),
 				User.findByUsername("admin"),
 				StockLocation.MMC,
-				999
+				999,882
 				)	
 		}
 	}
 	
 	//Models definition
 	//Spare Part type
-	public static def newSparePartType(def code, def names, def descriptions,def partNumber,def manufacturer, def discontinuedDate){
+	public static newSparePartType(def code, def names, def descriptions,def partNumber,def manufacturer, def discontinuedDate){
 		def type = new SparePartType(code:code,partNumber:partNumber,manufacturer:manufacturer,discontinuedDate:discontinuedDate)
 		Utils.setLocaleValueInMap(type,names,"Names")
 		Utils.setLocaleValueInMap(type,descriptions,"Descriptions")
@@ -883,7 +883,7 @@ public class Initializer {
 	}
 
 	// Spare part
-	public static def newSparePart(def sparePartPurchasedBy,def descriptions,def purchaseDate,def purchaseCost,def currency,def dataLocation,def type,def supplier,def addedBy,def stockLocation,def quantity){
+	public static newSparePart(def sparePartPurchasedBy,def descriptions,def purchaseDate,def purchaseCost,def currency,def dataLocation,def type,def supplier,def addedBy,def stockLocation,def quantity,def initialQuantity,def inStockQuanity){
 		def sparePart = new SparePart(
 			sparePartPurchasedBy:sparePartPurchasedBy,
 			purchaseCost:purchaseCost,
@@ -894,14 +894,15 @@ public class Initializer {
 			supplier:supplier,
 			addedBy:addedBy,
 			stockLocation:stockLocation,
-			quantity:quantity
+			initialQuantity:initialQuantity,
+			inStockQuanity:inStockQuanity
 			);
 		Utils.setLocaleValueInMap(sparePart,descriptions,"Descriptions")
 		return sparePart.save(failOnError: true,flush:true)
 	}
 
 	//Preventive Maintenance
-	public static def newDurationBasedOrder(def equipment,def addedBy,def status,def preventionResponsible,def technicianInCharge,def names,def description,def firstOccurenceOn,def closedOn,def occurency,def occurInterval,def occurDaysOfWeek){
+	public static newDurationBasedOrder(def equipment,def addedBy,def status,def preventionResponsible,def technicianInCharge,def names,def description,def firstOccurenceOn,def closedOn,def occurency,def occurInterval,def occurDaysOfWeek){
 		def timeDate =  newTimeDate(firstOccurenceOn)
 		def order  = new DurationBasedOrder(
 			equipment: equipment,
@@ -922,7 +923,7 @@ public class Initializer {
 		equipment.save(failOnError:true)
 		return order.save(failOnError: true)
 	}
-	public static def newWorkBasedOrder(def equipment,def addedBy,def status,def preventionResponsible,def technicianInCharge,def names,def description,def firstOccurenceOn,def closedOn,def occurency,def occurInterval){
+	public static newWorkBasedOrder(def equipment,def addedBy,def status,def preventionResponsible,def technicianInCharge,def names,def description,def firstOccurenceOn,def closedOn,def occurency,def occurInterval){
 		def timeDate =  newTimeDate(firstOccurenceOn)
 		def order  = new WorkBasedOrder(
 			equipment: equipment,
@@ -944,7 +945,7 @@ public class Initializer {
 		return order.save(failOnError: true)
 	}
 	//Prevention
-	public static def newPrevention(def order,def addedBy,def scheduledOn,def eventDate,def timeSpend,def descriptions, def processes){
+	public static newPrevention(def order,def addedBy,def scheduledOn,def eventDate,def timeSpend,def descriptions, def processes){
 		def timeD =  newTimeDate(scheduledOn)
 		def timeS = newTimeSpend(timeSpend)
 		def prevention = new Prevention(addedBy:addedBy,scheduledOn:timeD,eventDate:eventDate,timeSpend:timeS,processes:processes)
@@ -954,29 +955,29 @@ public class Initializer {
 		return prevention.save(failOnError:true)
 	}
 	//PreventiveProcess
-	public static def newPreventionProcess(def dateCreated, def name,def addedBy, def prevention){
+	public static newPreventionProcess(def dateCreated, def name,def addedBy, def prevention){
 		def process = new PreventiveProcess(dateCreated:dateCreated,name:name,addedBy:addedBy)
 		prevention.addToProcesses(process)
 		prevention.save(failOnError:true)
 		return process.save(failOnError:true)
 	}
-	public static def newTimeDate(def date,def time){
+	public static newTimeDate(def date,def time){
 		return new TimeDate(date,time)
 	}
-	public static def newTimeDate(def timeDate){
+	public static newTimeDate(def timeDate){
 		return new TimeDate(timeDate:timeDate)
 	}
-	public static def newTimeSpend(def hours,def minutes){
+	public static newTimeSpend(def hours,def minutes){
 		return new TimeSpend(hours,minutes)
 	}
-	public static def newTimeSpend(def numberOfMinutes){
+	public static newTimeSpend(def numberOfMinutes){
 		return new TimeSpend(numberOfMinutes:numberOfMinutes)
 	}
 	//Corrective Maintenance
-	public static def newWorkOrder(def equipment, def description, def criticality, def addedBy, def openOn,def failureReason,def currentStatus){
+	public static newWorkOrder(def equipment, def description, def criticality, def addedBy, def openOn,def failureReason,def currentStatus){
 		return new WorkOrder(equipment:equipment,description: description,criticality:criticality,addedBy:addedBy,openOn: openOn,currentStatus:currentStatus,failureReason:failureReason).save(failOnError:true)
 	}
-	public static def newWorkOrder(def equipment, def description, def criticality,def addedBy, def openOn, def closedOn, def failureReason,def currentStatus){
+	public static newWorkOrder(def equipment, def description, def criticality,def addedBy, def openOn, def closedOn, def failureReason,def currentStatus){
 		return new WorkOrder(equipment:equipment, description:description, criticality:criticality,addedBy:addedBy, openOn: openOn, closedOn:closedOn, currentStatus:currentStatus,failureReason:failureReason).save(failOnError:true)
 	}
 	public static newWorkOrderNotification(def workOrder, def sender, def receiver, def content){
@@ -1023,7 +1024,7 @@ public class Initializer {
 	}
 	
 	//Inventory
-	public static def newEquipment(def serialNumber,def purchaser,def donor,def donorName,def obsolete,def expectedLifeTime,def room,def purchaseCost,def descriptions,def manufactureDate, def purchaseDate,def currency,def model,def dataLocation,def department, def type,def manufacture,def supplier,def currentStatus,def addedBy,def lastModifiedBy,def lastModifiedOn){
+	public static newEquipment(def serialNumber,def purchaser,def donor,def donorName,def obsolete,def expectedLifeTime,def room,def purchaseCost,def descriptions,def manufactureDate, def purchaseDate,def currency,def model,def dataLocation,def department, def type,def manufacture,def supplier,def currentStatus,def addedBy,def lastModifiedBy,def lastModifiedOn){
 		def equipment = new Equipment(
 			serialNumber:serialNumber,
 			purchaser:purchaser,
@@ -1050,7 +1051,7 @@ public class Initializer {
 		return equipment.save(failOnError: true,flush:true)
 	}
 
-	public static def newEquipmentStatus(def dateOfEvent,def changedBy,def value, def equipment,def reasons){
+	public static newEquipmentStatus(def dateOfEvent,def changedBy,def value, def equipment,def reasons){
 		def status = new EquipmentStatus(dateOfEvent:dateOfEvent,changedBy:changedBy,status:value)
 		Utils.setLocaleValueInMap(status,reasons,"Reasons")
 		equipment.addToStatus(status) 
@@ -1061,68 +1062,68 @@ public class Initializer {
 		return status
 	}
 
-	public static def newContact(def addressDescriptions,def contactName,def email, def phone, def street, def poBox){
+	public static newContact(def addressDescriptions,def contactName,def email, def phone, def street, def poBox){
 		def contact = new Contact(contactName:contactName,email:email,phone:phone,street:street,poBox:poBox)
 		Utils.setLocaleValueInMap(contact,addressDescriptions,"AddressDescriptions")
 		return contact;
 	}
 	
-	public static def newProvider(def code, def type, def contact){
+	public static newProvider(def code, def type, def contact){
 		return new Provider(code:code,type:type,contact:contact).save(failOnError: true)
 	}
 	
-	public static def newProvider(def code, def type, def addressDescriptions, def contactName,def email, def phone, def street, def poBox){
+	public static newProvider(def code, def type, def addressDescriptions, def contactName,def email, def phone, def street, def poBox){
 		def contact = newContact(addressDescriptions,contactName,email,phone,street,poBox)
 		return newProvider(code,type,contact)
 	}
 	
-	public static def newWarranty(def contact, def startDate,def sameAsSupplier,def descriptions){
+	public static newWarranty(def contact, def startDate,def sameAsSupplier,def descriptions){
 		def warranty = new Warranty(contact:contact,startDate:startDate,sameAsSupplier:sameAsSupplier)
 		Utils.setLocaleValueInMap(warranty,descriptions,"Descriptions")
 		return warranty
 	}
 	
-	public static def newWarranty(def addressDescriptions,def contactName,def email,def phone,def street,def poBox,def startDate,def sameAsSupplier,def descriptions){
+	public static newWarranty(def addressDescriptions,def contactName,def email,def phone,def street,def poBox,def startDate,def sameAsSupplier,def descriptions){
 		def contact = newContact(addressDescriptions,contactName,email,phone,street,poBox)
 		return newWarranty(contact, startDate,sameAsSupplier,descriptions)
 	}
 	//@Deprecated have to remove the lastModifiedOn params	
-	public static def newEquipmentType(def code, def names,def descriptions, def observation, def lastModifiedOn,def expectedLifeTime = 12){
+	public static newEquipmentType(def code, def names,def descriptions, def observation, def lastModifiedOn,def expectedLifeTime = 12){
 		def type = new EquipmentType(code:code,observation:observation,expectedLifeTime:newPeriod(expectedLifeTime))
 		Utils.setLocaleValueInMap(type,names,"Names")
 		Utils.setLocaleValueInMap(type,descriptions,"Descriptions")
 		return type.save(failOnError: true)
 	}
 
-	public static def newDepartment(def names,def code, def descriptions){
+	public static newDepartment(def names,def code, def descriptions){
 		def department = new Department(code:code)
 		Utils.setLocaleValueInMap(department,names,"Names") 
 		Utils.setLocaleValueInMap(department,descriptions,"Descriptions")
 		return department.save(failOnError: true)
 	}
 	
-	public static def newPeriod(def numberOfMonths){
+	public static newPeriod(def numberOfMonths){
 		return new Period(numberOfMonths:numberOfMonths)
 	}
 	
-	public static def newPeriod(def years,def months){
+	public static newPeriod(def years,def months){
 		return new Period(years,months)
 	}
 	
 	//Location
-	public static def newDataLocationType(def names, def code) {
+	public static newDataLocationType(def names, def code) {
 		def dataLocationType = new DataLocationType(code: code, defaultSelected: true)
 		Utils.setLocaleValueInMap(dataLocationType,names,"Names")
 		return dataLocationType.save(failOnError: true)
 	}
 	
-	public static def newLocationLevel(def names, def code, def order) {
+	public static newLocationLevel(def names, def code, def order) {
 		def locationLevel = new LocationLevel(code: code, order:order)
 		Utils.setLocaleValueInMap(locationLevel,names,"Names")
 		return locationLevel.save(failOnError: true)
 	}
 	
-	public static def newLocation(def names, def code, def parent, def level) {
+	public static newLocation(def names, def code, def parent, def level) {
 		def location = new Location(code: code, parent: parent, level: level)
 		Utils.setLocaleValueInMap(location,names,"Names")
 		location.save(failOnError: true)
@@ -1135,7 +1136,7 @@ public class Initializer {
 		return location
 	}
 	
-	public static def newDataLocation(def names, def code, def location, def type) {
+	public static newDataLocation(def names, def code, def location, def type) {
 		def dataLocation = new DataLocation(code: code, location: location, type: type)
 		Utils.setLocaleValueInMap(dataLocation,names,"Names")
 		dataLocation.save(failOnError: true)
@@ -1154,7 +1155,7 @@ public class Initializer {
 		table "memms_initializer_data"
 		version false
 	}
-   public static def now(){
+   public static now(){
 	   return new Date()
    }
    public static Date getDate( int day, int month, int year) {

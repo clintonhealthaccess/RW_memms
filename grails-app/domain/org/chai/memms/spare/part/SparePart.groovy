@@ -74,7 +74,7 @@ public class SparePart {
 		
 		NONE('none'),
 		INSTOCK("in.stock"),
-		PENDINGORDER("pending.order"),
+		PENDINGORDER("pending.order")
 
 		String messageCode = "spare.part.status"
 
@@ -95,14 +95,14 @@ public class SparePart {
 
 	Double purchaseCost
 	Integer initialQuantity
-	Integer usedQuantity = 0
-	Integer remainingQuantity = 0
+	Integer inStockQuantity = 0
 
 	Provider supplier
 	DataLocation dataLocation
 
 	SparePartPurchasedBy sparePartPurchasedBy
 	StockLocation stockLocation
+	SparePartStatus status
 	
 	
 	User addedBy
@@ -120,9 +120,8 @@ public class SparePart {
 		room nullable: true, blank: true
 		shelf nullable: true, blank: true
 
-		initialQuantity nullable: false, min: 0
-		usedQuantity nullable: false, min:1
-		remainingQuantity nullable: false, min:0
+		initialQuantity nullable: false, min: 1
+		inStockQuantity nullable: false, min: 0
 		
 		purchaseDate nullable: true, validator:{it <= new Date()}
 
@@ -135,7 +134,9 @@ public class SparePart {
 
 		sparePartPurchasedBy nullable: false, inList:[SparePartPurchasedBy.BYFACILITY,SparePartPurchasedBy.BYMOH, SparePartPurchasedBy.BYMMC, SparePartPurchasedBy.BYPARTNER]
 
-		stockLocation  nullable: true,validator:{
+		status nullable: false, inList:[SparePartStatus.INSTOCK,SparePartStatus.PENDINGORDER]
+
+		stockLocation  nullable: true, validator:{
 			if(it!=null) it in [StockLocation.MMC, StockLocation.FACILITY]
 		}
 		
@@ -149,6 +150,10 @@ public class SparePart {
 			if (val != null) return (obj.lastUpdated != null)
 		}	
 		supplier nullable: true
+	}
+
+	def getUsedQuantity () {
+		return initialQuantity - inStockQuantity
 	}
 	
 	static mapping = {

@@ -66,7 +66,7 @@ class SparePartServiceSpec extends IntegrationTests{
 		def techMMC = newOtherUserWithType("techMMC", "techMMC", DataLocation.findByCode(RWANDA), UserType.TECHNICIANMMC)
 
 		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],"CODE Spare Part",manufacturer,Initializer.now())
-		Initializer.newSparePart(SparePartPurchasedBy.BYMOH,['en':'Spare Part Descriptions one'],Initializer.getDate(22,07,2010),"",""DataLocation.findByCode(BUTARO),sparePartType,supplier,user,StockLocation.FACILITY,22)
+		Initializer.newSparePart(SparePartPurchasedBy.BYMOH,['en':'Spare Part Descriptions one'],Initializer.getDate(22,07,2010),"","",DataLocation.findByCode(BUTARO),sparePartType,supplier,user,StockLocation.FACILITY,22)
 		def sparePartCodeToFind = Initializer.newSparePart( SparePartPurchasedBy.BYMOH,['en':'Spare Part Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","RWF",DataLocation.findByCode(KIVUYE),sparePartType,supplier,user,StockLocation.FACILITY,32)
 		
 		List<SparePart> spareParts
@@ -116,7 +116,7 @@ class SparePartServiceSpec extends IntegrationTests{
 		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],"CODE Spare Part",manufacturer,Initializer.now())
 		def sparePartTypeTwo = Initializer.newSparePartType(CODE(15819),["en":"Accelerometers deux"],["en":"used in memms"],"CODE Spare Part",manufacturer,Initializer.now())
 
-		Initializer.newSparePart(SparePartPurchasedBy.BYMOH,['en':'Spare Part Descriptions one'],Initializer.getDate(22,07,2010),"",""DataLocation.findByCode(BUTARO),sparePartType,supplier,user,StockLocation.FACILITY,2)
+		Initializer.newSparePart(SparePartPurchasedBy.BYMOH,['en':'Spare Part Descriptions one'],Initializer.getDate(22,07,2010),"","",DataLocation.findByCode(BUTARO),sparePartType,supplier,user,StockLocation.FACILITY,2)
 		def sparePartCodeToFind = Initializer.newSparePart(SparePartPurchasedBy.BYMOH,['en':'Spare Part Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","RWF",DataLocation.findByCode(KIVUYE),sparePartTypeTwo,supplierTwo,user,StockLocation.FACILITY,54)
 		
 		List<SparePart> spareParts
