@@ -118,7 +118,7 @@ class SparePartService {
 		}
 
 	}
-	public def filterSparePart(def location, def supplier, def type,def sparePartPurchasedBy,Map<String, String> params){
+	public def filterSparePart(def location, def supplier, def type,def sparePartPurchasedBy,def status,Map<String, String> params){
 
 		def dataLocations = []		
 			
@@ -142,6 +142,8 @@ class SparePartService {
 				eq ("type", type)
 			if(sparePartPurchasedBy && !sparePartPurchasedBy.equals(SparePartPurchasedBy.NONE))
 				eq ("sparePartPurchasedBy",sparePartPurchasedBy)
+			if(status && !status.equals(SparePartStatus.NONE))
+				eq ("status",status)
 		}
 	}
 	public File exporter(def location,List<SparePart> spareParts){

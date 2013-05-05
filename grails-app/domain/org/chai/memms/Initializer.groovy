@@ -72,6 +72,7 @@ import org.chai.memms.security.User.UserType
 import org.chai.memms.spare.part.SparePart;
 import org.chai.memms.spare.part.SparePartType;
 import org.chai.memms.spare.part.SparePart.SparePartPurchasedBy;
+import org.chai.memms.spare.part.SparePart.SparePartStatus;
 import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.spare.part.SparePart.StockLocation;
 
@@ -133,7 +134,6 @@ public class Initializer {
 			defaultTechnicianDHRole.addToPermissions("equipmentStatus:*")
 			defaultTechnicianDHRole.addToPermissions("sparePart:*")
 			defaultTechnicianDHRole.addToPermissions("sparePartView:*")
-			defaultTechnicianDHRole.addToPermissions("sparePartStatus:*")
 			defaultTechnicianDHRole.addToPermissions("notificationEquipment:*")
 			defaultTechnicianDHRole.addToPermissions("workOrder:*")
 			defaultTechnicianDHRole.addToPermissions("workOrderView:*")
@@ -789,35 +789,37 @@ public class Initializer {
 		if(!SparePart.count()){
 			def sparePartOne = newSparePart(
 				SparePartPurchasedBy.BYMOH,
-				['en':'Spare Part Descriptions'],
+				['en':'Spare Part Descriptions one'],
 				getDate(22,07,2010),
 				"",
 				"",
-				DataLocation.findByCode(NYANZA),
+				null,
 				SparePartType.findByCode("15810"),
 				Provider.findByCode("FIVE"),
 				User.findByUsername("admin"),
 				StockLocation.MMC,
+				SparePartStatus.PENDINGORDER,
 				9,0
 				)
 
 			def sparePartOneT = newSparePart(
 				SparePartPurchasedBy.BYMOH,
-				['en':'Spare Part Instock two Descriptions'],
+				['en':'Spare Part Descriptions two'],
 				getDate(22,07,2010),
 				"",
 				"",
-				DataLocation.findByCode(NYANZA),
+				null,
 				SparePartType.findByCode("15810"),
 				Provider.findByCode("FIVE"),
 				User.findByUsername("admin"),
 				StockLocation.MMC,
+				SparePartStatus.INSTOCK,
 				89,80
 				)
 
 			def sparePartTwo = newSparePart(
 				SparePartPurchasedBy.BYFACILITY,
-				['en':'Spare Part Descriptions two'],
+				['en':'Spare Part Descriptions three'],
 				getDate(12,01,2009),
 				"3333",
 				"USD",
@@ -826,12 +828,13 @@ public class Initializer {
 				Provider.findByCode("FIVE"),
 				User.findByUsername("admin"),
 				StockLocation.FACILITY,
+				SparePartStatus.PENDINGORDER,
 				8,0
 				)
 			
 			def sparePartThree = newSparePart(
 				SparePartPurchasedBy.BYFACILITY,
-				['en':'Spare Part Descriptions three'],
+				['en':'Spare Part Descriptions four'],
 				getDate(14,8,2008),
 				"98700",
 				"EUR",
@@ -840,35 +843,66 @@ public class Initializer {
 				Provider.findByCode("FIVE"),
 				User.findByUsername("admin"),
 				StockLocation.FACILITY,
+				SparePartStatus.INSTOCK,
 				92,70
 				)
 			
 			def sparePartFour = newSparePart(
 				SparePartPurchasedBy.BYMOH,
-				['en':'Spare Part Descriptions four'],
+				['en':'Spare Part Descriptions five'],
 				getDate(18,2,2011),
 				"",
 				"",
-				DataLocation.findByCode(KIVUYE),
+				null,
 				SparePartType.findByCode("10035"),
 				Provider.findByCode("SEVEN"),
 				User.findByUsername("admin"),
 				StockLocation.MMC,
+				SparePartStatus.INSTOCK,
 				100,1
 				)	
 			
 			def sparePartFive = newSparePart(
 				SparePartPurchasedBy.BYMOH,
-				['en':'Spare Part Descriptions five'],
+				['en':'Spare Part Descriptions six'],
 				getDate(11,8,2008),
 				"",
 				"",
-				DataLocation.findByCode(BUNGWE),
+				null,
 				SparePartType.findByCode("20760"),
 				Provider.findByCode("SIX"),
 				User.findByUsername("admin"),
 				StockLocation.MMC,
+				SparePartStatus.INSTOCK,
 				999,882
+				)
+			def sparePartSix = newSparePart(
+				SparePartPurchasedBy.BYMOH,
+				['en':'Spare Part Descriptions seven'],
+				getDate(11,8,2008),
+				"",
+				"",
+				null,
+				SparePartType.findByCode("20760"),
+				Provider.findByCode("SIX"),
+				User.findByUsername("admin"),
+				StockLocation.MMC,
+				SparePartStatus.INSTOCK,
+				343,0
+				)
+			def sparePartSeve = newSparePart(
+				SparePartPurchasedBy.BYMOH,
+				['en':'Spare Part Descriptions eight'],
+				getDate(11,8,2008),
+				"",
+				"",
+				null,
+				SparePartType.findByCode("20760"),
+				Provider.findByCode("SIX"),
+				User.findByUsername("admin"),
+				StockLocation.MMC,
+				SparePartStatus.PENDINGORDER,
+				234,0
 				)	
 		}
 	}
@@ -883,7 +917,7 @@ public class Initializer {
 	}
 
 	// Spare part
-	public static newSparePart(def sparePartPurchasedBy,def descriptions,def purchaseDate,def purchaseCost,def currency,def dataLocation,def type,def supplier,def addedBy,def stockLocation,def quantity,def initialQuantity,def inStockQuanity){
+	public static newSparePart(def sparePartPurchasedBy,def descriptions,def purchaseDate,def purchaseCost,def currency,def dataLocation,def type,def supplier,def addedBy,def stockLocation,def status,def initialQuantity,def inStockQuantity){
 		def sparePart = new SparePart(
 			sparePartPurchasedBy:sparePartPurchasedBy,
 			purchaseCost:purchaseCost,
@@ -894,8 +928,9 @@ public class Initializer {
 			supplier:supplier,
 			addedBy:addedBy,
 			stockLocation:stockLocation,
+			status:status,
 			initialQuantity:initialQuantity,
-			inStockQuanity:inStockQuanity
+			inStockQuantity:inStockQuantity
 			);
 		Utils.setLocaleValueInMap(sparePart,descriptions,"Descriptions")
 		return sparePart.save(failOnError: true,flush:true)

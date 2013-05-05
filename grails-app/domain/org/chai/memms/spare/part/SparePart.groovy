@@ -121,11 +121,13 @@ public class SparePart {
 		shelf nullable: true, blank: true
 
 		initialQuantity nullable: false, min: 1
-		inStockQuantity nullable: false, min: 0
-		
+		inStockQuantity nullable: false, min: 0, validator:{ val, obj ->
+			if(obj.status.equals(SparePartStatus.PENDINGORDER)) return val==0
+		}
+
 		purchaseDate nullable: true, validator:{it <= new Date()}
 
-		currency  nullable: true, blank: true,validator:{ val, obj ->
+		currency  nullable: true, blank: true, validator:{ val, obj ->
 			if(obj.purchaseCost != null) return (val != null && val in ["RWF","USD","EUR"])
 		}
 		purchaseCost nullable: true, validator: {val, obj ->
@@ -141,7 +143,8 @@ public class SparePart {
 		}
 		
 		dataLocation nullable: true, validator: {val, obj ->
-			if(obj.stockLocation.equals(StockLocation.FACILITY)) return (val!=null)
+			if(obj.stockLocation.equals(StockLocation.FACILITY)) return val!=null
+			else return val==null
 		}
 
 		addedBy nullable: false
@@ -153,7 +156,14 @@ public class SparePart {
 	}
 
 	def getUsedQuantity () {
-		return initialQuantity - inStockQuantity
+		if(status.equals(SparePartStatus.INSTOCK))
+			return initialQuantity - inStockQuantity
+	}
+	//True if this spare part group is no longer inStock
+	def isEmptyStock(){
+		if(status.equals(SparePartStatus.INSTOCK) && inStockQuantity==0)
+			return true
+		else return false
 	}
 	
 	static mapping = {

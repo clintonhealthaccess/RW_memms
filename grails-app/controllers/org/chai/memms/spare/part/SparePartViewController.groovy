@@ -73,7 +73,7 @@ class SparePartViewController extends AbstractController{
 	}
 	
 	def getSparePartClueTipsAjaxData = {
-		def sparePart = SparePart.get(params.long("sparePart.id"))
+		def sparePart = SparePart.get(params.long("id"))
 		def html = g.render(template:"/templates/sparePartClueTip",model:[sparePart:sparePart])
 		render(contentType:"text/plain", text:html)
 	}
@@ -123,7 +123,6 @@ class SparePartViewController extends AbstractController{
 			entityCount: entities.totalCount,
 			entityClass:getEntityClass(),
 			code: getLabel(),
-			status:status,
 			type:type
 			
 		]
@@ -133,7 +132,7 @@ class SparePartViewController extends AbstractController{
 	def filter = { FilterCommand cmd ->
 		if (log.isDebugEnabled()) log.debug("spareParts.filter, command "+cmd)
 		adaptParamsForList()
-		def spareParts = sparePartService.filterSparePart(user.location,cmd.supplier,cmd.sparePartType,cmd.sparePartPurchasedBy,params)
+		def spareParts = sparePartService.filterSparePart(user.location,cmd.supplier,cmd.sparePartType,cmd.sparePartPurchasedBy,cmd.status,params)
 		if(!request.xhr)
 			response.sendError(404)
 		else this.ajaxModel(spareParts,null,"")
@@ -214,6 +213,7 @@ class SparePartViewController extends AbstractController{
 class FilterCommand {
 	DataLocation location
 	SparePartType sparePartType
+	SparePartStatus status
 	Provider supplier
 	SparePartPurchasedBy sparePartPurchasedBy
 	
@@ -222,14 +222,15 @@ class FilterCommand {
 		sparePartType nullable:true
 		supplier nullable:true
 		sparePartPurchasedBy nullable:true
+		status nullable: true
 
-		location nullable:false, validator:{val, obj ->
-			return (obj.sparePartType != null || obj.supplier != null || obj.sparePartPurchasedBy || obj.sameAsManufacturer)?true:"select.atleast.one.value.text"
+		location nullable:false, validator:{ val, obj ->
+			return (obj.sparePartType != null || obj.supplier != null || obj.sparePartPurchasedBy!=null || obj.status!=null)?true:"select.atleast.one.value.text"
 		}
 	}
 
 	String toString() {
-		return "FilterCommand[DataLocation="+location+", SparePartType="+sparePartType+", Supplier="+supplier+",  donated="+sparePartPurchasedBy+"]"
+		return "FilterCommand[DataLocation="+location+", SparePartType="+sparePartType+", Supplier="+supplier+",  sparePartPurchasedBy="+sparePartPurchasedBy+" status="+status+"]"
 	}
 }
 
@@ -250,7 +251,7 @@ class ExportFilterCommand {
 	}
 
 	String toString() {
-		return "ExportFilterCommand[ CalculationLocations="+calculationLocations+", DataLocationTypes="+locationTypes+" , SparePartTypes="+sparePartTypes+", Suppliers="+suppliers+", donated="+sparePartPurchasedBy+"]"
+		return "ExportFilterCommand[ CalculationLocations="+calculationLocations+", DataLocationTypes="+locationTypes+" , SparePartTypes="+sparePartTypes+", Suppliers="+suppliers+", sparePartPurchasedBy="+sparePartPurchasedBy+"]"
 	}
 
 }
