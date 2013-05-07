@@ -1,5 +1,5 @@
 <label for="report_type">Report Subtype</label>
-<select name="reportSubType" style="width:384px;" class="js-custom-report-subtype">
+<select name="reportSubType" class="js-custom-report-subtype">
   <option value="0">Please select</option>
   <g:if test="${['inventory','spareParts'].contains(reportType)}">
     <option value="inventory" ${reportSubType == 'inventory'?'selected':''}>
