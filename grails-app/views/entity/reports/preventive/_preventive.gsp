@@ -18,7 +18,7 @@
     <span><g:message code="reports.selectAll"/></span>
   </li>
   <li>
-    <g:selectFromList name="equipmentTypes" label="Equipment Type"
+    <g:selectFromList name="equipmentTypes" label="${message(code:'equipment.type.label')}"
       field="type" optionKey="id" multiple="true" value="${equipmentTypes*.id}"
       ajaxLink="${createLink(controller:'EquipmentType', action:'getAjaxData', params:[observation:'USEDINMEMMS'])}"
       values="${equipmentTypes.collect{it.names + ' ['+ it.code +']'}}"/>
@@ -39,9 +39,9 @@
     </select>
   </li>
 </ul>
-<g:if test="${reportSubType == ReportSubType.INVENTORY}">
-  <g:render template="/entity/reports/inventory/inventory_inventory"/>
+<g:if test="${reportSubType == ReportSubType.WORKORDERS}">
+  <g:render template="/entity/reports/corrective/corrective_workorders"/>
 </g:if>
 <g:if test="${reportSubType == ReportSubType.STATUSCHANGES}">
-  <g:render template="/entity/reports/inventory/inventory_statuschanges"/>
+  <g:render template="/entity/reports/corrective/corrective_statuschanges"/>
 </g:if>

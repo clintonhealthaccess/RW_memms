@@ -1,8 +1,8 @@
 <%@ page import="org.chai.memms.inventory.EquipmentStatus.Status" %>
 <ul>
   <li>
-    %{-- TODO fix styles !!! --}%
-    <label for="statusChanges"><g:message code="reports.inventory.inventory.equipmentStatus"/>:</label>
+    %{-- TODO fix checkbox list styles !!! --}%
+    <label for="equipmentStatus"><g:message code="reports.inventory.inventory.equipmentStatus"/>:</label>
     <g:each in="${Status.values() - Status.NONE}" var="statusEnum">
         <input name="equipmentStatus" type="checkbox" value="${statusEnum.key}"/>
         <label for="${statusEnum.key}">${message(code: statusEnum?.messageCode+'.'+statusEnum?.name)}</label>
@@ -17,12 +17,12 @@
     <span><g:message code="reports.inventory.inventory.noAcquisitionPeriod"/></span>
   </li>
   <li>
-    %{-- TODO fix styles !!! --}%
+    %{-- TODO fix checkbox styles !!! --}%
     <label for="obsolete"><g:message code="reports.inventory.inventory.obsolete" />:</label>
     <input name="obsolete" type="checkbox"/>
   </li>
   <li>
-    %{-- TODO fix styles !!! --}%
+    %{-- TODO fix checkbox styles !!! --}%
     <label for="warranty"><g:message code="reports.inventory.inventory.warranty"/>:</label>
     <input name="warranty" type="checkbox"/>
   </li>
