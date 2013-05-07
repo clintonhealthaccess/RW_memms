@@ -207,7 +207,7 @@ class EquipmentViewController extends AbstractController {
 		cmd.dataLocationTypes = dataLocationTypes
 		
 		Set<CalculationLocation> calculationLocations = new HashSet<CalculationLocation>()
-		params.list('locationids').each { id ->
+		params.list('calculationLocationids').each { id ->
 			if (NumberUtils.isDigits(id)) {
 				def calculationLocation = CalculationLocation.get(id)
 				if (CalculationLocation != null && !calculationLocations.contains(calculationLocation))
