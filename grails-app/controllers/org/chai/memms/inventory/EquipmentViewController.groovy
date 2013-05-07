@@ -258,7 +258,7 @@ class EquipmentViewController extends AbstractController {
 		if (log.isDebugEnabled()) log.debug("equipments.export, command="+cmd+", params"+params)
 
 		if(params.exported != null){
-			def equipmentExportTask = new EquipmentExportFilter(dataLocationTypes:cmd.dataLocationTypes,
+			def equipmentExportTask = new EquipmentExportFilter(dataLocationTypes:cmd.dataLocationTypes,calculationLocations:cmd.calculationLocations,
 					equipmentTypes:cmd.equipmentTypes,serviceProviders:cmd.serviceProviders,manufacturers:cmd.manufacturers,suppliers:cmd.suppliers,equipmentStatus:cmd.equipmentStatus, donor:cmd.donor,
 					purchaser:cmd.purchaser,obsolete:cmd.obsolete).save(failOnError: true,flush: true)
 			params.exportFilterId = equipmentExportTask.id
@@ -380,7 +380,6 @@ class FilterCommand {
 class ExportFilterCommand {
 	Set<DataLocationType> dataLocationTypes
 	Set<CalculationLocation> calculationLocations
-	Set<DataLocation> dataLocations
 	Set<EquipmentType> equipmentTypes
 	Set<Provider> manufacturers
 	Set<Provider> suppliers
@@ -397,7 +396,6 @@ class ExportFilterCommand {
 	}
 
 	static constraints = {
-		dataLocations nullable:true
 		equipmentTypes nullable:true
 		manufacturers nullable:true
 		suppliers nullable:true
