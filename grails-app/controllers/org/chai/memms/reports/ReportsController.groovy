@@ -77,16 +77,22 @@ class ReportsController extends AbstractController{
 
 		def reportType = getReportType()
 		def reportSubType = getReportSubType()
+		// def dataLocations = getDataLocations()
 
-		def dataLocations = getDataLocations()
+		def step1Model = [
+			reportType: reportType,
+			reportSubType: reportSubType
+			// dataLocations: dataLocations
+		]
 
 		def step1Params = [:]
     	step1Params.putAll params
     	step1Params.remove 'reportType'
     	step1Params.remove 'reportSubType'
+    	step1Model << [step1Params: step1Params]
     	//TODO remove everything? or keep some params ex. dataLocations ???
 
-		render(template:"/entity/reports/step1", 
+		render(template:"/entity/reports/customizedReport/step1", 
 			model: 
 			[
 				reportType: reportType,
@@ -101,69 +107,21 @@ class ReportsController extends AbstractController{
 
 		def reportType = getReportType()
 		def reportSubType = getReportSubType()
+		// def dataLocations = getDataLocations()
 
-		switch(reportType){
-			case ReportType.INVENTORY:
-				//inventory - facilities, departments, equipment type, cost
-				def dataLocations = getDataLocations()
-				def departments = getDepartments()
-				def equipmentTypes = getEquipmentTypes()
-				// TODO def fromCost = getCostPeriod('fromCost')
-				// TODO def toCost = getCostPeriod('toCost')
-				def costCurrency = params.get('costCurrency')
-				switch(reportSubType){
-					case ReportSubType.INVENTORY:
-						//inventory x inventory - equipment status, period of acquisition, obsolete, warranty
-						// TODO def equipmentStatus = getStatus('equipmentStatus')
-						// TODO def fromPeriod = getPeriods('fromAcquisitionPeriod')
-						// TODO def toPeriod = getPeriods('toAcquisitionPeriod')
-						def obsolete = params.get('obsolete')
-						def warranty = params.get('warranty')
-						break;
-					case ReportSubType.STATUSCHANGES:
-						//inventory x status changes - get status changes, period of status changes
-						// TODO def statusChanges = getStatus('statusChanges')
-						// TODO def statusChangePeriod = getStatusChangePeriod()
-						break;
-
-				}
-				break;
-			// TODO ...
-			case ReportType.CORRECTIVE:
-				switch(reportSubType){
-					case ReportSubType.WORKORDERS:
-						//TODO corrective x work orders
-						break;
-					case ReportSubType.STATUSCHANGES:
-						//TODO corrective x status changes
-						break;
-				}
-				break;
-			case ReportType.PREVENTIVE:
-				break;
-			case ReportType.SPAREPARTS:
-				break;
-			default:
-				break;
-		}
+		def step2Model = [
+			reportType: reportType,
+			reportSubType: reportSubType,
+			// dataLocations: dataLocations
+			currencies: grailsApplication.config.site.possible.currency
+		]
 
 	    def step2Params = [:]
-	    step2Params.putAll params
-	    step2Params.remove 'dataLocations'
+	    step2Params.putAll step2Model
+	    step2Model << [step2Params: step2Params]
 
-		render(template:"/entity/reports/step2", 
-			model: 
-			[
-				reportType: reportType,
-				reportSubType: reportSubType,
-				dataLocations: dataLocations,
-				departments: departments,
-				equipmentTypes: equipmentTypes,
-				// TODO equipmentCost: equipmentCost,
-				step2Params: step2Params,
-
-				currencies: grailsApplication.config.site.possible.currency
-			])
+		render(template:"/entity/reports/customizedReport/step2", 
+			model:step2Model)
 	}
 
 	def step3 ={
@@ -171,16 +129,135 @@ class ReportsController extends AbstractController{
 
 		def reportType = getReportType()
 		def reportSubType = getReportSubType()
-
 		def dataLocations = getDataLocations()
 
-		render(template:"/entity/reports/step3", 
-			model: 
-			[
-				reportType: reportType,
-				reportSubType: reportSubType,
-				dataLocations: dataLocations
-			])
+		def step3Model = [
+			reportType: reportType,
+			reportSubType: reportSubType,
+			dataLocations: dataLocations
+		]
+
+		switch(reportType){
+			case ReportType.INVENTORY:
+			case ReportType.CORRECTIVE:
+			case ReportType.PREVENTIVE:
+				def departments = getDepartments()
+				def equipmentTypes = getEquipmentTypes()
+				// TODO def fromCost = getCostPeriod('fromCost')
+				// TODO def toCost = getCostPeriod('toCost')
+				def costCurrency = params.get('costCurrency')
+				step3Model << [
+					departments: departments,
+					equipmentTypes: equipmentTypes,
+					// fromCost: fromCost,
+					// toCost: toCost,
+					costCurrency: costCurrency
+				]
+				break;
+			case ReportType.SPAREPARTS:
+				// TODO def sparePartTypes = getSparePartTypes()
+				// step3Model << [
+				// 	sparePartTypes: sparePartTypes
+				// ]
+				break;
+			default:
+				break;
+		}
+
+		switch(reportSubType){
+			case ReportSubType.INVENTORY:
+				// TODO def fromPeriod = getPeriods('fromAcquisitionPeriod')
+				// TODO def toPeriod = getPeriods('toAcquisitionPeriod')
+				// step3Model << [
+				// 	fromAcquisitionPeriod: fromPeriod,
+				// 	toAcquisitionPeriod: toPeriod
+				// ]
+				if(reportType == ReportType.INVENTORY){
+					// TODO def equipmentStatus = getStatus('equipmentStatus')
+					// TODO def fromPeriod = getPeriods('fromAcquisitionPeriod')
+					// TODO def toPeriod = getPeriods('toAcquisitionPeriod')
+					def obsolete = params.get('obsolete')
+					def warranty = params.get('warranty')
+					step3Model << [
+						// equipmentStatus: equipmentStatus,
+						obsolete: obsolete,
+						warranty: warranty
+					]	
+				}
+				if(reportType == ReportType.SPAREPARTS){
+					// TODO def sparePartStatus = getStatus('equipmentStatus')
+					// step3Model << [sparePartStatus: sparePartStatus]
+				}
+				break;
+			case ReportSubType.WORKORDERS:
+				// TODO def fromPeriod = getPeriods('fromWorkOrderPeriod')
+				// TODO def toPeriod = getPeriods('toWorkOrderPeriod')
+				// step3Model << [
+				// 	fromWorkOrderPeriod: fromPeriod,
+				// 	toWorkOrderPeriod: toPeriod
+				// ]
+				if(reportType == ReportType.CORRECTIVE){
+					// TODO def workOrderStatus = getCorrectiveWorkOrderStatus()
+					def warranty = params.get('warranty')
+					step3Model << [
+						// workOrderStatus: workOrderStatus,
+						warranty: warranty
+					]
+				}
+				if(reportType == ReportType.PREVENTIVE) {
+					// TODO def workOrderStatus = getPreventiveWorkOrderStatus()
+					def whoIsResponsible = params.list('whoIsResponsible')
+					step3Model << [
+						// workOrderStatus: workOrderStatus,
+						whoIsResponsible: whoIsResponsible
+					]
+				}
+				break;
+			case ReportSubType.STATUSCHANGES:
+				// TODO def fromPeriod = getPeriods('fromStatusChangesPeriod')
+				// TODO def toPeriod = getPeriods('toStatusChangesPeriod')
+				// step3Model << [
+				// 	fromStatusChangesPeriod: fromPeriod,
+				// 	toStatusChangesPeriod: toPeriod
+				// ]
+				if(reportType == ReportType.INVENTORY){
+					// TODO def statusChanges = getInventoryStatusChanges()
+					// step3Model << [statusChanges: statusChanges]
+				}
+				if(reportType == ReportType.CORRECTIVE){
+					// TODO def statusChanges = getCorrectiveStatusChanges()
+					def warranty = params.get('warranty')
+					step3Model << [
+						// statusChanges: statusChanges,
+						warranty: warranty
+					]
+				}
+				if(reportType == ReportType.PREVENTIVE) {
+					// TODO def statusChanges = getPreventiveStatusChanges()
+					def doneByWho = params.list('doneByWho')
+					step3Model << [
+						// statusChanges: statusChanges,
+						doneByWho: doneByWho
+					]
+				}
+				if(reportType == ReportType.SPAREPARTS){
+					// TODO def statusChanges = getSparePartsStatusChanges()
+					// step3Model << [statusChanges: statusChanges]
+				}
+				break;
+			case ReportSubType.STOCKOUT:
+				def stockOut = params.get('stockOut')
+				def stockOutMonths = params.get('stockOutMonths')
+				step3Model << [
+					stockOut: stockOut,
+					stockOutMonths: stockOutMonths
+				]
+				break;
+
+		}
+
+		render(template:"/entity/reports/customizedReport/step3", 
+			model:step3Model)
 	}
 
 	def customizedListing ={
@@ -198,10 +275,14 @@ class ReportsController extends AbstractController{
 		if (log.isDebugEnabled()) 
 			log.debug("reports.step1.customizedReportSubType, reportType:"+reportType)
 
-		render(template:"/entity/reports/customizedReportSubType",
+		render(template:"/entity/reports/customizedReport/customizedReportSubType",
 			model: 
 			[
 				reportType: reportType
 			])
+	}
+
+	def customizedStatusChanges ={
+
 	}
 }

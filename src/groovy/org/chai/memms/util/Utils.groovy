@@ -256,8 +256,8 @@ public class Utils {
 	//message.properties, ex. reports.type.inventory
 	public enum ReportType{
 		INVENTORY("inventory"),
-		CORRECTIVE("correctiveMaintenance"),
-		PREVENTIVE("preventiveMaintenance"),
+		CORRECTIVE("corrective"),
+		PREVENTIVE("preventive"),
 		SPAREPARTS("spareParts")
 		
 		final String reportType

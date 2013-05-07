@@ -25,7 +25,7 @@
         </li>
         <li>
           <div id="custom-report-subtype">
-            <g:render template="/entity/reports/customizedReportSubType"/>
+            <g:render template="/entity/reports/customizedReport/customizedReportSubType"/>
           </div>
         </li>
       </ul>

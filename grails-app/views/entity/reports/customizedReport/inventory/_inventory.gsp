@@ -23,7 +23,7 @@
   </li>
   <li>
     %{-- TODO fix checkbox styles !!! --}%
-    <label for="warranty"><g:message code="reports.inventory.inventory.warranty"/>:</label>
+    <label for="warranty"><g:message code="reports.inventory.warranty"/>:</label>
     <input name="warranty" type="checkbox"/>
   </li>
 </ul>

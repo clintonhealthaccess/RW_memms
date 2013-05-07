@@ -15,7 +15,7 @@
   <div id ="list-grid" class="v-tabs">
 
     <!-- Create Customized Report Template goes here -->
-    <g:render template="/entity/reports/createCustomizedReport" />
+    <g:render template="/entity/reports/customizedReport/createCustomizedReport" />
 
     <ul id='js-top-tabs' class="v-tabs-nav left">
       <li><a class="active" id="#js-inventory">Inventory</a></li>
