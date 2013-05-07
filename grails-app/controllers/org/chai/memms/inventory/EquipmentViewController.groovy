@@ -280,7 +280,8 @@ class EquipmentViewController extends AbstractController {
 		def dataLocation = DataLocation.get(params.int('dataLocation.id'))
 		adaptParamsForList()
 
-		def equipments = equipmentService.filterEquipment(user,dataLocation,cmd.supplier,cmd.manufacturer,cmd.serviceProvider,cmd.equipmentType,cmd.purchaser,cmd.donor,cmd.obsolete,cmd.status,params)
+		def equipments = equipmentService.filterEquipment(user,dataLocation,cmd.supplier,cmd.manufacturer,cmd.serviceProvider,cmd.equipmentType,cmd.purchaser,cmd.donor,cmd.obsolete,cmd.status,[:])
+		if (log.isDebugEnabled()) log.debug("EQUIPMENTS TO BE EXPORTED IN SIZE "+equipments.size())
 		File file = equipmentService.exporter(dataLocation?:user.location,equipments)
 
 		response.setHeader "Content-disposition", "attachment; filename=${file.name}.csv"
