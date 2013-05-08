@@ -155,13 +155,15 @@ class ListingReportController extends AbstractController{
 	//static final String NYANZA = "Kivuye HC"
 
 	def listEquipments={
-		def dataLocation = DataLocation.get(params.int('dataLocation.id'))
+		def dataLocation = user.location
+		log.debug("DATA LOCATION FROM PARAMS: "+dataLocation)
 		//def dataLocation = DataLocation.findByCode(NYANZA)
 		//def location = DataLocation.get(params.long('dataLocation'))
 		
 		//def dataLocation = DataLocation.find(user.location as DataLocation)
 		adaptParamsForList()
-		def location=user.location
+		
+		/*def location=user.location
 		
 		//TODO To be checked Yesterday morning from EquipmentService
 		def dataLocations = []
@@ -169,18 +171,20 @@ class ListingReportController extends AbstractController{
 		else{
 			dataLocations.add((DataLocation)location)
 			dataLocations.addAll((location as DataLocation).manages)
-		}
+		}*/
 		
 		
 		def equipments
 		
 
-		if (dataLocation != null){
-			if(!user.canAccessCalculationLocation(dataLocation)) response.sendError(404)
-			equipments = equipmentListingReportService.getReportOfEquipmentsByDataLocationAndManages(dataLocation,params)
+		if (user.location != null){
+			if(!user.canAccessCalculationLocation(user.location)) response.sendError(404)
+			equipments = equipmentListingReportService.getReportOfEquipmentsByDataLocationAndManages(user, dataLocation, null, null, params)
+			log.debug("EQUIPMENTS SIZE HERE: "+equipments.size())
 		}
 		else equipments = equipmentListingReportService.getReportOfMyEquipments(user,params)
-
+		log.debug("EQUIPMENTS SIZE HERE AGAIN: "+equipments.size())
+		
 		if(request.xhr){
 			this.ajaxModel(equipments,dataLocation,"")
 		}else{

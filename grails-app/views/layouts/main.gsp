@@ -150,14 +150,14 @@
 									<g:message code="header.navigation.reports.dashboard"/>
 								</a>
 							</li>
-					</shiro:hasPermission>
+					</shiro:hasPermission>--}%
 					<shiro:hasPermission permission="menu:listing">
 							<li>
-								<a href="${createLink(controller:'reports', action:'listing')}">
+								<a href="${createLink(controller:'listingReport', action:'listEquipments')}">
 									<g:message code="header.navigation.reports.listing"/>
 								</a>
 							</li>
-					</shiro:hasPermission> --}%
+					</shiro:hasPermission> 
 					<shiro:hasPermission permission="menu:equipmentExport">
 							<li>
 								<a href="${createLink(controller: 'equipmentView', action:'generalExport')}">

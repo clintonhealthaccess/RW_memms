@@ -187,78 +187,7 @@
             </form>
           </div>
 
-          <table class="items spaced ralign">
-            <thead>
-              <tr>
-                <th>Column name</th>
-                <th>Column name</th>
-                <th>Column name</th>
-                <th>Column name</th>
-                <th>Column name</th>
-                <th>Column name</th>
-                <th>Column name</th>
-                <th>Column name</th>
-                <th>Column name</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-              </tr>
-              <tr>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-              </tr>
-              <tr>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-              </tr>
-              <tr>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-              </tr>
-              <tr>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-              </tr>
-            </tbody>
-          </table>
+         <g:render template="/entity/reports/createCustomizedReport" />
           <ul class="paginate">
             <li><a href="#">Previous</a></li>
             <li><a href="#">1</a></li>
