@@ -26,12 +26,30 @@
 
     <div id='js-inventory' class="v-tabs-content right shown">
       <ul class="v-tabs-subnav">
-        <li><a class="active" href="#" id="report-1">First predefined report</a></li>
-        <li><a href="#" id="report-2">Second predefined report</a></li>
-        <li><a href="#" id="report-3">Third predefined report</a></li>
-        <li><a href="#" id="report-4">Fourth predefined report</a></li>
-        <li><a href="#" id="report-5">Fifth predefined report</a></li>
-        <li><a href="#" id="report-6">Sixth predefined report</a></li>
+      	<li>
+      	<a class="active" href="${createLinkWithTargetURI(controller: 'listingReport', action:'listEquipments')}" id="report-1">
+			<g:message code="default.all.equipments.label" />
+		</a></li>
+		<li>
+      	<a href="${createLinkWithTargetURI(controller: 'listingReport', action:'obsoleteEquipments')}" id="report-2">
+			<g:message code="default.obsolete.label" />
+		</a></li>
+		<li>
+      	<a href="${createLinkWithTargetURI(controller: 'listingReport', action:'disposedEquipments')}" id="report-3">
+			<g:message code="default.disposed.label" />
+		</a></li>
+		<li>
+		<a href="${createLinkWithTargetURI(controller: 'listingReport', action:'underMaintenanceEquipments')}" id="report-4">
+			<g:message code="default.under.maintenance.label" />
+		</a></li>
+		<li>
+		<a href="${createLinkWithTargetURI(controller: 'listingReport', action:'inStockEquipments')}" id="report-5">
+			<g:message code="default.in.stock.label" />
+		</a></li>
+		<li>
+		<a href="${createLinkWithTargetURI(controller: 'listingReport', action:'searchEquipmentsByCriteria')}" id="report-6">
+			<g:message code="default.under.waranty.label" />
+		</a></li>
       </ul>
 
         <div id='report-1' class="js-shown-report">
@@ -47,7 +65,7 @@
               <li><a href="#">11.478<span>Some very long label</span></a></li>
             </ul>
           </div>
-
+         
           <div class="v-tabs-criteria">
             <ul class="left">
               <li>
@@ -187,6 +205,9 @@
             </form>
           </div>
 
+		<g:render template="/entity/reports/equipmentListing" />
+
+		<!--
           <table class="items spaced ralign">
             <thead>
               <tr>
@@ -259,6 +280,7 @@
               </tr>
             </tbody>
           </table>
+          
           <ul class="paginate">
             <li><a href="#">Previous</a></li>
             <li><a href="#">1</a></li>
@@ -269,22 +291,18 @@
             <li><a href="#">6</a></li>
             <li><a href="#">Next</a></li>
           </ul>
+          -->
         </div>
         <div id='report-2'>
-          <p>
-            Second predefined report
-          </p>
+         	<g:render template="/entity/reports/equipmentListing" />
         </div>
         <div id='report-3'>
-          <p>
-            Third predefined report
-          </p>
+          	<g:render template="/entity/reports/equipmentListing" />
         </div>
         <div id='report-4'>
-          <p>
-            Fourth predefined report
-          </p>
+          	<g:render template="/entity/reports/equipmentListing" />
         </div>
+        <!-- 
         <div id='report-5'>
           <p>
             Fifth predefined report
@@ -295,7 +313,10 @@
             Sixth predefined report
           </p>
         </div>
-      </div> <!-- end of Inventory -->
+         -->
+      </div> 
+      
+      <!-- end of Inventory -->
 
       <div id="js-corrective" class="v-tabs-content right">
       <ul class="v-tabs-subnav">

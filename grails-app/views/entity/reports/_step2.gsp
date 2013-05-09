@@ -15,6 +15,7 @@
     			ajaxLink="${createLink(controller:'dataLocation', action:'getAjaxData', params: [class:'dataLocation'])}"
     			from="${dataLocations}" value="${equipment?.dataLocation?.id}" values="${dataLocations.collect{it.names}}" />
           <input type='checkbox' class='js-select-all'><span>Select all</span>
+          
         </li>
         <li>
           <g:selectFromList name="departmentIds" style="width:384px;" class="chzn-select" label="${message(code:'department.label')}" bean="${equipment}" field="department" optionKey="id" multiple="true"

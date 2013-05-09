@@ -207,7 +207,7 @@ class EquipmentViewController extends AbstractController {
 		cmd.dataLocationTypes = dataLocationTypes
 		
 		Set<CalculationLocation> calculationLocations = new HashSet<CalculationLocation>()
-		params.list('locationids').each { id ->
+		params.list('calculationLocationids').each { id ->
 			if (NumberUtils.isDigits(id)) {
 				def calculationLocation = CalculationLocation.get(id)
 				if (CalculationLocation != null && !calculationLocations.contains(calculationLocation))
@@ -258,7 +258,7 @@ class EquipmentViewController extends AbstractController {
 		if (log.isDebugEnabled()) log.debug("equipments.export, command="+cmd+", params"+params)
 
 		if(params.exported != null){
-			def equipmentExportTask = new EquipmentExportFilter(dataLocationTypes:cmd.dataLocationTypes,
+			def equipmentExportTask = new EquipmentExportFilter(dataLocationTypes:cmd.dataLocationTypes,calculationLocations:cmd.calculationLocations,
 					equipmentTypes:cmd.equipmentTypes,serviceProviders:cmd.serviceProviders,manufacturers:cmd.manufacturers,suppliers:cmd.suppliers,equipmentStatus:cmd.equipmentStatus, donor:cmd.donor,
 					purchaser:cmd.purchaser,obsolete:cmd.obsolete).save(failOnError: true,flush: true)
 			params.exportFilterId = equipmentExportTask.id
@@ -279,8 +279,8 @@ class EquipmentViewController extends AbstractController {
 		if (log.isDebugEnabled()) log.debug("equipments.export, command "+cmd)
 		def dataLocation = DataLocation.get(params.int('dataLocation.id'))
 		adaptParamsForList()
-
-		def equipments = equipmentService.filterEquipment(user,dataLocation,cmd.supplier,cmd.manufacturer,cmd.serviceProvider,cmd.equipmentType,cmd.purchaser,cmd.donor,cmd.obsolete,cmd.status,params)
+		def equipments = equipmentService.filterEquipment(user,dataLocation,cmd.supplier,cmd.manufacturer,cmd.serviceProvider,cmd.equipmentType,cmd.purchaser,cmd.donor,cmd.obsolete,cmd.status,[:])
+		if (log.isDebugEnabled()) log.debug("EQUIPMENTS TO BE EXPORTED IN SIZE "+equipments.size())
 		File file = equipmentService.exporter(dataLocation?:user.location,equipments)
 
 		response.setHeader "Content-disposition", "attachment; filename=${file.name}.csv"
@@ -380,7 +380,6 @@ class FilterCommand {
 class ExportFilterCommand {
 	Set<DataLocationType> dataLocationTypes
 	Set<CalculationLocation> calculationLocations
-	Set<DataLocation> dataLocations
 	Set<EquipmentType> equipmentTypes
 	Set<Provider> manufacturers
 	Set<Provider> suppliers
@@ -397,7 +396,6 @@ class ExportFilterCommand {
 	}
 
 	static constraints = {
-		dataLocations nullable:true
 		equipmentTypes nullable:true
 		manufacturers nullable:true
 		suppliers nullable:true

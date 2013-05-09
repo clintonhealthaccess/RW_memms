@@ -127,7 +127,7 @@ class EquipmentExport implements Exporter{
 		headers.add(ImportExportConstant.EQUIPMENT_MANUFACTURE_DATE)
 		headers.add(ImportExportConstant.SUPPLIER_CODE)
 		headers.add(ImportExportConstant.SUPPLIER_CONTACT_NAME)
-		headers.add(ImportExportConstant.SUPPLIER_DATE)//
+		headers.add(ImportExportConstant.SUPPLIER_DATE)
 		headers.add(ImportExportConstant.EQUIPMENT_PURCHASE_COST)
 		headers.add(ImportExportConstant.EQUIPMENT_PURCHASE_COST_CURRENCY)
 		headers.add(ImportExportConstant.EQUIPMENT_DONOR)
@@ -141,8 +141,10 @@ class EquipmentExport implements Exporter{
 		
 		def criteria = Equipment.createCriteria();
 		return criteria.list(sort:"id",order:"desc"){
-			if(equipmentExportFilter.dataLocations != null && equipmentExportFilter.dataLocations.size() > 0)
-				('dataLocation' in equipmentExportFilter.dataLocations)
+			if(equipmentExportFilter.dataLocationTypes != null && equipmentExportFilter.dataLocationTypes.size() > 0)
+				('dataLocationType' in equipmentExportFilter.dataLocationTypes)
+			if(equipmentExportFilter.calculationLocations != null && equipmentExportFilter.calculationLocations.size() > 0)
+				('calculationLocation' in equipmentExportFilter.calculationLocations)
 			if(equipmentExportFilter.suppliers != null && equipmentExportFilter.suppliers.size() > 0)
 				("supplier" in equipmentExportFilter.suppliers)
 			if(equipmentExportFilter.manufacturers != null && equipmentExportFilter.manufacturers.size() > 0)

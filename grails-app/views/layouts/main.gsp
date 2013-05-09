@@ -146,18 +146,18 @@
 				<ul class="submenu">
 					%{-- <shiro:hasPermission permission="menu:dashboard">
 							<li>
-								<a href="${createLink(controller:'reports', action:'dashboard')}">
+								<a href="${createLink(controller:'dashboardReport', action:'dashboard')}">
 									<g:message code="header.navigation.reports.dashboard"/>
 								</a>
 							</li>
-					</shiro:hasPermission>
+					</shiro:hasPermission>--}%
 					<shiro:hasPermission permission="menu:listing">
 							<li>
-								<a href="${createLink(controller:'reports', action:'listing')}">
+								<a href="${createLink(controller:'listingReport', action:'generalEquipmentsListing') }">
 									<g:message code="header.navigation.reports.listing"/>
 								</a>
 							</li>
-					</shiro:hasPermission> --}%
+					</shiro:hasPermission> 
 					<shiro:hasPermission permission="menu:equipmentExport">
 							<li>
 								<a href="${createLink(controller: 'equipmentView', action:'generalExport')}">
