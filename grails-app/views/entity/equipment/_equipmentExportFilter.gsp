@@ -11,7 +11,6 @@
 			</g:eachError>
 		</ul>
 	</g:hasErrors>
-
 	<g:form url="[controller:'equipmentView', action:'generalExport']" method="get" useToken="false" class="filters-box">
 	<ul class="filters-list third">
       <li>
