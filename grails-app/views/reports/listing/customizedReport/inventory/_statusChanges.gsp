@@ -25,5 +25,5 @@
       </option>
     </select>
   </li>
-  <g:render template="/entity/reports/customizedReport/statusChangesPeriod"/>
+  <g:render template="/reports/listing/customizedReport/statusChangesPeriod"/>
 </ul>

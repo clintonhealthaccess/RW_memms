@@ -5,12 +5,12 @@
     <label for="statusChanges"><g:message code="reports.statusChanges"/>:</label>
     <select name="statusChanges" class="js-custom-report-subtype">      
       <g:set var="preventiveMaintenancePerformedMap" 
-        value="${[[PreventiveOrderStatus.OPEN]:[PreventiveOrderStatus.OPEN:true]]}"/>
+        value="${[[PreventiveOrderStatus.OPEN]:[(PreventiveOrderStatus.OPEN):true]]}"/>
       <option value="${preventiveMaintenancePerformedMap}">
         <g:message code="reports.preventive.statusChanges.preventiveMaintenancePerformed"/>
       </option>
       <g:set var="preventiveMaintenanceNotPerformedMap"
-        value="${[[PreventiveOrderStatus.OPEN]:[PreventiveOrderStatus.OPEN:false]]}"/>
+        value="${[[PreventiveOrderStatus.OPEN]:[(PreventiveOrderStatus.OPEN):false]]}"/>
       <option value="${preventiveMaintenanceNotPerformedMap}">
         <g:message code="reports.preventive.statusChanges.preventiveMaintenanceNotPerformed"/>
       </option>
@@ -21,7 +21,7 @@
       </option>
     </select>
   </li>
-  <g:render template="/entity/reports/customizedReport/statusChangesPeriod"/>
+  <g:render template="/reports/listing/customizedReport/statusChangesPeriod"/>
   <li>
     %{-- TODO fix checkbox list styles !!! --}%
     <label for="doneByWho"><g:message code="reports.preventive.statusChanges.doneByWho"/>:</label>

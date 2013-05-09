@@ -1,11 +1,11 @@
 <%@ page import="org.chai.memms.util.Utils.ReportSubType" %>
 
-<li><g:checkBox name="spartPartOptions" value="sparePartType" disabled="disabled"/><span>Spare Part Type</span></li>
-<li><g:checkBox name="spartPartOptions" value="locationOfStock" disabled="disabled"/><span>Location of Stock</span></li>
-<li><g:checkBox name="spartPartOptions" value="quantityInStock" disabled="disabled"/><span>Quantity in Stock</span></li>
+<li><g:checkBox name="spartPartOptions" value="sparePartType" /><span>Spare Part Type</span></li>
+<li><g:checkBox name="spartPartOptions" value="locationOfStock" /><span>Location of Stock</span></li>
+<li><g:checkBox name="spartPartOptions" value="quantityInStock" /><span>Quantity in Stock</span></li>
 
 <g:if test="${reportSubType == ReportSubType.STATUSCHANGES}">
-  <li><g:checkBox name="inventoryOptions" value="statusChanges" disabled="disabled"/><span>Status Changes</span></li>
+  <li><g:checkBox name="inventoryOptions" value="statusChanges" /><span>Status Changes</span></li>
 </g:if>
 
 <g:if test="${[ReportSubType.INVENTORY,ReportSubType.STATUSCHANGES].contains(reportSubType)}">
@@ -19,9 +19,9 @@
 </g:if>
 
 <g:if test="${reportSubType == ReportSubType.STOCKOUT}">
-    <li><g:checkBox name="spartPartOptions" value="forecastedStockOut" disabled="disabled"/><span>Forecasted Stock Out</span></li>
+    <li><g:checkBox name="spartPartOptions" value="forecastedStockOut" /><span>Forecasted Stock Out</span></li>
 </g:if>
 
 <g:if test="${reportSubType == ReportSubType.USERATE}">
-    <li><g:checkBox name="spartPartOptions" value="useRate" disabled="disabled"/><span>Use Rate</span></li>
+    <li><g:checkBox name="spartPartOptions" value="useRate" /><span>Use Rate</span></li>
 </g:if>

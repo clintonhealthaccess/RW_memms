@@ -1,11 +1,11 @@
 <%@ page import="org.chai.memms.util.Utils.ReportSubType" %>
 
-<li><g:checkBox name="correctiveOptions" value="serialNumber" disabled="disabled"/><span>Serial Number</span></li>
-<li><g:checkBox name="correctiveOptions" value="equipmentType" disabled="disabled"/><span>Equipment Type</span></li>
-<li><g:checkBox name="correctiveOptions" value="workOrderCode" disabled="disabled"/><span>Work Order Code</span></li>
+<li><g:checkBox name="correctiveOptions" value="serialNumber" /><span>Serial Number</span></li>
+<li><g:checkBox name="correctiveOptions" value="equipmentType" /><span>Equipment Type</span></li>
+<li><g:checkBox name="correctiveOptions" value="workOrderCode" /><span>Work Order Code</span></li>
 
 <g:if test="${reportSubType == ReportSubType.STATUSCHANGES}">
-      <li><g:checkBox name="correctiveOptions" value="statusChanges" disabled="disabled"/><span>Status Changes</span></li>
+      <li><g:checkBox name="correctiveOptions" value="statusChanges" /><span>Status Changes</span></li>
 </g:if>
 
 <li><g:checkBox name="preventiveOptions" value="manufacturerName" checked="false" /><span>Manufacturer Name</span></li>

@@ -60,7 +60,7 @@
         </g:if>
       </ul>
       <g:if test="${[ReportSubType.INVENTORY,ReportSubType.WORKORDERS,ReportSubType.STATUSCHANGES,ReportSubType.STOCKOUT].contains(reportSubType)}">
-        <g:render template="/entity/reports/customizedReport/${reportType}/${reportSubType}"/>
+        <g:render template="/reports/listing/customizedReport/${reportType}/${reportSubType}"/>
       </g:if>
     </fieldset>
   </g:formRemote>

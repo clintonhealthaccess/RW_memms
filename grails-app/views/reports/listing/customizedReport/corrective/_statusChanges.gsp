@@ -36,7 +36,7 @@
 
     </select>
   </li>
-  <g:render template="/entity/reports/customizedReport/statusChangesPeriod"/>
+  <g:render template="/reports/listing/customizedReport/statusChangesPeriod"/>
   <li>
     %{-- TODO fix checkbox styles !!! --}%
     <label for="warranty"><g:message code="reports.inventory.warranty"/>:</label>

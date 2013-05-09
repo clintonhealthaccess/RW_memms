@@ -9,16 +9,16 @@
     <fieldset>
       <ul class="twocol-checkboxes">
         <g:if test="${reportType == ReportType.INVENTORY}">
-          <g:render template="/entity/reports/customizedReport/inventory/step3"/>
+          <g:render template="/reports/listing/customizedReport/inventory/step3"/>
         </g:if>      
         <g:if test="${reportType == ReportType.CORRECTIVE}">
-          <g:render template="/entity/reports/customizedReport/corrective/step3"/>
+          <g:render template="/reports/listing/customizedReport/corrective/step3"/>
         </g:if>
         <g:if test="${reportType == ReportType.PREVENTIVE}">
-          <g:render template="/entity/reports/customizedReport/preventive/step3"/>
+          <g:render template="/reports/listing/customizedReport/preventive/step3"/>
         </g:if>
         <g:if test="${reportType == ReportType.SPAREPARTS}">
-          <g:render template="/entity/reports/customizedReport/spareParts/step3"/>
+          <g:render template="/reports/listing/customizedReport/spareParts/step3"/>
         </g:if>
       </ul>
     </fieldset>
