@@ -185,7 +185,7 @@ class ReportsController extends AbstractController{
 					]	
 				}
 				if(reportType == ReportType.SPAREPARTS){
-					// TODO def sparePartStatus = getStatus('equipmentStatus')
+					// TODO def sparePartStatus = getStatus('sparePartStatus')
 					// step3Model << [sparePartStatus: sparePartStatus]
 				}
 				break;
