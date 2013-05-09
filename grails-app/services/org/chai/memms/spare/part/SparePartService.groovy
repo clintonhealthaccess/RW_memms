@@ -44,6 +44,7 @@ import org.chai.memms.spare.part.SparePart.StockLocation;
 import org.chai.memms.security.User;
 import org.chai.memms.spare.part.SparePart.SparePartPurchasedBy;
 import org.chai.memms.spare.part.SparePartType;
+import org.chai.memms.spare.part.SparePart.SparePartStatus;
 import org.chai.memms.security.User.UserType;
 import org.supercsv.io.CsvListWriter;
 import org.supercsv.io.ICsvListWriter;

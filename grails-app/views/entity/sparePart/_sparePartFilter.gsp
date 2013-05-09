@@ -45,4 +45,4 @@
 		<g:message code="entity.filter.message.label" args="${[message(code: 'spare.part.label'),params?.q]}" />
 	</h2>
 </g:if>
-		
+
