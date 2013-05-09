@@ -31,7 +31,7 @@
 			<g:message code="default.all.equipments.label" />
 		</a></li>
 		<li>
-      	<a href="${createLinkWithTargetURI(controller: 'listingReport', action:'searchEquipmentsByCriteria')}" id="report-2">
+      	<a href="${createLinkWithTargetURI(controller: 'listingReport', action:'obsoleteEquipments')}" id="report-2">
 			<g:message code="default.obsolete.label" />
 		</a></li>
 		<li>
@@ -39,13 +39,17 @@
 			<g:message code="default.disposed.label" />
 		</a></li>
 		<li>
-		<a href="${createLinkWithTargetURI(controller: 'listingReport', action:'searchEquipmentsByCriteria')}" id="report-4">
+		<a href="${createLinkWithTargetURI(controller: 'listingReport', action:'underMaintenanceEquipments')}" id="report-4">
+			<g:message code="default.under.maintenance.label" />
+		</a></li>
+		<li>
+		<a href="${createLinkWithTargetURI(controller: 'listingReport', action:'inStockEquipments')}" id="report-5">
+			<g:message code="default.in.stock.label" />
+		</a></li>
+		<li>
+		<a href="${createLinkWithTargetURI(controller: 'listingReport', action:'searchEquipmentsByCriteria')}" id="report-6">
 			<g:message code="default.under.waranty.label" />
 		</a></li>
-		<!-- 
-        <li><a href="#" id="report-5">Fifth predefined report</a></li>
-        <li><a href="#" id="report-6">Sixth predefined report</a></li>
-        -->
       </ul>
 
         <div id='report-1' class="js-shown-report">

@@ -59,7 +59,7 @@ class ListingReportController extends AbstractController{
 	def getLabel() {
 		return "equipment.listing.report.label";
 	}
-	
+
 	def model(def entities, def dataLocation) {
 		return [
 			entities: entities,
@@ -72,7 +72,7 @@ class ListingReportController extends AbstractController{
 	def ajaxModel(def entities,def dataLocation,def searchTerm) {
 		def model = model(entities, dataLocation) << [q:searchTerm]
 		def listHtml = g.render(template:"/entity/reports/listing",model:model)
-		render(contentType:"text/json") { results = [listHtml] }
+		render(contentType:"text/json") { results = [listHtml]}
 	}
 
 	def defaultEquipmentsView ={
@@ -154,61 +154,59 @@ class ListingReportController extends AbstractController{
 			reportType: reportType
 		])
 	}
-	//static final String NYANZA = "Kivuye HC"
-
-	def listEquipments={
-		
-		//TODO To be checked Yesterday morning from EquipmentService
-		def dataLocation = DataLocation.get(params.int('dataLocation.id'))
-		def equipments
+	
+	def generalEquipmentsListing={
 		adaptParamsForList()
-		
-		if (dataLocation != null){
-			if(!user.canAccessCalculationLocation(dataLocation)) response.sendError(404)
-			equipments = equipmentListingReportService.getReportOfEquipmentsByDataLocationAndManages(dataLocation,params)
-			log.debug("EQUIPMENTS SIZE HERE: "+equipments.size())
-		}
-		else equipments = equipmentListingReportService.getReportOfMyEquipments(user,params)
-		log.debug("EQUIPMENTS SIZE HERE AGAIN: "+equipments.size())
-		
-		if(request.xhr){
-			this.ajaxModel(equipments,dataLocation,"")
-		}else{
-			render(view:"/entity/reports", model: model(equipments, dataLocation) << [
+		def equipments = equipmentListingReportService.getGeneralReportOfEquipments(user,params)
+		if(!request.xhr)
+			render(view:"/entity/reports", model: model(equipments, "") << [
 				template:"/entity/reports/listing",
 			])
-		}
+		else
+			this.ajaxModel(equipments,"","")
 	}
-
-	def searchEquipmentsByCriteria= {
-		DataLocation dataLocation = DataLocation.get(params.int("dataLocation.id"))
-		if (dataLocation != null && !user.canAccessCalculationLocation(dataLocation))
-			response.sendError(404)
-		else{
-			adaptParamsForList()
-			def equipments = equipmentListingReportService.searchEquipmentByCriteria(params['q'],user,dataLocation,params)
-			if(!request.xhr)
-				render(view:"/entity/reports", model: model(equipments, dataLocation) << [
-					template:"/entity/reports/listing",
-				])
-			else
-				this.ajaxModel(equipments,dataLocation,params['q'])
-		}
-	}
-	def disposedEquipments={
-		def disposedStatus=Status.DISPOSED
-		
-			adaptParamsForList()
-			def equipments = equipmentListingReportService.searchDisposedEquipment(disposedStatus,user,params)
-			if(!request.xhr)
-				render(view:"/entity/reports", model: model(equipments, "") << [
-					template:"/entity/reports/listing",
-				])
-			else
-				this.ajaxModel(equipments,"","")
-		
-	}
-	def obsoleteEquipments={
 	
-}
+	def disposedEquipments={
+		adaptParamsForList()
+		def equipments = equipmentListingReportService.getDisposedEquipments(user,params)
+		if(!request.xhr)
+			render(view:"/entity/reports", model: model(equipments, "") << [
+				template:"/entity/reports/listing",
+			])
+		else
+			this.ajaxModel(equipments,"","")
+
+	}
+	
+	def underMaintenanceEquipments={
+		adaptParamsForList()
+		def equipments = equipmentListingReportService.getUnderMaintenanceEquipments(user,params)
+		if(!request.xhr)
+			render(view:"/entity/reports", model: model(equipments, "") << [
+				template:"/entity/reports/listing",
+			])
+		else
+			this.ajaxModel(equipments,"","")	
+	}
+	
+	def obsoleteEquipments={
+		adaptParamsForList()
+		def equipments = equipmentListingReportService.getObsoleteEquipments(user,params)
+		if(!request.xhr)
+			render(view:"/entity/reports", model: model(equipments, "") << [
+				template:"/entity/reports/listing",
+			])
+		else
+			this.ajaxModel(equipments,"","")
+	}
+	def inStockEquipments={
+		adaptParamsForList()
+		def equipments = equipmentListingReportService.getInStockEquipments(user,params)
+		if(!request.xhr)
+			render(view:"/entity/reports", model: model(equipments, "") << [
+				template:"/entity/reports/listing",
+			])
+		else
+			this.ajaxModel(equipments,"","")
+	}
 }
