@@ -277,5 +277,4 @@ public class Utils {
 		ReportSubType(String reportSubType){ this.reportSubType=reportSubType }
 		String getReportSubType() { return reportSubType }
 	}
-	
 }
