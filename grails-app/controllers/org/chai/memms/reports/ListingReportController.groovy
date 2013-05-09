@@ -34,6 +34,8 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.chai.location.DataLocation;
 import org.chai.memms.AbstractController;
 import org.chai.memms.inventory.Equipment;
+import org.chai.memms.inventory.EquipmentStatus;
+import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.location.DataLocation;
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocationType;
@@ -155,31 +157,15 @@ class ListingReportController extends AbstractController{
 	//static final String NYANZA = "Kivuye HC"
 
 	def listEquipments={
-		def dataLocation = user.location
-		log.debug("DATA LOCATION FROM PARAMS: "+dataLocation)
-		//def dataLocation = DataLocation.findByCode(NYANZA)
-		//def location = DataLocation.get(params.long('dataLocation'))
-		
-		//def dataLocation = DataLocation.find(user.location as DataLocation)
-		adaptParamsForList()
-		
-		/*def location=user.location
 		
 		//TODO To be checked Yesterday morning from EquipmentService
-		def dataLocations = []
-		if(location instanceof Location) dataLocations.addAll(location.getDataLocations([:], [:]))
-		else{
-			dataLocations.add((DataLocation)location)
-			dataLocations.addAll((location as DataLocation).manages)
-		}*/
-		
-		
+		def dataLocation = DataLocation.get(params.int('dataLocation.id'))
 		def equipments
+		adaptParamsForList()
 		
-
-		if (user.location != null){
-			if(!user.canAccessCalculationLocation(user.location)) response.sendError(404)
-			equipments = equipmentListingReportService.getReportOfEquipmentsByDataLocationAndManages(user, dataLocation, null, null, params)
+		if (dataLocation != null){
+			if(!user.canAccessCalculationLocation(dataLocation)) response.sendError(404)
+			equipments = equipmentListingReportService.getReportOfEquipmentsByDataLocationAndManages(dataLocation,params)
 			log.debug("EQUIPMENTS SIZE HERE: "+equipments.size())
 		}
 		else equipments = equipmentListingReportService.getReportOfMyEquipments(user,params)
@@ -209,4 +195,20 @@ class ListingReportController extends AbstractController{
 				this.ajaxModel(equipments,dataLocation,params['q'])
 		}
 	}
+	def disposedEquipments={
+		def disposedStatus=Status.DISPOSED
+		
+			adaptParamsForList()
+			def equipments = equipmentListingReportService.searchDisposedEquipment(disposedStatus,user,params)
+			if(!request.xhr)
+				render(view:"/entity/reports", model: model(equipments, "") << [
+					template:"/entity/reports/listing",
+				])
+			else
+				this.ajaxModel(equipments,"","")
+		
+	}
+	def obsoleteEquipments={
+	
+}
 }
