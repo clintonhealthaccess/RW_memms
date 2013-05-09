@@ -1,17 +1,29 @@
 <%@ page import="org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart" %>
 <ul>
   <li>
-    %{-- TODO --}%
     <label for="statusChanges"><g:message code="reports.statusChanges"/>:</label>
-    <g:each in="${StatusOfSparePart.values() - StatusOfSparePart.NONE}" var="statusEnum">
-        <input name="statusChanges" type="checkbox" value="${statusEnum.key}"/>
-        <label for="${statusEnum.key}">${message(code: statusEnum?.messageCode+'.'+statusEnum?.name)}</label>
-    </g:each>
+    <select name="statusChanges" class="js-custom-report-subtype">      
+      <g:set var="newPendingOrderMap" 
+        value="${[[StatusOfSparePart.NONE]:[StatusOfSparePart.PENDINGORDER]]}"/>
+      <option value="${newPendingOrderMap}">
+        <g:message code="New pending order"/>
+      </option>
+      <g:set var="pendingOrderArrivedMap"
+        value="${[[StatusOfSparePart.PENDINGORDER]:[StatusOfSparePart.INSTOCK]]}" performed="false"/>
+      <option value="${pendingOrderArrivedMap}">
+        <g:message code="Pending order that arrived"/>
+      </option>
+      <g:set var="sparePartsAssociatedToEquipmentMap"
+        value="${[(StatusOfSparePart.values()-[StatusOfSparePart.OPERATIONAL,StatusOfSparePart.DISPOSED]):[StatusOfSparePart.OPERATIONAL]]}"/>
+      <option value="${sparePartsAssociatedToEquipmentMap}">
+        <g:message code="Spare parts associated to equipment"/>
+      </option>
+      <g:set var="disposedSparePartsMap"
+        value="${[(StatusOfSparePart.values()-StatusOfSparePart.DISPOSED):[StatusOfSparePart.OPERATIONAL]]}"/>
+      <option value="${disposedSparePartsMap}">
+        <g:message code="Disposed spare parts"/>
+      </option>
+    </select>
   </li>
-  <li>
-    <label for="statusChangesPeriod"><g:message code="reports.statusChangesPeriod"/>:</label>
-    <input name="fromStatusChangesPeriod" class="js-date-picker date-picker idle-field" />
-    <span class="dash">-</span>
-    <input name="toStatusChangesPeriod" class="js-date-picker date-picker idle-field" />
-  </li>
+  <g:render template="/entity/reports/customizedReport/statusChangesPeriod"/>
 </ul>

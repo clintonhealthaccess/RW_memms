@@ -281,8 +281,4 @@ class ReportsController extends AbstractController{
 				reportType: reportType
 			])
 	}
-
-	def customizedStatusChanges ={
-
-	}
 }

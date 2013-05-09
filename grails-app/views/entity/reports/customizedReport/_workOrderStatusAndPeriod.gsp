@@ -1,5 +1,4 @@
 <li>
-	%{-- TODO use corrective maintenance work order status object --}%
 	%{-- TODO fix checkbox list styles !!! --}%
 	<label for="workOrderStatus"><g:message code="reports.workOrderStatus"/>:</label>
 	<g:each in="${statusValues}" var="statusEnum">

@@ -1,20 +1,42 @@
 <%@ page import="org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus" %>
 <ul>
   <li>
-    %{-- TODO use corrective maintenance status changes object --}%
-    %{-- TODO fix checkbox list styles !!! --}%
     <label for="statusChanges"><g:message code="reports.statusChanges"/>:</label>
-    <g:each in="${OrderStatus.values() - OrderStatus.NONE}" var="statusEnum">
-        <input name="statusChanges" type="checkbox" value="${statusEnum.key}"/>
-        <label for="${statusEnum.key}">${message(code: statusEnum?.messageCode+'.'+statusEnum?.name)}</label>
-    </g:each>
+    <select name="statusChanges" class="js-custom-report-subtype">
+      <g:set var="newOrderMap" 
+        value="${[[OrderStatus.NONE]:[OrderStatus.OPENATFOSA,OrderStatus.OPENATMMC]]}"/>
+      <option value="${newOrderMap}">
+        <g:message code="reports.corrective.statusChanges.newOrder"/>
+      </option>
+      <g:set var="orderEscalatedToMmcMap"
+        value="${[[OrderStatus.OPENATFOSA]:[OrderStatus.OPENATMMC]]}"/>
+      <option value="${orderEscalatedToMmcMap}">
+        <g:message code="reports.corrective.statusChanges.orderEscalatedToMmc"/>
+      </option>
+      <g:set var="equipmentReceivedFromMmcFixedMap"
+        value="${[[OrderStatus.OPENATMMC]:[OrderStatus.CLOSEDFIXED]]}"/>
+      <option value="${equipmentReceivedFromMmcFixedMap}">
+        <g:message code="reports.corrective.statusChanges.equipmentReceivedFromMmcFixed"/>
+      </option>
+      <g:set var="equipmentReceivedFromMmcNotFixedMap"
+        value="${[[OrderStatus.OPENATMMC]:[OrderStatus.OPENATFOSA]]}"/>
+      <option value="${equipmentReceivedFromMmcNotFixedMap}">
+        <g:message code="reports.corrective.statusChanges.equipmentReceivedFromMmcNotFixed"/>
+      </option>
+      <g:set var="closedOrderFixedMap"
+        value="${[[OrderStatus.OPENATFOSA,OrderStatus.OPENATMMC]:[OrderStatus.CLOSEDFIXED]]}"/>
+      <option value="${closedOrderFixedMap}">
+        <g:message code="reports.corrective.statusChanges.closedOrderFixed"/>
+      </option>
+      <g:set var="closedOrderNotFixedMap"
+        value="${[[OrderStatus.OPENATFOSA,OrderStatus.OPENATMMC]:[OrderStatus.CLOSEDFORDISPOSAL]]}"/>
+      <option value="${closedOrderNotFixedMap}">
+        <g:message code="reports.corrective.statusChanges.closedOrderNotFixed"/>
+      </option>
+
+    </select>
   </li>
-  <li>
-    <label for="statusChangesPeriod"><g:message code="reports.statusChangesPeriod"/>:</label>
-    <input name="fromStatusChangesPeriod" class="js-date-picker date-picker idle-field" />
-    <span class="dash">-</span>
-    <input name="toStatusChangesPeriod" class="js-date-picker date-picker idle-field" />
-  </li>
+  <g:render template="/entity/reports/customizedReport/statusChangesPeriod"/>
   <li>
     %{-- TODO fix checkbox styles !!! --}%
     <label for="warranty"><g:message code="reports.inventory.warranty"/>:</label>

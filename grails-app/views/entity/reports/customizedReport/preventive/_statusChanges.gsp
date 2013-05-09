@@ -2,19 +2,26 @@
 <%@ page import="org.chai.memms.preventive.maintenance.PreventiveOrder.PreventionResponsible" %>
 <ul>
   <li>
-    %{-- TODO --}%
     <label for="statusChanges"><g:message code="reports.statusChanges"/>:</label>
-    <g:each in="${PreventiveOrderStatus.values()}" var="statusEnum">
-        <input name="statusChanges" type="checkbox" value="${statusEnum.key}"/>
-        <label for="${statusEnum.key}">${message(code: statusEnum?.messageCode+'.'+statusEnum?.name)}</label>
-    </g:each>
+    <select name="statusChanges" class="js-custom-report-subtype">      
+      <g:set var="preventiveMaintenancePerformedMap" 
+        value="${[[PreventiveOrderStatus.OPEN]:[PreventiveOrderStatus.OPEN:true]]}"/>
+      <option value="${preventiveMaintenancePerformedMap}">
+        <g:message code="reports.preventive.statusChanges.preventiveMaintenancePerformed"/>
+      </option>
+      <g:set var="preventiveMaintenanceNotPerformedMap"
+        value="${[[PreventiveOrderStatus.OPEN]:[PreventiveOrderStatus.OPEN:false]]}"/>
+      <option value="${preventiveMaintenanceNotPerformedMap}">
+        <g:message code="reports.preventive.statusChanges.preventiveMaintenanceNotPerformed"/>
+      </option>
+      <g:set var="closedScheduledPreventiveMaintenanceMap"
+        value="${[[PreventiveOrderStatus.OPEN]:[PreventiveOrderStatus.CLOSED]]}"/>
+      <option value="${closedScheduledPreventiveMaintenanceMap}">
+        <g:message code="reports.preventive.statusChanges.closedScheduledPreventiveMaintenance"/>
+      </option>
+    </select>
   </li>
-  <li>
-    <label for="statusChangesPeriod"><g:message code="reports.statusChangesPeriod"/>:</label>
-    <input name="fromStatusChangesPeriod" class="js-date-picker date-picker idle-field" />
-    <span class="dash">-</span>
-    <input name="toStatusChangesPeriod" class="js-date-picker date-picker idle-field" />
-  </li>
+  <g:render template="/entity/reports/customizedReport/statusChangesPeriod"/>
   <li>
     %{-- TODO fix checkbox list styles !!! --}%
     <label for="doneByWho"><g:message code="reports.preventive.statusChanges.doneByWho"/>:</label>
