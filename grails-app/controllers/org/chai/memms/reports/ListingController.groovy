@@ -27,20 +27,28 @@
  */
 package org.chai.memms.reports
 
-import org.apache.commons.lang.math.NumberUtils
-import org.chai.location.DataLocation
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.commons.lang.math.NumberUtils;
+import org.chai.location.CalculationLocation;
+import org.chai.location.DataLocation;
 import org.chai.location.DataLocationType
 import org.chai.location.Location
-import org.chai.memms.AbstractController
+import org.chai.location.LocationLevel
+import org.chai.memms.AbstractController;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus
 import org.chai.memms.inventory.Department
+import org.chai.memms.inventory.Equipment;
+import org.chai.memms.inventory.EquipmentStatus;
+import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.inventory.EquipmentType
-import org.chai.memms.inventory.EquipmentStatus
-import org.chai.memms.inventory.EquipmentStatus.Status
 import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatus
 import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventionResponsible
 import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart
 import org.chai.memms.spare.part.SparePartType
+import org.chai.memms.security.User;
+import org.chai.memms.security.User.UserType;
 import org.chai.memms.util.Utils
 import org.chai.memms.util.Utils.ReportType
 import org.chai.memms.util.Utils.ReportSubType
@@ -49,39 +57,123 @@ import org.chai.memms.util.Utils.ReportSubType
  * @author Jean Kahigiso M.
  *
  */
-class ReportsController extends AbstractController{
+class ListingController extends AbstractController{
 
-	def locationService
+	def equipmentListingReportService
+	def grailsApplication
 
-	def dashboard ={
-		if (log.isDebugEnabled()) log.debug("reports.dashboard, params:"+params)
-
-		//TODO Pivot Access
-
-		render(view: '/reports/reports', model: 
-			[
-				template:"/reports/dashboard/dashboard"
-			])
-	}	
-
-	def listing ={
-		if (log.isDebugEnabled()) log.debug("reports.listing, params:"+params)
-
-		def reportType = getReportType()
-		def reportSubType = getReportSubType()
-		// def dataLocations = getDataLocations()
-
-		render(view: '/reports/reports', model: 
-			[
-				template:"/reports/listing/listing",
-				reportType: reportType,
-				reportSubType: reportSubType
-				// dataLocations: dataLocations
-			])
+	def getEntityClass() {
+		return Equipment.class;
 	}
 
+	def getLabel() {
+		return "equipment.listing.report.label";
+	}
+
+	def model(def entities, def dataLocation) {
+		return [
+			entities: entities,
+			entityCount: entities.totalCount,
+			dataLocation:dataLocation,
+			entityClass:getEntityClass(),
+			code: getLabel()
+		]
+	}
+
+	def ajaxModel(def entities,def dataLocation,def searchTerm) {
+		def model = model(entities, dataLocation) << [q:searchTerm]
+		def listHtml = g.render(template:"/reports/listing/listing",model:model)
+		render(contentType:"text/json") { results = [listHtml]}
+	}
+
+	def defaultEquipmentsView ={
+		render(view: '/reports/reports', model:
+		[
+			template:"/reports/listing/listing"
+		])
+	}
+	
+	def generalEquipmentsListing={
+		if (log.isDebugEnabled()) log.debug("listing.generalEquipmentsListing, params:"+params)
+
+		adaptParamsForList()
+		def equipments = equipmentListingReportService.getGeneralReportOfEquipments(user,params)
+		if(!request.xhr)
+			render(view:"/reports/reports", 
+				model: model(equipments, "") << 
+				[
+					reportType: ReportType.INVENTORY,
+					reportSubType: ReportSubType.INVENTORY,
+					template:"/reports/listing/listing"
+				])
+		else
+			this.ajaxModel(equipments,"","")
+	}
+	
+	def disposedEquipments={
+		adaptParamsForList()
+		def equipments = equipmentListingReportService.getDisposedEquipments(user,params)
+		if(!request.xhr)
+			render(view:"/reports/reports", model: model(equipments, "") << [
+				template:"/reports/listing/listing",
+			])
+		else
+			this.ajaxModel(equipments,"","")
+	}
+	
+	def underMaintenanceEquipments={
+		adaptParamsForList()
+		def equipments = equipmentListingReportService.getUnderMaintenanceEquipments(user,params)
+		if(!request.xhr)
+			render(view:"/reports/reports", model: model(equipments, "") << [
+				template:"/reports/listing/listing",
+			])
+		else
+			this.ajaxModel(equipments,"","")	
+	}
+	
+	def obsoleteEquipments={
+		adaptParamsForList()
+		def equipments = equipmentListingReportService.getObsoleteEquipments(user,params)
+		if(!request.xhr)
+			render(view:"/reports/reports", model: model(equipments, "") << [
+				template:"/reports/listing/listing",
+			])
+		else
+			this.ajaxModel(equipments,"","")
+	}
+
+	def inStockEquipments={
+		adaptParamsForList()
+		def equipments = equipmentListingReportService.getInStockEquipments(user,params)
+		if(!request.xhr)
+			render(view:"/reports/reports", model: model(equipments, "") << [
+				template:"/reports/listing/listing",
+			])
+		else
+			this.ajaxModel(equipments,"","")
+	}
+
+	//customized report wizard
+
+	// def listing ={
+	// 	if (log.isDebugEnabled()) log.debug("listing, params:"+params)
+
+	// 	def reportType = getReportType()
+	// 	def reportSubType = getReportSubType()
+	// 	// def dataLocations = getDataLocations()
+
+	// 	render(view: '/reports/reports', model: 
+	// 		[
+	// 			template:"/reports/listing/listing",
+	// 			reportType: reportType,
+	// 			reportSubType: reportSubType
+	// 			// dataLocations: dataLocations
+	// 		])
+	// }
+
 	def step1 ={
-		if (log.isDebugEnabled()) log.debug("reports.listing.step1, params:"+params)
+		if (log.isDebugEnabled()) log.debug("listing.step1, params:"+params)
 
 		def reportType = getReportType()
 		def reportSubType = getReportSubType()
@@ -113,7 +205,7 @@ class ReportsController extends AbstractController{
 	}
 
 	def step2 ={
-		if (log.isDebugEnabled()) log.debug("reports.listing.step2, params:"+params)
+		if (log.isDebugEnabled()) log.debug("listing.step2, params:"+params)
 
 		def reportType = getReportType()
 		def reportSubType = getReportSubType()
@@ -137,7 +229,7 @@ class ReportsController extends AbstractController{
 	}
 
 	def step3 ={
-		if (log.isDebugEnabled()) log.debug("reports.listing.step3, params:"+params)
+		if (log.isDebugEnabled()) log.debug("listing.step3, params:"+params)
 
 		def reportType = getReportType()
 		def reportSubType = getReportSubType()
@@ -155,14 +247,14 @@ class ReportsController extends AbstractController{
 			case ReportType.PREVENTIVE:
 				def departments = getDepartments()
 				def equipmentTypes = getEquipmentTypes()
-				// def fromCost = getPeriod('fromCost')
-				// def toCost = getPeriod('toCost')
+				def fromCost = params.get('fromCost')
+				def toCost = params.get('toCost')
 				def costCurrency = params.get('costCurrency')
 				step3Model << [
 					departments: departments,
 					equipmentTypes: equipmentTypes,
-					// fromCost: fromCost,
-					// toCost: toCost,
+					fromCost: fromCost,
+					toCost: toCost,
 					costCurrency: costCurrency
 				]
 				break;
@@ -178,12 +270,12 @@ class ReportsController extends AbstractController{
 
 		switch(reportSubType){
 			case ReportSubType.INVENTORY:
-				// def fromPeriod = getPeriod('fromAcquisitionPeriod')
-				// def toPeriod = getPeriod('toAcquisitionPeriod')
-				// step3Model << [
-				// 	fromAcquisitionPeriod: fromPeriod,
-				// 	toAcquisitionPeriod: toPeriod
-				// ]
+				def fromPeriod = getPeriod('fromAcquisitionPeriod')
+				def toPeriod = getPeriod('toAcquisitionPeriod')
+				step3Model << [
+					fromAcquisitionPeriod: fromPeriod,
+					toAcquisitionPeriod: toPeriod
+				]
 				if(reportType == ReportType.INVENTORY){
 					def equipmentStatus = getInventoryStatus()
 					def obsolete = params.get('obsolete')
@@ -200,12 +292,12 @@ class ReportsController extends AbstractController{
 				}
 				break;
 			case ReportSubType.WORKORDERS:
-				// def fromPeriod = getPeriod('fromWorkOrderPeriod')
-				// def toPeriod = getPeriod('toWorkOrderPeriod')
-				// step3Model << [
-				// 	fromWorkOrderPeriod: fromPeriod,
-				// 	toWorkOrderPeriod: toPeriod
-				// ]
+				def fromPeriod = getPeriod('fromWorkOrderPeriod')
+				def toPeriod = getPeriod('toWorkOrderPeriod')
+				step3Model << [
+					fromWorkOrderPeriod: fromPeriod,
+					toWorkOrderPeriod: toPeriod
+				]
 				if(reportType == ReportType.CORRECTIVE){
 					def workOrderStatus = getCorrectiveStatus()
 					def warranty = params.get('warranty')
@@ -224,12 +316,12 @@ class ReportsController extends AbstractController{
 				}
 				break;
 			case ReportSubType.STATUSCHANGES:
-				// def fromPeriod = getPeriod('fromStatusChangesPeriod')
-				// def toPeriod = getPeriod('toStatusChangesPeriod')
-				// step3Model << [
-				// 	fromStatusChangesPeriod: fromPeriod,
-				// 	toStatusChangesPeriod: toPeriod
-				// ]
+				def fromPeriod = getPeriod('fromStatusChangesPeriod')
+				def toPeriod = getPeriod('toStatusChangesPeriod')
+				step3Model << [
+					fromStatusChangesPeriod: fromPeriod,
+					toStatusChangesPeriod: toPeriod
+				]
 				if(reportType == ReportType.INVENTORY){
 					// TODO def statusChanges = getInventoryStatusChanges()
 					// step3Model << [statusChanges: statusChanges]
@@ -272,17 +364,17 @@ class ReportsController extends AbstractController{
 	}
 
 	def customizedListing ={
-		if (log.isDebugEnabled()) log.debug("reports.listing.customizedListing, params:"+params)
+		if (log.isDebugEnabled()) log.debug("listing.customizedListing, params:"+params)
 	}
 
 	def customizedReportSubType ={
 		if (log.isDebugEnabled()) 
-			log.debug("reports.listing.step1.customizedReportSubType, params:"+params)
+			log.debug("listing.step1.customizedReportSubType, params:"+params)
 
 		def reportType = getReportType()
 
 		if (log.isDebugEnabled()) 
-			log.debug("reports.listing.step1.customizedReportSubType, reportType:"+reportType)
+			log.debug("listing.step1.customizedReportSubType, reportType:"+reportType)
 
 		render(template:"/reports/listing/customizedReport/customizedReportSubType",
 			model: 
@@ -291,7 +383,7 @@ class ReportsController extends AbstractController{
 			])
 	}
 
-	//param methods
+	//customized report wizard params
 
 	def getReportType(){
 		ReportType reportType = params.get('reportType')
@@ -383,11 +475,12 @@ class ReportsController extends AbstractController{
 	}
 
 	public Date getPeriod(String periodParam){
-		Date period = params.get(periodParam);
+		def period = params.get(periodParam);
 		if(log.isDebugEnabled()) 
 			log.debug("abstract.getPeriod param:"+periodParam+", value:"+period+")")
-		if(period == null) period = new Date();
-		return getNow();
+		if(period != null && !period.empty) period = Date.parse('MM/dd/yyyy', period)
+		else period = null
+		return period
 	}
 
 	public Set<EquipmentStatus> getInventoryStatus(){
