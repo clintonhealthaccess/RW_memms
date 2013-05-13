@@ -153,7 +153,7 @@
 					</shiro:hasPermission>--}%
 					<shiro:hasPermission permission="menu:listing">
 							<li>
-								<a href="${createLink(controller:'listing', action:'generalEquipmentsListing') }">
+								<a href="${createLink(controller:'listing', action:'view') }">
 									<g:message code="header.navigation.reports.listing"/>
 								</a>
 							</li>

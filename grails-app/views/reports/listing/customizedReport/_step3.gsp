@@ -4,7 +4,7 @@
   <!-- Step 3 -->
   <h2><g:message code="reports.select.optional.information"/><span class="right"><g:message code="reports.step" args="['3','3']"/></span></h2>
   <p>${message(code:'reports.type.label')}: <b>${message(code:'reports.type.'+reportType.reportType)}</b> > ${message(code:'reports.subType.label')}: <b>${message(code:'reports.subType.'+reportSubType.reportSubType)}</b></p>
-  <g:form name="formRemoteStep3Next" url="[action:'listing', params: step3Params]" update="dialog-form"
+  <g:form name="formRemoteStep3Next" url="[action:'customizedListing', params: step3Params]" update="dialog-form"
     onSuccess="customizedlisting_init();">
     <fieldset>
       <ul class="twocol-checkboxes">

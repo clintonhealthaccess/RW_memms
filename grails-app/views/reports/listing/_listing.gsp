@@ -1,3 +1,5 @@
+<%@ page import="org.chai.memms.util.Utils.ReportType" %>
+<%@ page import="org.chai.memms.util.Utils.ReportSubType" %>
 <div class="entity-list">
   <!-- List Top Header Template goes here -->
   <div class="heading1-bar">
