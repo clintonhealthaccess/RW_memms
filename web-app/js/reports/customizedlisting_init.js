@@ -24,6 +24,7 @@ function customizedlisting_init(){
   step1_init();
   step2_init();
   step3_init();
+  step4_init();
 
 }
 
@@ -62,5 +63,14 @@ function step3_init(){
   });
   $('#js-prev-step-3').click(function(e) {
     $('#formRemoteStep3Prev').submit();
+  });
+}
+
+function step4_init(){
+  $('#js-next-step-4').click(function(e) {
+    $('#formRemoteStep4Next').submit();
+  });
+  $('#js-prev-step-4').click(function(e) {
+    $('#formRemoteStep4Prev').submit();
   });
 }

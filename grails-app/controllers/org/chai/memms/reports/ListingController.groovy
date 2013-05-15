@@ -95,7 +95,7 @@ class ListingController extends AbstractController{
 		redirect(action: "defaultEquipmentsView", params: params)
 	}
 
-	// inventory default and predefined reports
+	// inventory default and predefined reports start
 
 	def defaultEquipmentsView ={
 		if (log.isDebugEnabled()) log.debug("listing.defaultEquipmentsView, params:"+params)
@@ -197,28 +197,24 @@ class ListingController extends AbstractController{
 			this.ajaxModel(equipments,"","")
 	}
 
-	//customized report wizard
+	// inventory default and predefined reports end
+
+	// customized report wizard steps start
 
 	def step1 ={
 		if (log.isDebugEnabled()) log.debug("listing.step1 start, params:"+params)
 
 		def reportType = getReportType()
 		def reportSubType = getReportSubType()
-		// TODO keep some params ex. dataLocations ???
-		// def dataLocations = getDataLocations()
 
+		//params to pass along to step 2
+		def step1Params = [:]
+
+    	//params to load step 1
 		def step1Model = [
 			reportType: reportType,
 			reportSubType: reportSubType
-			// TODO keep some params ex. dataLocations ???
-			// dataLocations: dataLocations
 		]
-
-		def step1Params = [:]
-    	step1Params.putAll params
-    	step1Params.remove 'reportType'
-    	step1Params.remove 'reportSubType'
-    	// TODO keep some params ex. dataLocations ???
     	step1Model << [step1Params: step1Params]
 
     	if (log.isDebugEnabled()) log.debug("listing.step1 end, step1Model:"+step1Model)
@@ -232,24 +228,37 @@ class ListingController extends AbstractController{
 			])
 	}
 
+	// customized report wizard step1 'remoteFunction' 
+	def customizedReportSubType ={
+		if (log.isDebugEnabled()) 
+			log.debug("listing.step1.customizedReportSubType start, params:"+params)
+
+		def reportType = getReportType()
+
+		if (log.isDebugEnabled()) log.debug("listing.step1.customizedReportSubType end, reportType:"+reportType)
+		render(template:"/reports/listing/customizedReport/customizedReportSubType",
+			model: 
+			[
+				reportType: reportType
+			])
+	}
+
 	def step2 ={
 		if (log.isDebugEnabled()) log.debug("listing.step2 start, params:"+params)
 
 		def reportType = getReportType()
 		def reportSubType = getReportSubType()
-		// TODO keep some params ex. dataLocations ???
-		// def dataLocations = getDataLocations()
 
+		//params from step 1 to pass along to step 3
+	    def step2Params = [:]
+	    step2Params.putAll params
+
+	    //params to load step 2
 		def step2Model = [
 			reportType: reportType,
 			reportSubType: reportSubType,
-			// TODO keep some params ex. dataLocations ???
-			// dataLocations: dataLocations
 			currencies: grailsApplication.config.site.possible.currency
 		]
-
-	    def step2Params = [:]
-	    step2Params.putAll step2Model
 	    step2Model << [step2Params: step2Params]
 
 	    if (log.isDebugEnabled()) log.debug("listing.step2 end, step2Model:"+step2Model)
@@ -261,16 +270,12 @@ class ListingController extends AbstractController{
 
 		def reportType = getReportType()
 		def reportSubType = getReportSubType()
+
+		//params from step 2 to pass along to step 4
+		def step3Params = [:]
+		step3Params.putAll params
 		def dataLocations = getDataLocations()
-
-		def step3Model = [
-			reportType: reportType,
-			reportSubType: reportSubType,
-			dataLocations: dataLocations
-		]
-
-		// get report type params
-
+		step3Params << [dataLocations: dataLocations]
 		switch(reportType){
 			case ReportType.INVENTORY:
 			case ReportType.CORRECTIVE:
@@ -280,7 +285,7 @@ class ListingController extends AbstractController{
 				def fromCost = params.get('fromCost')
 				def toCost = params.get('toCost')
 				def costCurrency = params.get('costCurrency')
-				step3Model << [
+				step3Params << [
 					departments: departments,
 					equipmentTypes: equipmentTypes,
 					fromCost: fromCost,
@@ -290,22 +295,19 @@ class ListingController extends AbstractController{
 				break;
 			case ReportType.SPAREPARTS:
 				def sparePartTypes = getSparePartTypes()
-				step3Model << [
+				step3Params << [
 					sparePartTypes: sparePartTypes
 				]
 				break;
 			default:
 				break;
 		}
-
-		// get report sub type params
-
 		switch(reportSubType){
 
 			case ReportSubType.INVENTORY:
 				def fromPeriod = getPeriod('fromAcquisitionPeriod')
 				def toPeriod = getPeriod('toAcquisitionPeriod')
-				step3Model << [
+				step3Params << [
 					fromAcquisitionPeriod: fromPeriod,
 					toAcquisitionPeriod: toPeriod
 				]
@@ -313,7 +315,7 @@ class ListingController extends AbstractController{
 					def equipmentStatus = getInventoryStatus()
 					def obsolete = params.get('obsolete')
 					def warranty = params.get('warranty')
-					step3Model << [
+					step3Params << [
 						equipmentStatus: equipmentStatus,
 						obsolete: obsolete,
 						warranty: warranty
@@ -321,21 +323,21 @@ class ListingController extends AbstractController{
 				}
 				if(reportType == ReportType.SPAREPARTS){
 					def sparePartStatus = getSparePartStatus()
-					step3Model << [sparePartStatus: sparePartStatus]
+					step3Params << [sparePartStatus: sparePartStatus]
 				}
 				break;
 
 			case ReportSubType.WORKORDERS:
 				def fromPeriod = getPeriod('fromWorkOrderPeriod')
 				def toPeriod = getPeriod('toWorkOrderPeriod')
-				step3Model << [
+				step3Params << [
 					fromWorkOrderPeriod: fromPeriod,
 					toWorkOrderPeriod: toPeriod
 				]
 				if(reportType == ReportType.CORRECTIVE){
 					def workOrderStatus = getCorrectiveStatus()
 					def warranty = params.get('warranty')
-					step3Model << [
+					step3Params << [
 						workOrderStatus: workOrderStatus,
 						warranty: warranty
 					]
@@ -343,7 +345,7 @@ class ListingController extends AbstractController{
 				if(reportType == ReportType.PREVENTIVE) {
 					def workOrderStatus = getPreventiveStatus()
 					def whoIsResponsible = params.list('whoIsResponsible')
-					step3Model << [
+					step3Params << [
 						workOrderStatus: workOrderStatus,
 						whoIsResponsible: whoIsResponsible
 					]
@@ -353,20 +355,20 @@ class ListingController extends AbstractController{
 			case ReportSubType.STATUSCHANGES:
 				def fromPeriod = getPeriod('fromStatusChangesPeriod')
 				def toPeriod = getPeriod('toStatusChangesPeriod')
-				step3Model << [
+				step3Params << [
 					fromStatusChangesPeriod: fromPeriod,
 					toStatusChangesPeriod: toPeriod
 				]
 				if(reportType == ReportType.INVENTORY){
 					def statusChanges = getInventoryStatusChanges()
-					step3Model << [
+					step3Params << [
 						statusChanges:statusChanges
 					]
 				}
 				if(reportType == ReportType.CORRECTIVE){
 					// TODO def statusChanges = getCorrectiveStatusChanges()
 					def warranty = params.get('warranty')
-					step3Model << [
+					step3Params << [
 						// statusChanges: statusChanges,
 						warranty: warranty
 					]
@@ -374,21 +376,21 @@ class ListingController extends AbstractController{
 				if(reportType == ReportType.PREVENTIVE) {
 					// TODO def statusChanges = getPreventiveStatusChanges()
 					def doneByWho = params.list('doneByWho')
-					step3Model << [
+					step3Params << [
 						// statusChanges: statusChanges,
 						doneByWho: doneByWho
 					]
 				}
 				if(reportType == ReportType.SPAREPARTS){
 					// TODO def statusChanges = getSparePartsStatusChanges()
-					// step3Model << [statusChanges: statusChanges]
+					// step3Params << [statusChanges: statusChanges]
 				}
 				break;
 
 			case ReportSubType.STOCKOUT:
 				def stockOut = params.get('stockOut')
 				def stockOutMonths = params.get('stockOutMonths')
-				step3Model << [
+				step3Params << [
 					stockOut: stockOut,
 					stockOutMonths: stockOutMonths
 				]
@@ -401,24 +403,26 @@ class ListingController extends AbstractController{
 				break;
 		}
 
+	    //params to load step 3
+		def step3Model = [
+			reportType: reportType,
+			reportSubType: reportSubType
+		]
+	    step3Model << [step3Params: step3Params]
+
 		if (log.isDebugEnabled()) log.debug("listing.step3 end, step3Model:"+step3Model)
 		render(template:"/reports/listing/customizedReport/step3", model:step3Model)
 	}
 
 	def step4 ={
-		//Add text for naming report and checkbox for saving report
-	}
-
-	def customizedListing ={
-		if (log.isDebugEnabled()) log.debug("listing.customizedListing start, params:"+params)
+		if (log.isDebugEnabled()) log.debug("listing.step4 start, params:"+params)
 
 		def reportType = getReportType()
 		def reportSubType = getReportSubType()
 
-		def customizedListingModel = [:]
-		customizedListingModel.putAll params
-		customizedListingModel << [customized:true]
-
+		//params from step 3 to pass along to customized listing
+		def step4Params = [:]
+		step4Params << params
 		def reportTypeOptions = new HashSet<String>()
 		switch(reportType){
 			case ReportType.INVENTORY:
@@ -436,9 +440,58 @@ class ListingController extends AbstractController{
 			default:
 				break;
 		}
-		customizedListingModel << [reportTypeOptions:reportTypeOptions]
+		step4Params << [reportTypeOptions:reportTypeOptions]
+
+		//params to load step 4
+		def step4Model = [
+			reportType: reportType,
+			reportSubType: reportSubType
+		]
+	    step4Model << [step4Params: step4Params]
+
+		if (log.isDebugEnabled()) log.debug("listing.step4 end, step4Model:"+step4Model)
+		render(template:"/reports/listing/customizedReport/step4", model:step4Model)
+	}
+
+	// customized report wizard steps end
+
+	// customized report listing start
+
+	def customizedListing ={
+		if (log.isDebugEnabled()) log.debug("listing.customizedListing start, params:"+params)
+
+		def reportType = getReportType()
+		def reportSubType = getReportSubType()
+
+		def customizedListingModel = [:]
+		customizedListingModel.putAll params
+
+		def customizedReportName = params.get('customizedReportName')
+		customizedListingModel << [customizedReportName:customizedReportName]
 
 		if (log.isDebugEnabled()) log.debug("listing.customizedListing end, customizedListingModel:"+customizedListingModel)
+		switch(reportType){
+			case ReportType.INVENTORY:
+				if(reportSubType == ReportSubType.INVENTORY){
+					redirect(action: "customizedInventoryInventory", params: customizedListingModel)
+				}
+				else if(reportSubType == ReportSubType.STATUSCHANGES){
+					redirect(action: "customizedInventoryStatusChanges", params: customizedListingModel)
+				}
+				break;
+			case ReportType.CORRECTIVE:
+				//TODO
+				break;
+			case ReportType.PREVENTIVE:
+				//TODO
+				break;
+			case ReportType.SPAREPARTS:
+				//TODO
+				break;
+			default:
+				break;
+		}
+
 		render(view: '/reports/reports',
 			model: customizedListingModel << 
 			[
@@ -446,12 +499,23 @@ class ListingController extends AbstractController{
 			])
 	}
 
+	def customizedInventoryInventory ={
+		if (log.isDebugEnabled()) log.debug("listing.customizedInventoryInventory start, params:"+params)
+		//TODO
+	}
+
+	def customizedInventoryStatusChanges ={
+		if (log.isDebugEnabled()) log.debug("listing.customizedInventoryStatusChanges start, params:"+params)
+		//TODO
+	}
+
+	// TODO Corrective, Preventive, Spare Parts
+
 	def listing ={
 		if (log.isDebugEnabled()) log.debug("listing start, params:"+params)
 
 		def reportType = getReportType()
 		def reportSubType = getReportSubType()
-		// def dataLocations = getDataLocations()
 
 		if (log.isDebugEnabled()) log.debug("listing end, params:"+params)
 		render(view: '/reports/reports', model: 
@@ -459,27 +523,12 @@ class ListingController extends AbstractController{
 				template:"/reports/listing/listing",
 				reportType: reportType,
 				reportSubType: reportSubType
-				// dataLocations: dataLocations
 			])
 	}
 
-	def customizedReportSubType ={
-		if (log.isDebugEnabled()) 
-			log.debug("listing.step1.customizedReportSubType start, params:"+params)
+	// customized report listing end
 
-		def reportType = getReportType()
-
-		if (log.isDebugEnabled()) log.debug("listing.step1.customizedReportSubType end, reportType:"+reportType)
-		render(template:"/reports/listing/customizedReport/customizedReportSubType",
-			model: 
-			[
-				reportType: reportType
-			])
-	}
-
-	// customized report wizard params
-
-	// step 1 report type option params
+	// customized report wizard params start
 
 	def getReportType(){
 		ReportType reportType = params.get('reportType')
@@ -488,7 +537,6 @@ class ListingController extends AbstractController{
 		if(reportType == null) reportType = ReportType.INVENTORY
 		return reportType
 	}
-
 	def getReportSubType(){
 		ReportSubType reportSubType = params.get('reportSubType')
 		if(log.isDebugEnabled()) 
@@ -496,8 +544,6 @@ class ListingController extends AbstractController{
 		if(reportSubType == null) reportSubType = ReportSubType.INVENTORY
 		return reportSubType
 	}
-
-	// step 2 report type option params
 
 	public Set<DataLocation> getDataLocations() {
 		if(log.isDebugEnabled()) log.debug("abstract.dataLocations params:"+params)
@@ -516,7 +562,6 @@ class ListingController extends AbstractController{
 		
 		return dataLocations
 	}
-
 	public Set<Department> getDepartments() {
 		if(log.isDebugEnabled()) log.debug("abstract.departments params:"+params)
 		Set<Department> departments = new HashSet<Department>()
@@ -534,8 +579,7 @@ class ListingController extends AbstractController{
 		}
 		
 		return departments
-	}
-	
+	}	
 	public Set<EquipmentType> getEquipmentTypes() {
 		if(log.isDebugEnabled()) log.debug("abstract.equipmentTypes params:"+params)
 		Set<EquipmentType> equipmentTypes = new HashSet<EquipmentType>()
@@ -553,7 +597,6 @@ class ListingController extends AbstractController{
 		}
 		return equipmentTypes
 	}
-
 	public Set<SparePartType> getSparePartTypes() {
 		if(log.isDebugEnabled()) log.debug("abstract.equipmentTypes params:"+params)
 		Set<SparePartType> sparePartTypes = new HashSet<SparePartType>()
@@ -571,7 +614,6 @@ class ListingController extends AbstractController{
 		}
 		return sparePartTypes
 	}
-
 	public Date getPeriod(String periodParam){
 		def period = params.get(periodParam);
 		if(log.isDebugEnabled()) 
@@ -580,7 +622,6 @@ class ListingController extends AbstractController{
 		else period = null
 		return period
 	}
-
 	public Set<EquipmentStatus> getInventoryStatus(){
 		if(log.isDebugEnabled()) log.debug("abstract.inventoryStatus params:"+params)
 		Set<EquipmentStatus> inventoryStatus = new HashSet<EquipmentStatus>()
@@ -593,7 +634,6 @@ class ListingController extends AbstractController{
 		}
 		return inventoryStatus
 	}
-
 	public List<EquipmentStatusChange> getInventoryStatusChanges(){
 		List<EquipmentStatusChange> inventoryStatusChanges = []
 		if(log.isDebugEnabled()) log.debug("abstract.inventoryStatusChanges start params:"+params)
@@ -609,7 +649,6 @@ class ListingController extends AbstractController{
 			log.debug("abstract.inventoryStatusChanges end statusChanges:"+inventoryStatusChanges)
 		return inventoryStatusChanges
 	}
-
 	public Set<OrderStatus> getCorrectiveStatus(){
 		if(log.isDebugEnabled()) log.debug("abstract.correctiveStatus params:"+params)
 		Set<OrderStatus> correctiveStatus = new HashSet<OrderStatus>()
@@ -622,7 +661,6 @@ class ListingController extends AbstractController{
 		}
 		return correctiveStatus
 	}
-
 	public Set<PreventiveOrderStatus> getPreventiveStatus(){
 		if(log.isDebugEnabled()) log.debug("abstract.preventiveStatus params:"+params)
 		Set<PreventiveOrderStatus> preventiveStatus = new HashSet<PreventiveOrderStatus>()
@@ -635,7 +673,6 @@ class ListingController extends AbstractController{
 		}
 		return preventiveStatus
 	}
-
 	public Set<StatusOfSparePart> getSparePartStatus(){
 		if(log.isDebugEnabled()) log.debug("abstract.sparePartStatus params:"+params)
 		Set<StatusOfSparePart> sparePartStatus = new HashSet<StatusOfSparePart>()
@@ -648,8 +685,6 @@ class ListingController extends AbstractController{
 		}
 		return sparePartStatus
 	}
-
-	// step 3 report type option params
 
 	public Set<String> getReportTypeOptions(String reportTypeOptionParam){
 		if(log.isDebugEnabled()) log.debug("abstract.reportTypeOptions params:"+params)
@@ -664,4 +699,8 @@ class ListingController extends AbstractController{
 		}
 		return reportTypeOptions
 	}
+
+	// customized report wizard params end
+
+	// customized report wizard end
 }
