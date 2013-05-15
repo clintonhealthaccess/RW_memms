@@ -42,6 +42,7 @@ import org.chai.memms.inventory.Department
 import org.chai.memms.inventory.Equipment;
 import org.chai.memms.inventory.EquipmentStatus;
 import org.chai.memms.inventory.EquipmentStatus.Status;
+import org.chai.memms.inventory.EquipmentStatus.EquipmentStatusChange;
 import org.chai.memms.inventory.EquipmentType
 import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatus
 import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventionResponsible
@@ -127,7 +128,7 @@ class ListingController extends AbstractController{
 	}
 	
 	def disposedEquipments={
-		if (log.isDebugEnabled()) log.debug("listing.generalEquipmentsListing start, params:"+params)
+		if (log.isDebugEnabled()) log.debug("listing.disposedEquipments start, params:"+params)
 
 		adaptParamsForList()
 		def equipments = equipmentListingReportService.getDisposedEquipments(user,params)
@@ -145,7 +146,7 @@ class ListingController extends AbstractController{
 	}
 	
 	def underMaintenanceEquipments={
-		if (log.isDebugEnabled()) log.debug("listing.generalEquipmentsListing start, params:"+params)
+		if (log.isDebugEnabled()) log.debug("listing.underMaintenanceEquipments start, params:"+params)
 
 		adaptParamsForList()
 		def equipments = equipmentListingReportService.getUnderMaintenanceEquipments(user,params)
@@ -163,7 +164,7 @@ class ListingController extends AbstractController{
 	}
 	
 	def obsoleteEquipments={
-		if (log.isDebugEnabled()) log.debug("listing.generalEquipmentsListing start, params:"+params)
+		if (log.isDebugEnabled()) log.debug("listing.obsoleteEquipments start, params:"+params)
 
 		adaptParamsForList()
 		def equipments = equipmentListingReportService.getObsoleteEquipments(user,params)
@@ -357,8 +358,10 @@ class ListingController extends AbstractController{
 					toStatusChangesPeriod: toPeriod
 				]
 				if(reportType == ReportType.INVENTORY){
-					// TODO def statusChanges = getInventoryStatusChanges()
-					// step3Model << [statusChanges: statusChanges]
+					def statusChanges = getInventoryStatusChanges()
+					step3Model << [
+						statusChanges:statusChanges
+					]
 				}
 				if(reportType == ReportType.CORRECTIVE){
 					// TODO def statusChanges = getCorrectiveStatusChanges()
@@ -403,7 +406,7 @@ class ListingController extends AbstractController{
 	}
 
 	def step4 ={
-		//TODO Download vs Create vs Create and Save the customized report
+		//Add text for naming report and checkbox for saving report
 	}
 
 	def customizedListing ={
@@ -589,6 +592,22 @@ class ListingController extends AbstractController{
 			}
 		}
 		return inventoryStatus
+	}
+
+	public List<EquipmentStatusChange> getInventoryStatusChanges(){
+		List<EquipmentStatusChange> inventoryStatusChanges = []
+		if(log.isDebugEnabled()) log.debug("abstract.inventoryStatusChanges start params:"+params)
+		if (params.list('statusChanges') != null && !params.list('statusChanges').empty) {
+			def statusChanges = params.list('statusChanges')
+			if(log.isDebugEnabled()) log.debug("abstract.inventoryStatusChanges statusChanges:"+statusChanges)
+			statusChanges.each { it ->
+				if(log.isDebugEnabled()) log.debug("abstract.inventoryStatusChanges statusChange:"+it)
+				if(it != null) inventoryStatusChanges.add(it)
+			}
+		}
+		if(log.isDebugEnabled()) 
+			log.debug("abstract.inventoryStatusChanges end statusChanges:"+inventoryStatusChanges)
+		return inventoryStatusChanges
 	}
 
 	public Set<OrderStatus> getCorrectiveStatus(){
