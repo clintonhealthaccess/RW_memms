@@ -1,3 +1,5 @@
+<%@ page import="org.chai.memms.util.Utils.ReportType" %>
+<%@ page import="org.chai.memms.util.Utils.ReportSubType" %>
 <div class="entity-list">
   <!-- List Top Header Template goes here -->
   <div class="heading1-bar">
@@ -15,7 +17,7 @@
   <div id ="list-grid" class="v-tabs">
 
     <!-- Create Customized Report Template goes here -->
-    <g:render template="/entity/reports/createCustomizedReport" />
+    <g:render template="/reports/listing/customizedReport/createCustomizedReport" />
 
     <ul id='js-top-tabs' class="v-tabs-nav left">
       <li><a class="active" id="#js-inventory">Inventory</a></li>
@@ -27,27 +29,27 @@
     <div id='js-inventory' class="v-tabs-content right shown">
       <ul class="v-tabs-subnav">
       	<li>
-      	<a class="active" href="${createLinkWithTargetURI(controller: 'listingReport', action:'generalEquipmentsListing')}" id="report-1">
+      	<a class="active" href="${createLinkWithTargetURI(controller: 'listing', action:'generalEquipmentsListing')}" id="report-1">
 			<g:message code="default.all.equipments.label" />
 		</a></li>
 		<li>
-      	<a href="${createLinkWithTargetURI(controller: 'listingReport', action:'obsoleteEquipments')}" id="report-2">
+      	<a href="${createLinkWithTargetURI(controller: 'listing', action:'obsoleteEquipments')}" id="report-2">
 			<g:message code="default.obsolete.label" />
 		</a></li>
 		<li>
-      	<a href="${createLinkWithTargetURI(controller: 'listingReport', action:'disposedEquipments')}" id="report-3">
+      	<a href="${createLinkWithTargetURI(controller: 'listing', action:'disposedEquipments')}" id="report-3">
 			<g:message code="default.disposed.label" />
 		</a></li>
 		<li>
-		<a href="${createLinkWithTargetURI(controller: 'listingReport', action:'underMaintenanceEquipments')}" id="report-4">
+		<a href="${createLinkWithTargetURI(controller: 'listing', action:'underMaintenanceEquipments')}" id="report-4">
 			<g:message code="default.under.maintenance.label" />
 		</a></li>
 		<li>
-		<a href="${createLinkWithTargetURI(controller: 'listingReport', action:'inStockEquipments')}" id="report-5">
+		<a href="${createLinkWithTargetURI(controller: 'listing', action:'inStockEquipments')}" id="report-5">
 			<g:message code="default.in.stock.label" />
 		</a></li>
 		<li>
-		<a href="${createLinkWithTargetURI(controller: 'listingReport', action:'underWarrantyEquipments')}" id="report-6">
+		<a href="${createLinkWithTargetURI(controller: 'listing', action:'underWarrantyEquipments')}" id="report-6">
 			<g:message code="default.under.waranty.label" />
 		</a></li>
       </ul>
@@ -70,19 +72,20 @@
             <ul class="left">
               <li>
                 <span>Report type:</span>
-                <a href="#">Lorem Ipsum 1234</a>
+                <a href="#">${message(code:'reports.type.'+reportType?.reportType)}</a>
               </li>
               <li>
-                <span>Report subtype:</span>
-                <a href="#">Dolor Sit Amet 1234</a>
+                <span>Report Subtype:</span>
+                <a href="#">${message(code:'reports.subType.'+reportSubType?.reportSubType)}</a>
               </li>
+              %{-- TODO get rid of this
               <li>
                 <span>Ordering:</span>
                 <a href="#">by Location</a>
-              </li>
+              </li> --}%
               <li>
                 <span>Filters:</span>
-                <a href="#">There are <a href="#" id='js-filters-toggle' class="tooltip" original-title="click to view them all">133</a> filters applied</a>
+                <a href="#">There are <a href="#" id='js-filters-toggle' class="tooltip">133</a> filters applied</a>
               </li>
             </ul>
           </div>
@@ -204,114 +207,23 @@
               </ul>
             </form>
           </div>
-           <g:render template="/entity/reports/equipmentListing" />
-		
-		<%-- 
-		<g:render template="/entity/reports/workOrderListing" />
-		<g:render template="/entity/reports/preventiveOrderListing" />
-		--%>
-		
-		<!--
-          <table class="items spaced ralign">
-            <thead>
-              <tr>
-                <th>Column name</th>
-                <th>Column name</th>
-                <th>Column name</th>
-                <th>Column name</th>
-                <th>Column name</th>
-                <th>Column name</th>
-                <th>Column name</th>
-                <th>Column name</th>
-                <th>Column name</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-              </tr>
-              <tr>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-              </tr>
-              <tr>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-              </tr>
-              <tr>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-              </tr>
-              <tr>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-              </tr>
-            </tbody>
-          </table>
-          
-          <ul class="paginate">
-            <li><a href="#">Previous</a></li>
-            <li><a href="#">1</a></li>
-            <li><a class="active" href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
-            <li><a href="#">6</a></li>
-            <li><a href="#">Next</a></li>
-          </ul>
-          -->
-        </div>
+			<g:render template="/reports/listing/equipmentListing" />
+		</div>
         <div id='report-2'>
-         	<g:render template="/entity/reports/equipmentListing" />
+         	<g:render template="/reports/listing/equipmentListing" />
         </div>
         <div id='report-3'>
-          	<g:render template="/entity/reports/equipmentListing" />
+          	<g:render template="/reports/listing/equipmentListing" />
         </div>
         <div id='report-4'>
-          	<g:render template="/entity/reports/equipmentListing" />
+          	<g:render template="/reports/listing/equipmentListing" />
         </div>
         
         <div id='report-5'>
-          <g:render template="/entity/reports/equipmentListing" />
+          	<g:render template="/reports/listing/equipmentListing" />
         </div>
         <div id='report-6'>
-         <g:render template="/entity/reports/equipmentListing" />
+         	<g:render template="/reports/listing/equipmentListing" />
         </div>   
       </div> 
       
@@ -480,15 +392,15 @@
               </ul>
             </form>
           </div>
-          	<g:render template="/entity/reports/equipmentListing" />
+          	<g:render template="/reports/listing/equipmentListing" />
  			<%--
- 		 		<g:render template="/entity/reports/workOrderListing" />
+ 		 		<g:render template="/reports/listing/workOrderListing" />
        		--%>  
         </div>
         <div id='report-2'>
-         	<g:render template="/entity/reports/equipmentListing" />
+         	<g:render template="/reports/listing/equipmentListing" />
           	<%--
-         		<g:render template="/entity/reports/workOrderListing" />
+         		<g:render template="/reports/listing/workOrderListing" />
        		--%> 
         </div>
         
@@ -658,15 +570,15 @@
               </ul>
             </form>
           </div>
-          	<g:render template="/entity/reports/equipmentListing" />
+          	<g:render template="/reports/listing/equipmentListing" />
  			<%--
- 		 		<g:render template="/entity/reports/preventiveOrderListing" />
+ 		 		<g:render template="/reports/listing/preventiveOrderListing" />
        		--%>  
         </div>
         <div id='report-2'>
-         	<g:render template="/entity/reports/equipmentListing" />
+         	<g:render template="/reports/listing/equipmentListing" />
           	<%--
-         		<g:render template="/entity/reports/preventiveOrderListing" />
+         		<g:render template="/reports/listing/preventiveOrderListing" />
        		--%> 
         </div>
       </div> <!-- end of Preventive Maintenance -->
