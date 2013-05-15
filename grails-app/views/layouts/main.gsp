@@ -146,7 +146,7 @@
 				<ul class="submenu">
 					%{-- <shiro:hasPermission permission="menu:dashboard">
 							<li>
-								<a href="${createLink(controller:'dashboardReport', action:'dashboard')}">
+								<a href="#${createLink(controller:'dashboardReport', action:'dashboard')}">
 									<g:message code="header.navigation.reports.dashboard"/>
 								</a>
 							</li>

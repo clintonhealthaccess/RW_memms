@@ -52,6 +52,8 @@ class ListingReportController extends AbstractController{
 
 	def equipmentListingReportService
 	def grailsApplication
+	def workOrderListingReportService
+	def preventiveOrderListingReportService
 
 	def getEntityClass() {
 		return Equipment.class;
@@ -63,7 +65,7 @@ class ListingReportController extends AbstractController{
 	def model(def entities, def dataLocation) {
 		return [
 			entities: entities,
-			entityCount: entities.totalCount,
+			entityCount: entities.size(),
 			dataLocation:dataLocation,
 			entityClass:getEntityClass(),
 			code: getLabel()
@@ -154,7 +156,7 @@ class ListingReportController extends AbstractController{
 			reportType: reportType
 		])
 	}
-	
+
 	def generalEquipmentsListing={
 		adaptParamsForList()
 		def equipments = equipmentListingReportService.getGeneralReportOfEquipments(user,params)
@@ -162,10 +164,8 @@ class ListingReportController extends AbstractController{
 			render(view:"/entity/reports", model: model(equipments, "") << [
 				template:"/entity/reports/listing",
 			])
-		else
-			this.ajaxModel(equipments,"","")
 	}
-	
+
 	def disposedEquipments={
 		adaptParamsForList()
 		def equipments = equipmentListingReportService.getDisposedEquipments(user,params)
@@ -173,22 +173,41 @@ class ListingReportController extends AbstractController{
 			render(view:"/entity/reports", model: model(equipments, "") << [
 				template:"/entity/reports/listing",
 			])
-		else
-			this.ajaxModel(equipments,"","")
-
 	}
-	
+
 	def underMaintenanceEquipments={
 		adaptParamsForList()
 		def equipments = equipmentListingReportService.getUnderMaintenanceEquipments(user,params)
+		if (log.isDebugEnabled()) log.debug("EQUIPMENTS SIZE "+equipments.size())
 		if(!request.xhr)
 			render(view:"/entity/reports", model: model(equipments, "") << [
 				template:"/entity/reports/listing",
 			])
 		else
-			this.ajaxModel(equipments,"","")	
+			this.ajaxModel(equipments,"","")
 	}
 	
+	def underWarrantyEquipments={
+		adaptParamsForList()
+		def displayableEquipments=[]
+		def warrantyExpirationDate
+		def equipments = equipmentListingReportService.getUnderWarrantyEquipments(user,params)
+		for(Equipment equipment: equipments){
+			if (equipment.warranty.startDate!=null && equipment.warrantyPeriod.numberOfMonths!=null && equipment.warrantyPeriod.months != null) {
+				warrantyExpirationDate= (equipment.warranty.startDate).plus((equipment.warrantyPeriod.numberOfMonths))
+				if (log.isDebugEnabled()) log.debug("CALCURATED DATE "+warrantyExpirationDate +"START DATE "+equipment.warranty.startDate +"WARRANTY PERIOD "+equipment.warrantyPeriod.months)
+				if (warrantyExpirationDate > new Date())
+					displayableEquipments.add(equipment)
+			}
+			warrantyExpirationDate=null
+		}
+		equipments=displayableEquipments
+		if(!request.xhr)
+			render(view:"/entity/reports", model: model(equipments, "") << [
+				template:"/entity/reports/listing"
+			])
+	}
+
 	def obsoleteEquipments={
 		adaptParamsForList()
 		def equipments = equipmentListingReportService.getObsoleteEquipments(user,params)
@@ -196,8 +215,6 @@ class ListingReportController extends AbstractController{
 			render(view:"/entity/reports", model: model(equipments, "") << [
 				template:"/entity/reports/listing",
 			])
-		else
-			this.ajaxModel(equipments,"","")
 	}
 	def inStockEquipments={
 		adaptParamsForList()
@@ -206,7 +223,43 @@ class ListingReportController extends AbstractController{
 			render(view:"/entity/reports", model: model(equipments, "") << [
 				template:"/entity/reports/listing",
 			])
-		else
-			this.ajaxModel(equipments,"","")
+	}
+	//WorkOrders
+	def lastMonthWorkOrders={
+		adaptParamsForList()
+		def workOrders = workOrderListingReportService.getWorkOrdersOfLastMonth(user,params)
+		if(!request.xhr)
+			render(view:"/entity/reports", model: model(workOrders, "") << [
+				template:"/entity/reports/listing",
+			])
+	}
+	def workOrdersEscalatedToMMC={
+		adaptParamsForList()
+		def workOrders = workOrderListingReportService.getWorkOrdersEscalatedToMMC(user,params)
+		if(!request.xhr)
+			render(view:"/entity/reports", model: model(workOrders, "") << [
+				template:"/entity/reports/listing",
+			])
+
+	}
+
+	//PreventiveOrders
+	def equipmentsWithPreventionPlan={
+		adaptParamsForList()
+		def preventiveOrders = preventiveOrderListingReportService.getEquipmentsWithPreventionPlan(user,params)
+		if(!request.xhr)
+			render(view:"/entity/reports", model: model(preventiveOrders, "") << [
+				template:"/entity/reports/listing",
+			])
+	}
+	//TODO see how to deal with periodic times either weekly, monthly, or any other
+	def preventionsDelayed={
+		adaptParamsForList()
+		def preventiveOrders = preventiveOrderListingReportService.getEquipmentsWithPreventionPlan(user,params)
+		if(!request.xhr)
+			render(view:"/entity/reports", model: model(preventiveOrders, "") << [
+				template:"/entity/reports/listing",
+			])
+
 	}
 }

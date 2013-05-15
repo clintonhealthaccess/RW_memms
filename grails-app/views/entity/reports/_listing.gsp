@@ -27,7 +27,7 @@
     <div id='js-inventory' class="v-tabs-content right shown">
       <ul class="v-tabs-subnav">
       	<li>
-      	<a class="active" href="${createLinkWithTargetURI(controller: 'listingReport', action:'listEquipments')}" id="report-1">
+      	<a class="active" href="${createLinkWithTargetURI(controller: 'listingReport', action:'generalEquipmentsListing')}" id="report-1">
 			<g:message code="default.all.equipments.label" />
 		</a></li>
 		<li>
@@ -47,7 +47,7 @@
 			<g:message code="default.in.stock.label" />
 		</a></li>
 		<li>
-		<a href="${createLinkWithTargetURI(controller: 'listingReport', action:'searchEquipmentsByCriteria')}" id="report-6">
+		<a href="${createLinkWithTargetURI(controller: 'listingReport', action:'underWarrantyEquipments')}" id="report-6">
 			<g:message code="default.under.waranty.label" />
 		</a></li>
       </ul>
@@ -204,9 +204,13 @@
               </ul>
             </form>
           </div>
-
-		<g:render template="/entity/reports/equipmentListing" />
-
+           <g:render template="/entity/reports/equipmentListing" />
+		
+		<%-- 
+		<g:render template="/entity/reports/workOrderListing" />
+		<g:render template="/entity/reports/preventiveOrderListing" />
+		--%>
+		
 		<!--
           <table class="items spaced ralign">
             <thead>
@@ -302,27 +306,27 @@
         <div id='report-4'>
           	<g:render template="/entity/reports/equipmentListing" />
         </div>
-        <!-- 
+        
         <div id='report-5'>
-          <p>
-            Fifth predefined report
-          </p>
+          <g:render template="/entity/reports/equipmentListing" />
         </div>
         <div id='report-6'>
-          <p>
-            Sixth predefined report
-          </p>
-        </div>
-         -->
+         <g:render template="/entity/reports/equipmentListing" />
+        </div>   
       </div> 
       
       <!-- end of Inventory -->
 
       <div id="js-corrective" class="v-tabs-content right">
       <ul class="v-tabs-subnav">
-        <li><a class="active" href="#" id="report-1">First predefined report</a></li>
-        <li><a href="#" id="report-2">Second predefined report</a></li>
-        <li><a href="#" id="report-3">Third predefined report</a></li>
+      	<li>
+      	<a class="active" href="${createLinkWithTargetURI(controller: 'listingReport', action:'lastMonthWorkOrders')}" id="report-1">
+			<g:message code="default.work.order.last.month.label" />
+		</a></li>
+		<li>
+      	<a href="${createLinkWithTargetURI(controller: 'listingReport', action:'workOrdersEscalatedToMMC')}" id="report-2">
+			<g:message code="default.work.order.escalated.to.mmc.label" />
+		</a></li>
       </ul>
 
         <div id='report-1' class="js-shown-report">
@@ -473,110 +477,198 @@
                     <li>Lorem ipsum dolor</li>
                   </ul>
                 </li>
-
               </ul>
             </form>
           </div>
-
-          <table class="items spaced ralign">
-            <thead>
-              <tr>
-                <th>Column name</th>
-                <th>Column name</th>
-                <th>Column name</th>
-                <th>Column name</th>
-                <th>Column name</th>
-                <th>Column name</th>
-                <th>Column name</th>
-                <th>Column name</th>
-                <th>Column name</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-              </tr>
-              <tr>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-              </tr>
-              <tr>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-              </tr>
-              <tr>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-              </tr>
-              <tr>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-                <td>12.345</td>
-              </tr>
-            </tbody>
-          </table>
-          <ul class="paginate">
-            <li><a href="#">Previous</a></li>
-            <li><a href="#">1</a></li>
-            <li><a class="active" href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
-            <li><a href="#">6</a></li>
-            <li><a href="#">Next</a></li>
-          </ul>
+          	<g:render template="/entity/reports/equipmentListing" />
+ 			<%--
+ 		 		<g:render template="/entity/reports/workOrderListing" />
+       		--%>  
         </div>
         <div id='report-2'>
-          <p>
-            Second predefined report
-          </p>
+         	<g:render template="/entity/reports/equipmentListing" />
+          	<%--
+         		<g:render template="/entity/reports/workOrderListing" />
+       		--%> 
         </div>
-        <div id='report-3'>
-          <p>
-            Third predefined report
-          </p>
-        </div>
+        
       </div> <!-- end of Corrective Maintenance -->
-
+      
+      <!-- start of Preventive Maintenance -->
       <div id="js-preventive" class="v-tabs-content right">
-        <p>
-          Preventive Maintenance
-        </p>
+       <ul class="v-tabs-subnav">
+      	<li>
+      	<a class="active" href="${createLinkWithTargetURI(controller: 'listingReport', action:'equipmentsWithPreventionPlan')}" id="report-1">
+			<g:message code="default.equipments.with.maintenance.plan.label" />
+		</a></li>
+		<li>
+      	<a href="${createLinkWithTargetURI(controller: 'listingReport', action:'preventionsDelayed')}" id="report-2">
+			<g:message code="default.work.order.delayed.label" />
+		</a></li>
+      </ul>
+
+        <div id='report-1' class="js-shown-report">
+          <div class="v-tabs-summary">
+            <h2>Summary</h2>
+            <hr />
+            <ul>
+              <li><a href="#">32.020<span>Some label</span></a></li>
+              <li><a href="#">12.345<span>Some longer label</span></a></li>
+              <li><a href="#">75.501<span>Some very long label</span></a></li>
+              <li><a href="#">12.944<span>Some label</span></a></li>
+              <li><a href="#">22.300<span>Some long label</span></a></li>
+              <li><a href="#">11.478<span>Some very long label</span></a></li>
+            </ul>
+          </div>
+
+          <div class="v-tabs-criteria">
+            <ul class="left">
+              <li>
+                <span>Report type:</span>
+                <a href="#">Lorem Ipsum 1234</a>
+              </li>
+              <li>
+                <span>Report subtype:</span>
+                <a href="#">Dolor Sit Amet 1234</a>
+              </li>
+              <li>
+                <span>Ordering:</span>
+                <a href="#">by Location</a>
+              </li>
+              <li>
+                <span>Filters:</span>
+                <a href="#">There are <a href="#" id='js-filters-toggle' class="tooltip" original-title="click to view them all">133</a> filters applied</a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="filters main">
+            <form class="filters-box" method="get" action="/memms/equipmentView/filter" style="display: none;">
+              <a href="#" class='filters-close' id='js-filters-close'>
+                <img src="${resource(dir:'images',file:'icon_close.png')}" />
+              </a>
+              <ul class="applied-filters-list">
+                <li>
+                  <h3>Filters category</h3>
+                  <ul class="applied-filters">
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                  </ul>
+                </li>
+                <li>
+                  <h3>Filters category</h3>
+                  <ul class="applied-filters">
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                  </ul>
+                </li>
+                <li>
+                  <h3>Filters category</h3>
+                  <ul class="applied-filters">
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                  </ul>
+                </li>
+                <li>
+                  <h3>Filters category</h3>
+                  <ul class="applied-filters">
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                  </ul>
+                </li>
+                <li>
+                  <h3>Filters category</h3>
+                  <ul class="applied-filters">
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                  </ul>
+                </li>
+                <li>
+                  <h3>Filters category</h3>
+                  <ul class="applied-filters">
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                    <li>Lorem ipsum dolor</li>
+                  </ul>
+                </li>
+              </ul>
+            </form>
+          </div>
+          	<g:render template="/entity/reports/equipmentListing" />
+ 			<%--
+ 		 		<g:render template="/entity/reports/preventiveOrderListing" />
+       		--%>  
+        </div>
+        <div id='report-2'>
+         	<g:render template="/entity/reports/equipmentListing" />
+          	<%--
+         		<g:render template="/entity/reports/preventiveOrderListing" />
+       		--%> 
+        </div>
       </div> <!-- end of Preventive Maintenance -->
 
       <div id="js-spare-parts" class="v-tabs-content right">

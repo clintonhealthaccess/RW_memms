@@ -14,6 +14,7 @@
 		</tr>
 	</thead>
 	<tbody>
+	 
 		<g:each in="${entities}" status="i" var="equipment">
 			<tr >
 				<td>${equipment.dataLocation.names}</td>
@@ -32,6 +33,7 @@
 				
 			</tr>
 		</g:each>
+
 	</tbody>	
 </table>
 <g:render template="/templates/pagination" />
