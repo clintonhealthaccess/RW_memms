@@ -2,7 +2,7 @@
 <%@ page import="org.chai.memms.util.Utils.ReportSubType" %>
 <div class="dialog-form step-2" id='js-step-2'>
   <!-- Step 2 -->
-  <h2><g:message code="reports.apply.filters"/><span class="right"><g:message code="reports.step" args="['2','3']"/></span></h2>
+  <h2><g:message code="reports.apply.filters"/><span class="right"><g:message code="reports.step" args="['2','4']"/></span></h2>
   <p>${message(code:'reports.type.label')}: <b>${message(code:'reports.type.'+reportType?.reportType)}</b> > ${message(code:'reports.subType.label')}: <b>${message(code:'reports.subType.'+reportSubType?.reportSubType)}</b></p>
   <g:formRemote name="formRemoteStep2Next" url="[action:'step3', params:step2Params]" update="dialog-form"
     onSuccess="customizedlisting_init();">

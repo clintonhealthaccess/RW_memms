@@ -20,10 +20,10 @@
     <g:render template="/reports/listing/customizedReport/createCustomizedReport" />
 
     <ul id='js-top-tabs' class="v-tabs-nav left">
-      <li><a class="active" id="#js-inventory">Inventory</a></li>
-      <li><a id="#js-corrective">Corrective Maintenance</a></li>
-      <li><a id="#js-preventive">Preventive Maintenance</a></li>
-      <li><a id="#js-spare-parts">Spare Parts</a></li>
+      <li><a class="active" id="#js-inventory">${message(code:'reports.type.inventory')}</a></li>
+      <li><a id="#js-corrective">${message(code:'reports.type.corrective')}</a></li>
+      <li><a id="#js-preventive">${message(code:'reports.type.preventive')}</a></li>
+      <li><a id="#js-spare-parts">${message(code:'reports.type.spareParts')}</a></li>
     </ul>
 
     <div id='js-inventory' class="v-tabs-content right shown">
@@ -227,7 +227,7 @@
         </div>   
       </div> 
       
-      <!-- end of Inventory -->
+    <!-- end Inventory -->
 
       <div id="js-corrective" class="v-tabs-content right">
       <ul class="v-tabs-subnav">

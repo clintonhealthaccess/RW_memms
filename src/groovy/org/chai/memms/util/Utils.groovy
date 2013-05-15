@@ -253,19 +253,19 @@ public class Utils {
 		return calendar.getTime();
 	}
 
-	//message.properties, ex. reports.type.inventory
 	public enum ReportType{
 		INVENTORY("inventory"),
 		CORRECTIVE("corrective"),
 		PREVENTIVE("preventive"),
 		SPAREPARTS("spareParts")
 		
+		String messageCode = "reports.type."
+
 		final String reportType
 		ReportType(String reportType){ this.reportType=reportType }
 		String getReportType() { return reportType }
 	}
 
-	//message.properties, ex. reports.subType.inventory
 	public enum ReportSubType{
 		INVENTORY("inventory"),
 		WORKORDERS("workOrders"),
@@ -273,6 +273,8 @@ public class Utils {
 		USERATE("useRate"),
 		STOCKOUT("stockOut")
 		
+		String messageCode = "reports.subType."
+
 		final String reportSubType
 		ReportSubType(String reportSubType){ this.reportSubType=reportSubType }
 		String getReportSubType() { return reportSubType }

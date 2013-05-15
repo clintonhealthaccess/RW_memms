@@ -245,20 +245,20 @@ public class Equipment {
 		return currentState
 	}
 	
-	// @Transient
-	// def getTimeBasedPreviousStatus(){
-	// 	if(!status) return null
-	// 	EquipmentStatus equipmentStatuses = status.asList()
+	@Transient
+	def getTimeBasedPreviousStatus(){
+		if(!status) return null
+		def equipmentStatuses = status.asList()
 
-	// 	equipmenStatuses.sort([{it.dateOfEvent})
-
-	// 	if(equipmentStatuses.size() == 0) return null
-	// 	else if(equipmenStatuses.size() == 1) return null
-	// 	else{
-	// 		equipmenStatuses.sort([{it.dateOfEvent})
-			
-	// 	}
-	// }
+		if(equipmentStatuses.size() == 0) return null
+		else if(equipmenStatuses.size() == 1) return null
+		else{
+			equipmentStatuses = equipmenStatuses.sort({it.dateOfEvent})
+			def previousStatus = null
+			previousStatus = equipmentStatuses[-2]
+			return previousStatus
+		}
+	}
 
 	String toString() {
 		return "Equipment[id= " + id + " code= "+code+" serialNumber= "+serialNumber+" currentState= "+currentStatus+"]";
