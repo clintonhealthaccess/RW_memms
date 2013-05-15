@@ -97,7 +97,7 @@ class ListingController extends AbstractController{
 		redirect(action: "generalEquipmentsListing", params: params)
 	}
 
-	// inventory default and predefined reports start
+	// default and predefined reports start
 
 	def defaultEquipmentsView ={
 		if (log.isDebugEnabled()) log.debug("listing.defaultEquipmentsView, params:"+params)
@@ -194,7 +194,6 @@ class ListingController extends AbstractController{
 	
 	}
 
-<<<<<<< HEAD
 	def underWarrantyEquipments={
 		adaptParamsForList()
 		def displayableEquipments=[]
@@ -253,12 +252,9 @@ class ListingController extends AbstractController{
 			])
 	}
 	
-	//customized report wizard
-=======
-	// inventory default and predefined reports end
+	// default and predefined reports end
 
 	// customized report wizard steps start
->>>>>>> listing-wizard
 
 	def step1 ={
 		if (log.isDebugEnabled()) log.debug("listing.step1 start, params:"+params)
