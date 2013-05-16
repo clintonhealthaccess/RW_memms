@@ -20,33 +20,15 @@
 		<g:each in="${entities}" status="i" var="order">
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 				
-				<td>
-					${order.equipment.code}
-				</td>
-				<td>
-					${order.equipment.serialNumber}
-				</td>
-				<td>
-					${order.equipment.type.names}
-				</td>
-				<td>
-					${message(code: order.currentStatus?.messageCode+'.'+order.currentStatus?.name)}
-				</td>
-				<td>
-					${order.criticality}
-				</td>
-				<td>
-					${Utils.formatDateWithTime(order.openOn)}
-				</td>
-				<td>
-					${Utils.formatDateWithTime(order.closedOn)}
-				</td>
-				<td>
-					<g:stripHtml field="${order.description}" chars="30"/>
-				</td>
-				<td>
-					${order.getUnReadNotificationsForUser(User.findByUuid(SecurityUtils.subject.principal, [cache: true])).size()}
-				</td>
+				<td>${order.equipment.code}</td>
+				<td>${order.equipment.serialNumber}</td>
+				<td>${order.equipment.type.names}</td>
+				<td>${message(code: order.currentStatus?.messageCode+'.'+order.currentStatus?.name)}</td>
+				<td>${order.criticality}</td>
+				<td>${Utils.formatDateWithTime(order.openOn)}</td>
+				<td>${Utils.formatDateWithTime(order.closedOn)}</td>
+				<td><g:stripHtml field="${order.description}" chars="30"/></td>
+				<td>${order.getUnReadNotificationsForUser(User.findByUuid(SecurityUtils.subject.principal, [cache: true])).size()}</td>
 			</tr>
 		</g:each>
 	</tbody>

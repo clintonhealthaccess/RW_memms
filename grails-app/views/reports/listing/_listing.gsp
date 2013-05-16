@@ -32,7 +32,12 @@
             <!-- listing filter summary template -->
             <g:render template ="/reports/listing/listingFilterSummary" />
             <!-- equipment report template -->
-            <g:render template="/reports/listing/equipmentReport/equipmentListing" />
+            <g:if test="${customizedReportName != null && !customizedReportName.empty}">
+              <g:render template="/reports/listing/equipmentReport/customEquipmentListing" />
+            </g:if>
+            <g:else>
+              <g:render template="/reports/listing/equipmentReport/equipmentListing" />
+            </g:else>
           </div>
       </div>
     </g:if>

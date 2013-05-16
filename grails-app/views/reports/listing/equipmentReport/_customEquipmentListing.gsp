@@ -9,7 +9,11 @@
 			<g:sortableColumn property="currentStatus"  title="${message(code: 'equipment.status.label')}" params="[q:q]" />
 			<g:sortableColumn property="obsolete"  title="${message(code: 'equipment.obsolete.label')}" params="[q:q]" />
 			<g:sortableColumn property="manufacturer"  title="${message(code: 'provider.type.manufacturer')}" params="[q:q]" />
-			<g:sortableColumn property="supplier"  title="${message(code: 'provider.type.supplier')}" params="[q:q]" />
+			
+			<g:if test="${reportTypeOptions.contains('supplier')}">
+				<g:sortableColumn property="supplier"  title="${message(code: 'provider.type.supplier')}" params="[q:q]" />
+			</g:if>
+
 			<g:sortableColumn property="purchaser"  title="${message(code: 'equipment.purchaser.label')}" params="[q:q]" />
 		</tr>
 	</thead>
@@ -17,6 +21,7 @@
 	 
 		<g:each in="${entities}" status="i" var="equipment">
 			<tr >
+				<!-- check reportTypeOptions for which columns to display -->
 				<td>${equipment.dataLocation.names}</td>
 				<td>${equipment.code}</td>
 				<td>${equipment.serialNumber}</td>
@@ -24,15 +29,13 @@
 				<td>${equipment.model}</td>
 				<td>${equipment.currentStatus?.name}</td>
 				<td>
-					<g:if test="${(!equipment.obsolete==true)}">
-						&radic;
-					</g:if>
-					<g:else>
-						&nbsp;
-					</g:else>
+					<g:if name="obsolete" id="${equipment.id}" test="${(!equipment.obsolete==true)}">&radic;</g:if>
+					<g:else>&nbsp;</g:else>
 				</td>
 				<td>${equipment.manufacturer?.contact?.contactName}</td>
-				<td>${equipment.supplier?.contact?.contactName}</td>
+				<g:if test="${reportTypeOptions.contains('supplier')}">
+					<td>${equipment.supplier?.contact?.contactName}</td>
+				</g:if>
 				<td>${message(code: equipment.purchaser?.messageCode+'.'+equipment.purchaser?.name)}</td>
 				
 			</tr>

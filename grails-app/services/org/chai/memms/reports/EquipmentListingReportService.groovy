@@ -60,7 +60,7 @@ class EquipmentListingReportService {
 					inList('dataLocation',dataLocations)
 		}
 	}
-	
+
 	public def getDisposedEquipments(User user,Map<String, String> params) {
 		def dataLocations = []
 		if(user.location instanceof Location) dataLocations.addAll(user.location.collectDataLocations(null))
@@ -140,6 +140,24 @@ class EquipmentListingReportService {
 			if(userService.canViewManagedEquipments(user)) dataLocations.addAll(((DataLocation)user.location).manages)
 		}
 		
+		def criteria = Equipment.createCriteria();
+		
+		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+				if(dataLocations)
+					inList('dataLocation',dataLocations)
+		}
+	}
+
+	//TODO
+	public def getCustomReportOfEquipments(User user,Map<String, String> params) {
+	def dataLocations = []
+		if(user.location instanceof Location) dataLocations.addAll(user.location.collectDataLocations(null))
+		else{
+			dataLocations = []
+			dataLocations.add(user.location as DataLocation)
+			if(userService.canViewManagedEquipments(user)) dataLocations.addAll(((DataLocation)user.location).manages)
+		}
+	
 		def criteria = Equipment.createCriteria();
 		
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){

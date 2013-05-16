@@ -23,40 +23,18 @@
 	<tbody>
 		<g:each in="${entities}" status="i" var="order">
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-				<td>${order.equipment.code}
-				</td>
-				<td>${order.equipment.serialNumber}
-				</td>
-				<td>${order.equipment.type.names}
-				</td>
-				<td>
-					${order.names}
-				</td>
-				<td>
-					${message(code: order.type?.messageCode+'.'+order.type?.name)}
-				</td>
-				<td>
-					${message(code: order.occurency?.messageCode+'.'+order.occurency?.name)}					
-				</td>
-				<td>
-					${order.occurInterval}					
-				</td>
-				<td>
-					${message(code: order.status?.messageCode+'.'+order.status?.name)}
-				</td>
-				<td>
-					${Utils.formatDateWithTime(order.firstOccurenceOn?.timeDate)}
-				</td>
-				<td>
-					${(order.type.equals(PreventiveOrderType.DURATIONBASED))?Utils.formatDateWithTime(order.nextOccurence):''}
-					
-				</td>
-				<td>
-					<g:stripHtml field="${order.description}" chars="30"/>
-				</td>
-				<td>
-					${order.preventions?.size()}
-				</td>
+				<td>${order.equipment.code}</td>
+				<td>${order.equipment.serialNumber}</td>
+				<td>${order.equipment.type.names}</td>
+				<td>${order.names}</td>
+				<td>${message(code: order.type?.messageCode+'.'+order.type?.name)}</td>
+				<td>${message(code: order.occurency?.messageCode+'.'+order.occurency?.name)}</td>
+				<td>${order.occurInterval}</td>
+				<td>${message(code: order.status?.messageCode+'.'+order.status?.name)}</td>
+				<td>${Utils.formatDateWithTime(order.firstOccurenceOn?.timeDate)}</td>
+				<td>${(order.type.equals(PreventiveOrderType.DURATIONBASED))?Utils.formatDateWithTime(order.nextOccurence):''}</td>
+				<td><g:stripHtml field="${order.description}" chars="30"/></td>
+				<td>${order.preventions?.size()}</td>
 			</tr>
 		</g:each>
 	</tbody>
