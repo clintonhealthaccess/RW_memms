@@ -1,4 +1,3 @@
-<%@ page import="org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatus" %>
 <%@ page import="org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatusChange" %>
 <%@ page import="org.chai.memms.preventive.maintenance.PreventiveOrder.PreventionResponsible" %>
 <ul>

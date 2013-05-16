@@ -42,7 +42,7 @@
       </div>
     </g:if>
 
-    <!-- TODO CORRECTIVE -->
+    <!-- CORRECTIVE -->
     <g:if test="${reportType == ReportType.CORRECTIVE}">
       <div id='js-corrective' class="v-tabs-content right shown">
         <!-- work order predefined reports template -->
@@ -64,7 +64,7 @@
       </div>
     </g:if>
 
-    <!-- TODO PREVENTIVE -->
+    <!-- PREVENTIVE -->
     <g:if test="${reportType == ReportType.PREVENTIVE}">
       <div id='js-preventive' class="v-tabs-content right shown">
         <!-- preventive order predefined reports template -->

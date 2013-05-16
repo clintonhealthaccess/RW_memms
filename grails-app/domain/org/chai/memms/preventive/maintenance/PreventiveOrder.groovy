@@ -77,7 +77,7 @@ public abstract class PreventiveOrder extends MaintenanceOrder {
 		String messageCode = "reports.preventive.statusChanges"
 		final String name
 		final Map<String,List<PreventiveOrderStatus>> statusChange
-		final Boolean maintenancePerformanced
+		final Boolean performed
 		PreventiveOrderStatusChange(String name, Map<String,List<PreventiveOrderStatus>> statusChange, Boolean performed) {
 		   this.name=name
 		   this.statusChange=statusChange
