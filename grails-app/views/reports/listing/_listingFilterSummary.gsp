@@ -8,9 +8,9 @@
       <span>Report Subtype:</span>
       <a href="#">${message(code:'reports.subType.'+reportSubType?.reportSubType)}</a>
     </li>
-    <li>
+%{--     <li>
       <span>Filters:</span>
       <a href="#">There are <a href="#" id='js-filters-toggle' class="tooltip">133</a> filters applied</a>
-    </li>
+    </li> --}%
   </ul>
 </div>

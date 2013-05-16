@@ -102,21 +102,6 @@ class ListingController extends AbstractController{
 		redirect(action: "generalEquipmentsListing", params: params)
 	}
 
-	// def listing ={
-	// 	if (log.isDebugEnabled()) log.debug("listing start, params:"+params)
-
-	// 	def reportType = getReportType()
-	// 	def reportSubType = getReportSubType()
-
-	// 	if (log.isDebugEnabled()) log.debug("listing end, params:"+params)
-	// 	render(view: '/reports/reports', model: 
-	// 		[
-	// 			template:"/reports/listing/listing",
-	// 			reportType: reportType,
-	// 			reportSubType: reportSubType
-	// 		])
-	// }
-
 	// default and predefined reports start
 
 	//Equipments
@@ -552,22 +537,26 @@ class ListingController extends AbstractController{
 		def customizedListingModel = [:]
 		customizedListingModel.putAll params
 		def customizedReportName = params.get('customizedReportName')
-		customizedListingModel << [customizedReportName:customizedReportName]
+		if(customizedReportName != null && !customizedReportName.empty)
+			customizedReportName = "customReport_"+reportType+"-"+reportSubType+"-"+'YYYMMddHHmmss'
 		def customizedReportSave = params.get('customizedReportSave')
-		customizedListingModel << [customizedReportSave:customizedReportSave]
+		customizedListingModel << [
+			customizedReportName:customizedReportName,
+			customizedReportSave:customizedReportSave
+		]
 
 		if (log.isDebugEnabled()) log.debug("listing.customizedListing end, customizedListingModel:"+customizedListingModel)
 		switch(reportType){
 			case ReportType.INVENTORY:
 				redirect(action: "customEquipmentListing", params: customizedListingModel)
 				break;
+			case ReportType.CORRECTIVE:
+				redirect(action: "customWorkOrderListing", params: customizedListingModel)
+				break;
+			case ReportType.PREVENTIVE:
+				redirect(action: "customPreventiveOrderListing", params: customizedListingModel)
+				break;
 			// TODO
-			// case ReportType.CORRECTIVE:
-			// 	redirect(action: "customWorkOrdersListing", params: customizedListingModel)
-			// 	break;
-			// case ReportType.PREVENTIVE:
-			// 	redirect(action: "customPreventiveOrdersListing", params: customizedListingModel)
-			// 	break;
 			// case ReportType.SPAREPARTS:
 			// 	redirect(action: "customSparePartsListing", params: customizedListingModel)
 			// 	break;
@@ -582,6 +571,7 @@ class ListingController extends AbstractController{
 			])
 	}
 
+	// inventory
 	def customEquipmentListing ={
 		if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing start, params:"+params)
 
@@ -592,6 +582,7 @@ class ListingController extends AbstractController{
 		def fromCost = params.get('fromCost')
 		def toCost = params.get('toCost')
 		def costCurrency = params.get('costCurrency')
+
 		def fromAcquisitionPeriod = getPeriod('fromAcquisitionPeriod')
 		def toAcquisitionPeriod = getPeriod('toAcquisitionPeriod')
 
@@ -655,7 +646,146 @@ class ListingController extends AbstractController{
 				])
 	}
 
-	// TODO custom corrective, preventive, and spare part listing
+	// corrective
+	def customWorkOrderListing ={
+		if (log.isDebugEnabled()) log.debug("listing.customWorkOrderListing start, params:"+params)
+
+		def reportType = getReportType()
+		def reportSubType = getReportSubType()
+		def dataLocations = getDataLocations()
+		def equipmentTypes = getEquipmentTypes()
+		def fromCost = params.get('fromCost')
+		def toCost = params.get('toCost')
+		def costCurrency = params.get('costCurrency')
+
+		def fromWorkOrderPeriod = getPeriod('fromWorkOrderPeriod')
+		def toWorkOrderPeriod = getPeriod('toWorkOrderPeriod')
+		def warranty = params.get('warranty')
+
+		def customWorkOrderParams = [
+			dataLocations: dataLocations,
+			departments: departments,
+			equipmentTypes: equipmentTypes,
+			fromCost: fromCost,
+			toCost: toCost,
+			costCurrency: costCurrency,
+			fromWorkOrderPeriod: fromWorkOrderPeriod,
+			toWorkOrderPeriod: toWorkOrderPeriod
+		]
+
+		if(reportSubType == ReportSubType.WORKORDERS){
+			def workOrderStatus = getCorrectiveStatus()
+			customWorkOrderParams << [
+				workOrderStatus: workOrderStatus,
+			]
+		}
+
+		if(reportSubType == ReportSubType.STATUSCHANGES){
+			def statusChanges = getCorrectiveStatusChanges()
+			customWorkOrderParams << [
+				statusChanges: statusChanges,
+			]
+		}
+
+		def reportTypeOptions = getReportTypeOptions('correctiveOptions')
+		def customizedReportName = params.get('customizedReportName')
+		def customizedReportSave = params.get('customizedReportSave')
+		customWorkOrderParams << [
+			reportTypeOptions: reportTypeOptions,
+			customizedReportName: customizedReportName,
+			customizedReportSave: customizedReportSave,
+		]
+
+		if (log.isDebugEnabled()) log.debug("listing.customWorkOrderListing, customWorkOrderParams:"+customWorkOrderParams)
+
+		adaptParamsForList()
+		def equipments = workOrderListingReportService.getCustomReportOfWorkOrders(user,customWorkOrderParams)
+
+		if(!request.xhr)
+			render(view:"/reports/reports", 
+				model: model(equipments, "") << 
+				[
+					reportType: reportType,
+					reportSubType: reportSubType,
+					reportTypeOptions: reportTypeOptions,
+					customizedReportName: customizedReportName,
+					customizedReportSave: customizedReportSave,
+					template:"/reports/listing/listing"
+				])
+	}
+
+	// preventive
+	def customPreventiveOrderListing ={
+		if (log.isDebugEnabled()) log.debug("listing.customPreventiveOrderListing start, params:"+params)
+
+		def reportType = getReportType()
+		def reportSubType = getReportSubType()
+		def dataLocations = getDataLocations()
+		def equipmentTypes = getEquipmentTypes()
+		def fromCost = params.get('fromCost')
+		def toCost = params.get('toCost')
+		def costCurrency = params.get('costCurrency')
+
+		def fromWorkOrderPeriod = getPeriod('fromWorkOrderPeriod')
+		def toWorkOrderPeriod = getPeriod('toWorkOrderPeriod')
+
+		def customPreventiveOrderParams = [
+			dataLocations: dataLocations,
+			departments: departments,
+			equipmentTypes: equipmentTypes,
+			fromCost: fromCost,
+			toCost: toCost,
+			costCurrency: costCurrency,
+			fromWorkOrderPeriod: fromPeriod,
+			toWorkOrderPeriod: toWorkOrderPeriod
+		]
+
+		if(reportSubType == ReportSubType.WORKORDERS){
+			def workOrderStatus = getPreventiveStatus()
+			def whoIsResponsible = params.list('whoIsResponsible')
+			customPreventiveOrderParams << [
+				workOrderStatus: workOrderStatus,
+				whoIsResponsible: whoIsResponsible
+			]
+		}
+
+		if(reportSubType == ReportSubType.STATUSCHANGES){
+			def statusChanges = getPreventiveStatusChanges()
+			def doneByWho = params.list('doneByWho')
+			customPreventiveOrderParams << [
+				statusChanges: statusChanges,
+				doneByWho: doneByWho
+			]
+		}
+
+		def reportTypeOptions = getReportTypeOptions('correctiveOptions')
+		def customizedReportName = params.get('customizedReportName')
+		def customizedReportSave = params.get('customizedReportSave')
+		customPreventiveOrderParams << [
+			reportTypeOptions: reportTypeOptions,
+			customizedReportName: customizedReportName,
+			customizedReportSave: customizedReportSave,
+		]
+
+		if (log.isDebugEnabled()) log.debug("listing.customPreventiveOrderListing, customPreventiveOrderParams:"+customPreventiveOrderParams)
+
+		adaptParamsForList()
+		def equipments = workOrderListingReportService.getCustomReportOfPreventiveOrders(user,customPreventiveOrderParams)
+
+		if(!request.xhr)
+			render(view:"/reports/reports", 
+				model: model(equipments, "") << 
+				[
+					reportType: reportType,
+					reportSubType: reportSubType,
+					reportTypeOptions: reportTypeOptions,
+					customizedReportName: customizedReportName,
+					customizedReportSave: customizedReportSave,
+					template:"/reports/listing/listing"
+				])
+	}
+
+	// TODO spare parts
 
 	// customized report listing end
 

@@ -18,5 +18,5 @@
 <li><g:checkBox name="correctiveOptions" value="departmentRequestedOrder" checked="false" /><span>Department Requested Order</span></li>
 <li><g:checkBox name="correctiveOptions" value="reasonsEquipmentFailure" checked="false" /><span>Reasons Equipment Failure</span></li>
 <li><g:checkBox name="correctiveOptions" value="listPerformedActions" checked="false" /><span>List Performed Actions</span></li>
-<li><g:checkBox name="correctiveOptions" value="descriptionOfProblem" checked="false" /><span>Description of Problem</span></li>
+<li><g:checkBox name="correctiveOptions" value="description" checked="false" /><span>Description of Problem</span></li>
 <li><g:checkBox name="correctiveOptions" value="dateOfEvent" checked="false" /><span>Date of Event</span></li>

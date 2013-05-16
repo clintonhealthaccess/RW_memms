@@ -33,7 +33,6 @@
 				<td>${message(code: order.status?.messageCode+'.'+order.status?.name)}</td>
 				<td>${Utils.formatDateWithTime(order.firstOccurenceOn?.timeDate)}</td>
 				<td>${(order.type.equals(PreventiveOrderType.DURATIONBASED))?Utils.formatDateWithTime(order.nextOccurence):''}</td>
-				
 				<td><g:stripHtml field="${order.description}" chars="30"/></td>
 				<td>${order.preventions?.size()}</td>
 			</tr>

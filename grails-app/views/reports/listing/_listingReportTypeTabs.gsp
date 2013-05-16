@@ -4,10 +4,10 @@
         href="${createLink(controller:'listing', action:'generalEquipmentsListing')}">
     ${message(code:'reports.type.inventory')}</a></li>
   <li><a class="${reportType == ReportType.CORRECTIVE?'active':''}" id="#js-corrective"
-        href="${createLink(controller:'listing', action:'TODO')}">
+        href="${createLink(controller:'listing', action:'lastMonthWorkOrders')}">
     ${message(code:'reports.type.corrective')}</a></li>
   <li><a class="${reportType == ReportType.PREVENTIVE?'active':''}" id="#js-preventive"
-        href="${createLink(controller:'listing', action:'TODO')}">
+        href="${createLink(controller:'listing', action:'equipmentsWithPreventionPlan')}">
     ${message(code:'reports.type.preventive')}</a></li>
   <li><a class="${reportType == ReportType.SPAREPARTS?'active':''}" id="#js-spare-parts"
         href="${createLink(controller:'listing', action:'TODO')}">

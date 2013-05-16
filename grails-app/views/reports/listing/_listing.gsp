@@ -54,7 +54,12 @@
             <!-- listing filter summary template -->
             <g:render template ="/reports/listing/listingFilterSummary" />
             <!-- work order report template -->
-            <g:render template="/reports/listing/workOrderReport/workOrderListing" />
+            <g:if test="${customizedReportName != null && !customizedReportName.empty}">
+              <g:render template="/reports/listing/workOrderReport/customWorkOrderListing" />
+            </g:if>
+            <g:else>
+              <g:render template="/reports/listing/workOrderReport/workOrderListing" />
+            </g:else>
           </div>
       </div>
     </g:if>
@@ -71,7 +76,12 @@
             <!-- listing filter summary template -->
             <g:render template ="/reports/listing/listingFilterSummary" />
             <!-- preventive order report template -->
-            <g:render template="/reports/listing/preventiveOrderReport/preventiveOrderListing" />
+            <g:if test="${customizedReportName != null && !customizedReportName.empty}">
+              <g:render template="/reports/listing/preventiveOrderReport/customPreventiveOrderListing" />
+            </g:if>
+            <g:else>
+              <g:render template="/reports/listing/preventiveOrderReport/preventiveOrderListing" />
+            </g:else>
           </div>
       </div>
     </g:if>
