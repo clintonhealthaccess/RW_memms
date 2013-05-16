@@ -1,7 +1,7 @@
 <%@ page import="org.chai.memms.util.Utils.ReportSubType" %>
 
 <li><g:checkBox name="inventoryOptions" value="location" /><span>Location</span></li>
-<li><g:checkBox name="inventoryOptions" value="code" /><span>Location</span></li>
+<li><g:checkBox name="inventoryOptions" value="code" /><span>Code</span></li>
 <li><g:checkBox name="inventoryOptions" value="serialNumber" /><span>Serial Number</span></li>
 <li><g:checkBox name="inventoryOptions" value="equipmentType" /><span>Equipment Type</span></li>
 
