@@ -1,25 +1,14 @@
 <%@ page import="org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatus" %>
+<%@ page import="org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatusChange" %>
 <%@ page import="org.chai.memms.preventive.maintenance.PreventiveOrder.PreventionResponsible" %>
 <ul>
   <li>
+    %{-- TODO fix checkbox list styles !!! --}%
     <label for="statusChanges"><g:message code="reports.statusChanges"/>:</label>
-    <select name="statusChanges" class="js-custom-report-subtype">      
-      <g:set var="preventiveMaintenancePerformedMap" 
-        value="${[[PreventiveOrderStatus.OPEN]:[(PreventiveOrderStatus.OPEN):true]]}"/>
-      <option value="${preventiveMaintenancePerformedMap}">
-        <g:message code="reports.preventive.statusChanges.preventiveMaintenancePerformed"/>
-      </option>
-      <g:set var="preventiveMaintenanceNotPerformedMap"
-        value="${[[PreventiveOrderStatus.OPEN]:[(PreventiveOrderStatus.OPEN):false]]}"/>
-      <option value="${preventiveMaintenanceNotPerformedMap}">
-        <g:message code="reports.preventive.statusChanges.preventiveMaintenanceNotPerformed"/>
-      </option>
-      <g:set var="closedScheduledPreventiveMaintenanceMap"
-        value="${[[PreventiveOrderStatus.OPEN]:[PreventiveOrderStatus.CLOSED]]}"/>
-      <option value="${closedScheduledPreventiveMaintenanceMap}">
-        <g:message code="reports.preventive.statusChanges.closedScheduledPreventiveMaintenance"/>
-      </option>
-    </select>
+    <g:each in="${PreventiveOrderStatusChange.values()}" var="statusEnum">
+        <input name="statusChanges" type="checkbox" value="${statusEnum}"/>
+        <label for="${statusEnum}">${message(code: statusEnum?.messageCode+'.'+statusEnum?.name)}</label>
+    </g:each>
   </li>
   <g:render template="/reports/listing/customizedReport/statusChangesPeriod"/>
   <li>

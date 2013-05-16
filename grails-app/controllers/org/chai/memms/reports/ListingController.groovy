@@ -30,26 +30,31 @@ package org.chai.memms.reports
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.lang.math.NumberUtils;
-import org.chai.location.CalculationLocation;
-import org.chai.location.DataLocation;
+import org.apache.commons.lang.math.NumberUtils
+import org.chai.location.CalculationLocation
+import org.chai.location.DataLocation
 import org.chai.location.DataLocationType
 import org.chai.location.Location
 import org.chai.location.LocationLevel
-import org.chai.memms.AbstractController;
+import org.chai.memms.AbstractController
+import org.chai.memms.corrective.maintenance.WorkOrder
+import org.chai.memms.corrective.maintenance.WorkOrderStatus
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus
+import org.chai.memms.corrective.maintenance.WorkOrderStatus.WorkOrderStatusChange
 import org.chai.memms.inventory.Department
-import org.chai.memms.inventory.Equipment;
-import org.chai.memms.inventory.EquipmentStatus;
-import org.chai.memms.inventory.EquipmentStatus.Status;
-import org.chai.memms.inventory.EquipmentStatus.EquipmentStatusChange;
+import org.chai.memms.inventory.Equipment
+import org.chai.memms.inventory.EquipmentStatus
+import org.chai.memms.inventory.EquipmentStatus.Status
+import org.chai.memms.inventory.EquipmentStatus.EquipmentStatusChange
 import org.chai.memms.inventory.EquipmentType
 import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatus
+import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatusChange
 import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventionResponsible
 import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart
+import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePartChange
 import org.chai.memms.spare.part.SparePartType
-import org.chai.memms.security.User;
-import org.chai.memms.security.User.UserType;
+import org.chai.memms.security.User
+import org.chai.memms.security.User.UserType
 import org.chai.memms.util.Utils
 import org.chai.memms.util.Utils.ReportType
 import org.chai.memms.util.Utils.ReportSubType
@@ -97,20 +102,35 @@ class ListingController extends AbstractController{
 		redirect(action: "generalEquipmentsListing", params: params)
 	}
 
+	// def listing ={
+	// 	if (log.isDebugEnabled()) log.debug("listing start, params:"+params)
+
+	// 	def reportType = getReportType()
+	// 	def reportSubType = getReportSubType()
+
+	// 	if (log.isDebugEnabled()) log.debug("listing end, params:"+params)
+	// 	render(view: '/reports/reports', model: 
+	// 		[
+	// 			template:"/reports/listing/listing",
+	// 			reportType: reportType,
+	// 			reportSubType: reportSubType
+	// 		])
+	// }
+
 	// default and predefined reports start
 
+	//Equipments
 	def defaultEquipmentsView ={
 		if (log.isDebugEnabled()) log.debug("listing.defaultEquipmentsView, params:"+params)
 
 		render(view: '/reports/reports', model:
 		[
-			//Note: these 2 properties are required for any default or predefined reports
 			reportType: ReportType.INVENTORY,
 			reportSubType: ReportSubType.INVENTORY,
 			template:"/reports/listing/listing"
 		])
 	}
-	
+
 	def generalEquipmentsListing={
 		if (log.isDebugEnabled()) log.debug("listing.generalEquipmentsListing start, params:"+params)
 
@@ -120,14 +140,12 @@ class ListingController extends AbstractController{
 			render(view:"/reports/reports", 
 				model: model(equipments, "") << 
 				[
-					//Note: these 2 properties are required for any default or predefined reports
 					reportType: ReportType.INVENTORY,
 					reportSubType: ReportSubType.INVENTORY,
 					template:"/reports/listing/listing"
-				])
-		
+				])		
 	}
-	
+
 	def disposedEquipments={
 		if (log.isDebugEnabled()) log.debug("listing.disposedEquipments start, params:"+params)
 
@@ -137,14 +155,12 @@ class ListingController extends AbstractController{
 			render(view:"/reports/reports", 
 				model: model(equipments, "") << 
 				[
-					//Note: these 2 properties are required for any default or predefined reports
 					reportType: ReportType.INVENTORY,
 					reportSubType: ReportSubType.INVENTORY,
 					template:"/reports/listing/listing",
-				])
-		
+				])		
 	}
-	
+
 	def underMaintenanceEquipments={
 		if (log.isDebugEnabled()) log.debug("listing.underMaintenanceEquipments start, params:"+params)
 
@@ -154,14 +170,12 @@ class ListingController extends AbstractController{
 			render(view:"/reports/reports", 
 				model: model(equipments, "") << 
 				[
-					//Note: these 2 properties are required for any default or predefined reports
 					reportType: ReportType.INVENTORY,
 					reportSubType: ReportSubType.INVENTORY,
 					template:"/reports/listing/listing",
-				])
-		
+				])		
 	}
-	
+
 	def obsoleteEquipments={
 		if (log.isDebugEnabled()) log.debug("listing.obsoleteEquipments start, params:"+params)
 
@@ -171,12 +185,10 @@ class ListingController extends AbstractController{
 			render(view:"/reports/reports", 
 				model: model(equipments, "") << 
 				[
-					//Note: these 2 properties are required for any default or predefined reports
 					reportType: ReportType.INVENTORY,
 					reportSubType: ReportSubType.INVENTORY,
 					template:"/reports/listing/listing",
-				])
-		
+				])	
 	}
 
 	def inStockEquipments={
@@ -186,12 +198,10 @@ class ListingController extends AbstractController{
 			render(view:"/reports/reports", 
 				model: model(equipments, "") << 
 				[
-					//Note: these 2 properties are required for any default or predefined reports
 					reportType: ReportType.INVENTORY,
 					reportSubType: ReportSubType.INVENTORY,
 					template:"/reports/listing/listing",
 				])
-	
 	}
 
 	def underWarrantyEquipments={
@@ -210,27 +220,40 @@ class ListingController extends AbstractController{
 		}
 		equipments=displayableEquipments
 		if(!request.xhr)
-			render(view:"/reports/reports", model: model(equipments, "") << [
-				template:"/reports/listing/listing"
-			])
+			render(view:"/reports/reports", 
+				model: model(equipments, "") << 
+				[
+					reportType: ReportType.INVENTORY,
+					reportSubType: ReportSubType.INVENTORY,
+					template:"/reports/listing/listing"
+				])
 	}
+
 	//WorkOrders
 	def lastMonthWorkOrders={
 		adaptParamsForList()
 		def workOrders = workOrderListingReportService.getWorkOrdersOfLastMonth(user,params)
 		if(!request.xhr)
-			render(view:"/reports/reports", model: model(workOrders, "") << [
-				template:"/reports/listing/listing",
-			])
+			render(view:"/reports/reports", 
+				model: model(workOrders, "") << 
+				[
+					reportType: ReportType.CORRECTIVE,
+					reportSubType: ReportSubType.WORKORDERS,
+					template:"/reports/listing/listing",
+				])
 	}
+
 	def workOrdersEscalatedToMMC={
 		adaptParamsForList()
 		def workOrders = workOrderListingReportService.getWorkOrdersEscalatedToMMC(user,params)
 		if(!request.xhr)
-			render(view:"/reports/reports", model: model(workOrders, "") << [
-				template:"/reports/listing/listing",
-			])
-
+			render(view:"/reports/reports", 
+				model: model(workOrders, "") << 
+				[
+					reportType: ReportType.CORRECTIVE,
+					reportSubType: ReportSubType.WORKORDERS,
+					template:"/reports/listing/listing",
+				])
 	}
 
 	//PreventiveOrders
@@ -238,18 +261,26 @@ class ListingController extends AbstractController{
 		adaptParamsForList()
 		def preventiveOrders = preventiveOrderListingReportService.getEquipmentsWithPreventionPlan(user,params)
 		if(!request.xhr)
-			render(view:"/reports/reports", model: model(preventiveOrders, "") << [
-				template:"/reports/listing/listing",
-			])
+			render(view:"/reports/reports", 
+				model: model(preventiveOrders, "") << 
+				[
+					reportType: ReportType.PREVENTIVE,
+					reportSubType: ReportSubType.WORKORDERS,
+					template:"/reports/listing/listing",
+				])
 	}
 	//TODO see how to deal with periodic times either weekly, monthly, or any other
 	def preventionsDelayed={
 		adaptParamsForList()
 		def preventiveOrders = preventiveOrderListingReportService.getEquipmentsWithPreventionPlan(user,params)
 		if(!request.xhr)
-			render(view:"/reports/reports", model: model(preventiveOrders, "") << [
-				template:"/reports/listing/listing",
-			])
+			render(view:"/reports/reports", 
+				model: model(preventiveOrders, "") << 
+				[
+					reportType: ReportType.PREVENTIVE,
+					reportSubType: ReportSubType.WORKORDERS,
+					template:"/reports/listing/listing",
+				])
 	}
 	
 	// default and predefined reports end
@@ -421,24 +452,24 @@ class ListingController extends AbstractController{
 					]
 				}
 				if(reportType == ReportType.CORRECTIVE){
-					// TODO def statusChanges = getCorrectiveStatusChanges()
+					def statusChanges = getCorrectiveStatusChanges()
 					def warranty = params.get('warranty')
 					step3Params << [
-						// statusChanges: statusChanges,
+						statusChanges: statusChanges,
 						warranty: warranty
 					]
 				}
 				if(reportType == ReportType.PREVENTIVE) {
-					// TODO def statusChanges = getPreventiveStatusChanges()
+					def statusChanges = getPreventiveStatusChanges()
 					def doneByWho = params.list('doneByWho')
 					step3Params << [
-						// statusChanges: statusChanges,
+						statusChanges: statusChanges,
 						doneByWho: doneByWho
 					]
 				}
 				if(reportType == ReportType.SPAREPARTS){
-					// TODO def statusChanges = getSparePartsStatusChanges()
-					// step3Params << [statusChanges: statusChanges]
+					def statusChanges = getSparePartsStatusChanges()
+					step3Params << [statusChanges: statusChanges]
 				}
 				break;
 
@@ -520,28 +551,36 @@ class ListingController extends AbstractController{
 
 		def customizedListingModel = [:]
 		customizedListingModel.putAll params
-
 		def customizedReportName = params.get('customizedReportName')
 		customizedListingModel << [customizedReportName:customizedReportName]
+		def customizedReportSave = params.get('customizedReportSave')
+		customizedListingModel << [customizedReportSave:customizedReportSave]
 
 		if (log.isDebugEnabled()) log.debug("listing.customizedListing end, customizedListingModel:"+customizedListingModel)
 		switch(reportType){
 			case ReportType.INVENTORY:
+			case ReportType.SPAREPARTS:
 				if(reportSubType == ReportSubType.INVENTORY){
-					redirect(action: "customizedInventoryInventory", params: customizedListingModel)
+					redirect(action: "customizedInventory", params: customizedListingModel)
 				}
 				else if(reportSubType == ReportSubType.STATUSCHANGES){
-					redirect(action: "customizedInventoryStatusChanges", params: customizedListingModel)
+					redirect(action: "customizedStatusChanges", params: customizedListingModel)
+				}
+				else if(reportSubType == ReportSubType.USERATE){
+					redirect(action: "customizedUseRate", params: customizedListingModel)
+				}
+				else if(reportSubType == ReportSubType.STOCKOUT){
+					redirect(action: "customizedStockOut", params: customizedListingModel)
 				}
 				break;
 			case ReportType.CORRECTIVE:
-				//TODO
-				break;
 			case ReportType.PREVENTIVE:
-				//TODO
-				break;
-			case ReportType.SPAREPARTS:
-				//TODO
+				if(reportSubType == ReportSubType.WORKORDERS){
+					redirect(action: "customizedMaintenanceWorkOrders", params: customizedListingModel)
+				}
+				else if(reportSubType == ReportSubType.STATUSCHANGES){
+					redirect(action: "customizedMaintenanceStatusChanges", params: customizedListingModel)
+				}
 				break;
 			default:
 				break;
@@ -554,31 +593,82 @@ class ListingController extends AbstractController{
 			])
 	}
 
-	def customizedInventoryInventory ={
-		if (log.isDebugEnabled()) log.debug("listing.customizedInventoryInventory start, params:"+params)
-		//TODO
-	}
-
-	def customizedInventoryStatusChanges ={
-		if (log.isDebugEnabled()) log.debug("listing.customizedInventoryStatusChanges start, params:"+params)
-		//TODO
-	}
-
-	// TODO Corrective, Preventive, Spare Parts
-
-	def listing ={
-		if (log.isDebugEnabled()) log.debug("listing start, params:"+params)
+	def customizedInventory ={
+		if (log.isDebugEnabled()) log.debug("listing.customizedInventory start, params:"+params)
 
 		def reportType = getReportType()
 		def reportSubType = getReportSubType()
 
-		if (log.isDebugEnabled()) log.debug("listing end, params:"+params)
-		render(view: '/reports/reports', model: 
-			[
-				template:"/reports/listing/listing",
-				reportType: reportType,
-				reportSubType: reportSubType
-			])
+		if (log.isDebugEnabled()) 
+			log.debug("listing.customizedInventory reportType:"+reportType+", reportSubType:"+reportSubType)
+
+		if(reportType == ReportType.INVENTORY){
+			//TODO
+		}
+		else if(reportType == ReportType.SPAREPARTS){
+			//TODO
+		}
+	}
+
+	def customizedStatusChanges ={
+		if (log.isDebugEnabled()) log.debug("listing.customizedStatusChanges start, params:"+params)
+		
+		def reportType = getReportType()
+		def reportSubType = getReportSubType()
+
+		if (log.isDebugEnabled()) 
+			log.debug("listing.customizedStatusChanges reportType:"+reportType+", reportSubType:"+reportSubType)
+
+		if(reportType == ReportType.INVENTORY){
+			//TODO
+		}
+		else if(reportType == ReportType.SPAREPARTS){
+			//TODO
+		}
+	}
+
+	def customizedMaintenanceWorkOrders ={
+		if (log.isDebugEnabled()) log.debug("listing.customizedMaintenanceWorksOrders start, params:"+params)
+		
+		def reportType = getReportType()
+		def reportSubType = getReportSubType()
+
+		if (log.isDebugEnabled()) 
+			log.debug("listing.customizedMaintenanceWorksOrders reportType:"+reportType+", reportSubType:"+reportSubType)
+
+		if(reportType == ReportType.CORRECTIVE){
+			//TODO
+		}
+		else if(reportType == ReportType.PREVENTIVE){
+			//TODO
+		}
+	}
+
+	def customizedMaintenanceStatusChanges ={
+		if (log.isDebugEnabled()) log.debug("listing.customizedMaintenanceStatusChanges start, params:"+params)
+		
+		def reportType = getReportType()
+		def reportSubType = getReportSubType()
+
+		if (log.isDebugEnabled()) 
+			log.debug("listing.customizedMaintenanceStatusChanges reportType:"+reportType+", reportSubType:"+reportSubType)
+
+		if(reportType == ReportType.CORRECTIVE){
+			//TODO
+		}
+		else if(reportType == ReportType.PREVENTIVE){
+			//TODO
+		}
+	}
+
+	def customizedUseRate ={
+		if (log.isDebugEnabled()) log.debug("listing.customizedUseRate start, params:"+params)
+		//TODO
+	}
+
+	def customizedStockOut ={
+		if (log.isDebugEnabled()) log.debug("listing.customizedStockOut start, params:"+params)
+		//TODO
 	}
 
 	// customized report listing end
@@ -677,6 +767,7 @@ class ListingController extends AbstractController{
 		else period = null
 		return period
 	}
+
 	public Set<EquipmentStatus> getInventoryStatus(){
 		if(log.isDebugEnabled()) log.debug("abstract.inventoryStatus params:"+params)
 		Set<EquipmentStatus> inventoryStatus = new HashSet<EquipmentStatus>()
@@ -704,6 +795,7 @@ class ListingController extends AbstractController{
 			log.debug("abstract.inventoryStatusChanges end statusChanges:"+inventoryStatusChanges)
 		return inventoryStatusChanges
 	}
+
 	public Set<OrderStatus> getCorrectiveStatus(){
 		if(log.isDebugEnabled()) log.debug("abstract.correctiveStatus params:"+params)
 		Set<OrderStatus> correctiveStatus = new HashSet<OrderStatus>()
@@ -716,6 +808,22 @@ class ListingController extends AbstractController{
 		}
 		return correctiveStatus
 	}
+	public List<WorkOrderStatusChange> getCorrectiveStatusChanges(){
+		List<WorkOrderStatusChange> correctiveStatusChanges = []
+		if(log.isDebugEnabled()) log.debug("abstract.correctiveStatusChanges start params:"+params)
+		if (params.list('statusChanges') != null && !params.list('statusChanges').empty) {
+			def statusChanges = params.list('statusChanges')
+			if(log.isDebugEnabled()) log.debug("abstract.correctiveStatusChanges statusChanges:"+statusChanges)
+			statusChanges.each { it ->
+				if(log.isDebugEnabled()) log.debug("abstract.correctiveStatusChanges statusChange:"+it)
+				if(it != null) correctiveStatusChanges.add(it)
+			}
+		}
+		if(log.isDebugEnabled()) 
+			log.debug("abstract.correctiveStatusChanges end statusChanges:"+correctiveStatusChanges)
+		return correctiveStatusChanges
+	}
+
 	public Set<PreventiveOrderStatus> getPreventiveStatus(){
 		if(log.isDebugEnabled()) log.debug("abstract.preventiveStatus params:"+params)
 		Set<PreventiveOrderStatus> preventiveStatus = new HashSet<PreventiveOrderStatus>()
@@ -728,6 +836,22 @@ class ListingController extends AbstractController{
 		}
 		return preventiveStatus
 	}
+	public List<PreventiveOrderStatusChange> getPreventiveStatusChanges(){
+		List<PreventiveOrderStatusChange> preventiveStatusChanges = []
+		if(log.isDebugEnabled()) log.debug("abstract.preventiveStatusChanges start params:"+params)
+		if (params.list('statusChanges') != null && !params.list('statusChanges').empty) {
+			def statusChanges = params.list('statusChanges')
+			if(log.isDebugEnabled()) log.debug("abstract.preventiveStatusChanges statusChanges:"+statusChanges)
+			statusChanges.each { it ->
+				if(log.isDebugEnabled()) log.debug("abstract.preventiveStatusChanges statusChange:"+it)
+				if(it != null) preventiveStatusChanges.add(it)
+			}
+		}
+		if(log.isDebugEnabled()) 
+			log.debug("abstract.preventiveStatusChanges end statusChanges:"+preventiveStatusChanges)
+		return preventiveStatusChanges
+	}
+
 	public Set<StatusOfSparePart> getSparePartStatus(){
 		if(log.isDebugEnabled()) log.debug("abstract.sparePartStatus params:"+params)
 		Set<StatusOfSparePart> sparePartStatus = new HashSet<StatusOfSparePart>()
@@ -739,6 +863,21 @@ class ListingController extends AbstractController{
 			}
 		}
 		return sparePartStatus
+	}
+	public List<StatusOfSparePartChange> getSparePartStatusChanges(){
+		List<StatusOfSparePartChange> sparePartStatusChanges = []
+		if(log.isDebugEnabled()) log.debug("abstract.sparePartStatusChanges start params:"+params)
+		if (params.list('statusChanges') != null && !params.list('statusChanges').empty) {
+			def statusChanges = params.list('statusChanges')
+			if(log.isDebugEnabled()) log.debug("abstract.sparePartStatusChanges statusChanges:"+statusChanges)
+			statusChanges.each { it ->
+				if(log.isDebugEnabled()) log.debug("abstract.sparePartStatusChanges statusChange:"+it)
+				if(it != null) sparePartStatusChanges.add(it)
+			}
+		}
+		if(log.isDebugEnabled()) 
+			log.debug("abstract.sparePartStatusChanges end statusChanges:"+sparePartStatusChanges)
+		return sparePartStatusChanges
 	}
 
 	public Set<String> getReportTypeOptions(String reportTypeOptionParam){

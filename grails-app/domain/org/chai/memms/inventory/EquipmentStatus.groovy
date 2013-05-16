@@ -61,14 +61,19 @@ class EquipmentStatus {
 		NEWORDER("newEquipment", 
 			['previous':[Status.NONE], 'current':(Status.values()-[Status.NONE])]),
 		DISPOSEDEQUIPMENT("disposedEquipment", 
-			['previous':(Status.values()-[Status.FORDISPOSAL,Status.DISPOSED]), 'current':[Status.FORDISPOSAL,Status.DISPOSED]]),
+			[
+				'previous':(Status.values()-[Status.FORDISPOSAL,Status.DISPOSED]), 
+				'current':[Status.FORDISPOSAL,Status.DISPOSED]
+			]),
 		FROMSTOCKTOOPERATIONAL("equipmentFromStockToOperational", 
 			['previous':[Status.INSTOCK], 'current':[Status.OPERATIONAL,Status.PARTIALLYOPERATIONAL]]),
 		FORMAINTENANCE("equipmentForMaintenance", 
-			['previous':(Status.values()-Status.UNDERMAINTENANCE), 'current':[Status.UNDERMAINTENANCE]])
+			[
+				'previous':(Status.values()-Status.UNDERMAINTENANCE), 
+				'current':[Status.UNDERMAINTENANCE]
+			])
 
 		String messageCode = "reports.inventory.statusChanges"
-
 		final String name
 		final Map<String,List<Status>> statusChange
 		EquipmentStatusChange(String name, Map<String,List<Status>> statusChange) {

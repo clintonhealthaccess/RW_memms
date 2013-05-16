@@ -1,17 +1,17 @@
 function customizedlisting_init(){
 
   /* select/deselect all dropdown */
-
-  $('.js-select-all').click(function(e) {
-    var options = $(this).parents('li').find('select').find('option');
-    var select = $(this).parents('li').find('select')
-    if($(this).is(':checked')) {
-      options.prop('selected', true);
-    }else{
-      options.prop('selected', false);
-    }
-    select.trigger('liszt:updated');
-  });
+  
+  // $('.js-select-all').click(function(e) {
+  //   var options = $(this).parents('li').find('select').find('option');
+  //   var select = $(this).parents('li').find('select')
+  //   if($(this).is(':checked')) {
+  //     options.prop('selected', true);
+  //   }else{
+  //     options.prop('selected', false);
+  //   }
+  //   select.trigger('liszt:updated');
+  // });
 
   // load chosen
   $(".chzn-select").chosen();
@@ -41,20 +41,6 @@ function step2_init(){
   $('#js-prev-step-2').click(function(e) {
     $('#formRemoteStep2Prev').submit();
   });
-
-  /* select/deselect all dropdown */
-
-  $('.js-select-all').click(function(e) {
-    // var options = $(this).parents('li').find('select').find('option');
-    // var select = $(this).parents('li').find('select')
-    // if($(this).is(':checked')) {
-    //   options.prop('selected', true);
-    // }else{
-    //   options.prop('selected', false);
-    // }
-    // select.trigger('liszt:updated');
-    
-  });
 }
 
 function step3_init(){
@@ -68,7 +54,7 @@ function step3_init(){
 
 function step4_init(){
   $('#js-next-step-4').click(function(e) {
-    $('#formRemoteStep4Next').submit();
+    $('#formStep4Next').submit();
   });
   $('#js-prev-step-4').click(function(e) {
     $('#formRemoteStep4Prev').submit();
