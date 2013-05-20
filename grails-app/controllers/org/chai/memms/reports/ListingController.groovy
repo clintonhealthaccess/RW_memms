@@ -889,7 +889,7 @@ class ListingController extends AbstractController{
 		def period = params.get(periodParam);
 		if(log.isDebugEnabled()) 
 			log.debug("abstract.getPeriod param:"+periodParam+", value:"+period+")")
-		if(period != null && !period.empty) period = Date.parse('MM/dd/yyyy', period)
+		if(period != null && !period.empty) period = Utils.parseDate(period)
 		else period = null
 		return period
 	}
