@@ -165,5 +165,39 @@ class EquipmentListingReportService {
 					inList('dataLocation',dataLocations)
 		}
 	}
+	
+	public def getCustomReportOfEquipmentsTEST(def user, def dataLocation, def supplier, def manufacturer,def serviceProvider, def equipmentType, 
+		def purchaser,def donor,def obsolete,def status,Map<String, String> params) {
+		def dataLocations = []
+			if(user.location instanceof Location) dataLocations.addAll(user.location.collectDataLocations(null))
+			else{
+				dataLocations = []
+				dataLocations.add(user.location as DataLocation)
+				if(userService.canViewManagedEquipments(user)) dataLocations.addAll(((DataLocation)user.location).manages)
+			}
+		
+			def criteria = Equipment.createCriteria();
+			
+			return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+					if(dataLocations)
+						inList('dataLocation',dataLocations)
+					if(supplier != null)
+						eq ("supplier", supplier)
+					if(manufacturer != null)
+						eq ("manufacturer", manufacturer)
+					if(serviceProvider != null)
+						eq ("serviceProvider", serviceProvider)
+					if(equipmentType != null)
+						eq ("type", equipmentType)
+					if(purchaser && !purchaser.equals(PurchasedBy.NONE))
+						eq ("purchaser",purchaser)
+					if(donor && !donor.equals(Donor.NONE))
+						eq ("donor",donor)
+					if(obsolete)
+						eq ("obsolete", (obsolete.equals('true'))?true:false)
+					if(status && !status.equals(Status.NONE))
+						eq ("currentStatus",status)
+			}
+		}
 
 }
