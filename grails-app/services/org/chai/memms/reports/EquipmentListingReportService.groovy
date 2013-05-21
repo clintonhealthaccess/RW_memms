@@ -150,15 +150,15 @@ class EquipmentListingReportService {
 		}
 	}
 
-	public def getCustomReportOfEquipments(User user,Map<String, String> params) {
+	public def getCustomReportOfEquipments(User user,def customEquipmentParams, Map<String, String> params) {
 		
-			def equipmentStatus = customEquipmentParams.get('equipmentStatus')
+			//def equipmentStatus = customEquipmentParams.get('equipmentStatus')
 			def dataLocations = customEquipmentParams.get('dataLocations')
 			def departments = customEquipmentParams.get('departments')
 			def equipmentTypes = customEquipmentParams.get('equipmentTypes')
-			def lowerLimitCost = customEquipmentParams.get('fromCost')
-			def upperLimitCost = customEquipmentParams.get('toCost')
-			def currency = customEquipmentParams.get('costCurrency')
+			//def lowerLimitCost = customEquipmentParams.get('fromCost')
+			//def upperLimitCost = customEquipmentParams.get('toCost')
+			//def currency = customEquipmentParams.get('costCurrency')
 			def obsolete = customEquipmentParams.get('obsolete')
 			def fromAcquisitionPeriod = customEquipmentParams.get('fromAcquisitionPeriod')
 			def toAcquisitionPeriod = customEquipmentParams.get('toAcquisitionPeriod')
@@ -173,17 +173,17 @@ class EquipmentListingReportService {
 						inList ("department", departments)
 					if(equipmentTypes != null)
 						inList ("type", equipmentTypes)
-					if(currency !=null)
-						eq ("currency",currency)
+				/*	if(currency !=null)
+						eq ("currency",currency)*/
 					if(obsolete)
 						eq ("obsolete", (obsolete.equals('true'))?true:false)
 						//TODO set of statuses
-					if(equipmentStatus!=null)
-						inList ("currentStatus",equipmentStatus)
-					if(lowerLimitCost!=null)
+				/*	if(equipmentStatus!=null)
+						inList ("currentStatus",equipmentStatus)*/
+					/*if(lowerLimitCost!=null)
 						gt ("purchaseCost", lowerLimitCost)
 					if(upperLimitCost!=null)
-						lt ("purchaseCost", upperLimitCost)
+						lt ("purchaseCost", upperLimitCost)*/
 			}
 	}
 	
@@ -196,7 +196,7 @@ class EquipmentListingReportService {
 				if(userService.canViewManagedEquipments(user)) dataLocations.addAll(((DataLocation)user.location).manages)
 			}*/
 			
-			def equipmentStatus = customEquipmentParams.get('equipmentStatus')
+			/*def equipmentStatus = customEquipmentParams.get('equipmentStatus')
 			def dataLocations = customEquipmentParams.get('dataLocations')
 			def departments = customEquipmentParams.get('departments')
 			def equipmentTypes = customEquipmentParams.get('equipmentTypes')
@@ -227,7 +227,7 @@ class EquipmentListingReportService {
 					if(upperLimitCost!=null)
 						lt ("purchaseCost", upperLimitCost)
 
-			}
+			}*/
 		}
 
 }
