@@ -44,8 +44,7 @@ import org.chai.location.DataLocation;
 import org.chai.location.Location;
 import org.chai.memms.inventory.EquipmentStatus;
 import org.chai.memms.inventory.EquipmentStatus.Status;
-import org.chai.memms.spare.part.SparePartStatus;
-import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
+import org.chai.memms.spare.part.SparePart.SparePartStatus;
 
 /**
  * @author Jean Kahigiso M.

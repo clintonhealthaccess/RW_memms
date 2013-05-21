@@ -8,7 +8,7 @@
 		<r:require modules="chosen,form,tipsy,cluetip"/>
 	</head>
 	<body>
-		<g:render template="/templates/genericList" model="[entityName: entityName,template: '/entity/'+template,filterTemplate:filterTemplate]"/>
+		<g:render template="/templates/genericList" model="[entityName: entityName,entityClass: entityClass,template: '/entity/'+template,filterTemplate:filterTemplate]"/>
 		<script type="text/javascript">
 			$(document).ready(function() {
 				listGridAjaxInit()

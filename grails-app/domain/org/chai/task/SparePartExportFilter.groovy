@@ -27,8 +27,7 @@
  */
 package org.chai.task
 
-import org.chai.memms.spare.part.SparePart.SparePartPurchasedBy;
-import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
+import org.chai.memms.spare.part.SparePart.SparePartStatus;
 import org.chai.memms.spare.part.SparePartType;
 import org.chai.memms.inventory.Provider;
 import groovy.transform.EqualsAndHashCode;
@@ -44,19 +43,21 @@ import org.chai.memms.util.Utils;
  */
 @EqualsAndHashCode(includes='id')
 class SparePartExportFilter extends ExportFilter{
-	StatusOfSparePart statusOfSparePart
-	String sameAsManufacturer
 	SparePartPurchasedBy sparePartPurchasedBy
-	
+	SparePartStatus sparePartStatus
+
 	static hasMany = [sparePartTypes:SparePartType,suppliers:Provider,dataLocations:DataLocation]
+	
 	static constraints = {
 		sparePartTypes nullable: true, blank: true
 		suppliers nullable: true, blank: true
 		dataLocations nullable: true, blank: true
-		statusOfSparePart nullable: true
-		sameAsManufacturer nullable: true, blank: true
 		sparePartPurchasedBy nullable: true, blank: true
+		sparePartStatus nullable: true
 	}
+	
+	static hasMany = [sparePartTypes:SparePartType,manufacturers:Provider,suppliers:Provider]
+	
 	static mapping = {
 		table "memms_spare_part_export_filter"
 		version false

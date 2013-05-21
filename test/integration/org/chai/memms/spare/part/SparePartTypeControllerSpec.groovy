@@ -87,10 +87,10 @@ def "list spare part types"(){
 	
 	then:
 	SparePartType.count() == 4
-	sparePartTypeController.response.json.results[0].contains(CODE(123))
-	sparePartTypeController.response.json.results[0].contains(CODE(124))
-	sparePartTypeController.response.json.results[0].contains(CODE(125))
-	sparePartTypeController.response.json.results[0].contains(CODE(126))
+	sparePartTypeController.response.json.results[0].contains("7654-HGT")
+	sparePartTypeController.response.json.results[0].contains("7655-HGT")
+	sparePartTypeController.response.json.results[0].contains("7656-HGT")
+	sparePartTypeController.response.json.results[0].contains("7657-HGT")
 }
 
 def "search spare part types"(){
@@ -119,10 +119,10 @@ def "search spare part types"(){
 	then:
 	SparePartType.count() == 4
 	sparePartTypeController.modelAndView.model.entities.size() == 1 
-	sparePartTypeController.response.json.results[0].contains(CODE(125))
-	!sparePartTypeController.response.json.results[0].contains(CODE(124))
-	!sparePartTypeController.response.json.results[0].contains(CODE(123))
-	!sparePartTypeController.response.json.results[0].contains(CODE(126))
+	sparePartTypeController.response.json.results[0].contains("7656-HGT")
+	!sparePartTypeController.response.json.results[0].contains("7657-HGT")
+	!sparePartTypeController.response.json.results[0].contains("7655-HGT")
+	!sparePartTypeController.response.json.results[0].contains("7654-HGT")
 }
 
 }

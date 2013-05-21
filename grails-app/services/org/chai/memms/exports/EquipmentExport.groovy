@@ -144,24 +144,22 @@ class EquipmentExport implements Exporter{
 			if(equipmentExportFilter.dataLocationTypes != null && equipmentExportFilter.dataLocationTypes.size() > 0)
 				('dataLocationType' in equipmentExportFilter.dataLocationTypes)
 			if(equipmentExportFilter.calculationLocations != null && equipmentExportFilter.calculationLocations.size() > 0)
-				('calculationLocation' in equipmentExportFilter.calculationLocations)
+				inList('dataLocation',equipmentExportFilter.calculationLocations)
 			if(equipmentExportFilter.suppliers != null && equipmentExportFilter.suppliers.size() > 0)
-				("supplier" in equipmentExportFilter.suppliers)
-			if(equipmentExportFilter.manufacturers != null && equipmentExportFilter.manufacturers.size() > 0)
-				("manufacturer" in equipmentExportFilter.manufacturers)
+				inList("supplier",equipmentExportFilter.suppliers)
 			if(equipmentExportFilter.serviceProviders != null && equipmentExportFilter.serviceProviders.size() > 0)
-				("serviceProvider" in equipmentExportFilter.serviceProviders)
-			if(equipmentExportFilter.equipmentTypes != null && equipmentExportFilter.equipmentTypes.size() > 0)
-				("type" in equipmentExportFilter.equipmentTypes)
+				inList("serviceProvider",equipmentExportFilter.serviceProviders)
 			if(!equipmentExportFilter.purchaser.equals(PurchasedBy.NONE))
 				eq ("purchaser", equipmentExportFilter.purchaser)
 			if(!equipmentExportFilter.donor.equals(Donor.NONE))
-				eq ("donor", equipmentExportFilter.donor)
+				eq ("donor", equipmentExportFilter.donor)	
+				inList("manufacturer",equipmentExportFilter.manufacturers)
+			if(equipmentExportFilter.equipmentTypes != null && equipmentExportFilter.equipmentTypes.size() > 0)
+				inList("type",equipmentExportFilter.equipmentTypes)
 			if(equipmentExportFilter.obsolete)
 				eq ("obsolete", (equipmentExportFilter.obsolete.equals('true'))?true:false)
-			if(!equipmentExportFilter.equipmentStatus.equals(Status.NONE)){
-				eq ("currentStatus", equipmentExportFilter.equipmentStatus)
-			}		
+			if(!equipmentExportFilter.equipmentStatus.equals(Status.NONE))
+				eq ("currentStatus", equipmentExportFilter.equipmentStatus)						
 		}
 	}
 	

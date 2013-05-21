@@ -71,9 +71,8 @@ import org.chai.memms.security.User
 import org.chai.memms.security.User.UserType
 import org.chai.memms.spare.part.SparePart;
 import org.chai.memms.spare.part.SparePartType;
-import org.chai.memms.spare.part.SparePartStatus;
 import org.chai.memms.spare.part.SparePart.SparePartPurchasedBy;
-import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
+import org.chai.memms.spare.part.SparePart.SparePartStatus;
 import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.spare.part.SparePart.StockLocation;
 
@@ -118,7 +117,7 @@ public class Initializer {
 	static final String KAYONZA = "Kayonza HC"
 	static final String RUHINDO = "Ruhindo HC"
 	
-	static def createUsers() {
+	public static createUsers() {
 		if(!User.count()){
 			//Default roles
 			def defaultAdminRole = new Role(name: "Admin")
@@ -135,7 +134,6 @@ public class Initializer {
 			defaultTechnicianDHRole.addToPermissions("equipmentStatus:*")
 			defaultTechnicianDHRole.addToPermissions("sparePart:*")
 			defaultTechnicianDHRole.addToPermissions("sparePartView:*")
-			defaultTechnicianDHRole.addToPermissions("sparePartStatus:*")
 			defaultTechnicianDHRole.addToPermissions("notificationEquipment:*")
 			defaultTechnicianDHRole.addToPermissions("workOrder:*")
 			defaultTechnicianDHRole.addToPermissions("workOrderView:*")
@@ -281,7 +279,7 @@ public class Initializer {
 		}
 	}
 	
-	static def createDummyStructure() {
+	public static createDummyStructure() {
 		
 		if (!Location.count()) {
 			//Add Location types
@@ -332,7 +330,7 @@ public class Initializer {
 			nyange.save(failOnError:true)
 		}		
 	}
-	static def createInventoryStructure(){
+	public static createInventoryStructure(){
 		
 		if(!Department.count()){
 			//Add Department
@@ -634,7 +632,7 @@ public class Initializer {
 		}
 	}
 	
-	static def createCorrectiveMaintenanceStructure(){
+	public static createCorrectiveMaintenanceStructure(){
 
 		if(!WorkOrder.list()){
 			def admin = User.findByUsername("admin")
@@ -708,7 +706,7 @@ public class Initializer {
 		}
 	}
 	
-	static def createPreventiveMaintenanceStructure(){
+	public static createPreventiveMaintenanceStructure(){
 		//TODO the users and what they can
 		if(!PreventiveOrder.count()){
 			def admin = User.findByUsername("admin")
@@ -741,7 +739,7 @@ public class Initializer {
 		
 	}
 
-	public static def createSparePartStructure(){
+	public static createSparePartStructure(){
 		
 		def equipment01 =Equipment.findBySerialNumber("SERIAL01")
 		def equipment09 =Equipment.findBySerialNumber("SERIAL09")
@@ -811,186 +809,157 @@ public class Initializer {
 		}
 		
 		if(!SparePart.count()){
-			def sparePartOne = newSparePart("SERIAL01",SparePartPurchasedBy.BYMOH,false,newPeriod(24),"",['en':'Spare Part Descriptions'],
-				getDate(22,07,2010),getDate(10,10,2010),"",
-				DataLocation.findByCode(NYANZA),
+			def sparePartOne = newSparePart(
+				SparePartPurchasedBy.BYMOH,
+				['en':'Spare Part Descriptions one'],
+				getDate(22,07,2010),
+				"",
+				"",
+				null,
 				SparePartType.findByCode("15810"),
-		
 				Provider.findByCode("FIVE"),
-				StatusOfSparePart.INSTOCK,
 				User.findByUsername("admin"),
-				null,
-				null,
 				StockLocation.MMC,
-				null
+				SparePartStatus.PENDINGORDER,
+				9,0
 				)
-					
-			def warrantyContactOne = newContact(['fr':'Warranty Address Descriptions One'],"Warranty","jk@yahoo.com","0768-888-787","Street 654","8988")
-			def warrantyOne = newWarranty(warrantyContactOne,getDate(10, 12, 2010),false,[:])
-			def statusOne= newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.INSTOCK,sparePartOne,[:],null)
-			
-			sparePartOne.warranty = warrantyOne
-			sparePartOne.warrantyPeriod = newPeriod(22)
-			sparePartOne.save(failOnError:true)
 
-			def sparePartOneT = newSparePart("SERIAL013",SparePartPurchasedBy.BYMOH,false,newPeriod(24),"",['en':'Spare Part Instock two Descriptions'],
-				getDate(22,07,2010),getDate(10,10,2010),"",
-				DataLocation.findByCode(NYANZA),
+			def sparePartOneT = newSparePart(
+				SparePartPurchasedBy.BYMOH,
+				['en':'Spare Part Descriptions two'],
+				getDate(22,07,2010),
+				"",
+				"",
+				null,
 				SparePartType.findByCode("15810"),
-		
 				Provider.findByCode("FIVE"),
-				StatusOfSparePart.INSTOCK,
 				User.findByUsername("admin"),
-				null,
-				null,
 				StockLocation.MMC,
-				null
+				SparePartStatus.INSTOCK,
+				89,80
 				)
-					
-			def warrantyContactOneT = newContact(['fr':'Warranty Address Descriptions One'],"Warranty","jk@yahoo.com","0768-888-787","Street 654","8988")
-			def warrantyOneT = newWarranty(warrantyContactOneT,getDate(10, 12, 2010),false,[:])
-			def statusOneT= newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.INSTOCK,sparePartOneT,[:],null)
-			
-			sparePartOneT.warranty = warrantyOneT
-			sparePartOneT.warrantyPeriod = newPeriod(22)
-			sparePartOneT.save(failOnError:true)
 
-			def sparePartTwo = newSparePart("SERIAL02",SparePartPurchasedBy.BYFACILITY,false,newPeriod(12),"34900",['en':'Spare Part Descriptions two'],
-				getDate(12,01,2009),getDate(10,10,2009),"USD",
+			def sparePartTwo = newSparePart(
+				SparePartPurchasedBy.BYFACILITY,
+				['en':'Spare Part Descriptions three'],
+				getDate(12,01,2009),
+				"3333",
+				"USD",
 				DataLocation.findByCode(NYANZA),
 				SparePartType.findByCode("15819"),
-				
 				Provider.findByCode("FIVE"),
-				StatusOfSparePart.INSTOCK,
 				User.findByUsername("admin"),
-				null,
-				null,
 				StockLocation.FACILITY,
-				null
+				SparePartStatus.PENDINGORDER,
+				8,0
 				)
 			
-			def warrantyTwo = newWarranty(['en':'warranty one'],'warranty name1','email1@gmail.com',"0768-111-787","Street 154","898",getDate(10, 12, 2010),false,[:])
-			def statusTwo= newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.OPERATIONAL,sparePartTwo,[:],equipment01)
-			sparePartTwo.warranty=warrantyTwo
-			sparePartTwo.warrantyPeriod = newPeriod(14)
-			sparePartTwo.save(failOnError:true)
-			
-			def sparePartThree = newSparePart("SERIAL03",SparePartPurchasedBy.BYFACILITY,true,newPeriod(34),"98700",['en':'Spare Part Descriptions three'],
-				getDate(14,8,2008),getDate(10,01,2009),"EUR",
+			def sparePartThree = newSparePart(
+				SparePartPurchasedBy.BYFACILITY,
+				['en':'Spare Part Descriptions four'],
+				getDate(14,8,2008),
+				"98700",
+				"EUR",
 				DataLocation.findByCode(KIVUYE),
 				SparePartType.findByCode("15966"),
-				
 				Provider.findByCode("FIVE"),
-				StatusOfSparePart.INSTOCK,
 				User.findByUsername("admin"),
-				null,
-				null,
 				StockLocation.FACILITY,
-				null
+				SparePartStatus.INSTOCK,
+				92,70
 				)
-		
-			def warrantyThree = newWarranty(['en':'warranty two'],'warranty name2','email2@gmail.com',"0768-222-787","Street 154","88",getDate(10, 12, 2010),false,[:])
-			def statusThree= newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.OPERATIONAL,sparePartThree,[:],equipment10)
-			sparePartThree.warranty=warrantyTwo
-			sparePartThree.warrantyPeriod = newPeriod(12)
-			sparePartThree.save(failOnError:true)
 			
-			def sparePartFour = newSparePart("SERIAL04",SparePartPurchasedBy.BYMOH,false,newPeriod(12),"",['en':'Spare Part Descriptions four'],
-				getDate(18,2,2011),getDate(10,10,2011),"",
-				DataLocation.findByCode(KIVUYE),
+			def sparePartFour = newSparePart(
+				SparePartPurchasedBy.BYMOH,
+				['en':'Spare Part Descriptions five'],
+				getDate(18,2,2011),
+				"",
+				"",
+				null,
 				SparePartType.findByCode("10035"),
-				
 				Provider.findByCode("SEVEN"),
-				StatusOfSparePart.INSTOCK,
 				User.findByUsername("admin"),
-				null,
-				null,
 				StockLocation.MMC,
-				equipment01
-				)
+				SparePartStatus.INSTOCK,
+				100,1
+				)	
 			
-			
-			def warrantyFour = newWarranty(['en':'warranty two'],'warranty name2','email2@gmail.com',"0768-222-787","Street 154","888",getDate(10, 12, 2011),false,[:])
-			def statusFour = newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.OPERATIONAL,sparePartFour,[:],equipment01)
-			def statusFourOne = newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.DISPOSED,sparePartFour,[:],null)
-			sparePartFour.warranty=warrantyFour
-			sparePartFour.warrantyPeriod = newPeriod(24)
-			sparePartFour.save(failOnError:true)
-			
-			def sparePartFive = newSparePart("SERIAL05",SparePartPurchasedBy.BYMOH,true,newPeriod(34),"",['en':'Spare Part Descriptions five'],
-				getDate(11,8,2008),getDate(11,10,2009),"",
-				DataLocation.findByCode(BUNGWE),
+			def sparePartFive = newSparePart(
+				SparePartPurchasedBy.BYMOH,
+				['en':'Spare Part Descriptions six'],
+				getDate(11,8,2008),
+				"",
+				"",
+				null,
 				SparePartType.findByCode("20760"),
-				
 				Provider.findByCode("SIX"),
-				StatusOfSparePart.INSTOCK,
 				User.findByUsername("admin"),
-				null,
-				null,
 				StockLocation.MMC,
-				null
+				SparePartStatus.INSTOCK,
+				999,882
 				)
-			
-			def warrantyFive = newWarranty(['en':'warranty Five'],'warranty name3','email3@gmail.com',"0768-333-787","Street 154","988",getDate(10, 12, 2010),false,[:])
-			def statusFive= newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.INSTOCK,sparePartFive,[:], null)
-			def statusFiveOne = newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.OPERATIONAL,sparePartFive,[:], equipment09)
-			def statusFiveTwo = newSparePartStatus(now(),User.findByUsername("admin"),StatusOfSparePart.DISPOSED,sparePartFive,[:],null)
-			sparePartFive.warranty=warrantyFour
-			sparePartFive.warrantyPeriod = newPeriod(8)
-			sparePartFive.save(failOnError:true)
-		
+			def sparePartSix = newSparePart(
+				SparePartPurchasedBy.BYMOH,
+				['en':'Spare Part Descriptions seven'],
+				getDate(11,8,2008),
+				"",
+				"",
+				null,
+				SparePartType.findByCode("20760"),
+				Provider.findByCode("SIX"),
+				User.findByUsername("admin"),
+				StockLocation.MMC,
+				SparePartStatus.INSTOCK,
+				343,0
+				)
+			def sparePartSeve = newSparePart(
+				SparePartPurchasedBy.BYMOH,
+				['en':'Spare Part Descriptions eight'],
+				getDate(11,8,2008),
+				"",
+				"",
+				null,
+				SparePartType.findByCode("20760"),
+				Provider.findByCode("SIX"),
+				User.findByUsername("admin"),
+				StockLocation.MMC,
+				SparePartStatus.PENDINGORDER,
+				234,0
+				)	
 		}
 	}
 	
 	//Models definition
 	//Spare Part type
-	public static def newSparePartType(def code, def names, def descriptions,def partNumber,def manufacturer, def discontinuedDate){
+	public static newSparePartType(def code, def names, def descriptions,def partNumber,def manufacturer, def discontinuedDate){
 		def type = new SparePartType(code:code,partNumber:partNumber,manufacturer:manufacturer,discontinuedDate:discontinuedDate)
 		Utils.setLocaleValueInMap(type,names,"Names")
 		Utils.setLocaleValueInMap(type,descriptions,"Descriptions")
 		return type.save(failOnError: false, flush:true)
 	}
 
-	//Spare Part status
-	public static def newSparePartStatus(def dateOfEvent,def changedBy,def value, def sparePart,def reasons, def usedOnEquipment){
-		def status = new SparePartStatus(dateOfEvent:dateOfEvent,changedBy:changedBy,statusOfSparePart:value)
-		
-		Utils.setLocaleValueInMap(status,reasons,"Reasons")
-		if (value.equals(StatusOfSparePart.OPERATIONAL))
-			sparePart.usedOnEquipment =usedOnEquipment
-		sparePart.addToStatus(status)
-		sparePart.statusOfSparePart = value
-		sparePart.lastModified = changedBy
-		sparePart.save(failOnError:true,flush:true)
-		return status.save(failOnError:true,flush:true)
-	}
 	// Spare part
-	public static def newSparePart(def serialNumber,def sparePartPurchasedBy,def sameAsManufacturer,def expectedLifeTime,def purchaseCost,def descriptions,def manufactureDate, def purchaseDate,def currency,def dataLocation,def type,def supplier,def statusOfSparePart,def addedBy,def lastModifiedBy,def lastModifiedOn, def stockLocation, def usedOnEquipment){
+	public static newSparePart(def sparePartPurchasedBy,def descriptions,def purchaseDate,def purchaseCost,def currency,def dataLocation,def type,def supplier,def addedBy,def stockLocation,def status,def initialQuantity,def inStockQuantity){
 		def sparePart = new SparePart(
-			serialNumber:serialNumber,
 			sparePartPurchasedBy:sparePartPurchasedBy,
-			sameAsManufacturer:sameAsManufacturer,
-			expectedLifeTime:expectedLifeTime,		
 			purchaseCost:purchaseCost,
-			manufactureDate:manufactureDate,
 			purchaseDate:purchaseDate,
 			currency:currency,
 			dataLocation:dataLocation,
 			type:type,
 			supplier:supplier,
-			statusOfSparePart:statusOfSparePart,
 			addedBy:addedBy,
-			lastModified:lastModifiedBy,
-			lastUpdated:lastModifiedOn,
 			stockLocation:stockLocation,
-			usedOnEquipment:usedOnEquipment
+			status:status,
+			initialQuantity:initialQuantity,
+			inStockQuantity:inStockQuantity
 			);
 		Utils.setLocaleValueInMap(sparePart,descriptions,"Descriptions")
 		return sparePart.save(failOnError: true,flush:true)
 	}
 
 	//Preventive Maintenance
-	public static def newDurationBasedOrder(def equipment,def addedBy,def status,def preventionResponsible,def technicianInCharge,def names,def description,def firstOccurenceOn,def closedOn,def occurency,def occurInterval,def occurDaysOfWeek){
+	public static newDurationBasedOrder(def equipment,def addedBy,def status,def preventionResponsible,def technicianInCharge,def names,def description,def firstOccurenceOn,def closedOn,def occurency,def occurInterval,def occurDaysOfWeek){
 		def timeDate =  newTimeDate(firstOccurenceOn)
 		def order  = new DurationBasedOrder(
 			equipment: equipment,
@@ -1011,7 +980,7 @@ public class Initializer {
 		equipment.save(failOnError:true)
 		return order.save(failOnError: true)
 	}
-	public static def newWorkBasedOrder(def equipment,def addedBy,def status,def preventionResponsible,def technicianInCharge,def names,def description,def firstOccurenceOn,def closedOn,def occurency,def occurInterval){
+	public static newWorkBasedOrder(def equipment,def addedBy,def status,def preventionResponsible,def technicianInCharge,def names,def description,def firstOccurenceOn,def closedOn,def occurency,def occurInterval){
 		def timeDate =  newTimeDate(firstOccurenceOn)
 		def order  = new WorkBasedOrder(
 			equipment: equipment,
@@ -1033,7 +1002,7 @@ public class Initializer {
 		return order.save(failOnError: true)
 	}
 	//Prevention
-	public static def newPrevention(def order,def addedBy,def scheduledOn,def eventDate,def timeSpend,def descriptions, def processes){
+	public static newPrevention(def order,def addedBy,def scheduledOn,def eventDate,def timeSpend,def descriptions, def processes){
 		def timeD =  newTimeDate(scheduledOn)
 		def timeS = newTimeSpend(timeSpend)
 		def prevention = new Prevention(addedBy:addedBy,scheduledOn:timeD,eventDate:eventDate,timeSpend:timeS,processes:processes)
@@ -1043,29 +1012,29 @@ public class Initializer {
 		return prevention.save(failOnError:true)
 	}
 	//PreventiveProcess
-	public static def newPreventionProcess(def dateCreated, def name,def addedBy, def prevention){
+	public static newPreventionProcess(def dateCreated, def name,def addedBy, def prevention){
 		def process = new PreventiveProcess(dateCreated:dateCreated,name:name,addedBy:addedBy)
 		prevention.addToProcesses(process)
 		prevention.save(failOnError:true)
 		return process.save(failOnError:true)
 	}
-	public static def newTimeDate(def date,def time){
+	public static newTimeDate(def date,def time){
 		return new TimeDate(date,time)
 	}
-	public static def newTimeDate(def timeDate){
+	public static newTimeDate(def timeDate){
 		return new TimeDate(timeDate:timeDate)
 	}
-	public static def newTimeSpend(def hours,def minutes){
+	public static newTimeSpend(def hours,def minutes){
 		return new TimeSpend(hours,minutes)
 	}
-	public static def newTimeSpend(def numberOfMinutes){
+	public static newTimeSpend(def numberOfMinutes){
 		return new TimeSpend(numberOfMinutes:numberOfMinutes)
 	}
 	//Corrective Maintenance
-	public static def newWorkOrder(def equipment, def description, def criticality, def addedBy, def openOn,def failureReason,def currentStatus){
+	public static newWorkOrder(def equipment, def description, def criticality, def addedBy, def openOn,def failureReason,def currentStatus){
 		return new WorkOrder(equipment:equipment,description: description,criticality:criticality,addedBy:addedBy,openOn: openOn,currentStatus:currentStatus,failureReason:failureReason).save(failOnError:true)
 	}
-	public static def newWorkOrder(def equipment, def description, def criticality,def addedBy, def openOn, def closedOn, def failureReason,def currentStatus){
+	public static newWorkOrder(def equipment, def description, def criticality,def addedBy, def openOn, def closedOn, def failureReason,def currentStatus){
 		return new WorkOrder(equipment:equipment, description:description, criticality:criticality,addedBy:addedBy, openOn: openOn, closedOn:closedOn, currentStatus:currentStatus,failureReason:failureReason).save(failOnError:true)
 	}
 	public static newWorkOrderNotification(def workOrder, def sender, def receiver, def content){
@@ -1112,7 +1081,7 @@ public class Initializer {
 	}
 	
 	//Inventory
-	public static def newEquipment(def serialNumber,def purchaser,def donor,def donorName,def obsolete,def expectedLifeTime,def room,def purchaseCost,def descriptions,def manufactureDate, def purchaseDate,def currency,def model,def dataLocation,def department, def type,def manufacture,def supplier,def currentStatus,def addedBy,def lastModifiedBy,def lastModifiedOn){
+	public static newEquipment(def serialNumber,def purchaser,def donor,def donorName,def obsolete,def expectedLifeTime,def room,def purchaseCost,def descriptions,def manufactureDate, def purchaseDate,def currency,def model,def dataLocation,def department, def type,def manufacture,def supplier,def currentStatus,def addedBy,def lastModifiedBy,def lastModifiedOn){
 		def equipment = new Equipment(
 			serialNumber:serialNumber,
 			purchaser:purchaser,
@@ -1139,7 +1108,7 @@ public class Initializer {
 		return equipment.save(failOnError: true,flush:true)
 	}
 
-	public static def newEquipmentStatus(def dateOfEvent,def changedBy,def value, def equipment,def reasons){
+	public static newEquipmentStatus(def dateOfEvent,def changedBy,def value, def equipment,def reasons){
 		def status = new EquipmentStatus(dateOfEvent:dateOfEvent,changedBy:changedBy,status:value)
 		Utils.setLocaleValueInMap(status,reasons,"Reasons")
 		equipment.addToStatus(status) 
@@ -1150,68 +1119,68 @@ public class Initializer {
 		return status
 	}
 
-	public static def newContact(def addressDescriptions,def contactName,def email, def phone, def street, def poBox){
+	public static newContact(def addressDescriptions,def contactName,def email, def phone, def street, def poBox){
 		def contact = new Contact(contactName:contactName,email:email,phone:phone,street:street,poBox:poBox)
 		Utils.setLocaleValueInMap(contact,addressDescriptions,"AddressDescriptions")
 		return contact;
 	}
 	
-	public static def newProvider(def code, def type, def contact){
+	public static newProvider(def code, def type, def contact){
 		return new Provider(code:code,type:type,contact:contact).save(failOnError: true)
 	}
 	
-	public static def newProvider(def code, def type, def addressDescriptions, def contactName,def email, def phone, def street, def poBox){
+	public static newProvider(def code, def type, def addressDescriptions, def contactName,def email, def phone, def street, def poBox){
 		def contact = newContact(addressDescriptions,contactName,email,phone,street,poBox)
 		return newProvider(code,type,contact)
 	}
 	
-	public static def newWarranty(def contact, def startDate,def sameAsSupplier,def descriptions){
+	public static newWarranty(def contact, def startDate,def sameAsSupplier,def descriptions){
 		def warranty = new Warranty(contact:contact,startDate:startDate,sameAsSupplier:sameAsSupplier)
 		Utils.setLocaleValueInMap(warranty,descriptions,"Descriptions")
 		return warranty
 	}
 	
-	public static def newWarranty(def addressDescriptions,def contactName,def email,def phone,def street,def poBox,def startDate,def sameAsSupplier,def descriptions){
+	public static newWarranty(def addressDescriptions,def contactName,def email,def phone,def street,def poBox,def startDate,def sameAsSupplier,def descriptions){
 		def contact = newContact(addressDescriptions,contactName,email,phone,street,poBox)
 		return newWarranty(contact, startDate,sameAsSupplier,descriptions)
 	}
 	//@Deprecated have to remove the lastModifiedOn params	
-	public static def newEquipmentType(def code, def names,def descriptions, def observation, def lastModifiedOn,def expectedLifeTime = 12){
+	public static newEquipmentType(def code, def names,def descriptions, def observation, def lastModifiedOn,def expectedLifeTime = 12){
 		def type = new EquipmentType(code:code,observation:observation,expectedLifeTime:newPeriod(expectedLifeTime))
 		Utils.setLocaleValueInMap(type,names,"Names")
 		Utils.setLocaleValueInMap(type,descriptions,"Descriptions")
 		return type.save(failOnError: true)
 	}
 
-	public static def newDepartment(def names,def code, def descriptions){
+	public static newDepartment(def names,def code, def descriptions){
 		def department = new Department(code:code)
 		Utils.setLocaleValueInMap(department,names,"Names") 
 		Utils.setLocaleValueInMap(department,descriptions,"Descriptions")
 		return department.save(failOnError: true)
 	}
 	
-	public static def newPeriod(def numberOfMonths){
+	public static newPeriod(def numberOfMonths){
 		return new Period(numberOfMonths:numberOfMonths)
 	}
 	
-	public static def newPeriod(def years,def months){
+	public static newPeriod(def years,def months){
 		return new Period(years,months)
 	}
 	
 	//Location
-	public static def newDataLocationType(def names, def code) {
+	public static newDataLocationType(def names, def code) {
 		def dataLocationType = new DataLocationType(code: code, defaultSelected: true)
 		Utils.setLocaleValueInMap(dataLocationType,names,"Names")
 		return dataLocationType.save(failOnError: true)
 	}
 	
-	public static def newLocationLevel(def names, def code, def order) {
+	public static newLocationLevel(def names, def code, def order) {
 		def locationLevel = new LocationLevel(code: code, order:order)
 		Utils.setLocaleValueInMap(locationLevel,names,"Names")
 		return locationLevel.save(failOnError: true)
 	}
 	
-	public static def newLocation(def names, def code, def parent, def level) {
+	public static newLocation(def names, def code, def parent, def level) {
 		def location = new Location(code: code, parent: parent, level: level)
 		Utils.setLocaleValueInMap(location,names,"Names")
 		location.save(failOnError: true)
@@ -1224,7 +1193,7 @@ public class Initializer {
 		return location
 	}
 	
-	public static def newDataLocation(def names, def code, def location, def type) {
+	public static newDataLocation(def names, def code, def location, def type) {
 		def dataLocation = new DataLocation(code: code, location: location, type: type)
 		Utils.setLocaleValueInMap(dataLocation,names,"Names")
 		dataLocation.save(failOnError: true)
@@ -1243,7 +1212,7 @@ public class Initializer {
 		table "memms_initializer_data"
 		version false
 	}
-   public static def now(){
+   public static now(){
 	   return new Date()
    }
    public static Date getDate( int day, int month, int year) {
