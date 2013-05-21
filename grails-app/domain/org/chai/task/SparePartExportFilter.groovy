@@ -27,6 +27,7 @@
  */
 package org.chai.task
 
+import org.chai.memms.spare.part.SparePart.SparePartPurchasedBy
 import org.chai.memms.spare.part.SparePart.SparePartStatus;
 import org.chai.memms.spare.part.SparePartType;
 import org.chai.memms.inventory.Provider;
@@ -46,12 +47,12 @@ class SparePartExportFilter extends ExportFilter{
 	SparePartPurchasedBy sparePartPurchasedBy
 	SparePartStatus sparePartStatus
 
-	static hasMany = [sparePartTypes:SparePartType,suppliers:Provider,dataLocations:DataLocation]
+	//static hasMany = [sparePartTypes:SparePartType,suppliers:Provider,dataLocations:DataLocation]
 	
 	static constraints = {
 		sparePartTypes nullable: true, blank: true
 		suppliers nullable: true, blank: true
-		dataLocations nullable: true, blank: true
+	//	dataLocations nullable: true, blank: true
 		sparePartPurchasedBy nullable: true, blank: true
 		sparePartStatus nullable: true
 	}
@@ -63,7 +64,7 @@ class SparePartExportFilter extends ExportFilter{
 		version false
 		sparePartTypes joinTable:[name:"memms_spare_part_spare_part_type_export_filter",key:"type_id",column:"spare_part_export_filter_id"]
 		suppliers joinTable:[name:"memms_spare_part_supplier_export_filter",key:"supplier_id",column:"spare_part_export_filter_id"]
-		dataLocations joinTable:[name:"memms_spare_part_data_location_export_filter",key:"data_location_id",column:"spare_part_export_filter_id"]
+	//	dataLocations joinTable:[name:"memms_spare_part_data_location_export_filter",key:"data_location_id",column:"spare_part_export_filter_id"]
 		}
 
 }

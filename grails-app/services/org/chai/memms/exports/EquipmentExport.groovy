@@ -141,11 +141,11 @@ class EquipmentExport implements Exporter{
 		
 		def criteria = Equipment.createCriteria();
 		return criteria.list(sort:"id",order:"desc"){
+			createAlias("dataLocation","dl")
 			if(equipmentExportFilter.dataLocationTypes != null && equipmentExportFilter.dataLocationTypes.size() > 0)
-				inList('dataLocationType',equipmentExportFilter.dataLocationTypes)
+				inList('dl.type',equipmentExportFilter.dataLocationTypes)
 			if(equipmentExportFilter.calculationLocations != null && equipmentExportFilter.calculationLocations.size() > 0)
-<<<<<<< HEAD
-				inList('calculationLocation', equipmentExportFilter.calculationLocations)
+				inList('dataLocation', equipmentExportFilter.calculationLocations)
 			if(equipmentExportFilter.suppliers != null && equipmentExportFilter.suppliers.size() > 0)
 				inList("supplier", equipmentExportFilter.suppliers)
 			if(equipmentExportFilter.manufacturers != null && equipmentExportFilter.manufacturers.size() > 0)
@@ -154,13 +154,6 @@ class EquipmentExport implements Exporter{
 				inList("serviceProvider",equipmentExportFilter.serviceProviders)
 			if(equipmentExportFilter.equipmentTypes != null && equipmentExportFilter.equipmentTypes.size() > 0)
 				inList("type",equipmentExportFilter.equipmentTypes)
-=======
-				inList('dataLocation',equipmentExportFilter.calculationLocations)
-			if(equipmentExportFilter.suppliers != null && equipmentExportFilter.suppliers.size() > 0)
-				inList("supplier",equipmentExportFilter.suppliers)
-			if(equipmentExportFilter.serviceProviders != null && equipmentExportFilter.serviceProviders.size() > 0)
-				inList("serviceProvider",equipmentExportFilter.serviceProviders)
->>>>>>> cb8b845f2a4a36bd4abdfb84bd11e339a679abf5
 			if(!equipmentExportFilter.purchaser.equals(PurchasedBy.NONE))
 				eq ("purchaser", equipmentExportFilter.purchaser)
 			if(!equipmentExportFilter.donor.equals(Donor.NONE))

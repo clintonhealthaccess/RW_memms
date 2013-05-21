@@ -196,7 +196,8 @@ class ListingController extends AbstractController{
 		def equipments = equipmentListingReportService.getUnderWarrantyEquipments(user,params)
 		for(Equipment equipment: equipments){
 			if (equipment.warranty.startDate!=null && equipment.warrantyPeriod.numberOfMonths!=null && equipment.warrantyPeriod.months != null) {
-				warrantyExpirationDate= (equipment.warranty.startDate).plus((equipment.warrantyPeriod.numberOfMonths))
+				//TODO we have to convert numberOfMonths in either months or equivalent days because here we are automatically using as days
+				warrantyExpirationDate= (equipment.warranty.startDate).plus(equipment.warrantyPeriod.numberOfMonths)
 				if (log.isDebugEnabled()) log.debug("CALCURATED DATE "+warrantyExpirationDate +"START DATE "+equipment.warranty.startDate +"WARRANTY PERIOD "+equipment.warrantyPeriod.months)
 				if (warrantyExpirationDate > new Date())
 					displayableEquipments.add(equipment)

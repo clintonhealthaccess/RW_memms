@@ -163,7 +163,6 @@ class EquipmentListingReportService {
 			def fromAcquisitionPeriod = customEquipmentParams.get('fromAcquisitionPeriod')
 			def toAcquisitionPeriod = customEquipmentParams.get('toAcquisitionPeriod')
 			
-		
 			def criteria = Equipment.createCriteria();
 			
 			return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
@@ -184,6 +183,10 @@ class EquipmentListingReportService {
 						gt ("purchaseCost", lowerLimitCost)
 					if(upperLimitCost!=null)
 						lt ("purchaseCost", upperLimitCost)*/
+					if(fromAcquisitionPeriod != null)
+						gt ("purchaseDate", fromAcquisitionPeriod)
+					if(toAcquisitionPeriod != null)
+						lt ("purchaseDate", toAcquisitionPeriod)
 			}
 	}
 	
