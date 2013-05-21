@@ -35,6 +35,8 @@ import org.chai.memms.security.User;
 import org.chai.memms.inventory.Equipment;
 import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.inventory.EquipmentStatus;
+import org.chai.memms.inventory.Equipment.PurchasedBy;
+import org.chai.memms.inventory.Equipment.Donor;
 
 /**
  * @author Aphrodice Rwagaju
@@ -166,8 +168,8 @@ class EquipmentListingReportService {
 		}
 	}
 	
-	public def getCustomReportOfEquipmentsTEST(def user, def dataLocation, def supplier, def manufacturer,def serviceProvider, def equipmentType, 
-		def purchaser,def donor,def obsolete,def status,Map<String, String> params) {
+	public def getCustomReportOfEquipmentsTEST(def user,def departments, def equipmentTypes, def lowerLimitCost, def upperLimitCost,
+		def purchaser,def currency,def obsolete,def status,Map<String, String> params) {
 		def dataLocations = []
 			if(user.location instanceof Location) dataLocations.addAll(user.location.collectDataLocations(null))
 			else{
@@ -181,22 +183,19 @@ class EquipmentListingReportService {
 			return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 					if(dataLocations)
 						inList('dataLocation',dataLocations)
-					if(supplier != null)
-						eq ("supplier", supplier)
-					if(manufacturer != null)
-						eq ("manufacturer", manufacturer)
-					if(serviceProvider != null)
-						eq ("serviceProvider", serviceProvider)
-					if(equipmentType != null)
-						eq ("type", equipmentType)
-					if(purchaser && !purchaser.equals(PurchasedBy.NONE))
-						eq ("purchaser",purchaser)
-					if(donor && !donor.equals(Donor.NONE))
-						eq ("donor",donor)
+					if(departments != null)
+						inList ("department", departments)
+					if(equipmentTypes != null)
+						eq ("type", equipmentTypes)
+					if(currency !=null)
+						eq ("currency",currency)
 					if(obsolete)
 						eq ("obsolete", (obsolete.equals('true'))?true:false)
+						//TODO set of statuses
 					if(status && !status.equals(Status.NONE))
 						eq ("currentStatus",status)
+					if(lowerLimitCost!=null&& upperLimitCost!=null)
+						between ("purchaseCost", lowerLimitCost, upperLimitCost)
 			}
 		}
 
