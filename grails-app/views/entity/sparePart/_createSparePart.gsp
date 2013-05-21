@@ -33,12 +33,12 @@
           <g:if test="${sparePart.id != null}">
           <div class="row ${hasErrors(bean:sparePart,field:initialQuantity,'errors')}">
             <label><g:message code="spare.part.initial.quantity"/>:</label> ${sparePart.initialQuantity}
-            <div class="error-list"><g:renderErrors bean="${sparePart}" field="${initialQuantity}" /></div>
+            <div class="error-list"><g:renderErrors bean="${initialQuantity}" field="${initialQuantity}" /></div>
           </div>
           <div class="row ${hasErrors(bean:sparePart,field:inStockQuantity,'errors')}">
             <label><g:message code="spare.part.in.stock.quantity"/>:</label>
             ${sparePart.inStockQuantity}
-            <div class="error-list"><g:renderErrors bean="${sparePart}" field="${inStockQuantity}" /></div>
+            <div class="error-list"><g:renderErrors bean="${inStockQuantity}" field="${inStockQuantity}" /></div>
           </div>
           </g:if>
           <g:else>

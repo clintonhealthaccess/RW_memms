@@ -1,4 +1,4 @@
-<%@ page import="org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart" %>
+<%@ page import="org.chai.memms.spare.part.SparePart.SparePartStatus" %>
 <%@ page import="org.chai.memms.util.Utils" %>
 <table class="items spaced">
 	<thead>
@@ -23,18 +23,14 @@
 				<td>
 					<ul class="horizontal">
 						<li>
-							<shiro:hasPermission permission="sparePart:edit">
-								<a href="${createLinkWithTargetURI(controller:'sparePart', action:'edit', params:[id: sparePart.id])}"  class="edit-button">
-									<g:message code="default.link.edit.label" />
-								</a>
-							</shiro:hasPermission>
+							<a href="${createLinkWithTargetURI(controller:'sparePart', action:'edit', params:[id: sparePart.id])}"  class="edit-button">
+								<g:message code="default.link.edit.label" />
+							</a>
 						</li>
 						<li>
-							<shiro:hasPermission permission="sparePart:delete">
-								<a href="${createLinkWithTargetURI(controller:'sparePart', action:'delete', params:[id: sparePart.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');" class="delete-button">
-									<g:message code="default.link.delete.label" />
-								</a>
-							</shiro:hasPermission>
+							<a href="${createLinkWithTargetURI(controller:'sparePart', action:'delete', params:[id: sparePart.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');" class="delete-button">
+								<g:message code="default.link.delete.label" />
+							</a>
 						</li>
 					</ul>
 				</td>

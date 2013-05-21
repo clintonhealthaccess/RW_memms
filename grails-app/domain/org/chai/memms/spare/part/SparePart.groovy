@@ -120,8 +120,8 @@ public class SparePart {
 		room nullable: true, blank: true
 		shelf nullable: true, blank: true
 
-		initialQuantity nullable: false, min: 1
-		inStockQuantity nullable: false, min: 0, validator:{ val, obj ->
+		initialQuantity nullable: false, minSize:1
+		inStockQuantity nullable: false, minSize:0, validator:{ val, obj ->
 			if(obj.status.equals(SparePartStatus.PENDINGORDER)) return val==0
 		}
 
@@ -138,16 +138,12 @@ public class SparePart {
 
 		status nullable: false, inList:[SparePartStatus.INSTOCK,SparePartStatus.PENDINGORDER]
 
-		stockLocation  nullable: true, validator:{
-			if(it!=null) it in [StockLocation.MMC, StockLocation.FACILITY]
-		}
+		stockLocation  nullable: false,inList:[StockLocation.MMC, StockLocation.FACILITY]
 		
 		dataLocation nullable: true, validator: {val, obj ->
-			if(obj.stockLocation.equals(StockLocation.FACILITY)) return val!=null
-			else return val==null
+			if(obj.stockLocation.equals(StockLocation.FACILITY)) return val != null
+			else return val == null
 		}
-
-		addedBy nullable: false
 		
 		lastModified nullable:true, validator:{ val, obj ->
 			if (val != null) return (obj.lastUpdated != null)
@@ -160,7 +156,7 @@ public class SparePart {
 			return initialQuantity - inStockQuantity
 	}
 	//True if this spare part group is no longer inStock
-	def isEmptyStock(){
+	def getIsEmptyStock(){
 		if(status.equals(SparePartStatus.INSTOCK) && inStockQuantity==0)
 			return true
 		else return false

@@ -61,10 +61,19 @@ class SparePartService {
 	def userService
 	
 	
-
+	public def getRemoveFromStock(def sparePart, def numberToRemove){
+		if(!sparePart || (numberToRemove - sparePart.inStockQuantity < 0)) 
+			return false
+		else{ 
+			sparePart.inStockQuantity = numberToRemove - sparePart.inStockQuantity
+			sparePart.save(failOnError:true)
+			return true
+		}
+	}
 	public def searchSparePart(String text,User user, SparePartType type,Map<String,String> params) {
 		//Remove unnecessary blank space
 		text= text.trim()
+		def dbFieldTypeNames = 'names_'+languageService.getCurrentLanguagePrefix();
 		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
 		def dataLocations = []
 		def criteria = SparePart.createCriteria();
@@ -89,7 +98,6 @@ class SparePartService {
 				ilike(dbFieldDescriptions,"%"+text+"%")
 				ilike("t."+dbFieldTypeNames,"%"+text+"%")
 				ilike("t."+dbFieldDescriptions,"%"+text+"%")
-				ilike("t.partNumber","%"+text+"%")
 				ilike("t.code","%"+text+"%")
 			}
 		}
@@ -108,8 +116,10 @@ class SparePartService {
 			if(user.location instanceof Location)
 				dataLocations.addAll(user.location.getDataLocations([:], [:]))
 			else{
-				dataLocations.add((DataLocation)user.location)
-				if(userService.canViewManagedSpareParts(user)) dataLocations.addAll((user.location as DataLocation).manages?.asList())
+				def location = (DataLocation)user.location
+				dataLocations.add(location)
+				if(userService.canViewManagedSpareParts(user)) 
+					(location.manages==null)?:dataLocations.addAll(location.manages?.asList())
 			}
 
 			if(log.isDebugEnabled()) log.debug("Current user: " + user + " Current user's managed dataLocations: " + dataLocations)
@@ -119,22 +129,20 @@ class SparePartService {
 		}
 
 	}
-	public def filterSparePart(def location, def supplier, def type,def sparePartPurchasedBy,def status,Map<String, String> params){
+	public def filterSparePart(def location, def supplier, def type,def stockLocation,def sparePartPurchasedBy,def status,Map<String, String> params){
 
 		def dataLocations = []		
 			
 		if(location instanceof Location) 
-			dataLocations.addAll(location.getDataLocations(null,null))
+			dataLocations.addAll(location.getDataLocations([:], [:]))
 		else{
+			location = (DataLocation)location
 			dataLocations.add(location)
-			if(log.isDebugEnabled()) log.debug("ADDED LOCATION: " + location)
-			//It always takes null value WHY? What logic behind? Will we need to remove this line or not?
-			//dataLocations.addAll((location as DataLocation)?.manages?.asList())
+			(location.manages==null)?:dataLocations.addAll(location.manages.asList())
 		}
 		def criteria = SparePart.createCriteria();
 		
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			
 			if(!dataLocations.isEmpty())
 				inList('dataLocation',dataLocations)
 			if(supplier != null)
@@ -145,6 +153,8 @@ class SparePartService {
 				eq ("sparePartPurchasedBy",sparePartPurchasedBy)
 			if(status && !status.equals(SparePartStatus.NONE))
 				eq ("status",status)
+			if(stockLocation && !stockLocation.equals(StockLocation.NONE))
+				eq ("stockLocation",stockLocation)
 		}
 	}
 	public File exporter(def location,List<SparePart> spareParts){
@@ -179,7 +189,7 @@ class SparePartService {
 					sparePart.purchaseDate,
 					sparePart.purchaseCost?:"n/a",
 					sparePart.currency?:"n/a",
-					sparePart.quantity
+					sparePart.initialQuantity
 				]
 				writer.write(line)
 			}

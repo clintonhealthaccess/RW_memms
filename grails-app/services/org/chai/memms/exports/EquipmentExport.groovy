@@ -134,25 +134,20 @@ class EquipmentExport implements Exporter{
 		def criteria = Equipment.createCriteria();
 		return criteria.list(sort:"id",order:"desc"){
 			if(equipmentExportFilter.calculationLocations != null && equipmentExportFilter.calculationLocations.size() > 0)
-				('dataLocation' in equipmentExportFilter.calculationLocations)
+				inList('dataLocation',equipmentExportFilter.calculationLocations)
 			if(equipmentExportFilter.suppliers != null && equipmentExportFilter.suppliers.size() > 0)
-				("supplier" in equipmentExportFilter.suppliers)
+				inList("supplier",equipmentExportFilter.suppliers)
 			if(equipmentExportFilter.manufacturers != null && equipmentExportFilter.manufacturers.size() > 0)
-				("manufacturer" in equipmentExportFilter.manufacturers)
+				inList("manufacturer",equipmentExportFilter.manufacturers)
 			if(equipmentExportFilter.equipmentTypes != null && equipmentExportFilter.equipmentTypes.size() > 0)
-				("type" in equipmentExportFilter.equipmentTypes)
+				inList("type",equipmentExportFilter.equipmentTypes)
 			if(equipmentExportFilter.donated)
 				eq ("donation", (equipmentExportFilter.donated.equals('true'))?true:false)
 			if(equipmentExportFilter.obsolete)
 				eq ("obsolete", (equipmentExportFilter.obsolete.equals('true'))?true:false)
-			if(!equipmentExportFilter.equipmentStatus.equals(Status.NONE)){
-				createAlias("status","t")
-				and{
-					eq ("t.status", equipmentExportFilter.equipmentStatus)
-					eq ("t.current", true)
-				}
-			}
-				
+			if(!equipmentExportFilter.equipmentStatus.equals(Status.NONE))
+				eq ("currentStatus", equipmentExportFilter.equipmentStatus)
+						
 		}
 	}
 	

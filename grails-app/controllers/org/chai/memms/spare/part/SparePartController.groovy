@@ -32,8 +32,7 @@ import java.util.Date;
 import org.apache.shiro.SecurityUtils;
 import org.chai.memms.AbstractEntityController;
 import org.chai.memms.spare.part.SparePart.StockLocation;
-import org.chai.memms.spare.part.SparePartStatus;
-import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
+import org.chai.memms.spare.part.SparePart.SparePartStatus;
 import org.chai.memms.Contact;
 import org.chai.memms.Initializer;
 import org.chai.memms.spare.part.SparePart.SparePartPurchasedBy;
@@ -83,13 +82,18 @@ class SparePartController extends AbstractEntityController{
 		return SparePart.class;
 	}
 	
-
 	def bindParams(def entity) {
+		def stockLocation = params['stockLocation']
 		if(log.isDebugEnabled()) log.debug("SparePart params: before bind "+params)
-		if(!entity.id) 
-			entity.addedBy = user 
-		else
+		if(!entity.id) entity.addedBy = user 
+		else{
 			entity.lastModified = user
+			stockLocation = StockLocation."$stockLocation"
+			if(stockLocation.equals(StockLocation.MMC))
+				params.dataLocation =''
+		}
+		entity.properties = params
+		if(log.isDebugEnabled()) log.debug("SparePart params: before bind "+params)
 	}
 
 

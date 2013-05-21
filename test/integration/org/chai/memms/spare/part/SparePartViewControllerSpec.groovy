@@ -36,11 +36,12 @@ import org.chai.memms.security.User.UserType;
 import org.chai.memms.spare.part.SparePart;
 import org.chai.memms.spare.part.SparePart.SparePartPurchasedBy;
 import org.chai.memms.spare.part.SparePart.StockLocation;
-import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
 import org.chai.memms.spare.part.SparePartViewController;
 import org.chai.memms.inventory.FilterCommand;
 import org.chai.memms.security.User;
 import org.chai.memms.security.User.UserType
+import org.chai.memms.spare.part.SparePart.SparePartStatus;
+
 
 
 /**
@@ -65,16 +66,17 @@ class SparePartViewControllerSpec extends IntegrationTests{
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
 		def manufacturer = Initializer.newProvider(CODE(111), Type.MANUFACTURER,manufactureContact)
 		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",manufacturer,Initializer.now())
-	
-		def sparePartOne = Initializer.newSparePart(CODE(123),SparePartPurchasedBy.BYFACILITY,false,Initializer.newPeriod(32),"2900.23",['en':'SparePart Descriptions one'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),"USD",DataLocation.findByCode(KIVUYE),sparePartType,supplier,StatusOfSparePart.INSTOCK,user,null,null,StockLocation.FACILITY, null)
-		def sparePartTwo = Initializer.newSparePart(CODE(124),SparePartPurchasedBy.BYFACILITY,true,Initializer.newPeriod(32),"2900.23",['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),"EUR",DataLocation.findByCode(BUTARO),sparePartType,supplier,StatusOfSparePart.INSTOCK,user,null,null, StockLocation.FACILITY, null)
+
+		def sparePartOne = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions one'],Initializer.getDate(22,07,2010),"2900.23","USD",
+			DataLocation.findByCode(KIVUYE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,32,0)
+
+		def sparePartTwo = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","EUR",
+			DataLocation.findByCode(BUTARO),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,12,0)
 		
-		Initializer.newSparePart(CODE(125),SparePartPurchasedBy.BYFACILITY,true,Initializer.newPeriod(32),"2900.23",['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010)
-			,Initializer.getDate(10,10,2010),"RWF",DataLocation.findByCode(MUSANZE),sparePartType,supplier,StatusOfSparePart.INSTOCK,user,null,null, StockLocation.FACILITY, null)
-		Initializer.newSparePart(CODE(126),SparePartPurchasedBy.BYFACILITY,true,Initializer.newPeriod(32),"2900.23",['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010)
-			,Initializer.getDate(10,10,2010),"RWF",DataLocation.findByCode(GITWE),sparePartType,supplier,StatusOfSparePart.INSTOCK,user,null,null, StockLocation.FACILITY, null)
+		Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","RWF",
+			DataLocation.findByCode(MUSANZE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,22,0)
+		Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","RWF",
+			DataLocation.findByCode(GITWE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,33,3)
 	
 		sparePartViewController = new SparePartViewController()
 		setupSecurityManager(techDh)
@@ -85,20 +87,21 @@ class SparePartViewControllerSpec extends IntegrationTests{
 		
 		then:
 		SparePart.list().size()==4
-		sparePartViewController.response.json.results[0].contains(CODE(123))
-		sparePartViewController.response.json.results[0].contains(CODE(124))
+		sparePartViewController.response.json.results[0].contains("32")
+		sparePartViewController.response.json.results[0].contains("33")
+		sparePartViewController.response.json.results[0].contains("12")
+		sparePartViewController.response.json.results[0].contains("22")
 	}
 
-	def "can list spare parts using ajax with specified type/status"(){
+	def "can list spare parts using ajax with specified type"(){
 		setup:
 		setupLocationTree()
 		def user = newOtherUser("user", "user", DataLocation.findByCode(KIVUYE))
 		user.userType = UserType.TITULAIREHC
 		user.save(failOnError:true)
 		
-		def techDh = newOtherUser("techDh", "techDh", DataLocation.findByCode(BUTARO))
-		techDh.userType = UserType.TECHNICIANDH
-		techDh.save(failOnError:true)
+		def admin = newOtherUserWithType("admin", "admin", DataLocation.findByCode(RWANDA),UserType.ADMIN)
+
 		def supplierContact = Initializer.newContact([:],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
 		def supplier = Initializer.newProvider(CODE(222), Type.SUPPLIER,supplierContact)
 		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
@@ -106,40 +109,33 @@ class SparePartViewControllerSpec extends IntegrationTests{
 		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",manufacturer,Initializer.now())
 		def sparePartTypeTwo = Initializer.newSparePartType(CODE(15819),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",manufacturer,Initializer.now())
 		
-		def sparePartOne = Initializer.newSparePart(CODE(123),SparePartPurchasedBy.BYFACILITY,false,Initializer.newPeriod(32),"2900.23",['en':'SparePart Descriptions one'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),"USD",DataLocation.findByCode(KIVUYE),sparePartType,supplier,StatusOfSparePart.INSTOCK,user,null,null,StockLocation.FACILITY,null)
-		def sparePartTwo = Initializer.newSparePart(CODE(124),SparePartPurchasedBy.BYFACILITY,true,Initializer.newPeriod(32),"2900.23",['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),"EUR",DataLocation.findByCode(BUTARO),sparePartTypeTwo,supplier,StatusOfSparePart.INSTOCK,user,null,null, StockLocation.FACILITY,null)
+		def sparePartOne = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions one'],Initializer.getDate(22,07,2010),"2900.23",,"USD",
+			DataLocation.findByCode(KIVUYE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,33,1)
+
+		def sparePartTwo = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","EUR",
+			DataLocation.findByCode(BUTARO),sparePartTypeTwo,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,323,2)
 		
-		Initializer.newSparePart(CODE(125),SparePartPurchasedBy.BYFACILITY,true,Initializer.newPeriod(32),"2900.23",['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010)
-			,Initializer.getDate(10,10,2010),"RWF",DataLocation.findByCode(MUSANZE),sparePartType,supplier,StatusOfSparePart.INSTOCK,user,null,null, StockLocation.FACILITY,null)
-		Initializer.newSparePart(CODE(126),SparePartPurchasedBy.BYFACILITY,true,Initializer.newPeriod(32),"2900.23",['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010)
-			,Initializer.getDate(10,10,2010),"RWF",DataLocation.findByCode(GITWE),sparePartType,supplier,StatusOfSparePart.INSTOCK,user,null,null, StockLocation.FACILITY,null)
+		Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","RWF",
+			DataLocation.findByCode(MUSANZE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,34,3)
+
+		Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","RWF",
+			DataLocation.findByCode(GITWE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,17,0)
 	
 		sparePartViewController = new SparePartViewController()
-		setupSecurityManager(techDh)
+		setupSecurityManager(admin)
 		
 		when:
 		sparePartViewController.params.'type.id' = sparePartType.id
-		sparePartViewController.params.status = "INSTOCK"
 		sparePartViewController.request.makeAjaxRequest()
 		sparePartViewController.list()
 		
 		then:
 		SparePart.list().size()==4
-		sparePartViewController.response.json.results[0].contains(CODE(123))
-		!sparePartViewController.response.json.results[0].contains(CODE(124))
+		sparePartViewController.response.json.results[0].contains("33")
+		sparePartViewController.response.json.results[0].contains("34")
+		sparePartViewController.response.json.results[0].contains("17")
+		!sparePartViewController.response.json.results[0].contains("323")
 
-		when:
-		sparePartViewController.params.'type.id' = sparePartType.id
-		sparePartViewController.params.status = "OPERATIONAL"
-		sparePartViewController.request.makeAjaxRequest()
-		sparePartViewController.list()
-		
-		then:
-		SparePart.list().size()==4
-		sparePartViewController.response.json.results[0].contains(CODE(123))
-		!sparePartViewController.response.json.results[0].contains(CODE(124))
 	}
 
 	//TODO throwing a json parsing exception
@@ -158,32 +154,32 @@ class SparePartViewControllerSpec extends IntegrationTests{
 		
 		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",manufacturer,Initializer.now())
 
-		def sparePartOne = Initializer.newSparePart(CODE(123),SparePartPurchasedBy.BYFACILITY,false,Initializer.newPeriod(32),"2900.23",['en':'SparePart Descriptions one'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),"USD",DataLocation.findByCode(KIVUYE),sparePartType,supplier,StatusOfSparePart.INSTOCK,user,null,null,StockLocation.FACILITY, null)
-		def sparePartTwo = Initializer.newSparePart(CODE(124),SparePartPurchasedBy.BYFACILITY,true,Initializer.newPeriod(32),"2900.23",['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),"EUR",DataLocation.findByCode(BUTARO),sparePartType,supplier,StatusOfSparePart.INSTOCK,user,null,null,StockLocation.FACILITY, null)
+		def sparePartOne = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions searched item'],Initializer.getDate(22,07,2010),"2900.23","USD",
+			DataLocation.findByCode(KIVUYE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,33,9)
+		def sparePartTwo = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","EUR",
+			DataLocation.findByCode(BUTARO),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,55,7)
 		
-		Initializer.newSparePart(CODE(125),SparePartPurchasedBy.BYFACILITY,true,Initializer.newPeriod(32),"2900.23",['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010)
-			,Initializer.getDate(10,10,2010),"RWF",DataLocation.findByCode(MUSANZE),sparePartType,supplier,StatusOfSparePart.INSTOCK,user,null,null,StockLocation.FACILITY, null)
-		Initializer.newSparePart(CODE(126),SparePartPurchasedBy.BYFACILITY,true,Initializer.newPeriod(32),"2900.23",['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010)
-			,Initializer.getDate(10,10,2010),"RWF",DataLocation.findByCode(GITWE),sparePartType,supplier,StatusOfSparePart.INSTOCK,user,null,null,StockLocation.FACILITY, null)
+		Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","RWF",
+			DataLocation.findByCode(MUSANZE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,67,0)
+		Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","RWF",
+			DataLocation.findByCode(GITWE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,659,0)
 	
 		sparePartViewController = new SparePartViewController()
 		setupSecurityManager(techDh)
 
 		when:
-		sparePartViewController.params.q = SparePart.findBySerialNumber(CODE(123)).code
+		sparePartViewController.params.q = "searched item"
 		sparePartViewController.request.makeAjaxRequest()
 		sparePartViewController.search()
 		
 		then:
-		sparePartViewController.response.json.results[0].contains(CODE(123))
-		!sparePartViewController.response.json.results[0].contains(CODE(124))
-		!sparePartViewController.response.json.results[0].contains(CODE(125))
-		!sparePartViewController.response.json.results[0].contains(CODE(126))
+		sparePartViewController.response.json.results[0].contains("33")
+		!sparePartViewController.response.json.results[0].contains("55")
+		!sparePartViewController.response.json.results[0].contains("67")
+		!sparePartViewController.response.json.results[0].contains("659")
 	}
 
-	def "can search spare parts with type/status "(){
+	def "can search spare parts with type"(){
 		setup:
 		setupLocationTree()
 		def user = newOtherUserWithType("sender", "sender", DataLocation.findByCode(KIVUYE),UserType.TITULAIREHC)
@@ -197,45 +193,31 @@ class SparePartViewControllerSpec extends IntegrationTests{
 		
 		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",manufacturer,Initializer.now())
 
-		def sparePartOne = Initializer.newSparePart(CODE(123),SparePartPurchasedBy.BYFACILITY,false,Initializer.newPeriod(32),"2900.23",['en':'SparePart Descriptions one'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),"USD",DataLocation.findByCode(KIVUYE),sparePartType,supplier,StatusOfSparePart.INSTOCK,user,null,null,StockLocation.FACILITY,null)
-		def sparePartTwo = Initializer.newSparePart(CODE(124),SparePartPurchasedBy.BYFACILITY,true,Initializer.newPeriod(32),"2900.23",['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010)
-				,Initializer.getDate(10,10,2010),"EUR",DataLocation.findByCode(BUTARO),sparePartType,supplier,StatusOfSparePart.INSTOCK,user,null,null,StockLocation.FACILITY,null)
+		def sparePartOne = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions one search term'],Initializer.getDate(22,07,2010),"2900.23","USD",
+			DataLocation.findByCode(KIVUYE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,45,0)
+		def sparePartTwo = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","EUR",
+			DataLocation.findByCode(BUTARO),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,,33,3)
 		
-		Initializer.newSparePart(CODE(125),SparePartPurchasedBy.BYFACILITY,true,Initializer.newPeriod(32),"2900.23",['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010)
-			,Initializer.getDate(10,10,2010),"RWF",DataLocation.findByCode(MUSANZE),sparePartType,supplier,StatusOfSparePart.INSTOCK,user,null,null,StockLocation.FACILITY,null)
-		Initializer.newSparePart(CODE(126),SparePartPurchasedBy.BYFACILITY,true,Initializer.newPeriod(32),"2900.23",['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010)
-			,Initializer.getDate(10,10,2010),"RWF",DataLocation.findByCode(GITWE),sparePartType,supplier,StatusOfSparePart.INSTOCK,user,null,null,StockLocation.FACILITY,null)
+		Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","RWF",
+			DataLocation.findByCode(MUSANZE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,2233,0)
+		Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","RWF",
+			DataLocation.findByCode(GITWE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,29432,0)
 	
 		sparePartViewController = new SparePartViewController()
 		setupSecurityManager(techDh)
 
 		when:
 		sparePartViewController.params.'type.id' = sparePartType.id
-		sparePartViewController.params.status = "INSTOCK"
-		sparePartViewController.params.q = SparePart.findBySerialNumber(CODE(123)).code
+		sparePartViewController.params.q = "search term"
 		sparePartViewController.request.makeAjaxRequest()
 		sparePartViewController.search()
 		
 		then:
 		SparePart.list().size()==4
-		sparePartViewController.response.json.results[0].contains(CODE(123))
-		!sparePartViewController.response.json.results[0].contains(CODE(124))
-		!sparePartViewController.response.json.results[0].contains(CODE(125))
-		!sparePartViewController.response.json.results[0].contains(CODE(126))
+		sparePartViewController.response.json.results[0].contains("45")
+		!sparePartViewController.response.json.results[0].contains("33")
+		!sparePartViewController.response.json.results[0].contains("2233")
+		!sparePartViewController.response.json.results[0].contains("29432")
 
-		when:
-		sparePartViewController.params.'type.id' = sparePartType.id
-		sparePartViewController.params.status = "OPERATIONAL"
-		sparePartViewController.params.q = SparePart.findBySerialNumber(CODE(123)).code
-		sparePartViewController.request.makeAjaxRequest()
-		sparePartViewController.search()
-		
-		then:
-		SparePart.list().size()==4
-		sparePartViewController.response.json.results[0].contains(CODE(123))
-		!sparePartViewController.response.json.results[0].contains(CODE(124))
-		!sparePartViewController.response.json.results[0].contains(CODE(125))
-		!sparePartViewController.response.json.results[0].contains(CODE(126))
 	}
 }

@@ -41,9 +41,10 @@ import org.chai.location.LocationLevel
 import org.chai.memms.AbstractController;
 import org.chai.memms.spare.part.SparePart;
 import org.chai.memms.spare.part.SparePartType;
+import org.chai.memms.spare.part.SparePart.StockLocation;
 import org.chai.memms.inventory.Provider;
 import org.chai.memms.spare.part.SparePart.SparePartPurchasedBy;
-import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
+import org.chai.memms.spare.part.SparePart.SparePartStatus;
 
 
 
@@ -132,7 +133,7 @@ class SparePartViewController extends AbstractController{
 	def filter = { FilterCommand cmd ->
 		if (log.isDebugEnabled()) log.debug("spareParts.filter, command "+cmd)
 		adaptParamsForList()
-		def spareParts = sparePartService.filterSparePart(user.location,cmd.supplier,cmd.sparePartType,cmd.sparePartPurchasedBy,cmd.status,params)
+		def spareParts = sparePartService.filterSparePart(user.location,cmd.supplier,cmd.sparePartType,cmd.stockLocation,cmd.sparePartPurchasedBy,cmd.status,params)
 		if(!request.xhr)
 			response.sendError(404)
 		else this.ajaxModel(spareParts,null,"")
@@ -140,67 +141,14 @@ class SparePartViewController extends AbstractController{
 	
 	
 	
-	def generalExport = { ExportFilterCommand cmd ->
-
-		Set<CalculationLocation> calculationLocations = new HashSet<CalculationLocation>()
-			params.list('calculationLocationids').each { id ->
-				if (NumberUtils.isDigits(id)) {
-					def calculationLocation = CalculationLocation.get(id)
-					if (calculationLocation != null && !calculationLocations.contains(calculationLocation)) calculationLocations.add(calculationLocation);
-				}
-			}
-			cmd.calculationLocations = calculationLocations
-				
-			Set<SparePartType> sparePartTypes = new HashSet<SparePartType>()
-			params.list('sparePartTypeids').each { id ->
-				if (NumberUtils.isDigits(id)) {
-					def sparePartType = SparePartType.get(id)
-					if (sparePartType != null && !sparePartTypes.contains(sparePartType)) sparePartTypes.add(sparePartType);
-				}
-			}
-			cmd.sparePartTypes = sparePartTypes
-		
-			Set<Provider> suppliers = new HashSet<Provider>()
-			params.list('supplierids').each { id ->
-				if (NumberUtils.isDigits(id)) {
-					def supplier = Provider.get(id)
-					if (supplier != null && !suppliers.contains(supplier)) suppliers.add(supplier);
-				}
-			}
-			cmd.suppliers = suppliers
-		
-			if (log.isDebugEnabled()) log.debug("spareParts.export, command="+cmd+", params"+params)
-		
-		
-			if(params.exported != null){
-				def sparePartExportTask = new SparePartExportFilter(
-						calculationLocations:cmd.calculationLocations,
-						sparePartTypes:cmd.sparePartTypes,
-						suppliers:cmd.suppliers,
-						sparePartPurchasedBy:cmd.sparePartPurchasedBy
-						).save(failOnError: true,flush: true)
-
-				params.exportFilterId = sparePartExportTask.id
-				params.class = "SparePartExportTask"
-				params.targetURI = "/sparePartView/generalExport"
-				redirect(controller: "task", action: "create", params: params)
-			}
-
-			adaptParamsForList()
-			render(view:"/entity/sparePart/sparePartExportPage", model:[
-					template:"/entity/sparePart/sparePartExportFilter",
-					filterCmd:cmd,
-					dataLocationTypes:DataLocationType.list(),
-					code: getLabel()
-			])
-	}
+	
 	
 	def export = { FilterCommand cmd ->
 		if (log.isDebugEnabled()) log.debug("spareParts.export, command "+cmd)
 		
 		adaptParamsForList()
 
-		def spareParts = sparePartService.filterSparePart(location,cmd.supplier,cmd.sparePartType,cmd.sparePartPurchasedBy,params)
+		def spareParts = sparePartService.filterSparePart(user.location,cmd.supplier,cmd.sparePartType,cmd.stockLocation,cmd.sparePartPurchasedBy,cmd.status,params)
 		File file = sparePartService.exporter(user.location,spareParts)
 
 		response.setHeader "Content-disposition", "attachment; filename=${file.name}.csv"
@@ -211,9 +159,9 @@ class SparePartViewController extends AbstractController{
 }
 
 class FilterCommand {
-	DataLocation location
 	SparePartType sparePartType
 	SparePartStatus status
+	StockLocation stockLocation
 	Provider supplier
 	SparePartPurchasedBy sparePartPurchasedBy
 	
@@ -223,35 +171,15 @@ class FilterCommand {
 		supplier nullable:true
 		sparePartPurchasedBy nullable:true
 		status nullable: true
+		stockLocation nullable: true
 
 		location nullable:false, validator:{ val, obj ->
-			return (obj.sparePartType != null || obj.supplier != null || obj.sparePartPurchasedBy!=null || obj.status!=null)?true:"select.atleast.one.value.text"
+			return (obj.stockLocation != null || obj.sparePartType != null || obj.supplier != null || obj.sparePartPurchasedBy!=null || obj.status!=null)?true:"select.atleast.one.value.text"
 		}
 	}
 
 	String toString() {
-		return "FilterCommand[DataLocation="+location+", SparePartType="+sparePartType+", Supplier="+supplier+",  sparePartPurchasedBy="+sparePartPurchasedBy+" status="+status+"]"
+		return "FilterCommand[SparePartType="+sparePartType+", StockLocation="+stockLocation+", Supplier="+supplier+",  sparePartPurchasedBy="+sparePartPurchasedBy+" status="+status+"]"
 	}
 }
 
-class ExportFilterCommand {
-	Set<CalculationLocation> calculationLocations
-	Set<DataLocationType> locationTypes
-	Set<SparePartType> sparePartTypes
-	Set<Provider> suppliers
-	SparePartPurchasedBy sparePartPurchasedBy
-	 
-
-	static constraints = {
-		calculationLocations nullable:true
-		locationTypes nullable:true
-		sparePartTypes nullable:true
-		suppliers nullable:true
-		sparePartPurchasedBy nullable:true
-	}
-
-	String toString() {
-		return "ExportFilterCommand[ CalculationLocations="+calculationLocations+", DataLocationTypes="+locationTypes+" , SparePartTypes="+sparePartTypes+", Suppliers="+suppliers+", sparePartPurchasedBy="+sparePartPurchasedBy+"]"
-	}
-
-}

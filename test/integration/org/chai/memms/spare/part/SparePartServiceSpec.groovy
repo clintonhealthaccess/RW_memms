@@ -39,8 +39,7 @@ import org.chai.memms.spare.part.SparePart;
 import org.chai.memms.spare.part.SparePart.StockLocation;
 import org.chai.memms.spare.part.SparePartType;
 import org.chai.memms.spare.part.SparePart.SparePartPurchasedBy;
-import org.chai.memms.spare.part.SparePartStatus;
-import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
+import org.chai.memms.spare.part.SparePart.SparePartStatus;
 
 /**
  * @author Aphrodice Rwagaju
@@ -66,8 +65,10 @@ class SparePartServiceSpec extends IntegrationTests{
 		def techMMC = newOtherUserWithType("techMMC", "techMMC", DataLocation.findByCode(RWANDA), UserType.TECHNICIANMMC)
 
 		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],"CODE Spare Part",manufacturer,Initializer.now())
-		Initializer.newSparePart(SparePartPurchasedBy.BYMOH,['en':'Spare Part Descriptions one'],Initializer.getDate(22,07,2010),"","",DataLocation.findByCode(BUTARO),sparePartType,supplier,user,StockLocation.FACILITY,22)
-		def sparePartCodeToFind = Initializer.newSparePart( SparePartPurchasedBy.BYMOH,['en':'Spare Part Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","RWF",DataLocation.findByCode(KIVUYE),sparePartType,supplier,user,StockLocation.FACILITY,32)
+		Initializer.newSparePart(SparePartPurchasedBy.BYMOH,['en':'Spare Part Descriptions one'],Initializer.getDate(22,07,2010),"","",DataLocation.findByCode(BUTARO),sparePartType,
+			supplier,user,StockLocation.FACILITY,SparePartStatus.PENDINGORDER,22,0)
+		def sparePartCodeToFind = Initializer.newSparePart( SparePartPurchasedBy.BYMOH,['en':'Spare Part Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","RWF",DataLocation.findByCode(KIVUYE),
+			sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.PENDINGORDER,32,0)
 		
 		List<SparePart> spareParts
 
@@ -84,7 +85,6 @@ class SparePartServiceSpec extends IntegrationTests{
 		spareParts = sparePartService.searchSparePart("Descriptions",userHc,null,[:])
 		then:
 		spareParts.size() == 1
-		spareParts[0].serialNumber.equals(CODE(124))
 
 		when: "Searching by description"
 
@@ -116,8 +116,10 @@ class SparePartServiceSpec extends IntegrationTests{
 		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],"CODE Spare Part",manufacturer,Initializer.now())
 		def sparePartTypeTwo = Initializer.newSparePartType(CODE(15819),["en":"Accelerometers deux"],["en":"used in memms"],"CODE Spare Part",manufacturer,Initializer.now())
 
-		Initializer.newSparePart(SparePartPurchasedBy.BYMOH,['en':'Spare Part Descriptions one'],Initializer.getDate(22,07,2010),"","",DataLocation.findByCode(BUTARO),sparePartType,supplier,user,StockLocation.FACILITY,2)
-		def sparePartCodeToFind = Initializer.newSparePart(SparePartPurchasedBy.BYMOH,['en':'Spare Part Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","RWF",DataLocation.findByCode(KIVUYE),sparePartTypeTwo,supplierTwo,user,StockLocation.FACILITY,54)
+		Initializer.newSparePart(SparePartPurchasedBy.BYMOH,['en':'Spare Part Descriptions one'],Initializer.getDate(22,07,2010),"","",DataLocation.findByCode(BUTARO),sparePartType,
+			supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,2,2)
+		def sparePartCodeToFind = Initializer.newSparePart(SparePartPurchasedBy.BYMOH,['en':'Spare Part Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","RWF",DataLocation.findByCode(KIVUYE),sparePartTypeTwo,
+			supplierTwo,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,54,0)
 		
 		List<SparePart> spareParts
 
@@ -127,14 +129,12 @@ class SparePartServiceSpec extends IntegrationTests{
 
 		then:
 		spareParts.size() == 1
-		spareParts[0].serialNumber.equals(CODE(124))
 
 		when: "user cannot see those he doesn't manage"
 
 		spareParts = sparePartService.searchSparePart("Descriptions",userHc,sparePartTypeTwo,[:])
 		then:
 		spareParts.size() == 1
-		spareParts[0].serialNumber.equals(CODE(124))
 
 		when: "Searching by description"
 
@@ -147,7 +147,6 @@ class SparePartServiceSpec extends IntegrationTests{
 		spareParts = sparePartService.searchSparePart("Accelerometers",techDH,sparePartTypeTwo,[:])
 		then:
 		spareParts.size() == 1
-		spareParts[0].serialNumber.equals(CODE(124)) 
 
 	}
 	def "user can only view his spare parts, if a technician at dh they can also view for the locations they manage"() {
@@ -172,8 +171,10 @@ class SparePartServiceSpec extends IntegrationTests{
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
 		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],"CODE Spare Part",manufacturer,Initializer.now())
 		
-		Initializer.newSparePart(SparePartPurchasedBy.BYMOH,['en':'Spare Part Descriptions one'],Initializer.getDate(22,07,2010),"","",DataLocation.findByCode(BUTARO),sparePartType,supplier,user,StockLocation.FACILITY,98)
-		def sparePartCodeToFind = Initializer.newSparePart(SparePartPurchasedBy.BYMOH,['en':'Spare Part Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","RWF",DataLocation.findByCode(KIVUYE),sparePartType,supplier,user,StockLocation.FACILITY,44)
+		Initializer.newSparePart(SparePartPurchasedBy.BYMOH,['en':'Spare Part Descriptions one'],Initializer.getDate(22,07,2010),"","",DataLocation.findByCode(BUTARO),sparePartType,
+			supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,98,9)
+		def sparePartCodeToFind = Initializer.newSparePart(SparePartPurchasedBy.BYMOH,['en':'Spare Part Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","RWF",DataLocation.findByCode(KIVUYE),sparePartType,
+			supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,44,0)
 
 
 		def sparePartsTech, sparePartsUser
@@ -206,8 +207,10 @@ class SparePartServiceSpec extends IntegrationTests{
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
 		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],"CODE Spare Part",manufacturer,Initializer.now())
 
-		Initializer.newSparePart(SparePartPurchasedBy.BYMOH,['en':'Spare Part Descriptions one'],Initializer.getDate(22,07,2010),"","",DataLocation.findByCode(BUTARO),sparePartType,supplier,user, StockLocation.FACILITY,21)
-		def sparePartCodeToFind = Initializer.newSparePart(SparePartPurchasedBy.BYMOH,['en':'Spare Part Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","RWF",DataLocation.findByCode(KIVUYE),sparePartType,supplier,user, StockLocation.FACILITY,11)
+		Initializer.newSparePart(SparePartPurchasedBy.BYMOH,['en':'Spare Part Descriptions one'],Initializer.getDate(22,07,2010),"","",DataLocation.findByCode(BUTARO),sparePartType,
+			supplier,user, StockLocation.FACILITY,SparePartStatus.INSTOCK,21,0)
+		def sparePartCodeToFind = Initializer.newSparePart(SparePartPurchasedBy.BYMOH,['en':'Spare Part Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","RWF",DataLocation.findByCode(KIVUYE),sparePartType,
+			supplier,user, StockLocation.FACILITY,SparePartStatus.INSTOCK,11,0)
 
 
 		def sparePartsTechs, sparePartsUsers
@@ -216,10 +219,10 @@ class SparePartServiceSpec extends IntegrationTests{
 		sparePartsUsers = sparePartService.getSpareParts(user,sparePartType,[:])
 		then:
 		sparePartsTechs.size() == 2
-		sparePartsTechs[1].quantity==21
+		sparePartsTechs[1].initialQuantity==21
 
 		sparePartsUsers.size() == 1
-		sparePartsUsers[0].quantity==11
+		sparePartsUsers[0].initialQuantity==11
 
 	}
 	
@@ -237,26 +240,33 @@ class SparePartServiceSpec extends IntegrationTests{
 		def user  = newUser("admin", "Admin UID")
 		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],"CODE Spare Part",manufacturer,Initializer.now())
 		
-		def sparePartOne = Initializer.newSparePart(SparePartPurchasedBy.BYMOH,['en':'Spare Part Descriptions one'],Initializer.getDate(22,07,2010),Initializer.getDate(10,10,2010),"","",kivuyeHC,sparePartType,supplier,user,StockLocation.FACILITY,8)
-		def sparePartTwo = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'Spare Part Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","USD",butaroDH,sparePartType,supplier,user,StockLocation.FACILITY,23)
+		def sparePartOne = Initializer.newSparePart(SparePartPurchasedBy.BYMOH,['en':'Spare Part Descriptions one'],Initializer.getDate(22,07,2010),"","",kivuyeHC,sparePartType,
+			supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,8,0)
+		def sparePartTwo = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'Spare Part Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","USD",butaroDH,sparePartType,
+			supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,23,3)
 
 		def spareParts
 		when://Filter by defaults
-		spareParts = sparePartService.filterSparePart(butaroDH,supplier,sparePartType,SparePartPurchasedBy.NONE,[:])
+		spareParts = sparePartService.filterSparePart(butaroDH,supplier,sparePartType,StockLocation.FACILITY,SparePartPurchasedBy.NONE,SparePartStatus.INSTOCK,[:])
 
-		then:
+		then://This should bring 2 records as kivuye HD is managed by butaro HD
 		SparePart.count() == 2
-		spareParts.size() == 1
+		spareParts.size() == 2
 		spareParts[0].getDescriptions(new Locale("en")).equals('Spare Part Descriptions two')
 		spareParts[0].sparePartPurchasedBy == SparePartPurchasedBy.BYFACILITY
-		spareParts[0].quantity==23
+		spareParts[0].initialQuantity==23
+		spareParts[1].initialQuantity==8
+		spareParts[1].getDescriptions(new Locale("en")).equals('Spare Part Descriptions one')
+		spareParts[1].sparePartPurchasedBy == SparePartPurchasedBy.BYMOH
 
 		when://Search by SparePartPurchasedBy
-		sparePartsTwo = sparePartService.filterSparePart(kivuyeHC,supplier, sparePartType,SparePartPurchasedBy.BYMOH,[:])		
+		spareParts = sparePartService.filterSparePart(kivuyeHC,supplier,sparePartType,StockLocation.FACILITY,SparePartPurchasedBy.NONE,SparePartStatus.INSTOCK,[:])		
 		then:
 		SparePart.count() == 2
 		spareParts.size() == 1
 		spareParts[0].getDescriptions(new Locale("en")).equals('Spare Part Descriptions one')
+		spareParts[0].sparePartPurchasedBy == SparePartPurchasedBy.BYMOH
+		spareParts[0].initialQuantity==8
 	}
 	
 	def "can export spare parts"(){
@@ -274,13 +284,14 @@ class SparePartServiceSpec extends IntegrationTests{
 		
 		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],"CODE Spare Part",manufacturer,Initializer.now())
 		
-		def sparePartOne = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'Spare Part Descriptions two'],Initializer.getDate(22,07,2010),"","",DataLocation.findByCode(KIVUYE),sparePartType,supplier,user,StockLocation.FACILITY, 12)
-			
-		def sparePartTwo = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'Spare Part Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","EUR",DataLocation.findByCode(KIVUYE),sparePartType,supplier,user,StockLocation.FACILITY,4)
-		
-		def sparePartThree = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'Spare Part Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","EUR",DataLocation.findByCode(KIVUYE),sparePartType,supplier,user,StockLocation.FACILITY, 45)
-		
-		def sparePartFour = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'Spare Part Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","EUR",DataLocation.findByCode(BUTARO),sparePartType,supplier,user,StockLocation.FACILITY,23)
+		def sparePartOne = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'Spare Part Descriptions two'],Initializer.getDate(22,07,2010),"","",DataLocation.findByCode(KIVUYE),sparePartType,
+			supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,12,0)
+		def sparePartTwo = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'Spare Part Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","EUR",DataLocation.findByCode(KIVUYE),sparePartType,
+			supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,4,0)
+		def sparePartThree = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'Spare Part Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","EUR",DataLocation.findByCode(KIVUYE),sparePartType,
+			supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,45,0)
+		def sparePartFour = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'Spare Part Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","EUR",DataLocation.findByCode(BUTARO),sparePartType,
+			supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,23,0)
 		List<SparePart> spareParts = [sparePartOne,sparePartTwo,sparePartThree]
 
 		when:
