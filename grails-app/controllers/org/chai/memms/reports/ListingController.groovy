@@ -813,6 +813,7 @@ class ListingController extends AbstractController{
 		if(log.isDebugEnabled()) log.debug("abstract.dataLocations params:"+params)
 		Set<DataLocation> dataLocations = new HashSet<DataLocation>()
 		if(params.get('allDataLocations')){
+			if(log.isDebugEnabled()) log.debug("abstract.dataLocations ALL")
 			if(user.location instanceof Location) 
 				dataLocations.addAll(user.location.collectDataLocations(null))
 			else{
@@ -823,6 +824,7 @@ class ListingController extends AbstractController{
 			}
 		}
 		else if (params.list('dataLocations') != null && !params.list('dataLocations').empty) {
+			if(log.isDebugEnabled()) log.debug("abstract.dataLocations CUSTOM")
 			def types = params.list('dataLocations')
 			dataLocations.addAll(types.collect{ it ->
 				if(log.isDebugEnabled()) 
@@ -837,10 +839,12 @@ class ListingController extends AbstractController{
 		if(log.isDebugEnabled()) log.debug("abstract.departments params:"+params)
 		Set<Department> departments = new HashSet<Department>()
 		if(params.get('allDepartments')){
-			// TODO
+			if(log.isDebugEnabled()) log.debug("abstract.departments ALL")
+			// TODO ?
 			departments = Department.list()
 		}
 		else if (params.list('departments') != null && !params.list('departments').empty) {
+			if(log.isDebugEnabled()) log.debug("abstract.departments CUSTOM")
 			def types = params.list('departments')
 			departments.addAll(types.collect{ it ->
 				if(log.isDebugEnabled()) 
@@ -855,10 +859,12 @@ class ListingController extends AbstractController{
 		if(log.isDebugEnabled()) log.debug("abstract.equipmentTypes params:"+params)
 		Set<EquipmentType> equipmentTypes = new HashSet<EquipmentType>()
 		if(params.get('allEquipmentTypes')){
-			//TODO
+			if(log.isDebugEnabled()) log.debug("abstract.equipmentTypes ALL")
+			//TODO ?
 			equipmentTypes = EquipmentType.list()
 		}
 		else if (params.list('equipmentTypes') != null && !params.list('equipmentTypes').empty) {
+			if(log.isDebugEnabled()) log.debug("abstract.equipmentTypes CUSTOM")
 			def types = params.list('equipmentTypes')
 			equipmentTypes.addAll(types.collect{ it ->
 				if(log.isDebugEnabled()) 
@@ -869,13 +875,15 @@ class ListingController extends AbstractController{
 		return equipmentTypes
 	}
 	public Set<SparePartType> getSparePartTypes() {
-		if(log.isDebugEnabled()) log.debug("abstract.equipmentTypes params:"+params)
+		if(log.isDebugEnabled()) log.debug("abstract.sparePartTypes params:"+params)
 		Set<SparePartType> sparePartTypes = new HashSet<SparePartType>()
+		if(log.isDebugEnabled()) log.debug("abstract.sparePartTypes ALL")
 		if(params.get('allSparePartTypes')){
 			//TODO
 			sparePartTypes = SparePartType.list()
 		}
 		else if (params.list('sparePartTypes') != null && !params.list('sparePartTypes').empty) {
+			if(log.isDebugEnabled()) log.debug("abstract.sparePartTypes CUSTOM")
 			def types = params.list('sparePartTypes')
 			sparePartTypes.addAll(types.collect{ it ->
 				if(log.isDebugEnabled()) 
