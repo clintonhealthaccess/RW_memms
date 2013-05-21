@@ -4,40 +4,108 @@
 <%@ page import="org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus" %>
 <table class="items">
 	<thead>
-		<tr>
-			<th><g:message code="default.equipment.code.label"/></th>
-			<th><g:message code="default.equipment.serial.number.label"/></th>
-			<th><g:message code="default.equipment.type.label"/></th>
-			<g:sortableColumn property="currentStatus" title="${message(code: 'entity.status.label')}" params="[q:q]" />
-			<g:sortableColumn property="criticality"  title="${message(code: 'work.order.criticality.label')}" params="[q:q]" />
-			<g:sortableColumn property="openOn"  title="${message(code: 'order.open.on.label')}" params="[q:q]" />
-			<g:sortableColumn property="closedOn"  title="${message(code: 'order.closed.on.label')}" params="[q:q]" />
-
+		<tr>			
+			<g:if test="${reportTypeOptions.contains('location')}">
+				<g:sortableColumn property="dataLocation"  title="${message(code: 'location.label')}" params="[q:q]" />
+			</g:if>
+			<g:if test="${reportTypeOptions.contains('code')}">
+				<th><g:message code="default.equipment.code.label"/></th>
+			</g:if>
+			<g:if test="${reportTypeOptions.contains('serialNumber')}">
+				<th><g:message code="default.equipment.serial.number.label"/></th>
+			</g:if>
+			<g:if test="${reportTypeOptions.contains('equipmentType')}">
+				<th><g:message code="default.equipment.type.label"/></th>
+			</g:if>
+			<g:if test="${reportTypeOptions.contains('model')}">
+				<g:sortableColumn property="model"  title="${message(code: 'equipment.model.label')}" params="[q:q]" />
+			</g:if>
+			<g:if test="${reportTypeOptions.contains('manufacturer')}">
+				<g:sortableColumn property="manufacturer"  title="${message(code: 'provider.type.manufacturer')}" params="[q:q]" />
+			</g:if>
+			<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
+				%{-- TODO SL --}%
+			</g:if>
+			<g:if test="${reportTypeOptions.contains('currentStatus')}">
+				<g:sortableColumn property="currentStatus" title="${message(code: 'entity.status.label')}" params="[q:q]" />
+			</g:if>
+			<g:if test="${reportTypeOptions.contains('travelTime')}">
+				%{-- TODO --}%
+			</g:if>
+			<g:if test="${reportTypeOptions.contains('workTime')}">
+				%{-- TODO --}%
+			</g:if>
+			<g:if test="${reportTypeOptions.contains('estimatedCost')}">
+				%{-- TODO --}%
+			</g:if>
+			<g:if test="${reportTypeOptions.contains('departmentRequestedOrder')}">
+				%{-- TODO --}%
+			</g:if>
+			<g:if test="${reportTypeOptions.contains('reasonsEquipmentFailure')}">
+				%{-- TODO --}%
+			</g:if>
+			<g:if test="${reportTypeOptions.contains('listPerformedActions')}">
+				%{-- TODO --}%
+			</g:if>
 			<g:if test="${reportTypeOptions.contains('description')}">
 				<th><g:message code="work.order.description.label"/></th>
 			</g:if>
-
-			<th><g:message code="work.order.description.label"/></th>
-			<th><g:message code="entity.messages.label"/></th>
+			<g:if test="${reportTypeOptions.contains('dateOfEvent')}">
+				%{-- TODO --}%
+			</g:if>
 		</tr>
 	</thead>
 	<tbody>
 		<g:each in="${entities}" status="i" var="order">
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-				
-				<td>${order.equipment.code}</td>
-				<td>${order.equipment.serialNumber}</td>
-				<td>${order.equipment.type.names}</td>
-				<td>${message(code: order.currentStatus?.messageCode+'.'+order.currentStatus?.name)}</td>
-				<td>${order.criticality}</td>
-				<td>${Utils.formatDateWithTime(order.openOn)}</td>
-				<td>${Utils.formatDateWithTime(order.closedOn)}</td>
-
+				<g:if test="${reportTypeOptions.contains('location')}">
+					<td>${order.equipment.dataLocation.names}</td>
+				</g:if>
+				<g:if test="${reportTypeOptions.contains('code')}">
+					<td>${order.equipment.code}</td>
+				</g:if>
+				<g:if test="${reportTypeOptions.contains('serialNumber')}">
+					<td>${order.equipment.serialNumber}</td>
+				</g:if>
+				<g:if test="${reportTypeOptions.contains('equipmentType')}">
+					<td>${order.equipment.type.names}</td>
+				</g:if>
+				<g:if test="${reportTypeOptions.contains('model')}">
+					<td>${order.equipment.model}</td>
+				</g:if>
+				<g:if test="${reportTypeOptions.contains('manufacturer')}">
+					<td>${order.equipment.manufacturer?.contact?.contactName}</td>
+				</g:if>
+				<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
+					%{-- TODO SL --}%
+				</g:if>
+				<g:if test="${reportTypeOptions.contains('currentStatus')}">
+					<td>${message(code: order.currentStatus?.messageCode+'.'+order.currentStatus?.name)}</td>
+				</g:if>
+				<g:if test="${reportTypeOptions.contains('travelTime')}">
+					%{-- TODO --}%
+				</g:if>
+				<g:if test="${reportTypeOptions.contains('workTime')}">
+					%{-- TODO --}%
+				</g:if>
+				<g:if test="${reportTypeOptions.contains('estimatedCost')}">
+					%{-- TODO --}%
+				</g:if>
+				<g:if test="${reportTypeOptions.contains('departmentRequestedOrder')}">
+					%{-- TODO --}%
+				</g:if>
+				<g:if test="${reportTypeOptions.contains('reasonsEquipmentFailure')}">
+					%{-- TODO --}%
+				</g:if>
+				<g:if test="${reportTypeOptions.contains('listPerformedActions')}">
+					%{-- TODO --}%
+				</g:if>
 				<g:if test="${reportTypeOptions.contains('description')}">
 					<td><g:stripHtml field="${order.description}" chars="30"/></td>
 				</g:if>
-
-				<td>${order.getUnReadNotificationsForUser(User.findByUuid(SecurityUtils.subject.principal, [cache: true])).size()}</td>
+				<g:if test="${reportTypeOptions.contains('dateOfEvent')}">
+					%{-- TODO --}%
+				</g:if>
 			</tr>
 		</g:each>
 	</tbody>
