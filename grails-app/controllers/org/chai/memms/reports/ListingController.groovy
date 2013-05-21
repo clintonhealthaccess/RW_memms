@@ -581,13 +581,19 @@ class ListingController extends AbstractController{
 		def reportType = getReportType()
 		def reportSubType = getReportSubType()
 		def dataLocations = getDataLocations()
+		def departments = getDepartments()
 		def equipmentTypes = getEquipmentTypes()
-		def fromCost = params.get('fromCost')
-		def toCost = params.get('toCost')
+
+		def fromCost = null
+		if(params.get('fromCost') != null && !params.get('fromCost').empty)
+			fromCost = Double.parseDouble(params.get('fromCost'))
+		def toCost = null
+		if(params.get('toCost') != null && !params.get('toCost').empty) 
+			toCost = Double.parseDouble(params.get('toCost'))
 		def costCurrency = params.get('costCurrency')
 
-		def fromAcquisitionPeriod = getPeriod('fromAcquisitionPeriod')
-		def toAcquisitionPeriod = getPeriod('toAcquisitionPeriod')
+		// TODO def fromAcquisitionPeriod
+		// TODO def toAcquisitionPeriod
 
 		def customEquipmentParams = [
 			dataLocations: dataLocations,
@@ -596,8 +602,8 @@ class ListingController extends AbstractController{
 			fromCost: fromCost,
 			toCost: toCost,
 			costCurrency: costCurrency,
-			fromAcquisitionPeriod: fromAcquisitionPeriod,
-			toAcquisitionPeriod: toAcquisitionPeriod
+			// fromAcquisitionPeriod: fromAcquisitionPeriod
+			// toAcquisitionPeriod: toAcquisitionPeriod
 		]
 
 		if(reportSubType == ReportSubType.INVENTORY){
@@ -631,7 +637,7 @@ class ListingController extends AbstractController{
 			customizedReportSave: customizedReportSave,
 		]
 
-		if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing, customEquipmentParams:"+customEquipmentParams)
+		if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing end, customEquipmentParams:"+customEquipmentParams)
 
 		adaptParamsForList()
 		def equipments = equipmentListingReportService.getCustomReportOfEquipments(user,customEquipmentParams,params)
@@ -893,23 +899,26 @@ class ListingController extends AbstractController{
 		}
 		return sparePartTypes
 	}
+
+	// TODO
 	public Date getPeriod(String periodParam){
 		def period = params.get(periodParam);
 		if(log.isDebugEnabled()) 
-			log.debug("abstract.getPeriod param:"+periodParam+", value:"+period+")")
-		if(period != null && !period.empty) period = Utils.parseDate(period)
+			log.debug("abstract.getPeriod param:"+periodParam+", value:"+period)
+		if(period != null && !period.empty) 
+			period = Utils.parseDate(period)
 		else period = null
 		return period
 	}
 
-	public Set<EquipmentStatus> getInventoryStatus(){
+	public Set<Status> getInventoryStatus(){
 		if(log.isDebugEnabled()) log.debug("abstract.inventoryStatus params:"+params)
-		Set<EquipmentStatus> inventoryStatus = new HashSet<EquipmentStatus>()
+		Set<Status> inventoryStatus = new HashSet<Status>()
 		if (params.list('equipmentStatus') != null && !params.list('equipmentStatus').empty) {
 			def types = params.list('equipmentStatus')
 			types.each{ it ->
 				if(log.isDebugEnabled()) log.debug("abstract.equipmentStatus equipmentStatus:"+it)
-				if(it != null) inventoryStatus.add(it)
+				if(it != null) inventoryStatus.add(Enum.valueOf(Status.class, it))
 			}
 		}
 		return inventoryStatus

@@ -152,39 +152,48 @@ class EquipmentListingReportService {
 
 	public def getCustomReportOfEquipments(User user,def customEquipmentParams, Map<String, String> params) {
 		
-			//def equipmentStatus = customEquipmentParams.get('equipmentStatus')
-			def dataLocations = customEquipmentParams.get('dataLocations')
-			def departments = customEquipmentParams.get('departments')
-			def equipmentTypes = customEquipmentParams.get('equipmentTypes')
-			//def lowerLimitCost = customEquipmentParams.get('fromCost')
-			//def upperLimitCost = customEquipmentParams.get('toCost')
-			//def currency = customEquipmentParams.get('costCurrency')
-			def obsolete = customEquipmentParams.get('obsolete')
-			def fromAcquisitionPeriod = customEquipmentParams.get('fromAcquisitionPeriod')
-			def toAcquisitionPeriod = customEquipmentParams.get('toAcquisitionPeriod')
-			
+		for ( e in customEquipmentParams ) {
+		    if (log.isDebugEnabled()) 
+				log.debug("listing.getCustomReportOfEquipments param key:"+e.key+", value:"+e.value+", class:"+e.value?.class)
+		}
+
+		def equipmentStatus = customEquipmentParams.get('equipmentStatus')
+		def dataLocations = customEquipmentParams.get('dataLocations')
+		def departments = customEquipmentParams.get('departments')
+		def equipmentTypes = customEquipmentParams.get('equipmentTypes')
+
+		def lowerLimitCost = customEquipmentParams.('fromCost')
+		def upperLimitCost = customEquipmentParams.('toCost')
+
+		def currency = customEquipmentParams.get('costCurrency')
+		def obsolete = customEquipmentParams.get('obsolete')
+
+		// TODO def fromAcquisitionPeriod = customEquipmentParams.get('fromAcquisitionPeriod')
+		// TODO def toAcquisitionPeriod = customEquipmentParams.get('toAcquisitionPeriod')
+		// if(log.isDebugEnabled()) 
+		// 	log.debug("fromAcquisitionPeriod:"+fromAcquisitionPeriod+", class:"+fromAcquisitionPeriod?.class)		
+	
+		def criteria = Equipment.createCriteria();
 		
-			def criteria = Equipment.createCriteria();
-			
-			return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-					if(dataLocations)
-						inList('dataLocation',dataLocations)
-					if(departments != null)
-						inList ("department", departments)
-					if(equipmentTypes != null)
-						inList ("type", equipmentTypes)
-				/*	if(currency !=null)
-						eq ("currency",currency)*/
-					if(obsolete)
-						eq ("obsolete", (obsolete.equals('true'))?true:false)
-						//TODO set of statuses
-				/*	if(equipmentStatus!=null)
-						inList ("currentStatus",equipmentStatus)*/
-					/*if(lowerLimitCost!=null)
-						gt ("purchaseCost", lowerLimitCost)
-					if(upperLimitCost!=null)
-						lt ("purchaseCost", upperLimitCost)*/
-			}
+		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+				if(dataLocations)
+					inList('dataLocation',dataLocations)
+				if(departments != null)
+					inList ("department", departments)
+				if(equipmentTypes != null)
+					inList ("type", equipmentTypes)
+			/*	if(currency !=null)
+					eq ("currency",currency)*/
+				if(obsolete)
+					eq ("obsolete", (obsolete.equals('true'))?true:false)
+					//TODO set of statuses
+				if(equipmentStatus!=null && !equipmentStatus.empty)
+					inList ("currentStatus",equipmentStatus)
+				if(lowerLimitCost!=null)
+					gt ("purchaseCost", lowerLimitCost)
+				if(upperLimitCost!=null)
+					lt ("purchaseCost", upperLimitCost)
+		}
 	}
 	
 	public def getCustomReportOfEquipmentsTEST(def user, Map<String, String> params) {
