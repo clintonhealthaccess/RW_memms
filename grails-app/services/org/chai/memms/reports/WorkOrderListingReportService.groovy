@@ -56,21 +56,7 @@ class WorkOrderListingReportService {
 		}
 	}
 
-	//TODO
 	def getCustomReportOfWorkOrders(User user,Map<String, String> params) {
-
-		def criteria = WorkOrder.createCriteria();
-		def dataLocations = []
-		if(user.location instanceof Location) dataLocations.addAll(user.location.collectDataLocations(null))
-		else{
-			dataLocations = []
-			dataLocations.add(user.location as DataLocation)
-		}
-		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			createAlias("equipment","equip")
-			if(dataLocations)
-				inList('equip.dataLocation',dataLocations)
-			eq ("currentStatus",OrderStatus.OPENATMMC)
-		}
+		//TODO
 	}
 }

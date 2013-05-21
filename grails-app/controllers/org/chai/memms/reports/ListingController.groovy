@@ -378,6 +378,7 @@ class ListingController extends AbstractController{
 			case ReportSubType.INVENTORY:
 				def fromPeriod = getPeriod('fromAcquisitionPeriod')
 				def toPeriod = getPeriod('toAcquisitionPeriod')
+				def includeNoAcquisitionPeriod = params.get('noAcquisitionPeriod')
 				step3Params << [
 					fromAcquisitionPeriod: fromPeriod,
 					toAcquisitionPeriod: toPeriod
@@ -537,8 +538,10 @@ class ListingController extends AbstractController{
 		def customizedListingModel = [:]
 		customizedListingModel.putAll params
 		def customizedReportName = params.get('customizedReportName')
-		if(customizedReportName != null && !customizedReportName.empty)
-			customizedReportName = "customReport_"+reportType+"-"+reportSubType+"-"+'YYYMMddHHmmss'
+		if(customizedReportName == null || customizedReportName.empty){
+			def customizedReportTimestamp = new Date()
+			customizedReportName = "customReport_"+reportType+"_"+reportSubType+"_"+customizedReportTimestamp.format('yyyyMMddHHmmss')
+		}
 		def customizedReportSave = params.get('customizedReportSave')
 		customizedListingModel << [
 			customizedReportName:customizedReportName,
@@ -810,7 +813,14 @@ class ListingController extends AbstractController{
 		if(log.isDebugEnabled()) log.debug("abstract.dataLocations params:"+params)
 		Set<DataLocation> dataLocations = new HashSet<DataLocation>()
 		if(params.get('allDataLocations')){
-			// TODO dataLocations = user.location.collectDataLocations(null)
+			if(user.location instanceof Location) 
+				dataLocations.addAll(user.location.collectDataLocations(null))
+			else{
+				dataLocations = []
+				dataLocations.add(user.location as DataLocation)
+				if(userService.canViewManagedEquipments(user)) 
+					dataLocations.addAll(((DataLocation)user.location).manages)
+			}
 		}
 		else if (params.list('dataLocations') != null && !params.list('dataLocations').empty) {
 			def types = params.list('dataLocations')
@@ -879,7 +889,7 @@ class ListingController extends AbstractController{
 		def period = params.get(periodParam);
 		if(log.isDebugEnabled()) 
 			log.debug("abstract.getPeriod param:"+periodParam+", value:"+period+")")
-		if(period != null && !period.empty) period = Date.parse('MM/dd/yyyy', period)
+		if(period != null && !period.empty) period = Utils.parseDate(period)
 		else period = null
 		return period
 	}
@@ -891,7 +901,7 @@ class ListingController extends AbstractController{
 			def types = params.list('equipmentStatus')
 			types.each{ it ->
 				if(log.isDebugEnabled()) log.debug("abstract.equipmentStatus equipmentStatus:"+it)
-				inventoryStatus.add(EquipmentStatus.get(it)-null)
+				if(it != null) inventoryStatus.add(it)
 			}
 		}
 		return inventoryStatus
@@ -919,7 +929,7 @@ class ListingController extends AbstractController{
 			def types = params.list('workOrderStatus')
 			types.each{ it ->
 				if(log.isDebugEnabled()) log.debug("abstract.workOrderStatus workOrderStatus:"+it)
-				correctiveStatus.add(OrderStatus.get(it)-null)
+				if(it != null) correctiveStatus.add(it)
 			}
 		}
 		return correctiveStatus
@@ -947,7 +957,7 @@ class ListingController extends AbstractController{
 			def types = params.list('workOrderStatus')
 			types.each{ it ->
 				if(log.isDebugEnabled()) log.debug("abstract.workOrderStatus workOrderStatus:"+it)
-				preventiveStatus.add(PreventiveOrderStatus.get(it)-null)
+				if(it != null) preventiveStatus.add(it)
 			}
 		}
 		return preventiveStatus
@@ -975,7 +985,7 @@ class ListingController extends AbstractController{
 			def types = params.list('sparePartStatus')
 			types.each{ it ->
 				if(log.isDebugEnabled()) log.debug("abstract.sparePartStatus sparePartStatus:"+it)
-				sparePartStatus.add(StatusOfSparePart.get(it)-null)
+				if(it != null) sparePartStatus.add(it)
 			}
 		}
 		return sparePartStatus
@@ -1003,8 +1013,7 @@ class ListingController extends AbstractController{
 			def options = params.list(reportTypeOptionParam)
 			options.each{ it ->
 				if(log.isDebugEnabled()) log.debug("abstract.reportTypeOption reportTypeOption:"+it)
-				if(it != null) 
-					reportTypeOptions.add(it)
+				if(it != null) reportTypeOptions.add(it)
 			}
 		}
 		return reportTypeOptions
