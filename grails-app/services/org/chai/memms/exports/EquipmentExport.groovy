@@ -144,7 +144,7 @@ class EquipmentExport implements Exporter{
 			if(equipmentExportFilter.dataLocationTypes != null && equipmentExportFilter.dataLocationTypes.size() > 0)
 				inList('dataLocationType',equipmentExportFilter.dataLocationTypes)
 			if(equipmentExportFilter.calculationLocations != null && equipmentExportFilter.calculationLocations.size() > 0)
-				inList('dataLocation',equipmentExportFilter.calculationLocations)
+				inList('location',equipmentExportFilter.calculationLocations)
 			if(equipmentExportFilter.suppliers != null && equipmentExportFilter.suppliers.size() > 0)
 				inList("supplier",equipmentExportFilter.suppliers)
 			if(equipmentExportFilter.serviceProviders != null && equipmentExportFilter.serviceProviders.size() > 0)

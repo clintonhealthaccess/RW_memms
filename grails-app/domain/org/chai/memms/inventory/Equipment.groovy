@@ -251,9 +251,9 @@ public class Equipment {
 		def equipmentStatuses = status.asList()
 
 		if(equipmentStatuses.size() == 0) return null
-		else if(equipmenStatuses.size() == 1) return null
+		else if(equipmentStatuses.size() == 1) return null
 		else{
-			equipmentStatuses = equipmenStatuses.sort({it.dateOfEvent})
+			equipmentStatuses = equipmentStatuses.sort({it.dateOfEvent})
 			def previousStatus = null
 			previousStatus = equipmentStatuses[-2]
 			return previousStatus
