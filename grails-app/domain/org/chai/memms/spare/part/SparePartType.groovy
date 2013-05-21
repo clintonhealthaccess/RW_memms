@@ -109,14 +109,14 @@ class SparePartType {
 	}
 
 	@Transient
-	def getQuantityInStockAtHC(){
-		def quantityInStockAtHC = 0
+	def getQuantityInStockAtFacility(){
+		def quantityInStockAtFacility= 0
 		if(spareParts && spareParts.size())
 			for(SparePart sparePart: spareParts){
 				if(sparePart.status.equals(SparePartStatus.INSTOCK) && sparePart.stockLocation.equals(StockLocation.FACILITY) && sparePart.inStockQuantity>0)
-					quantityInStockAtHC = quantityInStockAtHC+sparePart.inStockQuantity
+					quantityInStockAtFacility = quantityInStockAtFacility+sparePart.inStockQuantity
 			}
-		return quantityInStockAtHC
+		return quantityInStockAtFacility
 	}
 
 	@Transient
@@ -130,13 +130,13 @@ class SparePartType {
 	}
 
 	@Transient
-	def getQuantityPendingAtHC(){
-		def quantityPendingAtHC =0
+	def getQuantityPendingAtFacility(){
+		def quantityPendingAtFacility =0
 		if(spareParts && spareParts.size())
 			for(SparePart sparePart: spareParts)
 				if(sparePart.status.equals(SparePartStatus.PENDINGORDER) && sparePart.stockLocation.equals(StockLocation.FACILITY) && sparePart.initialQuantity>0) 
-					quantityPendingAtHC = quantityPendingAtHC+sparePart.initialQuantity
-		return quantityPendingAtHC
+					quantityPendingAtFacility = quantityPendingAtFacility+sparePart.initialQuantity
+		return quantityPendingAtFacility
 	}
 
 
