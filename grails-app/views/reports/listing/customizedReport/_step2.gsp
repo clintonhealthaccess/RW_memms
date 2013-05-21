@@ -65,7 +65,7 @@
       </g:if>
     </fieldset>
   </g:formRemote>
-  <g:formRemote name="formRemoteStep2Prev" url="[action:'step1', params:params]" update="dialog-form"
+  <g:formRemote name="formRemoteStep2Prev" url="[action:'step1', params:step2Model]" update="dialog-form"
     onSuccess="customizedlisting_init();">
   </g:formRemote>
   <a href="#" class="ui-widget-previous left btn gray medium" id='js-prev-step-2'><g:message code="reports.step.previous"/></a>
