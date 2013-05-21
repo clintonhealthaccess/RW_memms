@@ -51,7 +51,6 @@ import org.chai.memms.inventory.Provider;
 
 import org.chai.memms.security.User;
 import org.chai.memms.security.User.UserType;
-import org.chai.task.SparePartExportFilter;
 
 /**
  * @author Aphrodice Rwagaju

@@ -89,11 +89,11 @@ class EquipmentStatusSpec extends IntegrationTests{
 		EquipmentStatus.count() == 2
 
 		when:
-		def currentStatus = equipment.getTimeBasedStatus()
-		def previousStatus = equipment.getTimeBasedPreviousStatus()
+		def currentState = equipment.getTimeBasedStatus()
+		def previousState = equipment.getTimeBasedPreviousStatus()
 
 		then:
-		currentStatus.equals(statusOne)
-		previousStatus.equals(statusTwo)
+		currentState.equals(statusOne)
+		previousState.equals(statusTwo)
 	}
 }
