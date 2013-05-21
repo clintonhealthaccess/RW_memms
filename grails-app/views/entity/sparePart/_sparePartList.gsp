@@ -1,19 +1,20 @@
-<%@ page import="org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart" %>
+<%@ page import="org.chai.memms.spare.part.SparePart.SparePartStatus" %>
 <%@ page import="org.chai.memms.util.Utils" %>
 <table class="items spaced">
 	<thead>
 		<tr>
 			<th/>
-			<g:sortableColumn property="code"  title="${message(code: 'spare.part.code.label')}" params="[q:q,'type.id':type?.id,status:status]" />
 			<g:sortableColumn property="type"  title="${message(code: 'spare.part.type.label')}" params="[q:q,'type.id':type?.id,status:status]" />
-			<g:sortableColumn property="statusOfSparePart"  title="${message(code: 'spare.part.status.label')}" params="[q:q,'type.id':type?.id,status:status]" />
-			<g:sortableColumn property="usedOnEquipment"  title="${message(code: 'spare.part.used.on.equipment.label')}" params="[q:q,'type.id':type?.id,status:status]" />
+			<g:sortableColumn property="stockLocation"  title="${message(code: 'spare.part.stockLocation.label')}" params="[q:q,'type.id':type?.id,status:status]" />
+			<g:sortableColumn property="status"  title="${message(code: 'spare.part.status.label')}" params="[q:q,'type.id':type?.id,status:status]" />
 			<th><g:message code="location.label"/></th>
 			<g:sortableColumn property="purchaseDate"  title="${message(code: 'spare.part.purchase.date.label')}" params="[q:q,'type.id':type?.id,status:status]" />
-			<g:sortableColumn property="purchaseCost"  title="${message(code: 'spare.part.purchase.cost.label')}" params="[q:q,'type.id':type?.id,status:status]" />
-			<g:sortableColumn property="sameAsManufacturer"  title="${message(code: 'spare.part.same.as.manufacturer.label')}" params="[q:q,'type.id':type?.id,status:status]" />
-			<g:sortableColumn property="supplier"  title="${message(code: 'provider.type.supplier')}" params="[q:q,'type.id':type?.id,status:status]" />
 			<g:sortableColumn property="sparePartPurchasedBy"  title="${message(code: 'spare.part.purchaser.label')}" params="[q:q,'type.id':type?.id,status:status]" />	
+			<g:sortableColumn property="purchaseCost"  title="${message(code: 'spare.part.purchase.cost.label')}" params="[q:q,'type.id':type?.id,status:status]" />
+			<g:sortableColumn property="supplier"  title="${message(code: 'provider.type.supplier')}" params="[q:q,'type.id':type?.id,status:status]" />
+			<g:sortableColumn property="initialQuantity"  title="${message(code: 'spare.part.initial.quantity')}" params="[q:q,'type.id':type?.id,status:status]" />
+			<g:sortableColumn property="inStockQuantity"  title="${message(code: 'spare.part.in.stock.quantity')}" params="[q:q,'type.id':type?.id,status:status]" />
+			<th><g:message code="spare.part.used.quantity"/></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -22,62 +23,58 @@
 				<td>
 					<ul class="horizontal">
 						<li>
-							<shiro:hasPermission permission="sparePart:edit">
-								<a href="${createLinkWithTargetURI(controller:'sparePart', action:'edit', params:[id: sparePart.id])}"  class="edit-button">
-									<g:message code="default.link.edit.label" />
-								</a>
-							</shiro:hasPermission>
+							<a href="${createLinkWithTargetURI(controller:'sparePart', action:'edit', params:[id: sparePart.id])}"  class="edit-button">
+								<g:message code="default.link.edit.label" />
+							</a>
 						</li>
 						<li>
-							<shiro:hasPermission permission="sparePart:delete">
-								<a href="${createLinkWithTargetURI(controller:'sparePart', action:'delete', params:[id: sparePart.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');" class="delete-button">
-									<g:message code="default.link.delete.label" />
-								</a>
-							</shiro:hasPermission>
+							<a href="${createLinkWithTargetURI(controller:'sparePart', action:'delete', params:[id: sparePart.id])}" onclick="return confirm('\${message(code: 'default.link.delete.confirm.message')}');" class="delete-button">
+								<g:message code="default.link.delete.label" />
+							</a>
 						</li>
 					</ul>
 				</td>
-				<td>${sparePart.serialNumber}</td>
-				<td>${sparePart.type.names}</td>
 				<td>
-					<a href="${createLinkWithTargetURI(controller:'sparePartStatus', action:'create', params:['sparePart.id': sparePart?.id])}" title="${message(code: 'tooltip.click.update.status')}" class="tooltip">
-  	    				${message(code: sparePart.statusOfSparePart?.messageCode+'.'+sparePart.statusOfSparePart?.name)}
-  	    			</a>
+					${sparePart.type.names}
 				</td>
 				<td>
-				<g:if test="${sparePart?.usedOnEquipment != null}">
-					<g:if test="${sparePart.statusOfSparePart.equals(StatusOfSparePart.DISPOSED)}">
+					${message(code: sparePart.stockLocation?.messageCode+'.'+sparePart.stockLocation?.name)}
+				</td>
+				<td>
+					${message(code: sparePart.status?.messageCode+'.'+sparePart.status?.name)}
+				</td>
+				<td>
+					<g:if test="${sparePart.dataLocation != null}">
+						<g:message code="datalocation.label"/>: ${sparePart.dataLocation?.names}<br/>
 					</g:if>
-					<g:if test="${sparePart.statusOfSparePart.equals(StatusOfSparePart.OPERATIONAL)}">
-						${sparePart.usedOnEquipment.code}
+					<g:if test="${!sparePart.room.equals("") && sparePart.room!=null}">
+						<g:message code="spare.part.room.label"/>: ${sparePart.room}<br/>
 					</g:if>
-				</g:if>
-				<g:elseif test="${sparePart?.usedOnEquipment == null && sparePart.statusOfSparePart.equals(StatusOfSparePart.PENDINGORDER)}">
-					<a href="${createLinkWithTargetURI(controller:'sparePartStatus', action:'create', params:['sparePart.id': sparePart?.id])}">
-						<button class="escalate next small gray"><g:message code="spare.part.arrive.in.stock.link.label" /></button>
-					</a>
-				</g:elseif>
-				<g:elseif test="${sparePart?.usedOnEquipment == null && sparePart.statusOfSparePart.equals(StatusOfSparePart.DISPOSED)}">
-
-				</g:elseif>
-				<g:else>
-					<a href="${createLinkWithTargetURI(controller:'sparePartStatus', action:'create', params:['sparePart.id': sparePart?.id])}" >
-  	    				<button class="escalate next small gray"><g:message code="spare.part.assign.equipment.link.label" /></button>
-  	    			</a>		
-				</g:else>
+					<g:if test="${!sparePart.shelf.equals("") && sparePart.shelf!=null}">
+						<g:message code="spare.part.shelf.label"/>: ${sparePart.shelf}<br/>
+					</g:if>
 				</td>
 				<td>
-					<g:message code="datalocation.label"/>: ${sparePart.dataLocation?.names}<br/>
-					
+					${Utils.formatDate(sparePart.purchaseDate)}
 				</td>
-				<td>${Utils.formatDateWithTime(sparePart.purchaseDate)}</td>
-				<td>${sparePart.purchaseCost} ${sparePart.currency}</td>
 				<td>
-					<g:if name="sameAsManufacturer" id="${sparePart.id}" test="${(sparePart.sameAsManufacturer==true)}">&radic;</g:if>
-					<g:else>&nbsp;</g:else>
-				</td>					
-				<td>${sparePart.supplier?.contact?.contactName}</td>				
-				<td>${message(code: sparePart.sparePartPurchasedBy?.messageCode+'.'+sparePart.sparePartPurchasedBy?.name)}</td>				
+					${message(code: sparePart.sparePartPurchasedBy?.messageCode+'.'+sparePart.sparePartPurchasedBy?.name)}
+				</td>
+				<td>
+					${sparePart.purchaseCost} ${sparePart.currency}
+				</td>
+				<td>
+					${sparePart.supplier?.contact?.contactName}
+				</td>	
+				<td>
+					${sparePart.initialQuantity}
+				</td>
+				<td>
+					${sparePart.inStockQuantity}
+				</td>		
+				<td>
+					${sparePart.usedQuantity}
+				</td>								
 			</tr>
 		</g:each>
 	</tbody>	

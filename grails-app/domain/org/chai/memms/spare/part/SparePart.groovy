@@ -31,19 +31,10 @@ import java.util.Date;
 
 import groovy.transform.EqualsAndHashCode;
 
-import javax.persistence.Transient;
-
 import org.chai.location.DataLocation;
-import org.chai.memms.Period;
-import org.chai.memms.Warranty;
-import org.chai.memms.inventory.Equipment;
 import org.chai.memms.inventory.Provider;
 import org.chai.memms.security.User;
 import org.chai.memms.spare.part.SparePartType;
-import org.chai.memms.spare.part.SparePartStatus;
-import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
-import org.apache.commons.io.filefilter.FalseFileFilter;
-import org.apache.commons.lang.math.RandomUtils;
 import i18nfields.I18nFields;
 
 /**
@@ -51,11 +42,10 @@ import i18nfields.I18nFields;
  *
  */
 @i18nfields.I18nFields
-@EqualsAndHashCode(includes="code")
 public class SparePart {
 	
 	enum StockLocation{
-		
+
 		NONE('none'),
 		MMC("mmc"),
 		FACILITY("facility")
@@ -71,7 +61,7 @@ public class SparePart {
 		BYMOH("by.moh"),
 		BYMMC("by.mmc"),
 		BYFACILITY("by.facility"),
-		BYPARTNER("by.partner"),
+		BYPARTNER("by.partner")
 		
 		String messageCode = "spare.part.purchased"
 
@@ -80,89 +70,96 @@ public class SparePart {
 		String getKey() { return name() }
 		
 	}
+	enum SparePartStatus{
+		
+		NONE('none'),
+		INSTOCK("in.stock"),
+		PENDINGORDER("pending.order")
+
+		String messageCode = "spare.part.status"
+
+		final String name
+		SparePartStatus(String name){ this.name=name }
+		String getKey() { return name() }
+		
+	}
 	
-	String code
-	String names
 	String descriptions
 	String currency
-	String serialNumber
-	Double purchaseCost
-	Period warrantyPeriod
-	Period expectedLifeTime
-	Equipment usedOnEquipment
-	Boolean sameAsManufacturer = false
-	Provider supplier
-	Warranty warranty
-	SparePartPurchasedBy sparePartPurchasedBy
-	DataLocation dataLocation
+	String room
+	String shelf
+
 	Date purchaseDate
 	Date dateCreated
 	Date lastUpdated
-	Date manufactureDate
-	StatusOfSparePart statusOfSparePart
+
+	Double purchaseCost
+	Integer initialQuantity
+	Integer inStockQuantity = 0
+
+	Provider supplier
+	DataLocation dataLocation
+
+	SparePartPurchasedBy sparePartPurchasedBy
+	StockLocation stockLocation
+	SparePartStatus status
+	
+	
 	User addedBy
 	User lastModified
 
-	StockLocation stockLocation
-	String room
-	String shelve
-
+	
 	static belongsTo = [type: SparePartType]
 
-	
-	static hasMany = [status: SparePartStatus]	
-	static i18nFields = ["descriptions","names"]
-	static embedded = ["warranty","warrantyPeriod","expectedLifeTime"]
+	static i18nFields = ["descriptions"]
 	
 	static constraints = {
-		code nullable: false, unique :true
-		names nullable: true, blank: true
-		room nullable: true, blank: true
-		shelve nullable: true, blank: true
+
 		descriptions nullable: true, blank: true
-		serialNumber nullable: true, unique: true
-		purchaseDate nullable: true, validator:{ val, obj ->
-			if(val!=null && obj.warranty!=null && obj.warranty.startDate!=null)
-				return (obj.warranty.startDate.after(val) || obj.warranty.startDate.compareTo(val)==0)
+		type nullable: false
+		room nullable: true, blank: true
+		shelf nullable: true, blank: true
+
+		initialQuantity nullable: false, minSize:1
+		inStockQuantity nullable: false, minSize:0, validator:{ val, obj ->
+			if(obj.status.equals(SparePartStatus.PENDINGORDER)) return val==0
+		}
+
+		purchaseDate nullable: true, validator:{it <= new Date()}
+
+		currency  nullable: true, blank: true, validator:{ val, obj ->
+			if(obj.purchaseCost != null) return (val != null && val in ["RWF","USD","EUR"])
 		}
 		purchaseCost nullable: true, validator: {val, obj ->
-		if(obj.currency!=null) return (val!=null)
-		}		
-		stockLocation  nullable: true,validator:{
-			if(it!=null) it in [StockLocation.MMC, StockLocation.FACILITY]
+			if(obj.currency != null) return val != null
 		}
-		type nullable: false
+
+		sparePartPurchasedBy nullable: false, inList:[SparePartPurchasedBy.BYFACILITY,SparePartPurchasedBy.BYMOH, SparePartPurchasedBy.BYMMC, SparePartPurchasedBy.BYPARTNER]
+
+		status nullable: false, inList:[SparePartStatus.INSTOCK,SparePartStatus.PENDINGORDER]
+
+		stockLocation  nullable: false,inList:[StockLocation.MMC, StockLocation.FACILITY]
 		
-		dataLocation nullable: true, validator: {val,obj ->
-			if(obj.stockLocation.equals(StockLocation.FACILITY)) return (val!=null)
+		dataLocation nullable: true, validator: {val, obj ->
+			if(obj.stockLocation.equals(StockLocation.FACILITY)) return val != null
+			else return val == null
 		}
-		addedBy nullable: false
-		usedOnEquipment nullable: true, validator:{val,obj ->
-			if(obj.statusOfSparePart.equals(StatusOfSparePart.OPERATIONAL)) return (val!=null)
-		}
+		
 		lastModified nullable:true, validator:{ val, obj ->
 			if (val != null) return (obj.lastUpdated != null)
 		}	
-		warranty nullable:true
-
-		warrantyPeriod nullable: true, validator:{val, obj ->
-			if (obj.warranty!=null) return (val!=null) && (val.numberOfMonths >= 0)
-		}
-		sparePartPurchasedBy nullable: false, inList:[SparePartPurchasedBy.BYFACILITY,SparePartPurchasedBy.BYMOH, SparePartPurchasedBy.BYMMC, SparePartPurchasedBy.BYPARTNER]
-		
-		currency  nullable: true, blank: true, inList: ["RWF","USD","EUR"], validator:{ val, obj ->
-			if(obj.purchaseCost != null) return (val != null)
-		}
-		statusOfSparePart nullable:true,validator:{
-			if(it!=null) return it in [StatusOfSparePart.OPERATIONAL,StatusOfSparePart.INSTOCK,StatusOfSparePart.PENDINGORDER,StatusOfSparePart.DISPOSED]
-		}
 		supplier nullable: true
-		expectedLifeTime nullable: true, validator:{
-			if(it==null) return true
-			else return (it.numberOfMonths >= 0)
-		}
-		manufactureDate nullable: true, blank: false, validator:{it <= new Date()}
-		
+	}
+
+	def getUsedQuantity () {
+		if(status.equals(SparePartStatus.INSTOCK))
+			return initialQuantity - inStockQuantity
+	}
+	//True if this spare part group is no longer inStock
+	def getIsEmptyStock(){
+		if(status.equals(SparePartStatus.INSTOCK) && inStockQuantity==0)
+			return true
+		else return false
 	}
 	
 	static mapping = {
@@ -171,48 +168,9 @@ public class SparePart {
 		cache true
 	}
 	
-	@Transient
-	def getTimeBasedStatus(){
-		if(!status) return null
-		SparePartStatus currentState = status.asList()[0]
-		for(SparePartStatus state : status){
-			currentState.dateOfEvent.clearTime()
-			state.dateOfEvent.clearTime()
-			if(state.dateOfEvent.after(currentState.dateOfEvent)){
-				currentState= state;
-			}
-			if(state.dateOfEvent.compareTo(currentState.dateOfEvent)==0){
-				if(state.dateCreated.after(currentState.dateCreated))
-					currentState = state
-				if(state.dateCreated.compareTo(currentState.dateCreated)==0)
-					currentState = (currentState.id > state.id)?currentState:state
-			}
-			
-		}
-		return currentState
-	}
-	def beforeUpdate(){
-		lastUpdated = new Date()
-	}
-	
-	def beforeValidate(){
-		this.getGenerateAndSetCode()
-	}
-	
-	@Transient
-	def getGenerateAndSetCode(){
-		if(!code){
-			def randomInt = RandomUtils.nextInt(99999)
-			def now = new Date()
-			def sparePartCode = "${randomInt}-${now.month+1}-${now.year+1900}"
-			if(log.isDebugEnabled()) log.debug("Generated code:" + sparePartCode)
-			if(SparePart.findByCode(sparePartCode.toString()) == null) code = sparePartCode
-			else getGenerateAndSetCode()
-		}
-	}
 	
 	String toString() {
-		return "SparePart [id= " + id + " code= "+code+" serialNumber= "+serialNumber+" currentState= "+statusOfSparePart+"]";
+		return "SparePart [id= " + id + " type= "+type+"]";
 
 	}
 }

@@ -32,8 +32,7 @@ import java.util.Date;
 import org.apache.shiro.SecurityUtils;
 import org.chai.memms.AbstractEntityController;
 import org.chai.memms.spare.part.SparePart.StockLocation;
-import org.chai.memms.spare.part.SparePartStatus;
-import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
+import org.chai.memms.spare.part.SparePart.SparePartStatus;
 import org.chai.memms.Contact;
 import org.chai.memms.Initializer;
 import org.chai.memms.spare.part.SparePart.SparePartPurchasedBy;
@@ -83,107 +82,34 @@ class SparePartController extends AbstractEntityController{
 		return SparePart.class;
 	}
 	
-
 	def bindParams(def entity) {
+		def stockLocation = params['stockLocation']
 		if(log.isDebugEnabled()) log.debug("SparePart params: before bind "+params)
-		if(!entity.id){
-			entity.addedBy = user
-		}else{
-		    params.oldStatus =  entity.statusOfSparePart
+		if(!entity.id) entity.addedBy = user 
+		else{
 			entity.lastModified = user
-			if(params["warranty.sameAsSupplier"]=="on"){
-				params["warranty.contact.contactName"]=""
-				params["warranty.contact.email"]=""
-				params["warranty.contact.phone"]=""
-				params["warranty.contact.poBox"]=""
-				params["warranty.contact.city"]=""
-				params["warranty.contact.country"]=""
-				grailsApplication.config.i18nFields.locales.each{loc ->
-					params["warranty.contact.addressDescriptions_"+loc] = ""
-				}
-				entity.warranty.contact=null
-			}
+			stockLocation = StockLocation."$stockLocation"
+			if(stockLocation.equals(StockLocation.MMC))
+				params.dataLocation =''
 		}
-		//Verify dataLocation null at MMC NOT NULL at FACILITY
-		if(!params["stockLocation"].equals("FACILITY")){
-			params["dataLocation"] = null
-		}
-		//Making sure a disposed sparePart cannot be modified 
-		//TODO add this check to method that modified sparePart
-		if(!params.oldStatus.equals(StatusOfSparePart.DISPOSED))
-			bindData(entity,params,[exclude:["statusOfSparePart","dateOfEvent"]])
-		if(log.isDebugEnabled()) log.debug("SparePart params: after bind  "+entity)
-		
-		//Verify equipment is null on status different to operational
-		if(!params["statusOfSparePart"].equals("OPERATIONAL")){
-			params["usedOnEquipment"] = null
-		}
-		
-		//Verify stockLocation, dataLocation, room and shelve are null on OPERATIONAL status
-		if((params["statusOfSparePart"].equals("OPERATIONAL")) && (params["statusOfSparePart"].equals("DISPOSED"))){
-			params["room"] = null
-			params["shelve"] = null
-			params["stockLocation"] = null
-			params["dataLocation"] = null
-		}
+		entity.properties = params
+		if(log.isDebugEnabled()) log.debug("SparePart params: before bind "+params)
 	}
 
-	def validateEntity(def entity) {
-		boolean validStatus = true
-		//Check the purchaseDate is not after first Status dateOfEvent if any
-		if(entity.id==null && entity.purchaseDate!=null && !(entity.purchaseDate.before(params.cmd.dateOfEvent) || entity.purchaseDate.compareTo(params.cmd.dateOfEvent)==0)){ 
-			params.cmd.errors.rejectValue('dateOfEvent','date.of.event.before.purchase.date')
-			validStatus = (!params.cmd.hasErrors()) 
-		}		
-		if(log.isDebugEnabled()) log.debug("Rejecting SparePartStatus: "+params.cmd?.errors)
-		return (validStatus & entity.validate())
-	}
-
-	def saveEntity(def entity) {
-		SparePartStatus status
-		if(entity.id==null){
-			entity.statusOfSparePart = StatusOfSparePart."$params.cmd.statusOfSparePart"
-			sparePartStatusService.createSparePartStatus(user,params.cmd.statusOfSparePart,entity,params.cmd.dateOfEvent,[:])
-		}
-		else entity.save()
-	}
-
-	def save = { StatusCommand cmd ->
-		params.cmd = cmd
-		super.saveWithoutTokenCheck()
-	}
 
 	def getModel(def entity) {
-		def suppliers = []; def types = []; def dataLocations = []; def equipments=[];
+		def suppliers = []; def types = []; def dataLocations = [];
 		if (entity.supplier != null) suppliers << entity.supplier
 		if (entity.type!=null) types << entity.type
 		if (entity.dataLocation!=null) dataLocations << entity.dataLocation
-		if (entity.usedOnEquipment!=null) equipments << entity.usedOnEquipment
 		[
 			sparePart: entity,
 			suppliers: suppliers,
 			types: types,
 			dataLocations: dataLocations,
-			equipments:equipments,
-			numberOfStatusToDisplay: grailsApplication.config.status.to.display.on.spare.part.form,
-			cmd:params.cmd,
 			currencies: grailsApplication.config.site.possible.currency,
 			now:now
-
 		]
 	}
 }
 
-class StatusCommand {
-	StatusOfSparePart statusOfSparePart
-	Date dateOfEvent
-
-	static constraints = {
-		statusOfSparePart nullable: false, inList: [StatusOfSparePart.INSTOCK, StatusOfSparePart.OPERATIONAL, StatusOfSparePart.PENDINGORDER,StatusOfSparePart.DISPOSED]
-		dateOfEvent nullable: false
-	}
-
-	String toString(){
-		return "StatusCommand [Status "+statusOfSparePart+" dateOfEvent: "+dateOfEvent+"]";
-	}
-}

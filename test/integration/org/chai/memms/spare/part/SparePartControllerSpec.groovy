@@ -34,7 +34,7 @@ import org.chai.memms.spare.part.SparePart.StockLocation;
 import org.chai.memms.spare.part.SparePartViewController;
 import org.chai.memms.spare.part.FilterCommand;
 import org.chai.memms.spare.part.SparePart.SparePartPurchasedBy;
-import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
+import org.chai.memms.spare.part.SparePart.SparePartStatus;
 import org.chai.location.DataLocation;
 import org.chai.memms.security.User;
 import org.chai.memms.inventory.Provider.Type;
@@ -59,45 +59,59 @@ class SparePartControllerSpec extends IntegrationTests{
 		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",manufacturer,Initializer.now())
 		def supplierContact = Initializer.newContact(['en':'Address Descriptions '],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
-		def equipment = newEquipment("SERIAL01",DataLocation.findByCode(KIVUYE))
 
-		sparePartController = new SparePartController();
-		
 		when:
-		sparePartController.params.serialNumber = 'SERIAL12129'
+		sparePartController = new SparePartController();
+		sparePartController.params.initialQuantity = 44
 		sparePartController.params.purchaseCost = "32000"
 		sparePartController.params.currency = "USD"
 		sparePartController.params.sparePartPurchasedBy = SparePartPurchasedBy.BYMOH
 		sparePartController.params.stockLocation = StockLocation.MMC
-		sparePartController.params.sameAsManufacturer = false
 		sparePartController.params.descriptions_en = "test_english_descriptions"
-		sparePartController.params.manufactureDate = Initializer.getDate(1,1,2012)
 		sparePartController.params.purchaseDate = Initializer.getDate(2,1,2012)
 		sparePartController.params.type = sparePartType
-		sparePartController.params."warranty.startDate" = Initializer.getDate(10,1,2012)
-		sparePartController.params."warranty.sameAsSupplier" = true
-		sparePartController.params."warranty.descriptions_en" = "new warranty for testing"
-		sparePartController.params.warrantyPeriod = "struct"
-		sparePartController.params.warrantyPeriod_years = "1"
-		sparePartController.params.warrantyPeriod_months = "4"
 		sparePartController.params."supplier.id" = supplier.id
-		sparePartController.params.expectedLifeTime = "struct"
-		sparePartController.params.expectedLifeTime_years = "1"
-		sparePartController.params.expectedLifeTime_months = "3"
-		sparePartController.params.dataLocation = DataLocation.list().first()
-		sparePartController.params.statusOfSparePart="INSTOCK"
-		sparePartController.params.dateOfEvent=Initializer.now()
-		sparePartController.params.usedOnEquipment=equipment
+		sparePartController.params.status="INSTOCK"
 		sparePartController.save()
 
 		then:
 		SparePart.count() == 1;
-		SparePart.findBySerialNumber("SERIAL12129").serialNumber.equals("SERIAL12129")
-		SparePart.findBySerialNumber("SERIAL12129").expectedLifeTime.numberOfMonths == 15
-		SparePart.findBySerialNumber("SERIAL12129").warrantyPeriod.numberOfMonths == 16
 		SparePart.findByDescriptions_en("test_english_descriptions").getDescriptions(new Locale("en")).equals("test_english_descriptions")
+		SparePart.findByInitialQuantity(44) != null
 	}
-	
+	def "create spare part with correct required data in fields - for english input"(){
+
+		setup:
+		setupLocationTree()
+		setupSystemUser()
+		def manufactureContact = Initializer.newContact(['en':'Address Descriptions '],"Manufacture","jkl@yahoo.com","0768-889-787","Street 154","6353")
+		def manufacturer = Initializer.newProvider(CODE(111), Type.MANUFACTURER,manufactureContact)
+		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",manufacturer,Initializer.now())
+		def supplierContact = Initializer.newContact(['en':'Address Descriptions '],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
+		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
+		
+		when:
+		sparePartController = new SparePartController();
+		sparePartController.params.initialQuantity = 55
+		sparePartController.params.purchaseCost = "327670"
+		sparePartController.params.currency = "USD"
+		sparePartController.params.sparePartPurchasedBy = SparePartPurchasedBy.BYMOH
+		sparePartController.params.stockLocation = StockLocation.FACILITY
+		sparePartController.params.descriptions_en = "test_english_descriptions 3"
+		sparePartController.params.purchaseDate = Initializer.getDate(2,1,2012)
+		sparePartController.params.type = sparePartType
+		sparePartController.params."supplier.id" = supplier.id
+		sparePartController.params.dataLocation = DataLocation.list().first()
+		sparePartController.params.status="INSTOCK"
+		sparePartController.save()
+
+		then:
+		SparePart.count() == 1;
+		SparePart.findByDescriptions_en("test_english_descriptions 3").getDescriptions(new Locale("en")).equals("test_english_descriptions 3")
+		SparePart.findByInitialQuantity(55) != null
+		SparePart.findByPurchaseCost(327670) != null
+
+	}
 	def "create spare part with correct required data in fields - for all locale"(){
 		
 		setup:
@@ -109,53 +123,32 @@ class SparePartControllerSpec extends IntegrationTests{
 		def manufacturer = Initializer.newProvider(CODE(111), Type.MANUFACTURER,manufactureContact)
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
 		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",manufacturer,Initializer.now())
-		def equipment = newEquipment("SERIAL01",DataLocation.findByCode(KIVUYE))
 				
 		sparePartController = new SparePartController();
 		
 		when:
-		sparePartController.params.serialNumber = 'SERIAL129'
 		sparePartController.params.purchaseCost = ""
 		sparePartController.params.currency = ""
+		sparePartController.params.initialQuantity = 44
 		sparePartController.params.sparePartPurchasedBy = SparePartPurchasedBy.BYMOH
 		sparePartController.params.stockLocation = StockLocation.MMC
-		sparePartController.params.sameAsMAnufacturer = false
-		sparePartController.params."warranty.startDate" = Initializer.getDate(1,1,2012)
-		sparePartController.params."warranty.sameAsSupplier" = true
-		sparePartController.params.warrantyPeriod = "struct"
-		sparePartController.params.warrantyPeriod_years = "1"
-		sparePartController.params.warrantyPeriod_months = "4"
-		grailsApplication.config.i18nFields.locales.each{
-			sparePartController.params."warranty.descriptions_$it" = "new warranty for testing $it"
-		}
-		
 		grailsApplication.config.i18nFields.locales.each{
 			sparePartController.params."descriptions_$it" = "test descriptions $it"
 		}
-		sparePartController.params.manufactureDate = Initializer.getDate(1,1,2012)
 		sparePartController.params.purchaseDate = Initializer.getDate(1,1,2012)
 		sparePartController.params.type = sparePartType
-		sparePartController.params.expectedLifeTime = "struct"
-		sparePartController.params.expectedLifeTime_years = "1"
-		sparePartController.params.expectedLifeTime_months = "3"
 		sparePartController.params."supplier.id" = supplier.id
-		sparePartController.params.dataLocation = DataLocation.list().first()
-		sparePartController.params.statusOfSparePart="INSTOCK"
-		sparePartController.params.dateOfEvent=Initializer.now()
-		sparePartController.params.usedOnEquipment=equipment
+		sparePartController.params.status="INSTOCK"
 		sparePartController.save()
 		
 		then:
 		SparePart.count() == 1;
-		SparePart.findBySerialNumber("SERIAL129").serialNumber.equals("SERIAL129")
-		SparePart.findBySerialNumber("SERIAL129").expectedLifeTime.numberOfMonths == 15
-		SparePart.findBySerialNumber("SERIAL129").warrantyPeriod.numberOfMonths == 16
 		grailsApplication.config.i18nFields.locales.each{
 			SparePart."findByDescriptions_$it"("test descriptions $it").getDescriptions(new Locale("$it")).equals("test descriptions $it")
 		}
 	}
 	
-	def "Can create spare part with status OPERATIONAL when all location's parameters are null"(){
+	def "dataLocation cannot be null when the stockLocation is at FACILITY and has to be null when stockLocation is at MMC"(){
 		
 		setup:
 		setupLocationTree()
@@ -165,45 +158,48 @@ class SparePartControllerSpec extends IntegrationTests{
 		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",manufacturer,Initializer.now())
 		def supplierContact = Initializer.newContact(['en':'Address Descriptions '],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
-		def equipment = newEquipment("SERIAL01",DataLocation.findByCode(KIVUYE))
 		
 		sparePartController = new SparePartController();
 		
 		when:
-		sparePartController.params.serialNumber = 'SERIAL12129'
+		sparePartController.params.initialQuantity = 43
 		sparePartController.params.purchaseCost = "32000"
 		sparePartController.params.currency = "USD"
 		sparePartController.params.sparePartPurchasedBy = SparePartPurchasedBy.BYMOH
-		sparePartController.params.stockLocation = null
-		sparePartController.params.dataLocation = null
-		sparePartController.params.room = null
-		sparePartController.params.shelve = null
-		sparePartController.params.sameAsManufacturer = false
+		sparePartController.params.stockLocation = StockLocation.MMC
+		sparePartController.params.dataLocation = DataLocation.findByCode(KIVUYE)
+		sparePartController.params.room = ''
+		sparePartController.params.shelve = ''
 		sparePartController.params.descriptions_en = "test_english_descriptions"
-		sparePartController.params.manufactureDate = Initializer.getDate(1,1,2012)
 		sparePartController.params.purchaseDate = Initializer.getDate(2,1,2012)
 		sparePartController.params.type = sparePartType
-		sparePartController.params."warranty.startDate" = Initializer.getDate(10,1,2012)
-		sparePartController.params."warranty.sameAsSupplier" = true
-		sparePartController.params."warranty.descriptions_en" = "new warranty for testing"
-		sparePartController.params.warrantyPeriod = "struct"
-		sparePartController.params.warrantyPeriod_years = "1"
-		sparePartController.params.warrantyPeriod_months = "4"
 		sparePartController.params."supplier.id" = supplier.id
-		sparePartController.params.expectedLifeTime = "struct"
-		sparePartController.params.expectedLifeTime_years = "1"
-		sparePartController.params.expectedLifeTime_months = "3"
-		sparePartController.params.statusOfSparePart="OPERATIONAL"
-		sparePartController.params.dateOfEvent=Initializer.now()
-		sparePartController.params.usedOnEquipment=equipment
+		sparePartController.params.status="INSTOCK"
 		sparePartController.save()
 		
 		then:
-		SparePart.count() == 1;
-		SparePart.findBySerialNumber("SERIAL12129").serialNumber.equals("SERIAL12129")
-		SparePart.findBySerialNumber("SERIAL12129").expectedLifeTime.numberOfMonths == 15
-		SparePart.findBySerialNumber("SERIAL12129").warrantyPeriod.numberOfMonths == 16
-		SparePart.findByDescriptions_en("test_english_descriptions").getDescriptions(new Locale("en")).equals("test_english_descriptions")
+		SparePart.count() == 0;
+		
+
+		when:
+		sparePartController.params.initialQuantity = 13
+		sparePartController.params.purchaseCost = "32000"
+		sparePartController.params.currency = "USD"
+		sparePartController.params.sparePartPurchasedBy = SparePartPurchasedBy.BYMOH
+		sparePartController.params.stockLocation = StockLocation.FACILITY
+		sparePartController.params.dataLocation = null
+		sparePartController.params.room = ''
+		sparePartController.params.shelve = ''
+		sparePartController.params.descriptions_en = "test_english_descriptions"
+		sparePartController.params.purchaseDate = Initializer.getDate(2,1,2012)
+		sparePartController.params.type = sparePartType
+		sparePartController.params."supplier.id" = supplier.id
+		sparePartController.params.status="INSTOCK"
+		sparePartController.save()
+		
+		then:
+		SparePart.count() == 0;
+		
 	}
 	
 }

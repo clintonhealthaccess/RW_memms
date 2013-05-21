@@ -81,7 +81,7 @@ class EquipmentType {
 		
 		expectedLifeTime nullable: true
 		
-		lastUpdated nullable: false, blank: false, validator:{it <= new Date()}
+		lastUpdated nullable: false, validator:{it <= new Date()}
 		
 		observation nullable: false, inLIst:[Observation.USEDINMEMMS,Observation.RETIRED,Observation.TOODETAILED,Observation.NOTINSCOPE]
     }

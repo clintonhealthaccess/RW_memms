@@ -36,7 +36,7 @@ import org.chai.memms.inventory.Provider.Type;
 import org.chai.memms.inventory.Provider;
 import org.chai.memms.security.User;
 import org.chai.memms.spare.part.SparePartType;
-import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
+import org.chai.memms.spare.part.SparePart.SparePartStatus;
 import org.chai.memms.AbstractEntityController;
 
 

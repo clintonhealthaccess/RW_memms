@@ -33,8 +33,8 @@ import groovy.transform.EqualsAndHashCode;
 import org.chai.memms.inventory.Provider;
 import org.chai.memms.inventory.EquipmentType;
 import org.chai.memms.inventory.Equipment;
-import org.chai.memms.spare.part.SparePartStatus;
-import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
+import org.chai.memms.spare.part.SparePart.SparePartStatus;
+import org.chai.memms.spare.part.SparePart.StockLocation;
 import org.chai.memms.spare.part.SparePart;
 import org.chai.memms.inventory.Provider.Type
 
@@ -79,25 +79,66 @@ class SparePartType {
 
 	@Transient
 	def getInStockSpareParts(){
-		List<SparePart> inStockSpareParts =  []
-		if(spareParts!=null && spareParts.size()>0){
+		def inStockSpareParts = []
+		if(spareParts && spareParts.size())
 			for(SparePart sparePart: spareParts)
-				if(sparePart.statusOfSparePart.equals(StatusOfSparePart.INSTOCK))
+				if(sparePart.status.equals(SparePartStatus.INSTOCK) && sparePart.inStockQuantity>0) 
 					inStockSpareParts.add(sparePart)
-		}
 		return inStockSpareParts
 	}
 
 	@Transient
 	def getPendingSpareParts(){
-		List<SparePart> pendingSpareParts=[]
-		if(spareParts!=null && spareParts.size()>0){
-			for(SparePart sparePart:spareParts)
-				if(sparePart.statusOfSparePart.equals(StatusOfSparePart.PENDINGORDER))
+		def pendingSpareParts = []
+		if(spareParts && spareParts.size())
+			for(SparePart sparePart: spareParts)
+				if(sparePart.status.equals(SparePartStatus.PENDINGORDER) && sparePart.initialQuantity>0) 
 					pendingSpareParts.add(sparePart)
-		}
 		return pendingSpareParts
 	}
+
+	@Transient
+	def getQuantityInStockAtMMC(){
+		def quantityInStockAtMMC = []
+		if(spareParts && spareParts.size())
+			for(SparePart sparePart: spareParts){
+				if(sparePart.status.equals(SparePartStatus.INSTOCK) && sparePart.stockLocation.equals(StockLocation.MMC) && sparePart.inStockQuantity>0)
+					quantityInStockAtMMC = quantityInStockAtMMC+sparePart.inStockQuantity 
+			}
+		return quantityInStockAtMMC
+	}
+
+	@Transient
+	def getQuantityInStockAtFacility(){
+		def quantityInStockAtFacility= 0
+		if(spareParts && spareParts.size())
+			for(SparePart sparePart: spareParts){
+				if(sparePart.status.equals(SparePartStatus.INSTOCK) && sparePart.stockLocation.equals(StockLocation.FACILITY) && sparePart.inStockQuantity>0)
+					quantityInStockAtFacility = quantityInStockAtFacility+sparePart.inStockQuantity
+			}
+		return quantityInStockAtFacility
+	}
+
+	@Transient
+	def getQuantityPendingAtMMC(){
+		def quantityPendingAtMMC = 0
+		if(spareParts && spareParts.size())
+			for(SparePart sparePart: spareParts)
+				if(sparePart.status.equals(SparePartStatus.PENDINGORDER) && sparePart.stockLocation.equals(StockLocation.MMC) && sparePart.initialQuantity>0) 
+					quantityPendingAtMMC = quantityPendingAtMMC+sparePart.initialQuantity
+		return quantityPendingAtMMC
+	}
+
+	@Transient
+	def getQuantityPendingAtFacility(){
+		def quantityPendingAtFacility =0
+		if(spareParts && spareParts.size())
+			for(SparePart sparePart: spareParts)
+				if(sparePart.status.equals(SparePartStatus.PENDINGORDER) && sparePart.stockLocation.equals(StockLocation.FACILITY) && sparePart.initialQuantity>0) 
+					quantityPendingAtFacility = quantityPendingAtFacility+sparePart.initialQuantity
+		return quantityPendingAtFacility
+	}
+
 
 
 	@Override

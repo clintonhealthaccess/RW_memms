@@ -41,8 +41,11 @@ import org.chai.location.LocationLevel;
 import org.chai.memms.AbstractController;
 import org.chai.memms.spare.part.SparePart;
 import org.chai.memms.spare.part.SparePartType;
+
+import org.chai.memms.spare.part.SparePart.StockLocation;
+import org.chai.memms.inventory.Provider;
 import org.chai.memms.spare.part.SparePart.SparePartPurchasedBy;
-import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
+import org.chai.memms.spare.part.SparePart.SparePartStatus;
 
 import org.chai.memms.inventory.Provider;
 
@@ -70,24 +73,19 @@ class SparePartViewController extends AbstractController{
 	}
 	
 	def getSparePartClueTipsAjaxData = {
-		def sparePart = SparePart.get(params.long("sparePart.id"))
+		def sparePart = SparePart.get(params.long("id"))
 		def html = g.render(template:"/templates/sparePartClueTip",model:[sparePart:sparePart])
 		render(contentType:"text/plain", text:html)
 	}
 	
 	def list = {
 		adaptParamsForList()
-		def type = SparePartType.get(params.long('type.id'))	
-		def status = null
-		if(params['status']){
-			status = params["status"]
-			status = StatusOfSparePart."$status"
-		}
-		def spareParts = sparePartService.getSpareParts(user,type,status,params)
+		def type = SparePartType.get(params.long('type.id'))
+		def spareParts = sparePartService.getSpareParts(user,type,params)
 		if(request.xhr)
-			this.ajaxModel(spareParts,type,status,"")
+			this.ajaxModel(spareParts,type,"")
 		else{
-			render(view:"/entity/list",model: model(spareParts,type,status) << [
+			render(view:"/entity/list",model: model(spareParts,type) << [
 				template:"sparePart/sparePartList",
 				listTop:"sparePart/listTop",
 				filterTemplate:"sparePart/sparePartFilter",
@@ -101,16 +99,11 @@ class SparePartViewController extends AbstractController{
 	def search = {
 		adaptParamsForList()
 		def type = SparePartType.get(params.long('type.id'))	
-		def status = null
-		if(params['status']){
-			status = params["status"]
-			status = StatusOfSparePart."$status"
-		}
-		def spareParts = sparePartService.searchSparePart(params['q'],user,type,status,params)
+		def spareParts = sparePartService.searchSparePart(params['q'],user,type,params)
 		if(request.xhr)
-			this.ajaxModel(spareParts,type,status,params['q'])
+			this.ajaxModel(spareParts,type,params['q'])
 		else {
-			render(view:"/entity/list", model: model(spareParts,type,status) << [
+			render(view:"/entity/list", model: model(spareParts,type) << [
 				template:"sparePart/sparePartList",
 				filterTemplate:"sparePart/sparePartFilter",
 				listTop:"sparePart/listTop"
@@ -118,130 +111,37 @@ class SparePartViewController extends AbstractController{
 		}
 	}
 	
-	def ajaxModel(def entities,def type,def status,def searchTerm) {
-		def model = model(entities,type,status) << [q:searchTerm]
+	def ajaxModel(def entities,def type,def searchTerm) {
+		def model = model(entities,type) << [q:searchTerm]
 		def listHtml = g.render(template:"/entity/sparePart/sparePartList",model:model)
 		render(contentType:"text/json") { results = [listHtml] }
 	}
 	
-	def model(def entities,def type,def status) {
+	def model(def entities,def type) {
 		return [
 			entities: entities,
 			entityCount: entities.totalCount,
 			entityClass:getEntityClass(),
 			code: getLabel(),
-			status:status,
 			type:type
 			
 		]
 	}
 
-	def selectFacility = {
-		adaptParamsForList()
-		def locations = []
-		locations.add(user.location as DataLocation)
-		if((user.location as DataLocation).manages)
-			locations.addAll((user.location as DataLocation).manages)
-		render(view:"/entity/list", model:[
-					listTop:"sparePart/listTop",
-					template:"sparePart/selectFacility",
-					locations:locations
-				])
-	}
 
 	def filter = { FilterCommand cmd ->
 		if (log.isDebugEnabled()) log.debug("spare.parts.filter, command "+cmd)
 		adaptParamsForList()
-		def spareParts = sparePartService.filterSparePart(user.location,cmd.supplier,cmd.sparePartType,cmd.sparePartPurchasedBy,cmd.sameAsManufacturer,cmd.statusOfSparePart,params)
+		def spareParts = sparePartService.filterSparePart(user.location,cmd.supplier,cmd.sparePartType,cmd.stockLocation,cmd.sparePartPurchasedBy,cmd.status,params)
 		if(!request.xhr)
 			response.sendError(404)
-		else this.ajaxModel(spareParts,null,cmd.statusOfSparePart,"")
+		else this.ajaxModel(spareParts,null,"")
 	}
-	
-	def summaryPage = {
-		if(user.location instanceof DataLocation) redirect(controller:"sparePartView",action:"list")
-
-		def location = DataLocation.get(params.long('dataLocation'))
-		def locationTypesFilter = getLocationTypes()
-		def template = null
-		def spareParts = null
-
-		adaptParamsForList()
-
-		def locationSkipLevels = partService.getSkipLocationLevels()
-
-		if (location != null)
-			spareParts = partService.getPartByLocation(location,locationTypesFilter,params)
-	
-		render (view: '/partSummaryPage/summaryPage', model: [
-					spareParts:spareParts?.sparePartList,
-					currentLocation: location,
-					currentLocationTypes: locationTypesFilter,
-					template: "/partSummaryPage/sectionTable",
-					entityCount: spareParts?.totalCount,
-					locationSkipLevels: locationSkipLevels
-				])
-	}
-	
-	def generalExport = { ExportFilterCommand cmd ->
-
-			Set<DataLocation> dataLocations = new HashSet<DataLocation>()
-			params.list('dataLocationids').each { id ->
-				if (NumberUtils.isDigits(id)) {
-					def dataLocation = DataLocation.get(id)
-					if (dataLocation != null && !dataLocations.contains(dataLocation)) 
-					dataLocations.add(dataLocation);
-				}
-			}
-			cmd.dataLocations = dataLocations
-		
-			Set<SparePartType> sparePartTypes = new HashSet<SparePartType>()
-			params.list('sparePartTypeids').each { id ->
-				if (NumberUtils.isDigits(id)) {
-					def sparePartType = SparePartType.get(id)
-					if (sparePartType != null && !sparePartTypes.contains(sparePartType)) 
-					sparePartTypes.add(sparePartType);
-				}
-			}
-			cmd.sparePartTypes = sparePartTypes
-		
-			Set<Provider> suppliers = new HashSet<Provider>()
-			params.list('supplierids').each { id ->
-				if (NumberUtils.isDigits(id)) {
-					def supplier = Provider.get(id)
-					if (supplier != null && !suppliers.contains(supplier)) 
-					suppliers.add(supplier);
-				}
-			}
-			cmd.suppliers = suppliers
-		
-			if (log.isDebugEnabled()) log.debug("spare.Parts.export, command="+cmd+", params"+params)
-		
-		
-			if(params.exported != null){
-				def sparePartExportTask = new SparePartExportFilter(dataLocations:cmd.dataLocations,
-						sparePartTypes:cmd.sparePartTypes,suppliers:cmd.suppliers,statusOfSparePart:cmd.statusOfSparePart,
-						sparePartPurchasedBy:cmd.sparePartPurchasedBy,sameAsManufacturer:cmd.sameAsManufacturer).save(failOnError: true,flush: true)
-				params.exportFilterId = sparePartExportTask.id
-				params.class = "SparePartExportTask"
-				params.targetURI = "/sparePartView/generalExport"
-				redirect(controller: "task", action: "create", params: params)
-			}
-			adaptParamsForList()
-			render(view:"/entity/sparePart/sparePartExportPage", model:[
-					template:"/entity/sparePart/sparePartExportFilter",
-					filterCmd:cmd,
-					dataLocations:DataLocation.list(),
-					code: getLabel()
-			])
-	}
-	
+			
 	def export = { FilterCommand cmd ->
 		if (log.isDebugEnabled()) log.debug("spareParts.export, command "+cmd)
-		
 		adaptParamsForList()
-
-		def spareParts = sparePartService.filterSparePart(location,cmd.supplier,cmd.sparePartType,cmd.sparePartPurchasedBy,cmd.sameAsManufacturer,cmd.statusOfSparePart,params)
+		def spareParts = sparePartService.filterSparePart(user.location,cmd.supplier,cmd.sparePartType,cmd.stockLocation,cmd.sparePartPurchasedBy,cmd.status,params)
 		File file = sparePartService.exporter(user.location,spareParts)
 
 		response.setHeader "Content-disposition", "attachment; filename=${file.name}.csv"
@@ -249,117 +149,28 @@ class SparePartViewController extends AbstractController{
 		response.outputStream << file.text
 		response.outputStream.flush()
 	}
-
-	def updateSameAsManufacturer = {
-		if (log.isDebugEnabled()) log.debug("updateSameAsManufacturer sparePart.sameAsManufacturer "+params['sparePart.id'])
-		SparePart sparePart = SparePart.get(params.int(['sparePart.id']))
-		def property = params['field'];
-		if (sparePart == null || property ==null)
-			response.sendError(404)
-		else {
-			def value= false; def entity = null;
-			if(property.equals("sameAsManufacturer")){
-				if(sparePart.sameAsManufacturer) sparePart.sameAsManufacturer = false
-				else {
-					sparePart.lastModified = user
-					sparePart.sameAsManufacturer = true
-				}
-				entity = sparePart.save(flush:true)
-
-			}
-			if(entity!=null) value=true
-			render(contentType:"text/json") { results = [value]}
-		}
-	}
-
-	def getAjaxData = {
-		def type = SparePartType.get(params.long('type.id'))
-		List<SparePart> spareParts = sparePartService.searchSparePart(params['term'],type,user,[:])
-		render(contentType:"text/json") {
-			elements = array {
-				spareParts.each { sparePart ->
-					elem (
-							key: sparePart.id,
-							value: "["+sparePart.code+"] - ["+sparePart.serialNumber+"] - ["+sparePart.names+"]"
-						)
-				}
-			}
-			htmls = array {
-				spareParts.each { sparePart ->
-					elem (
-							key: sparePart.id,
-							html: g.render(template:"/templates/sparePartFormSide",model:[sparePart:sparePart,label:label,cssClass:"form-aside-hidden",field:"sparePart"])
-							)
-				}
-			}
-		}
-
-	}
-
 }
 
 class FilterCommand {
-	DataLocation location
 	SparePartType sparePartType
+	SparePartStatus status
+	StockLocation stockLocation
 	Provider supplier
-	StatusOfSparePart statusOfSparePart = StatusOfSparePart.NONE
 	SparePartPurchasedBy sparePartPurchasedBy
-	String sameAsManufacturer
 	
-	public boolean getSameAsManufacturerStatus(){
-		if(sameAsManufacturer) return null
-		else if(sameAsManufacturer.equals("true")) return true
-		else if(sameAsManufacturer.equals("false")) return false
-	}
-
 	static constraints = {
 
 		sparePartType nullable:true
 		supplier nullable:true
-		statusOfSparePart nullable:true
 		sparePartPurchasedBy nullable:true
-		sameAsManufacturer nullable:true
-
-		location nullable:false, validator:{val, obj ->
-			return (obj.sparePartType != null || obj.supplier != null || (obj.statusOfSparePart != null && obj.statusOfSparePart != StatusOfSparePart.NONE) || obj.sparePartPurchasedBy || obj.sameAsManufacturer)?true:"select.atleast.one.value.text"
+		status nullable: true
+		stockLocation nullable: true
+		location nullable:false, validator:{ val, obj ->
+			return (obj.stockLocation != null || obj.sparePartType != null || obj.supplier != null || obj.sparePartPurchasedBy!=null || obj.status!=null)?true:"select.atleast.one.value.text"
 		}
 	}
 
 	String toString() {
-		return "FilterCommand[DataLocation="+location+", SparePartType="+sparePartType+
-		", Supplier="+supplier+", StatusOfSparePart="+statusOfSparePart+", SparePartPurchasedBy="+sparePartPurchasedBy+", sameAsManufacturer="+sameAsManufacturer+
-		"]"
+		return "FilterCommand[SparePartType="+sparePartType+", StockLocation="+stockLocation+", Supplier="+supplier+",  sparePartPurchasedBy="+sparePartPurchasedBy+" status="+status+"]"
 	}
-}
-
-class ExportFilterCommand {
-	Set<DataLocation> dataLocations
-	Set<SparePartType> sparePartTypes
-	Set<Provider> suppliers
-	StatusOfSparePart statusOfSparePart
-	SparePartPurchasedBy sparePartPurchasedBy
-	String sameAsManufacturer
-	 
-
-	public boolean getSameAsManufacturerStatus(){
-		if(sameAsManufacturer) return null
-		else if(sameAsManufacturer.equals("true")) return true
-		else if(sameAsManufacturer.equals("false")) return false
-	}
-
-	static constraints = {
-		dataLocations nullable:true
-		sparePartTypes nullable:true
-		suppliers nullable:true
-		statusOfSparePart nullable:true
-		sparePartPurchasedBy nullable:true
-		sameAsManufacturer nullable:true
-	}
-
-	String toString() {
-		return "ExportFilterCommand[ DataLocations="+dataLocations+" , SparePartTypes="+sparePartTypes+
-		", Suppliers="+suppliers+", StatusOfSparePart="+statusOfSparePart+", SparePartPurchasedBy="+sparePartPurchasedBy+", sameAsManufacturer="+sameAsManufacturer+
-		"]"
-	}
-
 }

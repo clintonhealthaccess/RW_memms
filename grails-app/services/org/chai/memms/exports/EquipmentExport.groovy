@@ -144,6 +144,7 @@ class EquipmentExport implements Exporter{
 			if(equipmentExportFilter.dataLocationTypes != null && equipmentExportFilter.dataLocationTypes.size() > 0)
 				inList('dataLocationType',equipmentExportFilter.dataLocationTypes)
 			if(equipmentExportFilter.calculationLocations != null && equipmentExportFilter.calculationLocations.size() > 0)
+<<<<<<< HEAD
 				inList('calculationLocation', equipmentExportFilter.calculationLocations)
 			if(equipmentExportFilter.suppliers != null && equipmentExportFilter.suppliers.size() > 0)
 				inList("supplier", equipmentExportFilter.suppliers)
@@ -153,15 +154,24 @@ class EquipmentExport implements Exporter{
 				inList("serviceProvider",equipmentExportFilter.serviceProviders)
 			if(equipmentExportFilter.equipmentTypes != null && equipmentExportFilter.equipmentTypes.size() > 0)
 				inList("type",equipmentExportFilter.equipmentTypes)
+=======
+				inList('dataLocation',equipmentExportFilter.calculationLocations)
+			if(equipmentExportFilter.suppliers != null && equipmentExportFilter.suppliers.size() > 0)
+				inList("supplier",equipmentExportFilter.suppliers)
+			if(equipmentExportFilter.serviceProviders != null && equipmentExportFilter.serviceProviders.size() > 0)
+				inList("serviceProvider",equipmentExportFilter.serviceProviders)
+>>>>>>> cb8b845f2a4a36bd4abdfb84bd11e339a679abf5
 			if(!equipmentExportFilter.purchaser.equals(PurchasedBy.NONE))
 				eq ("purchaser", equipmentExportFilter.purchaser)
 			if(!equipmentExportFilter.donor.equals(Donor.NONE))
-				eq ("donor", equipmentExportFilter.donor)
+				eq ("donor", equipmentExportFilter.donor)	
+				inList("manufacturer",equipmentExportFilter.manufacturers)
+			if(equipmentExportFilter.equipmentTypes != null && equipmentExportFilter.equipmentTypes.size() > 0)
+				inList("type",equipmentExportFilter.equipmentTypes)
 			if(equipmentExportFilter.obsolete)
 				eq ("obsolete", (equipmentExportFilter.obsolete.equals('true'))?true:false)
-			if(!equipmentExportFilter.equipmentStatus.equals(Status.NONE)){
-				eq ("currentStatus", equipmentExportFilter.equipmentStatus)
-			}		
+			if(!equipmentExportFilter.equipmentStatus.equals(Status.NONE))
+				eq ("currentStatus", equipmentExportFilter.equipmentStatus)						
 		}
 	}
 	
