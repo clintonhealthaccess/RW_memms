@@ -813,6 +813,7 @@ class ListingController extends AbstractController{
 		if(log.isDebugEnabled()) log.debug("abstract.dataLocations params:"+params)
 		Set<DataLocation> dataLocations = new HashSet<DataLocation>()
 		if(params.get('allDataLocations')){
+			if(log.isDebugEnabled()) log.debug("abstract.dataLocations ALL params:"+params)
 			if(user.location instanceof Location) 
 				dataLocations.addAll(user.location.collectDataLocations(null))
 			else{
@@ -823,6 +824,7 @@ class ListingController extends AbstractController{
 			}
 		}
 		else if (params.list('dataLocations') != null && !params.list('dataLocations').empty) {
+			if(log.isDebugEnabled()) log.debug("abstract.dataLocations CUSTOM params:"+params)
 			def types = params.list('dataLocations')
 			dataLocations.addAll(types.collect{ it ->
 				if(log.isDebugEnabled()) 
