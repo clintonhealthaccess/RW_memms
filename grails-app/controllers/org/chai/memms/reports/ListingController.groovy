@@ -634,7 +634,7 @@ class ListingController extends AbstractController{
 		if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing, customEquipmentParams:"+customEquipmentParams)
 
 		adaptParamsForList()
-		def equipments = equipmentListingReportService.getCustomReportOfEquipments(user,customEquipmentParams)
+		def equipments = equipmentListingReportService.getCustomReportOfEquipments(user,customEquipmentParams,params)
 
 		if(!request.xhr)
 			render(view:"/reports/reports", 

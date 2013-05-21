@@ -35,6 +35,8 @@ import org.chai.memms.security.User;
 import org.chai.memms.inventory.Equipment;
 import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.inventory.EquipmentStatus;
+import org.chai.memms.inventory.Equipment.PurchasedBy;
+import org.chai.memms.inventory.Equipment.Donor;
 
 /**
  * @author Aphrodice Rwagaju
@@ -148,8 +150,84 @@ class EquipmentListingReportService {
 		}
 	}
 
-	public def getCustomReportOfEquipments(User user,Map<String, String> params) {
-		//TODO
+	public def getCustomReportOfEquipments(User user,def customEquipmentParams, Map<String, String> params) {
+		
+			//def equipmentStatus = customEquipmentParams.get('equipmentStatus')
+			def dataLocations = customEquipmentParams.get('dataLocations')
+			def departments = customEquipmentParams.get('departments')
+			def equipmentTypes = customEquipmentParams.get('equipmentTypes')
+			//def lowerLimitCost = customEquipmentParams.get('fromCost')
+			//def upperLimitCost = customEquipmentParams.get('toCost')
+			//def currency = customEquipmentParams.get('costCurrency')
+			def obsolete = customEquipmentParams.get('obsolete')
+			def fromAcquisitionPeriod = customEquipmentParams.get('fromAcquisitionPeriod')
+			def toAcquisitionPeriod = customEquipmentParams.get('toAcquisitionPeriod')
+			
+		
+			def criteria = Equipment.createCriteria();
+			
+			return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+					if(dataLocations)
+						inList('dataLocation',dataLocations)
+					if(departments != null)
+						inList ("department", departments)
+					if(equipmentTypes != null)
+						inList ("type", equipmentTypes)
+				/*	if(currency !=null)
+						eq ("currency",currency)*/
+					if(obsolete)
+						eq ("obsolete", (obsolete.equals('true'))?true:false)
+						//TODO set of statuses
+				/*	if(equipmentStatus!=null)
+						inList ("currentStatus",equipmentStatus)*/
+					/*if(lowerLimitCost!=null)
+						gt ("purchaseCost", lowerLimitCost)
+					if(upperLimitCost!=null)
+						lt ("purchaseCost", upperLimitCost)*/
+			}
 	}
+	
+	public def getCustomReportOfEquipmentsTEST(def user, Map<String, String> params) {
+		/*def dataLocations = []
+			if(user.location instanceof Location) dataLocations.addAll(user.location.collectDataLocations(null))
+			else{
+				dataLocations = []
+				dataLocations.add(user.location as DataLocation)
+				if(userService.canViewManagedEquipments(user)) dataLocations.addAll(((DataLocation)user.location).manages)
+			}*/
+			
+			/*def equipmentStatus = customEquipmentParams.get('equipmentStatus')
+			def dataLocations = customEquipmentParams.get('dataLocations')
+			def departments = customEquipmentParams.get('departments')
+			def equipmentTypes = customEquipmentParams.get('equipmentTypes')
+			def lowerLimitCost = customEquipmentParams.get('lowerLimitCost')
+			def upperLimitCost = customEquipmentParams.get('upperLimitCost')
+			def currency = customEquipmentParams.get('currency')
+			def obsolete = customEquipmentParams.get('obsolete')
+			
+		
+			def criteria = Equipment.createCriteria();
+			
+			return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+					if(dataLocations)
+						inList('dataLocation',dataLocations)
+					if(departments != null)
+						inList ("department", departments)
+					if(equipmentTypes != null)
+						inList ("type", equipmentTypes)
+					if(currency !=null)
+						eq ("currency",currency)
+					if(obsolete)
+						eq ("obsolete", (obsolete.equals('true'))?true:false)
+						//TODO set of statuses
+					if(equipmentStatus!=null)
+						inList ("currentStatus",equipmentStatus)
+					if(lowerLimitCost!=null)
+						gt ("purchaseCost", lowerLimitCost)
+					if(upperLimitCost!=null)
+						lt ("purchaseCost", upperLimitCost)
+
+			}*/
+		}
 
 }
