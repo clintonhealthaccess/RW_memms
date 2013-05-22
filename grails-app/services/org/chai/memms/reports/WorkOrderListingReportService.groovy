@@ -65,7 +65,7 @@ class WorkOrderListingReportService {
 		def upperLimitCost = customWorkOrderParams.('toCost')
 		def currency = customWorkOrderParams.get('costCurrency')
 		def workOrderStatus = customWorkOrderParams.get('workOrderStatus')
-
+		
 		def criteria = WorkOrder.createCriteria();
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 

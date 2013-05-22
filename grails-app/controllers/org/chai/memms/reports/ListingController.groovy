@@ -196,7 +196,8 @@ class ListingController extends AbstractController{
 		def equipments = equipmentListingReportService.getUnderWarrantyEquipments(user,params)
 		for(Equipment equipment: equipments){
 			if (equipment.warranty.startDate!=null && equipment.warrantyPeriod.numberOfMonths!=null && equipment.warrantyPeriod.months != null) {
-				warrantyExpirationDate= (equipment.warranty.startDate).plus((equipment.warrantyPeriod.numberOfMonths))
+				//TODO we have to convert numberOfMonths in either months or equivalent days because here we are automatically using as days
+				warrantyExpirationDate= (equipment.warranty.startDate).plus(equipment.warrantyPeriod.numberOfMonths)
 				if (log.isDebugEnabled()) log.debug("CALCURATED DATE "+warrantyExpirationDate +"START DATE "+equipment.warranty.startDate +"WARRANTY PERIOD "+equipment.warrantyPeriod.months)
 				if (warrantyExpirationDate > new Date())
 					displayableEquipments.add(equipment)
@@ -702,15 +703,16 @@ class ListingController extends AbstractController{
 			equipmentTypes: equipmentTypes,
 			fromCost: fromCost,
 			toCost: toCost,
-			costCurrency: costCurrency
+			costCurrency: costCurrency,
 			// fromWorkOrderPeriod: fromWorkOrderPeriod,
 			// toWorkOrderPeriod: toWorkOrderPeriod
+			warranty: warranty
 		]
 
 		if(reportSubType == ReportSubType.WORKORDERS){
 			def workOrderStatus = getCorrectiveStatus()
 			customWorkOrderParams << [
-				workOrderStatus: workOrderStatus,
+				workOrderStatus: workOrderStatus
 			]
 		}
 
@@ -733,7 +735,29 @@ class ListingController extends AbstractController{
 		if (log.isDebugEnabled()) log.debug("listing.customWorkOrderListing, customWorkOrderParams:"+customWorkOrderParams)
 
 		adaptParamsForList()
-		def equipments = workOrderListingReportService.getCustomReportOfWorkOrders(user,customWorkOrderParams,params)
+		def displayableEquipments=[]
+		def warrantyExpirationDate
+		def equipments = []
+
+		def equipmentz = workOrderListingReportService.getCustomReportOfWorkOrders(user,customWorkOrderParams,params)
+
+		if(warranty != null && warranty.empty){
+
+			for(Equipment equipment: equipmentz){
+				if (equipment.warranty.startDate!=null && equipment.warrantyPeriod.numberOfMonths!=null && equipment.warrantyPeriod.months != null) {
+					warrantyExpirationDate= (equipment.warranty.startDate).plus((equipment.warrantyPeriod.numberOfMonths))
+					if (log.isDebugEnabled()) log.debug("CALCURATED DATE "+warrantyExpirationDate +"START DATE "+equipment.warranty.startDate +"WARRANTY PERIOD "+equipment.warrantyPeriod.months)
+					if (warrantyExpirationDate > new Date())
+						displayableEquipments.add(equipment)
+				}
+				warrantyExpirationDate=null
+			}
+
+		}else{
+			displayableEquipments=equipmentz
+		}
+		equipments=displayableEquipments
+
 
 		if(!request.xhr)
 			render(view:"/reports/reports",
@@ -934,9 +958,17 @@ class ListingController extends AbstractController{
 	public Date getPeriod(String periodParam){
 		def period = params.get(periodParam);
 		if(log.isDebugEnabled())
-			log.debug("abstract.getPeriod param:"+periodParam+", value:"+period)
-		if(period != null && !period.empty)
-			period = Utils.parseDate(period)
+			log.debug("abstract.getPeriod param:"+periodParam+", value:"+period+", class:"+period?.class)
+		if(period != null && !period.empty) {
+			def newPeriod  = Utils.parseDate(period)
+			//period = Date.parse("MM/dd/yyyy",period)
+			// def jodaPeriod = Utils.jodaDateFormatter().parseDateTime(period).toDate()
+			if(log.isDebugEnabled())
+				log.debug("abstract.getPeriod after utils date parse param:+++++++++++++"+period+", value:"+newPeriod)
+			// jodaPeriod = Date.parse(Utils.DATE_FORMAT_US,period)
+			// if(log.isDebugEnabled())
+			// 	log.debug("abstract.getPeriod after utils date parse param:+++++++++++++"+period+", value:"+jodaPeriod)
+		}
 		else period = null
 		return period
 	}

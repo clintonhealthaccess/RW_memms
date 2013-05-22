@@ -132,7 +132,7 @@ modules = {
 	}
 	
 	reports {
-		dependsOn 'core,form,tipsy,jquery,jqueryui,chosen'
+		dependsOn 'core,form,tipsy,jquery,jqueryui,chosen,fieldselection'
 
 		// TODO ?
 		// Load Droid Sans remotely from Google Webfonts

@@ -152,11 +152,6 @@ class EquipmentListingReportService {
 
 	public def getCustomReportOfEquipments(User user,def customEquipmentParams, Map<String, String> params) {
 		
-		for ( e in customEquipmentParams ) {
-		    if (log.isDebugEnabled()) 
-				log.debug("listing.getCustomReportOfEquipments param key:"+e.key+", value:"+e.value+", class:"+e.value?.class)
-		}
-
 		def equipmentStatus = customEquipmentParams.get('equipmentStatus')
 		def dataLocations = customEquipmentParams.get('dataLocations')
 		def departments = customEquipmentParams.get('departments')
@@ -190,6 +185,11 @@ class EquipmentListingReportService {
 					gt ("purchaseCost", lowerLimitCost)
 				if(upperLimitCost!=null)
 					lt ("purchaseCost", upperLimitCost)
+				/*	
+				if(fromAcquisitionPeriod != null)
+					gt ("purchaseDate", fromAcquisitionPeriod)
+				if(toAcquisitionPeriod != null)
+					lt ("purchaseDate", toAcquisitionPeriod)*/
 		}
 	}
 
