@@ -35,7 +35,7 @@ class WorkOrderListingReportService {
 		}
 	}
 	def getWorkOrdersOfLastMonth(User user,Map<String, String> params) {
-		//TODO to add the last month criteria
+
 		def lastMonth= (new Date())-30
 		def criteria = WorkOrder.createCriteria();
 		def dataLocations = []
@@ -56,7 +56,36 @@ class WorkOrderListingReportService {
 		}
 	}
 
-	def getCustomReportOfWorkOrders(User user,Map<String, String> params) {
-		//TODO
+	def getCustomReportOfWorkOrders(User user, def customWorkOrderParams, Map<String, String> params) {
+
+		def dataLocations = customWorkOrderParams.get('dataLocations')
+		def departments = customWorkOrderParams.get('departments')
+		def equipmentTypes = customWorkOrderParams.get('equipmentTypes')
+		def lowerLimitCost = customWorkOrderParams.('fromCost')
+		def upperLimitCost = customWorkOrderParams.('toCost')
+		def currency = customWorkOrderParams.get('costCurrency')
+		def workOrderStatus = customWorkOrderParams.get('workOrderStatus')
+		
+		def criteria = WorkOrder.createCriteria();
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+
+			createAlias("equipment","equip")
+
+			if(dataLocations!=null)
+				inList('equip.dataLocation',dataLocations)
+			if(workOrderStatus!=null && !workOrderStatus.empty)
+				inList ("currentStatus",workOrderStatus)
+			if(lowerLimitCost!=null)
+				gt ("estimatedCost", lowerLimitCost)
+			if(upperLimitCost!=null)
+				lt ("estimatedCost", upperLimitCost)
+			if(currency !=null)
+				eq ("currency",currency)
+			if(departments != null)
+				inList ("equip.department", departments)
+			if(equipmentTypes != null)
+				inList ("equip.type", equipmentTypes)
+				
+		}
 	}
 }

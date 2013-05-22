@@ -156,10 +156,8 @@ class EquipmentListingReportService {
 		def dataLocations = customEquipmentParams.get('dataLocations')
 		def departments = customEquipmentParams.get('departments')
 		def equipmentTypes = customEquipmentParams.get('equipmentTypes')
-
 		def lowerLimitCost = customEquipmentParams.('fromCost')
 		def upperLimitCost = customEquipmentParams.('toCost')
-
 		def currency = customEquipmentParams.get('costCurrency')
 		def obsolete = customEquipmentParams.get('obsolete')
 
