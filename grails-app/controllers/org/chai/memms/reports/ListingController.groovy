@@ -691,15 +691,16 @@ class ListingController extends AbstractController{
 			equipmentTypes: equipmentTypes,
 			fromCost: fromCost,
 			toCost: toCost,
-			costCurrency: costCurrency
+			costCurrency: costCurrency,
 			// fromWorkOrderPeriod: fromWorkOrderPeriod,
 			// toWorkOrderPeriod: toWorkOrderPeriod
+			warranty: warranty
 		]
 
 		if(reportSubType == ReportSubType.WORKORDERS){
 			def workOrderStatus = getCorrectiveStatus()
 			customWorkOrderParams << [
-				workOrderStatus: workOrderStatus,
+				workOrderStatus: workOrderStatus
 			]
 		}
 
@@ -923,9 +924,17 @@ class ListingController extends AbstractController{
 	public Date getPeriod(String periodParam){
 		def period = params.get(periodParam);
 		if(log.isDebugEnabled()) 
-			log.debug("abstract.getPeriod param:"+periodParam+", value:"+period)
-		if(period != null && !period.empty) 
-			period = Utils.parseDate(period)
+			log.debug("abstract.getPeriod param:"+periodParam+", value:"+period+", class:"+period?.class)
+		if(period != null && !period.empty) {
+			def newPeriod  = Utils.parseDate(period)
+			//period = Date.parse("MM/dd/yyyy",period)
+			// def jodaPeriod = Utils.jodaDateFormatter().parseDateTime(period).toDate()
+			if(log.isDebugEnabled()) 
+				log.debug("abstract.getPeriod after utils date parse param:+++++++++++++"+period+", value:"+newPeriod)
+			// jodaPeriod = Date.parse(Utils.DATE_FORMAT_US,period)
+			// if(log.isDebugEnabled()) 
+			// 	log.debug("abstract.getPeriod after utils date parse param:+++++++++++++"+period+", value:"+jodaPeriod)
+		}
 		else period = null
 		return period
 	}

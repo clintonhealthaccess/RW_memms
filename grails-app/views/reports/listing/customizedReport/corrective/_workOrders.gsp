@@ -1,6 +1,6 @@
 <%@ page import="org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus" %>
 <ul>
-  <g:set var="statusValues" value="${OrderStatus.values()}"/>
+  <g:set var="statusValues" value="${OrderStatus.values()-OrderStatus.NONE}"/>
   <g:render template="/reports/listing/customizedReport/workOrderStatusAndPeriod" model="[statusValues:statusValues]" />
   <li>
     %{-- TODO fix checkbox styles !!! --}%
