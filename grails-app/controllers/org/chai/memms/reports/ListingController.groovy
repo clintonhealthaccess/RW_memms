@@ -94,6 +94,14 @@ class ListingController extends AbstractController{
 		render(contentType:"text/json") { results = [listHtml]}
 	}
 
+	//TODO get rid of this
+	def dashboard ={
+		render(view: '/reports/reports',
+			model: [
+				template:"/reports/dashboard/dashboard"
+			])
+	}
+
 	def index ={
 		redirect(action: "view", params: params)
 	}
