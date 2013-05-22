@@ -35,7 +35,7 @@ class WorkOrderListingReportService {
 		}
 	}
 	def getWorkOrdersOfLastMonth(User user,Map<String, String> params) {
-		//TODO to add the last month criteria
+		
 		def lastMonth= (new Date())-30
 		def criteria = WorkOrder.createCriteria();
 		def dataLocations = []
