@@ -94,14 +94,6 @@ class ListingController extends AbstractController{
 		render(contentType:"text/json") { results = [listHtml]}
 	}
 
-	//TODO get rid of this
-	def dashboard ={
-		render(view: '/reports/reports',
-			model: [
-				template:"/reports/dashboard/dashboard"
-			])
-	}
-
 	def index ={
 		redirect(action: "view", params: params)
 	}
@@ -654,7 +646,7 @@ class ListingController extends AbstractController{
 		def equipments = []
 		def equipmentz = equipmentListingReportService.getCustomReportOfEquipments(user,customEquipmentParams,params)
 
-		if(warranty != null && !warranty.empty){
+		if(warranty != null && warranty.empty){
 
 			for(Equipment equipment: equipmentz){
 				if (equipment.warranty.startDate!=null && equipment.warrantyPeriod.numberOfMonths!=null && equipment.warrantyPeriod.months != null) {
