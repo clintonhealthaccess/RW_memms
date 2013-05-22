@@ -94,6 +94,14 @@ class ListingController extends AbstractController{
 		render(contentType:"text/json") { results = [listHtml]}
 	}
 
+	//TODO get rid of this
+	def dashboard ={
+		render(view: '/reports/reports',
+			model: [
+				template:"/reports/dashboard/dashboard"
+			])
+	}
+
 	def index ={
 		redirect(action: "view", params: params)
 	}
@@ -602,7 +610,7 @@ class ListingController extends AbstractController{
 			equipmentTypes: equipmentTypes,
 			fromCost: fromCost,
 			toCost: toCost,
-			costCurrency: costCurrency,
+			costCurrency: costCurrency
 			// fromAcquisitionPeriod: fromAcquisitionPeriod
 			// toAcquisitionPeriod: toAcquisitionPeriod
 		]
@@ -664,12 +672,17 @@ class ListingController extends AbstractController{
 		def reportSubType = getReportSubType()
 		def dataLocations = getDataLocations()
 		def equipmentTypes = getEquipmentTypes()
-		def fromCost = params.get('fromCost')
-		def toCost = params.get('toCost')
+		
+		def fromCost = null
+		if(params.get('fromCost') != null && !params.get('fromCost').empty)
+			fromCost = Double.parseDouble(params.get('fromCost'))
+		def toCost = null
+		if(params.get('toCost') != null && !params.get('toCost').empty) 
+			toCost = Double.parseDouble(params.get('toCost'))
 		def costCurrency = params.get('costCurrency')
 
-		def fromWorkOrderPeriod = getPeriod('fromWorkOrderPeriod')
-		def toWorkOrderPeriod = getPeriod('toWorkOrderPeriod')
+		// def fromWorkOrderPeriod = getPeriod('fromWorkOrderPeriod')
+		// def toWorkOrderPeriod = getPeriod('toWorkOrderPeriod')
 		def warranty = params.get('warranty')
 
 		def customWorkOrderParams = [
@@ -678,9 +691,9 @@ class ListingController extends AbstractController{
 			equipmentTypes: equipmentTypes,
 			fromCost: fromCost,
 			toCost: toCost,
-			costCurrency: costCurrency,
-			fromWorkOrderPeriod: fromWorkOrderPeriod,
-			toWorkOrderPeriod: toWorkOrderPeriod
+			costCurrency: costCurrency
+			// fromWorkOrderPeriod: fromWorkOrderPeriod,
+			// toWorkOrderPeriod: toWorkOrderPeriod
 		]
 
 		if(reportSubType == ReportSubType.WORKORDERS){
@@ -732,12 +745,17 @@ class ListingController extends AbstractController{
 		def reportSubType = getReportSubType()
 		def dataLocations = getDataLocations()
 		def equipmentTypes = getEquipmentTypes()
-		def fromCost = params.get('fromCost')
-		def toCost = params.get('toCost')
+
+		def fromCost = null
+		if(params.get('fromCost') != null && !params.get('fromCost').empty)
+			fromCost = Double.parseDouble(params.get('fromCost'))
+		def toCost = null
+		if(params.get('toCost') != null && !params.get('toCost').empty) 
+			toCost = Double.parseDouble(params.get('toCost'))
 		def costCurrency = params.get('costCurrency')
 
-		def fromWorkOrderPeriod = getPeriod('fromWorkOrderPeriod')
-		def toWorkOrderPeriod = getPeriod('toWorkOrderPeriod')
+		// def fromWorkOrderPeriod = getPeriod('fromWorkOrderPeriod')
+		// def toWorkOrderPeriod = getPeriod('toWorkOrderPeriod')
 
 		def customPreventiveOrderParams = [
 			dataLocations: dataLocations,
@@ -745,9 +763,9 @@ class ListingController extends AbstractController{
 			equipmentTypes: equipmentTypes,
 			fromCost: fromCost,
 			toCost: toCost,
-			costCurrency: costCurrency,
-			fromWorkOrderPeriod: fromPeriod,
-			toWorkOrderPeriod: toWorkOrderPeriod
+			costCurrency: costCurrency
+			// fromWorkOrderPeriod: fromPeriod,
+			// toWorkOrderPeriod: toWorkOrderPeriod
 		]
 
 		if(reportSubType == ReportSubType.WORKORDERS){
@@ -947,7 +965,7 @@ class ListingController extends AbstractController{
 			def types = params.list('workOrderStatus')
 			types.each{ it ->
 				if(log.isDebugEnabled()) log.debug("abstract.workOrderStatus workOrderStatus:"+it)
-				if(it != null) correctiveStatus.add(it)
+				if(it != null) correctiveStatus.add(Enum.valueOf(OrderStatus.class, it))
 			}
 		}
 		return correctiveStatus
@@ -975,7 +993,7 @@ class ListingController extends AbstractController{
 			def types = params.list('workOrderStatus')
 			types.each{ it ->
 				if(log.isDebugEnabled()) log.debug("abstract.workOrderStatus workOrderStatus:"+it)
-				if(it != null) preventiveStatus.add(it)
+				if(it != null) preventiveStatus.add(Enum.valueOf(PreventiveOrderStatus.class, it))
 			}
 		}
 		return preventiveStatus
@@ -1003,7 +1021,7 @@ class ListingController extends AbstractController{
 			def types = params.list('sparePartStatus')
 			types.each{ it ->
 				if(log.isDebugEnabled()) log.debug("abstract.sparePartStatus sparePartStatus:"+it)
-				if(it != null) sparePartStatus.add(it)
+				if(it != null) sparePartStatus.add(Enum.valueOf(StatusOfSparePart.class, it))
 			}
 		}
 		return sparePartStatus
