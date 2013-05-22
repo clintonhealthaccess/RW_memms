@@ -127,6 +127,10 @@ modules = {
 		resource url: '/js/progressbar_init.js', bundle: 'core'
 	}
 
+	list {
+		dependsOn 'core,form,fieldselection,cluetip,dropdown,chosen'
+	}
+	
 	reports {
 		dependsOn 'core,form,tipsy,jquery,jqueryui,chosen'
 
