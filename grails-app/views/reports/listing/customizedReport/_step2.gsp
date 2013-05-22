@@ -72,8 +72,3 @@
   <a href="#" class="ui-widget-next right btn" id='js-next-step-2'><g:message code="reports.step.next"/></a>
   <!-- end step 2 -->
 </div>
-<script type="text/javascript">
-  $(document).ready(function() {
-    getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}");
-  });
-</script>

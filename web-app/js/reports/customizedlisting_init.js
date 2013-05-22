@@ -1,26 +1,9 @@
 function customizedlisting_init(){
 
-  /* select/deselect all dropdown */
-  
-  // $('.js-select-all').click(function(e) {
-  //   var options = $(this).parents('li').find('select').find('option');
-  //   var select = $(this).parents('li').find('select')
-  //   if($(this).is(':checked')) {
-  //     options.prop('selected', true);
-  //   }else{
-  //     options.prop('selected', false);
-  //   }
-  //   select.trigger('liszt:updated');
-  // });
+  // load wizard stuff here
+  // ...
 
-  // load chosen
-  $(".chzn-select").chosen();
-
-  // load jqueryui time picker
-  $(function() {
-    $( ".js-date-picker" ).datepicker();
-  });
-
+  // load step-specific wizard stuff here
   step1_init();
   step2_init();
   step3_init();
@@ -35,6 +18,27 @@ function step1_init(){
 }
 
 function step2_init(){
+
+  // load chosen
+  $(".chzn-select").chosen();
+  // select/deselect all dropdown
+  // $('.js-select-all').click(function(e) {
+  //   var options = $(this).parents('li').find('select').find('option');
+  //   var select = $(this).parents('li').find('select')
+  //   if($(this).is(':checked')) {
+  //     options.prop('selected', true);
+  //   }else{
+  //     options.prop('selected', false);
+  //   }
+  //   select.trigger('liszt:updated');
+  // });
+
+  // load jqueryui date time picker
+  $(function() {
+    $( ".js-date-picker" ).datepicker();
+  });
+  getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}");
+
   $('#js-next-step-2').click(function(e) {
     $('#formRemoteStep2Next').submit();
   });
