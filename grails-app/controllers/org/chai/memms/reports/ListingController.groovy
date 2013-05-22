@@ -733,7 +733,7 @@ class ListingController extends AbstractController{
 		if (log.isDebugEnabled()) log.debug("listing.customWorkOrderListing, customWorkOrderParams:"+customWorkOrderParams)
 
 		adaptParamsForList()
-		def equipments = workOrderListingReportService.getCustomReportOfWorkOrders(user,customWorkOrderParams)
+		def equipments = workOrderListingReportService.getCustomReportOfWorkOrders(user,customWorkOrderParams,params)
 
 		if(!request.xhr)
 			render(view:"/reports/reports",
