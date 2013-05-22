@@ -141,7 +141,7 @@ class EquipmentExport implements Exporter{
 		
 		def criteria = Equipment.createCriteria();
 		return criteria.list(sort:"id",order:"desc"){
-			 createAlias("dataLocation","l")
+			createAlias("dataLocation","l")
 			if(equipmentExportFilter.dataLocationTypes != null && equipmentExportFilter.dataLocationTypes.size() > 0)
 				inList('l.type',equipmentExportFilter.dataLocationTypes)
 			if(equipmentExportFilter.calculationLocations != null && equipmentExportFilter.calculationLocations.size() > 0)
