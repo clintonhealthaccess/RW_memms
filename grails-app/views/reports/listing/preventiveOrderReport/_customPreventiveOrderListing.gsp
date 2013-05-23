@@ -25,7 +25,7 @@
 			<g:if test="${reportTypeOptions.contains('manufacturer')}">
 				<g:sortableColumn property="manufacturer"  title="${message(code: 'provider.type.manufacturer')}" params="[q:q]" />
 			</g:if>
-			<g:if test="${reportSubType == ReportSubType?.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
+			<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
 				%{-- TODO SL --}%
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('currentStatus')}">

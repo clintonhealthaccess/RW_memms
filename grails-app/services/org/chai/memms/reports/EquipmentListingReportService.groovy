@@ -161,10 +161,9 @@ class EquipmentListingReportService {
 		def currency = customEquipmentParams.get('costCurrency')
 		def obsolete = customEquipmentParams.get('obsolete')
 
-		// TODO def fromAcquisitionPeriod = customEquipmentParams.get('fromAcquisitionPeriod')
-		// TODO def toAcquisitionPeriod = customEquipmentParams.get('toAcquisitionPeriod')
-		// if(log.isDebugEnabled()) 
-		// 	log.debug("fromAcquisitionPeriod:"+fromAcquisitionPeriod+", class:"+fromAcquisitionPeriod?.class)		
+		// def fromAcquisitionPeriod = customEquipmentParams.get('fromAcquisitionPeriod')
+		// def toAcquisitionPeriod = customEquipmentParams.get('toAcquisitionPeriod')
+		// def noAcquisitionPeriod = customEquipmentParams.get('noAcquisitionPeriod')
 	
 		def criteria = Equipment.createCriteria();
 		
@@ -184,12 +183,11 @@ class EquipmentListingReportService {
 				if(lowerLimitCost!=null)
 					gt ("purchaseCost", lowerLimitCost)
 				if(upperLimitCost!=null)
-					lt ("purchaseCost", upperLimitCost)
-				/*	
-				if(fromAcquisitionPeriod != null)
-					gt ("purchaseDate", fromAcquisitionPeriod)
-				if(toAcquisitionPeriod != null)
-					lt ("purchaseDate", toAcquisitionPeriod)*/
+					lt ("purchaseCost", upperLimitCost)	
+				// if(fromAcquisitionPeriod != null)
+				// 	gt ("purchaseDate", fromAcquisitionPeriod)
+				// if(toAcquisitionPeriod != null)
+				// 	lt ("purchaseDate", toAcquisitionPeriod)
 		}
 	}
 
