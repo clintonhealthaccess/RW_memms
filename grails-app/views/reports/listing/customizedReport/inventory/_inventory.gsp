@@ -17,7 +17,7 @@
     <input name="fromAcquisitionPeriod" class="js-date-picker date-picker idle-field" />
     <span class="dash">-</span>
     <input name="toAcquisitionPeriod" class="js-date-picker date-picker idle-field" />
-    <g:checkBox name="noAcquisitionPeriod"/>
+    <g:checkBox name="noAcquisitionPeriod" class='clear-left'/>
     <span><g:message code="reports.inventory.inventory.noAcquisitionPeriod"/></span>
   </li>
   <li>

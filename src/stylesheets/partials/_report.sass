@@ -397,7 +397,7 @@ div#comparison, div#geo_trend, div#info_facility, div#preventive, div#equipment,
     height: auto
 
 .ui-dialog
-  background: #fff
+  background: #fff !important
   border: 1px solid rgba(0, 0, 0, 0.2)
   outline: none
   padding: 0
@@ -465,6 +465,9 @@ div#comparison, div#geo_trend, div#info_facility, div#preventive, div#equipment,
           margin-top: 2px
           padding: 4px 7px
           width: 100px
+
+  input, select, textarea
+    font-size: 12px !important
 
   label
     color: $primary
@@ -551,16 +554,20 @@ div#comparison, div#geo_trend, div#info_facility, div#preventive, div#equipment,
   label + .checkbox-list
     padding-left: 160px
   .ui-dialog-titlebar
+    background: none !important
+    border: none !important
     padding: 15px
     position: relative
   .ui-dialog-titlebar-close
-    background: url("../images/icon_close.png") no-repeat
+    background: url("../images/icon_close.png") no-repeat !important
     height: 18px
     position: absolute
     right: -8px
-    text-indent: -9999em
+    text-indent: -9999em !important
     top: -8px
     width: 18px
+    span
+      display: none !important
 
 .ui-widget-overlay
   background: rgba(0, 0, 0, 0.15)

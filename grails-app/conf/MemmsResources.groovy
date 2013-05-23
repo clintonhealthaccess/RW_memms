@@ -60,7 +60,7 @@ modules = {
 
 	jqueryui {
 		dependsOn 'jquery'
-		
+
 		resource url: '/js/jquery/jquery-ui/css/cupertino/jquery-ui-1.9.2.custom.min.css', bundle: 'core'
 		resource url: '/js/jquery/jquery-ui/css/timepicker.css', bundle: 'core'
 		resource url: '/js/jquery/jquery-ui/js/jquery-ui-1.9.2.custom.min.js', bundle: 'core'
@@ -131,7 +131,7 @@ modules = {
 	list {
 		dependsOn 'core,form,fieldselection,cluetip,dropdown,chosen'
 	}
-	
+
 	reports {
 		dependsOn 'core,form,tipsy,jquery,jqueryui,chosen,fieldselection'
 
