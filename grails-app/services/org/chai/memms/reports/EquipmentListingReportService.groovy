@@ -163,6 +163,7 @@ class EquipmentListingReportService {
 
 		// def fromAcquisitionPeriod = customEquipmentParams.get('fromAcquisitionPeriod')
 		// def toAcquisitionPeriod = customEquipmentParams.get('toAcquisitionPeriod')
+		// def noAcquisitionPeriod = customEquipmentParams.get('noAcquisitionPeriod')
 	
 		def criteria = Equipment.createCriteria();
 		
