@@ -35,7 +35,7 @@ function step2_init(){
 
   // load jqueryui date time picker
   $(function() {
-    $( ".js-date-picker" ).datepicker();
+    $( ".js-date-picker" ).datepicker({ dateFormat: "dd/mm/yy" })
   });
   getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}");
 
