@@ -1,4 +1,5 @@
 <%@ page import="org.chai.memms.util.Utils" %>
+<%@ page import="org.chai.memms.util.Utils.ReportSubType" %>
 <%@ page import="org.apache.shiro.SecurityUtils" %>
 <%@ page import="org.chai.memms.security.User" %>
 <%@ page import="org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus" %>
@@ -23,8 +24,7 @@
 			<g:if test="${reportTypeOptions.contains('manufacturer')}">
 				<g:sortableColumn property="manufacturer"  title="${message(code: 'provider.type.manufacturer')}" params="[q:q]" />
 			</g:if>
-			<!-- TODO you may check whether ReportSubType is null or not null because it always at this level reason why I added ? sign-->
-			<g:if test="${reportSubType == ReportSubType?.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
+			<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
 				%{-- TODO SL --}%
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('currentStatus')}">
