@@ -9,17 +9,17 @@
     <fieldset>
       <ul>
         <li>
-          <g:selectFromList name="dataLocations" label="${message(code:'reports.dataLocation')}" field="dataLocations" 
-            optionKey="id" multiple="true" value="${dataLocations*.id}" 
-            ajaxLink="${createLink(controller: 'dataLocation', action:'getAjaxData')}" 
+          <g:selectFromList name="dataLocations" label="${message(code:'reports.dataLocation')}" field="dataLocations"
+            optionKey="id" multiple="true" value="${dataLocations*.id}"
+            ajaxLink="${createLink(controller: 'dataLocation', action:'getAjaxData')}"
             values="${dataLocations.collect{it.names+' '+it.id+' ['+it.location.names+']'}}" />
           <g:checkBox name="allDataLocations" class='js-select-all'/>
           <span><g:message code="reports.selectAll"/></span>
         </li>
-        <g:if test="${[ReportType.INVENTORY,ReportType.CORRECTIVE,ReportType.PREVENTIVE].contains(reportType)}">        
+        <g:if test="${[ReportType.INVENTORY,ReportType.CORRECTIVE,ReportType.PREVENTIVE].contains(reportType)}">
           <li>
-            <g:selectFromList name="departments" label="${message(code:'reports.department')}" field="departments" 
-              optionKey="id" multiple="true" value="${departments*.id}" 
+            <g:selectFromList name="departments" label="${message(code:'reports.department')}" field="departments"
+              optionKey="id" multiple="true" value="${departments*.id}"
               ajaxLink="${createLink(controller: 'department', action:'getAjaxData')}"
               values="${departments.collect{it.names+' ['+it.id+']'}}" />
             <g:checkBox name="allDepartments" class='js-select-all'/>
@@ -37,9 +37,6 @@
             %{-- TODO fix date + select box styles !!! --}%
             <label><g:message code="reports.cost"/>:</label>
             <input type="text" name="fromCost"/><span class="dash">-</span><input type="text" name="toCost"/>
-          </li>
-          <li>
-            <label for="costCurrency"><g:message code="reports.currency"/>:</label>
             <select name="costCurrency">
               <g:each in="${currencies}" var="currencyEnum">
                 <option value="${currencyEnum.key}">
@@ -62,7 +59,7 @@
         </g:if>
       </ul>
       <g:if test="${[ReportSubType.INVENTORY,ReportSubType.WORKORDERS,ReportSubType.STATUSCHANGES,ReportSubType.STOCKOUT].contains(reportSubType)}">
-        <g:render 
+        <g:render
             template="/reports/listing/customizedReport/${reportType.getReportType()}/${reportSubType.getReportSubType()}"/>
       </g:if>
     </fieldset>

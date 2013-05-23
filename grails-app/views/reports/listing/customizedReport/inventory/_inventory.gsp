@@ -22,12 +22,14 @@
   </li>
   <li>
     %{-- TODO fix checkbox styles !!! --}%
-    <label for="obsolete"><g:message code="reports.inventory.inventory.obsolete" />:</label>
+    <label for="obsolete"><g:message code="reports.inventory.inventory.obsolete.label" />:</label>
     <input name="obsolete" type="checkbox"/>
+    <span><g:message code="reports.inventory.inventory.obsolete"/></span>
   </li>
   <li>
     %{-- TODO fix checkbox styles !!! --}%
-    <label for="warranty"><g:message code="reports.inventory.warranty"/>:</label>
+    <label for="warranty"><g:message code="reports.inventory.warranty.label"/>:</label>
     <input name="warranty" type="checkbox"/>
+    <span><g:message code="reports.inventory.warranty"/></span>
   </li>
 </ul>

@@ -386,11 +386,12 @@ div#comparison, div#geo_trend, div#info_facility, div#preventive, div#equipment,
     border: 1px solid #aaa
     font-size: 12px
     height: auto
-    width: auto
+    width: 100px
   .dash
     display: inline-block
     float: left
-    margin: 3px 10px
+    margin: 6px 10px
+    color: #666
 
 .ui-dialog
   background: #fff
@@ -448,14 +449,20 @@ div#comparison, div#geo_trend, div#info_facility, div#preventive, div#equipment,
       margin-bottom: 5px
       padding-bottom: 5px
       +pie-clearfix
-      &:last-child
-        border: none
       &.modular
         input[type=text]
           border: 1px solid #aaa
           font-size: 12px
           height: auto
-          width: 126px
+          width: 100px
+        select
+          font-size: 12px
+          height: 27px
+          margin-left: 20px
+          margin-top: 2px
+          padding: 4px 7px
+          width: 100px
+
   label
     color: $primary
     display: inline-block
@@ -494,14 +501,15 @@ div#comparison, div#geo_trend, div#info_facility, div#preventive, div#equipment,
       margin-bottom: 5px
   input[type=checkbox]
     height: auto
-    margin-top: 5px
+    margin-top: 6px
     margin-left: 158px
     width: auto
     + span
       color: #666
       display: inline-block
       font-size: 11px
-      margin-top: 5px
+      margin-left: 3px
+      margin-top: 7px
   .ui-widget-next
     color: #fff
     margin-top: 15px
