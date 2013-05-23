@@ -653,7 +653,7 @@ class ListingController extends AbstractController{
 			for(Equipment equipment: equipmentz){
 				if (equipment.warranty.startDate!=null && equipment.warrantyPeriod.numberOfMonths!=null && equipment.warrantyPeriod.months != null) {
 					warrantyExpirationDate= (equipment.warranty.startDate).plus((equipment.warrantyPeriod.numberOfMonths))
-					if (log.isDebugEnabled()) log.debug("CALCURATED DATE "+warrantyExpirationDate +"START DATE "+equipment.warranty.startDate +"WARRANTY PERIOD "+equipment.warrantyPeriod.months)
+					if (log.isDebugEnabled()) log.debug("CALCULATED DATE "+warrantyExpirationDate +"START DATE "+equipment.warranty.startDate +"WARRANTY PERIOD "+equipment.warrantyPeriod.months)
 					if (warrantyExpirationDate > new Date())
 						displayableEquipments.add(equipment)
 				}
@@ -836,7 +836,6 @@ class ListingController extends AbstractController{
 
 		adaptParamsForList()
 		def preventiveOrders = preventiveOrderListingReportService.getCustomReportOfPreventiveOrders(user,customPreventiveOrderParams,params)
-
 		if(!request.xhr)
 			render(view:"/reports/reports",
 			model: model(preventiveOrders, "") <<
