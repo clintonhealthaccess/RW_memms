@@ -104,17 +104,7 @@ class ListingController extends AbstractController{
 
 	// default and predefined reports start
 
-	//Equipments
-	def defaultEquipmentsView ={
-		if (log.isDebugEnabled()) log.debug("listing.defaultEquipmentsView, params:"+params)
-
-		render(view: '/reports/reports', model:
-		[
-			reportType: ReportType.INVENTORY,
-			reportSubType: ReportSubType.INVENTORY,
-			template:"/reports/listing/listing"
-		])
-	}
+	// inventory
 
 	def generalEquipmentsListing={
 		if (log.isDebugEnabled()) log.debug("listing.generalEquipmentsListing start, params:"+params)
@@ -215,7 +205,21 @@ class ListingController extends AbstractController{
 			])
 	}
 
-	//WorkOrders
+	// corrective
+
+	def generalWorkOrdersListing={
+		adaptParamsForList()
+		def workOrders = workOrderListingReportService.getWorkOrdersOfLastMonth(user,params)
+		if(!request.xhr)
+			render(view:"/reports/reports",
+			model: model(workOrders, "") <<
+			[
+				reportType: ReportType.CORRECTIVE,
+				reportSubType: ReportSubType.WORKORDERS,
+				template:"/reports/listing/listing",
+			])
+	}
+
 	def lastMonthWorkOrders={
 		adaptParamsForList()
 		def workOrders = workOrderListingReportService.getWorkOrdersOfLastMonth(user,params)
@@ -242,7 +246,21 @@ class ListingController extends AbstractController{
 			])
 	}
 
-	//PreventiveOrders
+	// preventive
+
+	def generalPreventiveOrdersListing={
+		adaptParamsForList()
+		def preventiveOrders = preventiveOrderListingReportService.getEquipmentsWithPreventionPlan(user,params)
+		if(!request.xhr)
+			render(view:"/reports/reports",
+			model: model(preventiveOrders, "") <<
+			[
+				reportType: ReportType.PREVENTIVE,
+				reportSubType: ReportSubType.WORKORDERS,
+				template:"/reports/listing/listing",
+			])
+	}
+
 	def equipmentsWithPreventionPlan={
 		adaptParamsForList()
 		def preventiveOrders = preventiveOrderListingReportService.getEquipmentsWithPreventionPlan(user,params)
@@ -255,6 +273,7 @@ class ListingController extends AbstractController{
 				template:"/reports/listing/listing",
 			])
 	}
+
 	//TODO see how to deal with periodic times either weekly, monthly, or any other
 	def preventionsDelayed={
 		adaptParamsForList()
@@ -266,6 +285,39 @@ class ListingController extends AbstractController{
 				reportType: ReportType.PREVENTIVE,
 				reportSubType: ReportSubType.WORKORDERS,
 				template:"/reports/listing/listing",
+			])
+	}
+
+	// spare parts
+
+	// TODO
+	def generalSparePartsListing={
+		if (log.isDebugEnabled()) log.debug("listing.generalSparePartsListing start, params:"+params)
+
+		adaptParamsForList()
+		def equipments = equipmentListingReportService.getGeneralReportOfEquipments(user,params)
+		if(!request.xhr)
+			render(view:"/reports/reports",
+			model: model(equipments, "") <<
+			[
+				reportType: ReportType.SPAREPARTS,
+				reportSubType: ReportSubType.INVENTORY,
+				template:"/reports/listing/listing"
+			])
+	}
+
+	def otherSparePartsListing={
+		if (log.isDebugEnabled()) log.debug("listing.generalSparePartsListing start, params:"+params)
+
+		adaptParamsForList()
+		def equipments = equipmentListingReportService.getGeneralReportOfEquipments(user,params)
+		if(!request.xhr)
+			render(view:"/reports/reports",
+			model: model(equipments, "") <<
+			[
+				reportType: ReportType.SPAREPARTS,
+				reportSubType: ReportSubType.INVENTORY,
+				template:"/reports/listing/listing"
 			])
 	}
 
@@ -541,7 +593,10 @@ class ListingController extends AbstractController{
 		def customizedReportName = params.get('customizedReportName')
 		if(customizedReportName == null || customizedReportName.empty){
 			def customizedReportTimestamp = new Date()
-			customizedReportName = "customReport_"+reportType+"_"+reportSubType+"_"+customizedReportTimestamp.format('yyyyMMddHHmmss')
+			def reportTypeTimestamp = message(code:'reports.type.'+reportType?.reportType)
+			def reportSubTypeTimestamp = message(code:'reports.subType.'+reportSubType?.reportSubType)
+			customizedReportName = 
+				"Custom Report "+reportTypeTimestamp+" "+reportSubTypeTimestamp+" "+customizedReportTimestamp.format('yyyyMMddHHmmss')
 		}
 		def customizedReportSave = params.get('customizedReportSave')
 		customizedListingModel << [
@@ -560,10 +615,9 @@ class ListingController extends AbstractController{
 			case ReportType.PREVENTIVE:
 				redirect(action: "customPreventiveOrderListing", params: customizedListingModel)
 				break;
-			// TODO
-			// case ReportType.SPAREPARTS:
-			// 	redirect(action: "customSparePartsListing", params: customizedListingModel)
-			// 	break;
+			case ReportType.SPAREPARTS:
+				redirect(action: "customSparePartsListing", params: customizedListingModel)
+				break;
 			default:
 				break;
 		}
@@ -581,6 +635,7 @@ class ListingController extends AbstractController{
 
 		def reportType = getReportType()
 		def reportSubType = getReportSubType()
+
 		def dataLocations = getDataLocations()
 		def departments = getDepartments()
 		def equipmentTypes = getEquipmentTypes()
@@ -593,8 +648,8 @@ class ListingController extends AbstractController{
 			toCost = Double.parseDouble(params.get('toCost'))
 		def costCurrency = params.get('costCurrency')
 
-		// TODO def fromAcquisitionPeriod
-		// TODO def toAcquisitionPeriod
+		// def fromAcquisitionPeriod = getPeriod('fromAcquisitionPeriod')
+		// def toAcquisitionPeriod = getPeriod('toAcquisitionPeriod')
 
 		def customEquipmentParams = [
 			dataLocations: dataLocations,
@@ -603,7 +658,7 @@ class ListingController extends AbstractController{
 			fromCost: fromCost,
 			toCost: toCost,
 			costCurrency: costCurrency
-			// fromAcquisitionPeriod: fromAcquisitionPeriod
+			// fromAcquisitionPeriod: fromAcquisitionPeriod,
 			// toAcquisitionPeriod: toAcquisitionPeriod
 		]
 
@@ -682,6 +737,7 @@ class ListingController extends AbstractController{
 
 		def reportType = getReportType()
 		def reportSubType = getReportSubType()
+
 		def dataLocations = getDataLocations()
 		def equipmentTypes = getEquipmentTypes()
 
@@ -778,6 +834,7 @@ class ListingController extends AbstractController{
 
 		def reportType = getReportType()
 		def reportSubType = getReportSubType()
+
 		def dataLocations = getDataLocations()
 		def equipmentTypes = getEquipmentTypes()
 
@@ -848,7 +905,78 @@ class ListingController extends AbstractController{
 			])
 	}
 
-	// TODO spare parts
+	// spare parts
+	def customSparePartsListing ={
+		if (log.isDebugEnabled()) log.debug("listing.customSparePartsListing start, params:"+params)
+
+		def reportType = getReportType()
+		def reportSubType = getReportSubType()
+
+		def dataLocations = getDataLocations()
+		def sparePartTypes = getSparePartTypes()
+
+		def customSparePartsParams = [
+			dataLocations: dataLocations,
+			sparePartTypes: sparePartTypes
+		]
+
+		if(reportSubType == ReportSubType.INVENTORY){
+			def sparePartStatus = getSparePartStatus()
+			def fromAcquisitionPeriod = getPeriod('fromAcquisitionPeriod')
+			def toAcquisitionPeriod = getPeriod('toAcquisitionPeriod')
+			def noAcquisitionPeriod = params.get('noAcquisitionPeriod')
+			customSparePartsParams << [
+				sparePartStatus: sparePartStatus,
+				fromAcquisitionPeriod: fromAcquisitionPeriod,
+				toAcquisitionPeriod: toAcquisitionPeriod,
+				noAcquisitionPeriod: noAcquisitionPeriod
+			]
+		}
+
+		if(reportSubType == ReportSubType.STATUSCHANGES){
+			def statusChanges = getSparePartStatusChanges()
+			customSparePartsParams << [
+				statusChanges: statusChanges
+			]
+		}
+
+		if(reportSubType == ReportSubType.STOCKOUT){
+			def stockOut = params.get('stockOut')
+			def stockOutMonths = params.get('stockOutMonths')
+			customSparePartsParams << [
+				stockOut: stockOut,
+				stockOut: stockOutMonths
+			]
+		}
+
+		if(reportSubType == ReportSubType.USERATE){ }
+
+		def reportTypeOptions = getReportTypeOptions('spartPartsOptions')
+		def customizedReportName = params.get('customizedReportName')
+		def customizedReportSave = params.get('customizedReportSave')
+		customSparePartsParams << [
+			reportTypeOptions: reportTypeOptions,
+			customizedReportName: customizedReportName,
+			customizedReportSave: customizedReportSave,
+		]
+
+		if (log.isDebugEnabled()) log.debug("listing.customSparePartsListing, customSparePartsParams:"+customSparePartsParams)
+
+		// TODO
+		// adaptParamsForList()
+		// def equipments = workOrderListingReportService.getCustomReportOfSpareParts(user,customSparePartsParams,params)
+
+		if(!request.xhr)
+			render(view:"/reports/reports",
+			model: [
+				reportType: reportType,
+				reportSubType: reportSubType,
+				reportTypeOptions: reportTypeOptions,
+				customizedReportName: customizedReportName,
+				customizedReportSave: customizedReportSave,
+				template:"/reports/listing/listing"
+			])
+	}
 
 	// customized report listing end
 
@@ -939,7 +1067,7 @@ class ListingController extends AbstractController{
 		Set<SparePartType> sparePartTypes = new HashSet<SparePartType>()
 		if(log.isDebugEnabled()) log.debug("abstract.sparePartTypes ALL")
 		if(params.get('allSparePartTypes')){
-			//TODO
+			//TODO ?
 			sparePartTypes = SparePartType.list()
 		}
 		else if (params.list('sparePartTypes') != null && !params.list('sparePartTypes').empty) {
@@ -954,23 +1082,19 @@ class ListingController extends AbstractController{
 		return sparePartTypes
 	}
 
-	// TODO
+	// TODO fix date picker js initialization to parse intl date format
 	public Date getPeriod(String periodParam){
+		def date = null
 		def period = params.get(periodParam);
 		if(log.isDebugEnabled())
-			log.debug("abstract.getPeriod param:"+periodParam+", value:"+period+", class:"+period?.class)
+			log.debug("abstract.getPeriod period param:"+periodParam+", value:"+period+", class:"+period?.class)
 		if(period != null && !period.empty) {
-			def newPeriod  = Utils.parseDate(period)
-			//period = Date.parse("MM/dd/yyyy",period)
-			// def jodaPeriod = Utils.jodaDateFormatter().parseDateTime(period).toDate()
+			date  = Utils.parseDate(period)
 			if(log.isDebugEnabled())
-				log.debug("abstract.getPeriod after utils date parse param:+++++++++++++"+period+", value:"+newPeriod)
-			// jodaPeriod = Date.parse(Utils.DATE_FORMAT_US,period)
-			// if(log.isDebugEnabled())
-			// 	log.debug("abstract.getPeriod after utils date parse param:+++++++++++++"+period+", value:"+jodaPeriod)
+				log.debug("abstract.getPeriod date param:"+periodParam+", value:"+date+", class:"+date?.class)
+			return date
 		}
-		else period = null
-		return period
+		return date
 	}
 
 	public Set<Status> getInventoryStatus(){
