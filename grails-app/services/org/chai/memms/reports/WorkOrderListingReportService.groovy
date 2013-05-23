@@ -84,8 +84,7 @@ class WorkOrderListingReportService {
 			if(departments != null)
 				inList ("equip.department", departments)
 			if(equipmentTypes != null)
-				inList ("equip.type", equipmentTypes)
-				
+				inList ("equip.type", equipmentTypes)		
 		}
 	}
 }
