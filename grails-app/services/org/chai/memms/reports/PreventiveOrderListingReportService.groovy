@@ -52,7 +52,36 @@ class PreventiveOrderListingReportService {
 		}
 	}
 
-	def getCustomReportOfPreventiveOrders(User user,Map<String, String> params) {
-		//TODO
+	def getCustomReportOfPreventiveOrders(User user,def customPreventiveOrderParams,Map<String, String> params) {
+		
+		def dataLocations = customPreventiveOrderParams.get('dataLocations')
+		def departments = customPreventiveOrderParams.get('departments')
+		def equipmentTypes = customPreventiveOrderParams.get('equipmentTypes')
+		def lowerLimitCost = customPreventiveOrderParams.('fromCost')
+		def upperLimitCost = customPreventiveOrderParams.('toCost')
+		def currency = customPreventiveOrderParams.get('costCurrency')
+		def workOrderStatus = customPreventiveOrderParams.get('workOrderStatus')
+		def responsibles = customPreventiveOrderParams.get('whoIsResponsible')
+		def criteria = PreventiveOrder.createCriteria();
+	
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			createAlias("equipment","equip")
+			if(dataLocations)
+				inList('equip.dataLocation',dataLocations)
+			if(departments != null)
+				inList ("equip.department", departments)
+			if(equipmentTypes != null)
+				inList ("equip.type", equipmentTypes)
+			if(workOrderStatus!=null && !workOrderStatus.empty)
+				inList ("status",workOrderStatus)
+			if(lowerLimitCost!=null)
+				gt ("equip.purchaseCost", lowerLimitCost)
+			if(upperLimitCost!=null)
+				lt ("equip.purchaseCost", upperLimitCost)
+			if(currency !=null)
+				eq ("equip.currency",currency)	
+			if(responsibles!=null && !responsibles.empty)
+				inList ("preventionResponsible",responsibles)
+		}
 	}
 }

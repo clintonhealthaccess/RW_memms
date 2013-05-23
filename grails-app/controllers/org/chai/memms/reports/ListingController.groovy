@@ -69,6 +69,7 @@ class ListingController extends AbstractController{
 	def workOrderListingReportService
 	def preventiveOrderListingReportService
 	def grailsApplication
+	def userService
 
 	def getEntityClass() {
 		return Equipment.class;
@@ -791,33 +792,34 @@ class ListingController extends AbstractController{
 		if (log.isDebugEnabled()) log.debug("listing.customWorkOrderListing, customWorkOrderParams:"+customWorkOrderParams)
 
 		adaptParamsForList()
-		def displayableEquipments=[]
+		def displayableWorkOrders=[]
 		def warrantyExpirationDate
-		def equipments = []
+		def workOrders = []
 
-		def equipmentz = workOrderListingReportService.getCustomReportOfWorkOrders(user,customWorkOrderParams,params)
-
+		def workOrderz = workOrderListingReportService.getCustomReportOfWorkOrders(user,customWorkOrderParams,params)
+		if (log.isDebugEnabled()) log.debug("WORK ORDERS SIZE: "+ workOrderz.size())
+		
 		if(warranty != null && warranty.empty){
 
-			for(Equipment equipment: equipmentz){
-				if (equipment.warranty.startDate!=null && equipment.warrantyPeriod.numberOfMonths!=null && equipment.warrantyPeriod.months != null) {
-					warrantyExpirationDate= (equipment.warranty.startDate).plus((equipment.warrantyPeriod.numberOfMonths))
-					if (log.isDebugEnabled()) log.debug("CALCURATED DATE "+warrantyExpirationDate +"START DATE "+equipment.warranty.startDate +"WARRANTY PERIOD "+equipment.warrantyPeriod.months)
+			for(WorkOrder workOrder: workOrderz){
+				if (workOrder.equipment.warranty.startDate!=null && workOrder.equipment.warrantyPeriod.numberOfMonths!=null && workOrder.equipment.warrantyPeriod.months != null) {
+					warrantyExpirationDate= (workOrder.equipment.warranty.startDate).plus((workOrder.equipment.warrantyPeriod.numberOfMonths))
+					if (log.isDebugEnabled()) log.debug("CALCURATED DATE "+warrantyExpirationDate +"START DATE "+workOrder.equipment.warranty.startDate +"WARRANTY PERIOD "+workOrder.equipment.warrantyPeriod.months)
 					if (warrantyExpirationDate > new Date())
-						displayableEquipments.add(equipment)
+						displayableWorkOrders.add(workOrder)
 				}
 				warrantyExpirationDate=null
 			}
 
 		}else{
-			displayableEquipments=equipmentz
+			displayableWorkOrders=workOrderz
 		}
-		equipments=displayableEquipments
+		workOrders=displayableWorkOrders
 
 
 		if(!request.xhr)
 			render(view:"/reports/reports",
-			model: model(equipments, "") <<
+			model: model(workOrders, "") <<
 			[
 				reportType: reportType,
 				reportSubType: reportSubType,
@@ -890,11 +892,10 @@ class ListingController extends AbstractController{
 		if (log.isDebugEnabled()) log.debug("listing.customPreventiveOrderListing, customPreventiveOrderParams:"+customPreventiveOrderParams)
 
 		adaptParamsForList()
-		def equipments = workOrderListingReportService.getCustomReportOfWorkOrders(user,customPreventiveOrderParams,params)
-
+		def preventiveOrders = preventiveOrderListingReportService.getCustomReportOfPreventiveOrders(user,customPreventiveOrderParams,params)
 		if(!request.xhr)
 			render(view:"/reports/reports",
-			model: model(equipments, "") <<
+			model: model(preventiveOrders, "") <<
 			[
 				reportType: reportType,
 				reportSubType: reportSubType,
