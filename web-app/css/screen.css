@@ -1230,7 +1230,7 @@ table.nice-table .cell { cursor: default; }
 /* line 143, ../../src/stylesheets/partials/_report.sass */
 .v-tabs-subnav .right a { font-size: 14px; font-weight: bold; }
 /* line 148, ../../src/stylesheets/partials/_report.sass */
-.v-tabs-subnav.paginate .move_left { background: url("../images/arrow-left.png") no-repeat; height: 16px; width: 8px; }
+.v-tabs-subnav.slide .move_left { background: url("../images/arrow-left.png") no-repeat; height: 16px; width: 8px; }
 
 /* line 154, ../../src/stylesheets/partials/_report.sass */
 .v-tabs-content { background: white; border: 1px solid rgba(0, 0, 0, 0.1); color: #666666; font-size: 12px; padding: 15px 0 0; width: 998px; }
