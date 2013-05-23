@@ -1,4 +1,5 @@
 <%@ page import="org.chai.memms.util.Utils" %>
+<%@ page import="org.chai.memms.util.Utils.ReportSubType" %>
 <%@ page import="org.apache.shiro.SecurityUtils" %>
 <%@ page import="org.chai.memms.security.User" %>
 <%@ page import="org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus" %>

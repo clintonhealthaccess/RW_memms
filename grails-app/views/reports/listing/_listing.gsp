@@ -20,7 +20,7 @@
     <!-- report type tabs template -->
     <g:render template="/reports/listing/listingReportTypeTabs" />
 
-    <!-- INVENTORY -->
+    <!-- Inventory -->
     <g:if test="${reportType == ReportType.INVENTORY}">
       <div id='js-inventory' class="v-tabs-content right shown">
           <!-- equipment predefined reports template -->
@@ -42,7 +42,7 @@
       </div>
     </g:if>
 
-    <!-- CORRECTIVE -->
+    <!-- Corrective -->
     <g:if test="${reportType == ReportType.CORRECTIVE}">
       <div id='js-corrective' class="v-tabs-content right shown">
         <!-- work order predefined reports template -->
@@ -64,7 +64,7 @@
       </div>
     </g:if>
 
-    <!-- PREVENTIVE -->
+    <!-- Preventive -->
     <g:if test="${reportType == ReportType.PREVENTIVE}">
       <div id='js-preventive' class="v-tabs-content right shown">
         <!-- preventive order predefined reports template -->
@@ -86,10 +86,25 @@
       </div>
     </g:if>
 
-    <!-- TODO SPARE PARTS -->
+    <!-- Spare Parts -->
     <g:if test="${reportType == ReportType.SPAREPARTS}">
       <div id='js-spare-parts' class="v-tabs-content right shown">
-        %{-- TODO --}%
+        <!-- spare parts predefined reports template -->
+          <g:render template="/reports/listing/sparePartReport/sparePartPredefinedReports" />
+          <!-- TODO spare parts saved reports template -->
+          <div id='report-1' class="js-shown-report">
+            <!-- spare parts indicator summary template -->
+            <g:render template ="/reports/listing/sparePartReport/sparePartIndicatorSummary" />
+            <!-- listing filter summary template -->
+            <g:render template ="/reports/listing/listingFilterSummary" />
+            <!-- spare parts report template -->
+            <g:if test="${customizedReportName != null && !customizedReportName.empty}">
+              <g:render template="/reports/listing/sparePartReport/customSparePartsListing" />
+            </g:if>
+            <g:else>
+              <g:render template="/reports/listing/sparePartReport/sparePartsListing" />
+            </g:else>
+          </div>
       </div>
     </g:if>
 

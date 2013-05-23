@@ -69,6 +69,7 @@ class ListingController extends AbstractController{
 	def workOrderListingReportService
 	def preventiveOrderListingReportService
 	def grailsApplication
+	def userService
 
 	def getEntityClass() {
 		return Equipment.class;
@@ -94,14 +95,6 @@ class ListingController extends AbstractController{
 		render(contentType:"text/json") { results = [listHtml]}
 	}
 
-	//TODO get rid of this
-	def dashboard ={
-		render(view: '/reports/reports',
-			model: [
-				template:"/reports/dashboard/dashboard"
-			])
-	}
-
 	def index ={
 		redirect(action: "view", params: params)
 	}
@@ -112,17 +105,7 @@ class ListingController extends AbstractController{
 
 	// default and predefined reports start
 
-	//Equipments
-	def defaultEquipmentsView ={
-		if (log.isDebugEnabled()) log.debug("listing.defaultEquipmentsView, params:"+params)
-
-		render(view: '/reports/reports', model:
-		[
-			reportType: ReportType.INVENTORY,
-			reportSubType: ReportSubType.INVENTORY,
-			template:"/reports/listing/listing"
-		])
-	}
+	// inventory
 
 	def generalEquipmentsListing={
 		if (log.isDebugEnabled()) log.debug("listing.generalEquipmentsListing start, params:"+params)
@@ -130,13 +113,13 @@ class ListingController extends AbstractController{
 		adaptParamsForList()
 		def equipments = equipmentListingReportService.getGeneralReportOfEquipments(user,params)
 		if(!request.xhr)
-			render(view:"/reports/reports", 
-				model: model(equipments, "") << 
-				[
-					reportType: ReportType.INVENTORY,
-					reportSubType: ReportSubType.INVENTORY,
-					template:"/reports/listing/listing"
-				])		
+			render(view:"/reports/reports",
+			model: model(equipments, "") <<
+			[
+				reportType: ReportType.INVENTORY,
+				reportSubType: ReportSubType.INVENTORY,
+				template:"/reports/listing/listing"
+			])
 	}
 
 	def disposedEquipments={
@@ -145,13 +128,13 @@ class ListingController extends AbstractController{
 		adaptParamsForList()
 		def equipments = equipmentListingReportService.getDisposedEquipments(user,params)
 		if(!request.xhr)
-			render(view:"/reports/reports", 
-				model: model(equipments, "") << 
-				[
-					reportType: ReportType.INVENTORY,
-					reportSubType: ReportSubType.INVENTORY,
-					template:"/reports/listing/listing",
-				])		
+			render(view:"/reports/reports",
+			model: model(equipments, "") <<
+			[
+				reportType: ReportType.INVENTORY,
+				reportSubType: ReportSubType.INVENTORY,
+				template:"/reports/listing/listing",
+			])
 	}
 
 	def underMaintenanceEquipments={
@@ -160,13 +143,13 @@ class ListingController extends AbstractController{
 		adaptParamsForList()
 		def equipments = equipmentListingReportService.getUnderMaintenanceEquipments(user,params)
 		if(!request.xhr)
-			render(view:"/reports/reports", 
-				model: model(equipments, "") << 
-				[
-					reportType: ReportType.INVENTORY,
-					reportSubType: ReportSubType.INVENTORY,
-					template:"/reports/listing/listing",
-				])		
+			render(view:"/reports/reports",
+			model: model(equipments, "") <<
+			[
+				reportType: ReportType.INVENTORY,
+				reportSubType: ReportSubType.INVENTORY,
+				template:"/reports/listing/listing",
+			])
 	}
 
 	def obsoleteEquipments={
@@ -175,26 +158,26 @@ class ListingController extends AbstractController{
 		adaptParamsForList()
 		def equipments = equipmentListingReportService.getObsoleteEquipments(user,params)
 		if(!request.xhr)
-			render(view:"/reports/reports", 
-				model: model(equipments, "") << 
-				[
-					reportType: ReportType.INVENTORY,
-					reportSubType: ReportSubType.INVENTORY,
-					template:"/reports/listing/listing",
-				])	
+			render(view:"/reports/reports",
+			model: model(equipments, "") <<
+			[
+				reportType: ReportType.INVENTORY,
+				reportSubType: ReportSubType.INVENTORY,
+				template:"/reports/listing/listing",
+			])
 	}
 
 	def inStockEquipments={
 		adaptParamsForList()
 		def equipments = equipmentListingReportService.getInStockEquipments(user,params)
 		if(!request.xhr)
-			render(view:"/reports/reports", 
-				model: model(equipments, "") << 
-				[
-					reportType: ReportType.INVENTORY,
-					reportSubType: ReportSubType.INVENTORY,
-					template:"/reports/listing/listing",
-				])
+			render(view:"/reports/reports",
+			model: model(equipments, "") <<
+			[
+				reportType: ReportType.INVENTORY,
+				reportSubType: ReportSubType.INVENTORY,
+				template:"/reports/listing/listing",
+			])
 	}
 
 	def underWarrantyEquipments={
@@ -214,69 +197,134 @@ class ListingController extends AbstractController{
 		}
 		equipments=displayableEquipments
 		if(!request.xhr)
-			render(view:"/reports/reports", 
-				model: model(equipments, "") << 
-				[
-					reportType: ReportType.INVENTORY,
-					reportSubType: ReportSubType.INVENTORY,
-					template:"/reports/listing/listing"
-				])
+			render(view:"/reports/reports",
+			model: model(equipments, "") <<
+			[
+				reportType: ReportType.INVENTORY,
+				reportSubType: ReportSubType.INVENTORY,
+				template:"/reports/listing/listing"
+			])
 	}
 
-	//WorkOrders
+	// corrective
+
+	//TODO
+	def generalWorkOrdersListing={
+		adaptParamsForList()
+		def workOrders = workOrderListingReportService.getWorkOrdersOfLastMonth(user,params)
+		if(!request.xhr)
+			render(view:"/reports/reports",
+			model: model(workOrders, "") <<
+			[
+				reportType: ReportType.CORRECTIVE,
+				reportSubType: ReportSubType.WORKORDERS,
+				template:"/reports/listing/listing",
+			])
+	}
+
 	def lastMonthWorkOrders={
 		adaptParamsForList()
 		def workOrders = workOrderListingReportService.getWorkOrdersOfLastMonth(user,params)
 		if(!request.xhr)
-			render(view:"/reports/reports", 
-				model: model(workOrders, "") << 
-				[
-					reportType: ReportType.CORRECTIVE,
-					reportSubType: ReportSubType.WORKORDERS,
-					template:"/reports/listing/listing",
-				])
+			render(view:"/reports/reports",
+			model: model(workOrders, "") <<
+			[
+				reportType: ReportType.CORRECTIVE,
+				reportSubType: ReportSubType.WORKORDERS,
+				template:"/reports/listing/listing",
+			])
 	}
 
 	def workOrdersEscalatedToMMC={
 		adaptParamsForList()
 		def workOrders = workOrderListingReportService.getWorkOrdersEscalatedToMMC(user,params)
 		if(!request.xhr)
-			render(view:"/reports/reports", 
-				model: model(workOrders, "") << 
-				[
-					reportType: ReportType.CORRECTIVE,
-					reportSubType: ReportSubType.WORKORDERS,
-					template:"/reports/listing/listing",
-				])
+			render(view:"/reports/reports",
+			model: model(workOrders, "") <<
+			[
+				reportType: ReportType.CORRECTIVE,
+				reportSubType: ReportSubType.WORKORDERS,
+				template:"/reports/listing/listing",
+			])
 	}
 
-	//PreventiveOrders
+	// preventive
+
+	//TODO
+	def generalPreventiveOrdersListing={
+		adaptParamsForList()
+		def preventiveOrders = preventiveOrderListingReportService.getEquipmentsWithPreventionPlan(user,params)
+		if(!request.xhr)
+			render(view:"/reports/reports",
+			model: model(preventiveOrders, "") <<
+			[
+				reportType: ReportType.PREVENTIVE,
+				reportSubType: ReportSubType.WORKORDERS,
+				template:"/reports/listing/listing",
+			])
+	}
+
 	def equipmentsWithPreventionPlan={
 		adaptParamsForList()
 		def preventiveOrders = preventiveOrderListingReportService.getEquipmentsWithPreventionPlan(user,params)
 		if(!request.xhr)
-			render(view:"/reports/reports", 
-				model: model(preventiveOrders, "") << 
-				[
-					reportType: ReportType.PREVENTIVE,
-					reportSubType: ReportSubType.WORKORDERS,
-					template:"/reports/listing/listing",
-				])
+			render(view:"/reports/reports",
+			model: model(preventiveOrders, "") <<
+			[
+				reportType: ReportType.PREVENTIVE,
+				reportSubType: ReportSubType.WORKORDERS,
+				template:"/reports/listing/listing",
+			])
 	}
+
 	//TODO see how to deal with periodic times either weekly, monthly, or any other
 	def preventionsDelayed={
 		adaptParamsForList()
 		def preventiveOrders = preventiveOrderListingReportService.getEquipmentsWithPreventionPlan(user,params)
 		if(!request.xhr)
-			render(view:"/reports/reports", 
-				model: model(preventiveOrders, "") << 
-				[
-					reportType: ReportType.PREVENTIVE,
-					reportSubType: ReportSubType.WORKORDERS,
-					template:"/reports/listing/listing",
-				])
+			render(view:"/reports/reports",
+			model: model(preventiveOrders, "") <<
+			[
+				reportType: ReportType.PREVENTIVE,
+				reportSubType: ReportSubType.WORKORDERS,
+				template:"/reports/listing/listing",
+			])
 	}
-	
+
+	// spare parts
+
+	// TODO
+	def generalSparePartsListing={
+		if (log.isDebugEnabled()) log.debug("listing.generalSparePartsListing start, params:"+params)
+
+		adaptParamsForList()
+		def equipments = equipmentListingReportService.getGeneralReportOfEquipments(user,params)
+		if(!request.xhr)
+			render(view:"/reports/reports",
+			model: model(equipments, "") <<
+			[
+				reportType: ReportType.SPAREPARTS,
+				reportSubType: ReportSubType.INVENTORY,
+				template:"/reports/listing/listing"
+			])
+	}
+
+	// TODO
+	def otherSparePartsListing={
+		if (log.isDebugEnabled()) log.debug("listing.generalSparePartsListing start, params:"+params)
+
+		adaptParamsForList()
+		def equipments = equipmentListingReportService.getGeneralReportOfEquipments(user,params)
+		if(!request.xhr)
+			render(view:"/reports/reports",
+			model: model(equipments, "") <<
+			[
+				reportType: ReportType.SPAREPARTS,
+				reportSubType: ReportSubType.INVENTORY,
+				template:"/reports/listing/listing"
+			])
+	}
+
 	// default and predefined reports end
 
 	// customized report wizard steps start
@@ -290,37 +338,37 @@ class ListingController extends AbstractController{
 		//params to pass along to step 2
 		def step1Params = [:]
 
-    	//params to load step 1
+		//params to load step 1
 		def step1Model = [
 			reportType: reportType,
 			reportSubType: reportSubType
 		]
-    	step1Model << [step1Params: step1Params]
+		step1Model << [step1Params: step1Params]
 
-    	if (log.isDebugEnabled()) log.debug("listing.step1 end, step1Model:"+step1Model)
-		render(template:"/reports/listing/customizedReport/step1", 
-			model: step1Model <<
-			[
-				reportType: reportType,
-				reportSubType: reportSubType,
-				dataLocations: dataLocations,
-				step1Params: step1Params
-			])
+		if (log.isDebugEnabled()) log.debug("listing.step1 end, step1Model:"+step1Model)
+		render(template:"/reports/listing/customizedReport/step1",
+		model: step1Model <<
+		[
+			reportType: reportType,
+			reportSubType: reportSubType,
+			dataLocations: dataLocations,
+			step1Params: step1Params
+		])
 	}
 
-	// customized report wizard step1 'remoteFunction' 
+	// customized report wizard step1 'remoteFunction'
 	def customizedReportSubType ={
-		if (log.isDebugEnabled()) 
+		if (log.isDebugEnabled())
 			log.debug("listing.step1.customizedReportSubType start, params:"+params)
 
 		def reportType = getReportType()
 
 		if (log.isDebugEnabled()) log.debug("listing.step1.customizedReportSubType end, reportType:"+reportType)
 		render(template:"/reports/listing/customizedReport/customizedReportSubType",
-			model: 
-			[
-				reportType: reportType
-			])
+		model:
+		[
+			reportType: reportType
+		])
 	}
 
 	def step2 ={
@@ -330,18 +378,18 @@ class ListingController extends AbstractController{
 		def reportSubType = getReportSubType()
 
 		//params from step 1 to pass along to step 3
-	    def step2Params = [:]
-	    step2Params.putAll params
+		def step2Params = [:]
+		step2Params.putAll params
 
-	    //params to load step 2
+		//params to load step 2
 		def step2Model = [
 			reportType: reportType,
 			reportSubType: reportSubType,
 			currencies: grailsApplication.config.site.possible.currency
 		]
-	    step2Model << [step2Params: step2Params]
+		step2Model << [step2Params: step2Params]
 
-	    if (log.isDebugEnabled()) log.debug("listing.step2 end, step2Model:"+step2Model)
+		if (log.isDebugEnabled()) log.debug("listing.step2 end, step2Model:"+step2Model)
 		render(template:"/reports/listing/customizedReport/step2", model:step2Model)
 	}
 
@@ -400,7 +448,7 @@ class ListingController extends AbstractController{
 						equipmentStatus: equipmentStatus,
 						obsolete: obsolete,
 						warranty: warranty
-					]	
+					]
 				}
 				if(reportType == ReportType.SPAREPARTS){
 					def sparePartStatus = getSparePartStatus()
@@ -484,12 +532,12 @@ class ListingController extends AbstractController{
 				break;
 		}
 
-	    //params to load step 3
+		//params to load step 3
 		def step3Model = [
 			reportType: reportType,
 			reportSubType: reportSubType
 		]
-	    step3Model << [step3Params: step3Params]
+		step3Model << [step3Params: step3Params]
 
 		if (log.isDebugEnabled()) log.debug("listing.step3 end, step3Model:"+step3Model)
 		render(template:"/reports/listing/customizedReport/step3", model:step3Model)
@@ -528,7 +576,7 @@ class ListingController extends AbstractController{
 			reportType: reportType,
 			reportSubType: reportSubType
 		]
-	    step4Model << [step4Params: step4Params]
+		step4Model << [step4Params: step4Params]
 
 		if (log.isDebugEnabled()) log.debug("listing.step4 end, step4Model:"+step4Model)
 		render(template:"/reports/listing/customizedReport/step4", model:step4Model)
@@ -549,7 +597,10 @@ class ListingController extends AbstractController{
 		def customizedReportName = params.get('customizedReportName')
 		if(customizedReportName == null || customizedReportName.empty){
 			def customizedReportTimestamp = new Date()
-			customizedReportName = "customReport_"+reportType+"_"+reportSubType+"_"+customizedReportTimestamp.format('yyyyMMddHHmmss')
+			def reportTypeTimestamp = message(code:'reports.type.'+reportType?.reportType)
+			def reportSubTypeTimestamp = message(code:'reports.subType.'+reportSubType?.reportSubType)
+			customizedReportName = 
+				"Custom Report "+reportTypeTimestamp+" "+reportSubTypeTimestamp+" "+customizedReportTimestamp.format('yyyyMMddHHmmss')
 		}
 		def customizedReportSave = params.get('customizedReportSave')
 		customizedListingModel << [
@@ -568,19 +619,18 @@ class ListingController extends AbstractController{
 			case ReportType.PREVENTIVE:
 				redirect(action: "customPreventiveOrderListing", params: customizedListingModel)
 				break;
-			// TODO
-			// case ReportType.SPAREPARTS:
-			// 	redirect(action: "customSparePartsListing", params: customizedListingModel)
-			// 	break;
+			case ReportType.SPAREPARTS:
+				redirect(action: "customSparePartsListing", params: customizedListingModel)
+				break;
 			default:
 				break;
 		}
 
 		render(view: '/reports/reports',
-			model: customizedListingModel << 
-			[
-				template:"/reports/listing/listing"
-			])
+		model: customizedListingModel <<
+		[
+			template:"/reports/listing/listing"
+		])
 	}
 
 	// inventory
@@ -589,6 +639,7 @@ class ListingController extends AbstractController{
 
 		def reportType = getReportType()
 		def reportSubType = getReportSubType()
+
 		def dataLocations = getDataLocations()
 		def departments = getDepartments()
 		def equipmentTypes = getEquipmentTypes()
@@ -597,12 +648,13 @@ class ListingController extends AbstractController{
 		if(params.get('fromCost') != null && !params.get('fromCost').empty)
 			fromCost = Double.parseDouble(params.get('fromCost'))
 		def toCost = null
-		if(params.get('toCost') != null && !params.get('toCost').empty) 
+		if(params.get('toCost') != null && !params.get('toCost').empty)
 			toCost = Double.parseDouble(params.get('toCost'))
 		def costCurrency = params.get('costCurrency')
 
-		// TODO def fromAcquisitionPeriod
-		// TODO def toAcquisitionPeriod
+		// def fromAcquisitionPeriod = getPeriod('fromAcquisitionPeriod')
+		// def toAcquisitionPeriod = getPeriod('toAcquisitionPeriod')
+		// def noAcquisitionPeriod = params.get('noAcquisitionPeriod')
 
 		def customEquipmentParams = [
 			dataLocations: dataLocations,
@@ -611,8 +663,9 @@ class ListingController extends AbstractController{
 			fromCost: fromCost,
 			toCost: toCost,
 			costCurrency: costCurrency
-			// fromAcquisitionPeriod: fromAcquisitionPeriod
-			// toAcquisitionPeriod: toAcquisitionPeriod
+			// fromAcquisitionPeriod: fromAcquisitionPeriod,
+			// toAcquisitionPeriod: toAcquisitionPeriod,
+			// noAcquisitionPeriod: noAcquisitionPeriod
 		]
 
 		if(reportSubType == ReportSubType.INVENTORY){
@@ -649,19 +702,39 @@ class ListingController extends AbstractController{
 		if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing end, customEquipmentParams:"+customEquipmentParams)
 
 		adaptParamsForList()
-		def equipments = equipmentListingReportService.getCustomReportOfEquipments(user,customEquipmentParams,params)
+		def displayableEquipments=[]
+		def warrantyExpirationDate
+		def warranty=params.get('warranty')
+		def equipments = []
+		def equipmentz = equipmentListingReportService.getCustomReportOfEquipments(user,customEquipmentParams,params)
 
+		if(warranty != null && warranty.empty){
+
+			for(Equipment equipment: equipmentz){
+				if (equipment.warranty.startDate!=null && equipment.warrantyPeriod.numberOfMonths!=null && equipment.warrantyPeriod.months != null) {
+					warrantyExpirationDate= (equipment.warranty.startDate).plus((equipment.warrantyPeriod.numberOfMonths))
+					if (log.isDebugEnabled()) log.debug("CALCULATED DATE "+warrantyExpirationDate +"START DATE "+equipment.warranty.startDate +"WARRANTY PERIOD "+equipment.warrantyPeriod.months)
+					if (warrantyExpirationDate > new Date())
+						displayableEquipments.add(equipment)
+				}
+				warrantyExpirationDate=null
+			}
+
+		}else{
+			displayableEquipments=equipmentz
+		}
+		equipments=displayableEquipments
 		if(!request.xhr)
-			render(view:"/reports/reports", 
-				model: model(equipments, "") << 
-				[
-					reportType: reportType,
-					reportSubType: reportSubType,
-					reportTypeOptions: reportTypeOptions,
-					customizedReportName: customizedReportName,
-					customizedReportSave: customizedReportSave,
-					template:"/reports/listing/listing"
-				])
+			render(view:"/reports/reports",
+			model: model(equipments, "") <<
+			[
+				reportType: reportType,
+				reportSubType: reportSubType,
+				reportTypeOptions: reportTypeOptions,
+				customizedReportName: customizedReportName,
+				customizedReportSave: customizedReportSave,
+				template:"/reports/listing/listing"
+			])
 	}
 
 	// corrective
@@ -670,19 +743,18 @@ class ListingController extends AbstractController{
 
 		def reportType = getReportType()
 		def reportSubType = getReportSubType()
+
 		def dataLocations = getDataLocations()
 		def equipmentTypes = getEquipmentTypes()
-		
+
 		def fromCost = null
 		if(params.get('fromCost') != null && !params.get('fromCost').empty)
 			fromCost = Double.parseDouble(params.get('fromCost'))
 		def toCost = null
-		if(params.get('toCost') != null && !params.get('toCost').empty) 
+		if(params.get('toCost') != null && !params.get('toCost').empty)
 			toCost = Double.parseDouble(params.get('toCost'))
 		def costCurrency = params.get('costCurrency')
 
-		// def fromWorkOrderPeriod = getPeriod('fromWorkOrderPeriod')
-		// def toWorkOrderPeriod = getPeriod('toWorkOrderPeriod')
 		def warranty = params.get('warranty')
 
 		def customWorkOrderParams = [
@@ -692,22 +764,28 @@ class ListingController extends AbstractController{
 			fromCost: fromCost,
 			toCost: toCost,
 			costCurrency: costCurrency,
-			// fromWorkOrderPeriod: fromWorkOrderPeriod,
-			// toWorkOrderPeriod: toWorkOrderPeriod
 			warranty: warranty
 		]
 
 		if(reportSubType == ReportSubType.WORKORDERS){
 			def workOrderStatus = getCorrectiveStatus()
+			// def fromWorkOrderPeriod = getPeriod('fromWorkOrderPeriod')
+			// def toWorkOrderPeriod = getPeriod('toWorkOrderPeriod')
 			customWorkOrderParams << [
 				workOrderStatus: workOrderStatus
+				// fromWorkOrderPeriod: fromWorkOrderPeriod,
+				// toWorkOrderPeriod: toWorkOrderPeriod
 			]
 		}
 
 		if(reportSubType == ReportSubType.STATUSCHANGES){
 			def statusChanges = getCorrectiveStatusChanges()
+			// def fromStatusChangesPeriod = getPeriod('fromWorkOrderPeriod')
+			// def toStatusChangesPeriod = getPeriod('toWorkOrderPeriod')
 			customWorkOrderParams << [
-				statusChanges: statusChanges,
+				statusChanges: statusChanges
+				// fromStatusChangesPeriod: fromStatusChangesPeriod,
+				// toStatusChangesPeriod: toStatusChangesPeriod
 			]
 		}
 
@@ -723,19 +801,42 @@ class ListingController extends AbstractController{
 		if (log.isDebugEnabled()) log.debug("listing.customWorkOrderListing, customWorkOrderParams:"+customWorkOrderParams)
 
 		adaptParamsForList()
-		def equipments = workOrderListingReportService.getCustomReportOfWorkOrders(user,customWorkOrderParams)
+		def displayableWorkOrders=[]
+		def warrantyExpirationDate
+		def workOrders = []
+
+		def workOrderz = workOrderListingReportService.getCustomReportOfWorkOrders(user,customWorkOrderParams,params)
+		if (log.isDebugEnabled()) log.debug("WORK ORDERS SIZE: "+ workOrderz.size())
+		
+		if(warranty != null && warranty.empty){
+
+			for(WorkOrder workOrder: workOrderz){
+				if (workOrder.equipment.warranty.startDate!=null && workOrder.equipment.warrantyPeriod.numberOfMonths!=null && workOrder.equipment.warrantyPeriod.months != null) {
+					warrantyExpirationDate= (workOrder.equipment.warranty.startDate).plus((workOrder.equipment.warrantyPeriod.numberOfMonths))
+					if (log.isDebugEnabled()) log.debug("CALCURATED DATE "+warrantyExpirationDate +"START DATE "+workOrder.equipment.warranty.startDate +"WARRANTY PERIOD "+workOrder.equipment.warrantyPeriod.months)
+					if (warrantyExpirationDate > new Date())
+						displayableWorkOrders.add(workOrder)
+				}
+				warrantyExpirationDate=null
+			}
+
+		}else{
+			displayableWorkOrders=workOrderz
+		}
+		workOrders=displayableWorkOrders
+
 
 		if(!request.xhr)
-			render(view:"/reports/reports", 
-				model: model(equipments, "") << 
-				[
-					reportType: reportType,
-					reportSubType: reportSubType,
-					reportTypeOptions: reportTypeOptions,
-					customizedReportName: customizedReportName,
-					customizedReportSave: customizedReportSave,
-					template:"/reports/listing/listing"
-				])
+			render(view:"/reports/reports",
+			model: model(workOrders, "") <<
+			[
+				reportType: reportType,
+				reportSubType: reportSubType,
+				reportTypeOptions: reportTypeOptions,
+				customizedReportName: customizedReportName,
+				customizedReportSave: customizedReportSave,
+				template:"/reports/listing/listing"
+			])
 	}
 
 	// preventive
@@ -744,6 +845,7 @@ class ListingController extends AbstractController{
 
 		def reportType = getReportType()
 		def reportSubType = getReportSubType()
+
 		def dataLocations = getDataLocations()
 		def equipmentTypes = getEquipmentTypes()
 
@@ -751,12 +853,9 @@ class ListingController extends AbstractController{
 		if(params.get('fromCost') != null && !params.get('fromCost').empty)
 			fromCost = Double.parseDouble(params.get('fromCost'))
 		def toCost = null
-		if(params.get('toCost') != null && !params.get('toCost').empty) 
+		if(params.get('toCost') != null && !params.get('toCost').empty)
 			toCost = Double.parseDouble(params.get('toCost'))
 		def costCurrency = params.get('costCurrency')
-
-		// def fromWorkOrderPeriod = getPeriod('fromWorkOrderPeriod')
-		// def toWorkOrderPeriod = getPeriod('toWorkOrderPeriod')
 
 		def customPreventiveOrderParams = [
 			dataLocations: dataLocations,
@@ -765,29 +864,35 @@ class ListingController extends AbstractController{
 			fromCost: fromCost,
 			toCost: toCost,
 			costCurrency: costCurrency
-			// fromWorkOrderPeriod: fromPeriod,
-			// toWorkOrderPeriod: toWorkOrderPeriod
 		]
 
 		if(reportSubType == ReportSubType.WORKORDERS){
 			def workOrderStatus = getPreventiveStatus()
+			// def fromWorkOrderPeriod = getPeriod('fromWorkOrderPeriod')
+			// def toWorkOrderPeriod = getPeriod('toWorkOrderPeriod')
 			def whoIsResponsible = params.list('whoIsResponsible')
 			customPreventiveOrderParams << [
 				workOrderStatus: workOrderStatus,
+				// fromWorkOrderPeriod: fromPeriod,
+				// toWorkOrderPeriod: toWorkOrderPeriod
 				whoIsResponsible: whoIsResponsible
 			]
 		}
 
 		if(reportSubType == ReportSubType.STATUSCHANGES){
 			def statusChanges = getPreventiveStatusChanges()
+			// def fromStatusChangesPeriod = getPeriod('fromWorkOrderPeriod')
+			// def toStatusChangesPeriod = getPeriod('toWorkOrderPeriod')
 			def doneByWho = params.list('doneByWho')
 			customPreventiveOrderParams << [
 				statusChanges: statusChanges,
+				// fromStatusChangesPeriod: fromStatusChangesPeriod,
+				// toStatusChangesPeriod: toStatusChangesPeriod
 				doneByWho: doneByWho
 			]
 		}
 
-		def reportTypeOptions = getReportTypeOptions('correctiveOptions')
+		def reportTypeOptions = getReportTypeOptions('preventiveOptions')
 		def customizedReportName = params.get('customizedReportName')
 		def customizedReportSave = params.get('customizedReportSave')
 		customPreventiveOrderParams << [
@@ -799,22 +904,96 @@ class ListingController extends AbstractController{
 		if (log.isDebugEnabled()) log.debug("listing.customPreventiveOrderListing, customPreventiveOrderParams:"+customPreventiveOrderParams)
 
 		adaptParamsForList()
-		def equipments = workOrderListingReportService.getCustomReportOfPreventiveOrders(user,customPreventiveOrderParams)
-
+		def preventiveOrders = preventiveOrderListingReportService.getCustomReportOfPreventiveOrders(user,customPreventiveOrderParams,params)
 		if(!request.xhr)
-			render(view:"/reports/reports", 
-				model: model(equipments, "") << 
-				[
-					reportType: reportType,
-					reportSubType: reportSubType,
-					reportTypeOptions: reportTypeOptions,
-					customizedReportName: customizedReportName,
-					customizedReportSave: customizedReportSave,
-					template:"/reports/listing/listing"
-				])
+			render(view:"/reports/reports",
+			model: model(preventiveOrders, "") <<
+			[
+				reportType: reportType,
+				reportSubType: reportSubType,
+				reportTypeOptions: reportTypeOptions,
+				customizedReportName: customizedReportName,
+				customizedReportSave: customizedReportSave,
+				template:"/reports/listing/listing"
+			])
 	}
 
-	// TODO spare parts
+	// spare parts
+	def customSparePartsListing ={
+		if (log.isDebugEnabled()) log.debug("listing.customSparePartsListing start, params:"+params)
+
+		def reportType = getReportType()
+		def reportSubType = getReportSubType()
+
+		def dataLocations = getDataLocations()
+		def sparePartTypes = getSparePartTypes()
+
+		def customSparePartsParams = [
+			dataLocations: dataLocations,
+			sparePartTypes: sparePartTypes
+		]
+
+		if(reportSubType == ReportSubType.INVENTORY){
+			def sparePartStatus = getSparePartStatus()
+			// def fromAcquisitionPeriod = getPeriod('fromAcquisitionPeriod')
+			// def toAcquisitionPeriod = getPeriod('toAcquisitionPeriod')
+			// def noAcquisitionPeriod = params.get('noAcquisitionPeriod')
+			customSparePartsParams << [
+				sparePartStatus: sparePartStatus
+				// fromAcquisitionPeriod: fromAcquisitionPeriod,
+				// toAcquisitionPeriod: toAcquisitionPeriod,
+				// noAcquisitionPeriod: noAcquisitionPeriod
+			]
+		}
+
+		if(reportSubType == ReportSubType.STATUSCHANGES){
+			def statusChanges = getSparePartStatusChanges()
+			// def fromStatusChangesPeriod = getPeriod('fromWorkOrderPeriod')
+			// def toStatusChangesPeriod = getPeriod('toWorkOrderPeriod')
+			customSparePartsParams << [
+				statusChanges: statusChanges
+				// fromStatusChangesPeriod: fromStatusChangesPeriod,
+				// toStatusChangesPeriod: toStatusChangesPeriod
+			]
+		}
+
+		if(reportSubType == ReportSubType.STOCKOUT){
+			def stockOut = params.get('stockOut')
+			def stockOutMonths = params.get('stockOutMonths')
+			customSparePartsParams << [
+				stockOut: stockOut,
+				stockOut: stockOutMonths
+			]
+		}
+
+		if(reportSubType == ReportSubType.USERATE){ }
+
+		def reportTypeOptions = getReportTypeOptions('spartPartsOptions')
+		def customizedReportName = params.get('customizedReportName')
+		def customizedReportSave = params.get('customizedReportSave')
+		customSparePartsParams << [
+			reportTypeOptions: reportTypeOptions,
+			customizedReportName: customizedReportName,
+			customizedReportSave: customizedReportSave,
+		]
+
+		if (log.isDebugEnabled()) log.debug("listing.customSparePartsListing, customSparePartsParams:"+customSparePartsParams)
+
+		// TODO
+		// adaptParamsForList()
+		// def equipments = workOrderListingReportService.getCustomReportOfSpareParts(user,customSparePartsParams,params)
+
+		if(!request.xhr)
+			render(view:"/reports/reports",
+			model: [
+				reportType: reportType,
+				reportSubType: reportSubType,
+				reportTypeOptions: reportTypeOptions,
+				customizedReportName: customizedReportName,
+				customizedReportSave: customizedReportSave,
+				template:"/reports/listing/listing"
+			])
+	}
 
 	// customized report listing end
 
@@ -822,14 +1001,14 @@ class ListingController extends AbstractController{
 
 	def getReportType(){
 		ReportType reportType = params.get('reportType')
-		if(log.isDebugEnabled()) 
+		if(log.isDebugEnabled())
 			log.debug("abstract.reportType param:"+reportType+")")
 		if(reportType == null) reportType = ReportType.INVENTORY
 		return reportType
 	}
 	def getReportSubType(){
 		ReportSubType reportSubType = params.get('reportSubType')
-		if(log.isDebugEnabled()) 
+		if(log.isDebugEnabled())
 			log.debug("abstract.reportSubType param:"+reportSubType+")")
 		if(reportSubType == null) reportSubType = ReportSubType.INVENTORY
 		return reportSubType
@@ -840,12 +1019,12 @@ class ListingController extends AbstractController{
 		Set<DataLocation> dataLocations = new HashSet<DataLocation>()
 		if(params.get('allDataLocations')){
 			if(log.isDebugEnabled()) log.debug("abstract.dataLocations ALL")
-			if(user.location instanceof Location) 
+			if(user.location instanceof Location)
 				dataLocations.addAll(user.location.collectDataLocations(null))
 			else{
 				dataLocations = []
 				dataLocations.add(user.location as DataLocation)
-				if(userService.canViewManagedEquipments(user)) 
+				if(userService.canViewManagedEquipments(user))
 					dataLocations.addAll(((DataLocation)user.location).manages)
 			}
 		}
@@ -853,12 +1032,12 @@ class ListingController extends AbstractController{
 			if(log.isDebugEnabled()) log.debug("abstract.dataLocations CUSTOM")
 			def types = params.list('dataLocations')
 			dataLocations.addAll(types.collect{ it ->
-				if(log.isDebugEnabled()) 
+				if(log.isDebugEnabled())
 					log.debug("abstract.dataLocations dataLocation:"+it+", isNumber:"+NumberUtils.isNumber(it as String))
-				NumberUtils.isNumber(it as String) ? DataLocation.get(it) : null 
+				NumberUtils.isNumber(it as String) ? DataLocation.get(it) : null
 			} - null)
 		}
-		
+
 		return dataLocations
 	}
 	public Set<Department> getDepartments() {
@@ -873,14 +1052,14 @@ class ListingController extends AbstractController{
 			if(log.isDebugEnabled()) log.debug("abstract.departments CUSTOM")
 			def types = params.list('departments')
 			departments.addAll(types.collect{ it ->
-				if(log.isDebugEnabled()) 
+				if(log.isDebugEnabled())
 					log.debug("abstract.departments department:"+it+", isNumber:"+NumberUtils.isNumber(it as String))
-				NumberUtils.isNumber(it as String) ? Department.get(it) : null 
+				NumberUtils.isNumber(it as String) ? Department.get(it) : null
 			} - null)
 		}
-		
+
 		return departments
-	}	
+	}
 	public Set<EquipmentType> getEquipmentTypes() {
 		if(log.isDebugEnabled()) log.debug("abstract.equipmentTypes params:"+params)
 		Set<EquipmentType> equipmentTypes = new HashSet<EquipmentType>()
@@ -893,9 +1072,9 @@ class ListingController extends AbstractController{
 			if(log.isDebugEnabled()) log.debug("abstract.equipmentTypes CUSTOM")
 			def types = params.list('equipmentTypes')
 			equipmentTypes.addAll(types.collect{ it ->
-				if(log.isDebugEnabled()) 
+				if(log.isDebugEnabled())
 					log.debug("abstract.equipmentTypes equipmentType:"+it+", isNumber:"+NumberUtils.isNumber(it as String))
-				NumberUtils.isNumber(it as String) ? EquipmentType.get(it) : null 
+				NumberUtils.isNumber(it as String) ? EquipmentType.get(it) : null
 			} - null)
 		}
 		return equipmentTypes
@@ -905,38 +1084,34 @@ class ListingController extends AbstractController{
 		Set<SparePartType> sparePartTypes = new HashSet<SparePartType>()
 		if(log.isDebugEnabled()) log.debug("abstract.sparePartTypes ALL")
 		if(params.get('allSparePartTypes')){
-			//TODO
+			//TODO ?
 			sparePartTypes = SparePartType.list()
 		}
 		else if (params.list('sparePartTypes') != null && !params.list('sparePartTypes').empty) {
 			if(log.isDebugEnabled()) log.debug("abstract.sparePartTypes CUSTOM")
 			def types = params.list('sparePartTypes')
 			sparePartTypes.addAll(types.collect{ it ->
-				if(log.isDebugEnabled()) 
+				if(log.isDebugEnabled())
 					log.debug("abstract.sparePartTypes sparePartType:"+it+", isNumber:"+NumberUtils.isNumber(it as String))
-				NumberUtils.isNumber(it as String) ? SparePartType.get(it) : null 
+				NumberUtils.isNumber(it as String) ? SparePartType.get(it) : null
 			} - null)
 		}
 		return sparePartTypes
 	}
 
-	// TODO
+	// TODO fix date picker js initialization to parse intl date format
 	public Date getPeriod(String periodParam){
+		def date = null
 		def period = params.get(periodParam);
-		if(log.isDebugEnabled()) 
-			log.debug("abstract.getPeriod param:"+periodParam+", value:"+period+", class:"+period?.class)
+		if(log.isDebugEnabled())
+			log.debug("abstract.getPeriod period param:"+periodParam+", value:"+period+", class:"+period?.class)
 		if(period != null && !period.empty) {
-			def newPeriod  = Utils.parseDate(period)
-			//period = Date.parse("MM/dd/yyyy",period)
-			// def jodaPeriod = Utils.jodaDateFormatter().parseDateTime(period).toDate()
-			if(log.isDebugEnabled()) 
-				log.debug("abstract.getPeriod after utils date parse param:+++++++++++++"+period+", value:"+newPeriod)
-			// jodaPeriod = Date.parse(Utils.DATE_FORMAT_US,period)
-			// if(log.isDebugEnabled()) 
-			// 	log.debug("abstract.getPeriod after utils date parse param:+++++++++++++"+period+", value:"+jodaPeriod)
+			date  = Utils.parseDate(period)
+			if(log.isDebugEnabled())
+				log.debug("abstract.getPeriod date param:"+periodParam+", value:"+date+", class:"+date?.class)
+			return date
 		}
-		else period = null
-		return period
+		return date
 	}
 
 	public Set<Status> getInventoryStatus(){
@@ -962,7 +1137,7 @@ class ListingController extends AbstractController{
 				if(it != null) inventoryStatusChanges.add(it)
 			}
 		}
-		if(log.isDebugEnabled()) 
+		if(log.isDebugEnabled())
 			log.debug("abstract.inventoryStatusChanges end statusChanges:"+inventoryStatusChanges)
 		return inventoryStatusChanges
 	}
@@ -990,7 +1165,7 @@ class ListingController extends AbstractController{
 				if(it != null) correctiveStatusChanges.add(it)
 			}
 		}
-		if(log.isDebugEnabled()) 
+		if(log.isDebugEnabled())
 			log.debug("abstract.correctiveStatusChanges end statusChanges:"+correctiveStatusChanges)
 		return correctiveStatusChanges
 	}
@@ -1018,7 +1193,7 @@ class ListingController extends AbstractController{
 				if(it != null) preventiveStatusChanges.add(it)
 			}
 		}
-		if(log.isDebugEnabled()) 
+		if(log.isDebugEnabled())
 			log.debug("abstract.preventiveStatusChanges end statusChanges:"+preventiveStatusChanges)
 		return preventiveStatusChanges
 	}
@@ -1046,7 +1221,7 @@ class ListingController extends AbstractController{
 				if(it != null) sparePartStatusChanges.add(it)
 			}
 		}
-		if(log.isDebugEnabled()) 
+		if(log.isDebugEnabled())
 			log.debug("abstract.sparePartStatusChanges end statusChanges:"+sparePartStatusChanges)
 		return sparePartStatusChanges
 	}

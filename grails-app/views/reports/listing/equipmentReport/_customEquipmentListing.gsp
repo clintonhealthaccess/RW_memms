@@ -19,7 +19,7 @@
 			</g:if>
 			
 			<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
-				%{-- TODO --}%
+				%{-- TODO SL --}%
 			</g:if>
 
 			<g:if test="${reportTypeOptions.contains('currentStatus')}">

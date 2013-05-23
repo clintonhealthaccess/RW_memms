@@ -23,7 +23,21 @@
 		<li><g:checkBox name="spartPartsOptions" value="forecastedStockOut" /><span>Forecasted Stock Out</span></li>
 	</g:if>
 
-	<g:if test="${reportSubType == ReportSubType.USERATE}">
-		<li><g:checkBox name="spartPartsOptions" value="useRate" /><span>Use Rate</span></li>
-	</g:if>
+<g:if test="${[ReportSubType.INVENTORY,ReportSubType.STATUSCHANGES].contains(reportSubType)}">
+    <li><g:checkBox name="spartPartsOptions" value="status" /><span>Status</span></li>
+    <li><g:checkBox name="spartPartsOptions" value="model" /><span>Model</span></li>
+    <li><g:checkBox name="spartPartsOptions" value="manufacturer" /><span>Manufacturer</span></li>
+    <li><g:checkBox name="spartPartsOptions" value="equipmentCode" /><span>Equipment Code Associated With Spare Part</span></li>
+    <li><g:checkBox name="spartPartsOptions" value="cost" /><span>Cost</span></li>
+    <li><g:checkBox name="spartPartsOptions" value="warrantyPeriodRemaining" checked="false" /><span>Warranty Period Remaining</span></li>
+    <li><g:checkBox name="spartPartsOptions" value="discontinuedDate" checked="false" /><span>Discontinued Date</span></li>
+</g:if>
+
+<g:if test="${reportSubType == ReportSubType.STOCKOUT}">
+    <li><g:checkBox name="spartPartsOptions" value="forecastedStockOut" /><span>Forecasted Stock Out</span></li>
+</g:if>
+
+<g:if test="${reportSubType == ReportSubType.USERATE}">
+    <li><g:checkBox name="spartPartsOptions" value="useRate" /><span>Use Rate</span></li>
+</g:if>
 </ul>
