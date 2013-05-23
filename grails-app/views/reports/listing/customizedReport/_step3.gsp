@@ -7,20 +7,18 @@
   <g:formRemote name="formRemoteStep3Next" url="[action:'step4', params: step3Params]" update="dialog-form"
     onSuccess="customizedlisting_init();">
     <fieldset>
-      <ul class="twocol-checkboxes">
-        <g:if test="${reportType == ReportType.INVENTORY}">
-          <g:render template="/reports/listing/customizedReport/inventory/step3"/>
-        </g:if>      
-        <g:if test="${reportType == ReportType.CORRECTIVE}">
-          <g:render template="/reports/listing/customizedReport/corrective/step3"/>
-        </g:if>
-        <g:if test="${reportType == ReportType.PREVENTIVE}">
-          <g:render template="/reports/listing/customizedReport/preventive/step3"/>
-        </g:if>
-        <g:if test="${reportType == ReportType.SPAREPARTS}">
-          <g:render template="/reports/listing/customizedReport/spareParts/step3"/>
-        </g:if>
-      </ul>
+      <g:if test="${reportType == ReportType.INVENTORY}">
+        <g:render template="/reports/listing/customizedReport/inventory/step3"/>
+      </g:if>      
+      <g:if test="${reportType == ReportType.CORRECTIVE}">
+        <g:render template="/reports/listing/customizedReport/corrective/step3"/>
+      </g:if>
+      <g:if test="${reportType == ReportType.PREVENTIVE}">
+        <g:render template="/reports/listing/customizedReport/preventive/step3"/>
+      </g:if>
+      <g:if test="${reportType == ReportType.SPAREPARTS}">
+        <g:render template="/reports/listing/customizedReport/spareParts/step3"/>
+      </g:if>
     </fieldset>
   </g:formRemote>
   <g:formRemote name="formRemoteStep3Prev" url="[action:'step2', params:step3Model]" update="dialog-form"
