@@ -3,10 +3,14 @@
   <li>
     %{-- TODO fix checkbox list styles !!! --}%
     <label for="equipmentStatus"><g:message code="reports.inventory.inventory.equipmentStatus"/>:</label>
-    <g:each in="${Status.values() - Status.NONE}" var="statusEnum">
-        <input name="equipmentStatus" type="checkbox" value="${statusEnum.key}"/>
-        <label for="${statusEnum.key}">${message(code: statusEnum?.messageCode+'.'+statusEnum?.name)}</label>
-    </g:each>
+    <ul class="checkbox-list">
+      <g:each in="${Status.values() - Status.NONE}" var="statusEnum">
+        <li>
+          <input name="equipmentStatus" type="checkbox" value="${statusEnum.key}"/>
+          <label for="${statusEnum.key}">${message(code: statusEnum?.messageCode+'.'+statusEnum?.name)}</label>
+        </li>
+      </g:each>
+    </ul>
   </li>
   <li>
     <label for="acquisitionPeriod"><g:message code="reports.inventory.inventory.acquisitionPeriod"/>:</label>

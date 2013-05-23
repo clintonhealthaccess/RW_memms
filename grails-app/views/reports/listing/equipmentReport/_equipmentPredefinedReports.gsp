@@ -1,4 +1,4 @@
-<ul class="v-tabs-subnav">
+<ul class="v-tabs-subnav slide">
 	<li>
 		<a class="${actionName == 'generalEquipmentsListing'?'active':''}" 
 			href="${createLinkWithTargetURI(controller: 'listing', action:'generalEquipmentsListing')}" id="report-1">

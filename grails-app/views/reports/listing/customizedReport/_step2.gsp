@@ -33,10 +33,12 @@
             <g:checkBox name="allEquipmentTypes" class='js-select-all'/>
             <span><g:message code="reports.selectAll"/></span>
           </li>
-          <li>
+          <li class="modular">
             %{-- TODO fix date + select box styles !!! --}%
             <label><g:message code="reports.cost"/>:</label>
             <input type="text" name="fromCost"/><span class="dash">-</span><input type="text" name="toCost"/>
+          </li>
+          <li>
             <label for="costCurrency"><g:message code="reports.currency"/>:</label>
             <select name="costCurrency">
               <g:each in="${currencies}" var="currencyEnum">
