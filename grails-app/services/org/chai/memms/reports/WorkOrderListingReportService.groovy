@@ -73,8 +73,8 @@ class WorkOrderListingReportService {
 
 			if(dataLocations!=null)
 				inList('equip.dataLocation',dataLocations)
-			/*if(workOrderStatus!=null && !workOrderStatus.empty)
-				inList ("currentStatus",workOrderStatus)*/
+			if(workOrderStatus!=null && !workOrderStatus.empty)
+				inList ("currentStatus",workOrderStatus)
 			if(lowerLimitCost!=null)
 				gt ("equip.purchaseCost", lowerLimitCost)
 			if(upperLimitCost!=null)
@@ -83,6 +83,7 @@ class WorkOrderListingReportService {
 				eq ("equip.currency",currency)
 			if(departments != null)
 				inList ("equip.department", departments)
+				
 			if(equipmentTypes != null)
 				inList ("equip.type", equipmentTypes)		
 		}

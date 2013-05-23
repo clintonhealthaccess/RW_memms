@@ -62,13 +62,14 @@ class PreventiveOrderListingReportService {
 		def currency = customPreventiveOrderParams.get('costCurrency')
 		def workOrderStatus = customPreventiveOrderParams.get('workOrderStatus')
 		def responsibles = customPreventiveOrderParams.get('whoIsResponsible')
+		
 		def criteria = PreventiveOrder.createCriteria();
 	
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			createAlias("equipment","equip")
 			if(dataLocations)
 				inList('equip.dataLocation',dataLocations)
-			if(departments != null)
+			/*if(departments != null)
 				inList ("equip.department", departments)
 			if(equipmentTypes != null)
 				inList ("equip.type", equipmentTypes)
@@ -81,7 +82,7 @@ class PreventiveOrderListingReportService {
 			if(currency !=null)
 				eq ("equip.currency",currency)	
 			if(responsibles!=null && !responsibles.empty)
-				inList ("preventionResponsible",responsibles)
+				inList ("preventionResponsible",responsibles)*/
 		}
 	}
 }
