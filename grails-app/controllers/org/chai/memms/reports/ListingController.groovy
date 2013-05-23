@@ -823,7 +823,7 @@ class ListingController extends AbstractController{
 			]
 		}
 
-		def reportTypeOptions = getReportTypeOptions('correctiveOptions')
+		def reportTypeOptions = getReportTypeOptions('preventiveOptions')
 		def customizedReportName = params.get('customizedReportName')
 		def customizedReportSave = params.get('customizedReportSave')
 		customPreventiveOrderParams << [
