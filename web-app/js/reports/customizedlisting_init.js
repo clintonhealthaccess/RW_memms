@@ -1,13 +1,13 @@
-function customizedlisting_init(){
+function customizedlisting_init(step){
 
   // load wizard stuff here
   // ...
 
   // load step-specific wizard stuff here
-  step1_init();
-  step2_init();
-  step3_init();
-  step4_init();
+  if(step == 1) step1_init();
+  if(step == 2) step2_init();
+  if(step == 3) step3_init();
+  if(step == 4) step4_init();
 
 }
 
@@ -37,7 +37,6 @@ function step2_init(){
   $(function() {
     $( ".js-date-picker" ).datepicker({ dateFormat: "dd/mm/yy" })
   });
-  getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}");
 
   $('#js-next-step-2').click(function(e) {
     $('#formRemoteStep2Next').submit();

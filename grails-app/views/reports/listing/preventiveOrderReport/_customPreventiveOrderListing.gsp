@@ -79,7 +79,7 @@
 					%{-- TODO SL --}%
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('currentStatus')}">
-					<td>${message(code: order.currentStatus?.messageCode+'.'+order.currentStatus?.name)}</td>
+					<td>${message(code: order.status?.messageCode+'.'+order.status?.name)}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('scheduleNextInterventions')}">
 					%{-- TODO --}%

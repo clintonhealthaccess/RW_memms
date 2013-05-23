@@ -1,6 +1,7 @@
 $(document).ready(function(){
 
   // load listing stuff here
+  // ...
 
   // load jqueryui dialog box
   $( "#js-customize-toggle").click(function(e) {
@@ -11,16 +12,8 @@ $(document).ready(function(){
 
 });
 
-// load jqueryui time picker
-$(function() {
-  $( ".js-date-picker" ).datepicker();
-});
-
-// load chosen
-$(".chzn-select").chosen();
-
 // load customized listing init
 $(function(){
-  customizedlisting_init();
+  customizedlisting_init(1);
 });
 

@@ -5,7 +5,7 @@
   <h2><g:message code="reports.apply.filters"/><span class="right"><g:message code="reports.step" args="['2','4']"/></span></h2>
   <p>${message(code:'reports.type.label')}: <b>${message(code:'reports.type.'+reportType?.reportType)}</b> > ${message(code:'reports.subType.label')}: <b>${message(code:'reports.subType.'+reportSubType?.reportSubType)}</b></p>
   <g:formRemote name="formRemoteStep2Next" url="[action:'step3', params:step2Params]" update="dialog-form"
-    onSuccess="customizedlisting_init();">
+    onSuccess="customizedlisting_init(3)">
     <fieldset>
       <ul>
         <li>
@@ -65,7 +65,7 @@
     </fieldset>
   </g:formRemote>
   <g:formRemote name="formRemoteStep2Prev" url="[action:'step1', params:step2Model]" update="dialog-form"
-    onSuccess="customizedlisting_init();">
+    onSuccess="customizedlisting_init(1)">
   </g:formRemote>
   <a href="#" class="ui-widget-previous left btn gray medium" id='js-prev-step-2'><g:message code="reports.step.previous"/></a>
   <a href="#" class="ui-widget-next right btn" id='js-next-step-2'><g:message code="reports.step.next"/></a>

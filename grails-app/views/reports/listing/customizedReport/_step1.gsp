@@ -4,7 +4,7 @@
   <!-- Step 1 -->
   <h2><g:message code="reports.select.customized.report"/><span class="right"><g:message code="reports.step" args="['1','4']"/></span></h2>
   <g:formRemote name="formRemoteStep1Next" url="[action:'step2', params: step1Params]" update="dialog-form" 
-    onSuccess="customizedlisting_init();">
+    onSuccess="customizedlisting_init(2)">
     <fieldset>
       <ul>
         <li>
