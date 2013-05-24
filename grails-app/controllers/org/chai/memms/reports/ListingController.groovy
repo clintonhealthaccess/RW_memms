@@ -873,8 +873,8 @@ class ListingController extends AbstractController{
 			def whoIsResponsible = getPreventionResponsible('whoIsResponsible')
 			customPreventiveOrderParams << [
 				workOrderStatus: workOrderStatus,
-				fromWorkOrderPeriod: fromPeriod,
-				toWorkOrderPeriod: toWorkOrderPeriod
+				fromWorkOrderPeriod: fromWorkOrderPeriod,
+				toWorkOrderPeriod: toWorkOrderPeriod,
 				whoIsResponsible: whoIsResponsible
 			]
 		}
@@ -887,7 +887,7 @@ class ListingController extends AbstractController{
 			customPreventiveOrderParams << [
 				statusChanges: statusChanges,
 				fromStatusChangesPeriod: fromStatusChangesPeriod,
-				toStatusChangesPeriod: toStatusChangesPeriod
+				toStatusChangesPeriod: toStatusChangesPeriod,
 				doneByWho: doneByWho
 			]
 		}
@@ -939,7 +939,7 @@ class ListingController extends AbstractController{
 			def toAcquisitionPeriod = getPeriod('toAcquisitionPeriod')
 			def noAcquisitionPeriod = params.get('noAcquisitionPeriod')
 			customSparePartsParams << [
-				sparePartStatus: sparePartStatus
+				sparePartStatus: sparePartStatus,
 				fromAcquisitionPeriod: fromAcquisitionPeriod,
 				toAcquisitionPeriod: toAcquisitionPeriod,
 				noAcquisitionPeriod: noAcquisitionPeriod
