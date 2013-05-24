@@ -37,6 +37,7 @@ import org.chai.memms.inventory.Equipment;
 import org.chai.memms.maintenance.MaintenanceOrder;
 import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.memms.security.User;
+import org.chai.memms.spare.part.SparePart
 
 /**
  * @author Jean Kahigiso M.
@@ -85,6 +86,7 @@ public class WorkOrder extends MaintenanceOrder{
 	OrderStatus currentStatus
 	Criticality criticality
 	FailureReason failureReason
+	Map<SparePart,Integer> usedSpareParts =  [:]
 	
 	
 	static belongsTo = [equipment: Equipment]
@@ -167,16 +169,30 @@ public class WorkOrder extends MaintenanceOrder{
 			return true
 		return false
 	}
-		
+
 	@Transient
 	def getTimeBasedStatus(){
-		WorkOrderStatus currentState = status.asList()[0]
-		for(WorkOrderStatus state : status)
-			if(state.dateCreated.after(currentState.dateCreated))
-				currentState= state;
-		return currentState
+		if(!status) return null
+		if(status.size() == 0) return null
+		else if(status.size() == 1) status[0]
+		else{
+			List<WorkOrderStatus> sortedStatus = status.sort{ it.dateCreated }
+			WorkOrderStatus currentState = sortedStatus[-1]
+			return currentState
+		}
 	}
-
+	
+	@Transient
+	def getTimeBasedPreviousStatus(){
+		if(!status) return null
+		if(status.size() == 0) return null
+		else if(status.size() == 1) return null
+		else{
+			List<WorkOrderStatus> sortedStatus = status.sort{ it.dateCreated }
+			WorkOrderStatus previousState = sortedStatus[-2]
+			return previousState
+		}
+	}
 
 	static mapping = {
 		table "memms_work_order"

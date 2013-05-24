@@ -67,8 +67,7 @@ public class SparePart {
 
 		final String name
 		SparePartPurchasedBy(String name){ this.name=name }
-		String getKey() { return name() }
-		
+		String getKey() { return name() }	
 	}
 	enum SparePartStatus{
 		
@@ -80,8 +79,7 @@ public class SparePart {
 
 		final String name
 		SparePartStatus(String name){ this.name=name }
-		String getKey() { return name() }
-		
+		String getKey() { return name() }	
 	}
 	
 	String descriptions
@@ -104,10 +102,8 @@ public class SparePart {
 	StockLocation stockLocation
 	SparePartStatus status
 	
-	
 	User addedBy
 	User lastModified
-
 	
 	static belongsTo = [type: SparePartType]
 
@@ -168,9 +164,7 @@ public class SparePart {
 		cache true
 	}
 	
-	
 	String toString() {
 		return "SparePart [id= " + id + " type= "+type+"]";
-
 	}
 }

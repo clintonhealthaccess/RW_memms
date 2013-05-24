@@ -153,6 +153,6 @@ public abstract class PreventiveOrder extends MaintenanceOrder {
 
     def getEndTimeForOrder() {
         return new DateTime(firstOccurenceOn.timeDate).plusHours(1)
-    }	
+    }
 	
 }
