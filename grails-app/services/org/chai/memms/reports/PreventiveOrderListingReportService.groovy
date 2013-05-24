@@ -11,6 +11,7 @@ import org.chai.memms.preventive.maintenance.PreventiveOrder;
 import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventionResponsible;
 import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatus;
 import org.chai.memms.security.User;
+import org.chai.memms.util.Utils;
 
 /**
  * @author Aphrodice Rwagaju
@@ -85,9 +86,9 @@ class PreventiveOrderListingReportService {
 			createAlias("equipment","equip")
 			if(dataLocations)
 				inList('equip.dataLocation',dataLocations)
-			if(departments != null)
+			if(departments != null && departments.size()>0)
 				inList ("equip.department", departments)
-			if(equipmentTypes != null)
+			if(equipmentTypes != null && equipmentTypes.size()>0)
 				inList ("equip.type", equipmentTypes)
 			if(workOrderStatus!=null && !workOrderStatus.empty)
 				inList ("status",workOrderStatus)
@@ -97,8 +98,8 @@ class PreventiveOrderListingReportService {
 				lt ("equip.purchaseCost", upperLimitCost)
 			if(currency !=null)
 				eq ("equip.currency",currency)	
-//			if(responsibles!=null && !responsibles.empty)
-//				inList ("preventionResponsible",responsibles)
+			if(responsibles!=null && !responsibles.empty)
+				inList ("preventionResponsible",responsibles)
 		}
 	}
 }
