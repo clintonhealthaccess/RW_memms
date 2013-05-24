@@ -142,7 +142,6 @@ public abstract class PreventiveOrder extends MaintenanceOrder {
 		tablePerHierarchy false 
 		cache true
 		version false
-
 	}
 
 	def getDurationMinutes() {

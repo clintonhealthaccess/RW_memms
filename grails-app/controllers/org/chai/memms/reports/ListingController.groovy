@@ -768,8 +768,8 @@ class ListingController extends AbstractController{
 
 		if(reportSubType == ReportSubType.STATUSCHANGES){
 			def statusChanges = getCorrectiveStatusChanges()
-			def fromStatusChangesPeriod = getPeriod('fromWorkOrderPeriod')
-			def toStatusChangesPeriod = getPeriod('toWorkOrderPeriod')
+			def fromStatusChangesPeriod = getPeriod('fromStatusChangesPeriod')
+			def toStatusChangesPeriod = getPeriod('toStatusChangesPeriod')
 			customWorkOrderParams << [
 				statusChanges: statusChanges,
 				fromStatusChangesPeriod: fromStatusChangesPeriod,
@@ -861,8 +861,8 @@ class ListingController extends AbstractController{
 			def whoIsResponsible = getPreventionResponsible('whoIsResponsible')
 			customPreventiveOrderParams << [
 				workOrderStatus: workOrderStatus,
-				fromWorkOrderPeriod: fromPeriod,
-				toWorkOrderPeriod: toWorkOrderPeriod
+				fromWorkOrderPeriod: fromWorkOrderPeriod,
+				toWorkOrderPeriod: toWorkOrderPeriod,
 				whoIsResponsible: whoIsResponsible
 			]
 		}
@@ -914,7 +914,7 @@ class ListingController extends AbstractController{
 			def toAcquisitionPeriod = getPeriod('toAcquisitionPeriod')
 			def noAcquisitionPeriod = params.get('noAcquisitionPeriod')
 			customSparePartsParams << [
-				sparePartStatus: sparePartStatus
+				sparePartStatus: sparePartStatus,
 				fromAcquisitionPeriod: fromAcquisitionPeriod,
 				toAcquisitionPeriod: toAcquisitionPeriod,
 				noAcquisitionPeriod: noAcquisitionPeriod
@@ -1145,25 +1145,9 @@ class ListingController extends AbstractController{
 		}
 		return preventiveStatus
 	}
-	public List<PreventiveOrderStatusChange> getPreventiveStatusChanges(){
-		List<PreventiveOrderStatusChange> preventiveStatusChanges = []
-		if(log.isDebugEnabled()) log.debug("abstract.preventiveStatusChanges start params:"+params)
-		if (params.list('statusChanges') != null && !params.list('statusChanges').empty) {
-			def statusChanges = params.list('statusChanges')
-			if(log.isDebugEnabled()) log.debug("abstract.preventiveStatusChanges statusChanges:"+statusChanges)
-			statusChanges.each { it ->
-				if(log.isDebugEnabled()) log.debug("abstract.preventiveStatusChanges statusChange:"+it)
-				if(it != null) preventiveStatusChanges.add(it)
-			}
-		}
-		if(log.isDebugEnabled())
-			log.debug("abstract.preventiveStatusChanges end statusChanges:"+preventiveStatusChanges)
-		return preventiveStatusChanges
-	}
-
 	public List<PreventionResponsible> getPreventionResponsible(String preventionResponsibleParam){
 		if(log.isDebugEnabled()) log.debug("abstract.PreventionResponsible params:"+params)
-		Set<PreventionResponsible> preventionResponsible = new HashSet<PreventionResponsible>()
+		List<PreventionResponsible> preventionResponsible = []
 		if (params.list(preventionResponsibleParam) != null && !params.list(preventionResponsibleParam).empty) {
 			def types = params.list(preventionResponsibleParam)
 			types.each{ it ->
@@ -1185,21 +1169,6 @@ class ListingController extends AbstractController{
 			}
 		}
 		return sparePartStatus
-	}
-	public List<StatusOfSparePartChange> getSparePartStatusChanges(){
-		List<StatusOfSparePartChange> sparePartStatusChanges = []
-		if(log.isDebugEnabled()) log.debug("abstract.sparePartStatusChanges start params:"+params)
-		if (params.list('statusChanges') != null && !params.list('statusChanges').empty) {
-			def statusChanges = params.list('statusChanges')
-			if(log.isDebugEnabled()) log.debug("abstract.sparePartStatusChanges statusChanges:"+statusChanges)
-			statusChanges.each { it ->
-				if(log.isDebugEnabled()) log.debug("abstract.sparePartStatusChanges statusChange:"+it)
-				if(it != null) sparePartStatusChanges.add(it)
-			}
-		}
-		if(log.isDebugEnabled())
-			log.debug("abstract.sparePartStatusChanges end statusChanges:"+sparePartStatusChanges)
-		return sparePartStatusChanges
 	}
 
 	public Set<String> getReportTypeOptions(String reportTypeOptionParam){
