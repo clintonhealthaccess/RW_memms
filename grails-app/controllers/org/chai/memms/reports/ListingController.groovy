@@ -870,7 +870,7 @@ class ListingController extends AbstractController{
 			def workOrderStatus = getPreventiveStatus()
 			// def fromWorkOrderPeriod = getPeriod('fromWorkOrderPeriod')
 			// def toWorkOrderPeriod = getPeriod('toWorkOrderPeriod')
-			def whoIsResponsible = params.list('whoIsResponsible')
+			def whoIsResponsible = getPreventionResponsible('whoIsResponsible')
 			customPreventiveOrderParams << [
 				workOrderStatus: workOrderStatus,
 				// fromWorkOrderPeriod: fromPeriod,
@@ -883,7 +883,7 @@ class ListingController extends AbstractController{
 			def statusChanges = getPreventiveStatusChanges()
 			// def fromStatusChangesPeriod = getPeriod('fromWorkOrderPeriod')
 			// def toStatusChangesPeriod = getPeriod('toWorkOrderPeriod')
-			def doneByWho = params.list('doneByWho')
+			def doneByWho = getPreventionResponsible('doneByWho')
 			customPreventiveOrderParams << [
 				statusChanges: statusChanges,
 				// fromStatusChangesPeriod: fromStatusChangesPeriod,
@@ -1176,7 +1176,7 @@ class ListingController extends AbstractController{
 		if (params.list('workOrderStatus') != null && !params.list('workOrderStatus').empty) {
 			def types = params.list('workOrderStatus')
 			types.each{ it ->
-				if(log.isDebugEnabled()) log.debug("abstract.workOrderStatus workOrderStatus:"+it)
+				if(log.isDebugEnabled()) log.debug("abstract.preventiveStatus preventiveStatus:"+it)
 				if(it != null) preventiveStatus.add(Enum.valueOf(PreventiveOrderStatus.class, it))
 			}
 		}
@@ -1196,6 +1196,19 @@ class ListingController extends AbstractController{
 		if(log.isDebugEnabled())
 			log.debug("abstract.preventiveStatusChanges end statusChanges:"+preventiveStatusChanges)
 		return preventiveStatusChanges
+	}
+
+	public List<PreventionResponsible> getPreventionResponsible(String preventionResponsibleParam){
+		if(log.isDebugEnabled()) log.debug("abstract.PreventionResponsible params:"+params)
+		Set<PreventionResponsible> preventionResponsible = new HashSet<PreventionResponsible>()
+		if (params.list(preventionResponsibleParam) != null && !params.list(preventionResponsibleParam).empty) {
+			def types = params.list(preventionResponsibleParam)
+			types.each{ it ->
+				if(log.isDebugEnabled()) log.debug("abstract.PreventionResponsible PreventionResponsible:"+it)
+				if(it != null) preventionResponsible.add(Enum.valueOf(PreventionResponsible.class, it))
+			}
+		}
+		return preventionResponsible
 	}
 
 	public Set<StatusOfSparePart> getSparePartStatus(){
