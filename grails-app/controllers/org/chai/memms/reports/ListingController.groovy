@@ -355,7 +355,6 @@ class ListingController extends AbstractController{
 			step1Params: step1Params
 		])
 	}
-
 	// customized report wizard step1 'remoteFunction'
 	def customizedReportSubType ={
 		if (log.isDebugEnabled())
