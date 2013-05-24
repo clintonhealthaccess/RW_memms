@@ -433,13 +433,13 @@ class ListingController extends AbstractController{
 		switch(reportSubType){
 
 			case ReportSubType.INVENTORY:
-				// def fromPeriod = getPeriod('fromAcquisitionPeriod')
-				// def toPeriod = getPeriod('toAcquisitionPeriod')
+				def fromPeriod = getPeriod('fromAcquisitionPeriod')
+				def toPeriod = getPeriod('toAcquisitionPeriod')
 				def includeNoAcquisitionPeriod = params.get('noAcquisitionPeriod')
-				// step3Params << [
-					// fromAcquisitionPeriod: fromPeriod,
-					// toAcquisitionPeriod: toPeriod
-				// ]
+				step3Params << [
+					fromAcquisitionPeriod: fromPeriod,
+					toAcquisitionPeriod: toPeriod
+				]
 				if(reportType == ReportType.INVENTORY){
 					def equipmentStatus = getInventoryStatus()
 					def obsolete = params.get('obsolete')
@@ -457,12 +457,12 @@ class ListingController extends AbstractController{
 				break;
 
 			case ReportSubType.WORKORDERS:
-				// def fromPeriod = getPeriod('fromWorkOrderPeriod')
-				// def toPeriod = getPeriod('toWorkOrderPeriod')
-				// step3Params << [
-					// fromWorkOrderPeriod: fromPeriod,
-					// toWorkOrderPeriod: toPeriod
-				// ]
+				def fromPeriod = getPeriod('fromWorkOrderPeriod')
+				def toPeriod = getPeriod('toWorkOrderPeriod')
+				step3Params << [
+					fromWorkOrderPeriod: fromPeriod,
+					toWorkOrderPeriod: toPeriod
+				]
 				if(reportType == ReportType.CORRECTIVE){
 					def workOrderStatus = getCorrectiveStatus()
 					def warranty = params.get('warranty')
@@ -482,12 +482,12 @@ class ListingController extends AbstractController{
 				break;
 
 			case ReportSubType.STATUSCHANGES:
-				// def fromPeriod = getPeriod('fromStatusChangesPeriod')
-				// def toPeriod = getPeriod('toStatusChangesPeriod')
-				// step3Params << [
-					// fromStatusChangesPeriod: fromPeriod,
-					// toStatusChangesPeriod: toPeriod
-				// ]
+				def fromPeriod = getPeriod('fromStatusChangesPeriod')
+				def toPeriod = getPeriod('toStatusChangesPeriod')
+				step3Params << [
+					fromStatusChangesPeriod: fromPeriod,
+					toStatusChangesPeriod: toPeriod
+				]
 				if(reportType == ReportType.INVENTORY){
 					def statusChanges = getInventoryStatusChanges()
 					step3Params << [
@@ -652,9 +652,9 @@ class ListingController extends AbstractController{
 			toCost = Double.parseDouble(params.get('toCost'))
 		def costCurrency = params.get('costCurrency')
 
-		// def fromAcquisitionPeriod = getPeriod('fromAcquisitionPeriod')
-		// def toAcquisitionPeriod = getPeriod('toAcquisitionPeriod')
-		// def noAcquisitionPeriod = params.get('noAcquisitionPeriod')
+		def fromAcquisitionPeriod = getPeriod('fromAcquisitionPeriod')
+		def toAcquisitionPeriod = getPeriod('toAcquisitionPeriod')
+		def noAcquisitionPeriod = params.get('noAcquisitionPeriod')
 
 		def customEquipmentParams = [
 			dataLocations: dataLocations,
@@ -662,10 +662,10 @@ class ListingController extends AbstractController{
 			equipmentTypes: equipmentTypes,
 			fromCost: fromCost,
 			toCost: toCost,
-			costCurrency: costCurrency
-			// fromAcquisitionPeriod: fromAcquisitionPeriod,
-			// toAcquisitionPeriod: toAcquisitionPeriod,
-			// noAcquisitionPeriod: noAcquisitionPeriod
+			costCurrency: costCurrency,
+			fromAcquisitionPeriod: fromAcquisitionPeriod,
+			toAcquisitionPeriod: toAcquisitionPeriod,
+			noAcquisitionPeriod: noAcquisitionPeriod
 		]
 
 		if(reportSubType == ReportSubType.INVENTORY){
@@ -680,12 +680,12 @@ class ListingController extends AbstractController{
 		}
 
 		if(reportSubType == ReportSubType.STATUSCHANGES){
-			// def fromStatusChangesPeriod = getPeriod('fromStatusChangesPeriod')
-			// def toStatusChangesPeriod = getPeriod('toStatusChangesPeriod')
+			def fromStatusChangesPeriod = getPeriod('fromStatusChangesPeriod')
+			def toStatusChangesPeriod = getPeriod('toStatusChangesPeriod')
 			def statusChanges = getInventoryStatusChanges()
 			customEquipmentParams << [
-				// fromStatusChangesPeriod: fromStatusChangesPeriod,
-				// toStatusChangesPeriod: toStatusChangesPeriod,
+				fromStatusChangesPeriod: fromStatusChangesPeriod,
+				toStatusChangesPeriod: toStatusChangesPeriod,
 				statusChanges: statusChanges
 			]
 		}
@@ -769,23 +769,23 @@ class ListingController extends AbstractController{
 
 		if(reportSubType == ReportSubType.WORKORDERS){
 			def workOrderStatus = getCorrectiveStatus()
-			// def fromWorkOrderPeriod = getPeriod('fromWorkOrderPeriod')
-			// def toWorkOrderPeriod = getPeriod('toWorkOrderPeriod')
+			def fromWorkOrderPeriod = getPeriod('fromWorkOrderPeriod')
+			def toWorkOrderPeriod = getPeriod('toWorkOrderPeriod')
 			customWorkOrderParams << [
-				workOrderStatus: workOrderStatus
-				// fromWorkOrderPeriod: fromWorkOrderPeriod,
-				// toWorkOrderPeriod: toWorkOrderPeriod
+				workOrderStatus: workOrderStatus,
+				fromWorkOrderPeriod: fromWorkOrderPeriod,
+				toWorkOrderPeriod: toWorkOrderPeriod
 			]
 		}
 
 		if(reportSubType == ReportSubType.STATUSCHANGES){
 			def statusChanges = getCorrectiveStatusChanges()
-			// def fromStatusChangesPeriod = getPeriod('fromWorkOrderPeriod')
-			// def toStatusChangesPeriod = getPeriod('toWorkOrderPeriod')
+			def fromStatusChangesPeriod = getPeriod('fromWorkOrderPeriod')
+			def toStatusChangesPeriod = getPeriod('toWorkOrderPeriod')
 			customWorkOrderParams << [
-				statusChanges: statusChanges
-				// fromStatusChangesPeriod: fromStatusChangesPeriod,
-				// toStatusChangesPeriod: toStatusChangesPeriod
+				statusChanges: statusChanges,
+				fromStatusChangesPeriod: fromStatusChangesPeriod,
+				toStatusChangesPeriod: toStatusChangesPeriod
 			]
 		}
 
@@ -868,26 +868,26 @@ class ListingController extends AbstractController{
 
 		if(reportSubType == ReportSubType.WORKORDERS){
 			def workOrderStatus = getPreventiveStatus()
-			// def fromWorkOrderPeriod = getPeriod('fromWorkOrderPeriod')
-			// def toWorkOrderPeriod = getPeriod('toWorkOrderPeriod')
+			def fromWorkOrderPeriod = getPeriod('fromWorkOrderPeriod')
+			def toWorkOrderPeriod = getPeriod('toWorkOrderPeriod')
 			def whoIsResponsible = getPreventionResponsible('whoIsResponsible')
 			customPreventiveOrderParams << [
 				workOrderStatus: workOrderStatus,
-				// fromWorkOrderPeriod: fromPeriod,
-				// toWorkOrderPeriod: toWorkOrderPeriod
+				fromWorkOrderPeriod: fromPeriod,
+				toWorkOrderPeriod: toWorkOrderPeriod
 				whoIsResponsible: whoIsResponsible
 			]
 		}
 
 		if(reportSubType == ReportSubType.STATUSCHANGES){
 			def statusChanges = getPreventiveStatusChanges()
-			// def fromStatusChangesPeriod = getPeriod('fromWorkOrderPeriod')
-			// def toStatusChangesPeriod = getPeriod('toWorkOrderPeriod')
+			def fromStatusChangesPeriod = getPeriod('fromStatusChangesPeriod')
+			def toStatusChangesPeriod = getPeriod('toStatusChangesPeriod')
 			def doneByWho = getPreventionResponsible('doneByWho')
 			customPreventiveOrderParams << [
 				statusChanges: statusChanges,
-				// fromStatusChangesPeriod: fromStatusChangesPeriod,
-				// toStatusChangesPeriod: toStatusChangesPeriod
+				fromStatusChangesPeriod: fromStatusChangesPeriod,
+				toStatusChangesPeriod: toStatusChangesPeriod
 				doneByWho: doneByWho
 			]
 		}
@@ -935,25 +935,25 @@ class ListingController extends AbstractController{
 
 		if(reportSubType == ReportSubType.INVENTORY){
 			def sparePartStatus = getSparePartStatus()
-			// def fromAcquisitionPeriod = getPeriod('fromAcquisitionPeriod')
-			// def toAcquisitionPeriod = getPeriod('toAcquisitionPeriod')
-			// def noAcquisitionPeriod = params.get('noAcquisitionPeriod')
+			def fromAcquisitionPeriod = getPeriod('fromAcquisitionPeriod')
+			def toAcquisitionPeriod = getPeriod('toAcquisitionPeriod')
+			def noAcquisitionPeriod = params.get('noAcquisitionPeriod')
 			customSparePartsParams << [
 				sparePartStatus: sparePartStatus
-				// fromAcquisitionPeriod: fromAcquisitionPeriod,
-				// toAcquisitionPeriod: toAcquisitionPeriod,
-				// noAcquisitionPeriod: noAcquisitionPeriod
+				fromAcquisitionPeriod: fromAcquisitionPeriod,
+				toAcquisitionPeriod: toAcquisitionPeriod,
+				noAcquisitionPeriod: noAcquisitionPeriod
 			]
 		}
 
 		if(reportSubType == ReportSubType.STATUSCHANGES){
 			def statusChanges = getSparePartStatusChanges()
-			// def fromStatusChangesPeriod = getPeriod('fromWorkOrderPeriod')
-			// def toStatusChangesPeriod = getPeriod('toWorkOrderPeriod')
+			def fromStatusChangesPeriod = getPeriod('fromStatusChangesPeriod')
+			def toStatusChangesPeriod = getPeriod('toStatusChangesPeriod')
 			customSparePartsParams << [
-				statusChanges: statusChanges
-				// fromStatusChangesPeriod: fromStatusChangesPeriod,
-				// toStatusChangesPeriod: toStatusChangesPeriod
+				statusChanges: statusChanges,
+				fromStatusChangesPeriod: fromStatusChangesPeriod,
+				toStatusChangesPeriod: toStatusChangesPeriod
 			]
 		}
 
@@ -1099,7 +1099,6 @@ class ListingController extends AbstractController{
 		return sparePartTypes
 	}
 
-	// TODO fix date picker js initialization to parse intl date format
 	public Date getPeriod(String periodParam){
 		def date = null
 		def period = params.get(periodParam);
