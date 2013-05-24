@@ -502,18 +502,6 @@ class ListingController extends AbstractController{
 						warranty: warranty
 					]
 				}
-				if(reportType == ReportType.PREVENTIVE) {
-					def statusChanges = getPreventiveStatusChanges()
-					def doneByWho = params.list('doneByWho')
-					step3Params << [
-						statusChanges: statusChanges,
-						doneByWho: doneByWho
-					]
-				}
-				if(reportType == ReportType.SPAREPARTS){
-					def statusChanges = getSparePartsStatusChanges()
-					step3Params << [statusChanges: statusChanges]
-				}
 				break;
 
 			case ReportSubType.STOCKOUT:
@@ -879,19 +867,6 @@ class ListingController extends AbstractController{
 			]
 		}
 
-		if(reportSubType == ReportSubType.STATUSCHANGES){
-			def statusChanges = getPreventiveStatusChanges()
-			def fromStatusChangesPeriod = getPeriod('fromStatusChangesPeriod')
-			def toStatusChangesPeriod = getPeriod('toStatusChangesPeriod')
-			def doneByWho = getPreventionResponsible('doneByWho')
-			customPreventiveOrderParams << [
-				statusChanges: statusChanges,
-				fromStatusChangesPeriod: fromStatusChangesPeriod,
-				toStatusChangesPeriod: toStatusChangesPeriod
-				doneByWho: doneByWho
-			]
-		}
-
 		def reportTypeOptions = getReportTypeOptions('preventiveOptions')
 		def customizedReportName = params.get('customizedReportName')
 		def customizedReportSave = params.get('customizedReportSave')
@@ -943,17 +918,6 @@ class ListingController extends AbstractController{
 				fromAcquisitionPeriod: fromAcquisitionPeriod,
 				toAcquisitionPeriod: toAcquisitionPeriod,
 				noAcquisitionPeriod: noAcquisitionPeriod
-			]
-		}
-
-		if(reportSubType == ReportSubType.STATUSCHANGES){
-			def statusChanges = getSparePartStatusChanges()
-			def fromStatusChangesPeriod = getPeriod('fromStatusChangesPeriod')
-			def toStatusChangesPeriod = getPeriod('toStatusChangesPeriod')
-			customSparePartsParams << [
-				statusChanges: statusChanges,
-				fromStatusChangesPeriod: fromStatusChangesPeriod,
-				toStatusChangesPeriod: toStatusChangesPeriod
 			]
 		}
 

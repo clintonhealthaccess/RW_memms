@@ -110,13 +110,11 @@ public abstract class PreventiveOrder extends MaintenanceOrder {
 	PreventiveOrderStatus status
 	TimeDate firstOccurenceOn
 	Integer occurInterval = 1
-
 	
 	static belongsTo = [equipment: Equipment]
 	static hasMany = [preventions: Prevention]
 	static i18nFields = ["names"]
 	static embedded = ["firstOccurenceOn"]
-
 	
 	static constraints = {
 		importFrom MaintenanceOrder, exclude:["closedOn","lastUpdated"]
