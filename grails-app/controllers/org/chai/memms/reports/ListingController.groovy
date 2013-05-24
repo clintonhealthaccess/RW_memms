@@ -208,10 +208,10 @@ class ListingController extends AbstractController{
 
 	// corrective
 
-	//TODO
+	//DONE
 	def generalWorkOrdersListing={
 		adaptParamsForList()
-		def workOrders = workOrderListingReportService.getWorkOrdersOfLastMonth(user,params)
+		def workOrders = workOrderListingReportService.getAllWorkOrders(user,params)
 		if(!request.xhr)
 			render(view:"/reports/reports",
 			model: model(workOrders, "") <<
@@ -250,10 +250,10 @@ class ListingController extends AbstractController{
 
 	// preventive
 
-	//TODO
+	//DONE
 	def generalPreventiveOrdersListing={
 		adaptParamsForList()
-		def preventiveOrders = preventiveOrderListingReportService.getEquipmentsWithPreventionPlan(user,params)
+		def preventiveOrders = preventiveOrderListingReportService.getAllPreventions(user,params)
 		if(!request.xhr)
 			render(view:"/reports/reports",
 			model: model(preventiveOrders, "") <<
@@ -863,6 +863,19 @@ class ListingController extends AbstractController{
 				fromWorkOrderPeriod: fromWorkOrderPeriod,
 				toWorkOrderPeriod: toWorkOrderPeriod,
 				whoIsResponsible: whoIsResponsible
+			]
+		}
+
+		if(reportSubType == ReportSubType.STATUSCHANGES){
+			def statusChanges = getPreventiveStatusChanges()
+			def fromStatusChangesPeriod = getPeriod('fromStatusChangesPeriod')
+			def toStatusChangesPeriod = getPeriod('toStatusChangesPeriod')
+			def doneByWho = getPreventionResponsible('doneByWho')
+			customPreventiveOrderParams << [
+				statusChanges: statusChanges,
+				fromStatusChangesPeriod: fromStatusChangesPeriod,
+				toStatusChangesPeriod: toStatusChangesPeriod,
+				doneByWho: doneByWho
 			]
 		}
 
