@@ -17,6 +17,22 @@ import org.chai.memms.security.User;
  *
  */
 class PreventiveOrderListingReportService {
+	
+	def getAllPreventions(User user , Map<String, String> params){
+		
+		def criteria = PreventiveOrder.createCriteria();
+		def dataLocations = []
+		if(user.location instanceof Location) dataLocations.addAll(user.location.collectDataLocations(null))
+		else{
+			dataLocations = []
+			dataLocations.add(user.location as DataLocation)
+		}
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			createAlias("equipment","equip")
+			if(dataLocations)
+				inList('equip.dataLocation',dataLocations)
+		}
+	}
 	def getEquipmentsWithPreventionPlan(User user,Map<String, String> params) {
 
 		def criteria = PreventiveOrder.createCriteria();
@@ -69,7 +85,7 @@ class PreventiveOrderListingReportService {
 			createAlias("equipment","equip")
 			if(dataLocations)
 				inList('equip.dataLocation',dataLocations)
-			/*if(departments != null)
+			if(departments != null)
 				inList ("equip.department", departments)
 			if(equipmentTypes != null)
 				inList ("equip.type", equipmentTypes)
@@ -81,8 +97,8 @@ class PreventiveOrderListingReportService {
 				lt ("equip.purchaseCost", upperLimitCost)
 			if(currency !=null)
 				eq ("equip.currency",currency)	
-			if(responsibles!=null && !responsibles.empty)
-				inList ("preventionResponsible",responsibles)*/
+//			if(responsibles!=null && !responsibles.empty)
+//				inList ("preventionResponsible",responsibles)
 		}
 	}
 }

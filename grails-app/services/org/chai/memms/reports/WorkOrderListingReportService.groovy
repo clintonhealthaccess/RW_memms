@@ -18,6 +18,23 @@ import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
  *
  */
 class WorkOrderListingReportService {
+	
+	def getAllWorkOrders(User user , Map<String, String> params){
+		
+		def criteria = WorkOrder.createCriteria();
+		def dataLocations = []
+		if(user.location instanceof Location) dataLocations.addAll(user.location.collectDataLocations(null))
+		else{
+			dataLocations = []
+			dataLocations.add(user.location as DataLocation)
+		}
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			createAlias("equipment","equip")
+			if(dataLocations)
+				inList('equip.dataLocation',dataLocations)
+		}
+		
+	}
 	def getWorkOrdersEscalatedToMMC(User user,Map<String, String> params) {
 
 		def criteria = WorkOrder.createCriteria();
@@ -71,7 +88,7 @@ class WorkOrderListingReportService {
 
 			createAlias("equipment","equip")
 
-			if(dataLocations!=null)
+			if(dataLocations!=null && dataLocations.size()>0)
 				inList('equip.dataLocation',dataLocations)
 			if(workOrderStatus!=null && !workOrderStatus.empty)
 				inList ("currentStatus",workOrderStatus)
@@ -81,10 +98,10 @@ class WorkOrderListingReportService {
 				lt ("equip.purchaseCost", upperLimitCost)
 			if(currency !=null)
 				eq ("equip.currency",currency)
-			if(departments != null)
+			if(departments != null && departments.size()>0)
 				inList ("equip.department", departments)
 				
-			if(equipmentTypes != null)
+			if(equipmentTypes != null && equipmentTypes.size()>0)
 				inList ("equip.type", equipmentTypes)		
 		}
 	}
