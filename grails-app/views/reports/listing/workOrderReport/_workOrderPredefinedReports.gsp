@@ -7,11 +7,11 @@
 	<li>
 		<a class="${actionName == 'lastMonthWorkOrders'?'active':''}" 
 			href="${createLinkWithTargetURI(controller: 'listing', action:'lastMonthWorkOrders')}" id="report-1">
-			Last Month Work Orders
+			TODO Last Month Work Orders
 		</a></li>
 	<li>
 		<a class="${actionName == 'workOrdersEscalatedToMMC'?'active':''}" 
 		href="${createLinkWithTargetURI(controller: 'listing', action:'workOrdersEscalatedToMMC')}" id="report-2">
-			Work Orders Escalated to MMC
+			TODO Work Orders Escalated to MMC
 		</a></li>
 </ul>

@@ -376,7 +376,7 @@ class ListingController extends AbstractController{
 		def reportType = getReportType()
 		def reportSubType = getReportSubType()
 
-		//params from step 1 to pass along to step 3
+		//params from step 1 to pass along to step 3, or to pass back to step 1
 		def step2Params = [:]
 		step2Params.putAll params
 
@@ -584,10 +584,10 @@ class ListingController extends AbstractController{
 		def customizedReportName = params.get('customizedReportName')
 		if(customizedReportName == null || customizedReportName.empty){
 			def customizedReportTimestamp = new Date()
-			def reportTypeTimestamp = message(code:'reports.type.'+reportType?.reportType)
-			def reportSubTypeTimestamp = message(code:'reports.subType.'+reportSubType?.reportSubType)
+			def customReportType = message(code:'reports.type.'+reportType?.reportType)
+			def customReportSubType = message(code:'reports.subType.'+reportSubType?.reportSubType)
 			customizedReportName = 
-				"Custom Report "+reportTypeTimestamp+" "+reportSubTypeTimestamp+" "+customizedReportTimestamp.format('yyyyMMddHHmmss')
+				customReportType+" "+customReportSubType+" "+customizedReportTimestamp.format('yyyyMMddHHmmss')
 		}
 		def customizedReportSave = params.get('customizedReportSave')
 		customizedListingModel << [
@@ -720,6 +720,7 @@ class ListingController extends AbstractController{
 				reportTypeOptions: reportTypeOptions,
 				customizedReportName: customizedReportName,
 				customizedReportSave: customizedReportSave,
+				customEquipmentParams: customEquipmentParams,
 				template:"/reports/listing/listing"
 			])
 	}

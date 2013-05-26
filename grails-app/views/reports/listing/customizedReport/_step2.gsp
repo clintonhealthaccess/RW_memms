@@ -34,7 +34,6 @@
             <span><g:message code="reports.selectAll"/></span>
           </li>
           <li class="modular">
-            %{-- TODO fix date + select box styles !!! --}%
             <label><g:message code="reports.cost"/>:</label>
             <input type="text" name="fromCost"/><span class="dash">-</span><input type="text" name="toCost"/>
             <select name="costCurrency">
@@ -64,7 +63,7 @@
       </g:if>
     </fieldset>
   </g:formRemote>
-  <g:formRemote name="formRemoteStep2Prev" url="[action:'step1', params:step2Model]" update="dialog-form"
+  <g:formRemote name="formRemoteStep2Prev" url="[action:'step1', params:step2Params]" update="dialog-form"
     onSuccess="customizedlisting_init(1)">
   </g:formRemote>
   <a href="#" class="ui-widget-previous left btn gray medium" id='js-prev-step-2'><g:message code="reports.step.previous"/></a>
