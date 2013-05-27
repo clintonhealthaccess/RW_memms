@@ -19,6 +19,7 @@ import org.chai.location.DataLocation;
 @EqualsAndHashCode(includes='id')
 class EquipmentGeneralReportParameters {
 
+	String reportName
 	Date dateCreated
 	Double lowerLimitCost
 	Double upperLimitCost

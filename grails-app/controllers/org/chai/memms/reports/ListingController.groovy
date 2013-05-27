@@ -37,6 +37,7 @@ import org.chai.location.DataLocationType
 import org.chai.location.Location
 import org.chai.location.LocationLevel
 import org.chai.memms.AbstractController
+import org.chai.memms.AbstractEntityController
 import org.chai.memms.corrective.maintenance.WorkOrder
 import org.chai.memms.corrective.maintenance.WorkOrderStatus
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus
@@ -48,10 +49,13 @@ import org.chai.memms.inventory.EquipmentStatus.Status
 import org.chai.memms.inventory.EquipmentStatus.EquipmentStatusChange
 import org.chai.memms.inventory.EquipmentType
 import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatus
-import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatusChange
+//import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatusChange
 import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventionResponsible
+import org.chai.memms.report.listing.CorrectiveMaintenanceReport
+import org.chai.memms.report.listing.EquipmentReport
+import org.chai.memms.report.listing.PreventiveMaintenanceReport
 import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart
-import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePartChange
+//import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePartChange
 import org.chai.memms.spare.part.SparePartType
 import org.chai.memms.security.User
 import org.chai.memms.security.User.UserType
@@ -63,12 +67,12 @@ import org.chai.memms.util.Utils.ReportSubType
  * @author Jean Kahigiso M.
  *
  */
-class ListingController extends AbstractController{
+class ListingController extends AbstractEntityController{
 
 	def equipmentListingReportService
 	def workOrderListingReportService
 	def preventiveOrderListingReportService
-	def grailsApplication
+	//def grailsApplication
 	def userService
 
 	def getEntityClass() {
@@ -376,7 +380,7 @@ class ListingController extends AbstractController{
 		def reportType = getReportType()
 		def reportSubType = getReportSubType()
 
-		//params from step 1 to pass along to step 3, or to pass back to step 1
+		//params from step 1 to pass along to step 3
 		def step2Params = [:]
 		step2Params.putAll params
 
@@ -584,10 +588,10 @@ class ListingController extends AbstractController{
 		def customizedReportName = params.get('customizedReportName')
 		if(customizedReportName == null || customizedReportName.empty){
 			def customizedReportTimestamp = new Date()
-			def customReportType = message(code:'reports.type.'+reportType?.reportType)
-			def customReportSubType = message(code:'reports.subType.'+reportSubType?.reportSubType)
+			def reportTypeTimestamp = message(code:'reports.type.'+reportType?.reportType)
+			def reportSubTypeTimestamp = message(code:'reports.subType.'+reportSubType?.reportSubType)
 			customizedReportName = 
-				customReportType+" "+customReportSubType+" "+customizedReportTimestamp.format('yyyyMMddHHmmss')
+				"Custom Report "+reportTypeTimestamp+" "+reportSubTypeTimestamp+" "+customizedReportTimestamp.format('yyyyMMddHHmmss')
 		}
 		def customizedReportSave = params.get('customizedReportSave')
 		customizedListingModel << [
@@ -720,7 +724,6 @@ class ListingController extends AbstractController{
 				reportTypeOptions: reportTypeOptions,
 				customizedReportName: customizedReportName,
 				customizedReportSave: customizedReportSave,
-				customEquipmentParams: customEquipmentParams,
 				template:"/reports/listing/listing"
 			])
 	}
@@ -1196,8 +1199,74 @@ class ListingController extends AbstractController{
 		}
 		return reportTypeOptions
 	}
-
+	
 	// customized report wizard params end
-
+	
 	// customized report wizard end
+	
+	public def bindParams(def entity) {
+		entity.properties = params
+	}
+
+	public def getModel(def entity) {
+		[
+			equipmentReport: entity
+		]
+	}
+
+	public def getEntity(def id) {
+		def reportType=getReportType()
+		
+		if(log.isDebugEnabled()) log.debug("I AM INSIDE BUT OUTSIDE CONDITION OF GET ENTITY CUSTOM REPORT: REPORT TYPE IS: "+reportType)
+		
+		def customizedReportSave=params.get('customizedReportSave')
+		if (customizedReportSave.equals("on")){
+			
+			if(log.isDebugEnabled()) log.debug("I AM INSIDE GET ENTITY CUSTOM REPORT: REPORT TYPE IS: "+reportType)
+			
+			if(reportType==ReportType.INVENTORY)
+			{
+			return EquipmentReport.get(id);
+			}
+			if (reportType==ReportType.CORRECTIVE){
+			return CorrectiveMaintenanceReport.get(id);
+			}
+			if (reportType==ReportType.PREVENTIVE){
+				return PreventiveMaintenanceReport.get(id);
+			}
+			if (reportType==ReportType.SPAREPARTS){
+				//TODO to add class to persist spare part query params
+			}
+		}
+	}
+
+	public def createEntity() {
+		if(log.isDebugEnabled()) log.debug("I AM INSIDE BUT OUTSIDE CONDITION OF CREATE ENTITY CUSTOM REPORT: REPORT TYPE IS: "+reportType)
+		
+		def reportType=getReportType()
+		def customizedReportSave=params.get('customizedReportSave')
+		if (customizedReportSave.equals("on")){
+			if(log.isDebugEnabled()) log.debug("I AM INSIDE CREATE ENTITY CUSTOM REPORT: REPORT TYPE IS: "+reportType)
+			
+			if(reportType==ReportType.INVENTORY)
+			{
+			return new EquipmentReport();
+			}
+			if (reportType==ReportType.CORRECTIVE){
+			return new CorrectiveMaintenanceReport();
+			}
+			if (reportType==ReportType.PREVENTIVE){
+				return new PreventiveMaintenanceReport()
+			}
+			if (reportType==ReportType.SPAREPARTS){
+				//TODO to add class to persist spare part query params
+			}
+		}		
+		
+	}
+
+	public def getTemplate() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
