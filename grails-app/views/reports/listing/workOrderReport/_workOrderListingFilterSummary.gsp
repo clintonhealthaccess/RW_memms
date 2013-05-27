@@ -16,7 +16,7 @@
 
     <li>
       <span>Report Total:</span>
-      <a href="#"><g:message code="inventory.equipment.count"/> = ${entities?.size()}</a>
+      <a href="#">TODO Work Orders = ${entities?.size()}</a>
     </li>
 
     <g:if test="${customizedReportName != null && !customizedReportName.empty}">
@@ -73,6 +73,7 @@
           <a href="#"><g:message code="reports.workOrderPeriod"/> =   
             ${customWorkOrderParams?.fromWorkOrderPeriod?:message(code:'reports.filters.none')} - 
             ${customWorkOrderParams?.toWorkOrderPeriod?:message(code:'reports.filters.none')}</a>,        
+          
           <a href="#"><g:message code="reports.inventory.warranty.label"/> = 
             ${customWorkOrderParams?.warranty?'&radic;':message(code:'reports.filters.none')}</a>
         </g:if>
@@ -93,7 +94,8 @@
           <a href="#"><g:message code="reports.statusChangesPeriod"/> =   
             ${customWorkOrderParams?.fromStatusChangesPeriod?:message(code:'reports.filters.none')} - 
             ${customWorkOrderParams?.toStatusChangesPeriod?:message(code:'reports.filters.none')}</a>,
-            <a href="#"><g:message code="reports.inventory.warranty.label"/> = 
+          
+          <a href="#"><g:message code="reports.inventory.warranty.label"/> = 
             ${customWorkOrderParams?.warranty?'&radic;':message(code:'reports.filters.none')}</a>
         </g:if>
 

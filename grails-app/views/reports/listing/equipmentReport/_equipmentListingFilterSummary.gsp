@@ -67,11 +67,6 @@
           ${customEquipmentParams?.costCurrency?:message(code:'reports.filters.none')}</a>,
 
         <g:if test="${reportSubType == ReportSubType.INVENTORY}">
-          <a href="#"><g:message code="reports.inventory.inventory.acquisitionPeriod"/> =   
-            ${customEquipmentParams?.fromAcquisitionPeriod?:message(code:'reports.filters.none')} - 
-            ${customEquipmentParams?.toAcquisitionPeriod?:message(code:'reports.filters.none')}</a>,
-          <a href="#"><g:message code="reports.inventory.inventory.noAcquisitionPeriod.label"/> = 
-            ${customEquipmentParams?.noAcquisitionPeriod?'&radic;':message(code:'reports.filters.none')}</a>,
           <a href="#"><g:message code="reports.inventory.inventory.equipmentStatus"/> = 
             <g:if test="${customEquipmentParams?.equipmentStatus == null || customEquipmentParams?.equipmentStatus.empty}">
               ${message(code:'reports.filters.none')},
@@ -84,6 +79,13 @@
               </g:each>
             </g:else>
           </a>
+          
+          <a href="#"><g:message code="reports.inventory.inventory.acquisitionPeriod"/> =   
+            ${customEquipmentParams?.fromAcquisitionPeriod?:message(code:'reports.filters.none')} - 
+            ${customEquipmentParams?.toAcquisitionPeriod?:message(code:'reports.filters.none')}</a>,
+          <a href="#"><g:message code="reports.inventory.inventory.noAcquisitionPeriod.label"/> = 
+            ${customEquipmentParams?.noAcquisitionPeriod?'&radic;':message(code:'reports.filters.none')}</a>,
+          
           <a href="#"><g:message code="reports.inventory.inventory.obsolete.label" /> = 
             ${customEquipmentParams?.obsolete?'&radic;':message(code:'reports.filters.none')}</a>,
           <a href="#"><g:message code="reports.inventory.warranty.label"/> = 

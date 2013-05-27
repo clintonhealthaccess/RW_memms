@@ -74,7 +74,7 @@
             <!-- preventive order indicator summary template -->
             <g:render template ="/reports/listing/preventiveOrderReport/preventiveOrderIndicatorSummary" />
             <!-- listing filter summary template -->
-            <g:render template ="/reports/listing/listingFilterSummary" />
+            <g:render template ="/reports/listing/preventiveOrderReport/preventiveOrderListingFilterSummary" />
             <!-- preventive order report template -->
             <g:if test="${customizedReportName != null && !customizedReportName.empty}">
               <g:render template="/reports/listing/preventiveOrderReport/customPreventiveOrderListing" />

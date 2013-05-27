@@ -899,6 +899,7 @@ class ListingController extends AbstractController{
 				reportTypeOptions: reportTypeOptions,
 				customizedReportName: customizedReportName,
 				customizedReportSave: customizedReportSave,
+				customPreventiveOrderParams: customPreventiveOrderParams,
 				template:"/reports/listing/listing"
 			])
 	}
