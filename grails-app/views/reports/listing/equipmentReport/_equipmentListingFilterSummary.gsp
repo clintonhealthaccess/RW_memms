@@ -99,7 +99,7 @@
             </g:if>
             <g:else>
               <g:each in="${EquipmentStatusChange.values()}" var="statusEnum">
-                <g:if test="${customEquipmentParams?.statusChanges?.contains(statusEnum.toString())}">
+                <g:if test="${customEquipmentParams?.statusChanges?.contains(statusEnum)}">
                   ${message(code: statusEnum?.messageCode+'.'+statusEnum?.name)},
                 </g:if>
               </g:each>

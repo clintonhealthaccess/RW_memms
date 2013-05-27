@@ -37,6 +37,8 @@ import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.inventory.EquipmentStatus;
 import org.chai.memms.inventory.Equipment.PurchasedBy;
 import org.chai.memms.inventory.Equipment.Donor;
+import org.chai.memms.util.Utils.ReportType
+import org.chai.memms.util.Utils.ReportSubType
 
 /**
  * @author Aphrodice Rwagaju
@@ -47,7 +49,7 @@ class EquipmentListingReportService {
 	def userService
 	
 	public def getGeneralReportOfEquipments(User user,Map<String, String> params) {
-	def dataLocations = []
+		def dataLocations = []
 		if(user.location instanceof Location) dataLocations.addAll(user.location.collectDataLocations(null))
 		else{
 			dataLocations = []
@@ -151,44 +153,110 @@ class EquipmentListingReportService {
 	}
 
 	public def getCustomReportOfEquipments(User user,def customEquipmentParams, Map<String, String> params) {
-		
-		def equipmentStatus = customEquipmentParams.get('equipmentStatus')
+
+		def customEquipments = []
+
+		def reportType = customEquipmentParams.get('reportType')
+		def reportSubType = customEquipmentParams.get('reportSubType')
+
 		def dataLocations = customEquipmentParams.get('dataLocations')
 		def departments = customEquipmentParams.get('departments')
 		def equipmentTypes = customEquipmentParams.get('equipmentTypes')
 		def lowerLimitCost = customEquipmentParams.('fromCost')
 		def upperLimitCost = customEquipmentParams.('toCost')
 		def currency = customEquipmentParams.get('costCurrency')
-		def obsolete = customEquipmentParams.get('obsolete')
-
-		// def fromAcquisitionPeriod = customEquipmentParams.get('fromAcquisitionPeriod')
-		// def toAcquisitionPeriod = customEquipmentParams.get('toAcquisitionPeriod')
-		// def noAcquisitionPeriod = customEquipmentParams.get('noAcquisitionPeriod')
 	
 		def criteria = Equipment.createCriteria();
-		
-		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+
+		def criteriaEquipments = []
+
+		if(reportSubType == ReportSubType.INVENTORY){
+			def fromAcquisitionPeriod = customEquipmentParams.get('fromAcquisitionPeriod')
+			def toAcquisitionPeriod = customEquipmentParams.get('toAcquisitionPeriod')
+			def noAcquisitionPeriod = customEquipmentParams.get('noAcquisitionPeriod')
+			def equipmentStatus = customEquipmentParams.get('equipmentStatus')
+			def obsolete = customEquipmentParams.get('obsolete')
+			def warranty = customEquipmentParams.get('warranty')
+
+			criteriaEquipments = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+				if(dataLocations != null)
+					inList('dataLocation',dataLocations)
+				if(departments != null)
+					inList ("department", departments)
+				if(equipmentTypes != null)
+					inList ("type", equipmentTypes)
+
+				if(lowerLimitCost!=null)
+					gt ("purchaseCost", lowerLimitCost)
+				if(upperLimitCost!=null)
+					lt ("purchaseCost", upperLimitCost)	
+				if(currency !=null)
+					eq ("currency",currency)
+
+				if(fromAcquisitionPeriod != null)
+					gt ("purchaseDate", fromAcquisitionPeriod)
+				if(toAcquisitionPeriod != null)
+					lt ("purchaseDate", toAcquisitionPeriod)
+				if(noAcquisitionPeriod != null && noAcquisitionPeriod)
+					eq ("purchaseDate", null)
+				
+				if(equipmentStatus!=null && !equipmentStatus.empty)
+					inList ("currentStatus",equipmentStatus)
+				if(obsolete != null && obsolete)
+					eq ("obsolete", (obsolete.equals('true'))?true:false)
+			}
+			if (log.isDebugEnabled()) log.debug("EQUIPMENTS SIZE: "+ criteriaEquipments.size())
+
+			if(warranty != null && warranty){
+				def underWarrantyEquipments = []
+				criteriaEquipments.each{ equipment ->
+					if (equipment.warranty.startDate!=null && equipment.warrantyPeriod.numberOfMonths!=null && equipment.warrantyPeriod.months != null) {
+						def warrantyExpirationDate = (equipment.warranty.startDate).plus((equipment.warrantyPeriod.numberOfMonths))
+						if (log.isDebugEnabled()) 
+							log.debug("CALCULATED DATE "+warrantyExpirationDate +"START DATE "+equipment.warranty.startDate +"WARRANTY PERIOD "+equipment.warrantyPeriod.months)
+						if (warrantyExpirationDate > new Date())
+							underWarrantyEquipments.add(equipment)
+					}
+				}
+				customEquipments = underWarrantyEquipments
+			}
+		}
+
+		if(reportSubType == ReportSubType.STATUSCHANGES){
+			def statusChanges = customEquipmentParams.get('statusChanges')
+			def fromStatusChangesPeriod = customEquipmentParams.get('fromStatusChangesPeriod')
+			def toStatusChangesPeriod = customEquipmentParams.get('toStatusChangesPeriod')
+
+			criteriaEquipments = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 				if(dataLocations)
 					inList('dataLocation',dataLocations)
 				if(departments != null)
 					inList ("department", departments)
 				if(equipmentTypes != null)
 					inList ("type", equipmentTypes)
-				if(currency !=null)
-					eq ("currency",currency)
-				if(obsolete)
-					eq ("obsolete", (obsolete.equals('true'))?true:false)
-				if(equipmentStatus!=null && !equipmentStatus.empty)
-					inList ("currentStatus",equipmentStatus)
+
 				if(lowerLimitCost!=null)
 					gt ("purchaseCost", lowerLimitCost)
 				if(upperLimitCost!=null)
 					lt ("purchaseCost", upperLimitCost)	
-				// if(fromAcquisitionPeriod != null)
-				// 	gt ("purchaseDate", fromAcquisitionPeriod)
-				// if(toAcquisitionPeriod != null)
-				// 	lt ("purchaseDate", toAcquisitionPeriod)
+				if(currency !=null)
+					eq ("currency",currency)
+
+				//TODO status changes period
+			}
+			if (log.isDebugEnabled()) log.debug("EQUIPMENTS SIZE: "+ criteriaEquipments.size())
+
+			if(statusChanges != null && !statusChanges.empty){
+				def statusChangesEquipments = []
+				criteriaEquipments.each { equipment ->
+					def equipmentStatusChange = equipment.getTimeBasedStatusChange(statusChanges)
+					if(equipmentStatusChange != null) statusChangesEquipments.add(equipment)
+				}
+				customEquipments = statusChangesEquipments
+			}
 		}
+
+		return customEquipments
 	}
 
 }
