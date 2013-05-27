@@ -48,10 +48,8 @@ import org.chai.memms.inventory.EquipmentStatus.Status
 import org.chai.memms.inventory.EquipmentStatus.EquipmentStatusChange
 import org.chai.memms.inventory.EquipmentType
 import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatus
-import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatusChange
 import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventionResponsible
 import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart
-import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePartChange
 import org.chai.memms.spare.part.SparePartType
 import org.chai.memms.security.User
 import org.chai.memms.security.User.UserType
@@ -655,10 +653,11 @@ class ListingController extends AbstractController{
 			noAcquisitionPeriod: noAcquisitionPeriod
 		]
 
+		def warranty = null
 		if(reportSubType == ReportSubType.INVENTORY){
 			def equipmentStatus = getInventoryStatus()
 			def obsolete = params.get('obsolete')
-			def warranty = params.get('warranty')
+			warranty = params.get('warranty')
 			customEquipmentParams << [
 				equipmentStatus: equipmentStatus,
 				obsolete: obsolete,
@@ -666,10 +665,11 @@ class ListingController extends AbstractController{
 			]
 		}
 
+		def statusChanges = null
 		if(reportSubType == ReportSubType.STATUSCHANGES){
 			def fromStatusChangesPeriod = getPeriod('fromStatusChangesPeriod')
 			def toStatusChangesPeriod = getPeriod('toStatusChangesPeriod')
-			def statusChanges = getInventoryStatusChanges()
+			statusChanges = getInventoryStatusChanges()
 			customEquipmentParams << [
 				fromStatusChangesPeriod: fromStatusChangesPeriod,
 				toStatusChangesPeriod: toStatusChangesPeriod,
@@ -691,26 +691,30 @@ class ListingController extends AbstractController{
 		adaptParamsForList()
 		def displayableEquipments=[]
 		def warrantyExpirationDate
-		def warranty=params.get('warranty')
 		def equipments = []
 		def equipmentz = equipmentListingReportService.getCustomReportOfEquipments(user,customEquipmentParams,params)
+		if (log.isDebugEnabled()) log.debug("EQUIPMENTS SIZE: "+ equipmentz.size())
 
-		if(warranty != null && warranty.empty){
-
+		if((warranty != null && !warranty.empty) || (statusChanges != null && !statusChanges.empty)){
 			for(Equipment equipment: equipmentz){
-				if (equipment.warranty.startDate!=null && equipment.warrantyPeriod.numberOfMonths!=null && equipment.warrantyPeriod.months != null) {
-					warrantyExpirationDate= (equipment.warranty.startDate).plus((equipment.warrantyPeriod.numberOfMonths))
-					if (log.isDebugEnabled()) log.debug("CALCULATED DATE "+warrantyExpirationDate +"START DATE "+equipment.warranty.startDate +"WARRANTY PERIOD "+equipment.warrantyPeriod.months)
-					if (warrantyExpirationDate > new Date())
-						displayableEquipments.add(equipment)
+				if(warranty != null && !warranty.empty){
+					if (equipment.warranty.startDate!=null && equipment.warrantyPeriod.numberOfMonths!=null && equipment.warrantyPeriod.months != null) {
+						warrantyExpirationDate= (equipment.warranty.startDate).plus((equipment.warrantyPeriod.numberOfMonths))
+						if (log.isDebugEnabled()) log.debug("CALCULATED DATE "+warrantyExpirationDate +"START DATE "+equipment.warranty.startDate +"WARRANTY PERIOD "+equipment.warrantyPeriod.months)
+						if (warrantyExpirationDate > new Date())
+							displayableEquipments.add(equipment)
+					}
+					warrantyExpirationDate=null
 				}
-				warrantyExpirationDate=null
+				if(statusChanges != null && !statusChanges.empty){
+					//TODO
+				}
 			}
-
 		}else{
 			displayableEquipments=equipmentz
 		}
 		equipments=displayableEquipments
+
 		if(!request.xhr)
 			render(view:"/reports/reports",
 			model: model(equipments, "") <<
@@ -766,8 +770,9 @@ class ListingController extends AbstractController{
 			]
 		}
 
+		def statusChanges = null
 		if(reportSubType == ReportSubType.STATUSCHANGES){
-			def statusChanges = getCorrectiveStatusChanges()
+			statusChanges = getCorrectiveStatusChanges()
 			def fromStatusChangesPeriod = getPeriod('fromStatusChangesPeriod')
 			def toStatusChangesPeriod = getPeriod('toStatusChangesPeriod')
 			customWorkOrderParams << [
@@ -796,23 +801,25 @@ class ListingController extends AbstractController{
 		def workOrderz = workOrderListingReportService.getCustomReportOfWorkOrders(user,customWorkOrderParams,params)
 		if (log.isDebugEnabled()) log.debug("WORK ORDERS SIZE: "+ workOrderz.size())
 		
-		if(warranty != null && warranty.empty){
-
+		if((warranty != null && !warranty.empty) || (statusChanges != null && !statusChanges.empty)){
 			for(WorkOrder workOrder: workOrderz){
-				if (workOrder.equipment.warranty.startDate!=null && workOrder.equipment.warrantyPeriod.numberOfMonths!=null && workOrder.equipment.warrantyPeriod.months != null) {
-					warrantyExpirationDate= (workOrder.equipment.warranty.startDate).plus((workOrder.equipment.warrantyPeriod.numberOfMonths))
-					if (log.isDebugEnabled()) log.debug("CALCURATED DATE "+warrantyExpirationDate +"START DATE "+workOrder.equipment.warranty.startDate +"WARRANTY PERIOD "+workOrder.equipment.warrantyPeriod.months)
-					if (warrantyExpirationDate > new Date())
-						displayableWorkOrders.add(workOrder)
+				if(warranty != null && !warranty.empty){
+					if (workOrder.equipment.warranty.startDate!=null && workOrder.equipment.warrantyPeriod.numberOfMonths!=null && workOrder.equipment.warrantyPeriod.months != null) {
+						warrantyExpirationDate= (workOrder.equipment.warranty.startDate).plus((workOrder.equipment.warrantyPeriod.numberOfMonths))
+						if (log.isDebugEnabled()) log.debug("CALCULATED DATE "+warrantyExpirationDate +"START DATE "+workOrder.equipment.warranty.startDate +"WARRANTY PERIOD "+workOrder.equipment.warrantyPeriod.months)
+						if (warrantyExpirationDate > new Date())
+							displayableWorkOrders.add(workOrder)
+					}
+					warrantyExpirationDate=null
 				}
-				warrantyExpirationDate=null
+				if(statusChanges != null && !statusChanges.empty){
+					//TODO
+				}
 			}
-
 		}else{
 			displayableWorkOrders=workOrderz
 		}
 		workOrders=displayableWorkOrders
-
 
 		if(!request.xhr)
 			render(view:"/reports/reports",
@@ -823,6 +830,7 @@ class ListingController extends AbstractController{
 				reportTypeOptions: reportTypeOptions,
 				customizedReportName: customizedReportName,
 				customizedReportSave: customizedReportSave,
+				customWorkOrderParams: customWorkOrderParams,
 				template:"/reports/listing/listing"
 			])
 	}
@@ -864,19 +872,6 @@ class ListingController extends AbstractController{
 				fromWorkOrderPeriod: fromWorkOrderPeriod,
 				toWorkOrderPeriod: toWorkOrderPeriod,
 				whoIsResponsible: whoIsResponsible
-			]
-		}
-
-		if(reportSubType == ReportSubType.STATUSCHANGES){
-			def statusChanges = getPreventiveStatusChanges()
-			def fromStatusChangesPeriod = getPeriod('fromStatusChangesPeriod')
-			def toStatusChangesPeriod = getPeriod('toStatusChangesPeriod')
-			def doneByWho = getPreventionResponsible('doneByWho')
-			customPreventiveOrderParams << [
-				statusChanges: statusChanges,
-				fromStatusChangesPeriod: fromStatusChangesPeriod,
-				toStatusChangesPeriod: toStatusChangesPeriod,
-				doneByWho: doneByWho
 			]
 		}
 
