@@ -52,7 +52,7 @@
             <!-- work order indicator summary template -->
             <g:render template ="/reports/listing/workOrderReport/workOrderIndicatorSummary" />
             <!-- listing filter summary template -->
-            <g:render template ="/reports/listing/listingFilterSummary" />
+            <g:render template ="/reports/listing/workOrderReport/workOrderListingFilterSummary" />
             <!-- work order report template -->
             <g:if test="${customizedReportName != null && !customizedReportName.empty}">
               <g:render template="/reports/listing/workOrderReport/customWorkOrderListing" />

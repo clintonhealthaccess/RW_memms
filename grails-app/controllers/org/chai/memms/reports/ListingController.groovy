@@ -667,13 +667,13 @@ class ListingController extends AbstractController{
 
 		def statusChanges = null
 		if(reportSubType == ReportSubType.STATUSCHANGES){
+			statusChanges = getInventoryStatusChanges()
 			def fromStatusChangesPeriod = getPeriod('fromStatusChangesPeriod')
 			def toStatusChangesPeriod = getPeriod('toStatusChangesPeriod')
-			statusChanges = getInventoryStatusChanges()
 			customEquipmentParams << [
+				statusChanges: statusChanges,
 				fromStatusChangesPeriod: fromStatusChangesPeriod,
-				toStatusChangesPeriod: toStatusChangesPeriod,
-				statusChanges: statusChanges
+				toStatusChangesPeriod: toStatusChangesPeriod
 			]
 		}
 
@@ -695,6 +695,7 @@ class ListingController extends AbstractController{
 		def equipmentz = equipmentListingReportService.getCustomReportOfEquipments(user,customEquipmentParams,params)
 		if (log.isDebugEnabled()) log.debug("EQUIPMENTS SIZE: "+ equipmentz.size())
 
+		//TODO move this into service method
 		if((warranty != null && !warranty.empty) || (statusChanges != null && !statusChanges.empty)){
 			for(Equipment equipment: equipmentz){
 				if(warranty != null && !warranty.empty){
@@ -801,6 +802,7 @@ class ListingController extends AbstractController{
 		def workOrderz = workOrderListingReportService.getCustomReportOfWorkOrders(user,customWorkOrderParams,params)
 		if (log.isDebugEnabled()) log.debug("WORK ORDERS SIZE: "+ workOrderz.size())
 		
+		//TODO move this into service method
 		if((warranty != null && !warranty.empty) || (statusChanges != null && !statusChanges.empty)){
 			for(WorkOrder workOrder: workOrderz){
 				if(warranty != null && !warranty.empty){
