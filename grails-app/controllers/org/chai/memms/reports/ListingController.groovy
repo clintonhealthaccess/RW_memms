@@ -178,6 +178,8 @@ class ListingController extends AbstractController{
 			])
 	}
 
+	// TODO move warranty code into service method
+	// TODO change displayableEquipments to something more accurate like 'underWarrantyEquipments'
 	def underWarrantyEquipments={
 		adaptParamsForList()
 		def displayableEquipments=[]
@@ -687,7 +689,7 @@ class ListingController extends AbstractController{
 
 		adaptParamsForList()
 		def equipments = equipmentListingReportService.getCustomReportOfEquipments(user,customEquipmentParams,params)
-		if (log.isDebugEnabled()) log.debug("EQUIPMENTS SIZE: "+ equipments.size())
+		if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing # of equipments:"+equipments.size())
 
 		if(!request.xhr)
 			render(view:"/reports/reports",
@@ -724,6 +726,8 @@ class ListingController extends AbstractController{
 		def warranty = params.get('warranty')
 
 		def customWorkOrderParams = [
+			reportType: reportType,
+			reportSubType: reportSubType,
 			dataLocations: dataLocations,
 			departments: departments,
 			equipmentTypes: equipmentTypes,
@@ -773,23 +777,18 @@ class ListingController extends AbstractController{
 		def workOrders = []
 
 		def workOrderz = workOrderListingReportService.getCustomReportOfWorkOrders(user,customWorkOrderParams,params)
-		if (log.isDebugEnabled()) log.debug("WORK ORDERS SIZE: "+ workOrderz.size())
+		if (log.isDebugEnabled()) log.debug("llisting.customWorkOrderListing # of workOrders:"+workOrderz.size())
 		
 		//TODO move this into service method
-		if((warranty != null && !warranty.empty) || (statusChanges != null && !statusChanges.empty)){
+		if(warranty != null && !warranty.empty){
 			for(WorkOrder workOrder: workOrderz){
-				if(warranty != null && !warranty.empty){
-					if (workOrder.equipment.warranty.startDate!=null && workOrder.equipment.warrantyPeriod.numberOfMonths!=null && workOrder.equipment.warrantyPeriod.months != null) {
-						warrantyExpirationDate= (workOrder.equipment.warranty.startDate).plus((workOrder.equipment.warrantyPeriod.numberOfMonths))
-						if (log.isDebugEnabled()) log.debug("CALCULATED DATE "+warrantyExpirationDate +"START DATE "+workOrder.equipment.warranty.startDate +"WARRANTY PERIOD "+workOrder.equipment.warrantyPeriod.months)
-						if (warrantyExpirationDate > new Date())
-							displayableWorkOrders.add(workOrder)
-					}
-					warrantyExpirationDate=null
+				if (workOrder.equipment.warranty.startDate!=null && workOrder.equipment.warrantyPeriod.numberOfMonths!=null && workOrder.equipment.warrantyPeriod.months != null) {
+					warrantyExpirationDate= (workOrder.equipment.warranty.startDate).plus((workOrder.equipment.warrantyPeriod.numberOfMonths))
+					if (log.isDebugEnabled()) log.debug("CALCULATED DATE "+warrantyExpirationDate +"START DATE "+workOrder.equipment.warranty.startDate +"WARRANTY PERIOD "+workOrder.equipment.warrantyPeriod.months)
+					if (warrantyExpirationDate > new Date())
+						displayableWorkOrders.add(workOrder)
 				}
-				if(statusChanges != null && !statusChanges.empty){
-					//TODO
-				}
+				warrantyExpirationDate=null
 			}
 		}else{
 			displayableWorkOrders=workOrderz

@@ -172,26 +172,48 @@ public class WorkOrder extends MaintenanceOrder{
 
 	@Transient
 	def getTimeBasedStatus(){
-		if(!status) return null
-		if(status.size() == 0) return null
-		else if(status.size() == 1) status[0]
+		WorkOrderStatus currentState = null
+		if(!status) return currentState
+		if(status.size() == 0) return currentState
 		else{
 			List<WorkOrderStatus> sortedStatus = status.sort{ it.dateCreated }
 			WorkOrderStatus currentState = sortedStatus[-1]
-			return currentState
 		}
+		return currentState
 	}
 	
 	@Transient
 	def getTimeBasedPreviousStatus(){
-		if(!status) return null
-		if(status.size() == 0) return null
-		else if(status.size() == 1) return null
+		WorkOrderStatus previousState = null
+		if(!status) return previousState
+		if(status.size() == 0) return previousState
+		else if(status.size() == 1) return previousState
 		else{
 			List<WorkOrderStatus> sortedStatus = status.sort{ it.dateCreated }
 			WorkOrderStatus previousState = sortedStatus[-2]
-			return previousState
 		}
+		return previousState
+	}
+
+	@Transient
+	WorkOrderStatusChange getTimeBasedStatusChange(List<WorkOrderStatusChange> workOrderStatusChanges){
+		WorkOrderStatusChange workOrderStatusChange = null
+
+		def previousStatus = getTimeBasedPreviousStatus()?.status
+		def currentStatus = getTimeBasedStatus().status
+
+		if(workOrderStatusChanges == null) workOrderStatusChanges = WorkOrderStatusChange.values()
+	 	workOrderStatusChanges.each{ statusChange ->
+ 			
+ 			def previousStatusMap = statusChange.getStatusChange()['previous']
+			def currentStatusMap = statusChange.getStatusChange()['current']
+
+			def previousStatusChange = previousStatusMap.contains(previousStatus) || (previousStatusMap.contains(OrderStatus.NONE) && previousStatus == null)
+			def currentStatusChange = currentStatusMap.contains(currentStatus)
+
+			if(previousStatusChange && currentStatusChange) workOrderStatusChange = statusChange
+	 	}
+	 	return workOrderStatusChange
 	}
 
 	static mapping = {

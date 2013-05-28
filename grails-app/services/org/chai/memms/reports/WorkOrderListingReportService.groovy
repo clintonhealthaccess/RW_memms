@@ -12,6 +12,8 @@ import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.memms.security.User;
 import org.chai.memms.util.Utils;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
+import org.chai.memms.util.Utils.ReportType
+import org.chai.memms.util.Utils.ReportSubType
 
 /**
  * @author Aphrodice Rwagaju
@@ -75,34 +77,96 @@ class WorkOrderListingReportService {
 
 	def getCustomReportOfWorkOrders(User user, def customWorkOrderParams, Map<String, String> params) {
 
+		def customWorkOrders = []
+
+		def reportType = customEquipmentParams.get('reportType')
+		def reportSubType = customEquipmentParams.get('reportSubType')
+
 		def dataLocations = customWorkOrderParams.get('dataLocations')
 		def departments = customWorkOrderParams.get('departments')
 		def equipmentTypes = customWorkOrderParams.get('equipmentTypes')
 		def lowerLimitCost = customWorkOrderParams.('fromCost')
 		def upperLimitCost = customWorkOrderParams.('toCost')
 		def currency = customWorkOrderParams.get('costCurrency')
-		def workOrderStatus = customWorkOrderParams.get('workOrderStatus')
 		
 		def criteria = WorkOrder.createCriteria();
-		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 
-			createAlias("equipment","equip")
+		def criteriaWorkOrders = []
 
-			if(dataLocations!=null && dataLocations.size()>0)
-				inList('equip.dataLocation',dataLocations)
-			if(workOrderStatus!=null && !workOrderStatus.empty)
-				inList ("currentStatus",workOrderStatus)
-			if(lowerLimitCost!=null)
-				gt ("equip.purchaseCost", lowerLimitCost)
-			if(upperLimitCost!=null)
-				lt ("equip.purchaseCost", upperLimitCost)
-			if(currency !=null)
-				eq ("equip.currency",currency)
-			if(departments != null && departments.size()>0)
-				inList ("equip.department", departments)
-				
-			if(equipmentTypes != null && equipmentTypes.size()>0)
-				inList ("equip.type", equipmentTypes)		
+		if(reportSubType == ReportSubType.WORKORDERS){
+			def workOrderStatus = customWorkOrderParams.get('workOrderStatus')
+			def fromWorkOrderPeriod = customWorkOrderParams.get('fromWorkOrderPeriod')
+			def toWorkOrderPeriod = customWorkOrderParams.get('toWorkOrderPeriod')
+
+			criteriaWorkOrders = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+
+				createAlias("equipment","equip")
+
+				if(dataLocations!=null && dataLocations.size()>0)
+					inList('equip.dataLocation',dataLocations)
+				if(departments != null && departments.size()>0)
+					inList ("equip.department", departments)
+				if(equipmentTypes != null && equipmentTypes.size()>0)
+					inList ("equip.type", equipmentTypes)
+
+				if(lowerLimitCost!=null)
+					gt ("equip.purchaseCost", lowerLimitCost)
+				if(upperLimitCost!=null)
+					lt ("equip.purchaseCost", upperLimitCost)
+				if(currency !=null)
+					eq ("equip.currency",currency)
+
+				if(workOrderStatus!=null && !workOrderStatus.empty)
+					inList ("currentStatus",workOrderStatus)
+				// TODO
+				// if(fromWorkOrderPeriod != null)
+				// 	gt ("TODO", fromWorkOrderPeriod)
+				// if(toWorkOrderPeriod != null)
+				// 	lt ("TODO", toWorkOrderPeriod)
+			}
+			if (log.isDebugEnabled()) log.debug("WORK ORDERS SIZE: "+ criteriaWorkOrders.size())
 		}
+
+		if(reportSubType == ReportSubType.STATUSCHANGES){
+			def statusChanges = customEquipmentParams.get('statusChanges')
+			def fromStatusChangesPeriod = customEquipmentParams.get('fromStatusChangesPeriod')
+			def toStatusChangesPeriod = customEquipmentParams.get('toStatusChangesPeriod')
+
+			criteriaWorkOrders = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+
+				createAlias("equipment","equip")
+
+				if(dataLocations!=null && dataLocations.size()>0)
+					inList('equip.dataLocation',dataLocations)
+				if(departments != null && departments.size()>0)
+					inList ("equip.department", departments)
+				if(equipmentTypes != null && equipmentTypes.size()>0)
+					inList ("equip.type", equipmentTypes)
+
+				if(lowerLimitCost!=null)
+					gt ("equip.purchaseCost", lowerLimitCost)
+				if(upperLimitCost!=null)
+					lt ("equip.purchaseCost", upperLimitCost)
+				if(currency !=null)
+					eq ("equip.currency",currency)
+
+				// TODO
+				// if(fromStatusChangesPeriod != null)
+				// 	gt ("TODO", fromStatusChangesPeriod)
+				// if(toStatusChangesPeriod != null)
+				// 	lt ("TODO", toStatusChangesPeriod)
+			}
+			if (log.isDebugEnabled()) log.debug("WORK ORDERS SIZE: "+ criteriaWorkOrders.size())
+
+			if(statusChanges != null && !statusChanges.empty){
+				def statusChangesWorkOrders = []
+				criteriaWorkOrders.each { workOrder ->
+					def workOrderStatusChange = workOrder.getTimeBasedStatusChange(statusChanges)
+					if(workOrderStatusChange != null) statusChangesWorkOrders.add(workOrder)
+				}
+				customWorkOrders = statusChangesWorkOrders
+			}
+		}
+
 	}
 }

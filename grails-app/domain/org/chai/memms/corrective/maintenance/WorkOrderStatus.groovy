@@ -51,17 +51,35 @@ public class WorkOrderStatus {
 
 	enum WorkOrderStatusChange{
 		NEWORDER("newOrder",
-			['previous':[OrderStatus.NONE], 'current':[OrderStatus.OPENATFOSA,OrderStatus.OPENATMMC]]),
+			[
+				'previous':[OrderStatus.NONE],
+				'current':[OrderStatus.OPENATFOSA,OrderStatus.OPENATMMC]
+			]),
 		ORDERESCALATEDTOMMC("orderEscalatedToMmc",
-			['previous':[OrderStatus.OPENATFOSA], 'current':[OrderStatus.OPENATMMC]]),
+			[
+				'previous':[OrderStatus.OPENATFOSA],
+				'current':[OrderStatus.OPENATMMC]
+			]),
 		EQUIPMENTRECEIVEDFROMMMCFIXED("equipmentReceivedFromMmcFixed", 
-			['previous':[OrderStatus.OPENATMMC], 'current':[OrderStatus.CLOSEDFIXED]]),
+			[
+				'previous':[OrderStatus.OPENATMMC],
+				'current':[OrderStatus.CLOSEDFIXED]
+			]),
 		EQUIPMENTRECEIVEDFROMMMCNOTFIXED("equipmentReceivedFromMmcNotFixed",
-			['previous':[OrderStatus.OPENATMMC], 'current':[OrderStatus.OPENATFOSA]]),
+			[
+				'previous':[OrderStatus.OPENATMMC],
+				'current':[OrderStatus.OPENATFOSA]
+			]),
 		CLOSEDORDERFIXED("closedOrderFixed",
-			['previous':[OrderStatus.OPENATFOSA,OrderStatus.OPENATMMC], 'current':[OrderStatus.CLOSEDFIXED]]),
+			[
+				'previous':[OrderStatus.OPENATFOSA,OrderStatus.OPENATMMC],
+				'current':[OrderStatus.CLOSEDFIXED]
+			]),
 		CLOSEDORDERNOTFIXED("closedOrderNotFixed",
-			['previous':[OrderStatus.OPENATFOSA,OrderStatus.OPENATMMC], 'current':[OrderStatus.CLOSEDFORDISPOSAL]])
+			[
+				'previous':[OrderStatus.OPENATFOSA,OrderStatus.OPENATMMC],
+				'current':[OrderStatus.CLOSEDFORDISPOSAL]
+			])
 
 		String messageCode = "reports.corrective.statusChanges"
 		final String name

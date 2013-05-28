@@ -19,6 +19,7 @@
 			</g:if>
 			
 			<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
+				%{-- TODO --}%
 				<g:sortableColumn property="statusChanges"  title="Status Changes" params="[q:q]" />
 			</g:if>
 

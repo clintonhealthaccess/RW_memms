@@ -242,7 +242,11 @@ class EquipmentListingReportService {
 				if(currency !=null)
 					eq ("currency",currency)
 
-				//TODO status changes period
+				// TODO
+				// if(fromStatusChangesPeriod != null)
+				// 	gt ("TODO", fromStatusChangesPeriod)
+				// if(toStatusChangesPeriod != null)
+				// 	lt ("TODO", toStatusChangesPeriod)
 			}
 			if (log.isDebugEnabled()) log.debug("EQUIPMENTS SIZE: "+ criteriaEquipments.size())
 
