@@ -59,14 +59,20 @@ class EquipmentStatus {
 
 	enum EquipmentStatusChange{
 		NEWORDER("newEquipment", 
-			['previous':[Status.NONE], 'current':(Status.values()-[Status.NONE])]),
+			[
+				'previous':[Status.NONE], 
+				'current':(Status.values()-[Status.NONE])
+			]),
 		DISPOSEDEQUIPMENT("disposedEquipment", 
 			[
 				'previous':(Status.values()-[Status.FORDISPOSAL,Status.DISPOSED]), 
 				'current':[Status.FORDISPOSAL,Status.DISPOSED]
 			]),
 		FROMSTOCKTOOPERATIONAL("equipmentFromStockToOperational", 
-			['previous':[Status.INSTOCK], 'current':[Status.OPERATIONAL,Status.PARTIALLYOPERATIONAL]]),
+			[
+				'previous':[Status.INSTOCK], 
+				'current':[Status.OPERATIONAL,Status.PARTIALLYOPERATIONAL]
+			]),
 		FORMAINTENANCE("equipmentForMaintenance", 
 			[
 				'previous':(Status.values()-Status.UNDERMAINTENANCE), 

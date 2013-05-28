@@ -3,8 +3,8 @@
 	    %{-- TODO fix checkbox + text styles !!! --}%
 	    <label for="stockOut"><g:message code="reports.spareParts.stockOut"/>:</label>
 	    <input name="stockOut" type="checkbox"/>
-	    <g:message code="reports.spareParts.stockOut.within"/>
+	    <span><g:message code="reports.spareParts.stockOut.within"/></span>
 	    <input type="text" name="stockOutMonths"/>
-	    <g:message code="reports.spareParts.stockOut.months"/>
+	    <span><g:message code="reports.spareParts.stockOut.months"/></span>
 	</li>
 </ul>

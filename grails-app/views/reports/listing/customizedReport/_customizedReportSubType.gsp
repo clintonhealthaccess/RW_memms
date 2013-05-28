@@ -12,7 +12,7 @@
       <g:message code="reports.subType.${ReportSubType.WORKORDERS.reportSubType}"/>
     </option>
   </g:if>
-  <g:if test="${[ReportType.INVENTORY,ReportType.CORRECTIVE,ReportType.PREVENTIVE,ReportType.SPAREPARTS].contains(reportType)}">
+  <g:if test="${[ReportType.INVENTORY,ReportType.CORRECTIVE].contains(reportType)}">
     <option value="${ReportSubType.STATUSCHANGES}" ${reportSubType == ReportSubType.STATUSCHANGES?'selected':''}>
       <g:message code="reports.subType.${ReportSubType.STATUSCHANGES.reportSubType}"/>
     </option>

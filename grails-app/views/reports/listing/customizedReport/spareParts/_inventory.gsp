@@ -1,7 +1,6 @@
 <%@ page import="org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart" %>
 <ul>
   <li>
-    %{-- TODO fix checkbox list styles !!! --}%
     <label for="sparePartStatus"><g:message code="reports.spareParts.inventory.sparePartStatus"/>:</label>
     <ul class="checkbox-list">
       <g:each in="${StatusOfSparePart.values() - StatusOfSparePart.NONE}" var="statusEnum">
@@ -17,7 +16,7 @@
     <input name="fromAcquisitionPeriod" class="js-date-picker date-picker idle-field" />
     <span class="dash">-</span>
     <input name="toAcquisitionPeriod" class="js-date-picker date-picker idle-field" />
-    <g:checkBox name="noAcquisitionPeriod"/>
+    <g:checkBox name="noAcquisitionPeriod" class='clear-left'/>
     <span><g:message code="reports.spareParts.inventory.noAcquisitionPeriod"/></span>
   </li>
 </ul>

@@ -36,6 +36,7 @@ import org.chai.memms.inventory.Provider;
 import org.chai.memms.inventory.Department;
 import org.chai.memms.inventory.EquipmentType;
 import org.chai.memms.inventory.EquipmentStatus;
+import org.chai.memms.inventory.EquipmentStatus.EquipmentStatusChange;
 import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.preventive.maintenance.PreventiveOrder;
 import org.chai.memms.security.User;
@@ -224,67 +225,60 @@ public class Equipment {
 	
 	@Transient
 	def getTimeBasedStatus(){
-		if(!status) return null
-		EquipmentStatus currentState = status.asList()[0]
-		for(EquipmentStatus state : status){
-			//To make sure we only compare date not time
-			currentState.dateOfEvent.clearTime()
-			state.dateOfEvent.clearTime()
-			if(state.dateOfEvent.after(currentState.dateOfEvent)){
-				currentState= state;
-			}
-			if(state.dateOfEvent.compareTo(currentState.dateOfEvent)==0){
-				if(state.dateCreated.after(currentState.dateCreated))
-					currentState = state
-				//This case happen in test data settings
-				if(state.dateCreated.compareTo(currentState.dateCreated)==0)
-					currentState = (currentState.id > state.id)?currentState:state
-			}
-			
+		EquipmentStatus currentState = null
+		if(!status) return currentState
+		else if(status.size() == 0) return currentState
+		else{
+			//only compare date not time
+			status.each{ it -> it.dateOfEvent.clearTime() }
+			//first check the date of event, if date of event is the same, check the date created, if date created is the same, check the id
+			List<EquipmentStatus> sortedStatus = status.sort{ a,b -> (a.dateOfEvent <=> b.dateOfEvent) ?: (a.dateCreated <=> b.dateCreated) ?: (a.id <=> b.id) }
+			currentState = sortedStatus[-1]
+			if(currentState != currentStatus) 
+				currentStatus = currentState.status
 		}
 		return currentState
 	}
 	
 	@Transient
 	def getTimeBasedPreviousStatus(){
-		// if(!status) return null
-		// if(status.size() == 0) return null
-		// else if(status.size() == 1) return null
-		// else{
-		// 	List<EquipmentStatus> sortedStatus = status.sort{it.dateOfEvent}
-		// 	EquipmentStatus previousState = sortedStatus[status.size()-2]
-		// 	return previousState
-		// }
-
-		if(!status) return null
-		EquipmentStatus previousState = status.asList()[0]
-		EquipmentStatus currentState = status.asList()[0]
-		for(EquipmentStatus state : status){
-			//To make sure we only compare date not time
-			currentState.dateOfEvent.clearTime()
-			state.dateOfEvent.clearTime()
-			if(state.dateOfEvent.after(currentState.dateOfEvent)){
-				previousState = currentState
-				currentState = state
-			}
-			if(state.dateOfEvent.compareTo(currentState.dateOfEvent)==0){
-				if(state.dateCreated.after(currentState.dateCreated)){
-					previousState = currentState
-					currentState = state
-				}
-				//This case happen in test data settings
-				if(state.dateCreated.compareTo(currentState.dateCreated)==0){
-					previousState = (previousState.id > currentState.id)?previousState:currentState
-					currentState = (currentState.id > state.id)?currentState:state
-				}
-			}
-			
+		EquipmentStatus previousState = null
+		if(!status) return previousState
+		else if(status.size() == 0) return previousState
+		else if(status.size() == 1) return previousState
+		else{
+			//only compare date not time
+			status.each{ it -> it.dateOfEvent.clearTime() }
+			//first check the date of event, if date of event is the same, check the date created, if date created is the same, check the id
+			List<EquipmentStatus> sortedStatus = status.sort{ a,b -> (a.dateOfEvent <=> b.dateOfEvent) ?: (a.dateCreated <=> b.dateCreated) ?: (a.id <=> b.id) }
+			previousState = sortedStatus[-2]
 		}
 		return previousState
 	}
 
+	@Transient
+	EquipmentStatusChange getTimeBasedStatusChange(List<EquipmentStatusChange> equipmentStatusChanges){
+		EquipmentStatusChange equipmentStatusChange = null
+
+		def previousStatus = getTimeBasedPreviousStatus()?.status
+		def currentStatus = getTimeBasedStatus().status
+
+		if(equipmentStatusChanges == null) equipmentStatusChanges = EquipmentStatusChange.values()
+	 	equipmentStatusChanges.each{ statusChange ->
+ 			
+ 			def previousStatusMap = statusChange.getStatusChange()['previous']
+			def currentStatusMap = statusChange.getStatusChange()['current']
+
+			def previousStatusChange = previousStatusMap.contains(previousStatus) || (previousStatusMap.contains(Status.NONE) && previousStatus == null)
+			def currentStatusChange = currentStatusMap.contains(currentStatus)
+
+			if(previousStatusChange && currentStatusChange) equipmentStatusChange = statusChange
+	 	}
+	 	return equipmentStatusChange
+	}
+
 	String toString() {
-		return "Equipment[id= " + id + " code= "+code+" serialNumber= "+serialNumber+" currentState= "+currentStatus+"]";
+		return "Equipment[id= " + id + " code= "+code+" serialNumber= "+serialNumber+" currentState= "+currentStatus+", previousState= "+getTimeBasedPreviousStatus()?.status+"]";
 
 	}
 }

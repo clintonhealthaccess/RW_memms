@@ -164,9 +164,9 @@ class FilterCommand {
 		sparePartPurchasedBy nullable:true
 		status nullable: true
 		stockLocation nullable: true
-		location nullable:false, validator:{ val, obj ->
-			return (obj.stockLocation != null || obj.sparePartType != null || obj.supplier != null || obj.sparePartPurchasedBy!=null || obj.status!=null)?true:"select.atleast.one.value.text"
-		}
+		//location nullable:false, validator:{ val, obj ->
+			//return (obj.stockLocation != null || obj.sparePartType != null || obj.supplier != null || obj.sparePartPurchasedBy!=null || obj.status!=null)?true:"select.atleast.one.value.text"
+		//}
 	}
 
 	String toString() {

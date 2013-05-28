@@ -30,7 +30,7 @@
             <!-- equipment indicator summary template -->
             <g:render template ="/reports/listing/equipmentReport/equipmentIndicatorSummary" />
             <!-- listing filter summary template -->
-            <g:render template ="/reports/listing/listingFilterSummary" />
+            <g:render template ="/reports/listing/equipmentReport/equipmentListingFilterSummary" />
             <!-- equipment report template -->
             <g:if test="${customizedReportName != null && !customizedReportName.empty}">
               <g:render template="/reports/listing/equipmentReport/customEquipmentListing" />
@@ -52,7 +52,7 @@
             <!-- work order indicator summary template -->
             <g:render template ="/reports/listing/workOrderReport/workOrderIndicatorSummary" />
             <!-- listing filter summary template -->
-            <g:render template ="/reports/listing/listingFilterSummary" />
+            <g:render template ="/reports/listing/workOrderReport/workOrderListingFilterSummary" />
             <!-- work order report template -->
             <g:if test="${customizedReportName != null && !customizedReportName.empty}">
               <g:render template="/reports/listing/workOrderReport/customWorkOrderListing" />
@@ -74,7 +74,7 @@
             <!-- preventive order indicator summary template -->
             <g:render template ="/reports/listing/preventiveOrderReport/preventiveOrderIndicatorSummary" />
             <!-- listing filter summary template -->
-            <g:render template ="/reports/listing/listingFilterSummary" />
+            <g:render template ="/reports/listing/preventiveOrderReport/preventiveOrderListingFilterSummary" />
             <!-- preventive order report template -->
             <g:if test="${customizedReportName != null && !customizedReportName.empty}">
               <g:render template="/reports/listing/preventiveOrderReport/customPreventiveOrderListing" />

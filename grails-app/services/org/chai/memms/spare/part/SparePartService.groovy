@@ -134,7 +134,9 @@ class SparePartService {
 		def dataLocations = []		
 			
 		if(location instanceof Location) 
-			dataLocations.addAll(location.getDataLocations([:], [:]))
+			//dataLocations.addAll(location.getDataLocations([:], [:]))
+			//TODO Jean you may check if this is the right way Fortunately it is working
+			dataLocations.addAll(location.collectDataLocations(null))
 		else{
 			location = (DataLocation)location
 			dataLocations.add(location)

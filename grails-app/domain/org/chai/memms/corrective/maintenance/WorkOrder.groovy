@@ -33,6 +33,7 @@ import org.chai.memms.Notification;
 import org.chai.memms.TimeSpend;
 import org.chai.memms.corrective.maintenance.CorrectiveProcess.ProcessType;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
+import org.chai.memms.corrective.maintenance.WorkOrderStatus.WorkOrderStatusChange;
 import org.chai.memms.inventory.Equipment;
 import org.chai.memms.maintenance.MaintenanceOrder;
 import org.chai.memms.corrective.maintenance.WorkOrder;
@@ -169,16 +170,56 @@ public class WorkOrder extends MaintenanceOrder{
 			return true
 		return false
 	}
-		
+
 	@Transient
 	def getTimeBasedStatus(){
-		WorkOrderStatus currentState = status.asList()[0]
-		for(WorkOrderStatus state : status)
-			if(state.dateCreated.after(currentState.dateCreated))
-				currentState= state;
+		WorkOrderStatus currentState = null
+		if(!status) return currentState
+		else if(status.size() == 0) return currentState
+		else{
+			//first check the date created, if date created is the same, check the id
+			List<WorkOrderStatus> sortedStatus = status.sort{ a,b -> (a.dateCreated <=> b.dateCreated) ?: (a.id <=> b.id) }
+			currentState = sortedStatus[-1]
+			if(currentState != currentStatus) 
+				currentStatus = currentState.status
+		}
 		return currentState
 	}
+	
+	@Transient
+	def getTimeBasedPreviousStatus(){
+		WorkOrderStatus previousState = null
+		if(!status) return previousState
+		else if(status.size() == 0) return previousState
+		else if(status.size() == 1) return previousState
+		else{
+			//first check the date created, if date created is the same, check the id
+			List<WorkOrderStatus> sortedStatus = status.sort{ a,b -> (a.dateCreated <=> b.dateCreated) ?: (a.id <=> b.id) }
+			previousState = sortedStatus[-2]
+		}
+		return previousState
+	}
 
+	@Transient
+	WorkOrderStatusChange getTimeBasedStatusChange(List<WorkOrderStatusChange> workOrderStatusChanges){
+		WorkOrderStatusChange workOrderStatusChange = null
+
+		def previousStatus = getTimeBasedPreviousStatus()?.status
+		def currentStatus = getTimeBasedStatus().status
+
+		if(workOrderStatusChanges == null) workOrderStatusChanges = WorkOrderStatusChange.values()
+	 	workOrderStatusChanges.each{ statusChange ->
+ 			
+ 			def previousStatusMap = statusChange.getStatusChange()['previous']
+			def currentStatusMap = statusChange.getStatusChange()['current']
+
+			def previousStatusChange = previousStatusMap.contains(previousStatus) || (previousStatusMap.contains(OrderStatus.NONE) && previousStatus == null)
+			def currentStatusChange = currentStatusMap.contains(currentStatus)
+
+			if(previousStatusChange && currentStatusChange) workOrderStatusChange = statusChange
+	 	}
+	 	return workOrderStatusChange
+	}
 
 	static mapping = {
 		table "memms_work_order"

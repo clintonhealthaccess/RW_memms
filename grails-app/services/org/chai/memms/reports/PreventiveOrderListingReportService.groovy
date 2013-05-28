@@ -11,12 +11,29 @@ import org.chai.memms.preventive.maintenance.PreventiveOrder;
 import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventionResponsible;
 import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatus;
 import org.chai.memms.security.User;
+import org.chai.memms.util.Utils;
 
 /**
  * @author Aphrodice Rwagaju
  *
  */
 class PreventiveOrderListingReportService {
+	
+	def getAllPreventions(User user , Map<String, String> params){
+		
+		def criteria = PreventiveOrder.createCriteria();
+		def dataLocations = []
+		if(user.location instanceof Location) dataLocations.addAll(user.location.collectDataLocations(null))
+		else{
+			dataLocations = []
+			dataLocations.add(user.location as DataLocation)
+		}
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			createAlias("equipment","equip")
+			if(dataLocations)
+				inList('equip.dataLocation',dataLocations)
+		}
+	}
 	def getEquipmentsWithPreventionPlan(User user,Map<String, String> params) {
 
 		def criteria = PreventiveOrder.createCriteria();
@@ -69,9 +86,9 @@ class PreventiveOrderListingReportService {
 			createAlias("equipment","equip")
 			if(dataLocations)
 				inList('equip.dataLocation',dataLocations)
-			/*if(departments != null)
+			if(departments != null && departments.size()>0)
 				inList ("equip.department", departments)
-			if(equipmentTypes != null)
+			if(equipmentTypes != null && equipmentTypes.size()>0)
 				inList ("equip.type", equipmentTypes)
 			if(workOrderStatus!=null && !workOrderStatus.empty)
 				inList ("status",workOrderStatus)
@@ -82,7 +99,7 @@ class PreventiveOrderListingReportService {
 			if(currency !=null)
 				eq ("equip.currency",currency)	
 			if(responsibles!=null && !responsibles.empty)
-				inList ("preventionResponsible",responsibles)*/
+				inList ("preventionResponsible",responsibles)
 		}
 	}
 }
