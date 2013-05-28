@@ -43,7 +43,7 @@
 				%{-- TODO --}%
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('cost')}">
-				%{-- TODO --}%
+				<g:sortableColumn property="cost"  title="Cost" params="[q:q]" />
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('warrantyProvider')}">
 				%{-- TODO --}%
@@ -103,7 +103,7 @@
 					%{-- TODO --}%
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('cost')}">
-					%{-- TODO --}%
+					<td>${equipment.purchaseCost}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('warrantyProvider')}">
 					%{-- TODO --}%

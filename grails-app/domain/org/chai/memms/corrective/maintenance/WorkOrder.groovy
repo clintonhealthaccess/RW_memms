@@ -175,10 +175,13 @@ public class WorkOrder extends MaintenanceOrder{
 	def getTimeBasedStatus(){
 		WorkOrderStatus currentState = null
 		if(!status) return currentState
-		if(status.size() == 0) return currentState
+		else if(status.size() == 0) return currentState
 		else{
-			List<WorkOrderStatus> sortedStatus = status.sort{ it.dateCreated }
+			//first check the date created, if date created is the same, check the id
+			List<WorkOrderStatus> sortedStatus = status.sort{ a,b -> (a.dateCreated <=> b.dateCreated) ?: (a.id <=> b.id) }
 			currentState = sortedStatus[-1]
+			if(currentState != currentStatus) 
+				currentStatus = currentState.status
 		}
 		return currentState
 	}
@@ -187,10 +190,11 @@ public class WorkOrder extends MaintenanceOrder{
 	def getTimeBasedPreviousStatus(){
 		WorkOrderStatus previousState = null
 		if(!status) return previousState
-		if(status.size() == 0) return previousState
+		else if(status.size() == 0) return previousState
 		else if(status.size() == 1) return previousState
 		else{
-			List<WorkOrderStatus> sortedStatus = status.sort{ it.dateCreated }
+			//first check the date created, if date created is the same, check the id
+			List<WorkOrderStatus> sortedStatus = status.sort{ a,b -> (a.dateCreated <=> b.dateCreated) ?: (a.id <=> b.id) }
 			previousState = sortedStatus[-2]
 		}
 		return previousState

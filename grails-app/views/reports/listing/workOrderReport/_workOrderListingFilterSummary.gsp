@@ -85,7 +85,7 @@
             </g:if>
             <g:else>
               <g:each in="${WorkOrderStatusChange.values()}" var="statusEnum">
-                <g:if test="${customWorkOrderParams?.statusChanges?.contains(statusEnum.toString())}">
+                <g:if test="${customWorkOrderParams?.statusChanges?.contains(statusEnum)}">
                   ${message(code: statusEnum?.messageCode+'.'+statusEnum?.name)},
                 </g:if>
               </g:each>
