@@ -259,7 +259,6 @@ class EquipmentListingReportService {
 				customEquipments = statusChangesEquipments
 			}
 		}
-
 		return customEquipments
 	}
 

@@ -79,8 +79,8 @@ class WorkOrderListingReportService {
 
 		def customWorkOrders = []
 
-		def reportType = customEquipmentParams.get('reportType')
-		def reportSubType = customEquipmentParams.get('reportSubType')
+		def reportType = customWorkOrderParams.get('reportType')
+		def reportSubType = customWorkOrderParams.get('reportSubType')
 
 		def dataLocations = customWorkOrderParams.get('dataLocations')
 		def departments = customWorkOrderParams.get('departments')
@@ -124,13 +124,13 @@ class WorkOrderListingReportService {
 				// if(toWorkOrderPeriod != null)
 				// 	lt ("TODO", toWorkOrderPeriod)
 			}
-			if (log.isDebugEnabled()) log.debug("WORK ORDERS SIZE: "+ criteriaWorkOrders.size())
+			customWorkOrders = criteriaWorkOrders
 		}
 
 		if(reportSubType == ReportSubType.STATUSCHANGES){
-			def statusChanges = customEquipmentParams.get('statusChanges')
-			def fromStatusChangesPeriod = customEquipmentParams.get('fromStatusChangesPeriod')
-			def toStatusChangesPeriod = customEquipmentParams.get('toStatusChangesPeriod')
+			def statusChanges = customWorkOrderParams.get('statusChanges')
+			def fromStatusChangesPeriod = customWorkOrderParams.get('fromStatusChangesPeriod')
+			def toStatusChangesPeriod = customWorkOrderParams.get('toStatusChangesPeriod')
 
 			criteriaWorkOrders = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 
@@ -167,6 +167,6 @@ class WorkOrderListingReportService {
 				customWorkOrders = statusChangesWorkOrders
 			}
 		}
-
+		return customWorkOrders;
 	}
 }
