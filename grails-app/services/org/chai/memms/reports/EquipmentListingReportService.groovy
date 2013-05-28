@@ -193,21 +193,23 @@ class EquipmentListingReportService {
 				if(currency !=null)
 					eq ("currency",currency)
 
-				if(fromAcquisitionPeriod != null)
+				/*if(fromAcquisitionPeriod != null)
 					gt ("purchaseDate", fromAcquisitionPeriod)
 				if(toAcquisitionPeriod != null)
 					lt ("purchaseDate", toAcquisitionPeriod)
 				if(noAcquisitionPeriod != null && noAcquisitionPeriod)
-					eq ("purchaseDate", null)
+					eq ("purchaseDate", null)*/
 				
 				if(equipmentStatus!=null && !equipmentStatus.empty)
 					inList ("currentStatus",equipmentStatus)
 				if(obsolete != null && obsolete)
 					eq ("obsolete", (obsolete.equals('true'))?true:false)
+					
 			}
-			if (log.isDebugEnabled()) log.debug("EQUIPMENTS SIZE: "+ criteriaEquipments.size())
+			if (log.isDebugEnabled()) log.debug("CRITERIA EQUIPMENTS SIZE: "+ criteriaEquipments.size())
 
 			if(warranty != null && warranty){
+				if (log.isDebugEnabled()) log.debug("WARRANTY IN SERVICE CLASS: "+ warranty)
 				def underWarrantyEquipments = []
 				criteriaEquipments.each{ equipment ->
 					if (equipment.warranty.startDate!=null && equipment.warrantyPeriod.numberOfMonths!=null && equipment.warrantyPeriod.months != null) {
