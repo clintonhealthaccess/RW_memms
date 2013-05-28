@@ -158,6 +158,7 @@ class WorkOrderListingReportService {
 			}
 			if (log.isDebugEnabled()) log.debug("WORK ORDERS SIZE: "+ criteriaWorkOrders.size())
 
+			// TODO build into criteria
 			if(statusChanges != null && !statusChanges.empty){
 				def statusChangesWorkOrders = []
 				criteriaWorkOrders.each { workOrder ->

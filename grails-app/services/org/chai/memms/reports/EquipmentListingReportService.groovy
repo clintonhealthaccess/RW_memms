@@ -207,6 +207,7 @@ class EquipmentListingReportService {
 			}
 			if (log.isDebugEnabled()) log.debug("EQUIPMENTS SIZE: "+ criteriaEquipments.size())
 
+			// TODO build into criteria
 			if(warranty != null && warranty){
 				def underWarrantyEquipments = []
 				criteriaEquipments.each{ equipment ->
@@ -250,6 +251,7 @@ class EquipmentListingReportService {
 			}
 			if (log.isDebugEnabled()) log.debug("EQUIPMENTS SIZE: "+ criteriaEquipments.size())
 
+			// TODO build into criteria
 			if(statusChanges != null && !statusChanges.empty){
 				def statusChangesEquipments = []
 				criteriaEquipments.each { equipment ->
