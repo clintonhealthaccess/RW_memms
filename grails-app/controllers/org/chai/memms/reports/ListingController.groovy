@@ -1205,6 +1205,8 @@ class ListingController extends AbstractEntityController{
 	// customized report wizard end
 	
 	public def bindParams(def entity) {
+		if(log.isDebugEnabled()) log.debug("PARAMETERS TO BIND !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!: "+params)
+		
 		entity.properties = params
 	}
 
