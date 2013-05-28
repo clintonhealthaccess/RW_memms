@@ -184,6 +184,8 @@ class ListingController extends AbstractEntityController{
 			])
 	}
 
+	// TODO move warranty code into service method
+	// TODO change displayableEquipments to something more accurate like 'underWarrantyEquipments'
 	def underWarrantyEquipments={
 		adaptParamsForList()
 		def displayableEquipments=[]
@@ -212,7 +214,6 @@ class ListingController extends AbstractEntityController{
 
 	// corrective
 
-	//DONE
 	def generalWorkOrdersListing={
 		adaptParamsForList()
 		def workOrders = workOrderListingReportService.getAllWorkOrders(user,params)
@@ -254,7 +255,6 @@ class ListingController extends AbstractEntityController{
 
 	// preventive
 
-	//DONE
 	def generalPreventiveOrdersListing={
 		adaptParamsForList()
 		def preventiveOrders = preventiveOrderListingReportService.getAllPreventions(user,params)
@@ -643,41 +643,42 @@ class ListingController extends AbstractEntityController{
 			toCost = Double.parseDouble(params.get('toCost'))
 		def costCurrency = params.get('costCurrency')
 
-		def fromAcquisitionPeriod = getPeriod('fromAcquisitionPeriod')
-		def toAcquisitionPeriod = getPeriod('toAcquisitionPeriod')
-		def noAcquisitionPeriod = params.get('noAcquisitionPeriod')
-
 		def customEquipmentParams = [
+			reportType: reportType,
+			reportSubType: reportSubType,
 			dataLocations: dataLocations,
 			departments: departments,
 			equipmentTypes: equipmentTypes,
 			fromCost: fromCost,
 			toCost: toCost,
-			costCurrency: costCurrency,
-			fromAcquisitionPeriod: fromAcquisitionPeriod,
-			toAcquisitionPeriod: toAcquisitionPeriod,
-			noAcquisitionPeriod: noAcquisitionPeriod
+			costCurrency: costCurrency
 		]
 
 		if(reportSubType == ReportSubType.INVENTORY){
+			def fromAcquisitionPeriod = getPeriod('fromAcquisitionPeriod')
+			def toAcquisitionPeriod = getPeriod('toAcquisitionPeriod')
+			def noAcquisitionPeriod = params.get('noAcquisitionPeriod')
 			def equipmentStatus = getInventoryStatus()
 			def obsolete = params.get('obsolete')
 			def warranty = params.get('warranty')
 			customEquipmentParams << [
+				fromAcquisitionPeriod: fromAcquisitionPeriod,
+				toAcquisitionPeriod: toAcquisitionPeriod,
+				noAcquisitionPeriod: noAcquisitionPeriod,
 				equipmentStatus: equipmentStatus,
 				obsolete: obsolete,
-				warranty: warranty,
+				warranty: warranty
 			]
 		}
 
 		if(reportSubType == ReportSubType.STATUSCHANGES){
+			def statusChanges = getInventoryStatusChanges()
 			def fromStatusChangesPeriod = getPeriod('fromStatusChangesPeriod')
 			def toStatusChangesPeriod = getPeriod('toStatusChangesPeriod')
-			def statusChanges = getInventoryStatusChanges()
 			customEquipmentParams << [
+				statusChanges: statusChanges,
 				fromStatusChangesPeriod: fromStatusChangesPeriod,
-				toStatusChangesPeriod: toStatusChangesPeriod,
-				statusChanges: statusChanges
+				toStatusChangesPeriod: toStatusChangesPeriod
 			]
 		}
 
@@ -693,28 +694,9 @@ class ListingController extends AbstractEntityController{
 		if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing end, customEquipmentParams:"+customEquipmentParams)
 
 		adaptParamsForList()
-		def displayableEquipments=[]
-		def warrantyExpirationDate
-		def warranty=params.get('warranty')
-		def equipments = []
-		def equipmentz = equipmentListingReportService.getCustomReportOfEquipments(user,customEquipmentParams,params)
+		def equipments = equipmentListingReportService.getCustomReportOfEquipments(user,customEquipmentParams,params)
+		if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing # of equipments:"+equipments.size())
 
-		if(warranty != null && warranty.empty){
-
-			for(Equipment equipment: equipmentz){
-				if (equipment.warranty.startDate!=null && equipment.warrantyPeriod.numberOfMonths!=null && equipment.warrantyPeriod.months != null) {
-					warrantyExpirationDate= (equipment.warranty.startDate).plus((equipment.warrantyPeriod.numberOfMonths))
-					if (log.isDebugEnabled()) log.debug("CALCULATED DATE "+warrantyExpirationDate +"START DATE "+equipment.warranty.startDate +"WARRANTY PERIOD "+equipment.warrantyPeriod.months)
-					if (warrantyExpirationDate > new Date())
-						displayableEquipments.add(equipment)
-				}
-				warrantyExpirationDate=null
-			}
-
-		}else{
-			displayableEquipments=equipmentz
-		}
-		equipments=displayableEquipments
 		if(!request.xhr)
 			render(view:"/reports/reports",
 			model: model(equipments, "") <<
@@ -749,6 +731,8 @@ class ListingController extends AbstractEntityController{
 		def warranty = params.get('warranty')
 
 		def customWorkOrderParams = [
+			reportType: reportType,
+			reportSubType: reportSubType,
 			dataLocations: dataLocations,
 			departments: departments,
 			equipmentTypes: equipmentTypes,
@@ -769,8 +753,9 @@ class ListingController extends AbstractEntityController{
 			]
 		}
 
+		def statusChanges = null
 		if(reportSubType == ReportSubType.STATUSCHANGES){
-			def statusChanges = getCorrectiveStatusChanges()
+			statusChanges = getCorrectiveStatusChanges()
 			def fromStatusChangesPeriod = getPeriod('fromStatusChangesPeriod')
 			def toStatusChangesPeriod = getPeriod('toStatusChangesPeriod')
 			customWorkOrderParams << [
@@ -797,25 +782,23 @@ class ListingController extends AbstractEntityController{
 		def workOrders = []
 
 		def workOrderz = workOrderListingReportService.getCustomReportOfWorkOrders(user,customWorkOrderParams,params)
-		if (log.isDebugEnabled()) log.debug("WORK ORDERS SIZE: "+ workOrderz.size())
+		if (log.isDebugEnabled()) log.debug("llisting.customWorkOrderListing # of workOrders:"+workOrderz.size())
 		
-		if(warranty != null && warranty.empty){
-
+		//TODO move this into service method
+		if(warranty != null && !warranty.empty){
 			for(WorkOrder workOrder: workOrderz){
 				if (workOrder.equipment.warranty.startDate!=null && workOrder.equipment.warrantyPeriod.numberOfMonths!=null && workOrder.equipment.warrantyPeriod.months != null) {
 					warrantyExpirationDate= (workOrder.equipment.warranty.startDate).plus((workOrder.equipment.warrantyPeriod.numberOfMonths))
-					if (log.isDebugEnabled()) log.debug("CALCURATED DATE "+warrantyExpirationDate +"START DATE "+workOrder.equipment.warranty.startDate +"WARRANTY PERIOD "+workOrder.equipment.warrantyPeriod.months)
+					if (log.isDebugEnabled()) log.debug("CALCULATED DATE "+warrantyExpirationDate +"START DATE "+workOrder.equipment.warranty.startDate +"WARRANTY PERIOD "+workOrder.equipment.warrantyPeriod.months)
 					if (warrantyExpirationDate > new Date())
 						displayableWorkOrders.add(workOrder)
 				}
 				warrantyExpirationDate=null
 			}
-
 		}else{
 			displayableWorkOrders=workOrderz
 		}
 		workOrders=displayableWorkOrders
-
 
 		if(!request.xhr)
 			render(view:"/reports/reports",
@@ -826,6 +809,7 @@ class ListingController extends AbstractEntityController{
 				reportTypeOptions: reportTypeOptions,
 				customizedReportName: customizedReportName,
 				customizedReportSave: customizedReportSave,
+				customWorkOrderParams: customWorkOrderParams,
 				template:"/reports/listing/listing"
 			])
 	}
@@ -870,19 +854,6 @@ class ListingController extends AbstractEntityController{
 			]
 		}
 
-		if(reportSubType == ReportSubType.STATUSCHANGES){
-			def statusChanges = getPreventiveStatusChanges()
-			def fromStatusChangesPeriod = getPeriod('fromStatusChangesPeriod')
-			def toStatusChangesPeriod = getPeriod('toStatusChangesPeriod')
-			def doneByWho = getPreventionResponsible('doneByWho')
-			customPreventiveOrderParams << [
-				statusChanges: statusChanges,
-				fromStatusChangesPeriod: fromStatusChangesPeriod,
-				toStatusChangesPeriod: toStatusChangesPeriod,
-				doneByWho: doneByWho
-			]
-		}
-
 		def reportTypeOptions = getReportTypeOptions('preventiveOptions')
 		def customizedReportName = params.get('customizedReportName')
 		def customizedReportSave = params.get('customizedReportSave')
@@ -905,6 +876,7 @@ class ListingController extends AbstractEntityController{
 				reportTypeOptions: reportTypeOptions,
 				customizedReportName: customizedReportName,
 				customizedReportSave: customizedReportSave,
+				customPreventiveOrderParams: customPreventiveOrderParams,
 				template:"/reports/listing/listing"
 			])
 	}
@@ -1113,7 +1085,7 @@ class ListingController extends AbstractEntityController{
 			if(log.isDebugEnabled()) log.debug("abstract.inventoryStatusChanges statusChanges:"+statusChanges)
 			statusChanges.each { it ->
 				if(log.isDebugEnabled()) log.debug("abstract.inventoryStatusChanges statusChange:"+it)
-				if(it != null) inventoryStatusChanges.add(it)
+				if(it != null) inventoryStatusChanges.add(Enum.valueOf(EquipmentStatusChange.class, it))
 			}
 		}
 		if(log.isDebugEnabled())
@@ -1141,7 +1113,7 @@ class ListingController extends AbstractEntityController{
 			if(log.isDebugEnabled()) log.debug("abstract.correctiveStatusChanges statusChanges:"+statusChanges)
 			statusChanges.each { it ->
 				if(log.isDebugEnabled()) log.debug("abstract.correctiveStatusChanges statusChange:"+it)
-				if(it != null) correctiveStatusChanges.add(it)
+				if(it != null) correctiveStatusChanges.add(Enum.valueOf(WorkOrderStatusChange.class, it))
 			}
 		}
 		if(log.isDebugEnabled())

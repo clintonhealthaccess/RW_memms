@@ -19,7 +19,8 @@
 			</g:if>
 			
 			<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
-				%{-- TODO SL --}%
+				%{-- TODO --}%
+				<g:sortableColumn property="statusChanges"  title="Status Changes" params="[q:q]" />
 			</g:if>
 
 			<g:if test="${reportTypeOptions.contains('currentStatus')}">
@@ -75,11 +76,12 @@
 				</g:if>
 				
 				<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
-					%{-- TODO --}%
+					<g:set var="statusChangesEnum" value="${equipment.getTimeBasedStatusChange(customEquipmentParams.statusChanges)}"/>
+					<td>${message(code: statusChangesEnum?.messageCode+'.'+statusChangesEnum?.name)}</td>
 				</g:if>
 
 				<g:if test="${reportTypeOptions.contains('currentStatus')}">
-					<td>${equipment.currentStatus?.name}</td>
+					<td>${message(code: equipment.currentStatus?.messageCode+'.'+equipment.currentStatus?.name)}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('obsolete')}">
 					<td>

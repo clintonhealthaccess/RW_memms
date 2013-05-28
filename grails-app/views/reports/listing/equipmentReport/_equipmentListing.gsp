@@ -22,7 +22,7 @@
 				<td>${equipment.serialNumber}</td>
 				<td>${equipment.type.names}</td>
 				<td>${equipment.model}</td>
-				<td>${equipment.currentStatus?.name}</td>
+				<td>${message(code: equipment.currentStatus?.messageCode+'.'+equipment.currentStatus?.name)}</td>
 				<td>
 					<g:if test="${(!equipment.obsolete==true)}">
 						&radic;

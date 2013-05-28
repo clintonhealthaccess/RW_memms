@@ -25,7 +25,7 @@
         <a href="#"><g:message code="inventory.equipment.count"/> = ${entities?.size()}</a>
       </g:if>
       <g:if test="${reportType == ReportType.SPAREPARTS}">
-        <a href="#"><g:message code="inventory.equipment.count"/> = ${entities?.size()}</a>
+        <a href="#">TODO Spare Parts = ${entities?.size()}</a>
       </g:if>
     </li>
 
