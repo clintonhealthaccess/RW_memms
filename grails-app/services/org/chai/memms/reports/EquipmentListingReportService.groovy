@@ -186,41 +186,43 @@ class EquipmentListingReportService {
 				if(equipmentTypes != null)
 					inList ("type", equipmentTypes)
 
-				if(lowerLimitCost!=null)
-					gt ("purchaseCost", lowerLimitCost)
-				if(upperLimitCost!=null)
-					lt ("purchaseCost", upperLimitCost)	
-				if(currency !=null)
-					eq ("currency",currency)
-
-				if(fromAcquisitionPeriod != null)
-					gt ("purchaseDate", fromAcquisitionPeriod)
-				if(toAcquisitionPeriod != null)
-					lt ("purchaseDate", toAcquisitionPeriod)
-				if(noAcquisitionPeriod != null && noAcquisitionPeriod)
-					eq ("purchaseDate", null)
-				
-				if(equipmentStatus!=null && !equipmentStatus.empty)
-					inList ("currentStatus",equipmentStatus)
-				if(obsolete != null && obsolete)
-					eq ("obsolete", (obsolete.equals('true'))?true:false)
+				and {
+					if(lowerLimitCost!=null)
+						gt ("purchaseCost", lowerLimitCost)
+					if(upperLimitCost!=null)
+						lt ("purchaseCost", upperLimitCost)
+					if(currency !=null && !currency.empty)
+						eq ("currency",currency)
+					if(fromAcquisitionPeriod != null)
+						gt ("purchaseDate", fromAcquisitionPeriod)
+					if(toAcquisitionPeriod != null)
+						lt ("purchaseDate", toAcquisitionPeriod)
+					// TODO
+					// if(noAcquisitionPeriod != null && noAcquisitionPeriod)
+					// 	eq ("purchaseDate", null)
+					if(equipmentStatus!=null && !equipmentStatus.empty)
+						inList ("currentStatus",equipmentStatus)
+					if(obsolete != null && obsolete)
+						eq ("obsolete", (obsolete.equals('true'))?true:false)
+				}
 			}
 			if (log.isDebugEnabled()) log.debug("EQUIPMENTS SIZE: "+ criteriaEquipments.size())
+			customEquipments = criteriaEquipments
 
 			// TODO build into criteria
-			if(warranty != null && warranty){
-				def underWarrantyEquipments = []
-				criteriaEquipments.each{ equipment ->
-					if (equipment.warranty.startDate!=null && equipment.warrantyPeriod.numberOfMonths!=null && equipment.warrantyPeriod.months != null) {
-						def warrantyExpirationDate = (equipment.warranty.startDate).plus((equipment.warrantyPeriod.numberOfMonths))
-						if (log.isDebugEnabled()) 
-							log.debug("CALCULATED DATE "+warrantyExpirationDate +"START DATE "+equipment.warranty.startDate +"WARRANTY PERIOD "+equipment.warrantyPeriod.months)
-						if (warrantyExpirationDate > new Date())
-							underWarrantyEquipments.add(equipment)
-					}
-				}
-				customEquipments = underWarrantyEquipments
-			}
+			// if(warranty != null && warranty){
+			// 	def underWarrantyEquipments = []
+			// 	criteriaEquipments.each{ equipment ->
+			// 		if (equipment.warranty.startDate!=null && equipment.warrantyPeriod.numberOfMonths!=null && equipment.warrantyPeriod.months != null) {
+			// 			def warrantyExpirationDate = (equipment.warranty.startDate).plus((equipment.warrantyPeriod.numberOfMonths))
+			// 			if (log.isDebugEnabled()) 
+			// 				log.debug("CALCULATED DATE "+warrantyExpirationDate +"START DATE "+equipment.warranty.startDate +"WARRANTY PERIOD "+equipment.warrantyPeriod.months)
+			// 			if (warrantyExpirationDate > new Date())
+			// 				underWarrantyEquipments.add(equipment)
+			// 		}
+			// 	}
+				// customEquipments = underWarrantyEquipments
+			// }
 		}
 
 		if(reportSubType == ReportSubType.STATUSCHANGES){
