@@ -228,11 +228,14 @@ public class Equipment {
 		EquipmentStatus currentState = null
 		if(!status) return currentState
 		else if(status.size() == 0) return currentState
-		// else if(status.size() == 1) currentState = status[0]
 		else{
+			//only compare date not time
 			status.each{ it -> it.dateOfEvent.clearTime() }
-			List<EquipmentStatus> sortedStatus = status.sort{ it.dateOfEvent }
+			//first check the date of event, if date of event is the same, check the date created, if date created is the same, check the id
+			List<EquipmentStatus> sortedStatus = status.sort{ a,b -> (a.dateOfEvent <=> b.dateOfEvent) ?: (a.dateCreated <=> b.dateCreated) ?: (a.id <=> b.id) }
 			currentState = sortedStatus[-1]
+			if(currentState != currentStatus) 
+				currentStatus = currentState.status
 		}
 		return currentState
 	}
@@ -244,8 +247,10 @@ public class Equipment {
 		else if(status.size() == 0) return previousState
 		else if(status.size() == 1) return previousState
 		else{
+			//only compare date not time
 			status.each{ it -> it.dateOfEvent.clearTime() }
-			List<EquipmentStatus> sortedStatus = status.sort{ it.dateOfEvent }
+			//first check the date of event, if date of event is the same, check the date created, if date created is the same, check the id
+			List<EquipmentStatus> sortedStatus = status.sort{ a,b -> (a.dateOfEvent <=> b.dateOfEvent) ?: (a.dateCreated <=> b.dateCreated) ?: (a.id <=> b.id) }
 			previousState = sortedStatus[-2]
 		}
 		return previousState

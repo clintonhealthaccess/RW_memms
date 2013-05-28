@@ -1049,12 +1049,10 @@ class ListingController extends AbstractController{
 	public Date getPeriod(String periodParam){
 		def date = null
 		def period = params.get(periodParam);
-		if(log.isDebugEnabled())
-			log.debug("abstract.getPeriod period param:"+periodParam+", value:"+period+", class:"+period?.class)
+		if(log.isDebugEnabled()) log.debug("abstract.getPeriod period param:"+periodParam+", value:"+period+", class:"+period?.class)
 		if(period != null && !period.empty) {
 			date  = Utils.parseDate(period)
-			if(log.isDebugEnabled())
-				log.debug("abstract.getPeriod date param:"+periodParam+", value:"+date+", class:"+date?.class)
+			if(log.isDebugEnabled()) log.debug("abstract.getPeriod date param:"+periodParam+", value:"+date+", class:"+date?.class)
 			return date
 		}
 		return date
