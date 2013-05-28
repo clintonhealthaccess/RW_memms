@@ -33,6 +33,7 @@ import org.chai.memms.Notification;
 import org.chai.memms.TimeSpend;
 import org.chai.memms.corrective.maintenance.CorrectiveProcess.ProcessType;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
+import org.chai.memms.corrective.maintenance.WorkOrderStatus.WorkOrderStatusChange;
 import org.chai.memms.inventory.Equipment;
 import org.chai.memms.maintenance.MaintenanceOrder;
 import org.chai.memms.corrective.maintenance.WorkOrder;
@@ -177,7 +178,7 @@ public class WorkOrder extends MaintenanceOrder{
 		if(status.size() == 0) return currentState
 		else{
 			List<WorkOrderStatus> sortedStatus = status.sort{ it.dateCreated }
-			WorkOrderStatus currentState = sortedStatus[-1]
+			currentState = sortedStatus[-1]
 		}
 		return currentState
 	}
@@ -190,7 +191,7 @@ public class WorkOrder extends MaintenanceOrder{
 		else if(status.size() == 1) return previousState
 		else{
 			List<WorkOrderStatus> sortedStatus = status.sort{ it.dateCreated }
-			WorkOrderStatus previousState = sortedStatus[-2]
+			previousState = sortedStatus[-2]
 		}
 		return previousState
 	}
