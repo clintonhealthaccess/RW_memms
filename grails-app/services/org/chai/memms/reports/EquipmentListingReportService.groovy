@@ -37,8 +37,10 @@ import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.inventory.EquipmentStatus;
 import org.chai.memms.inventory.Equipment.PurchasedBy;
 import org.chai.memms.inventory.Equipment.Donor;
-import org.chai.memms.util.Utils.ReportType
-import org.chai.memms.util.Utils.ReportSubType
+import org.chai.memms.util.Utils.ReportType;
+import org.chai.memms.util.Utils.ReportSubType;
+import org.chai.memms.util.Utils;
+import org.joda.time.DateTime;
 
 /**
  * @author Aphrodice Rwagaju
@@ -47,6 +49,7 @@ import org.chai.memms.util.Utils.ReportSubType
 class EquipmentListingReportService {
 
 	def userService
+	def today =new Date()
 
 	public def getGeneralReportOfEquipments(User user,Map<String, String> params) {
 		def dataLocations = []
@@ -177,8 +180,10 @@ class EquipmentListingReportService {
 			def equipmentStatus = customEquipmentParams.get('equipmentStatus')
 			def obsolete = customEquipmentParams.get('obsolete')
 			def warranty = customEquipmentParams.get('warranty')
+			if (log.isDebugEnabled()) log.debug("DIFERENCE BETWEEN TWO DATES: "+today+ " AND "+ today.minus(3)+ " IS " +(today-(today-3))+" AND DATE IS " +Utils.getDate(0, 0, 0))
 
 			criteriaEquipments = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+				
 				if(dataLocations != null)
 					inList('dataLocation',dataLocations)
 				
@@ -195,25 +200,32 @@ class EquipmentListingReportService {
 					if(fromAcquisitionPeriod != null)
 						gt ("purchaseDate", fromAcquisitionPeriod)
 					if(toAcquisitionPeriod != null)
-						lt ("purchaseDate", toAcquisitionPeriod)
-					if(noAcquisitionPeriod != null && noAcquisitionPeriod)
+						lt ("purchaseDate", toAcquisitionPeriod)	
+						//TODO
+					/*if(noAcquisitionPeriod != null && noAcquisitionPeriod)
 						eq ("purchaseDate", null)
-
+						*/
 					if(equipmentStatus!=null && !equipmentStatus.empty)
 						inList ("currentStatus",equipmentStatus)
 					if(obsolete != null && obsolete)
 						eq ("obsolete", (obsolete.equals('true'))?true:false)
+					/*if(warranty!=null && !warranty)
+						inList ("warranty.startDate",equipmentStatus)*/
 				}
 			}
 			if (log.isDebugEnabled()) log.debug("EQUIPMENTS SIZE: "+ criteriaEquipments.size())
 
 			if(warranty != null && warranty){
 				def underWarrantyEquipments = []
+				
 				criteriaEquipments.each{ equipment ->
 					if (equipment.warranty.startDate!=null && equipment.warrantyPeriod.numberOfMonths!=null && equipment.warrantyPeriod.months != null) {
-						def warrantyExpirationDate = (equipment.warranty.startDate).plus((equipment.warrantyPeriod.numberOfMonths))
+						
+						DateTime warrantyStatDateTime = new DateTime(equipment.warranty.startDate)
+						def warrantyExpirationDateTime = warrantyStatDateTime.plusMonths(equipment.warrantyPeriod.numberOfMonths)
+						def warrantyExpirationDate = warrantyExpirationDateTime.toDate()
 						if (log.isDebugEnabled())
-							log.debug("CALCULATED DATE "+warrantyExpirationDate +"START DATE "+equipment.warranty.startDate +"WARRANTY PERIOD "+equipment.warrantyPeriod.months)
+							log.debug("WARRANTY EXPIRATION DATE TIME "+warrantyExpirationDateTime +"WARRANTY EXPIRATION DATE "+warrantyExpirationDate +" START DATE "+equipment.warranty.startDate +" WARRANTY PERIOD MONTHS "+equipment.warrantyPeriod.months +" WARRANTY PERIOD NUMBER OF MONTHS "+equipment.warrantyPeriod.numberOfMonths+" AND EXPIRATION DATE IS " +Utils.getDate(0, equipment.warrantyPeriod.numberOfMonths, 0))
 						if (warrantyExpirationDate > new Date())
 							underWarrantyEquipments.add(equipment)
 					}
@@ -254,7 +266,8 @@ class EquipmentListingReportService {
 				def statusChangesEquipments = []
 				criteriaEquipments.each { equipment ->
 					def equipmentStatusChange = equipment.getTimeBasedStatusChange(statusChanges)
-					if(equipmentStatusChange != null) statusChangesEquipments.add(equipment)
+					if(equipmentStatusChange != null) 
+					statusChangesEquipments.add(equipment)
 				}
 				customEquipments = statusChangesEquipments
 			}

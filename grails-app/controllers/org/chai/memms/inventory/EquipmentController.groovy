@@ -29,7 +29,7 @@ package org.chai.memms.inventory
 
 import org.apache.shiro.SecurityUtils;
 import org.chai.memms.AbstractEntityController;
-import org.chai.memms.Contact
+import org.chai.memms.Contact;
 import org.chai.memms.Initializer;
 import org.chai.memms.inventory.Equipment.Donor;
 import org.chai.memms.inventory.Equipment.PurchasedBy;
@@ -42,12 +42,12 @@ import org.chai.memms.inventory.Provider;
 import org.chai.location.DataLocation;
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocationType;
-import org.chai.location.Location
-import org.chai.location.LocationLevel
+import org.chai.location.Location;
+import org.chai.location.LocationLevel;
 import org.chai.memms.inventory.Provider.Type;
 
 import java.util.HashSet;
-import java.util.Set
+import java.util.Set;
 
 /**
  * @author Jean Kahigiso M.
