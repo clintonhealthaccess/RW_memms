@@ -120,9 +120,9 @@ class WorkOrderListingReportService {
 					inList ("currentStatus",workOrderStatus)
 				// TODO
 				// if(fromWorkOrderPeriod != null)
-				// 	gt ("TODO", fromWorkOrderPeriod)
+				// 	gt ("openOn", fromWorkOrderPeriod)
 				// if(toWorkOrderPeriod != null)
-				// 	lt ("TODO", toWorkOrderPeriod)
+				// 	lt ("openOn", toWorkOrderPeriod)
 			}
 			customWorkOrders = criteriaWorkOrders
 		}
@@ -169,5 +169,41 @@ class WorkOrderListingReportService {
 			}
 		}
 		return customWorkOrders;
+	}
+	public def saveWorkOrderReportParams(User user, def correctiveMaintenanceReport,def customWorkOrderParams, Map<String, String> params){
+		def reportName = customWorkOrderParams.get('customizedReportName')
+		def reportType = customWorkOrderParams.get('reportType')
+		def reportSubType = customWorkOrderParams.get('reportSubType')
+
+		def dataLocations = customWorkOrderParams.get('dataLocations')
+		def departments = customWorkOrderParams.get('departments')
+		def equipmentTypes = customWorkOrderParams.get('equipmentTypes')
+		def lowerLimitCost = customWorkOrderParams.get('fromCost')
+		def upperLimitCost = customWorkOrderParams.get('toCost')
+		def currency = customWorkOrderParams.get('costCurrency')
+		
+		def fromWorkOrderPeriod = customWorkOrderParams.get('fromWorkOrderPeriod')
+		def toWorkOrderPeriod = customWorkOrderParams.get('toWorkOrderPeriod')
+		def whoIsResponsible = customWorkOrderParams.get('whoIsResponsible')
+		def warranty = customWorkOrderParams.get('warranty')
+		
+		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON EQUIPMENT CUSTOM REPORT: LOWER COST :"+lowerLimitCost+" UPPER COST :"+upperLimitCost)
+		
+		//correctiveMaintenanceReport.underWarranty=warranty
+		//correctiveMaintenanceReport.whoIsResponsible=whoIsResponsible
+		correctiveMaintenanceReport.toDate=toWorkOrderPeriod
+		correctiveMaintenanceReport.fromDate=fromWorkOrderPeriod
+		correctiveMaintenanceReport.currency=currency
+		correctiveMaintenanceReport.upperLimitCost=upperLimitCost
+		correctiveMaintenanceReport.lowerLimitCost=lowerLimitCost
+		correctiveMaintenanceReport.equipmentTypes=equipmentTypes
+		correctiveMaintenanceReport.departments=departments
+		correctiveMaintenanceReport.dataLocations=dataLocations
+		//correctiveMaintenanceReport.reportSubType=reportSubType
+		//correctiveMaintenanceReport.reportType=reportType
+		correctiveMaintenanceReport.reportName=reportName
+		
+		correctiveMaintenanceReport.save(failOnError:true)
+		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON EQUIPMENT CUSTOM REPORT SAVED CORRECTLY. THE REPORT ID IS :"+ correctiveMaintenanceReport.id)
 	}
 }

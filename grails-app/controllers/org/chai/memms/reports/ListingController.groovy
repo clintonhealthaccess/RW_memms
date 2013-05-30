@@ -68,7 +68,7 @@ import org.joda.time.DateTime
  * @author Jean Kahigiso M.
  *
  */
-class ListingController extends AbstractEntityController{
+class ListingController extends AbstractController{
 
 	def equipmentListingReportService
 	def workOrderListingReportService
@@ -685,6 +685,7 @@ class ListingController extends AbstractEntityController{
 		if(params.get('toCost') != null && !params.get('toCost').empty)
 			toCost = Double.parseDouble(params.get('toCost'))
 		def costCurrency = params.get('costCurrency')
+		def equipmentReport=new EquipmentReport()
 
 		def customEquipmentParams = [
 			reportType: reportType,
@@ -737,7 +738,7 @@ class ListingController extends AbstractEntityController{
 		if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing end, customEquipmentParams:"+customEquipmentParams)
 
 		if(customizedReportSave){
-			// TODO save the report
+			equipmentListingReportService.saveEquipmentReportParams(user,equipmentReport, customEquipmentParams, params)
 		}
 
 		adaptParamsForList()
@@ -753,6 +754,7 @@ class ListingController extends AbstractEntityController{
 				reportTypeOptions: reportTypeOptions,
 				customizedReportName: customizedReportName,
 				customizedReportSave: customizedReportSave,
+				customEquipmentParams: customEquipmentParams,
 				template:"/reports/listing/listing"
 			])
 	}
@@ -776,6 +778,7 @@ class ListingController extends AbstractEntityController{
 		def costCurrency = params.get('costCurrency')
 
 		def warranty = params.get('warranty')
+		def correctiveMaintenanceReport = new CorrectiveMaintenanceReport()
 
 		def customWorkOrderParams = [
 			reportType: reportType,
@@ -824,7 +827,7 @@ class ListingController extends AbstractEntityController{
 		if (log.isDebugEnabled()) log.debug("listing.customWorkOrderListing, customWorkOrderParams:"+customWorkOrderParams)
 
 		if(customizedReportSave){
-			// TODO save the report
+			workOrderListingReportService.saveWorkOrderReportParams(user, correctiveMaintenanceReport, customWorkOrderParams, params)
 		}
 
 		adaptParamsForList()
@@ -882,6 +885,8 @@ class ListingController extends AbstractEntityController{
 		if(params.get('toCost') != null && !params.get('toCost').empty)
 			toCost = Double.parseDouble(params.get('toCost'))
 		def costCurrency = params.get('costCurrency')
+		
+		def preventiveMaintenanceReport= new PreventiveMaintenanceReport()
 
 		def customPreventiveOrderParams = [
 			dataLocations: dataLocations,
@@ -917,7 +922,7 @@ class ListingController extends AbstractEntityController{
 		if (log.isDebugEnabled()) log.debug("listing.customPreventiveOrderListing, customPreventiveOrderParams:"+customPreventiveOrderParams)
 
 		if(customizedReportSave){
-			// TODO save the report
+			preventiveOrderListingReportService.savePreventiveOrderReportParams(user, preventiveMaintenanceReport, customPreventiveOrderParams, params)
 		}
 
 		adaptParamsForList()
@@ -1232,72 +1237,4 @@ class ListingController extends AbstractEntityController{
 	// customized report wizard params end
 	
 	// customized report wizard end
-	
-	public def bindParams(def entity) {
-		if(log.isDebugEnabled()) log.debug("PARAMETERS TO BIND !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!: "+params)
-		
-		entity.properties = params
-	}
-
-	public def getModel(def entity) {
-		[
-			equipmentReport: entity
-		]
-	}
-
-	public def getEntity(def id) {
-		def reportType=getReportType()
-		
-		if(log.isDebugEnabled()) log.debug("I AM INSIDE BUT OUTSIDE CONDITION OF GET ENTITY CUSTOM REPORT: REPORT TYPE IS: "+reportType)
-		
-		def customizedReportSave=params.get('customizedReportSave')
-		if (customizedReportSave.equals("on")){
-			
-			if(log.isDebugEnabled()) log.debug("I AM INSIDE GET ENTITY CUSTOM REPORT: REPORT TYPE IS: "+reportType)
-			
-			if(reportType==ReportType.INVENTORY)
-			{
-			return EquipmentReport.get(id);
-			}
-			if (reportType==ReportType.CORRECTIVE){
-			return CorrectiveMaintenanceReport.get(id);
-			}
-			if (reportType==ReportType.PREVENTIVE){
-				return PreventiveMaintenanceReport.get(id);
-			}
-			if (reportType==ReportType.SPAREPARTS){
-				//TODO to add class to persist spare part query params
-			}
-		}
-	}
-
-	public def createEntity() {
-		if(log.isDebugEnabled()) log.debug("I AM INSIDE BUT OUTSIDE CONDITION OF CREATE ENTITY CUSTOM REPORT: REPORT TYPE IS: "+reportType)
-		
-		def reportType=getReportType()
-		def customizedReportSave=params.get('customizedReportSave')
-		if (customizedReportSave.equals("on")){
-			if(log.isDebugEnabled()) log.debug("I AM INSIDE CREATE ENTITY CUSTOM REPORT: REPORT TYPE IS: "+reportType)
-			
-			if(reportType==ReportType.INVENTORY)
-			{
-			return new EquipmentReport();
-			}
-			if (reportType==ReportType.CORRECTIVE){
-			return new CorrectiveMaintenanceReport();
-			}
-			if (reportType==ReportType.PREVENTIVE){
-				return new PreventiveMaintenanceReport()
-			}
-			if (reportType==ReportType.SPAREPARTS){
-				//TODO to add class to persist spare part query params
-			}
-		}		
-		
-	}
-
-	public def getTemplate() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

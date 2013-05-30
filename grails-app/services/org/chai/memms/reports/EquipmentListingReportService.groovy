@@ -31,6 +31,7 @@ import java.util.Map;
 
 import org.chai.location.DataLocation;
 import org.chai.location.Location;
+import org.chai.memms.report.listing.EquipmentReport;
 import org.chai.memms.security.User;
 import org.chai.memms.inventory.Equipment;
 import org.chai.memms.inventory.EquipmentStatus.Status;
@@ -165,8 +166,8 @@ class EquipmentListingReportService {
 		def dataLocations = customEquipmentParams.get('dataLocations')
 		def departments = customEquipmentParams.get('departments')
 		def equipmentTypes = customEquipmentParams.get('equipmentTypes')
-		def lowerLimitCost = customEquipmentParams.('fromCost')
-		def upperLimitCost = customEquipmentParams.('toCost')
+		def lowerLimitCost = customEquipmentParams.get('fromCost')
+		def upperLimitCost = customEquipmentParams.get('toCost')
 		def currency = customEquipmentParams.get('costCurrency')
 
 		def criteria = Equipment.createCriteria();
@@ -180,7 +181,6 @@ class EquipmentListingReportService {
 			def equipmentStatus = customEquipmentParams.get('equipmentStatus')
 			def obsolete = customEquipmentParams.get('obsolete')
 			def warranty = customEquipmentParams.get('warranty')
-			if (log.isDebugEnabled()) log.debug("DIFERENCE BETWEEN TWO DATES: "+today+ " AND "+ today.minus(3)+ " IS " +(today-(today-3))+" AND DATE IS " +Utils.getDate(0, 0, 0))
 
 			criteriaEquipments = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 				
@@ -274,5 +274,45 @@ class EquipmentListingReportService {
 		}
 
 		return customEquipments
+	}
+	public def saveEquipmentReportParams(User user, def equipmentReport,def customEquipmentParams, Map<String, String> params){
+		def reportName = customEquipmentParams.get('customizedReportName')
+		def reportType = customEquipmentParams.get('reportType')
+		def reportSubType = customEquipmentParams.get('reportSubType')
+
+		def dataLocations = customEquipmentParams.get('dataLocations')
+		def departments = customEquipmentParams.get('departments')
+		def equipmentTypes = customEquipmentParams.get('equipmentTypes')
+		def lowerLimitCost = customEquipmentParams.get('fromCost')
+		def upperLimitCost = customEquipmentParams.get('toCost')
+		def currency = customEquipmentParams.get('costCurrency')
+		
+		def fromAcquisitionPeriod = customEquipmentParams.get('fromAcquisitionPeriod')
+		def toAcquisitionPeriod = customEquipmentParams.get('toAcquisitionPeriod')
+		def noAcquisitionPeriod = customEquipmentParams.get('noAcquisitionPeriod')
+		def equipmentStatus = customEquipmentParams.get('equipmentStatus')
+		def obsolete = customEquipmentParams.get('obsolete')
+		def warranty = customEquipmentParams.get('warranty')
+		
+		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON EQUIPMENT CUSTOM REPORT: LOWER COST :"+lowerLimitCost+" UPPER COST :"+upperLimitCost)
+		
+		//equipmentReport.underWarranty=warranty
+		equipmentReport.obsolete=obsolete
+		//equipmentReport.equipmentStatus=equipmentStatus
+		//equipmentReport.noAcquisitionPeriod=noAcquisitionPeriod
+		equipmentReport.toDate=toAcquisitionPeriod
+		equipmentReport.fromDate=fromAcquisitionPeriod
+		equipmentReport.currency=currency
+		equipmentReport.upperLimitCost=upperLimitCost
+		equipmentReport.lowerLimitCost=lowerLimitCost
+		equipmentReport.equipmentTypes=equipmentTypes
+		equipmentReport.departments=departments
+		equipmentReport.dataLocations=dataLocations
+		//equipmentReport.reportSubType=reportSubType
+		//equipmentReport.reportType=reportType
+		equipmentReport.reportName=reportName
+		
+		equipmentReport.save(failOnError:true)
+		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON EQUIPMENT CUSTOM REPORT SAVED CORRECTLY. THE REPORT ID IS :"+ equipmentReport.id)
 	}
 }
