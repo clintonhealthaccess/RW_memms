@@ -56,6 +56,7 @@ import java.util.Set
 class EquipmentController extends AbstractEntityController{
 
 	def equipmentStatusService
+	def equipmentService
 
 
 	def index = {
