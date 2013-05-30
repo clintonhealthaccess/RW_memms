@@ -117,10 +117,20 @@
       margin: 0 0 -1px 0
       position: relative
 
-.v-tabs-subnav
+.v-tabs-subnav-wrapper
   border-bottom: 1px solid $primary
+  float:left
+  height: 29px
+  overflow: hidden
+  padding-right: 23px
+  width: 820px
+
+.v-tabs-subnav
+  height: 29px
   padding-left: 5px
   +pie-clearfix
+  position: relative
+  margin-left: 30px
   li
     display: inline
     float: left
@@ -144,12 +154,37 @@
       font-size: 14px
       font-weight: bold
 
-  &.slide
-    .move_left
-      background: url('../images/arrow-left.png') no-repeat
-      height: 16px
-      width: 8px
-    .move_right
+.v-tabs-subnav-scroll-right, .v-tabs-subnav-scroll-left
+  background: white
+  display: block
+  height: 29px
+  position: absolute
+  width: 10px
+  z-index: 1000
+  text-indent: -9999em
+
+.v-tabs-subnav-scroll-right
+  right: -20px
+  background: url('../images/arrow-right.png') no-repeat
+
+.v-tabs-subnav-scroll-left
+  left: -20px
+  background: url('../images/arrow-left.png') no-repeat
+
+.v-tabs-chosen-report
+  background: white
+  border-bottom: 1px solid #258cd5
+  color: #258cd5
+  float: left
+  padding-left: 10px
+
+  a.active
+    background: url("../images/bump.png") no-repeat bottom center
+    bottom: -1px
+    display: block
+    padding: 2px 14px 15px
+    position: relative
+    text-decoration: none
 
 .v-tabs-content
   background: #fff
