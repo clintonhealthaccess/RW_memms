@@ -43,6 +43,7 @@ import org.chai.memms.security.User;
 import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.location.DataLocation;
 import org.apache.commons.lang.math.RandomUtils;
+import groovy.time.TimeCategory;
 
 import groovy.transform.EqualsAndHashCode;
 import i18nfields.I18nFields
@@ -114,6 +115,7 @@ public class Equipment {
 	Date serviceContractStartDate
 	Date dateCreated
 	Date lastUpdated
+	Date warrantyEndDate
 	
 	User addedBy
 	User lastModifiedBy
@@ -151,6 +153,7 @@ public class Equipment {
 		warranty nullable:true, validator:{ val, obj ->
 			if(val!=null && val.startDate != null && obj.purchaseDate != null) return (val.startDate?.after(obj.purchaseDate) || val.startDate?.compareTo(obj.purchaseDate)==0)
 		}
+		warrantyEndDate nullable: true
 		warrantyPeriod nullable: true, validator:{val, obj ->
 			if (obj.warranty!=null) return (val!=null) && (val.numberOfMonths >= 0)
 		}
@@ -209,6 +212,17 @@ public class Equipment {
 	
 	def beforeValidate(){
 		this.genarateAndSetEquipmentCode()
+		this.generateWarrantyEndDate()
+	}
+
+	@Transient
+	def generateWarrantyEndDate(){
+		Integer.metaClass.mixin TimeCategory
+		Date.metaClass.mixin TimeCategory
+		if(warranty!=null && warrantyPeriod!=null)
+			warrantyEndDate = warranty.startDate + (warrantyPeriod.numberOfMonths).months
+		else
+			warrantyEndDate = null
 	}
 	
 	@Transient

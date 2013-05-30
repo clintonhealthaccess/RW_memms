@@ -70,6 +70,14 @@ class EquipmentService {
 	static transactional = true
 	def languageService;
 	def userService
+
+	public def updateWarrantyEndDate(){
+		def criteria = Equipment.createCriteria();
+		return  criteria.list(){
+				isNull("warrantyEndDate")
+				isNotNull("warranty")
+		}
+	}
 	
 	public void updateCurrentEquipmentStatus(Equipment equipment,EquipmentStatus status,User user){
 		if(status!=null){

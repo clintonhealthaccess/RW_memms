@@ -173,6 +173,14 @@ class EquipmentController extends AbstractEntityController{
 	}
 	
 	
+	def generateEndDate = {
+		def equipments = equipmentService.updateWarrantyEndDate()
+		equipments.each { equipment ->
+			log.debug("currentEquipment= "+equipment.id+" dataLocation= "+equipment.dataLocation.id)
+			equipment.generateWarrantyEndDate()
+			equipment.save(failOnError:true)
+		}
+	}
 
 	
 	def getAjaxData = {
