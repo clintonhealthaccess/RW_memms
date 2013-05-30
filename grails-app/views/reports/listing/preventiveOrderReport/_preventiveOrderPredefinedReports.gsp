@@ -7,11 +7,11 @@
 	<li>
 		<a class="${actionName == 'equipmentsWithPreventionPlan'?'active':''}" 
 			href="${createLinkWithTargetURI(controller: 'listing', action:'equipmentsWithPreventionPlan')}" id="report-1">
-			Equipments with Prevention Plan
+			TODO Equipments with Prevention Plan
 		</a></li>
 	<li>
 		<a class="${actionName == 'preventionsDelayed'?'active':''}" 
 		href="${createLinkWithTargetURI(controller: 'listing', action:'preventionsDelayed')}" id="report-2">
-			Preventions Delayed
+			TODO Preventions Delayed
 		</a></li>
 </ul>

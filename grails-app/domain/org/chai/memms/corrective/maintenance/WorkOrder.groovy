@@ -33,6 +33,7 @@ import org.chai.memms.Notification;
 import org.chai.memms.TimeSpend;
 import org.chai.memms.corrective.maintenance.CorrectiveProcess.ProcessType;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
+import org.chai.memms.corrective.maintenance.WorkOrderStatus.WorkOrderStatusChange;
 import org.chai.memms.inventory.Equipment;
 import org.chai.memms.maintenance.MaintenanceOrder;
 import org.chai.memms.corrective.maintenance.WorkOrder;
@@ -172,26 +173,52 @@ public class WorkOrder extends MaintenanceOrder{
 
 	@Transient
 	def getTimeBasedStatus(){
-		if(!status) return null
-		if(status.size() == 0) return null
-		else if(status.size() == 1) status[0]
+		WorkOrderStatus currentState = null
+		if(!status) return currentState
+		else if(status.size() == 0) return currentState
 		else{
-			List<WorkOrderStatus> sortedStatus = status.sort{ it.dateCreated }
-			WorkOrderStatus currentState = sortedStatus[-1]
-			return currentState
+			//first check the date created, if date created is the same, check the id
+			List<WorkOrderStatus> sortedStatus = status.sort{ a,b -> (a.dateCreated <=> b.dateCreated) ?: (a.id <=> b.id) }
+			currentState = sortedStatus[-1]
+			if(currentState != currentStatus) 
+				currentStatus = currentState.status
 		}
+		return currentState
 	}
 	
 	@Transient
 	def getTimeBasedPreviousStatus(){
-		if(!status) return null
-		if(status.size() == 0) return null
-		else if(status.size() == 1) return null
+		WorkOrderStatus previousState = null
+		if(!status) return previousState
+		else if(status.size() == 0) return previousState
+		else if(status.size() == 1) return previousState
 		else{
-			List<WorkOrderStatus> sortedStatus = status.sort{ it.dateCreated }
-			WorkOrderStatus previousState = sortedStatus[-2]
-			return previousState
+			//first check the date created, if date created is the same, check the id
+			List<WorkOrderStatus> sortedStatus = status.sort{ a,b -> (a.dateCreated <=> b.dateCreated) ?: (a.id <=> b.id) }
+			previousState = sortedStatus[-2]
 		}
+		return previousState
+	}
+
+	@Transient
+	WorkOrderStatusChange getTimeBasedStatusChange(List<WorkOrderStatusChange> workOrderStatusChanges){
+		WorkOrderStatusChange workOrderStatusChange = null
+
+		def previousStatus = getTimeBasedPreviousStatus()?.status
+		def currentStatus = getTimeBasedStatus().status
+
+		if(workOrderStatusChanges == null) workOrderStatusChanges = WorkOrderStatusChange.values()
+	 	workOrderStatusChanges.each{ statusChange ->
+ 			
+ 			def previousStatusMap = statusChange.getStatusChange()['previous']
+			def currentStatusMap = statusChange.getStatusChange()['current']
+
+			def previousStatusChange = previousStatusMap.contains(previousStatus) || (previousStatusMap.contains(OrderStatus.NONE) && previousStatus == null)
+			def currentStatusChange = currentStatusMap.contains(currentStatus)
+
+			if(previousStatusChange && currentStatusChange) workOrderStatusChange = statusChange
+	 	}
+	 	return workOrderStatusChange
 	}
 
 	static mapping = {

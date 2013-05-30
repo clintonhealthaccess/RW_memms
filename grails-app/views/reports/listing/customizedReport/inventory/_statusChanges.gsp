@@ -1,7 +1,6 @@
 <%@ page import="org.chai.memms.inventory.EquipmentStatus.EquipmentStatusChange" %>
 <ul>
   <li>
-    %{-- TODO fix checkbox list styles !!! --}%
     <label for="statusChanges"><g:message code="reports.statusChanges"/>:</label>
     <ul class="checkbox-list">
 	    <g:each in="${EquipmentStatusChange.values()}" var="statusEnum">
