@@ -577,8 +577,8 @@ class ListingController extends AbstractController{
 		def reportType = getReportType()
 		def reportSubType = getReportSubType()
 
-		def customizedListingModel = [:]
-		customizedListingModel.putAll params
+		def customizedListingParams = [:]
+		customizedListingParams.putAll params
 		def customizedReportName = params.get('customizedReportName')
 		if(customizedReportName == null || customizedReportName.empty){
 			def customizedReportTimestamp = new Date()
@@ -588,34 +588,72 @@ class ListingController extends AbstractController{
 				customReportType+" "+customReportSubType+" "+customizedReportTimestamp.format('yyyyMMddHHmmss')
 		}
 		def customizedReportSave = params.get('customizedReportSave')
-		customizedListingModel << [
+		customizedListingParams << [
 			customizedReportName:customizedReportName,
 			customizedReportSave:customizedReportSave
 		]
 
-		if (log.isDebugEnabled()) log.debug("listing.customizedListing end, customizedListingModel:"+customizedListingModel)
+		if (log.isDebugEnabled()) log.debug("listing.customizedListing end, customizedListingParams:"+customizedListingParams)
 		switch(reportType){
 			case ReportType.INVENTORY:
-				redirect(action: "customEquipmentListing", params: customizedListingModel)
+				redirect(action: "customEquipmentListing", params: customizedListingParams)
 				break;
 			case ReportType.CORRECTIVE:
-				redirect(action: "customWorkOrderListing", params: customizedListingModel)
+				redirect(action: "customWorkOrderListing", params: customizedListingParams)
 				break;
 			case ReportType.PREVENTIVE:
-				redirect(action: "customPreventiveOrderListing", params: customizedListingModel)
+				redirect(action: "customPreventiveOrderListing", params: customizedListingParams)
 				break;
 			case ReportType.SPAREPARTS:
-				redirect(action: "customSparePartsListing", params: customizedListingModel)
+				redirect(action: "customSparePartsListing", params: customizedListingParams)
+				break;
+			default:
+				break;
+		}
+	}
+
+	def savedCustomizedListing ={
+		if (log.isDebugEnabled()) log.debug("listing.savedCustomizedListing start, params:"+params)
+
+		def reportType = getReportType()
+		def reportSubType = getReportSubType()
+
+		// TODO get the user's saved report id
+
+		def savedCustomizedListingParams = [:]
+		def savedCustomizedListingReport = null
+
+		switch(reportType){
+			case ReportType.INVENTORY:
+				// TODO get the savedCustomizedListingParams for the saved report
+				savedCustomizedListingReport = equipmentListingReportService.getCustomReportOfEquipments(user,savedCustomizedListingParams,null)
+				if (log.isDebugEnabled()) log.debug("listing.savedCustomizedListing # of equipments:"+savedCustomizedListingReport.size())
+				break;
+			case ReportType.CORRECTIVE:
+				savedCustomizedListingReport = workOrderListingReportService.getCustomReportOfWorkOrders(user,savedCustomizedListingParams,null)
+				if (log.isDebugEnabled()) log.debug("llisting.savedCustomizedListing # of workOrders:"+savedCustomizedListingReport.size())
+				break;
+			case ReportType.PREVENTIVE:
+				// TODO
+				break;
+			case ReportType.SPAREPARTS:
+				// TODO
 				break;
 			default:
 				break;
 		}
 
-		render(view: '/reports/reports',
-		model: customizedListingModel <<
-		[
-			template:"/reports/listing/listing"
-		])
+		if(!request.xhr)
+			render(view:"/reports/reports",
+			model: model(savedCustomizedListingReport, "") <<
+			[
+				reportType: reportType,
+				reportSubType: reportSubType,
+				reportTypeOptions: reportTypeOptions,
+				customizedReportName: customizedReportName,
+				template:"/reports/listing/listing"
+			])
+
 	}
 
 	// inventory
@@ -686,6 +724,10 @@ class ListingController extends AbstractController{
 		]
 
 		if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing end, customEquipmentParams:"+customEquipmentParams)
+
+		if(customizedReportSave){
+			// TODO save the report
+		}
 
 		adaptParamsForList()
 		def equipments = equipmentListingReportService.getCustomReportOfEquipments(user,customEquipmentParams,params)
@@ -770,6 +812,10 @@ class ListingController extends AbstractController{
 		]
 
 		if (log.isDebugEnabled()) log.debug("listing.customWorkOrderListing, customWorkOrderParams:"+customWorkOrderParams)
+
+		if(customizedReportSave){
+			// TODO save the report
+		}
 
 		adaptParamsForList()
 		def displayableWorkOrders=[]
@@ -860,6 +906,10 @@ class ListingController extends AbstractController{
 
 		if (log.isDebugEnabled()) log.debug("listing.customPreventiveOrderListing, customPreventiveOrderParams:"+customPreventiveOrderParams)
 
+		if(customizedReportSave){
+			// TODO save the report
+		}
+
 		adaptParamsForList()
 		def preventiveOrders = preventiveOrderListingReportService.getCustomReportOfPreventiveOrders(user,customPreventiveOrderParams,params)
 		if(!request.xhr)
@@ -925,6 +975,10 @@ class ListingController extends AbstractController{
 		]
 
 		if (log.isDebugEnabled()) log.debug("listing.customSparePartsListing, customSparePartsParams:"+customSparePartsParams)
+
+		if(customizedReportSave){
+			// TODO save the report
+		}
 
 		// TODO
 		// adaptParamsForList()
