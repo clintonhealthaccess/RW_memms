@@ -15,7 +15,8 @@ $(document).ready(function(){
       items = scroller.children();
       if(item > 0) {
         scrollRight(item);
-        item--;
+        item -= 5;
+        console.log(item);
       }
     });
 
@@ -23,9 +24,10 @@ $(document).ready(function(){
       e.preventDefault();
       console.log('scrolling right')
       items = scroller.children();
-      if(item < (items.length-1)){
+      if(item < (items.length-6)){
         scrollLeft(item);
-        item++;
+        item += 5;
+        console.log(item);
       }
     });
 
@@ -78,6 +80,31 @@ $(document).ready(function(){
     <li>
       <a href="${createLinkWithTargetURI(controller: 'listing', action:'underMaintenanceEquipments')}" id="report-4">
               <g:message code="default.under.maintenance.label" />
+      </a>
+    </li>
+    <li>
+      <a href="${createLinkWithTargetURI(controller: 'listing', action:'inStockEquipments')}" id="report-5">
+              <g:message code="default.in.stock.label" />
+      </a>
+    </li>
+    <li>
+      <a href="${createLinkWithTargetURI(controller: 'listing', action:'inStockEquipments')}" id="report-5">
+              <g:message code="default.in.stock.label" />
+      </a>
+    </li>
+    <li>
+      <a href="${createLinkWithTargetURI(controller: 'listing', action:'inStockEquipments')}" id="report-5">
+              <g:message code="default.in.stock.label" />
+      </a>
+    </li>
+    <li>
+      <a href="${createLinkWithTargetURI(controller: 'listing', action:'inStockEquipments')}" id="report-5">
+              <g:message code="default.in.stock.label" />
+      </a>
+    </li>
+    <li>
+      <a href="${createLinkWithTargetURI(controller: 'listing', action:'inStockEquipments')}" id="report-5">
+              <g:message code="default.in.stock.label" />
       </a>
     </li>
     <li>
