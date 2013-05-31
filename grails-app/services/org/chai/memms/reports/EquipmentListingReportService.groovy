@@ -46,6 +46,7 @@ import org.chai.memms.util.Utils.ReportSubType
  */
 class EquipmentListingReportService {
 	
+	def equipmentService
 	def userService
 	
 	public def getGeneralReportOfEquipments(User user,Map<String, String> params) {
@@ -257,7 +258,7 @@ class EquipmentListingReportService {
 			if(statusChanges != null && !statusChanges.empty){
 				def statusChangesEquipments = []
 				criteriaEquipments.each { equipment ->
-					def equipmentStatusChange = equipment.getTimeBasedStatusChange(statusChanges)
+					def equipmentStatusChange = equipmentService.getEquipmentTimeBasedStatusChange(equipment,statusChanges)
 					if(equipmentStatusChange != null) statusChangesEquipments.add(equipment)
 				}
 				customEquipments = statusChangesEquipments

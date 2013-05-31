@@ -353,6 +353,7 @@ class ListingController extends AbstractController{
 			step1Params: step1Params
 		])
 	}
+
 	// customized report wizard step1 'remoteFunction'
 	def customizedReportSubType ={
 		if (log.isDebugEnabled())
@@ -399,123 +400,6 @@ class ListingController extends AbstractController{
 		//params from step 2 to pass along to step 4
 		def step3Params = [:]
 		step3Params.putAll params
-		def dataLocations = getDataLocations()
-		step3Params << [dataLocations: dataLocations]
-		switch(reportType){
-			case ReportType.INVENTORY:
-			case ReportType.CORRECTIVE:
-			case ReportType.PREVENTIVE:
-				def departments = getDepartments()
-				def equipmentTypes = getEquipmentTypes()
-				def fromCost = params.get('fromCost')
-				def toCost = params.get('toCost')
-				def costCurrency = params.get('costCurrency')
-				step3Params << [
-					departments: departments,
-					equipmentTypes: equipmentTypes,
-					fromCost: fromCost,
-					toCost: toCost,
-					costCurrency: costCurrency
-				]
-				break;
-			case ReportType.SPAREPARTS:
-				def sparePartTypes = getSparePartTypes()
-				step3Params << [
-					sparePartTypes: sparePartTypes
-				]
-				break;
-			default:
-				break;
-		}
-		switch(reportSubType){
-
-			case ReportSubType.INVENTORY:
-				def fromPeriod = getPeriod('fromAcquisitionPeriod')
-				def toPeriod = getPeriod('toAcquisitionPeriod')
-				def includeNoAcquisitionPeriod = params.get('noAcquisitionPeriod')
-				step3Params << [
-					fromAcquisitionPeriod: fromPeriod,
-					toAcquisitionPeriod: toPeriod
-				]
-				if(reportType == ReportType.INVENTORY){
-					def equipmentStatus = getInventoryStatus()
-					def obsolete = params.get('obsolete')
-					def warranty = params.get('warranty')
-					step3Params << [
-						equipmentStatus: equipmentStatus,
-						obsolete: obsolete,
-						warranty: warranty
-					]
-				}
-				if(reportType == ReportType.SPAREPARTS){
-					def sparePartStatus = getSparePartStatus()
-					step3Params << [sparePartStatus: sparePartStatus]
-				}
-				break;
-
-			case ReportSubType.WORKORDERS:
-				def fromPeriod = getPeriod('fromWorkOrderPeriod')
-				def toPeriod = getPeriod('toWorkOrderPeriod')
-				step3Params << [
-					fromWorkOrderPeriod: fromPeriod,
-					toWorkOrderPeriod: toPeriod
-				]
-				if(reportType == ReportType.CORRECTIVE){
-					def workOrderStatus = getCorrectiveStatus()
-					def warranty = params.get('warranty')
-					step3Params << [
-						workOrderStatus: workOrderStatus,
-						warranty: warranty
-					]
-				}
-				if(reportType == ReportType.PREVENTIVE) {
-					def workOrderStatus = getPreventiveStatus()
-					def whoIsResponsible = params.list('whoIsResponsible')
-					step3Params << [
-						workOrderStatus: workOrderStatus,
-						whoIsResponsible: whoIsResponsible
-					]
-				}
-				break;
-
-			case ReportSubType.STATUSCHANGES:
-				def fromPeriod = getPeriod('fromStatusChangesPeriod')
-				def toPeriod = getPeriod('toStatusChangesPeriod')
-				step3Params << [
-					fromStatusChangesPeriod: fromPeriod,
-					toStatusChangesPeriod: toPeriod
-				]
-				if(reportType == ReportType.INVENTORY){
-					def statusChanges = getInventoryStatusChanges()
-					step3Params << [
-						statusChanges:statusChanges
-					]
-				}
-				if(reportType == ReportType.CORRECTIVE){
-					def statusChanges = getCorrectiveStatusChanges()
-					def warranty = params.get('warranty')
-					step3Params << [
-						statusChanges: statusChanges,
-						warranty: warranty
-					]
-				}
-				break;
-
-			case ReportSubType.STOCKOUT:
-				def stockOut = params.get('stockOut')
-				def stockOutMonths = params.get('stockOutMonths')
-				step3Params << [
-					stockOut: stockOut,
-					stockOutMonths: stockOutMonths
-				]
-				break;
-
-			case ReportSubType.USERATE:
-				break;
-
-			default:
-				break;
-		}
 
 		//params to load step 3
 		def step3Model = [
@@ -536,25 +420,7 @@ class ListingController extends AbstractController{
 
 		//params from step 3 to pass along to customized listing
 		def step4Params = [:]
-		step4Params << params
-		def reportTypeOptions = new HashSet<String>()
-		switch(reportType){
-			case ReportType.INVENTORY:
-				reportTypeOptions = getReportTypeOptions('inventoryOptions')
-				break;
-			case ReportType.CORRECTIVE:
-				reportTypeOptions = getReportTypeOptions('correctiveOptions')
-				break;
-			case ReportType.PREVENTIVE:
-				reportTypeOptions = getReportTypeOptions('preventiveOptions')
-				break;
-			case ReportType.SPAREPARTS:
-				reportTypeOptions = getReportTypeOptions('sparePartsOptions')
-				break;
-			default:
-				break;
-		}
-		step4Params << [reportTypeOptions:reportTypeOptions]
+		step4Params.putAll params
 
 		//params to load step 4
 		def step4Model = [
@@ -579,6 +445,7 @@ class ListingController extends AbstractController{
 
 		def customizedListingParams = [:]
 		customizedListingParams.putAll params
+
 		def customizedReportName = params.get('customizedReportName')
 		if(customizedReportName == null || customizedReportName.empty){
 			def customizedReportTimestamp = new Date()
@@ -755,6 +622,7 @@ class ListingController extends AbstractController{
 		def reportSubType = getReportSubType()
 
 		def dataLocations = getDataLocations()
+		def departments = getDepartments()
 		def equipmentTypes = getEquipmentTypes()
 
 		def fromCost = null
@@ -863,6 +731,7 @@ class ListingController extends AbstractController{
 		def reportSubType = getReportSubType()
 
 		def dataLocations = getDataLocations()
+		def departments = getDepartments()
 		def equipmentTypes = getEquipmentTypes()
 
 		def fromCost = null

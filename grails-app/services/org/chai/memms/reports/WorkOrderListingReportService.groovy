@@ -20,7 +20,9 @@ import org.chai.memms.util.Utils.ReportSubType
  *
  */
 class WorkOrderListingReportService {
-	
+
+	def workOrderService
+
 	def getAllWorkOrders(User user , Map<String, String> params){
 		
 		def criteria = WorkOrder.createCriteria();
@@ -53,6 +55,7 @@ class WorkOrderListingReportService {
 			eq ("currentStatus",OrderStatus.OPENATMMC)
 		}
 	}
+
 	def getWorkOrdersOfLastMonth(User user,Map<String, String> params) {
 
 		def lastMonth= (new Date())-30
@@ -162,7 +165,7 @@ class WorkOrderListingReportService {
 			if(statusChanges != null && !statusChanges.empty){
 				def statusChangesWorkOrders = []
 				criteriaWorkOrders.each { workOrder ->
-					def workOrderStatusChange = workOrder.getTimeBasedStatusChange(statusChanges)
+					def workOrderStatusChange = workOrderService.getWorkOrderTimeBasedStatusChange(workOrder, statusChanges)
 					if(workOrderStatusChange != null) statusChangesWorkOrders.add(workOrder)
 				}
 				customWorkOrders = statusChangesWorkOrders
