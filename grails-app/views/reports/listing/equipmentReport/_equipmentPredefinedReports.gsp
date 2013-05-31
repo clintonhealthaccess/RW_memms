@@ -11,23 +11,19 @@ $(document).ready(function(){
 
     $(document).on('click', '.v-tabs-subnav-scroll-left', function(e){
       e.preventDefault();
-      console.log('scrolling left')
       items = scroller.children();
       if(item > 0) {
         scrollRight(item);
         item -= 5;
-        console.log(item);
       }
     });
 
     $(document).on('click', '.v-tabs-subnav-scroll-right', function(e){
       e.preventDefault();
-      console.log('scrolling right')
       items = scroller.children();
       if(item < (items.length-6)){
         scrollLeft(item);
         item += 5;
-        console.log(item);
       }
     });
 
