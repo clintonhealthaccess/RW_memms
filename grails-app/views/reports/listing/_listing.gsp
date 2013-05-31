@@ -26,7 +26,7 @@
           <!-- equipment predefined reports template -->
           <g:render template="/reports/listing/equipmentReport/equipmentPredefinedReports" />
           <!-- TODO equipment saved reports template -->
-          <div id='report-1' class="js-shown-report">
+          <div id='report-1' class="js-shown-report shown-report">
             <!-- equipment indicator summary template -->
             <g:render template ="/reports/listing/equipmentReport/equipmentIndicatorSummary" />
             <!-- listing filter summary template -->
@@ -48,7 +48,7 @@
         <!-- work order predefined reports template -->
           <g:render template="/reports/listing/workOrderReport/workOrderPredefinedReports" />
           <!-- TODO work order saved reports template -->
-          <div id='report-1' class="js-shown-report">
+          <div id='report-1' class="js-shown-report shown-report">
             <!-- work order indicator summary template -->
             <g:render template ="/reports/listing/workOrderReport/workOrderIndicatorSummary" />
             <!-- listing filter summary template -->
@@ -70,7 +70,7 @@
         <!-- preventive order predefined reports template -->
           <g:render template="/reports/listing/preventiveOrderReport/preventiveOrderPredefinedReports" />
           <!-- TODO preventive order saved reports template -->
-          <div id='report-1' class="js-shown-report">
+          <div id='report-1' class="js-shown-report shown-report">
             <!-- preventive order indicator summary template -->
             <g:render template ="/reports/listing/preventiveOrderReport/preventiveOrderIndicatorSummary" />
             <!-- listing filter summary template -->
@@ -92,7 +92,7 @@
         <!-- spare parts predefined reports template -->
           <g:render template="/reports/listing/sparePartReport/sparePartPredefinedReports" />
           <!-- TODO spare parts saved reports template -->
-          <div id='report-1' class="js-shown-report">
+          <div id='report-1' class="js-shown-report shown-report">
             <!-- spare parts indicator summary template -->
             <g:render template ="/reports/listing/sparePartReport/sparePartIndicatorSummary" />
             <!-- listing filter summary template -->

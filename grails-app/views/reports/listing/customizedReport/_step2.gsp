@@ -44,6 +44,13 @@
               </g:each>
             </select>
           </li>
+          <li class="modular">
+            <label>label:</label>
+            <input type="checkbox" />
+            <span class="word left push">within</span>
+            <input type="text" />
+            <span class="word left push">months</span>
+          </li>
         </g:if>
         <g:if test="${[ReportType.SPAREPARTS].contains(reportType)}">
           <li>

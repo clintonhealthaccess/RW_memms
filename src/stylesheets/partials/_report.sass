@@ -118,27 +118,29 @@
       position: relative
 
 .v-tabs-subnav-wrapper
-  border-bottom: 1px solid $primary
   float:left
   height: 29px
-  overflow: hidden
-  padding-right: 23px
-  width: 820px
+  width: 100%
+  &.slide-wrapper
+    margin-left: 200px
+    overflow: hidden
+    padding-right: 23px
+    width: 720px
 
 .v-tabs-subnav
   height: 29px
   padding-left: 5px
   +pie-clearfix
   position: relative
-  margin-left: 30px
   li
     display: inline
     float: left
   a
+    bottom: -1px
     color: #bbb
     display: block
-    margin-bottom: -1px
     padding: 2px 14px 15px
+    position: relative
     text-decoration: none
     +transition(color .2s)
     &.active
@@ -153,6 +155,9 @@
     a
       font-size: 14px
       font-weight: bold
+  &.slide
+    margin-left: 0
+    padding-left: 0
 
 .v-tabs-subnav-scroll-right, .v-tabs-subnav-scroll-left
   background: white
@@ -164,17 +169,19 @@
   text-indent: -9999em
 
 .v-tabs-subnav-scroll-right
-  right: -20px
+  right: 13px
   background: url('../images/arrow-right.png') no-repeat
 
 .v-tabs-subnav-scroll-left
-  left: -20px
+  left: 175px
   background: url('../images/arrow-left.png') no-repeat
+
+.shown-report
+  border-top: 1px solid $primary
 
 .v-tabs-chosen-report
   background: white
-  border-bottom: 1px solid #258cd5
-  color: #258cd5
+  color: $primary
   float: left
   padding-left: 10px
 
@@ -335,8 +342,6 @@
     padding: 0
     &:first-child
       border-top: 0
-    &:last-child
-      //border-bottom: 1px solid rgba(0, 0, 0, 0.1)
     &:hover, &:focus
       background: rgba(0, 0, 0, 0.03)
   .v-tabs-name
@@ -425,7 +430,7 @@ div#comparison, div#geo_trend, div#info_facility, div#preventive, div#equipment,
   .dash
     display: inline-block
     float: left
-    margin: 6px 10px
+    margin: 4px 8px 0
     color: #666
 
   &.step-4 input[type=text]
@@ -497,7 +502,6 @@ div#comparison, div#geo_trend, div#info_facility, div#preventive, div#equipment,
           font-size: 12px
           height: 27px
           margin-left: 20px
-          margin-top: 2px
           padding: 4px 7px
           width: 100px
 
@@ -508,8 +512,8 @@ div#comparison, div#geo_trend, div#info_facility, div#preventive, div#equipment,
     color: $primary
     display: inline-block
     float: left
-    font-size: 12px
-    height: 12px
+    font-size: 11px
+    height: 11px
     padding: 7px
     width: 145px
     +
@@ -545,13 +549,16 @@ div#comparison, div#geo_trend, div#info_facility, div#preventive, div#equipment,
     margin-top: 6px
     margin-left: 158px
     width: auto
-    + span
-      color: #666
-      margin-left: 3px
-      display: inline-block
-      font-size: 11px
-      margin-left: 3px
-      margin-top: 7px
+  input[type=checkbox] + span, .word
+    color: #666
+    margin-left: 3px
+    display: inline-block
+    font-size: 11px
+    margin-left: 3px
+    margin-top: 7px
+    &.push
+      margin-left: 10px
+      margin-right: 10px
   .ui-widget-next
     color: #fff
     margin-top: 15px
@@ -559,7 +566,7 @@ div#comparison, div#geo_trend, div#info_facility, div#preventive, div#equipment,
     margin-top: 18px
   .ui-dialog-content
     background: none
-    padding: 0 30px 30px
+    padding: 0 20px 20px !important
   .twocol-checkboxes
     +pie-clearfix
     li

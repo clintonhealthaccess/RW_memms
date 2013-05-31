@@ -35,7 +35,7 @@ $(document).ready(function(){
         }
       });
       scrolledWidth += scrollWidth;
-      scroller.animate({'left' : (0 - scrolledWidth - 30) + 'px'}, 'linear');
+      scroller.animate({'left' : (0 - scrolledWidth) + 'px'}, 'linear');
     }
 
     function scrollRight(item){
@@ -46,7 +46,7 @@ $(document).ready(function(){
         }
       });
       scrolledWidth -= scrollWidth;
-      scroller.animate({'left' : (0 - scrolledWidth - 30) + 'px'}, 'linear');
+      scroller.animate({'left' : (0 - scrolledWidth) + 'px'}, 'linear');
     }
 });
 </script>
@@ -56,7 +56,7 @@ $(document).ready(function(){
 </div>
 <a class='v-tabs-subnav-scroll-left' href='#' id='js-scroll-left'><</a>
 <a class='v-tabs-subnav-scroll-right' href='#' id='js-scroll-right'>></a>
-<div class='v-tabs-subnav-wrapper' id='#js-slider-wrapper'>
+<div class='v-tabs-subnav-wrapper slide-wrapper' id='#js-slider-wrapper'>
   <ul class="v-tabs-subnav slide">
     <li>
       <a href="${createLinkWithTargetURI(controller: 'listing', action:'generalEquipmentsListing')}" id="report-1">
