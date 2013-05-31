@@ -37,6 +37,7 @@ import org.chai.location.DataLocationType
 import org.chai.location.Location
 import org.chai.location.LocationLevel
 import org.chai.memms.AbstractController
+import org.chai.memms.AbstractEntityController
 import org.chai.memms.corrective.maintenance.WorkOrder
 import org.chai.memms.corrective.maintenance.WorkOrderStatus
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus
@@ -48,14 +49,20 @@ import org.chai.memms.inventory.EquipmentStatus.Status
 import org.chai.memms.inventory.EquipmentStatus.EquipmentStatusChange
 import org.chai.memms.inventory.EquipmentType
 import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatus
+//import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatusChange
 import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventionResponsible
+import org.chai.memms.report.listing.CorrectiveMaintenanceReport
+import org.chai.memms.report.listing.EquipmentReport
+import org.chai.memms.report.listing.PreventiveMaintenanceReport
 import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart
+//import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePartChange
 import org.chai.memms.spare.part.SparePartType
 import org.chai.memms.security.User
 import org.chai.memms.security.User.UserType
 import org.chai.memms.util.Utils
 import org.chai.memms.util.Utils.ReportType
 import org.chai.memms.util.Utils.ReportSubType
+import org.joda.time.DateTime
 
 /**
  * @author Jean Kahigiso M.
@@ -66,7 +73,7 @@ class ListingController extends AbstractController{
 	def equipmentListingReportService
 	def workOrderListingReportService
 	def preventiveOrderListingReportService
-	def grailsApplication
+	//def grailsApplication
 	def userService
 
 	def getEntityClass() {
@@ -188,8 +195,12 @@ class ListingController extends AbstractController{
 		for(Equipment equipment: equipments){
 			if (equipment.warranty.startDate!=null && equipment.warrantyPeriod.numberOfMonths!=null && equipment.warrantyPeriod.months != null) {
 				//TODO we have to convert numberOfMonths in either months or equivalent days because here we are automatically using as days
+				DateTime warrantyStatDateTime = new DateTime(equipment.warranty.startDate)
+				def warrantyExpirationDateTime = warrantyStatDateTime.plusMonths(equipment.warrantyPeriod.numberOfMonths)
+				warrantyExpirationDate = warrantyExpirationDateTime.toDate()
+				
 				warrantyExpirationDate= (equipment.warranty.startDate).plus(equipment.warrantyPeriod.numberOfMonths)
-				if (log.isDebugEnabled()) log.debug("CALCURATED DATE "+warrantyExpirationDate +"START DATE "+equipment.warranty.startDate +"WARRANTY PERIOD "+equipment.warrantyPeriod.months)
+				if (log.isDebugEnabled()) log.debug("WARRANTY EXPIRATION DATE "+warrantyExpirationDate +"WARRANTY START DATE "+equipment.warranty.startDate +"WARRANTY NUMBER OF MONTHS "+equipment.warrantyPeriod.numberOfMonths)
 				if (warrantyExpirationDate > new Date())
 					displayableEquipments.add(equipment)
 			}
@@ -375,7 +386,7 @@ class ListingController extends AbstractController{
 		def reportType = getReportType()
 		def reportSubType = getReportSubType()
 
-		//params from step 1 to pass along to step 3, or to pass back to step 1
+		//params from step 1 to pass along to step 3
 		def step2Params = [:]
 		step2Params.putAll params
 
@@ -449,10 +460,10 @@ class ListingController extends AbstractController{
 		def customizedReportName = params.get('customizedReportName')
 		if(customizedReportName == null || customizedReportName.empty){
 			def customizedReportTimestamp = new Date()
-			def customReportType = message(code:'reports.type.'+reportType?.reportType)
-			def customReportSubType = message(code:'reports.subType.'+reportSubType?.reportSubType)
+			def reportTypeTimestamp = message(code:'reports.type.'+reportType?.reportType)
+			def reportSubTypeTimestamp = message(code:'reports.subType.'+reportSubType?.reportSubType)
 			customizedReportName = 
-				customReportType+" "+customReportSubType+" "+customizedReportTimestamp.format('yyyyMMddHHmmss')
+				"Custom Report "+reportTypeTimestamp+" "+reportSubTypeTimestamp+" "+customizedReportTimestamp.format('yyyyMMddHHmmss')
 		}
 		def customizedReportSave = params.get('customizedReportSave')
 		customizedListingParams << [
@@ -541,6 +552,7 @@ class ListingController extends AbstractController{
 		if(params.get('toCost') != null && !params.get('toCost').empty)
 			toCost = Double.parseDouble(params.get('toCost'))
 		def costCurrency = params.get('costCurrency')
+		def equipmentReport=new EquipmentReport()
 
 		def customEquipmentParams = [
 			reportType: reportType,
@@ -593,7 +605,7 @@ class ListingController extends AbstractController{
 		if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing end, customEquipmentParams:"+customEquipmentParams)
 
 		if(customizedReportSave){
-			// TODO save the report
+			equipmentListingReportService.saveEquipmentReportParams(user,equipmentReport, customEquipmentParams, params)
 		}
 
 		adaptParamsForList()
@@ -634,6 +646,7 @@ class ListingController extends AbstractController{
 		def costCurrency = params.get('costCurrency')
 
 		def warranty = params.get('warranty')
+		def correctiveMaintenanceReport = new CorrectiveMaintenanceReport()
 
 		def customWorkOrderParams = [
 			reportType: reportType,
@@ -682,7 +695,7 @@ class ListingController extends AbstractController{
 		if (log.isDebugEnabled()) log.debug("listing.customWorkOrderListing, customWorkOrderParams:"+customWorkOrderParams)
 
 		if(customizedReportSave){
-			// TODO save the report
+			workOrderListingReportService.saveWorkOrderReportParams(user, correctiveMaintenanceReport, customWorkOrderParams, params)
 		}
 
 		adaptParamsForList()
@@ -741,6 +754,8 @@ class ListingController extends AbstractController{
 		if(params.get('toCost') != null && !params.get('toCost').empty)
 			toCost = Double.parseDouble(params.get('toCost'))
 		def costCurrency = params.get('costCurrency')
+		
+		def preventiveMaintenanceReport= new PreventiveMaintenanceReport()
 
 		def customPreventiveOrderParams = [
 			dataLocations: dataLocations,
@@ -776,7 +791,7 @@ class ListingController extends AbstractController{
 		if (log.isDebugEnabled()) log.debug("listing.customPreventiveOrderListing, customPreventiveOrderParams:"+customPreventiveOrderParams)
 
 		if(customizedReportSave){
-			// TODO save the report
+			preventiveOrderListingReportService.savePreventiveOrderReportParams(user, preventiveMaintenanceReport, customPreventiveOrderParams, params)
 		}
 
 		adaptParamsForList()
@@ -1087,8 +1102,8 @@ class ListingController extends AbstractController{
 		}
 		return reportTypeOptions
 	}
-
+	
 	// customized report wizard params end
-
+	
 	// customized report wizard end
 }
