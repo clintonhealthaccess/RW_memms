@@ -13,10 +13,12 @@ class EquipmentReport extends EquipmentGeneralReportParameters {
 
 	String obsolete
 	Status equipmentStatus
+	String underWarranty
 
 	static constraints = {
 		obsolete nullable: true, blank: true
 		equipmentStatus nullable: true
+		underWarranty nullable: true, blank: true
 	}
 
 	static mapping = {
