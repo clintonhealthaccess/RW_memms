@@ -19,6 +19,8 @@ import org.chai.location.DataLocation;
 class EquipmentGeneralReportParameters {
 
 	String reportName
+	String reportType
+	String reportSubType
 	Date dateCreated
 	Double lowerLimitCost
 	Double upperLimitCost

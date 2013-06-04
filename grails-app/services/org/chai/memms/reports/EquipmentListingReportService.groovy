@@ -300,12 +300,12 @@ class EquipmentListingReportService {
 		def obsolete = customEquipmentParams.get('obsolete')
 		def warranty = customEquipmentParams.get('warranty')
 		
-		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON EQUIPMENT CUSTOM REPORT: LOWER COST :"+lowerLimitCost+" UPPER COST :"+upperLimitCost)
+		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON EQUIPMENT CUSTOM REPORT: EQUIPMENT STATUS :"+equipmentStatus)
 		
-		//equipmentReport.underWarranty=warranty
-		equipmentReport.obsolete=obsolete
-		//equipmentReport.equipmentStatus=equipmentStatus
-		//equipmentReport.noAcquisitionPeriod=noAcquisitionPeriod
+		equipmentReport.underWarranty=warranty=="on"?true:false
+		equipmentReport.obsolete=obsolete=="on"?true:false
+		equipmentReport.equipmentStatus=equipmentStatus
+		equipmentReport.noAcquisitionPeriod=noAcquisitionPeriod=="on"?true:false
 		equipmentReport.toDate=toAcquisitionPeriod
 		equipmentReport.fromDate=fromAcquisitionPeriod
 		equipmentReport.currency=currency
@@ -314,8 +314,8 @@ class EquipmentListingReportService {
 		equipmentReport.equipmentTypes=equipmentTypes
 		equipmentReport.departments=departments
 		equipmentReport.dataLocations=dataLocations
-		//equipmentReport.reportSubType=reportSubType
-		//equipmentReport.reportType=reportType
+		equipmentReport.reportSubType=reportSubType
+		equipmentReport.reportType=reportType
 		equipmentReport.reportName=reportName
 		
 		equipmentReport.save(failOnError:true)

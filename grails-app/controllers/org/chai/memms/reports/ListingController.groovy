@@ -759,6 +759,8 @@ class ListingController extends AbstractController{
 		def preventiveMaintenanceReport= new PreventiveMaintenanceReport()
 
 		def customPreventiveOrderParams = [
+			reportType: reportType,
+			reportSubType: reportSubType,
 			dataLocations: dataLocations,
 			departments: departments,
 			equipmentTypes: equipmentTypes,
