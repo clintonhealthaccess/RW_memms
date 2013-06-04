@@ -90,6 +90,8 @@ public class SparePart {
 	Date purchaseDate
 	Date dateCreated
 	Date lastUpdated
+	Date acquisitionDate
+	Date deliveryDate
 
 	Double purchaseCost
 	Integer initialQuantity
@@ -121,7 +123,7 @@ public class SparePart {
 			if(obj.status.equals(SparePartStatus.PENDINGORDER)) return val==0
 		}
 
-		purchaseDate nullable: true, validator:{it <= new Date()}
+		purchaseDate nullable: true, validator:{if(it!=null) return it <= new Date()}
 
 		currency  nullable: true, blank: true, validator:{ val, obj ->
 			if(obj.purchaseCost != null) return (val != null && val in ["RWF","USD","EUR"])
@@ -145,6 +147,9 @@ public class SparePart {
 			if (val != null) return (obj.lastUpdated != null)
 		}	
 		supplier nullable: true
+
+		acquisitionDate nullable: true
+		deliveryDate nullable: true
 	}
 
 	def getUsedQuantity () {
