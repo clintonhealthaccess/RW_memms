@@ -121,8 +121,7 @@ class PreventiveOrderListingReportService {
 		
 		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON PREVENTIVE MAINTENANCE CUSTOM REPORT: LOWER COST :"+lowerLimitCost+" UPPER COST :"+upperLimitCost)
 		
-		//preventiveMaintenanceReport.underWarranty=warranty
-		//preventiveMaintenanceReport.workOrderStatus=workOrderStatus
+		preventiveMaintenanceReport.preventiveOrderStatus=workOrderStatus
 		preventiveMaintenanceReport.toDate=toWorkOrderPeriod
 		preventiveMaintenanceReport.fromDate=fromWorkOrderPeriod
 		preventiveMaintenanceReport.currency=currency
@@ -131,8 +130,8 @@ class PreventiveOrderListingReportService {
 		preventiveMaintenanceReport.equipmentTypes=equipmentTypes
 		preventiveMaintenanceReport.departments=departments
 		preventiveMaintenanceReport.dataLocations=dataLocations
-		//preventiveMaintenanceReport.reportSubType=reportSubType
-		//preventiveMaintenanceReport.reportType=reportType
+		preventiveMaintenanceReport.reportSubType=reportSubType
+		preventiveMaintenanceReport.reportType=reportType
 		preventiveMaintenanceReport.reportName=reportName
 		
 		preventiveMaintenanceReport.save(failOnError:true)
