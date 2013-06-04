@@ -42,6 +42,7 @@ import org.chai.memms.util.Utils.ReportType;
 import org.chai.memms.util.Utils.ReportSubType;
 import org.chai.memms.util.Utils;
 import org.joda.time.DateTime;
+import org.chai.memms.Warranty;
 
 /**
  * @author Aphrodice Rwagaju
@@ -65,7 +66,7 @@ class EquipmentListingReportService {
 
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(dataLocations)
-				inList('dataLocation',dataLocations)
+				inList("dataLocation",dataLocations)
 		}
 	}
 
@@ -82,7 +83,7 @@ class EquipmentListingReportService {
 
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(dataLocations)
-				inList('dataLocation',dataLocations)
+				inList("dataLocation",dataLocations)
 			eq ("currentStatus",Status.DISPOSED)
 		}
 	}
@@ -100,7 +101,7 @@ class EquipmentListingReportService {
 
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(dataLocations)
-				inList('dataLocation',dataLocations)
+				inList("dataLocation",dataLocations)
 			eq ("obsolete", (obsolete.equals('true'))?true:false)
 		}
 	}
@@ -117,7 +118,7 @@ class EquipmentListingReportService {
 
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(dataLocations)
-				inList('dataLocation',dataLocations)
+				inList("dataLocation",dataLocations)
 			eq ("currentStatus",Status.UNDERMAINTENANCE)
 		}
 	}
@@ -134,7 +135,7 @@ class EquipmentListingReportService {
 
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(dataLocations)
-				inList('dataLocation',dataLocations)
+				inList("dataLocation",dataLocations)
 			eq ("currentStatus",Status.INSTOCK)
 		}
 	}
@@ -152,7 +153,7 @@ class EquipmentListingReportService {
 
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(dataLocations)
-				inList('dataLocation',dataLocations)
+				inList("dataLocation",dataLocations)
 		}
 	}
 
@@ -184,9 +185,8 @@ class EquipmentListingReportService {
 
 			criteriaEquipments = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 				
-				if(dataLocations != null)
-					inList('dataLocation',dataLocations)
-				
+				if(dataLocations != null && dataLocations.size()>0)
+					inList("dataLocation",dataLocations)
 				if(equipmentTypes != null && equipmentTypes.size() > 0)
 					inList ("type", equipmentTypes)
 				and{
@@ -197,10 +197,10 @@ class EquipmentListingReportService {
 					if(upperLimitCost!=null)
 						lt ("purchaseCost", upperLimitCost)
 					if(currency !=null)
-					if(fromAcquisitionPeriod != null)
+					/*if(fromAcquisitionPeriod != null)
 						gt ("purchaseDate", fromAcquisitionPeriod)
 					if(toAcquisitionPeriod != null)
-						lt ("purchaseDate", toAcquisitionPeriod)	
+						lt ("purchaseDate", toAcquisitionPeriod)	*/
 						//TODO
 					/*if(noAcquisitionPeriod != null && noAcquisitionPeriod)
 						eq ("purchaseDate", null)
@@ -219,9 +219,9 @@ class EquipmentListingReportService {
 				def underWarrantyEquipments = []
 				
 				criteriaEquipments.each{ equipment ->
-					if (equipment.warranty.startDate!=null && equipment.warrantyPeriod.numberOfMonths!=null && equipment.warrantyPeriod.months != null) {
+					if (equipment.warranty?.startDate!=null && equipment.warrantyPeriod.numberOfMonths!=null && equipment.warrantyPeriod.months != null) {
 						
-						DateTime warrantyStatDateTime = new DateTime(equipment.warranty.startDate)
+						DateTime warrantyStatDateTime = new DateTime(equipment.warranty?.startDate)
 						def warrantyExpirationDateTime = warrantyStatDateTime.plusMonths(equipment.warrantyPeriod.numberOfMonths)
 						def warrantyExpirationDate = warrantyExpirationDateTime.toDate()
 						if (log.isDebugEnabled())
@@ -241,7 +241,7 @@ class EquipmentListingReportService {
 
 			criteriaEquipments = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 				if(dataLocations)
-					inList('dataLocation',dataLocations)
+					inList("dataLocation",dataLocations)
 				if(departments != null)
 					inList ("department", departments)
 				if(equipmentTypes != null)

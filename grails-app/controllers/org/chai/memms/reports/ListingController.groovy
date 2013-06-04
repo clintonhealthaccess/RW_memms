@@ -30,39 +30,40 @@ package org.chai.memms.reports
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.lang.math.NumberUtils
-import org.chai.location.CalculationLocation
-import org.chai.location.DataLocation
-import org.chai.location.DataLocationType
-import org.chai.location.Location
-import org.chai.location.LocationLevel
-import org.chai.memms.AbstractController
-import org.chai.memms.AbstractEntityController
-import org.chai.memms.corrective.maintenance.WorkOrder
-import org.chai.memms.corrective.maintenance.WorkOrderStatus
-import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus
-import org.chai.memms.corrective.maintenance.WorkOrderStatus.WorkOrderStatusChange
-import org.chai.memms.inventory.Department
-import org.chai.memms.inventory.Equipment
-import org.chai.memms.inventory.EquipmentStatus
-import org.chai.memms.inventory.EquipmentStatus.Status
-import org.chai.memms.inventory.EquipmentStatus.EquipmentStatusChange
-import org.chai.memms.inventory.EquipmentType
-import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatus
-//import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatusChange
-import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventionResponsible
-import org.chai.memms.report.listing.CorrectiveMaintenanceReport
-import org.chai.memms.report.listing.EquipmentReport
-import org.chai.memms.report.listing.PreventiveMaintenanceReport
-import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart
-//import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePartChange
-import org.chai.memms.spare.part.SparePartType
-import org.chai.memms.security.User
-import org.chai.memms.security.User.UserType
-import org.chai.memms.util.Utils
-import org.chai.memms.util.Utils.ReportType
-import org.chai.memms.util.Utils.ReportSubType
-import org.joda.time.DateTime
+import org.apache.commons.lang.math.NumberUtils;
+import org.chai.location.CalculationLocation;
+import org.chai.location.DataLocation;
+import org.chai.location.DataLocationType;
+import org.chai.location.Location;
+import org.chai.location.LocationLevel;
+import org.chai.memms.AbstractController;
+import org.chai.memms.AbstractEntityController;
+import org.chai.memms.corrective.maintenance.WorkOrder;
+import org.chai.memms.corrective.maintenance.WorkOrderStatus;
+import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
+import org.chai.memms.corrective.maintenance.WorkOrderStatus.WorkOrderStatusChange;
+import org.chai.memms.inventory.Department;
+import org.chai.memms.inventory.Equipment;
+import org.chai.memms.inventory.EquipmentStatus;
+import org.chai.memms.inventory.EquipmentStatus.Status;
+import org.chai.memms.inventory.EquipmentStatus.EquipmentStatusChange;
+import org.chai.memms.inventory.EquipmentType;
+import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatus;
+//import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatusChange;
+import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventionResponsible;
+import org.chai.memms.report.listing.CorrectiveMaintenanceReport;
+import org.chai.memms.report.listing.EquipmentReport;
+import org.chai.memms.report.listing.PreventiveMaintenanceReport;
+import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
+//import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePartChange;
+import org.chai.memms.spare.part.SparePartType;
+import org.chai.memms.security.User;
+import org.chai.memms.security.User.UserType;
+import org.chai.memms.util.Utils;
+import org.chai.memms.util.Utils.ReportType;
+import org.chai.memms.util.Utils.ReportSubType;
+import org.joda.time.DateTime;
+import org.chai.memms.Warranty;
 
 /**
  * @author Jean Kahigiso M.
@@ -138,7 +139,7 @@ class ListingController extends AbstractController{
 			[
 				reportType: ReportType.INVENTORY,
 				reportSubType: ReportSubType.INVENTORY,
-				template:"/reports/listing/listing",
+				template:"/reports/listing/listing"
 			])
 	}
 
@@ -153,7 +154,7 @@ class ListingController extends AbstractController{
 			[
 				reportType: ReportType.INVENTORY,
 				reportSubType: ReportSubType.INVENTORY,
-				template:"/reports/listing/listing",
+				template:"/reports/listing/listing"
 			])
 	}
 
@@ -193,14 +194,14 @@ class ListingController extends AbstractController{
 		def warrantyExpirationDate
 		def equipments = equipmentListingReportService.getUnderWarrantyEquipments(user,params)
 		for(Equipment equipment: equipments){
-			if (equipment.warranty.startDate!=null && equipment.warrantyPeriod.numberOfMonths!=null && equipment.warrantyPeriod.months != null) {
+			if (equipment.warranty?.startDate!=null && equipment.warrantyPeriod.numberOfMonths!=null && equipment.warrantyPeriod.months != null) {
 				//TODO we have to convert numberOfMonths in either months or equivalent days because here we are automatically using as days
-				DateTime warrantyStatDateTime = new DateTime(equipment.warranty.startDate)
+				DateTime warrantyStatDateTime = new DateTime(equipment.warranty?.startDate)
 				def warrantyExpirationDateTime = warrantyStatDateTime.plusMonths(equipment.warrantyPeriod.numberOfMonths)
 				warrantyExpirationDate = warrantyExpirationDateTime.toDate()
 				
-				warrantyExpirationDate= (equipment.warranty.startDate).plus(equipment.warrantyPeriod.numberOfMonths)
-				if (log.isDebugEnabled()) log.debug("WARRANTY EXPIRATION DATE "+warrantyExpirationDate +"WARRANTY START DATE "+equipment.warranty.startDate +"WARRANTY NUMBER OF MONTHS "+equipment.warrantyPeriod.numberOfMonths)
+				warrantyExpirationDate= (equipment.warranty?.startDate).plus(equipment.warrantyPeriod.numberOfMonths)
+				if (log.isDebugEnabled()) log.debug("WARRANTY EXPIRATION DATE "+warrantyExpirationDate +"WARRANTY START DATE "+equipment.warranty?.startDate +"WARRANTY NUMBER OF MONTHS "+equipment.warrantyPeriod.numberOfMonths)
 				if (warrantyExpirationDate > new Date())
 					displayableEquipments.add(equipment)
 			}
@@ -228,7 +229,7 @@ class ListingController extends AbstractController{
 			[
 				reportType: ReportType.CORRECTIVE,
 				reportSubType: ReportSubType.WORKORDERS,
-				template:"/reports/listing/listing",
+				template:"/reports/listing/listing"
 			])
 	}
 
@@ -241,7 +242,7 @@ class ListingController extends AbstractController{
 			[
 				reportType: ReportType.CORRECTIVE,
 				reportSubType: ReportSubType.WORKORDERS,
-				template:"/reports/listing/listing",
+				template:"/reports/listing/listing"
 			])
 	}
 
@@ -254,7 +255,7 @@ class ListingController extends AbstractController{
 			[
 				reportType: ReportType.CORRECTIVE,
 				reportSubType: ReportSubType.WORKORDERS,
-				template:"/reports/listing/listing",
+				template:"/reports/listing/listing"
 			])
 	}
 
@@ -269,7 +270,7 @@ class ListingController extends AbstractController{
 			[
 				reportType: ReportType.PREVENTIVE,
 				reportSubType: ReportSubType.WORKORDERS,
-				template:"/reports/listing/listing",
+				template:"/reports/listing/listing"
 			])
 	}
 
@@ -282,7 +283,7 @@ class ListingController extends AbstractController{
 			[
 				reportType: ReportType.PREVENTIVE,
 				reportSubType: ReportSubType.WORKORDERS,
-				template:"/reports/listing/listing",
+				template:"/reports/listing/listing"
 			])
 	}
 	
@@ -296,7 +297,7 @@ class ListingController extends AbstractController{
 			[
 				reportType: ReportType.PREVENTIVE,
 				reportSubType: ReportSubType.WORKORDERS,
-				template:"/reports/listing/listing",
+				template:"/reports/listing/listing"
 			])
 	}
 
@@ -628,12 +629,12 @@ class ListingController extends AbstractController{
 
 		def reportType = getReportType()
 		def reportSubType = getReportSubType()
-
+		
 		// TODO get the user's saved report id
 
 		def savedCustomizedListingParams = [:]
 		def savedCustomizedListingReport = null
-
+		
 		switch(reportType){
 			case ReportType.INVENTORY:
 				// TODO get the savedCustomizedListingParams for the saved report
@@ -660,8 +661,8 @@ class ListingController extends AbstractController{
 			[
 				reportType: reportType,
 				reportSubType: reportSubType,
-				reportTypeOptions: reportTypeOptions,
-				customizedReportName: customizedReportName,
+				//reportTypeOptions: reportTypeOptions,
+				//customizedReportName: customizedReportName,
 				template:"/reports/listing/listing"
 			])
 
@@ -669,6 +670,7 @@ class ListingController extends AbstractController{
 
 	// inventory
 	def customEquipmentListing ={
+		adaptParamsForList()
 		if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing start, params:"+params)
 
 		def reportType = getReportType()
@@ -732,7 +734,7 @@ class ListingController extends AbstractController{
 		customEquipmentParams << [
 			reportTypeOptions: reportTypeOptions,
 			customizedReportName: customizedReportName,
-			customizedReportSave: customizedReportSave,
+			customizedReportSave: customizedReportSave
 		]
 
 		if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing end, customEquipmentParams:"+customEquipmentParams)
@@ -741,7 +743,6 @@ class ListingController extends AbstractController{
 			equipmentListingReportService.saveEquipmentReportParams(user,equipmentReport, customEquipmentParams, params)
 		}
 
-		adaptParamsForList()
 		def equipments = equipmentListingReportService.getCustomReportOfEquipments(user,customEquipmentParams,params)
 		if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing # of equipments:"+equipments.size())
 
@@ -821,7 +822,7 @@ class ListingController extends AbstractController{
 		customWorkOrderParams << [
 			reportTypeOptions: reportTypeOptions,
 			customizedReportName: customizedReportName,
-			customizedReportSave: customizedReportSave,
+			customizedReportSave: customizedReportSave
 		]
 
 		if (log.isDebugEnabled()) log.debug("listing.customWorkOrderListing, customWorkOrderParams:"+customWorkOrderParams)
@@ -916,7 +917,7 @@ class ListingController extends AbstractController{
 		customPreventiveOrderParams << [
 			reportTypeOptions: reportTypeOptions,
 			customizedReportName: customizedReportName,
-			customizedReportSave: customizedReportSave,
+			customizedReportSave: customizedReportSave
 		]
 
 		if (log.isDebugEnabled()) log.debug("listing.customPreventiveOrderListing, customPreventiveOrderParams:"+customPreventiveOrderParams)
@@ -986,7 +987,7 @@ class ListingController extends AbstractController{
 		customSparePartsParams << [
 			reportTypeOptions: reportTypeOptions,
 			customizedReportName: customizedReportName,
-			customizedReportSave: customizedReportSave,
+			customizedReportSave: customizedReportSave
 		]
 
 		if (log.isDebugEnabled()) log.debug("listing.customSparePartsListing, customSparePartsParams:"+customSparePartsParams)
