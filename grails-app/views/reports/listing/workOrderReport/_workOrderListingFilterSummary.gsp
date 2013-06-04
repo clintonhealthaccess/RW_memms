@@ -16,7 +16,7 @@
 
     <li>
       <span>Report Total:</span>
-      <a href="#">TODO Work Orders = ${entities?.size()}</a>
+      <a href="#"><g:message code="work.orders.label"/> = ${entities?.size()}</a>
     </li>
 
     <g:if test="${customizedReportName != null && !customizedReportName.empty}">
@@ -28,17 +28,7 @@
     <g:else>
       <li>
         <span>Report Name:</span>
-        <a href="#">
-          <g:if test="${actionName == 'generalWorkOrdersListing'}">
-            TODO All Work Orders
-          </g:if>
-          <g:if test="${actionName == 'lastMonthWorkOrders'}">
-            TODO Last Month Work Orders
-          </g:if>
-          <g:if test="${actionName == 'workOrdersEscalatedToMMC'}">
-            TODO Work Orders Escalated to MMC
-          </g:if>
-        </a>
+        <a href="#">${selectedReport}</a>
       </li>
     </g:else>
 
@@ -101,11 +91,12 @@
 
       </li>
     </g:if>
+%{-- TODO    
     <g:else>
       <li>
         <span>Report Filter Summary:</span>
         <a href="#">TODO</a>
       </li>
-    </g:else>
+    </g:else> --}%
   </ul>
 </div>
