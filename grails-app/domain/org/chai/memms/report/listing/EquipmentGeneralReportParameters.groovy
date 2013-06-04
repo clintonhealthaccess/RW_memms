@@ -39,7 +39,7 @@ class EquipmentGeneralReportParameters {
 	}
 
 	static mapping = {
-		//table "memms_equipment_report_listing"
+		table "memms_equipment_report_listing"
 		version false
 		dataLocations joinTable:[name:"memms_equipment_data_location_report_listing",key:"data_location_id",column:"report_listing_id"]
 		departments joinTable:[name:"memms_equipment_department_report_listing",key:"department_id",column:"report_listing_id"]
