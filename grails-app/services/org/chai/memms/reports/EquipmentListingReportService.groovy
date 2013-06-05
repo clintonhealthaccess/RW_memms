@@ -189,9 +189,8 @@ class EquipmentListingReportService {
 
 			criteriaEquipments = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 				
-				if(dataLocations != null)
-					inList('dataLocation',dataLocations)
-				
+				if(dataLocations != null && dataLocations.size() > 0)
+					inList("dataLocation",dataLocations)
 				if(equipmentTypes != null && equipmentTypes.size() > 0)
 					inList ("type", equipmentTypes)
 				and{
@@ -214,13 +213,13 @@ class EquipmentListingReportService {
 						inList ("currentStatus",equipmentStatus)
 					if(obsolete != null && obsolete)
 						eq ("obsolete", (obsolete.equals('true'))?true:false)
-					/*if(warranty!=null && !warranty)
-						inList ("warranty.startDate",equipmentStatus)*/
+					if(warranty!=null && warranty)
+						lt ("warrantyEndDate",today)
 				}
 			}
 			if (log.isDebugEnabled()) log.debug("EQUIPMENTS SIZE: "+ criteriaEquipments.size())
 
-			if(warranty != null && warranty){
+			/*if(warranty != null && warranty){
 				def underWarrantyEquipments = []
 				
 				criteriaEquipments.each{ equipment ->
@@ -236,7 +235,7 @@ class EquipmentListingReportService {
 					}
 				}
 				customEquipments = underWarrantyEquipments
-			}
+			}*/
 		}
 
 		if(reportSubType == ReportSubType.STATUSCHANGES){
@@ -317,6 +316,7 @@ class EquipmentListingReportService {
 		//equipmentReport.reportSubType=reportSubType
 		//equipmentReport.reportType=reportType
 		equipmentReport.reportName=reportName
+		equipmentReport.savedBy=user
 		
 		equipmentReport.save(failOnError:true)
 		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON EQUIPMENT CUSTOM REPORT SAVED CORRECTLY. THE REPORT ID IS :"+ equipmentReport.id)

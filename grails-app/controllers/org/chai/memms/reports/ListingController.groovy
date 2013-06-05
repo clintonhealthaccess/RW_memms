@@ -191,28 +191,11 @@ class ListingController extends AbstractController{
 			])
 	}
 
-	// TODO move warranty code into service method
-	// TODO change displayableEquipments to something more accurate like 'underWarrantyEquipments'
 	def underWarrantyEquipments={
 		adaptParamsForList()
-		def displayableEquipments=[]
 		def warrantyExpirationDate
 		def equipments = equipmentListingReportService.getUnderWarrantyEquipments(user,params)
-		for(Equipment equipment: equipments){
-			if (equipment.warranty?.startDate!=null && equipment.warrantyPeriod.numberOfMonths!=null && equipment.warrantyPeriod.months != null) {
-				//TODO we have to convert numberOfMonths in either months or equivalent days because here we are automatically using as days
-				DateTime warrantyStatDateTime = new DateTime(equipment.warranty?.startDate)
-				def warrantyExpirationDateTime = warrantyStatDateTime.plusMonths(equipment.warrantyPeriod.numberOfMonths)
-				warrantyExpirationDate = warrantyExpirationDateTime.toDate()
-				
-				warrantyExpirationDate= (equipment.warranty?.startDate).plus(equipment.warrantyPeriod.numberOfMonths)
-				if (log.isDebugEnabled()) log.debug("WARRANTY EXPIRATION DATE "+warrantyExpirationDate +"WARRANTY START DATE "+equipment.warranty?.startDate +"WARRANTY NUMBER OF MONTHS "+equipment.warrantyPeriod.numberOfMonths)
-				if (warrantyExpirationDate > new Date())
-					displayableEquipments.add(equipment)
-			}
-			warrantyExpirationDate=null
-		}
-		equipments=displayableEquipments
+
 		if(!request.xhr)
 			render(view:"/reports/reports",
 			model: model(equipments, "") <<

@@ -9,6 +9,7 @@ import java.util.Date;
 
 import org.chai.memms.inventory.Department;
 import org.chai.memms.inventory.EquipmentType;
+import org.chai.memms.security.User;
 import org.chai.location.DataLocation;
 
 /**
@@ -27,6 +28,7 @@ class EquipmentGeneralReportParameters {
 	String currency
 	Date fromDate
 	Date toDate
+	User savedBy
 
 	static hasMany = [dataLocations:DataLocation,departments:Department,equipmentTypes:EquipmentType]
 	static constraints = {
@@ -38,6 +40,7 @@ class EquipmentGeneralReportParameters {
 		currency nullable: true, blank: true
 		fromDate nullable: true, blank: true
 		toDate nullable: true, blank: true
+		savedBy nullable: false
 	}
 
 	static mapping = {
