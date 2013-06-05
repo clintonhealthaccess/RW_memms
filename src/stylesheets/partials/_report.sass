@@ -138,7 +138,7 @@
   a
     bottom: -1px
     color: #bbb
-    display: block
+    display: inline-block
     padding: 2px 14px 15px
     position: relative
     text-decoration: none
@@ -148,6 +148,21 @@
       color: $primary
     &:hover, &:focus
       color: $primary
+
+  .delete-node
+    background: url('../images/icons/mini_delete.png') no-repeat center
+    display: inline-block
+    height: 13px
+    line-height: 13px
+    text-indent: -9999em
+    width: 13px
+    position: relative
+    left: -10px
+    opacity: 0.25
+
+    &:hover, &:focus
+      opacity: 1
+
   .right
     float: right !important
     margin-right: 14px
@@ -620,3 +635,4 @@ div#comparison, div#geo_trend, div#info_facility, div#preventive, div#equipment,
 .search-choice-close /* Chosen.js override */
   background: url('../js/jquery/chosen/chosen-sprite.png') -49px -8px no-repeat !important
   top: 5px !important
+
