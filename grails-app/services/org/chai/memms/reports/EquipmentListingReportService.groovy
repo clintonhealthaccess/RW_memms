@@ -202,6 +202,7 @@ class EquipmentListingReportService {
 					if(upperLimitCost!=null)
 						lt ("purchaseCost", upperLimitCost)
 					if(currency !=null)
+						eq ("currency", currency)
 					/*if(fromAcquisitionPeriod != null)
 						gt ("purchaseDate", fromAcquisitionPeriod)
 					if(toAcquisitionPeriod != null)

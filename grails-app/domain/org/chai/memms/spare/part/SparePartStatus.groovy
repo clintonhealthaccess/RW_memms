@@ -44,9 +44,9 @@ class SparePartStatus {
 		
 		NONE("none"),
 		INSTOCK("in.stock"),
-		OPERATIONAL("operational"),
-		PENDINGORDER("pending.order"),
-		DISPOSED("disposed")
+		//OPERATIONAL("operational"),
+		PENDINGORDER("pending.order")
+		//DISPOSED("disposed")
 		
 		String messageCode = "spare.part.status"
 		
@@ -69,7 +69,7 @@ class SparePartStatus {
 			return (val <= new Date()) &&  (val.after(obj.sparePart.purchaseDate) || (val.compareTo(obj.sparePart.purchaseDate)==0))
 		}
 		changedBy nullable: false
-		statusOfSparePart blank: false, nullable: false, inList:[StatusOfSparePart.OPERATIONAL,StatusOfSparePart.INSTOCK,StatusOfSparePart.PENDINGORDER, StatusOfSparePart.DISPOSED]
+		statusOfSparePart blank: false, nullable: false, inList:[StatusOfSparePart.INSTOCK,StatusOfSparePart.PENDINGORDER]
 		reasons nullable: true, blank: true
 	}
 	

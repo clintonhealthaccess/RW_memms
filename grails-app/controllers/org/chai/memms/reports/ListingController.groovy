@@ -54,6 +54,7 @@ import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventionResponsib
 import org.chai.memms.report.listing.CorrectiveMaintenanceReport;
 import org.chai.memms.report.listing.EquipmentReport;
 import org.chai.memms.report.listing.PreventiveMaintenanceReport;
+import org.chai.memms.report.listing.SparePartReport
 import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
 //import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePartChange;
 import org.chai.memms.spare.part.SparePartType;
@@ -72,6 +73,7 @@ import org.chai.memms.Warranty;
 class ListingController extends AbstractController{
 
 	def equipmentListingReportService
+	def sparePartListingReportService
 	def workOrderListingReportService
 	def preventiveOrderListingReportService
 	//def grailsApplication
@@ -285,16 +287,14 @@ class ListingController extends AbstractController{
 	}
 
 	// spare parts
-
-	// TODO
 	def generalSparePartsListing={
 		if (log.isDebugEnabled()) log.debug("listing.generalSparePartsListing start, params:"+params)
 
 		adaptParamsForList()
-		def equipments = equipmentListingReportService.getGeneralReportOfEquipments(user,params)
+		def spareParts = sparePartListingReportService.getGeneralReportOfSpareParts(user,params)
 		if(!request.xhr)
 			render(view:"/reports/reports",
-			model: model(equipments, "") <<
+			model: model(spareParts, "") <<
 			[
 				reportType: ReportType.SPAREPARTS,
 				reportSubType: ReportSubType.INVENTORY,
@@ -302,15 +302,15 @@ class ListingController extends AbstractController{
 			])
 	}
 
-	// TODO
-	def otherSparePartsListing={
+	// Done
+	def pendingOrderSparePartsListing={
 		if (log.isDebugEnabled()) log.debug("listing.generalSparePartsListing start, params:"+params)
 
 		adaptParamsForList()
-		def equipments = equipmentListingReportService.getGeneralReportOfEquipments(user,params)
+		def spareParts = sparePartListingReportService.getPendingOrderSparePartsReport(user,params)
 		if(!request.xhr)
 			render(view:"/reports/reports",
-			model: model(equipments, "") <<
+			model: model(spareParts, "") <<
 			[
 				reportType: ReportType.SPAREPARTS,
 				reportSubType: ReportSubType.INVENTORY,
@@ -805,8 +805,12 @@ class ListingController extends AbstractController{
 
 		def dataLocations = getDataLocations()
 		def sparePartTypes = getSparePartTypes()
+		
+		def sparePartReport= new SparePartReport()
 
 		def customSparePartsParams = [
+			reportType: reportType,
+			reportSubType: reportSubType,
 			dataLocations: dataLocations,
 			sparePartTypes: sparePartTypes
 		]
@@ -847,8 +851,13 @@ class ListingController extends AbstractController{
 		if (log.isDebugEnabled()) log.debug("listing.customSparePartsListing, customSparePartsParams:"+customSparePartsParams)
 
 		if(customizedReportSave){
-			// TODO save the report
-		}
+			
+			sparePartListingReportService.saveSparePartReportParams(user, sparePartReport, customSparePartsParams, params)
+		
+			
+			
+			
+			}
 
 		// TODO
 		// adaptParamsForList()

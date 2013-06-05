@@ -9,7 +9,7 @@
   <li><a class="${reportType == ReportType.PREVENTIVE?'active':''}" id="#js-preventive"
         href="${createLink(controller:'listing', action:'generalPreventiveOrdersListing')}">
     ${message(code:'reports.type.preventive')}</a></li>
-  %{-- <li><a class="${reportType == ReportType.SPAREPARTS?'active':''}" id="#js-spare-parts"
+ <li><a class="${reportType == ReportType.SPAREPARTS?'active':''}" id="#js-spare-parts"
         href="${createLink(controller:'listing', action:'generalSparePartsListing')}">
-    ${message(code:'reports.type.spareParts')}</a></li> --}%
+    ${message(code:'reports.type.spareParts')}</a></li>
 </ul>
