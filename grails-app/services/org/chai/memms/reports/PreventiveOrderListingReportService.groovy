@@ -102,4 +102,39 @@ class PreventiveOrderListingReportService {
 				inList ("preventionResponsible",responsibles)
 		}
 	}
+	public def savePreventiveOrderReportParams(User user, def preventiveMaintenanceReport,def customPreventiveOrderParams, Map<String, String> params){
+		def reportName = customPreventiveOrderParams.get('customizedReportName')
+		def reportType = customPreventiveOrderParams.get('reportType')
+		def reportSubType = customPreventiveOrderParams.get('reportSubType')
+
+		def dataLocations = customPreventiveOrderParams.get('dataLocations')
+		def departments = customPreventiveOrderParams.get('departments')
+		def equipmentTypes = customPreventiveOrderParams.get('equipmentTypes')
+		def lowerLimitCost = customPreventiveOrderParams.get('fromCost')
+		def upperLimitCost = customPreventiveOrderParams.get('toCost')
+		def currency = customPreventiveOrderParams.get('costCurrency')
+		
+		def fromWorkOrderPeriod = customPreventiveOrderParams.get('fromWorkOrderPeriod')
+		def toWorkOrderPeriod = customPreventiveOrderParams.get('toWorkOrderPeriod')
+		def workOrderStatus = customPreventiveOrderParams.get('workOrderStatus')
+		def warranty = customPreventiveOrderParams.get('warranty')
+		
+		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON PREVENTIVE MAINTENANCE CUSTOM REPORT: LOWER COST :"+lowerLimitCost+" UPPER COST :"+upperLimitCost)
+		
+		preventiveMaintenanceReport.preventiveOrderStatus=workOrderStatus
+		preventiveMaintenanceReport.toDate=toWorkOrderPeriod
+		preventiveMaintenanceReport.fromDate=fromWorkOrderPeriod
+		preventiveMaintenanceReport.currency=currency
+		preventiveMaintenanceReport.upperLimitCost=upperLimitCost
+		preventiveMaintenanceReport.lowerLimitCost=lowerLimitCost
+		preventiveMaintenanceReport.equipmentTypes=equipmentTypes
+		preventiveMaintenanceReport.departments=departments
+		preventiveMaintenanceReport.dataLocations=dataLocations
+		preventiveMaintenanceReport.reportSubType=reportSubType
+		preventiveMaintenanceReport.reportType=reportType
+		preventiveMaintenanceReport.reportName=reportName
+		
+		preventiveMaintenanceReport.save(failOnError:true)
+		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON PREVENTIVE MAINTENANCE CUSTOM REPORT SAVED CORRECTLY. THE REPORT ID IS :"+ preventiveMaintenanceReport.id)
+	}
 }

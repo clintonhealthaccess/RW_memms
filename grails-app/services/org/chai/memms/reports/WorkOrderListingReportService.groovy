@@ -20,7 +20,9 @@ import org.chai.memms.util.Utils.ReportSubType
  *
  */
 class WorkOrderListingReportService {
-	
+
+	def workOrderService
+
 	def getAllWorkOrders(User user , Map<String, String> params){
 		
 		def criteria = WorkOrder.createCriteria();
@@ -53,6 +55,7 @@ class WorkOrderListingReportService {
 			eq ("currentStatus",OrderStatus.OPENATMMC)
 		}
 	}
+
 	def getWorkOrdersOfLastMonth(User user,Map<String, String> params) {
 
 		def lastMonth= (new Date())-30
@@ -120,9 +123,9 @@ class WorkOrderListingReportService {
 					inList ("currentStatus",workOrderStatus)
 				// TODO
 				// if(fromWorkOrderPeriod != null)
-				// 	gt ("TODO", fromWorkOrderPeriod)
+				// 	gt ("openOn", fromWorkOrderPeriod)
 				// if(toWorkOrderPeriod != null)
-				// 	lt ("TODO", toWorkOrderPeriod)
+				// 	lt ("openOn", toWorkOrderPeriod)
 			}
 			customWorkOrders = criteriaWorkOrders
 		}
@@ -158,15 +161,50 @@ class WorkOrderListingReportService {
 			}
 			if (log.isDebugEnabled()) log.debug("WORK ORDERS SIZE: "+ criteriaWorkOrders.size())
 
+			// TODO build into criteria
 			if(statusChanges != null && !statusChanges.empty){
 				def statusChangesWorkOrders = []
 				criteriaWorkOrders.each { workOrder ->
-					def workOrderStatusChange = workOrder.getTimeBasedStatusChange(statusChanges)
+					def workOrderStatusChange = workOrderService.getWorkOrderTimeBasedStatusChange(workOrder, statusChanges)
 					if(workOrderStatusChange != null) statusChangesWorkOrders.add(workOrder)
 				}
 				customWorkOrders = statusChangesWorkOrders
 			}
 		}
 		return customWorkOrders;
+	}
+	public def saveWorkOrderReportParams(User user, def correctiveMaintenanceReport,def customWorkOrderParams, Map<String, String> params){
+		def reportName = customWorkOrderParams.get('customizedReportName')
+		def reportType = customWorkOrderParams.get('reportType')
+		def reportSubType = customWorkOrderParams.get('reportSubType')
+
+		def dataLocations = customWorkOrderParams.get('dataLocations')
+		def departments = customWorkOrderParams.get('departments')
+		def equipmentTypes = customWorkOrderParams.get('equipmentTypes')
+		def lowerLimitCost = customWorkOrderParams.get('fromCost')
+		def upperLimitCost = customWorkOrderParams.get('toCost')
+		def currency = customWorkOrderParams.get('costCurrency')
+		
+		def fromWorkOrderPeriod = customWorkOrderParams.get('fromWorkOrderPeriod')
+		def toWorkOrderPeriod = customWorkOrderParams.get('toWorkOrderPeriod')
+		def warranty = customWorkOrderParams.get('warranty')
+		
+		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON EQUIPMENT CUSTOM REPORT: WARRANTY :"+warranty)
+		
+		correctiveMaintenanceReport.underWarranty=warranty=="on"?true:false
+		correctiveMaintenanceReport.toDate=toWorkOrderPeriod
+		correctiveMaintenanceReport.fromDate=fromWorkOrderPeriod
+		correctiveMaintenanceReport.currency=currency
+		correctiveMaintenanceReport.upperLimitCost=upperLimitCost
+		correctiveMaintenanceReport.lowerLimitCost=lowerLimitCost
+		correctiveMaintenanceReport.equipmentTypes=equipmentTypes
+		correctiveMaintenanceReport.departments=departments
+		correctiveMaintenanceReport.dataLocations=dataLocations
+		correctiveMaintenanceReport.reportSubType=reportSubType
+		correctiveMaintenanceReport.reportType=reportType
+		correctiveMaintenanceReport.reportName=reportName
+		
+		correctiveMaintenanceReport.save(failOnError:true)
+		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON EQUIPMENT CUSTOM REPORT SAVED CORRECTLY. THE REPORT ID IS :"+ correctiveMaintenanceReport.id)
 	}
 }

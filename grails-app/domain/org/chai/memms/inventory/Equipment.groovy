@@ -43,6 +43,7 @@ import org.chai.memms.security.User;
 import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.location.DataLocation;
 import org.apache.commons.lang.math.RandomUtils;
+import groovy.time.TimeCategory;
 
 import groovy.transform.EqualsAndHashCode;
 import i18nfields.I18nFields
@@ -114,6 +115,7 @@ public class Equipment {
 	Date serviceContractStartDate
 	Date dateCreated
 	Date lastUpdated
+	Date warrantyEndDate
 	
 	User addedBy
 	User lastModifiedBy
@@ -151,6 +153,7 @@ public class Equipment {
 		warranty nullable:true, validator:{ val, obj ->
 			if(val!=null && val.startDate != null && obj.purchaseDate != null) return (val.startDate?.after(obj.purchaseDate) || val.startDate?.compareTo(obj.purchaseDate)==0)
 		}
+		warrantyEndDate nullable: true
 		warrantyPeriod nullable: true, validator:{val, obj ->
 			if (obj.warranty!=null) return (val!=null) && (val.numberOfMonths >= 0)
 		}
@@ -209,6 +212,17 @@ public class Equipment {
 	
 	def beforeValidate(){
 		this.genarateAndSetEquipmentCode()
+		this.generateWarrantyEndDate()
+	}
+
+	@Transient
+	def generateWarrantyEndDate(){
+		Integer.metaClass.mixin TimeCategory
+		Date.metaClass.mixin TimeCategory
+		if(warranty!=null && warrantyPeriod!=null)
+			warrantyEndDate = warranty.startDate + (warrantyPeriod.numberOfMonths).months
+		else
+			warrantyEndDate = null
 	}
 	
 	@Transient
@@ -228,11 +242,14 @@ public class Equipment {
 		EquipmentStatus currentState = null
 		if(!status) return currentState
 		else if(status.size() == 0) return currentState
-		// else if(status.size() == 1) currentState = status[0]
 		else{
+			//only compare date not time
 			status.each{ it -> it.dateOfEvent.clearTime() }
-			List<EquipmentStatus> sortedStatus = status.sort{ it.dateOfEvent }
+			//first check the date of event, if date of event is the same, check the date created, if date created is the same, check the id
+			List<EquipmentStatus> sortedStatus = status.sort{ a,b -> (a.dateOfEvent <=> b.dateOfEvent) ?: (a.dateCreated <=> b.dateCreated) ?: (a.id <=> b.id) }
 			currentState = sortedStatus[-1]
+			if(currentState != currentStatus) 
+				currentStatus = currentState.status
 		}
 		return currentState
 	}
@@ -244,32 +261,13 @@ public class Equipment {
 		else if(status.size() == 0) return previousState
 		else if(status.size() == 1) return previousState
 		else{
+			//only compare date not time
 			status.each{ it -> it.dateOfEvent.clearTime() }
-			List<EquipmentStatus> sortedStatus = status.sort{ it.dateOfEvent }
+			//first check the date of event, if date of event is the same, check the date created, if date created is the same, check the id
+			List<EquipmentStatus> sortedStatus = status.sort{ a,b -> (a.dateOfEvent <=> b.dateOfEvent) ?: (a.dateCreated <=> b.dateCreated) ?: (a.id <=> b.id) }
 			previousState = sortedStatus[-2]
 		}
 		return previousState
-	}
-
-	@Transient
-	EquipmentStatusChange getTimeBasedStatusChange(List<EquipmentStatusChange> equipmentStatusChanges){
-		EquipmentStatusChange equipmentStatusChange = null
-
-		def previousStatus = getTimeBasedPreviousStatus()?.status
-		def currentStatus = getTimeBasedStatus().status
-
-		if(equipmentStatusChanges == null) equipmentStatusChanges = EquipmentStatusChange.values()
-	 	equipmentStatusChanges.each{ statusChange ->
- 			
- 			def previousStatusMap = statusChange.getStatusChange()['previous']
-			def currentStatusMap = statusChange.getStatusChange()['current']
-
-			def previousStatusChange = previousStatusMap.contains(previousStatus) || (previousStatusMap.contains(Status.NONE) && previousStatus == null)
-			def currentStatusChange = currentStatusMap.contains(currentStatus)
-
-			if(previousStatusChange && currentStatusChange) equipmentStatusChange = statusChange
-	 	}
-	 	return equipmentStatusChange
 	}
 
 	String toString() {

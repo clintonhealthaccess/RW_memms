@@ -175,10 +175,13 @@ public class WorkOrder extends MaintenanceOrder{
 	def getTimeBasedStatus(){
 		WorkOrderStatus currentState = null
 		if(!status) return currentState
-		if(status.size() == 0) return currentState
+		else if(status.size() == 0) return currentState
 		else{
-			List<WorkOrderStatus> sortedStatus = status.sort{ it.dateCreated }
+			//first check the date created, if date created is the same, check the id
+			List<WorkOrderStatus> sortedStatus = status.sort{ a,b -> (a.dateCreated <=> b.dateCreated) ?: (a.id <=> b.id) }
 			currentState = sortedStatus[-1]
+			if(currentState != currentStatus) 
+				currentStatus = currentState.status
 		}
 		return currentState
 	}
@@ -187,34 +190,14 @@ public class WorkOrder extends MaintenanceOrder{
 	def getTimeBasedPreviousStatus(){
 		WorkOrderStatus previousState = null
 		if(!status) return previousState
-		if(status.size() == 0) return previousState
+		else if(status.size() == 0) return previousState
 		else if(status.size() == 1) return previousState
 		else{
-			List<WorkOrderStatus> sortedStatus = status.sort{ it.dateCreated }
+			//first check the date created, if date created is the same, check the id
+			List<WorkOrderStatus> sortedStatus = status.sort{ a,b -> (a.dateCreated <=> b.dateCreated) ?: (a.id <=> b.id) }
 			previousState = sortedStatus[-2]
 		}
 		return previousState
-	}
-
-	@Transient
-	WorkOrderStatusChange getTimeBasedStatusChange(List<WorkOrderStatusChange> workOrderStatusChanges){
-		WorkOrderStatusChange workOrderStatusChange = null
-
-		def previousStatus = getTimeBasedPreviousStatus()?.status
-		def currentStatus = getTimeBasedStatus().status
-
-		if(workOrderStatusChanges == null) workOrderStatusChanges = WorkOrderStatusChange.values()
-	 	workOrderStatusChanges.each{ statusChange ->
- 			
- 			def previousStatusMap = statusChange.getStatusChange()['previous']
-			def currentStatusMap = statusChange.getStatusChange()['current']
-
-			def previousStatusChange = previousStatusMap.contains(previousStatus) || (previousStatusMap.contains(OrderStatus.NONE) && previousStatus == null)
-			def currentStatusChange = currentStatusMap.contains(currentStatus)
-
-			if(previousStatusChange && currentStatusChange) workOrderStatusChange = statusChange
-	 	}
-	 	return workOrderStatusChange
 	}
 
 	static mapping = {

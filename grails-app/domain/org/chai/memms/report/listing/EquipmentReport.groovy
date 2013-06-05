@@ -11,12 +11,17 @@ import org.chai.memms.inventory.EquipmentStatus.Status;
  */
 class EquipmentReport extends EquipmentGeneralReportParameters {
 
-	String obsolete
-	Status equipmentStatus
+	def obsolete
+	def equipmentStatus
+	def underWarranty
+	def noAcquisitionPeriod
 
 	static constraints = {
 		obsolete nullable: true, blank: true
 		equipmentStatus nullable: true
+		underWarranty nullable: true, blank: true
+		noAcquisitionPeriod nullable: true, blank: true
+		
 	}
 
 	static mapping = {

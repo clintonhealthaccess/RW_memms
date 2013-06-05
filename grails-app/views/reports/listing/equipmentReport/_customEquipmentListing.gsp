@@ -40,13 +40,13 @@
 				<g:sortableColumn property="purchaser"  title="${message(code: 'equipment.purchaser.label')}" params="[q:q]" />
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('acquisitionDate')}">
-				%{-- TODO --}%
+				<g:sortableColumn property="purchaseDate"  title="${message(code: 'equipment.purchase.date.label')}" params="[q:q]" />
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('cost')}">
-				%{-- TODO --}%
+				<g:sortableColumn property="cost"  title="${message(code: 'equipment.purchase.cost.label')}" params="[q:q]" />
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('warrantyProvider')}">
-				%{-- TODO --}%
+				<g:sortableColumn property="cost"  title="${message(code: 'equipment.warranty.provider.label')}" params="[q:q]" />
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('warrantyPeriodRemaining')}">
 				%{-- TODO --}%
@@ -74,9 +74,9 @@
 				<g:if test="${reportTypeOptions.contains('model')}">
 					<td>${equipment.model}</td>
 				</g:if>
-				
+				<!-- TODO  customEquipmentParams.statusChanges not working: NULL POINTER EXCEPTION-->
 				<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
-					<g:set var="statusChangesEnum" value="${equipment.getTimeBasedStatusChange(customEquipmentParams.statusChanges)}"/>
+					<g:set var="statusChangesEnum" value="${equipment.getTimeBasedStatusChange(customEquipmentParams?.statusChanges)}"/>
 					<td>${message(code: statusChangesEnum?.messageCode+'.'+statusChangesEnum?.name)}</td>
 				</g:if>
 
@@ -100,10 +100,10 @@
 					<td>${message(code: equipment.purchaser?.messageCode+'.'+equipment.purchaser?.name)}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('acquisitionDate')}">
-					%{-- TODO --}%
+					<td>${equipment.purchaseDate}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('cost')}">
-					%{-- TODO --}%
+					<td>${equipment.purchaseCost}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('warrantyProvider')}">
 					%{-- TODO --}%

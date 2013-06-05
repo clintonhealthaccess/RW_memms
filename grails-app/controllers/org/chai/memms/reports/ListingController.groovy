@@ -30,32 +30,40 @@ package org.chai.memms.reports
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.lang.math.NumberUtils
-import org.chai.location.CalculationLocation
-import org.chai.location.DataLocation
-import org.chai.location.DataLocationType
-import org.chai.location.Location
-import org.chai.location.LocationLevel
-import org.chai.memms.AbstractController
-import org.chai.memms.corrective.maintenance.WorkOrder
-import org.chai.memms.corrective.maintenance.WorkOrderStatus
-import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus
-import org.chai.memms.corrective.maintenance.WorkOrderStatus.WorkOrderStatusChange
-import org.chai.memms.inventory.Department
-import org.chai.memms.inventory.Equipment
-import org.chai.memms.inventory.EquipmentStatus
-import org.chai.memms.inventory.EquipmentStatus.Status
-import org.chai.memms.inventory.EquipmentStatus.EquipmentStatusChange
-import org.chai.memms.inventory.EquipmentType
-import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatus
-import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventionResponsible
-import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart
-import org.chai.memms.spare.part.SparePartType
-import org.chai.memms.security.User
-import org.chai.memms.security.User.UserType
-import org.chai.memms.util.Utils
-import org.chai.memms.util.Utils.ReportType
-import org.chai.memms.util.Utils.ReportSubType
+import org.apache.commons.lang.math.NumberUtils;
+import org.chai.location.CalculationLocation;
+import org.chai.location.DataLocation;
+import org.chai.location.DataLocationType;
+import org.chai.location.Location;
+import org.chai.location.LocationLevel;
+import org.chai.memms.AbstractController;
+import org.chai.memms.AbstractEntityController;
+import org.chai.memms.corrective.maintenance.WorkOrder;
+import org.chai.memms.corrective.maintenance.WorkOrderStatus;
+import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
+import org.chai.memms.corrective.maintenance.WorkOrderStatus.WorkOrderStatusChange;
+import org.chai.memms.inventory.Department;
+import org.chai.memms.inventory.Equipment;
+import org.chai.memms.inventory.EquipmentStatus;
+import org.chai.memms.inventory.EquipmentStatus.Status;
+import org.chai.memms.inventory.EquipmentStatus.EquipmentStatusChange;
+import org.chai.memms.inventory.EquipmentType;
+import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatus;
+//import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatusChange;
+import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventionResponsible;
+import org.chai.memms.report.listing.CorrectiveMaintenanceReport;
+import org.chai.memms.report.listing.EquipmentReport;
+import org.chai.memms.report.listing.PreventiveMaintenanceReport;
+import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
+//import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePartChange;
+import org.chai.memms.spare.part.SparePartType;
+import org.chai.memms.security.User;
+import org.chai.memms.security.User.UserType;
+import org.chai.memms.util.Utils;
+import org.chai.memms.util.Utils.ReportType;
+import org.chai.memms.util.Utils.ReportSubType;
+import org.joda.time.DateTime;
+import org.chai.memms.Warranty;
 
 /**
  * @author Jean Kahigiso M.
@@ -66,7 +74,7 @@ class ListingController extends AbstractController{
 	def equipmentListingReportService
 	def workOrderListingReportService
 	def preventiveOrderListingReportService
-	def grailsApplication
+	//def grailsApplication
 	def userService
 
 	def getEntityClass() {
@@ -131,7 +139,7 @@ class ListingController extends AbstractController{
 			[
 				reportType: ReportType.INVENTORY,
 				reportSubType: ReportSubType.INVENTORY,
-				template:"/reports/listing/listing",
+				template:"/reports/listing/listing"
 			])
 	}
 
@@ -146,7 +154,7 @@ class ListingController extends AbstractController{
 			[
 				reportType: ReportType.INVENTORY,
 				reportSubType: ReportSubType.INVENTORY,
-				template:"/reports/listing/listing",
+				template:"/reports/listing/listing"
 			])
 	}
 
@@ -178,24 +186,11 @@ class ListingController extends AbstractController{
 			])
 	}
 
-	// TODO move warranty code into service method
-	// TODO change displayableEquipments to something more accurate like 'underWarrantyEquipments'
 	def underWarrantyEquipments={
 		adaptParamsForList()
-		def displayableEquipments=[]
 		def warrantyExpirationDate
 		def equipments = equipmentListingReportService.getUnderWarrantyEquipments(user,params)
-		for(Equipment equipment: equipments){
-			if (equipment.warranty.startDate!=null && equipment.warrantyPeriod.numberOfMonths!=null && equipment.warrantyPeriod.months != null) {
-				//TODO we have to convert numberOfMonths in either months or equivalent days because here we are automatically using as days
-				warrantyExpirationDate= (equipment.warranty.startDate).plus(equipment.warrantyPeriod.numberOfMonths)
-				if (log.isDebugEnabled()) log.debug("CALCURATED DATE "+warrantyExpirationDate +"START DATE "+equipment.warranty.startDate +"WARRANTY PERIOD "+equipment.warrantyPeriod.months)
-				if (warrantyExpirationDate > new Date())
-					displayableEquipments.add(equipment)
-			}
-			warrantyExpirationDate=null
-		}
-		equipments=displayableEquipments
+
 		if(!request.xhr)
 			render(view:"/reports/reports",
 			model: model(equipments, "") <<
@@ -217,7 +212,7 @@ class ListingController extends AbstractController{
 			[
 				reportType: ReportType.CORRECTIVE,
 				reportSubType: ReportSubType.WORKORDERS,
-				template:"/reports/listing/listing",
+				template:"/reports/listing/listing"
 			])
 	}
 
@@ -230,7 +225,7 @@ class ListingController extends AbstractController{
 			[
 				reportType: ReportType.CORRECTIVE,
 				reportSubType: ReportSubType.WORKORDERS,
-				template:"/reports/listing/listing",
+				template:"/reports/listing/listing"
 			])
 	}
 
@@ -243,7 +238,7 @@ class ListingController extends AbstractController{
 			[
 				reportType: ReportType.CORRECTIVE,
 				reportSubType: ReportSubType.WORKORDERS,
-				template:"/reports/listing/listing",
+				template:"/reports/listing/listing"
 			])
 	}
 
@@ -258,7 +253,7 @@ class ListingController extends AbstractController{
 			[
 				reportType: ReportType.PREVENTIVE,
 				reportSubType: ReportSubType.WORKORDERS,
-				template:"/reports/listing/listing",
+				template:"/reports/listing/listing"
 			])
 	}
 
@@ -271,7 +266,7 @@ class ListingController extends AbstractController{
 			[
 				reportType: ReportType.PREVENTIVE,
 				reportSubType: ReportSubType.WORKORDERS,
-				template:"/reports/listing/listing",
+				template:"/reports/listing/listing"
 			])
 	}
 	
@@ -285,7 +280,7 @@ class ListingController extends AbstractController{
 			[
 				reportType: ReportType.PREVENTIVE,
 				reportSubType: ReportSubType.WORKORDERS,
-				template:"/reports/listing/listing",
+				template:"/reports/listing/listing"
 			])
 	}
 
@@ -353,6 +348,7 @@ class ListingController extends AbstractController{
 			step1Params: step1Params
 		])
 	}
+
 	// customized report wizard step1 'remoteFunction'
 	def customizedReportSubType ={
 		if (log.isDebugEnabled())
@@ -374,7 +370,7 @@ class ListingController extends AbstractController{
 		def reportType = getReportType()
 		def reportSubType = getReportSubType()
 
-		//params from step 1 to pass along to step 3, or to pass back to step 1
+		//params from step 1 to pass along to step 3
 		def step2Params = [:]
 		step2Params.putAll params
 
@@ -399,123 +395,6 @@ class ListingController extends AbstractController{
 		//params from step 2 to pass along to step 4
 		def step3Params = [:]
 		step3Params.putAll params
-		def dataLocations = getDataLocations()
-		step3Params << [dataLocations: dataLocations]
-		switch(reportType){
-			case ReportType.INVENTORY:
-			case ReportType.CORRECTIVE:
-			case ReportType.PREVENTIVE:
-				def departments = getDepartments()
-				def equipmentTypes = getEquipmentTypes()
-				def fromCost = params.get('fromCost')
-				def toCost = params.get('toCost')
-				def costCurrency = params.get('costCurrency')
-				step3Params << [
-					departments: departments,
-					equipmentTypes: equipmentTypes,
-					fromCost: fromCost,
-					toCost: toCost,
-					costCurrency: costCurrency
-				]
-				break;
-			case ReportType.SPAREPARTS:
-				def sparePartTypes = getSparePartTypes()
-				step3Params << [
-					sparePartTypes: sparePartTypes
-				]
-				break;
-			default:
-				break;
-		}
-		switch(reportSubType){
-
-			case ReportSubType.INVENTORY:
-				def fromPeriod = getPeriod('fromAcquisitionPeriod')
-				def toPeriod = getPeriod('toAcquisitionPeriod')
-				def includeNoAcquisitionPeriod = params.get('noAcquisitionPeriod')
-				step3Params << [
-					fromAcquisitionPeriod: fromPeriod,
-					toAcquisitionPeriod: toPeriod
-				]
-				if(reportType == ReportType.INVENTORY){
-					def equipmentStatus = getInventoryStatus()
-					def obsolete = params.get('obsolete')
-					def warranty = params.get('warranty')
-					step3Params << [
-						equipmentStatus: equipmentStatus,
-						obsolete: obsolete,
-						warranty: warranty
-					]
-				}
-				if(reportType == ReportType.SPAREPARTS){
-					def sparePartStatus = getSparePartStatus()
-					step3Params << [sparePartStatus: sparePartStatus]
-				}
-				break;
-
-			case ReportSubType.WORKORDERS:
-				def fromPeriod = getPeriod('fromWorkOrderPeriod')
-				def toPeriod = getPeriod('toWorkOrderPeriod')
-				step3Params << [
-					fromWorkOrderPeriod: fromPeriod,
-					toWorkOrderPeriod: toPeriod
-				]
-				if(reportType == ReportType.CORRECTIVE){
-					def workOrderStatus = getCorrectiveStatus()
-					def warranty = params.get('warranty')
-					step3Params << [
-						workOrderStatus: workOrderStatus,
-						warranty: warranty
-					]
-				}
-				if(reportType == ReportType.PREVENTIVE) {
-					def workOrderStatus = getPreventiveStatus()
-					def whoIsResponsible = params.list('whoIsResponsible')
-					step3Params << [
-						workOrderStatus: workOrderStatus,
-						whoIsResponsible: whoIsResponsible
-					]
-				}
-				break;
-
-			case ReportSubType.STATUSCHANGES:
-				def fromPeriod = getPeriod('fromStatusChangesPeriod')
-				def toPeriod = getPeriod('toStatusChangesPeriod')
-				step3Params << [
-					fromStatusChangesPeriod: fromPeriod,
-					toStatusChangesPeriod: toPeriod
-				]
-				if(reportType == ReportType.INVENTORY){
-					def statusChanges = getInventoryStatusChanges()
-					step3Params << [
-						statusChanges:statusChanges
-					]
-				}
-				if(reportType == ReportType.CORRECTIVE){
-					def statusChanges = getCorrectiveStatusChanges()
-					def warranty = params.get('warranty')
-					step3Params << [
-						statusChanges: statusChanges,
-						warranty: warranty
-					]
-				}
-				break;
-
-			case ReportSubType.STOCKOUT:
-				def stockOut = params.get('stockOut')
-				def stockOutMonths = params.get('stockOutMonths')
-				step3Params << [
-					stockOut: stockOut,
-					stockOutMonths: stockOutMonths
-				]
-				break;
-
-			case ReportSubType.USERATE:
-				break;
-
-			default:
-				break;
-		}
 
 		//params to load step 3
 		def step3Model = [
@@ -536,25 +415,7 @@ class ListingController extends AbstractController{
 
 		//params from step 3 to pass along to customized listing
 		def step4Params = [:]
-		step4Params << params
-		def reportTypeOptions = new HashSet<String>()
-		switch(reportType){
-			case ReportType.INVENTORY:
-				reportTypeOptions = getReportTypeOptions('inventoryOptions')
-				break;
-			case ReportType.CORRECTIVE:
-				reportTypeOptions = getReportTypeOptions('correctiveOptions')
-				break;
-			case ReportType.PREVENTIVE:
-				reportTypeOptions = getReportTypeOptions('preventiveOptions')
-				break;
-			case ReportType.SPAREPARTS:
-				reportTypeOptions = getReportTypeOptions('sparePartsOptions')
-				break;
-			default:
-				break;
-		}
-		step4Params << [reportTypeOptions:reportTypeOptions]
+		step4Params.putAll params
 
 		//params to load step 4
 		def step4Model = [
@@ -577,49 +438,89 @@ class ListingController extends AbstractController{
 		def reportType = getReportType()
 		def reportSubType = getReportSubType()
 
-		def customizedListingModel = [:]
-		customizedListingModel.putAll params
+		def customizedListingParams = [:]
+		customizedListingParams.putAll params
+
 		def customizedReportName = params.get('customizedReportName')
 		if(customizedReportName == null || customizedReportName.empty){
 			def customizedReportTimestamp = new Date()
-			def customReportType = message(code:'reports.type.'+reportType?.reportType)
-			def customReportSubType = message(code:'reports.subType.'+reportSubType?.reportSubType)
+			def reportTypeTimestamp = message(code:'reports.type.'+reportType?.reportType)
+			def reportSubTypeTimestamp = message(code:'reports.subType.'+reportSubType?.reportSubType)
 			customizedReportName = 
-				customReportType+" "+customReportSubType+" "+customizedReportTimestamp.format('yyyyMMddHHmmss')
+				"Custom Report "+reportTypeTimestamp+" "+reportSubTypeTimestamp+" "+customizedReportTimestamp.format('yyyyMMddHHmmss')
 		}
 		def customizedReportSave = params.get('customizedReportSave')
-		customizedListingModel << [
+		customizedListingParams << [
 			customizedReportName:customizedReportName,
 			customizedReportSave:customizedReportSave
 		]
 
-		if (log.isDebugEnabled()) log.debug("listing.customizedListing end, customizedListingModel:"+customizedListingModel)
+		if (log.isDebugEnabled()) log.debug("listing.customizedListing end, customizedListingParams:"+customizedListingParams)
 		switch(reportType){
 			case ReportType.INVENTORY:
-				redirect(action: "customEquipmentListing", params: customizedListingModel)
+				redirect(action: "customEquipmentListing", params: customizedListingParams)
 				break;
 			case ReportType.CORRECTIVE:
-				redirect(action: "customWorkOrderListing", params: customizedListingModel)
+				redirect(action: "customWorkOrderListing", params: customizedListingParams)
 				break;
 			case ReportType.PREVENTIVE:
-				redirect(action: "customPreventiveOrderListing", params: customizedListingModel)
+				redirect(action: "customPreventiveOrderListing", params: customizedListingParams)
 				break;
 			case ReportType.SPAREPARTS:
-				redirect(action: "customSparePartsListing", params: customizedListingModel)
+				redirect(action: "customSparePartsListing", params: customizedListingParams)
+				break;
+			default:
+				break;
+		}
+	}
+
+	def savedCustomizedListing ={
+		if (log.isDebugEnabled()) log.debug("listing.savedCustomizedListing start, params:"+params)
+
+		def reportType = getReportType()
+		def reportSubType = getReportSubType()
+		
+		// TODO get the user's saved report id
+
+		def savedCustomizedListingParams = [:]
+		def savedCustomizedListingReport = null
+		
+		switch(reportType){
+			case ReportType.INVENTORY:
+				// TODO get the savedCustomizedListingParams for the saved report
+				savedCustomizedListingReport = equipmentListingReportService.getCustomReportOfEquipments(user,savedCustomizedListingParams,null)
+				if (log.isDebugEnabled()) log.debug("listing.savedCustomizedListing # of equipments:"+savedCustomizedListingReport.size())
+				break;
+			case ReportType.CORRECTIVE:
+				savedCustomizedListingReport = workOrderListingReportService.getCustomReportOfWorkOrders(user,savedCustomizedListingParams,null)
+				if (log.isDebugEnabled()) log.debug("llisting.savedCustomizedListing # of workOrders:"+savedCustomizedListingReport.size())
+				break;
+			case ReportType.PREVENTIVE:
+				// TODO
+				break;
+			case ReportType.SPAREPARTS:
+				// TODO
 				break;
 			default:
 				break;
 		}
 
-		render(view: '/reports/reports',
-		model: customizedListingModel <<
-		[
-			template:"/reports/listing/listing"
-		])
+		if(!request.xhr)
+			render(view:"/reports/reports",
+			model: model(savedCustomizedListingReport, "") <<
+			[
+				reportType: reportType,
+				reportSubType: reportSubType,
+				//reportTypeOptions: reportTypeOptions,
+				//customizedReportName: customizedReportName,
+				template:"/reports/listing/listing"
+			])
+
 	}
 
 	// inventory
 	def customEquipmentListing ={
+		adaptParamsForList()
 		if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing start, params:"+params)
 
 		def reportType = getReportType()
@@ -636,6 +537,7 @@ class ListingController extends AbstractController{
 		if(params.get('toCost') != null && !params.get('toCost').empty)
 			toCost = Double.parseDouble(params.get('toCost'))
 		def costCurrency = params.get('costCurrency')
+		def equipmentReport=new EquipmentReport()
 
 		def customEquipmentParams = [
 			reportType: reportType,
@@ -682,12 +584,15 @@ class ListingController extends AbstractController{
 		customEquipmentParams << [
 			reportTypeOptions: reportTypeOptions,
 			customizedReportName: customizedReportName,
-			customizedReportSave: customizedReportSave,
+			customizedReportSave: customizedReportSave
 		]
 
 		if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing end, customEquipmentParams:"+customEquipmentParams)
 
-		adaptParamsForList()
+		if(customizedReportSave){
+			equipmentListingReportService.saveEquipmentReportParams(user,equipmentReport, customEquipmentParams, params)
+		}
+
 		def equipments = equipmentListingReportService.getCustomReportOfEquipments(user,customEquipmentParams,params)
 		if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing # of equipments:"+equipments.size())
 
@@ -713,6 +618,7 @@ class ListingController extends AbstractController{
 		def reportSubType = getReportSubType()
 
 		def dataLocations = getDataLocations()
+		def departments = getDepartments()
 		def equipmentTypes = getEquipmentTypes()
 
 		def fromCost = null
@@ -724,6 +630,7 @@ class ListingController extends AbstractController{
 		def costCurrency = params.get('costCurrency')
 
 		def warranty = params.get('warranty')
+		def correctiveMaintenanceReport = new CorrectiveMaintenanceReport()
 
 		def customWorkOrderParams = [
 			reportType: reportType,
@@ -766,10 +673,14 @@ class ListingController extends AbstractController{
 		customWorkOrderParams << [
 			reportTypeOptions: reportTypeOptions,
 			customizedReportName: customizedReportName,
-			customizedReportSave: customizedReportSave,
+			customizedReportSave: customizedReportSave
 		]
 
 		if (log.isDebugEnabled()) log.debug("listing.customWorkOrderListing, customWorkOrderParams:"+customWorkOrderParams)
+
+		if(customizedReportSave){
+			workOrderListingReportService.saveWorkOrderReportParams(user, correctiveMaintenanceReport, customWorkOrderParams, params)
+		}
 
 		adaptParamsForList()
 		def displayableWorkOrders=[]
@@ -817,6 +728,7 @@ class ListingController extends AbstractController{
 		def reportSubType = getReportSubType()
 
 		def dataLocations = getDataLocations()
+		def departments = getDepartments()
 		def equipmentTypes = getEquipmentTypes()
 
 		def fromCost = null
@@ -826,8 +738,12 @@ class ListingController extends AbstractController{
 		if(params.get('toCost') != null && !params.get('toCost').empty)
 			toCost = Double.parseDouble(params.get('toCost'))
 		def costCurrency = params.get('costCurrency')
+		
+		def preventiveMaintenanceReport= new PreventiveMaintenanceReport()
 
 		def customPreventiveOrderParams = [
+			reportType: reportType,
+			reportSubType: reportSubType,
 			dataLocations: dataLocations,
 			departments: departments,
 			equipmentTypes: equipmentTypes,
@@ -855,10 +771,14 @@ class ListingController extends AbstractController{
 		customPreventiveOrderParams << [
 			reportTypeOptions: reportTypeOptions,
 			customizedReportName: customizedReportName,
-			customizedReportSave: customizedReportSave,
+			customizedReportSave: customizedReportSave
 		]
 
 		if (log.isDebugEnabled()) log.debug("listing.customPreventiveOrderListing, customPreventiveOrderParams:"+customPreventiveOrderParams)
+
+		if(customizedReportSave){
+			preventiveOrderListingReportService.savePreventiveOrderReportParams(user, preventiveMaintenanceReport, customPreventiveOrderParams, params)
+		}
 
 		adaptParamsForList()
 		def preventiveOrders = preventiveOrderListingReportService.getCustomReportOfPreventiveOrders(user,customPreventiveOrderParams,params)
@@ -921,10 +841,14 @@ class ListingController extends AbstractController{
 		customSparePartsParams << [
 			reportTypeOptions: reportTypeOptions,
 			customizedReportName: customizedReportName,
-			customizedReportSave: customizedReportSave,
+			customizedReportSave: customizedReportSave
 		]
 
 		if (log.isDebugEnabled()) log.debug("listing.customSparePartsListing, customSparePartsParams:"+customSparePartsParams)
+
+		if(customizedReportSave){
+			// TODO save the report
+		}
 
 		// TODO
 		// adaptParamsForList()
@@ -1049,12 +973,10 @@ class ListingController extends AbstractController{
 	public Date getPeriod(String periodParam){
 		def date = null
 		def period = params.get(periodParam);
-		if(log.isDebugEnabled())
-			log.debug("abstract.getPeriod period param:"+periodParam+", value:"+period+", class:"+period?.class)
+		if(log.isDebugEnabled()) log.debug("abstract.getPeriod period param:"+periodParam+", value:"+period+", class:"+period?.class)
 		if(period != null && !period.empty) {
 			date  = Utils.parseDate(period)
-			if(log.isDebugEnabled())
-				log.debug("abstract.getPeriod date param:"+periodParam+", value:"+date+", class:"+date?.class)
+			if(log.isDebugEnabled()) log.debug("abstract.getPeriod date param:"+periodParam+", value:"+date+", class:"+date?.class)
 			return date
 		}
 		return date
@@ -1166,8 +1088,8 @@ class ListingController extends AbstractController{
 		}
 		return reportTypeOptions
 	}
-
+	
 	// customized report wizard params end
-
+	
 	// customized report wizard end
 }
