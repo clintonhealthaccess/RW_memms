@@ -28,17 +28,7 @@
     <g:else>
       <li>
         <span>Report Name:</span>
-        <a href="#">
-          <g:if test="${actionName == 'generalPreventiveOrdersListing'}">
-              TODO All Preventions
-            </g:if>
-            <g:if test="${actionName == 'equipmentsWithPreventionPlan'}">
-              TODO Equipments with Prevention Plan
-            </g:if>
-            <g:if test="${actionName == 'preventionsDelayed'}">
-              TODO Preventions Delayed
-            </g:if>
-        </a>
+        <a href="#">${selectedReport}</a>
       </li>
     </g:else>
 
@@ -88,11 +78,12 @@
         </g:if>
       </li>
     </g:if>
+%{-- TODO
     <g:else>
       <li>
         <span>Report Filter Summary:</span>
         <a href="#">TODO</a>
       </li>
-    </g:else>
+    </g:else> --}%
   </ul>
 </div>

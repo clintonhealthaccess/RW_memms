@@ -1,10 +1,9 @@
 <ul>
-	<li>
-	    %{-- TODO fix checkbox + text styles !!! --}%
+	<li class="modular">
 	    <label for="stockOut"><g:message code="reports.spareParts.stockOut"/>:</label>
 	    <input name="stockOut" type="checkbox"/>
-	    <span><g:message code="reports.spareParts.stockOut.within"/></span>
+	    <span class="word left push"><g:message code="reports.spareParts.stockOut.within"/></span>
 	    <input type="text" name="stockOutMonths"/>
-	    <span><g:message code="reports.spareParts.stockOut.months"/></span>
+	    <span class="word left push"><g:message code="reports.spareParts.stockOut.months"/></span>
 	</li>
 </ul>

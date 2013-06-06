@@ -28,26 +28,7 @@
     <g:else>
       <li>
         <span>Report Name:</span>
-        <a href="#">
-          <g:if test="${actionName == 'generalEquipmentsListing'}">
-            <g:message code="default.all.equipments.label" />
-          </g:if>
-          <g:if test="${actionName == 'obsoleteEquipments'}">
-            <g:message code="default.obsolete.label" />
-          </g:if>
-          <g:if test="${actionName == 'disposedEquipments'}">
-            <g:message code="default.disposed.label" />
-          </g:if>
-          <g:if test="${actionName == 'underMaintenanceEquipments'}">
-           <g:message code="default.under.maintenance.label" />
-          </g:if>
-          <g:if test="${actionName == 'inStockEquipments'}">
-            <g:message code="default.in.stock.label" />
-          </g:if>
-          <g:if test="${actionName == 'underWarrantyEquipments'}">
-            <g:message code="default.under.waranty.label" />
-          </g:if>
-        </a>
+        <a href="#">${selectedReport}</a>
       </li>
     </g:else>
 
@@ -109,14 +90,14 @@
             ${customEquipmentParams?.fromStatusChangesPeriod?:message(code:'reports.filters.none')} - 
             ${customEquipmentParams?.toStatusChangesPeriod?:message(code:'reports.filters.none')}</a>  
         </g:if>
-
       </li>
     </g:if>
+%{-- TODO    
     <g:else>
       <li>
         <span>Report Filter Summary:</span>
         <a href="#">TODO</a>
       </li>
-    </g:else>
+    </g:else> --}%
   </ul>
 </div>
