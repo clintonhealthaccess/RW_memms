@@ -728,7 +728,7 @@ class ListingController extends AbstractController{
 				reportTypeOptions: reportTypeOptions,
 				customizedReportName: customizedReportName,
 				customizedReportSave: customizedReportSave,
-				customWorkOrderParams: customWorkOrderParam
+				customWorkOrderParams: customWorkOrderParams,
 				template:"/reports/listing/listing"
 			])
 	}

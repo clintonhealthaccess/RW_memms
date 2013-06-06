@@ -13,7 +13,6 @@
 	<li><g:checkBox name="spartPartsOptions" value="status" checked="false" /><span>Status</span></li>
 	<li><g:checkBox name="spartPartsOptions" value="model" checked="false" /><span>Model</span></li>
 	<li><g:checkBox name="spartPartsOptions" value="manufacturer" checked="false" /><span>Manufacturer</span></li>
-	<li><g:checkBox name="spartPartsOptions" value="equipmentCode" checked="false" /><span>Equipment Code Associated With Spare Part</span></li>
 	<li><g:checkBox name="spartPartsOptions" value="cost" checked="false" /><span>Cost</span></li>
 	<li><g:checkBox name="spartPartsOptions" value="warrantyPeriodRemaining" checked="false" /><span>Warranty Period Remaining</span></li>
 	<li><g:checkBox name="spartPartsOptions" value="discontinuedDate" checked="false" /><span>Discontinued Date</span></li>
