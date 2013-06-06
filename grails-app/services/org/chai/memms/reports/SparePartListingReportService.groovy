@@ -13,6 +13,7 @@ import org.chai.memms.spare.part.SparePart.SparePartStatus;
 import org.chai.memms.util.Utils.ReportType;
 import org.chai.memms.util.Utils.ReportSubType;
 import org.chai.memms.util.Utils;
+import org.joda.time.DateTime;
 
 
 /**
@@ -22,6 +23,7 @@ import org.chai.memms.util.Utils;
 class SparePartListingReportService {
 	def sparePartService
 	def userService
+	def today = new Date()
 
 	public def getGeneralReportOfSpareParts(User user,Map<String, String> params) {
 		def dataLocations = []
@@ -129,7 +131,43 @@ class SparePartListingReportService {
 			 customSpareParts = statusChangesSpareParts
 			 }*/
 		}
-
+		if(reportSubType == ReportSubType.USERATE){
+			DateTime todayDateTime = new DateTime(today)
+			def lastYearDateTimeFromNow = todayDateTime.minusDays(365)
+			def lastYearDateFromNow = lastYearDateTimeFromNow.toDate()
+			criteriaSpareParts = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+				if(dataLocations != null && dataLocations.size() > 0)
+					inList("dataLocation",dataLocations)
+				if(sparePartTypes != null && sparePartTypes.size() > 0)
+					inList ("type", sparePartTypes)
+					gt("deliveryDate", lastYearDateFromNow)
+					projections{
+						property("id")
+						groupProperty("type")
+						rowCount("inStockQuantity")
+					}
+			}
+			if (log.isDebugEnabled()) log.debug("SPARE PARTS SIZE ON USE RATE: "+ criteriaSpareParts.size())
+		}
+		
+		if(reportSubType == ReportSubType.STOCKOUT){
+			DateTime todayDateTime = new DateTime(today)
+			def lastYearDateTimeFromNow = todayDateTime.minusDays(365)
+			def lastYearDateFromNow = lastYearDateTimeFromNow.toDate()
+			criteriaSpareParts = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+				if(dataLocations != null && dataLocations.size() > 0)
+					inList("dataLocation",dataLocations)
+				if(sparePartTypes != null && sparePartTypes.size() > 0)
+					inList ("type", sparePartTypes)
+					gt("deliveryDate", lastYearDateFromNow)
+					projections{
+						property("id")
+						groupProperty("type")
+						rowCount("inStockQuantity")
+					}
+			}
+			if (log.isDebugEnabled()) log.debug("SPARE PARTS SIZE ON USE RATE: "+ criteriaSpareParts.size())
+		}
 		return customSpareParts
 	}
 	public def saveSparePartReportParams(User user, def sparePartReport,def customSparePartParams, Map<String, String> params){
@@ -146,7 +184,6 @@ class SparePartListingReportService {
 		def sparePartStatus = customSparePartParams.get('sparePartStatus')
 
 		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON SPARE PART CUSTOM REPORT: SPARE PART STATUS :"+sparePartStatus)
-
 		sparePartReport.sparePartStatus=sparePartStatus
 		sparePartReport.noAcquisitionPeriod=noAcquisitionPeriod=="on"?true:false
 		sparePartReport.toDate=toAcquisitionPeriod

@@ -14,6 +14,7 @@ import org.chai.memms.util.Utils;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
 import org.chai.memms.util.Utils.ReportType
 import org.chai.memms.util.Utils.ReportSubType
+import org.joda.time.DateTime
 
 /**
  * @author Aphrodice Rwagaju
@@ -22,6 +23,7 @@ import org.chai.memms.util.Utils.ReportSubType
 class WorkOrderListingReportService {
 
 	def workOrderService
+	def today = new Date()
 
 	def getAllWorkOrders(User user , Map<String, String> params){
 		
@@ -56,9 +58,11 @@ class WorkOrderListingReportService {
 		}
 	}
 
-	def getWorkOrdersOfLastMonth(User user,Map<String, String> params) {
+	def getWorkOrdersOfLastMonth(User user,Map<String, String> params) {	
+		DateTime todayDateTime = new DateTime(today)
+		def lastMonthDateTimeFromNow = todayDateTime.minusDays(30)
+		def lastMonthDateFromNow = lastMonthDateTimeFromNow.toDate()
 
-		def lastMonth= (new Date())-30
 		def criteria = WorkOrder.createCriteria();
 		def dataLocations = []
 		if(user.location instanceof Location) dataLocations.addAll(user.location.collectDataLocations(null))
@@ -74,7 +78,7 @@ class WorkOrderListingReportService {
 				eq ("currentStatus",OrderStatus.OPENATMMC)
 				eq ("currentStatus",OrderStatus.OPENATFOSA)
 			}
-			ge ("openOn",lastMonth)
+			ge ("openOn",lastMonthDateFromNow)
 		}
 	}
 

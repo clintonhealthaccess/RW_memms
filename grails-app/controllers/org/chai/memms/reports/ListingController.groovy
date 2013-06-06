@@ -853,11 +853,7 @@ class ListingController extends AbstractController{
 		if(customizedReportSave){
 			
 			sparePartListingReportService.saveSparePartReportParams(user, sparePartReport, customSparePartsParams, params)
-		
-			
-			
-			
-			}
+		}
 
 		// TODO
 		// adaptParamsForList()

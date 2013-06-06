@@ -159,6 +159,7 @@ class EquipmentListingReportService {
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(dataLocations)
 				inList("dataLocation",dataLocations)
+				lt ("warrantyEndDate",today)
 		}
 	}
 
