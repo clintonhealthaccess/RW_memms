@@ -44,9 +44,9 @@ class SparePartStatus {
 		
 		NONE("none"),
 		INSTOCK("in.stock"),
-		// OPERATIONAL("operational"),
+		//OPERATIONAL("operational"),
 		PENDINGORDER("pending.order")
-		// DISPOSED("disposed")
+		//DISPOSED("disposed")
 		
 		String messageCode = "spare.part.status"
 		
