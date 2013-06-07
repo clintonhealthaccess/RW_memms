@@ -303,7 +303,8 @@ class ListingController extends AbstractController{
 		if (log.isDebugEnabled()) log.debug("listing.generalSparePartsListing start, params:"+params)
 
 		adaptParamsForList()
-		def spareParts = sparePartListingReportService.getGeneralReportOfSpareParts(user,params)
+		def type = SparePartType.get(params.long('type.id'))
+		def spareParts = sparePartListingReportService.getGeneralReportOfSpareParts(user,type, params)
 		if(!request.xhr)
 			render(view:"/reports/reports",
 			model: model(spareParts, "") <<
@@ -319,7 +320,8 @@ class ListingController extends AbstractController{
 		if (log.isDebugEnabled()) log.debug("listing.generalSparePartsListing start, params:"+params)
 
 		adaptParamsForList()
-		def spareParts = sparePartListingReportService.getPendingOrderSparePartsReport(user,params)
+		def type = SparePartType.get(params.long('type.id'))
+		def spareParts = sparePartListingReportService.getPendingOrderSparePartsReport(user,type,params)
 		if(!request.xhr)
 			render(view:"/reports/reports",
 			model: model(spareParts, "") <<
@@ -811,6 +813,7 @@ class ListingController extends AbstractController{
 
 	// spare parts
 	def customSparePartsListing ={
+		adaptParamsForList()
 		if (log.isDebugEnabled()) log.debug("listing.customSparePartsListing start, params:"+params)
 
 		def reportType = getReportType()
@@ -867,19 +870,19 @@ class ListingController extends AbstractController{
 			
 			sparePartListingReportService.saveSparePartReportParams(user, sparePartReport, customSparePartsParams, params)
 		}
-
-		// TODO
-		// adaptParamsForList()
-		// def equipments = workOrderListingReportService.getCustomReportOfSpareParts(user,customSparePartsParams,params)
-
+		def spareParts = sparePartListingReportService.getCustomReportOfSpareParts(user,customSparePartsParams,params)
+		if (log.isDebugEnabled()) log.debug("WWWWWWWWWWWHY DON'T I SEE THIS VALUE ON THE INTERFACE?:"+spareParts)
+		
 		if(!request.xhr)
 			render(view:"/reports/reports",
-			model: [
+			model: model(spareParts, "") << 
+			[
 				reportType: reportType,
 				reportSubType: reportSubType,
 				reportTypeOptions: reportTypeOptions,
 				customizedReportName: customizedReportName,
 				customizedReportSave: customizedReportSave,
+				customSparePartsParams:customSparePartsParams,
 				template:"/reports/listing/listing"
 			])
 	}

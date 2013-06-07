@@ -8,7 +8,9 @@ import java.util.Map;
 import org.chai.location.DataLocation;
 import org.chai.location.Location;
 import org.chai.memms.security.User;
+import org.chai.memms.security.User.UserType;
 import org.chai.memms.spare.part.SparePart;
+import org.chai.memms.spare.part.SparePartType;
 import org.chai.memms.spare.part.SparePart.SparePartStatus;
 import org.chai.memms.util.Utils.ReportType;
 import org.chai.memms.util.Utils.ReportSubType;
@@ -25,44 +27,55 @@ class SparePartListingReportService {
 	def userService
 	def today = new Date()
 
-	public def getGeneralReportOfSpareParts(User user,Map<String, String> params) {
+	public def getGeneralReportOfSpareParts(User user,SparePartType type,Map<String, String> params) {
 		def dataLocations = []
-		if(user.location instanceof Location) dataLocations.addAll(user.location.collectDataLocations(null))
-		else{
-			dataLocations = []
-			dataLocations.add(user.location as DataLocation)
-			if(userService.canViewManagedSpareParts(user)) dataLocations.addAll(((DataLocation)user.location).manages)
-		}
-
 		def criteria = SparePart.createCriteria();
-
-		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			if(dataLocations)
-				inList("dataLocation",dataLocations)
+		if(user.userType.equals(UserType.ADMIN) || user.userType.equals(UserType.TECHNICIANMMC) || user.userType.equals(UserType.SYSTEM) || user.userType.equals(UserType.TECHNICIANDH))
+			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+				if(type!=null)
+					eq("type",type)
+			}
+		else{
+			if(user.location instanceof Location) dataLocations.addAll(user.location.collectDataLocations(null))
+			else{
+				dataLocations = []
+				dataLocations.add(user.location as DataLocation)
+				if(userService.canViewManagedSpareParts(user)) dataLocations.addAll(((DataLocation)user.location).manages)
+			}
+			return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+				if(dataLocations)
+					inList("dataLocation",dataLocations)
+			}
 		}
 	}
 
-	public def getPendingOrderSparePartsReport(User user,Map<String, String> params) {
+	public def getPendingOrderSparePartsReport(User user,SparePartType type, Map<String, String> params) {
 		def dataLocations = []
-		if(user.location instanceof Location) dataLocations.addAll(user.location.collectDataLocations(null))
-		else{
-			dataLocations = []
-			dataLocations.add(user.location as DataLocation)
-			if(userService.canViewManagedSpareParts(user)) dataLocations.addAll(((DataLocation)user.location).manages)
-		}
-
 		def criteria = SparePart.createCriteria();
-
-		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			if(dataLocations)
-				inList("dataLocation",dataLocations)
-			eq ("status",SparePartStatus.PENDINGORDER)
+		if(user.userType.equals(UserType.ADMIN) || user.userType.equals(UserType.TECHNICIANMMC) || user.userType.equals(UserType.SYSTEM) || user.userType.equals(UserType.TECHNICIANDH))
+			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+				if(type!=null)
+					eq("type",type)
+					eq ("status",SparePartStatus.PENDINGORDER)
+			}
+		else{
+			if(user.location instanceof Location) dataLocations.addAll(user.location.collectDataLocations(null))
+			else{
+				dataLocations = []
+				dataLocations.add(user.location as DataLocation)
+				if(userService.canViewManagedSpareParts(user)) dataLocations.addAll(((DataLocation)user.location).manages)
+			}
+			return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+				if(dataLocations)
+					inList("dataLocation",dataLocations)
+					eq ("status",SparePartStatus.PENDINGORDER)
+			}
 		}
 	}
+	// TODO we have to track also the spare part at MMC level which does not have dataLocation.
+	public def getCustomReportOfSpareParts(User user, def customSparePartsParams, Map<String, String> params) {
 
-	public def getCustomReportOfSpareParts(User user,def customSparePartsParams, Map<String, String> params) {
-
-		def customSpareParts = []
+		//def customSpareParts = []
 
 		def reportType = customSparePartsParams.get('reportType')
 		def reportSubType = customSparePartsParams.get('reportSubType')
@@ -140,16 +153,16 @@ class SparePartListingReportService {
 					inList("dataLocation",dataLocations)
 				if(sparePartTypes != null && sparePartTypes.size() > 0)
 					inList ("type", sparePartTypes)
-					gt("deliveryDate", lastYearDateFromNow)
-					projections{
-						property("id")
-						groupProperty("type")
-						rowCount("inStockQuantity")
-					}
+				gt("deliveryDate", lastYearDateFromNow)
+				projections{
+					property("id")
+					groupProperty("type")
+					rowCount("inStockQuantity")
+				}
 			}
 			if (log.isDebugEnabled()) log.debug("SPARE PARTS SIZE ON USE RATE: "+ criteriaSpareParts.size())
 		}
-		
+
 		if(reportSubType == ReportSubType.STOCKOUT){
 			DateTime todayDateTime = new DateTime(today)
 			def lastYearDateTimeFromNow = todayDateTime.minusDays(365)
@@ -159,16 +172,17 @@ class SparePartListingReportService {
 					inList("dataLocation",dataLocations)
 				if(sparePartTypes != null && sparePartTypes.size() > 0)
 					inList ("type", sparePartTypes)
-					gt("deliveryDate", lastYearDateFromNow)
-					projections{
-						property("id")
-						groupProperty("type")
-						rowCount("inStockQuantity")
-					}
+				gt("deliveryDate", lastYearDateFromNow)
+				projections{
+					property("id")
+					groupProperty("type")
+					rowCount("inStockQuantity")
+				}
 			}
 			if (log.isDebugEnabled()) log.debug("SPARE PARTS SIZE ON USE RATE: "+ criteriaSpareParts.size())
+			//customSpareParts=criteriaSpareParts
 		}
-		return customSpareParts
+		return criteriaSpareParts
 	}
 	public def saveSparePartReportParams(User user, def sparePartReport,def customSparePartParams, Map<String, String> params){
 		def reportName = customSparePartParams.get('customizedReportName')

@@ -20,15 +20,8 @@
 			<g:if test="${reportTypeOptions.contains('status')}">
 				<th>Status</th>
 			</g:if>
-			<g:if test="${reportTypeOptions.contains('model')}">
-				<g:sortableColumn property="model"  title="${message(code: 'equipment.model.label')}" params="[q:q]" />
-			</g:if>
 			<g:if test="${reportTypeOptions.contains('manufacturer')}">
 				<g:sortableColumn property="manufacturer"  title="${message(code: 'provider.type.manufacturer')}" params="[q:q]" />
-			</g:if>
-			</g:if>
-			<g:if test="${reportTypeOptions.contains('cost')}">
-				<th>Cost</th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('warrantyPeriodRemaining')}">
 				<th>Warranty Period Remaining</th>
@@ -45,38 +38,44 @@
 		</tr>
 	</thead>
 	<tbody>
-		<g:each in="${entities}" status="i" var="order">
-			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
+		<g:each in="${entities}" status="i" var="sparePart">
+			<tr >
 				<g:if test="${reportTypeOptions.contains('sparePartType')}">
-					<td>%{-- TODO --}%</td>
+					<td>${sparePart.type.names}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('locationOfStock')}">
-					<td>%{-- TODO --}%</td>
+					<td>
+					<g:if test="${sparePart.dataLocation != null}">
+					<g:message code="datalocation.label"/>: ${sparePart.dataLocation?.names}<br/>
+					</g:if>
+					<g:else>
+					${sparePart.stockLocation?.name.toUpperCase()}
+					</g:else>
+					<g:if test="${!sparePart.room.equals("") && sparePart.room!=null}">
+						<g:message code="spare.part.room.label"/>: ${sparePart.room}<br/>
+					</g:if>
+					<g:if test="${!sparePart.shelf.equals("") && sparePart.shelf!=null}">
+						<g:message code="spare.part.shelf.label"/>: ${sparePart.shelf}<br/>
+					</g:if>
+					</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('quantityInStock')}">
-					<td>%{-- TODO --}%</td>
+					<td>${sparePart.inStockQuantity}</td>
 				</g:if>
 				<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
 					%{-- TODO SL --}%
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('status')}">
-					<td>%{-- TODO --}%</td>
-				</g:if>
-				<g:if test="${reportTypeOptions.contains('model')}">
-					<g:sortableColumn property="model"  title="${message(code: 'equipment.model.label')}" params="[q:q]" />
+					<td>${message(code: sparePart.status?.messageCode+'.'+sparePart.status?.name)}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('manufacturer')}">
-					<g:sortableColumn property="manufacturer"  title="${message(code: 'provider.type.manufacturer')}" params="[q:q]" />
-				</g:if>
-				</g:if>
-				<g:if test="${reportTypeOptions.contains('cost')}">
-					<td>%{-- TODO --}%</td>
+					<td>${sparePart.type.manufacturer?.contact?.contactName}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('warrantyPeriodRemaining')}">
 					<td>%{-- TODO --}%</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('discontinuedDate')}">
-					<td>%{-- TODO --}%</td>
+					<td>${sparePart.type.discontinuedDate}</td>
 				</g:if>
 				<g:if test="${reportSubType == ReportSubType.STOCKOUT && reportTypeOptions.contains('forecastedStockOut')}">
 				    <td>%{-- TODO --}%</td>
