@@ -9,16 +9,19 @@
       <a href="${createLinkWithTargetURI(controller: 'listing', action:'generalEquipmentsListing')}" id="report-1">
               <g:message code="default.all.equipments.label" />
       </a>
+      <span class='delete-node' id='js-delete-node'>X</span>
     </li>
     <li>
       <a href="${createLinkWithTargetURI(controller: 'listing', action:'obsoleteEquipments')}" id="report-2">
               <g:message code="default.obsolete.label" />
       </a>
+      <span class='delete-node' id='js-delete-node'>X</span>
     </li>
     <li>
       <a href="${createLinkWithTargetURI(controller: 'listing', action:'disposedEquipments')}" id="report-3">
               <g:message code="default.disposed.label" />
       </a>
+      <span class='delete-node' id='js-delete-node'>X</span>
     </li>
     <li>
       <a href="${createLinkWithTargetURI(controller: 'listing', action:'underMaintenanceEquipments')}" id="report-4">

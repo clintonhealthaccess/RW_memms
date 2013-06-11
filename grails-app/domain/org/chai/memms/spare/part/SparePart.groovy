@@ -69,6 +69,7 @@ public class SparePart {
 		SparePartPurchasedBy(String name){ this.name=name }
 		String getKey() { return name() }	
 	}
+	
 	enum SparePartStatus{
 		
 		NONE('none'),

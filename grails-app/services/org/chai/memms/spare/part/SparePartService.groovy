@@ -103,7 +103,6 @@ class SparePartService {
 		}
 	}
 
-
 	public def getSpareParts(User user, SparePartType type,Map<String,String> params) {
 		def dataLocations = []
 		def criteria = SparePart.createCriteria();
@@ -127,8 +126,28 @@ class SparePartService {
 			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){  inList('dataLocation',dataLocations)  }
 
 		}
-
 	}
+
+	public def getSparePartTimeBasedStatusChange(SparePart sparePart, List<StatusOfSparePartChange> sparePartStatusChange){
+		StatusOfSparePartChange sparePartStatusChange = null
+
+		def previousStatus = sparePart.getTimeBasedPreviousStatus()?.status
+		def currentStatus = sparePart.getTimeBasedStatus().status
+
+		if(sparePartStatusChange == null) sparePartStatusChange = StatusOfSparePartChange.values()
+	 	sparePartStatusChange.each{ statusChange ->
+ 			
+ 			def previousStatusMap = statusChange.getStatusChange()['previous']
+			def currentStatusMap = statusChange.getStatusChange()['current']
+
+			def previousStatusChange = previousStatusMap.contains(previousStatus) || (previousStatusMap.contains(Status.NONE) && previousStatus == null)
+			def currentStatusChange = currentStatusMap.contains(currentStatus)
+
+			if(previousStatusChange && currentStatusChange) sparePartStatusChange = statusChange
+	 	}
+	 	return sparePartStatusChange
+	}
+
 	public def filterSparePart(def location, def supplier, def type,def stockLocation,def sparePartPurchasedBy,def status,Map<String, String> params){
 
 		def dataLocations = []		
