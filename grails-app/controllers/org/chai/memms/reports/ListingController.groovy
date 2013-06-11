@@ -249,7 +249,20 @@ class ListingController extends AbstractController{
 				reportType: ReportType.CORRECTIVE,
 				reportSubType: ReportSubType.WORKORDERS,
 				selectedReport: message(code:'default.work.order.escalated.to.mmc.label'),
-				template:"/reports/listing/listing",
+				template:"/reports/listing/listing"
+			])
+	}
+	def lastYearClosedWorkOrders={
+		adaptParamsForList()
+		def workOrders = workOrderListingReportService.getClosedWorkOrdersOfLastYear(user, params)
+		if(!request.xhr)
+			render(view:"/reports/reports",
+			model: model(workOrders, "") <<
+			[
+				reportType: ReportType.CORRECTIVE,
+				reportSubType: ReportSubType.WORKORDERS,
+				selectedReport: message(code:'default.work.order.closed.last.year.label'),
+				template:"/reports/listing/listing"
 			])
 	}
 
@@ -870,7 +883,7 @@ class ListingController extends AbstractController{
 			
 			sparePartListingReportService.saveSparePartReportParams(user, sparePartReport, customSparePartsParams, params)
 		}
-		def spareParts = sparePartListingReportService.getCustomReportOfSpareParts(user,customSparePartsParams,params)
+		def spareParts = workOrderListingReportService.getClosedWorkOrdersOfLastYear(user, customSparePartsParams, params)
 		if (log.isDebugEnabled()) log.debug("WWWWWWWWWWWHY DON'T I SEE THIS VALUE ON THE INTERFACE?:"+spareParts)
 		
 		if(!request.xhr)

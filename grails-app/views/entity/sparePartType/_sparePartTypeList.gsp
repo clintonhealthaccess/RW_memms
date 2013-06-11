@@ -39,8 +39,8 @@
 				</td>
 				<td>
 					<g:if test="${(type.inStockSpareParts?.size()>0)}">
-						<a href="${createLinkWithTargetURI(controller:'sparePartView', action:'list', params:['type.id': type.id,status:"INSTOCK"])}">
-							${type.inStockSpareParts.size()}
+						<a href="${createLinkWithTargetURI(controller:'sparePartView', action:'list', params:['type.id': type.id, 'status':"INSTOCK"])}">
+							${type.inStockSparePartsQuantity}
 						</a>
 					</g:if>
 					<g:else>0</g:else>

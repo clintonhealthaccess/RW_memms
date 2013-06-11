@@ -86,6 +86,15 @@ class SparePartType {
 					inStockSpareParts.add(sparePart)
 		return inStockSpareParts
 	}
+	// Added by Aphrodice for testing purpose
+	@Transient
+	def getInStockSparePartsQuantity(){
+		spareParts=getInStockSpareParts()
+		def inStockSpareParts = 0
+			for(SparePart sparePart: spareParts)
+				inStockSpareParts= inStockSpareParts+ sparePart.inStockQuantity
+		return inStockSpareParts
+	}
 
 	@Transient
 	def getPendingSpareParts(){

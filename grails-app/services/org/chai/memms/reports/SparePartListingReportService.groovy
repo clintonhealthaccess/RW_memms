@@ -16,6 +16,9 @@ import org.chai.memms.util.Utils.ReportType;
 import org.chai.memms.util.Utils.ReportSubType;
 import org.chai.memms.util.Utils;
 import org.joda.time.DateTime;
+import org.chai.memms.maintenance.MaintenanceOrder;
+import org.chai.memms.corrective.maintenance.WorkOrder;
+import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
 
 
 /**
@@ -153,12 +156,13 @@ class SparePartListingReportService {
 					inList("dataLocation",dataLocations)
 				if(sparePartTypes != null && sparePartTypes.size() > 0)
 					inList ("type", sparePartTypes)
-				gt("deliveryDate", lastYearDateFromNow)
-				projections{
+				eq ("status",SparePartStatus.INSTOCK)
+				//gt("deliveryDate", lastYearDateFromNow)
+				/*projections{
 					property("id")
 					groupProperty("type")
 					rowCount("inStockQuantity")
-				}
+				}*/
 			}
 			if (log.isDebugEnabled()) log.debug("SPARE PARTS SIZE ON USE RATE: "+ criteriaSpareParts.size())
 		}
@@ -172,12 +176,13 @@ class SparePartListingReportService {
 					inList("dataLocation",dataLocations)
 				if(sparePartTypes != null && sparePartTypes.size() > 0)
 					inList ("type", sparePartTypes)
-				gt("deliveryDate", lastYearDateFromNow)
-				projections{
+				eq ("status",SparePartStatus.INSTOCK)
+				//gt("deliveryDate", lastYearDateFromNow)
+				/*projections{
 					property("id")
 					groupProperty("type")
 					rowCount("inStockQuantity")
-				}
+				}*/
 			}
 			if (log.isDebugEnabled()) log.debug("SPARE PARTS SIZE ON USE RATE: "+ criteriaSpareParts.size())
 			//customSpareParts=criteriaSpareParts
@@ -211,5 +216,38 @@ class SparePartListingReportService {
 
 		sparePartReport.save(failOnError:true)
 		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON SPARE PART CUSTOM REPORT SAVED CORRECTLY. THE REPORT ID IS :"+ sparePartReport.id)
+	}
+	
+	def getQuantityOfEachTypeOfSparePartUsedLastYear(User user, Map<SparePart, Integer> usedSpareParts, Map<String, String> params){
+		DateTime todayDateTime = new DateTime(today)
+		def lastYearDateTimeFromNow = todayDateTime.minusDays(365)
+		def lastYearDateFromNow = lastYearDateTimeFromNow.toDate()
+		
+		def dataLocations = []
+		
+		def criteria = WorkOrder.createCriteria();
+		if(user.userType.equals(UserType.ADMIN) || user.userType.equals(UserType.TECHNICIANMMC) || user.userType.equals(UserType.SYSTEM) || user.userType.equals(UserType.TECHNICIANDH))
+			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+				createAlias("equipment","equip")
+				if(usedSpareParts.size()!=0 && (OrderStatus.CLOSEDFIXED ||OrderStatus.CLOSEDFORDISPOSAL))
+					//eq("equip.type",usedSpareParts.get(SparePart.type))
+					eq ("status",SparePartStatus.INSTOCK)
+					gt ("closedOn",lastYearDateFromNow)
+			}
+		else{
+			if(user.location instanceof Location) dataLocations.addAll(user.location.collectDataLocations(null))
+			else{
+				dataLocations = []
+				dataLocations.add(user.location as DataLocation)
+				if(userService.canViewManagedSpareParts(user)) dataLocations.addAll(((DataLocation)user.location).manages)
+			}
+			return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+				createAlias("equipment","equip")
+				if(dataLocations)
+					//eq("equip.type",usedSpareParts.get(SparePart.type))
+					inList("dataLocation",dataLocations)
+					gt ("closedOn",lastYearDateFromNow)
+			}
+		}
 	}
 }

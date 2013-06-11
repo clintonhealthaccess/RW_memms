@@ -98,8 +98,11 @@
             <!-- listing filter summary template -->
             <g:render template ="/reports/listing/listingFilterSummary" />
             <!-- spare parts report template -->
-            <g:if test="${customizedReportName != null && !customizedReportName.empty}">
+            <g:if test="${customizedReportName != null && !customizedReportName.empty && !ReportSubType.USERATE}">
               <g:render template="/reports/listing/sparePartReport/customSparePartsListing" />
+            </g:if>
+            <g:if test="${customizedReportName != null && !customizedReportName.empty && ReportSubType.USERATE}">
+              <g:render template="/reports/listing/sparePartReport/customSparePartTypesListing" />
             </g:if>
             <g:else>
               <g:render template="/reports/listing/sparePartReport/sparePartsListing" />

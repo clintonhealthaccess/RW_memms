@@ -211,4 +211,40 @@ class WorkOrderListingReportService {
 		correctiveMaintenanceReport.save(failOnError:true)
 		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON EQUIPMENT CUSTOM REPORT SAVED CORRECTLY. THE REPORT ID IS :"+ correctiveMaintenanceReport.id)
 	}
+	
+	
+	
+	def getClosedWorkOrdersOfLastYear(User user, def customWorkOrderParams ,Map<String, String> params) {
+		//DATE PROCESSING TO BE REVIEWED EITHER IN THIS SERVICE OR WORKORDER BEAN LEVEL
+		DateTime todayDateTime = new DateTime(today)
+		def lastYaerDateTimeFromNow = todayDateTime.minusDays(365)
+		def lastYearDateFromNow = lastYaerDateTimeFromNow.toDate()
+
+		def criteria = WorkOrder.createCriteria();
+		def dataLocations = []
+		def criteriaWorkOrders=[]
+		if(user.location instanceof Location) dataLocations.addAll(user.location.collectDataLocations(null))
+		else{
+			dataLocations.add(user.location as DataLocation)
+		}
+		criteriaWorkOrders = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			createAlias("equipment","equip")
+			if(dataLocations)
+				inList('equip.dataLocation',dataLocations)
+			or{
+				eq ("currentStatus",OrderStatus.CLOSEDFIXED)
+				eq ("currentStatus",OrderStatus.CLOSEDFORDISPOSAL)
+			}
+			ge ("closedOn",lastYearDateFromNow)
+		}
+		
+		if (log.isDebugEnabled()) log.debug("WORK ORDER SIZE: "+ criteriaWorkOrders.size())
+		 
+		def sparePartTypesUsed = []
+		 for (WorkOrder workOrder:criteriaWorkOrders){
+			 if(workOrder.getSparePartsUsed() != null)
+			 sparePartTypesUsed.add(workOrder.getSparePartsUsed())
+		 }
+		return sparePartTypesUsed
+	}
 }
