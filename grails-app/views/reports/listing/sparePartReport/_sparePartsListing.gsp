@@ -4,7 +4,7 @@
 <table class="items">
 	<thead>
 		<tr>
-			<th><g:message code="location.label"/></th>
+			<g:sortableColumn property="stockLocation"  title="${message(code: 'location.label')}" params="[q:q,'type.id':type?.id,status:status]"/>
 			<g:sortableColumn property="type"  title="${message(code: 'spare.part.type.label')}" params="[q:q,'type.id':type?.id,status:status]" />
 			<g:sortableColumn property="stockLocation"  title="${message(code: 'spare.part.stockLocation.label')}" params="[q:q,'type.id':type?.id,status:status]" />
 			<g:sortableColumn property="status"  title="${message(code: 'spare.part.status.label')}" params="[q:q,'type.id':type?.id,status:status]" />
@@ -24,6 +24,9 @@
 					<g:if test="${sparePart.dataLocation != null}">
 					<g:message code="datalocation.label"/>: ${sparePart.dataLocation?.names}<br/>
 					</g:if>
+					<g:else>
+					${sparePart.stockLocation?.name.toUpperCase()}
+					</g:else>
 					<g:if test="${!sparePart.room.equals("") && sparePart.room!=null}">
 						<g:message code="spare.part.room.label"/>: ${sparePart.room}<br/>
 					</g:if>

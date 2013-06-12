@@ -29,6 +29,8 @@ package org.chai.memms.spare.part
 
 import java.util.Date;
 
+import javax.persistence.Transient;
+
 import groovy.transform.EqualsAndHashCode;
 
 import org.chai.location.DataLocation;
@@ -150,12 +152,13 @@ public class SparePart {
 
 		deliveryDate nullable: true
 	}
-
+	@Transient
 	def getUsedQuantity () {
 		if(status.equals(SparePartStatus.INSTOCK))
 			return initialQuantity - inStockQuantity
 	}
 	//True if this spare part group is no longer inStock
+	@Transient
 	def getIsEmptyStock(){
 		if(status.equals(SparePartStatus.INSTOCK) && inStockQuantity==0)
 			return true

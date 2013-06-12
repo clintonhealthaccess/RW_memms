@@ -14,6 +14,7 @@ import org.chai.memms.util.Utils;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
 import org.chai.memms.util.Utils.ReportType
 import org.chai.memms.util.Utils.ReportSubType
+import org.joda.time.DateTime
 
 /**
  * @author Aphrodice Rwagaju
@@ -22,6 +23,7 @@ import org.chai.memms.util.Utils.ReportSubType
 class WorkOrderListingReportService {
 
 	def workOrderService
+	def today = new Date()
 
 	def getAllWorkOrders(User user , Map<String, String> params){
 		
@@ -56,9 +58,11 @@ class WorkOrderListingReportService {
 		}
 	}
 
-	def getWorkOrdersOfLastMonth(User user,Map<String, String> params) {
+	def getWorkOrdersOfLastMonth(User user,Map<String, String> params) {	
+		DateTime todayDateTime = new DateTime(today)
+		def lastMonthDateTimeFromNow = todayDateTime.minusDays(30)
+		def lastMonthDateFromNow = lastMonthDateTimeFromNow.toDate()
 
-		def lastMonth= (new Date())-30
 		def criteria = WorkOrder.createCriteria();
 		def dataLocations = []
 		if(user.location instanceof Location) dataLocations.addAll(user.location.collectDataLocations(null))
@@ -74,7 +78,7 @@ class WorkOrderListingReportService {
 				eq ("currentStatus",OrderStatus.OPENATMMC)
 				eq ("currentStatus",OrderStatus.OPENATFOSA)
 			}
-			ge ("openOn",lastMonth)
+			ge ("openOn",lastMonthDateFromNow)
 		}
 	}
 
@@ -206,5 +210,41 @@ class WorkOrderListingReportService {
 		
 		correctiveMaintenanceReport.save(failOnError:true)
 		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON EQUIPMENT CUSTOM REPORT SAVED CORRECTLY. THE REPORT ID IS :"+ correctiveMaintenanceReport.id)
+	}
+	
+	
+	
+	def getClosedWorkOrdersOfLastYear(User user, def customWorkOrderParams ,Map<String, String> params) {
+		//DATE PROCESSING TO BE REVIEWED EITHER IN THIS SERVICE OR WORKORDER BEAN LEVEL
+		DateTime todayDateTime = new DateTime(today)
+		def lastYaerDateTimeFromNow = todayDateTime.minusDays(365)
+		def lastYearDateFromNow = lastYaerDateTimeFromNow.toDate()
+
+		def criteria = WorkOrder.createCriteria();
+		def dataLocations = []
+		def criteriaWorkOrders=[]
+		if(user.location instanceof Location) dataLocations.addAll(user.location.collectDataLocations(null))
+		else{
+			dataLocations.add(user.location as DataLocation)
+		}
+		criteriaWorkOrders = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			createAlias("equipment","equip")
+			if(dataLocations)
+				inList('equip.dataLocation',dataLocations)
+			or{
+				eq ("currentStatus",OrderStatus.CLOSEDFIXED)
+				eq ("currentStatus",OrderStatus.CLOSEDFORDISPOSAL)
+			}
+			ge ("closedOn",lastYearDateFromNow)
+		}
+		
+		if (log.isDebugEnabled()) log.debug("WORK ORDER SIZE: "+ criteriaWorkOrders.size())
+		 
+		def sparePartTypesUsed = []
+		 for (WorkOrder workOrder:criteriaWorkOrders){
+			 if(workOrder.getSparePartsUsed() != null)
+			 sparePartTypesUsed.add(workOrder.getSparePartsUsed())
+		 }
+		return sparePartTypesUsed
 	}
 }

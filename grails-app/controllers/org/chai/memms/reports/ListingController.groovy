@@ -249,7 +249,20 @@ class ListingController extends AbstractController{
 				reportType: ReportType.CORRECTIVE,
 				reportSubType: ReportSubType.WORKORDERS,
 				selectedReport: message(code:'default.work.order.escalated.to.mmc.label'),
-				template:"/reports/listing/listing",
+				template:"/reports/listing/listing"
+			])
+	}
+	def lastYearClosedWorkOrders={
+		adaptParamsForList()
+		def workOrders = workOrderListingReportService.getClosedWorkOrdersOfLastYear(user, params)
+		if(!request.xhr)
+			render(view:"/reports/reports",
+			model: model(workOrders, "") <<
+			[
+				reportType: ReportType.CORRECTIVE,
+				reportSubType: ReportSubType.WORKORDERS,
+				selectedReport: message(code:'default.work.order.closed.last.year.label'),
+				template:"/reports/listing/listing"
 			])
 	}
 
@@ -303,7 +316,8 @@ class ListingController extends AbstractController{
 		if (log.isDebugEnabled()) log.debug("listing.generalSparePartsListing start, params:"+params)
 
 		adaptParamsForList()
-		def spareParts = sparePartListingReportService.getGeneralReportOfSpareParts(user,params)
+		def type = SparePartType.get(params.long('type.id'))
+		def spareParts = sparePartListingReportService.getGeneralReportOfSpareParts(user,type, params)
 		if(!request.xhr)
 			render(view:"/reports/reports",
 			model: model(spareParts, "") <<
@@ -319,7 +333,8 @@ class ListingController extends AbstractController{
 		if (log.isDebugEnabled()) log.debug("listing.generalSparePartsListing start, params:"+params)
 
 		adaptParamsForList()
-		def spareParts = sparePartListingReportService.getPendingOrderSparePartsReport(user,params)
+		def type = SparePartType.get(params.long('type.id'))
+		def spareParts = sparePartListingReportService.getPendingOrderSparePartsReport(user,type,params)
 		if(!request.xhr)
 			render(view:"/reports/reports",
 			model: model(spareParts, "") <<
@@ -811,6 +826,7 @@ class ListingController extends AbstractController{
 
 	// spare parts
 	def customSparePartsListing ={
+		adaptParamsForList()
 		if (log.isDebugEnabled()) log.debug("listing.customSparePartsListing start, params:"+params)
 
 		def reportType = getReportType()
@@ -877,24 +893,20 @@ class ListingController extends AbstractController{
 		if(customizedReportSave){
 			
 			sparePartListingReportService.saveSparePartReportParams(user, sparePartReport, customSparePartsParams, params)
+		}
+		def spareParts = workOrderListingReportService.getClosedWorkOrdersOfLastYear(user, customSparePartsParams, params)
+		if (log.isDebugEnabled()) log.debug("WWWWWWWWWWWHY DON'T I SEE THIS VALUE ON THE INTERFACE?:"+spareParts)
 		
-			
-			
-			
-			}
-
-		// TODO
-		// adaptParamsForList()
-		// def equipments = workOrderListingReportService.getCustomReportOfSpareParts(user,customSparePartsParams,params)
-
 		if(!request.xhr)
 			render(view:"/reports/reports",
-			model: [
+			model: model(spareParts, "") << 
+			[
 				reportType: reportType,
 				reportSubType: reportSubType,
 				reportTypeOptions: reportTypeOptions,
 				customizedReportName: customizedReportName,
 				customizedReportSave: customizedReportSave,
+				customSparePartsParams:customSparePartsParams,
 				template:"/reports/listing/listing"
 			])
 	}
