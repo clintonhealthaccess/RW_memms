@@ -91,7 +91,6 @@ public class SparePart {
 	Date purchaseDate
 	Date dateCreated
 	Date lastUpdated
-	Date acquisitionDate
 	Date deliveryDate
 
 	Double purchaseCost
@@ -149,7 +148,6 @@ public class SparePart {
 		}	
 		supplier nullable: true
 
-		acquisitionDate nullable: true
 		deliveryDate nullable: true
 	}
 
