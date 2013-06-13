@@ -104,6 +104,7 @@ class WorkOrderListingReportService {
 			def workOrderStatus = customWorkOrderParams.get('workOrderStatus')
 			def fromWorkOrderPeriod = customWorkOrderParams.get('fromWorkOrderPeriod')
 			def toWorkOrderPeriod = customWorkOrderParams.get('toWorkOrderPeriod')
+			def warranty = customWorkOrderParams.get('warranty')
 
 			criteriaWorkOrders = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 
@@ -130,6 +131,8 @@ class WorkOrderListingReportService {
 				// 	gt ("openOn", fromWorkOrderPeriod)
 				// if(toWorkOrderPeriod != null)
 				// 	lt ("openOn", toWorkOrderPeriod)
+				if(warranty!=null && warranty)
+				lt ("equip.warrantyEndDate",today)
 			}
 			customWorkOrders = criteriaWorkOrders
 		}

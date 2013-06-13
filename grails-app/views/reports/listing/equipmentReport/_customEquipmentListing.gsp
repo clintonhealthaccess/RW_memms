@@ -75,6 +75,7 @@
 					<td>${equipment.model}</td>
 				</g:if>
 				<!-- TODO  customEquipmentParams.statusChanges not working: NULL POINTER EXCEPTION-->
+				<!-- TODO  equipment.getTimeBasedStatusChange no message signature-->
 				<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
 					<g:set var="statusChangesEnum" value="${equipment.getTimeBasedStatusChange(customEquipmentParams?.statusChanges)}"/>
 					<td>${message(code: statusChangesEnum?.messageCode+'.'+statusChangesEnum?.name)}</td>

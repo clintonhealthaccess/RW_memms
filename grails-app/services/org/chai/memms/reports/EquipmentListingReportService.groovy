@@ -221,24 +221,6 @@ class EquipmentListingReportService {
 				}
 			}
 			if (log.isDebugEnabled()) log.debug("EQUIPMENTS SIZE: "+ criteriaEquipments.size())
-
-			/*if(warranty != null && warranty){
-				def underWarrantyEquipments = []
-				
-				criteriaEquipments.each{ equipment ->
-					if (equipment.warranty?.startDate!=null && equipment.warrantyPeriod.numberOfMonths!=null && equipment.warrantyPeriod.months != null) {
-						
-						DateTime warrantyStatDateTime = new DateTime(equipment.warranty?.startDate)
-						def warrantyExpirationDateTime = warrantyStatDateTime.plusMonths(equipment.warrantyPeriod.numberOfMonths)
-						def warrantyExpirationDate = warrantyExpirationDateTime.toDate()
-						if (log.isDebugEnabled())
-							log.debug("WARRANTY EXPIRATION DATE TIME "+warrantyExpirationDateTime +"WARRANTY EXPIRATION DATE "+warrantyExpirationDate +" START DATE "+equipment.warranty.startDate +" WARRANTY PERIOD MONTHS "+equipment.warrantyPeriod.months +" WARRANTY PERIOD NUMBER OF MONTHS "+equipment.warrantyPeriod.numberOfMonths+" AND EXPIRATION DATE IS " +Utils.getDate(0, equipment.warrantyPeriod.numberOfMonths, 0))
-						if (warrantyExpirationDate > new Date())
-							underWarrantyEquipments.add(equipment)
-					}
-				}
-				customEquipments = underWarrantyEquipments
-			}*/
 		}
 
 		if(reportSubType == ReportSubType.STATUSCHANGES){
