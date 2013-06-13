@@ -564,6 +564,8 @@ class ListingController extends AbstractController{
 		if(params.get('toCost') != null && !params.get('toCost').empty)
 			toCost = Double.parseDouble(params.get('toCost'))
 		def costCurrency = params.get('costCurrency')
+		def noCost = params.get('noCost')
+
 		def equipmentReport=new EquipmentReport()
 
 		def customEquipmentParams = [
@@ -574,7 +576,8 @@ class ListingController extends AbstractController{
 			equipmentTypes: equipmentTypes,
 			fromCost: fromCost,
 			toCost: toCost,
-			costCurrency: costCurrency
+			costCurrency: costCurrency,
+			noCost: noCost
 		]
 
 		if(reportSubType == ReportSubType.INVENTORY){
@@ -655,6 +658,7 @@ class ListingController extends AbstractController{
 		if(params.get('toCost') != null && !params.get('toCost').empty)
 			toCost = Double.parseDouble(params.get('toCost'))
 		def costCurrency = params.get('costCurrency')
+		def noCost = params.get('noCost')
 
 		def warranty = params.get('warranty')
 		def correctiveMaintenanceReport = new CorrectiveMaintenanceReport()
@@ -668,6 +672,7 @@ class ListingController extends AbstractController{
 			fromCost: fromCost,
 			toCost: toCost,
 			costCurrency: costCurrency,
+			noCost: noCost,
 			warranty: warranty
 		]
 
@@ -746,6 +751,7 @@ class ListingController extends AbstractController{
 		if(params.get('toCost') != null && !params.get('toCost').empty)
 			toCost = Double.parseDouble(params.get('toCost'))
 		def costCurrency = params.get('costCurrency')
+		def noCost = params.get('noCost')
 		
 		def preventiveMaintenanceReport= new PreventiveMaintenanceReport()
 
@@ -757,7 +763,8 @@ class ListingController extends AbstractController{
 			equipmentTypes: equipmentTypes,
 			fromCost: fromCost,
 			toCost: toCost,
-			costCurrency: costCurrency
+			costCurrency: costCurrency,
+			noCost: noCost
 		]
 
 		if(reportSubType == ReportSubType.WORKORDERS){

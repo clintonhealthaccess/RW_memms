@@ -43,6 +43,8 @@
                 </option>
               </g:each>
             </select>
+            <g:checkBox name="noCost" class='clear-left'/>
+            <span><g:message code="reports.no.cost"/></span>
           </li>
         </g:if>
         <g:if test="${[ReportType.SPAREPARTS].contains(reportType)}">
