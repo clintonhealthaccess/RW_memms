@@ -76,7 +76,6 @@ class ListingController extends AbstractController{
 	def sparePartListingReportService
 	def workOrderListingReportService
 	def preventiveOrderListingReportService
-	//def grailsApplication
 	def userService
 
 	def getEntityClass() {
@@ -254,7 +253,7 @@ class ListingController extends AbstractController{
 	}
 	def lastYearClosedWorkOrders={
 		adaptParamsForList()
-		def workOrders = workOrderListingReportService.getClosedWorkOrdersOfLastYear(user, params)
+		def workOrders = workOrderListingReportService.getClosedWorkOrdersOfLastYear(user,null, params)
 		if(!request.xhr)
 			render(view:"/reports/reports",
 			model: model(workOrders, "") <<
@@ -711,28 +710,9 @@ class ListingController extends AbstractController{
 		}
 
 		adaptParamsForList()
-		def displayableWorkOrders=[]
 		def warrantyExpirationDate
-		def workOrders = []
-
-		def workOrderz = workOrderListingReportService.getCustomReportOfWorkOrders(user,customWorkOrderParams,params)
-		if (log.isDebugEnabled()) log.debug("llisting.customWorkOrderListing # of workOrders:"+workOrderz.size())
-		
-		//TODO move this into service method
-		if(warranty != null && !warranty.empty){
-			for(WorkOrder workOrder: workOrderz){
-				if (workOrder.equipment.warranty.startDate!=null && workOrder.equipment.warrantyPeriod.numberOfMonths!=null && workOrder.equipment.warrantyPeriod.months != null) {
-					warrantyExpirationDate= (workOrder.equipment.warranty.startDate).plus((workOrder.equipment.warrantyPeriod.numberOfMonths))
-					if (log.isDebugEnabled()) log.debug("CALCULATED DATE "+warrantyExpirationDate +"START DATE "+workOrder.equipment.warranty.startDate +"WARRANTY PERIOD "+workOrder.equipment.warrantyPeriod.months)
-					if (warrantyExpirationDate > new Date())
-						displayableWorkOrders.add(workOrder)
-				}
-				warrantyExpirationDate=null
-			}
-		}else{
-			displayableWorkOrders=workOrderz
-		}
-		workOrders=displayableWorkOrders
+		def workOrders = workOrderListingReportService.getCustomReportOfWorkOrders(user,customWorkOrderParams,params)
+		if (log.isDebugEnabled()) log.debug("llisting.customWorkOrderListing # of workOrders:"+workOrders.size())
 
 		if(!request.xhr)
 			render(view:"/reports/reports",
