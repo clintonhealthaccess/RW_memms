@@ -42,7 +42,6 @@ import org.chai.memms.util.Utils.ReportType;
 import org.chai.memms.util.Utils.ReportSubType;
 import org.chai.memms.util.Utils;
 import org.joda.time.DateTime;
-import org.chai.memms.Warranty;
 
 /**
  * @author Aphrodice Rwagaju
@@ -67,7 +66,7 @@ class EquipmentListingReportService {
 
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(dataLocations)
-				inList("dataLocation",dataLocations)
+				inList('dataLocation',dataLocations)
 		}
 	}
 
@@ -84,7 +83,7 @@ class EquipmentListingReportService {
 
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(dataLocations)
-				inList("dataLocation",dataLocations)
+				inList('dataLocation',dataLocations)
 			eq ("currentStatus",Status.DISPOSED)
 		}
 	}
@@ -103,7 +102,7 @@ class EquipmentListingReportService {
 
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(dataLocations)
-				inList("dataLocation",dataLocations)
+				inList('dataLocation',dataLocations)
 			eq ("obsolete", (obsolete.equals('true'))?true:false)
 		}
 	}
@@ -121,7 +120,7 @@ class EquipmentListingReportService {
 
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(dataLocations)
-				inList("dataLocation",dataLocations)
+				inList('dataLocation',dataLocations)
 			eq ("currentStatus",Status.UNDERMAINTENANCE)
 		}
 	}
@@ -139,11 +138,11 @@ class EquipmentListingReportService {
 
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(dataLocations)
-				inList("dataLocation",dataLocations)
+				inList('dataLocation',dataLocations)
 			eq ("currentStatus",Status.INSTOCK)
 		}
 	}
-	
+
 	public def getUnderWarrantyEquipments(User user,Map<String, String> params) {
 		def dataLocations = []
 
@@ -158,8 +157,7 @@ class EquipmentListingReportService {
 
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(dataLocations)
-				inList("dataLocation",dataLocations)
-				lt ("warrantyEndDate",today)
+				inList('dataLocation',dataLocations)
 		}
 	}
 
@@ -191,8 +189,9 @@ class EquipmentListingReportService {
 
 			criteriaEquipments = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 				
-				if(dataLocations != null && dataLocations.size() > 0)
-					inList("dataLocation",dataLocations)
+				if(dataLocations != null)
+					inList('dataLocation',dataLocations)
+				
 				if(equipmentTypes != null && equipmentTypes.size() > 0)
 					inList ("type", equipmentTypes)
 				and{
@@ -203,11 +202,10 @@ class EquipmentListingReportService {
 					if(upperLimitCost!=null)
 						lt ("purchaseCost", upperLimitCost)
 					if(currency !=null)
-						eq ("currency", currency)
-					/*if(fromAcquisitionPeriod != null)
+					if(fromAcquisitionPeriod != null)
 						gt ("purchaseDate", fromAcquisitionPeriod)
 					if(toAcquisitionPeriod != null)
-						lt ("purchaseDate", toAcquisitionPeriod)	*/
+						lt ("purchaseDate", toAcquisitionPeriod)	
 						//TODO
 					/*if(noAcquisitionPeriod != null && noAcquisitionPeriod)
 						eq ("purchaseDate", null)
@@ -216,11 +214,29 @@ class EquipmentListingReportService {
 						inList ("currentStatus",equipmentStatus)
 					if(obsolete != null && obsolete)
 						eq ("obsolete", (obsolete.equals('true'))?true:false)
-					if(warranty!=null && warranty)
-						lt ("warrantyEndDate",today)
+					/*if(warranty!=null && !warranty)
+						inList ("warranty.startDate",equipmentStatus)*/
 				}
 			}
 			if (log.isDebugEnabled()) log.debug("EQUIPMENTS SIZE: "+ criteriaEquipments.size())
+
+			if(warranty != null && warranty){
+				def underWarrantyEquipments = []
+				
+				criteriaEquipments.each{ equipment ->
+					if (equipment.warranty.startDate!=null && equipment.warrantyPeriod.numberOfMonths!=null && equipment.warrantyPeriod.months != null) {
+						
+						DateTime warrantyStatDateTime = new DateTime(equipment.warranty.startDate)
+						def warrantyExpirationDateTime = warrantyStatDateTime.plusMonths(equipment.warrantyPeriod.numberOfMonths)
+						def warrantyExpirationDate = warrantyExpirationDateTime.toDate()
+						if (log.isDebugEnabled())
+							log.debug("WARRANTY EXPIRATION DATE TIME "+warrantyExpirationDateTime +"WARRANTY EXPIRATION DATE "+warrantyExpirationDate +" START DATE "+equipment.warranty.startDate +" WARRANTY PERIOD MONTHS "+equipment.warrantyPeriod.months +" WARRANTY PERIOD NUMBER OF MONTHS "+equipment.warrantyPeriod.numberOfMonths+" AND EXPIRATION DATE IS " +Utils.getDate(0, equipment.warrantyPeriod.numberOfMonths, 0))
+						if (warrantyExpirationDate > new Date())
+							underWarrantyEquipments.add(equipment)
+					}
+				}
+				customEquipments = underWarrantyEquipments
+			}
 		}
 
 		if(reportSubType == ReportSubType.STATUSCHANGES){
@@ -230,7 +246,7 @@ class EquipmentListingReportService {
 
 			criteriaEquipments = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 				if(dataLocations)
-					inList("dataLocation",dataLocations)
+					inList('dataLocation',dataLocations)
 				if(departments != null)
 					inList ("department", departments)
 				if(equipmentTypes != null)
@@ -284,12 +300,12 @@ class EquipmentListingReportService {
 		def obsolete = customEquipmentParams.get('obsolete')
 		def warranty = customEquipmentParams.get('warranty')
 		
-		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON EQUIPMENT CUSTOM REPORT: EQUIPMENT STATUS :"+equipmentStatus)
+		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON EQUIPMENT CUSTOM REPORT: LOWER COST :"+lowerLimitCost+" UPPER COST :"+upperLimitCost)
 		
-		equipmentReport.underWarranty=warranty=="on"?true:false
-		equipmentReport.obsolete=obsolete=="on"?true:false
-		equipmentReport.equipmentStatus=equipmentStatus
-		equipmentReport.noAcquisitionPeriod=noAcquisitionPeriod=="on"?true:false
+		//equipmentReport.underWarranty=warranty
+		equipmentReport.obsolete=obsolete
+		//equipmentReport.equipmentStatus=equipmentStatus
+		// equipmentReport.noAcquisitionPeriod = noAcquisition=='on'?true:false
 		equipmentReport.toDate=toAcquisitionPeriod
 		equipmentReport.fromDate=fromAcquisitionPeriod
 		equipmentReport.currency=currency
@@ -298,10 +314,9 @@ class EquipmentListingReportService {
 		equipmentReport.equipmentTypes=equipmentTypes
 		equipmentReport.departments=departments
 		equipmentReport.dataLocations=dataLocations
-		equipmentReport.reportSubType=reportSubType
-		equipmentReport.reportType=reportType
+		//equipmentReport.reportSubType=reportSubType
+		//equipmentReport.reportType=reportType
 		equipmentReport.reportName=reportName
-		equipmentReport.savedBy=user
 		
 		equipmentReport.save(failOnError:true)
 		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON EQUIPMENT CUSTOM REPORT SAVED CORRECTLY. THE REPORT ID IS :"+ equipmentReport.id)

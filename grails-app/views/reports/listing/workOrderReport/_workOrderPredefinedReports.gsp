@@ -20,11 +20,6 @@
 				<g:message code="default.work.order.escalated.to.mmc.label"/>
 			</a>
 		</li>
-		<li>
-			<a href="${createLinkWithTargetURI(controller: 'listing', action:'lastYearClosedWorkOrders')}" id="report-4">
-				<g:message code="default.work.order.closed.last.year.label"/>
-			</a>
-		</li>
 			%{-- TODO saved reports --}%
 	</ul>
 </div>
