@@ -3,7 +3,9 @@
 <div class="entity-list">
 
   <div class="heading1-bar">
-    <h1>Detailed Reports</h1>
+    <h1>
+    <g:message code="default.detailed.report.label" args="[message(code:'default.detailed.report.label')]" />
+    </h1>
   </div>
 
   <!-- filter template -->

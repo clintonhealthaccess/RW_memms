@@ -1112,7 +1112,7 @@ class ListingController extends AbstractController{
 		return sparePartStatus
 	}
 
-	public List<StatusOfSparePartChange> getSparePartStatusChanges(){
+	/*public List<StatusOfSparePartChange> getSparePartStatusChanges(){
 		List<StatusOfSparePartChange> sparePartStatusChanges = []
 		if(log.isDebugEnabled()) log.debug("abstract.sparePartStatusChanges start params:"+params)
 		if (params.list('statusChanges') != null && !params.list('statusChanges').empty) {
@@ -1125,7 +1125,7 @@ class ListingController extends AbstractController{
 		}
 		if(log.isDebugEnabled()) log.debug("abstract.sparePartStatusChanges end statusChanges:"+sparePartStatusChanges)
 		return sparePartStatusChanges
-	}
+	}*/
 
 	public Set<String> getReportTypeOptions(String reportTypeOptionParam){
 		if(log.isDebugEnabled()) log.debug("abstract.reportTypeOptions params:"+params)
