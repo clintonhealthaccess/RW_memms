@@ -633,6 +633,7 @@ class ListingController extends AbstractController{
 				customizedReportName: customizedReportName,
 				customizedReportSave: customizedReportSave,
 				customEquipmentParams: customEquipmentParams,
+				selectedReport: customizedReportName,
 				template:"/reports/listing/listing"
 			])
 	}
@@ -724,6 +725,7 @@ class ListingController extends AbstractController{
 				customizedReportName: customizedReportName,
 				customizedReportSave: customizedReportSave,
 				customWorkOrderParams: customWorkOrderParams,
+				selectedReport: customizedReportName,
 				template:"/reports/listing/listing"
 			])
 	}
@@ -800,6 +802,7 @@ class ListingController extends AbstractController{
 				customizedReportName: customizedReportName,
 				customizedReportSave: customizedReportSave,
 				customPreventiveOrderParams: customPreventiveOrderParams,
+				selectedReport: customizedReportName,
 				template:"/reports/listing/listing"
 			])
 	}
@@ -863,7 +866,7 @@ class ListingController extends AbstractController{
 			
 			sparePartListingReportService.saveSparePartReportParams(user, sparePartReport, customSparePartsParams, params)
 		}
-		def spareParts = workOrderListingReportService.getClosedWorkOrdersOfLastYear(user, customSparePartsParams, params)
+		def spareParts = sparePartListingReportService.getCustomReportOfSpareParts(user, customSparePartsParams, params)
 		if (log.isDebugEnabled()) log.debug("WWWWWWWWWWWHY DON'T I SEE THIS VALUE ON THE INTERFACE?:"+spareParts)
 		
 		if(!request.xhr)
@@ -876,6 +879,7 @@ class ListingController extends AbstractController{
 				customizedReportName: customizedReportName,
 				customizedReportSave: customizedReportSave,
 				customSparePartsParams:customSparePartsParams,
+				selectedReport: customizedReportName,
 				template:"/reports/listing/listing"
 			])
 	}

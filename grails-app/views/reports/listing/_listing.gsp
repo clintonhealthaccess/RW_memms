@@ -100,7 +100,11 @@
             <!-- spare parts report template -->
             <g:if test="${customizedReportName != null && !customizedReportName.empty}">
               <g:if test="${[ReportSubType.USERATE,ReportSubType.STOCKOUT].contains(reportSubType)}">
-                <g:render template="/reports/listing/sparePartReport/customSparePartTypesListing" />
+              
+
+              <g:render template="/reports/listing/sparePartReport/customSparePartTypesListing" />
+
+                
               </g:if>
               <g:else>
                 <g:render template="/reports/listing/sparePartReport/customSparePartsListing" />
