@@ -50,6 +50,7 @@ class PreventiveOrderListingReportService {
 			eq ("status",PreventiveOrderStatus.OPEN)
 		}
 	}
+	//TODO To complete the function of delayed prevention by adding condition of delay
 	def getPreventionsDelayed(User user,Map<String, String> params) {
 		def criteria = PreventiveOrder.createCriteria();
 		def dataLocations = []
@@ -84,19 +85,21 @@ class PreventiveOrderListingReportService {
 	
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			createAlias("equipment","equip")
-			if(dataLocations)
+			//Mandatory property
 				inList('equip.dataLocation',dataLocations)
 			if(departments != null && departments.size()>0)
 				inList ("equip.department", departments)
-			if(equipmentTypes != null && equipmentTypes.size()>0)
+			//Mandatory property
 				inList ("equip.type", equipmentTypes)
 			if(workOrderStatus!=null && !workOrderStatus.empty)
 				inList ("status",workOrderStatus)
-			if(lowerLimitCost!=null)
-				gt ("equip.purchaseCost", lowerLimitCost)
-			if(upperLimitCost!=null)
-				lt ("equip.purchaseCost", upperLimitCost)
-			if(currency !=null)
+			if(lowerLimitCost && lowerLimitCost!=null)
+			//Including lowerLimitCost by using ge
+				ge ("equip.purchaseCost", lowerLimitCost)
+			if(upperLimitCost && upperLimitCost!=null)
+			//Including upperLimitCost by using le
+				le ("equip.purchaseCost", upperLimitCost)
+			if(currency && currency !=null)
 				eq ("equip.currency",currency)	
 			if(responsibles!=null && !responsibles.empty)
 				inList ("preventionResponsible",responsibles)

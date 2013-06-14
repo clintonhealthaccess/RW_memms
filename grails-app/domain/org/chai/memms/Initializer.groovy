@@ -925,7 +925,21 @@ public class Initializer {
 				StockLocation.MMC,
 				SparePartStatus.PENDINGORDER,
 				234,0
-				)	
+				)
+			def sparePartEight = newSparePart(
+				SparePartPurchasedBy.BYFACILITY,
+				['en':'Spare Part Descriptions Eight'],
+				getDate(14,8,2008),
+				"98700",
+				"EUR",
+				DataLocation.findByCode(KIVUYE),
+				SparePartType.findByCode("15966"),
+				Provider.findByCode("FIVE"),
+				User.findByUsername("admin"),
+				StockLocation.FACILITY,
+				SparePartStatus.INSTOCK,
+				122,87
+				)
 		}
 	}
 	

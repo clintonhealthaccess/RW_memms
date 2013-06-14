@@ -191,36 +191,39 @@ class EquipmentListingReportService {
 
 			criteriaEquipments = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 				
-				if(dataLocations != null && dataLocations.size() > 0)
+				//if(dataLocations != null && dataLocations.size() > 0)
+				//MADE IT MANDATORY, CONDITION REMOVED
 					inList("dataLocation",dataLocations)
-				if(equipmentTypes != null && equipmentTypes.size() > 0)
+				//if(equipmentTypes != null && equipmentTypes.size() > 0)
+				//MADE IT MANDATORY, CONDITION REMOVED
 					inList ("type", equipmentTypes)
-				and{
-					if(departments != null && departments.size() > 0)
-						inList ("department", departments)
-					if(lowerLimitCost!=null)
-						gt ("purchaseCost", lowerLimitCost)
-					if(upperLimitCost!=null)
-						lt ("purchaseCost", upperLimitCost)
-					if(currency !=null)
-						eq ("currency", currency)
-					/*if(fromAcquisitionPeriod != null)
+					
+				if(departments != null && departments.size() > 0)
+					inList ("department", departments)
+				if(lowerLimitCost && lowerLimitCost!=null)
+					gt ("purchaseCost", lowerLimitCost)
+				if(upperLimitCost && upperLimitCost!=null)
+					lt ("purchaseCost", upperLimitCost)
+				if(currency && currency !=null)
+					eq ("currency", currency)
+				if(equipmentStatus!=null && !equipmentStatus.empty)
+					inList ("currentStatus",equipmentStatus)
+				if(obsolete != null && obsolete)
+					eq ("obsolete", (obsolete.equals('true'))?true:false)
+				if(warranty!=null && warranty)
+					lt ("warrantyEndDate",today)
+				if(noAcquisitionPeriod != null && noAcquisitionPeriod)
+					eq ("purchaseDate", null)
+				/*
+					if(fromAcquisitionPeriod != null)
 						gt ("purchaseDate", fromAcquisitionPeriod)
 					if(toAcquisitionPeriod != null)
-						lt ("purchaseDate", toAcquisitionPeriod)	*/
+						lt ("purchaseDate", toAcquisitionPeriod)	
 						//TODO
-					/*if(noAcquisitionPeriod != null && noAcquisitionPeriod)
-						eq ("purchaseDate", null)
-						*/
-					if(equipmentStatus!=null && !equipmentStatus.empty)
-						inList ("currentStatus",equipmentStatus)
-					if(obsolete != null && obsolete)
-						eq ("obsolete", (obsolete.equals('true'))?true:false)
-					if(warranty!=null && warranty)
-						lt ("warrantyEndDate",today)
-				}
+				*/
 			}
-			if (log.isDebugEnabled()) log.debug("EQUIPMENTS SIZE: "+ criteriaEquipments.size())
+			customEquipments = criteriaEquipments
+			if (log.isDebugEnabled()) log.debug("EQUIPMENTS SIZE: "+ customEquipments.size())
 		}
 
 		if(reportSubType == ReportSubType.STATUSCHANGES){
@@ -229,18 +232,21 @@ class EquipmentListingReportService {
 			def toStatusChangesPeriod = customEquipmentParams.get('toStatusChangesPeriod')
 
 			criteriaEquipments = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-				if(dataLocations)
+				
+				//if(dataLocations != null && dataLocations.size() > 0)
+				//MADE IT MANDATORY, CONDITION REMOVED
 					inList("dataLocation",dataLocations)
+				//if(equipmentTypes != null && equipmentTypes.size() > 0)
+				//MADE IT MANDATORY, CONDITION REMOVED
+					inList ("type", equipmentTypes)
+		
 				if(departments != null)
 					inList ("department", departments)
-				if(equipmentTypes != null)
-					inList ("type", equipmentTypes)
-
-				if(lowerLimitCost!=null)
+				if(lowerLimitCost && lowerLimitCost!=null)
 					gt ("purchaseCost", lowerLimitCost)
-				if(upperLimitCost!=null)
+				if(upperLimitCost && upperLimitCost!=null)
 					lt ("purchaseCost", upperLimitCost)
-				if(currency !=null)
+				if(currency && currency !=null)
 					eq ("currency",currency)
 
 				// TODO

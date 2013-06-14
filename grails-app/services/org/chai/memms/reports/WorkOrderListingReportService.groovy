@@ -110,18 +110,18 @@ class WorkOrderListingReportService {
 
 				createAlias("equipment","equip")
 
-				if(dataLocations!=null && dataLocations.size()>0)
+				//if(dataLocations!=null && dataLocations.size()>0)
 					inList('equip.dataLocation',dataLocations)
 				if(departments != null && departments.size()>0)
 					inList ("equip.department", departments)
-				if(equipmentTypes != null && equipmentTypes.size()>0)
+				//if(equipmentTypes != null && equipmentTypes.size()>0)
 					inList ("equip.type", equipmentTypes)
 
-				if(lowerLimitCost!=null)
+				if(lowerLimitCost && lowerLimitCost!=null)
 					gt ("equip.purchaseCost", lowerLimitCost)
-				if(upperLimitCost!=null)
+				if(upperLimitCost && upperLimitCost!=null)
 					lt ("equip.purchaseCost", upperLimitCost)
-				if(currency !=null)
+				if(currency && currency !=null)
 					eq ("equip.currency",currency)
 
 				if(workOrderStatus!=null && !workOrderStatus.empty)
@@ -146,18 +146,18 @@ class WorkOrderListingReportService {
 
 				createAlias("equipment","equip")
 
-				if(dataLocations!=null && dataLocations.size()>0)
+				//Mandatory property
 					inList('equip.dataLocation',dataLocations)
 				if(departments != null && departments.size()>0)
 					inList ("equip.department", departments)
-				if(equipmentTypes != null && equipmentTypes.size()>0)
+				//Mandatory property
 					inList ("equip.type", equipmentTypes)
 
-				if(lowerLimitCost!=null)
+				if(lowerLimitCost && lowerLimitCost!=null)
 					gt ("equip.purchaseCost", lowerLimitCost)
-				if(upperLimitCost!=null)
+				if(upperLimitCost && upperLimitCost!=null)
 					lt ("equip.purchaseCost", upperLimitCost)
-				if(currency !=null)
+				if(currency && currency !=null)
 					eq ("equip.currency",currency)
 
 				// TODO
