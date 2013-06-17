@@ -19,7 +19,7 @@ $(document).ready(function(){
   scroller.children().each(function(){
     width += $(this).outerWidth(true);
   });
-  scroller.css('width', width);
+  scroller.css('width', width + 20);
 
   $(document).on('click', '#js-scroll-left', function(e){
     e.preventDefault();
