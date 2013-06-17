@@ -1,5 +1,6 @@
 <%@ page import="org.chai.memms.util.Utils.ReportType" %>
 <%@ page import="org.chai.memms.util.Utils.ReportSubType" %>
+<%@ page import="org.chai.memms.util.Utils" %>
 <div class="dialog-form step-2" id='js-step-2'>
   <!-- Step 2 -->
   <h2><g:message code="reports.apply.filters"/><span class="right"><g:message code="reports.step" args="['2','4']"/></span></h2>

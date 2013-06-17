@@ -848,11 +848,11 @@ class ListingController extends AbstractController{
 		}
 
 		if(reportSubType == ReportSubType.STATUSCHANGES){
-			def statusChanges = getSparePartStatusChanges()
+			//def statusChanges = getSparePartStatusChanges()
 			def fromStatusChangesPeriod = getPeriod('fromStatusChangesPeriod')
 			def toStatusChangesPeriod = getPeriod('toStatusChangesPeriod')
 			customSparePartsParams << [
-				statusChanges: statusChanges,
+			//	statusChanges: statusChanges,
 				fromStatusChangesPeriod: fromStatusChangesPeriod,
 				toStatusChangesPeriod: toStatusChangesPeriod
 			]

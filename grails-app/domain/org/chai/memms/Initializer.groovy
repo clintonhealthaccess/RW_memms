@@ -607,7 +607,7 @@ public class Initializer {
 			equipmentTen.warrantyPeriod = newPeriod(28)
 			equipmentTen.save(failOnError:true)
 			
-			def equipmentEleven = newEquipment("SERIAL11",PurchasedBy.BYFACILITY,null,null,true,newPeriod(7),"Room 10A1","290540",['en':'Equipment Descriptions Ten'],
+			def equipmentEleven = newEquipment("SERIAL11",PurchasedBy.BYFACILITY,null,null,true,newPeriod(7),"Room 10A1","200540",['en':'Equipment Descriptions Ten'],
 				getDate(7,4,2013),getDate(12,4,2013),"RWF",
 				'MODELTen3',
 				DataLocation.findByCode(KIREHE),

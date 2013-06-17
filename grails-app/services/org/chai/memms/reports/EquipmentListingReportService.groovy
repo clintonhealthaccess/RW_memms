@@ -214,13 +214,11 @@ class EquipmentListingReportService {
 					lt ("warrantyEndDate",today)
 				if(noAcquisitionPeriod != null && noAcquisitionPeriod)
 					eq ("purchaseDate", null)
-				/*
-					if(fromAcquisitionPeriod != null)
-						gt ("purchaseDate", fromAcquisitionPeriod)
-					if(toAcquisitionPeriod != null)
-						lt ("purchaseDate", toAcquisitionPeriod)	
-						//TODO
-				*/
+
+				if(fromAcquisitionPeriod && fromAcquisitionPeriod != null)
+					gt ("purchaseDate", fromAcquisitionPeriod)
+				if(toAcquisitionPeriod && toAcquisitionPeriod != null)
+					lt ("purchaseDate", toAcquisitionPeriod)	
 			}
 			customEquipments = criteriaEquipments
 			if (log.isDebugEnabled()) log.debug("EQUIPMENTS SIZE: "+ customEquipments.size())

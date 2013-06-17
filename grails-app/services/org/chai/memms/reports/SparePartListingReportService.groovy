@@ -104,11 +104,10 @@ class SparePartListingReportService {
 					eq ("purchaseDate", null)
 				if(sparePartStatus!=null && !sparePartStatus.empty)
 					inList ("status",sparePartStatus)
-					/*if(fromAcquisitionPeriod != null)
-					 gt ("purchaseDate", fromAcquisitionPeriod)
-					 if(toAcquisitionPeriod != null)
-					 lt ("purchaseDate", toAcquisitionPeriod)	*/
-					//TODO
+				if(fromAcquisitionPeriod && fromAcquisitionPeriod != null)
+					gt ("purchaseDate", fromAcquisitionPeriod)
+				if(toAcquisitionPeriod && toAcquisitionPeriod != null)
+					lt ("purchaseDate", toAcquisitionPeriod)	
 			}
 			if (log.isDebugEnabled()) log.debug("SPARE PARTS SIZE: "+ criteriaSpareParts.size())
 		}

@@ -1,21 +1,22 @@
 <%@ page import="org.chai.memms.util.Utils.ReportSubType" %>
 <%@ page import="org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus" %>
 <%@ page import="org.chai.memms.corrective.maintenance.WorkOrderStatus.WorkOrderStatusChange" %>
+<%@ page import="org.chai.memms.util.Utils" %>
 <div class="v-tabs-criteria">
   <ul class="left">
 
     <li>
-      <span>Report Type:</span>
+      <span><g:message code="reports.type.label"/></span>
       <a href="#">${message(code:'reports.type.'+reportType?.reportType)}</a>
     </li>
 
     <li>
-      <span>Report Subtype:</span>
+      <span><g:message code="reports.subType.label"/></span>
       <a href="#">${message(code:'reports.subType.'+reportSubType?.reportSubType)}</a>
     </li>
 
     <li>
-      <span>Report Total:</span>
+      <span><g:message code="reports.total.label"/></span>
       <a href="#"><g:message code="work.orders.label"/> = ${entities?.size()}</a>
     </li>
 
@@ -61,8 +62,8 @@
             </g:else>
           </a>
           <a href="#"><g:message code="reports.workOrderPeriod"/> =   
-            ${customWorkOrderParams?.fromWorkOrderPeriod?:message(code:'reports.filters.none')} - 
-            ${customWorkOrderParams?.toWorkOrderPeriod?:message(code:'reports.filters.none')}</a>,        
+            ${Utils.formatDate(customWorkOrderParams?.fromWorkOrderPeriod)?:message(code:'reports.filters.none')} - 
+            ${Utils.formatDate(customWorkOrderParams?.toWorkOrderPeriod)?:message(code:'reports.filters.none')}</a>,        
           
           <a href="#"><g:message code="reports.inventory.warranty.label"/> = 
             ${customWorkOrderParams?.warranty?'&radic;':message(code:'reports.filters.none')}</a>
@@ -82,8 +83,8 @@
             </g:else>
           </a>
           <a href="#"><g:message code="reports.statusChangesPeriod"/> =   
-            ${customWorkOrderParams?.fromStatusChangesPeriod?:message(code:'reports.filters.none')} - 
-            ${customWorkOrderParams?.toStatusChangesPeriod?:message(code:'reports.filters.none')}</a>,
+            ${Utils.formatDate(customWorkOrderParams?.fromStatusChangesPeriod)?:message(code:'reports.filters.none')} - 
+            ${Utils.formatDate(customWorkOrderParams?.toStatusChangesPeriod)?:message(code:'reports.filters.none')}</a>,
           
           <a href="#"><g:message code="reports.inventory.warranty.label"/> = 
             ${customWorkOrderParams?.warranty?'&radic;':message(code:'reports.filters.none')}</a>

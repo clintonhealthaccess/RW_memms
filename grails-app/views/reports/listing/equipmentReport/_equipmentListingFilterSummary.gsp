@@ -1,27 +1,28 @@
 <%@ page import="org.chai.memms.util.Utils.ReportSubType" %>
 <%@ page import="org.chai.memms.inventory.EquipmentStatus.Status" %>
 <%@ page import="org.chai.memms.inventory.EquipmentStatus.EquipmentStatusChange" %>
+<%@ page import="org.chai.memms.util.Utils" %>
 <div class="v-tabs-criteria">
   <ul class="left">
 
     <li>
-      <span>Report Type:</span>
+      <span><g:message code="reports.type.label"/></span>
       <a href="#">${message(code:'reports.type.'+reportType?.reportType)}</a>
     </li>
 
     <li>
-      <span>Report Subtype:</span>
+      <span><g:message code="reports.subType.label"/></span>
       <a href="#">${message(code:'reports.subType.'+reportSubType?.reportSubType)}</a>
     </li>
 
     <li>
-      <span>Report Total:</span>
+      <span><g:message code="reports.total.label"/></span>
         <a href="#"><g:message code="inventory.equipment.count"/> = ${entities?.size()}</a>
     </li>
 
     <g:if test="${customizedReportName != null && !customizedReportName.empty}">
       <li>
-        <span>Custom Report Name:</span>
+        <span><g:message code="reports.name.label"/></span>
         <a href="#">${customizedReportName}</a>
       </li>
     </g:if>
@@ -62,8 +63,9 @@
           </a>
           
           <a href="#"><g:message code="reports.inventory.inventory.acquisitionPeriod"/> =   
-            ${customEquipmentParams?.fromAcquisitionPeriod?:message(code:'reports.filters.none')} - 
-            ${customEquipmentParams?.toAcquisitionPeriod?:message(code:'reports.filters.none')}</a>,
+          
+            ${Utils.formatDate(customEquipmentParams?.fromAcquisitionPeriod)?:message(code:'reports.filters.none')} - 
+            ${Utils.formatDate(customEquipmentParams?.toAcquisitionPeriod)?:message(code:'reports.filters.none')}</a>,
           <a href="#"><g:message code="reports.inventory.inventory.noAcquisitionPeriod.label"/> = 
             ${customEquipmentParams?.noAcquisitionPeriod?'&radic;':message(code:'reports.filters.none')}</a>,
           
@@ -87,8 +89,8 @@
             </g:else>
           </a>
           <a href="#"><g:message code="reports.statusChangesPeriod"/> =   
-            ${customEquipmentParams?.fromStatusChangesPeriod?:message(code:'reports.filters.none')} - 
-            ${customEquipmentParams?.toStatusChangesPeriod?:message(code:'reports.filters.none')}</a>  
+            ${Utils.formatDate(customEquipmentParams?.fromStatusChangesPeriod)?:message(code:'reports.filters.none')} - 
+            ${Utils.formatDate(customEquipmentParams?.toStatusChangesPeriod)?:message(code:'reports.filters.none')}</a>  
         </g:if>
       </li>
     </g:if>

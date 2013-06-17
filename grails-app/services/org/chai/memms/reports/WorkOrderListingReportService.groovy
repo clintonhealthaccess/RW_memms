@@ -126,11 +126,10 @@ class WorkOrderListingReportService {
 
 				if(workOrderStatus!=null && !workOrderStatus.empty)
 					inList ("currentStatus",workOrderStatus)
-				// TODO
-				// if(fromWorkOrderPeriod != null)
-				// 	gt ("openOn", fromWorkOrderPeriod)
-				// if(toWorkOrderPeriod != null)
-				// 	lt ("openOn", toWorkOrderPeriod)
+				if(fromWorkOrderPeriod && fromWorkOrderPeriod != null)
+				 	ge ("openOn", fromWorkOrderPeriod)
+				if(toWorkOrderPeriod && toWorkOrderPeriod != null)
+				 	le ("openOn", toWorkOrderPeriod)
 				if(warranty!=null && warranty)
 				lt ("equip.warrantyEndDate",today)
 			}
