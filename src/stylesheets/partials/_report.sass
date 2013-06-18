@@ -2,6 +2,7 @@
 #report
   // slister end
 
+
   #values
     overflow: auto
 
@@ -112,34 +113,44 @@
       background: #fff
       border: 1px solid rgba(0, 0, 0, 0.1)
       border-bottom: none
+      bottom: -1px
       color: $primary
       font-weight: bold
-      margin: 0 0 -1px 0
       position: relative
 
 .v-tabs-subnav-wrapper
-  float:left
-  height: 29px
-  width: 100%
+  float: left
   &.slide-wrapper
-    margin-left: 200px
     overflow: hidden
-    padding-right: 23px
-    width: 720px
+    width: 80%
+
+.v-tabs-box
+  line-height: 1.4
+  +pie-clearfix
+  > *
+    float: left
 
 .v-tabs-subnav
-  height: 29px
   padding-left: 5px
-  +pie-clearfix
   position: relative
+  +pie-clearfix
+  
+  ul
+    padding-left: 30px
   li
     display: inline
     float: left
+    max-width: 150px
+    position: relative
+  p
+    float: left
+    max-width: 150px
+    position: relative
   a
     bottom: -1px
     color: #bbb
     display: inline-block
-    padding: 2px 14px 15px
+    padding: 15px 0 15px 15px
     position: relative
     text-decoration: none
     +transition(color .2s)
@@ -149,19 +160,7 @@
     &:hover, &:focus
       color: $primary
 
-  .delete-node
-    background: url('../images/icons/mini_delete.png') no-repeat center
-    display: inline-block
-    height: 13px
-    line-height: 13px
-    text-indent: -9999em
-    width: 13px
-    position: relative
-    left: -10px
-    opacity: 0.25
 
-    &:hover, &:focus
-      opacity: 1
 
   .right
     float: right !important
@@ -174,46 +173,129 @@
     margin-left: 0
     padding-left: 0
 
+
+
+
 .v-tabs-subnav-scroll-right, .v-tabs-subnav-scroll-left
   background: white
   display: block
-  height: 29px
-  position: absolute
+  margin-top: 12px
+  padding: 0
   width: 10px
   z-index: 1000
   text-indent: -9999em
 
 .v-tabs-subnav-scroll-right
-  right: 13px
-  background: url('../images/arrow-right.png') no-repeat
+  background: url('../images/arrow-right.png') no-repeat center
 
 .v-tabs-subnav-scroll-left
-  left: 175px
-  background: url('../images/arrow-left.png') no-repeat
+  background: url('../images/arrow-left.png') no-repeat center
+
+
+// Dynamic slider navigation
+
+.v-tabs-dynav-wrap
+  position: relative
+  +pie-clearfix
+  > *
+    float: right
+  a
+    color: #bbb
+    display: inline-block
+    max-width: 180px
+    padding: 15px 1px 15px 15px
+    position: relative
+    text-decoration: none
+    vertical-align: middle
+    overflow: hidden
+    text-overflow: ellipsis
+    white-space: nowrap
+    +transition(color .2s)
+    &.active
+      color: $primary
+    &:hover, &:focus
+      color: $primary
+
+    &.v-tabs-dynav-scroll-right, &.v-tabs-dynav-scroll-left
+      background: white
+      display: inline
+      height: 16px
+      margin-top: 15px
+      opacity: .6
+      padding: 0
+      position: relative
+      text-indent: -9999em
+      top: 30%
+      width: 10px
+      z-index: 1000
+      +transition(all .4s)
+      &:hover, &:focus
+        opacity: 1
+
+    &.v-tabs-dynav-scroll-right
+      background: url('../images/arrow-right.png') no-repeat center
+      margin: 15px 15px 0
+      &:hover, &:focus
+        background-image: url('../images/arrow-right-hover.png')
+
+    &.v-tabs-dynav-scroll-left
+      background: url('../images/arrow-left.png') no-repeat center
+      &:hover, &:focus
+        background-image: url('../images/arrow-left-hover.png')
+
+
+.v-tabs-dynav
+  line-height: 1.4
+  overflow: hidden
+  width: 740px
+  ul
+    height: 46px
+    width: 1200px
+  li
+    display: inline
+    position: relative
+    vertical-align: middle
+  
+.v-tabs-chosen-report
+  background: url('../images/bump.png') no-repeat 50px bottom
+  bottom: -1px
+  color: $primary
+  float: left
+  position: relative
+  text-decoration: none
+  max-width: 160px
+  a.active
+    background: none
+    display: block
+    padding: 17px
+    position: relative
+    text-decoration: none
+    
+
+.delete-node
+  background: url('../images/icons/mini_delete.png') no-repeat center
+  display: inline-block
+  height: 13px
+  line-height: 13px
+  margin-left: 0
+  text-indent: -9999em
+  width: 13px
+  opacity: 0.25
+
+  &:hover, &:focus
+    opacity: 1
+
+// end
+
 
 .shown-report
   border-top: 1px solid $primary
-
-.v-tabs-chosen-report
-  background: white
-  color: $primary
-  float: left
-  padding-left: 10px
-
-  a.active
-    background: url("../images/bump.png") no-repeat bottom center
-    bottom: -1px
-    display: block
-    padding: 2px 14px 15px
-    position: relative
-    text-decoration: none
 
 .v-tabs-content
   background: #fff
   border: 1px solid rgba(0, 0, 0, 0.1)
   color: #666666
   font-size: 12px
-  padding: 15px 0 0
   width: 1000px - 2px /* minus the border */
   .filters
     border: none !important
@@ -635,4 +717,4 @@ div#comparison, div#geo_trend, div#info_facility, div#preventive, div#equipment,
 .search-choice-close /* Chosen.js override */
   background: url('../js/jquery/chosen/chosen-sprite.png') -49px -8px no-repeat !important
   top: 5px !important
-
+    
