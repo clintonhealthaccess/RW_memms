@@ -209,7 +209,7 @@ class WorkOrderListingReportService {
 		correctiveMaintenanceReport.reportSubType=reportSubType
 		correctiveMaintenanceReport.reportType=reportType
 		correctiveMaintenanceReport.reportName=reportName
-		
+		correctiveMaintenanceReport.savedBy=user
 		correctiveMaintenanceReport.save(failOnError:true)
 		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON EQUIPMENT CUSTOM REPORT SAVED CORRECTLY. THE REPORT ID IS :"+ correctiveMaintenanceReport.id)
 	}

@@ -4,17 +4,17 @@
   <ul class="left">
 
     <li>
-      <span>Report Type:</span>
+      <span><g:message code="reports.type.label"/></span>
       <a href="#">${message(code:'reports.type.'+reportType?.reportType)}</a>
     </li>
 
     <li>
-      <span>Report Subtype:</span>
+      <span><g:message code="reports.subType.label"/></span>
       <a href="#">${message(code:'reports.subType.'+reportSubType?.reportSubType)}</a>
     </li>
 
     <li>
-      <span>Report Total:</span>
+      <span><g:message code="reports.total.label"/></span>
       <g:if test="${reportType == ReportType.INVENTORY}">
           <a href="#"><g:message code="inventory.equipment.count"/> = ${entities?.size()}</a>
       </g:if>
@@ -31,13 +31,13 @@
 
     <g:if test="${customizedReportName != null && !customizedReportName.empty}">
       <li>
-        <span>Custom Report Name:</span>
+        <span><g:message code="reports.name.label"/></span>
         <a href="#">${customizedReportName}</a>
       </li>
     </g:if>
     <g:else>
       <li>
-        <span>Report Name:</span>
+        <span><g:message code="reports.name.label"/></span>
         <a href="#">
           <g:if test="${reportType == ReportType.INVENTORY}">
             <g:if test="${actionName == 'generalEquipmentsListing'}">

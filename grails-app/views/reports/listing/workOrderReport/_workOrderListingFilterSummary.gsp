@@ -22,13 +22,13 @@
 
     <g:if test="${customizedReportName != null && !customizedReportName.empty}">
       <li>
-        <span>Custom Report Name:</span>
+        <span>reports.name.label</span>
         <a href="#">${customizedReportName}</a>
       </li>
     </g:if>
     <g:else>
       <li>
-        <span>Report Name:</span>
+        <span>reports.name.label</span>
         <a href="#">${selectedReport}</a>
       </li>
     </g:else>

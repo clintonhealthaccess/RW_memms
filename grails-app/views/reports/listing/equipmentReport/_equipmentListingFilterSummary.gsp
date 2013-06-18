@@ -28,7 +28,7 @@
     </g:if>
     <g:else>
       <li>
-        <span>Report Name:</span>
+        <span><g:message code="reports.name.label"/></span>
         <a href="#">${selectedReport}</a>
       </li>
     </g:else>

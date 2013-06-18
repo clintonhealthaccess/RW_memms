@@ -10,6 +10,7 @@ import org.chai.location.Location
 import org.chai.memms.preventive.maintenance.PreventiveOrder;
 import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventionResponsible;
 import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatus;
+import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderType;
 import org.chai.memms.security.User;
 import org.chai.memms.util.Utils;
 
@@ -67,6 +68,8 @@ class PreventiveOrderListingReportService {
 				eq ("status",PreventiveOrderStatus.OPEN)
 				//eq ("status",PreventiveOrderStatus.OPEN)
 			}
+			eq ("type",PreventiveOrderType.DURATIONBASED)
+			
 		}
 	}
 
@@ -136,6 +139,7 @@ class PreventiveOrderListingReportService {
 		preventiveMaintenanceReport.reportSubType=reportSubType
 		preventiveMaintenanceReport.reportType=reportType
 		preventiveMaintenanceReport.reportName=reportName
+		preventiveMaintenanceReport.savedBy=user
 		
 		preventiveMaintenanceReport.save(failOnError:true)
 		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON PREVENTIVE MAINTENANCE CUSTOM REPORT SAVED CORRECTLY. THE REPORT ID IS :"+ preventiveMaintenanceReport.id)

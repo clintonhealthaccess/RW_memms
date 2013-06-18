@@ -32,6 +32,7 @@ import java.util.Map;
 import org.chai.location.DataLocation;
 import org.chai.location.Location;
 import org.chai.memms.report.listing.EquipmentReport;
+import org.chai.memms.report.listing.EquipmentGeneralReportParameters;
 import org.chai.memms.security.User;
 import org.chai.memms.inventory.Equipment;
 import org.chai.memms.inventory.EquipmentStatus.Status;

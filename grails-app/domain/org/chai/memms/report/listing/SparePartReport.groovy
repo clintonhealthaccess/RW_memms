@@ -22,7 +22,7 @@ class SparePartReport {
 	Date toDate
 	User savedBy
 	def sparePartStatus
-	def noAcquisitionPeriod
+	boolean noAcquisitionPeriod
 
 	static hasMany = [dataLocations:DataLocation,sparePartTypes:SparePartType]
 	static constraints = {
@@ -32,7 +32,7 @@ class SparePartReport {
 		toDate nullable: true, blank: true
 		savedBy nullable: false
 		sparePartStatus nullable: true, blank: true
-		noAcquisitionPeriod nullable: true, blank: true
+		noAcquisitionPeriod nullable: false
 	}
 
 	static mapping = {
