@@ -194,6 +194,7 @@ class WorkOrderListingReportService {
 		def fromWorkOrderPeriod = customWorkOrderParams.get('fromWorkOrderPeriod')
 		def toWorkOrderPeriod = customWorkOrderParams.get('toWorkOrderPeriod')
 		def warranty = customWorkOrderParams.get('warranty')
+		def workOrderStatus = customWorkOrderParams.get('workOrderStatus')
 		
 		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON EQUIPMENT CUSTOM REPORT: WARRANTY :"+warranty)
 		
@@ -209,6 +210,7 @@ class WorkOrderListingReportService {
 		correctiveMaintenanceReport.reportSubType=reportSubType
 		correctiveMaintenanceReport.reportType=reportType
 		correctiveMaintenanceReport.reportName=reportName
+		correctiveMaintenanceReport.workOrderStatus=workOrderStatus
 		correctiveMaintenanceReport.savedBy=user
 		correctiveMaintenanceReport.save(failOnError:true)
 		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON EQUIPMENT CUSTOM REPORT SAVED CORRECTLY. THE REPORT ID IS :"+ correctiveMaintenanceReport.id)

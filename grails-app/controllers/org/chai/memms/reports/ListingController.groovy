@@ -89,7 +89,7 @@ class ListingController extends AbstractController{
 	def model(def entities, def dataLocation) {
 		return [
 			entities: entities,
-			entityCount: entities.size(),
+			entityCount: entities.totalCount,
 			dataLocation:dataLocation,
 			entityClass:getEntityClass(),
 			code: getLabel()
@@ -142,7 +142,7 @@ class ListingController extends AbstractController{
 				reportType: ReportType.INVENTORY,
 				reportSubType: ReportSubType.INVENTORY,
 				selectedReport: message(code:'default.obsolete.label'),
-				template:"/reports/listing/listing",
+				template:"/reports/listing/listing"
 			])
 	}
 
@@ -158,7 +158,7 @@ class ListingController extends AbstractController{
 				reportType: ReportType.INVENTORY,
 				reportSubType: ReportSubType.INVENTORY,
 				selectedReport: message(code:'default.disposed.label'),
-				template:"/reports/listing/listing",
+				template:"/reports/listing/listing"
 			])
 	}
 
@@ -174,7 +174,7 @@ class ListingController extends AbstractController{
 				reportType: ReportType.INVENTORY,
 				reportSubType: ReportSubType.INVENTORY,
 				selectedReport: message(code:'default.under.maintenance.label'),
-				template:"/reports/listing/listing",
+				template:"/reports/listing/listing"
 			])
 	}
 
@@ -188,7 +188,7 @@ class ListingController extends AbstractController{
 				reportType: ReportType.INVENTORY,
 				reportSubType: ReportSubType.INVENTORY,
 				selectedReport: message(code:'default.in.stock.label'),
-				template:"/reports/listing/listing",
+				template:"/reports/listing/listing"
 			])
 	}
 
@@ -220,7 +220,7 @@ class ListingController extends AbstractController{
 				reportType: ReportType.CORRECTIVE,
 				reportSubType: ReportSubType.WORKORDERS,
 				selectedReport: message(code:'default.all.work.order.label'),
-				template:"/reports/listing/listing",
+				template:"/reports/listing/listing"
 			])
 	}
 
@@ -234,7 +234,7 @@ class ListingController extends AbstractController{
 				reportType: ReportType.CORRECTIVE,
 				reportSubType: ReportSubType.WORKORDERS,
 				selectedReport: message(code:'default.work.order.last.month.label'),
-				template:"/reports/listing/listing",
+				template:"/reports/listing/listing"
 			])
 	}
 
@@ -277,7 +277,7 @@ class ListingController extends AbstractController{
 				reportType: ReportType.PREVENTIVE,
 				reportSubType: ReportSubType.WORKORDERS,
 				selectedReport: message(code:'default.all.preventive.order.label'),
-				template:"/reports/listing/listing",
+				template:"/reports/listing/listing"
 			])
 	}
 
@@ -291,14 +291,14 @@ class ListingController extends AbstractController{
 				reportType: ReportType.PREVENTIVE,
 				reportSubType: ReportSubType.WORKORDERS,
 				selectedReport: message(code:'default.equipments.with.prevention.label'),
-				template:"/reports/listing/listing",
+				template:"/reports/listing/listing"
 			])
 	}
 	
 	//TODO see how to deal with periodic times either weekly, monthly, or any other
 	def preventionsDelayed={
 		adaptParamsForList()
-		def preventiveOrders = preventiveOrderListingReportService.getEquipmentsWithPreventionPlan(user,params)
+		def preventiveOrders = preventiveOrderListingReportService.getPreventionsDelayed(user,params)
 		if(!request.xhr)
 			render(view:"/reports/reports",
 			model: model(preventiveOrders, "") <<
@@ -306,7 +306,7 @@ class ListingController extends AbstractController{
 				reportType: ReportType.PREVENTIVE,
 				reportSubType: ReportSubType.WORKORDERS,
 				selectedReport: message(code:'default.preventions.delayed.label'),
-				template:"/reports/listing/listing",
+				template:"/reports/listing/listing"
 			])
 	}
 
