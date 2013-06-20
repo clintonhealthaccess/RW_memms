@@ -12,11 +12,11 @@ import org.chai.memms.corrective.maintenance.WorkOrderStatus;
 class CorrectiveMaintenanceReport extends EquipmentGeneralReportParameters{
 
 	def workOrderStatus
-	def underWarranty
+	boolean underWarranty
 
 	static constraints = {
 		workOrderStatus nullable: true, blank: true
-		underWarranty nullable: true, blank: true
+		underWarranty nullable: false
 	}
 
 	static mapping = {

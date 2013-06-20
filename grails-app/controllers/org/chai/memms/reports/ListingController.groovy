@@ -87,7 +87,7 @@ class ListingController extends AbstractController{
 	def model(def entities, def dataLocation) {
 		return [
 			entities: entities,
-			entityCount: entities.size(),
+			entityCount: entities.totalCount,
 			dataLocation:dataLocation,
 			entityClass:getEntityClass(),
 			code: getLabel()
@@ -140,7 +140,7 @@ class ListingController extends AbstractController{
 				reportType: ReportType.INVENTORY,
 				reportSubType: ReportSubType.INVENTORY,
 				selectedReport: message(code:'default.obsolete.label'),
-				template:"/reports/listing/listing",
+				template:"/reports/listing/listing"
 			])
 	}
 
@@ -156,7 +156,7 @@ class ListingController extends AbstractController{
 				reportType: ReportType.INVENTORY,
 				reportSubType: ReportSubType.INVENTORY,
 				selectedReport: message(code:'default.disposed.label'),
-				template:"/reports/listing/listing",
+				template:"/reports/listing/listing"
 			])
 	}
 
@@ -172,7 +172,7 @@ class ListingController extends AbstractController{
 				reportType: ReportType.INVENTORY,
 				reportSubType: ReportSubType.INVENTORY,
 				selectedReport: message(code:'default.under.maintenance.label'),
-				template:"/reports/listing/listing",
+				template:"/reports/listing/listing"
 			])
 	}
 
@@ -186,7 +186,7 @@ class ListingController extends AbstractController{
 				reportType: ReportType.INVENTORY,
 				reportSubType: ReportSubType.INVENTORY,
 				selectedReport: message(code:'default.in.stock.label'),
-				template:"/reports/listing/listing",
+				template:"/reports/listing/listing"
 			])
 	}
 
@@ -235,7 +235,7 @@ class ListingController extends AbstractController{
 				reportType: ReportType.CORRECTIVE,
 				reportSubType: ReportSubType.WORKORDERS,
 				selectedReport: message(code:'default.all.work.order.label'),
-				template:"/reports/listing/listing",
+				template:"/reports/listing/listing"
 			])
 	}
 
@@ -249,7 +249,7 @@ class ListingController extends AbstractController{
 				reportType: ReportType.CORRECTIVE,
 				reportSubType: ReportSubType.WORKORDERS,
 				selectedReport: message(code:'default.work.order.last.month.label'),
-				template:"/reports/listing/listing",
+				template:"/reports/listing/listing"
 			])
 	}
 
@@ -279,7 +279,7 @@ class ListingController extends AbstractController{
 				reportType: ReportType.PREVENTIVE,
 				reportSubType: ReportSubType.WORKORDERS,
 				selectedReport: message(code:'default.all.preventive.order.label'),
-				template:"/reports/listing/listing",
+				template:"/reports/listing/listing"
 			])
 	}
 
@@ -293,14 +293,14 @@ class ListingController extends AbstractController{
 				reportType: ReportType.PREVENTIVE,
 				reportSubType: ReportSubType.WORKORDERS,
 				selectedReport: message(code:'default.equipments.with.prevention.label'),
-				template:"/reports/listing/listing",
+				template:"/reports/listing/listing"
 			])
 	}
 	
 	//TODO see how to deal with periodic times either weekly, monthly, or any other
 	def preventionsDelayed={
 		adaptParamsForList()
-		def preventiveOrders = preventiveOrderListingReportService.getEquipmentsWithPreventionPlan(user,params)
+		def preventiveOrders = preventiveOrderListingReportService.getPreventionsDelayed(user,params)
 		if(!request.xhr)
 			render(view:"/reports/reports",
 			model: model(preventiveOrders, "") <<
@@ -308,7 +308,7 @@ class ListingController extends AbstractController{
 				reportType: ReportType.PREVENTIVE,
 				reportSubType: ReportSubType.WORKORDERS,
 				selectedReport: message(code:'default.preventions.delayed.label'),
-				template:"/reports/listing/listing",
+				template:"/reports/listing/listing"
 			])
 	}
 
@@ -633,6 +633,7 @@ class ListingController extends AbstractController{
 				customizedReportName: customizedReportName,
 				customizedReportSave: customizedReportSave,
 				customEquipmentParams: customEquipmentParams,
+				selectedReport: customizedReportName,
 				template:"/reports/listing/listing"
 			])
 	}
@@ -743,6 +744,7 @@ class ListingController extends AbstractController{
 				customizedReportName: customizedReportName,
 				customizedReportSave: customizedReportSave,
 				customWorkOrderParams: customWorkOrderParams,
+				selectedReport: customizedReportName,
 				template:"/reports/listing/listing"
 			])
 	}
@@ -817,6 +819,7 @@ class ListingController extends AbstractController{
 				customizedReportName: customizedReportName,
 				customizedReportSave: customizedReportSave,
 				customPreventiveOrderParams: customPreventiveOrderParams,
+				selectedReport: customizedReportName,
 				template:"/reports/listing/listing"
 			])
 	}
@@ -849,6 +852,17 @@ class ListingController extends AbstractController{
 			]
 		}
 
+		if(reportSubType == ReportSubType.STATUSCHANGES){
+			//def statusChanges = getSparePartStatusChanges()
+			def fromStatusChangesPeriod = getPeriod('fromStatusChangesPeriod')
+			def toStatusChangesPeriod = getPeriod('toStatusChangesPeriod')
+			customSparePartsParams << [
+			//	statusChanges: statusChanges,
+				fromStatusChangesPeriod: fromStatusChangesPeriod,
+				toStatusChangesPeriod: toStatusChangesPeriod
+			]
+		}
+
 		if(reportSubType == ReportSubType.STOCKOUT){
 			def stockOut = params.get('stockOut')
 			def stockOutMonths = params.get('stockOutMonths')
@@ -875,10 +889,9 @@ class ListingController extends AbstractController{
 			// TODO save the report
 		}
 
-		// TODO
-		// adaptParamsForList()
-		// def equipments = workOrderListingReportService.getCustomReportOfSpareParts(user,customSparePartsParams,params)
-
+		def spareParts = sparePartListingReportService.getCustomReportOfSpareParts(user, customSparePartsParams, params)
+		if (log.isDebugEnabled()) log.debug("WWWWWWWWWWWHY DON'T I SEE THIS VALUE ON THE INTERFACE?:"+spareParts)
+		
 		if(!request.xhr)
 			render(view:"/reports/reports",
 			model: [
@@ -887,6 +900,8 @@ class ListingController extends AbstractController{
 				reportTypeOptions: reportTypeOptions,
 				customizedReportName: customizedReportName,
 				customizedReportSave: customizedReportSave,
+				customSparePartsParams:customSparePartsParams,
+				selectedReport: customizedReportName,
 				template:"/reports/listing/listing"
 			])
 	}
@@ -1100,6 +1115,21 @@ class ListingController extends AbstractController{
 		}
 		return sparePartStatus
 	}
+
+	/*public List<StatusOfSparePartChange> getSparePartStatusChanges(){
+		List<StatusOfSparePartChange> sparePartStatusChanges = []
+		if(log.isDebugEnabled()) log.debug("abstract.sparePartStatusChanges start params:"+params)
+		if (params.list('statusChanges') != null && !params.list('statusChanges').empty) {
+			def statusChanges = params.list('statusChanges')
+			if(log.isDebugEnabled()) log.debug("abstract.sparePartStatusChanges statusChanges:"+statusChanges)
+			statusChanges.each { it ->
+				if(log.isDebugEnabled()) log.debug("abstract.sparePartStatusChanges statusChange:"+it)
+				if(it != null) sparePartStatusChanges.add(it)
+			}
+		}
+		if(log.isDebugEnabled()) log.debug("abstract.sparePartStatusChanges end statusChanges:"+sparePartStatusChanges)
+		return sparePartStatusChanges
+	}*/
 
 	public Set<String> getReportTypeOptions(String reportTypeOptionParam){
 		if(log.isDebugEnabled()) log.debug("abstract.reportTypeOptions params:"+params)

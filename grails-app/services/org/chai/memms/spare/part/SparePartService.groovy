@@ -128,7 +128,7 @@ class SparePartService {
 		}
 	}
 
-	public def getSparePartTimeBasedStatusChange(SparePart sparePart, List<StatusOfSparePartChange> sparePartStatusChange){
+	/*public def getSparePartTimeBasedStatusChange(SparePart sparePart, List<StatusOfSparePartChange> sparePartStatusChange){
 		StatusOfSparePartChange sparePartStatusChange = null
 
 		def previousStatus = sparePart.getTimeBasedPreviousStatus()?.status
@@ -146,7 +146,7 @@ class SparePartService {
 			if(previousStatusChange && currentStatusChange) sparePartStatusChange = statusChange
 	 	}
 	 	return sparePartStatusChange
-	}
+	}*/
 
 	public def filterSparePart(def location, def supplier, def type,def stockLocation,def sparePartPurchasedBy,def status,Map<String, String> params){
 

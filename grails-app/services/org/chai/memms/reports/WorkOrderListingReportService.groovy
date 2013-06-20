@@ -110,27 +110,26 @@ class WorkOrderListingReportService {
 
 				createAlias("equipment","equip")
 
-				if(dataLocations!=null && dataLocations.size()>0)
+				//if(dataLocations!=null && dataLocations.size()>0)
 					inList('equip.dataLocation',dataLocations)
 				if(departments != null && departments.size()>0)
 					inList ("equip.department", departments)
-				if(equipmentTypes != null && equipmentTypes.size()>0)
+				//if(equipmentTypes != null && equipmentTypes.size()>0)
 					inList ("equip.type", equipmentTypes)
 
-				if(lowerLimitCost!=null)
+				if(lowerLimitCost && lowerLimitCost!=null)
 					gt ("equip.purchaseCost", lowerLimitCost)
-				if(upperLimitCost!=null)
+				if(upperLimitCost && upperLimitCost!=null)
 					lt ("equip.purchaseCost", upperLimitCost)
-				if(currency !=null)
+				if(currency && currency !=null)
 					eq ("equip.currency",currency)
 
 				if(workOrderStatus!=null && !workOrderStatus.empty)
 					inList ("currentStatus",workOrderStatus)
-				// TODO
-				// if(fromWorkOrderPeriod != null)
-				// 	gt ("openOn", fromWorkOrderPeriod)
-				// if(toWorkOrderPeriod != null)
-				// 	lt ("openOn", toWorkOrderPeriod)
+				if(fromWorkOrderPeriod && fromWorkOrderPeriod != null)
+				 	ge ("openOn", fromWorkOrderPeriod)
+				if(toWorkOrderPeriod && toWorkOrderPeriod != null)
+				 	le ("openOn", toWorkOrderPeriod)
 				if(warranty!=null && warranty)
 				lt ("equip.warrantyEndDate",today)
 			}
@@ -146,18 +145,18 @@ class WorkOrderListingReportService {
 
 				createAlias("equipment","equip")
 
-				if(dataLocations!=null && dataLocations.size()>0)
+				//Mandatory property
 					inList('equip.dataLocation',dataLocations)
 				if(departments != null && departments.size()>0)
 					inList ("equip.department", departments)
-				if(equipmentTypes != null && equipmentTypes.size()>0)
+				//Mandatory property
 					inList ("equip.type", equipmentTypes)
 
-				if(lowerLimitCost!=null)
+				if(lowerLimitCost && lowerLimitCost!=null)
 					gt ("equip.purchaseCost", lowerLimitCost)
-				if(upperLimitCost!=null)
+				if(upperLimitCost && upperLimitCost!=null)
 					lt ("equip.purchaseCost", upperLimitCost)
-				if(currency !=null)
+				if(currency && currency !=null)
 					eq ("equip.currency",currency)
 
 				// TODO
@@ -195,6 +194,7 @@ class WorkOrderListingReportService {
 		def fromWorkOrderPeriod = customWorkOrderParams.get('fromWorkOrderPeriod')
 		def toWorkOrderPeriod = customWorkOrderParams.get('toWorkOrderPeriod')
 		def warranty = customWorkOrderParams.get('warranty')
+		def workOrderStatus = customWorkOrderParams.get('workOrderStatus')
 		
 		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON EQUIPMENT CUSTOM REPORT: WARRANTY :"+warranty)
 		
@@ -210,7 +210,8 @@ class WorkOrderListingReportService {
 		correctiveMaintenanceReport.reportSubType=reportSubType
 		correctiveMaintenanceReport.reportType=reportType
 		correctiveMaintenanceReport.reportName=reportName
-		
+		correctiveMaintenanceReport.workOrderStatus=workOrderStatus
+		correctiveMaintenanceReport.savedBy=user
 		correctiveMaintenanceReport.save(failOnError:true)
 		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON EQUIPMENT CUSTOM REPORT SAVED CORRECTLY. THE REPORT ID IS :"+ correctiveMaintenanceReport.id)
 	}

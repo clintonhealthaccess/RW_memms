@@ -1,4 +1,5 @@
 <%@ page import="org.chai.memms.util.Utils.ReportSubType" %>
+<%@ page import="org.chai.memms.util.Utils" %>
 <table class="items spaced">
 	<thead>
 		<tr>
@@ -17,12 +18,12 @@
 			<g:if test="${reportTypeOptions.contains('model')}">
 				<g:sortableColumn property="model"  title="${message(code: 'equipment.model.label')}" params="[q:q]" />
 			</g:if>
-			
+			<%--
 			<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
 				%{-- TODO --}%
 				<g:sortableColumn property="statusChanges"  title="Status Changes" params="[q:q]" />
 			</g:if>
-
+ 			--%>
 			<g:if test="${reportTypeOptions.contains('currentStatus')}">
 				<g:sortableColumn property="currentStatus"  title="${message(code: 'equipment.status.label')}" params="[q:q]" />
 			</g:if>
@@ -76,10 +77,12 @@
 				</g:if>
 				<!-- TODO  customEquipmentParams.statusChanges not working: NULL POINTER EXCEPTION-->
 				<!-- TODO  equipment.getTimeBasedStatusChange no message signature-->
+				<%--
 				<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
 					<g:set var="statusChangesEnum" value="${equipment.getTimeBasedStatusChange(customEquipmentParams?.statusChanges)}"/>
 					<td>${message(code: statusChangesEnum?.messageCode+'.'+statusChangesEnum?.name)}</td>
 				</g:if>
+				 --%>
 
 				<g:if test="${reportTypeOptions.contains('currentStatus')}">
 					<td>${message(code: equipment.currentStatus?.messageCode+'.'+equipment.currentStatus?.name)}</td>
@@ -101,7 +104,7 @@
 					<td>${message(code: equipment.purchaser?.messageCode+'.'+equipment.purchaser?.name)}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('acquisitionDate')}">
-					<td>${equipment.purchaseDate}</td>
+					<td>${Utils.formatDate(equipment.purchaseDate)}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('cost')}">
 					<td>${equipment.purchaseCost}</td>

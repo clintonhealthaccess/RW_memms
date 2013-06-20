@@ -1,4 +1,5 @@
 <%@ page import="org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart" %>
+<%@ page import="org.chai.memms.util.Utils" %>
 <ul>
   <li>
     <label for="sparePartStatus"><g:message code="reports.spareParts.inventory.sparePartStatus"/>:</label>

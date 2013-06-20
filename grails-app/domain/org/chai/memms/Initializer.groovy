@@ -607,7 +607,7 @@ public class Initializer {
 			equipmentTen.warrantyPeriod = newPeriod(28)
 			equipmentTen.save(failOnError:true)
 			
-			def equipmentEleven = newEquipment("SERIAL11",PurchasedBy.BYFACILITY,null,null,true,newPeriod(7),"Room 10A1","290540",['en':'Equipment Descriptions Ten'],
+			def equipmentEleven = newEquipment("SERIAL11",PurchasedBy.BYFACILITY,null,null,true,newPeriod(7),"Room 10A1","200540",['en':'Equipment Descriptions Ten'],
 				getDate(7,4,2013),getDate(12,4,2013),"RWF",
 				'MODELTen3',
 				DataLocation.findByCode(KIREHE),
@@ -925,7 +925,21 @@ public class Initializer {
 				StockLocation.MMC,
 				SparePartStatus.PENDINGORDER,
 				234,0
-				)	
+				)
+			def sparePartEight = newSparePart(
+				SparePartPurchasedBy.BYFACILITY,
+				['en':'Spare Part Descriptions Eight'],
+				getDate(14,8,2008),
+				"98700",
+				"EUR",
+				DataLocation.findByCode(KIVUYE),
+				SparePartType.findByCode("15966"),
+				Provider.findByCode("FIVE"),
+				User.findByUsername("admin"),
+				StockLocation.FACILITY,
+				SparePartStatus.INSTOCK,
+				122,87
+				)
 		}
 	}
 	

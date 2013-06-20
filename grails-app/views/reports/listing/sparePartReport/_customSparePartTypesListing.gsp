@@ -32,21 +32,18 @@
 	<tbody>
 		<g:each in="${entities}" status="i" var="sparePartType">
 			<tr >
-				<g:if test="${reportTypeOptions.contains('sparePartType')}">
-					<td>${sparePartType.names}</td>
-				</g:if>
 				
 				<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
 					%{-- TODO SL --}%
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('manufacturer')}">
-					<td>${sparePartType.manufacturer?.contact?.contactName}</td>
+					<td>${sparePartType?.manufacturer?.contact?.contactName}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('warrantyPeriodRemaining')}">
 					<td>%{-- TODO --}%</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('discontinuedDate')}">
-					<td>${sparePartType.discontinuedDate}</td>
+					<td>${sparePartType?.discontinuedDate}</td>
 				</g:if>
 				<g:if test="${reportSubType == ReportSubType.STOCKOUT && reportTypeOptions.contains('forecastedStockOut')}">
 				    <td>%{-- TODO --}%</td>

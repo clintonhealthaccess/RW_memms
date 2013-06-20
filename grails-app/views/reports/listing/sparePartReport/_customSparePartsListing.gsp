@@ -75,7 +75,7 @@
 					<td>%{-- TODO --}%</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('discontinuedDate')}">
-					<td>${sparePart.type.discontinuedDate}</td>
+					<td>${Utils.formatDate(sparePart.type.discontinuedDate)}</td>
 				</g:if>
 				<g:if test="${reportSubType == ReportSubType.STOCKOUT && reportTypeOptions.contains('forecastedStockOut')}">
 				    <td>%{-- TODO --}%</td>

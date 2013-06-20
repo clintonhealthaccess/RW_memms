@@ -10,6 +10,7 @@ import org.chai.location.Location
 import org.chai.memms.preventive.maintenance.PreventiveOrder;
 import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventionResponsible;
 import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatus;
+import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderType;
 import org.chai.memms.security.User;
 import org.chai.memms.util.Utils;
 
@@ -50,6 +51,7 @@ class PreventiveOrderListingReportService {
 			eq ("status",PreventiveOrderStatus.OPEN)
 		}
 	}
+	//TODO To complete the function of delayed prevention by adding condition of delay
 	def getPreventionsDelayed(User user,Map<String, String> params) {
 		def criteria = PreventiveOrder.createCriteria();
 		def dataLocations = []
@@ -66,6 +68,8 @@ class PreventiveOrderListingReportService {
 				eq ("status",PreventiveOrderStatus.OPEN)
 				//eq ("status",PreventiveOrderStatus.OPEN)
 			}
+			eq ("type",PreventiveOrderType.DURATIONBASED)
+			
 		}
 	}
 
@@ -84,19 +88,21 @@ class PreventiveOrderListingReportService {
 	
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			createAlias("equipment","equip")
-			if(dataLocations)
+			//Mandatory property
 				inList('equip.dataLocation',dataLocations)
 			if(departments != null && departments.size()>0)
 				inList ("equip.department", departments)
-			if(equipmentTypes != null && equipmentTypes.size()>0)
+			//Mandatory property
 				inList ("equip.type", equipmentTypes)
 			if(workOrderStatus!=null && !workOrderStatus.empty)
 				inList ("status",workOrderStatus)
-			if(lowerLimitCost!=null)
-				gt ("equip.purchaseCost", lowerLimitCost)
-			if(upperLimitCost!=null)
-				lt ("equip.purchaseCost", upperLimitCost)
-			if(currency !=null)
+			if(lowerLimitCost && lowerLimitCost!=null)
+			//Including lowerLimitCost by using ge
+				ge ("equip.purchaseCost", lowerLimitCost)
+			if(upperLimitCost && upperLimitCost!=null)
+			//Including upperLimitCost by using le
+				le ("equip.purchaseCost", upperLimitCost)
+			if(currency && currency !=null)
 				eq ("equip.currency",currency)	
 			if(responsibles!=null && !responsibles.empty)
 				inList ("preventionResponsible",responsibles)
@@ -118,6 +124,7 @@ class PreventiveOrderListingReportService {
 		def toWorkOrderPeriod = customPreventiveOrderParams.get('toWorkOrderPeriod')
 		def workOrderStatus = customPreventiveOrderParams.get('workOrderStatus')
 		def warranty = customPreventiveOrderParams.get('warranty')
+		def responsibles = customPreventiveOrderParams.get('whoIsResponsible')
 		
 		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON PREVENTIVE MAINTENANCE CUSTOM REPORT: LOWER COST :"+lowerLimitCost+" UPPER COST :"+upperLimitCost)
 		
@@ -133,6 +140,8 @@ class PreventiveOrderListingReportService {
 		preventiveMaintenanceReport.reportSubType=reportSubType
 		preventiveMaintenanceReport.reportType=reportType
 		preventiveMaintenanceReport.reportName=reportName
+		preventiveMaintenanceReport.preventionResponsible=responsibles
+		preventiveMaintenanceReport.savedBy=user
 		
 		preventiveMaintenanceReport.save(failOnError:true)
 		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON PREVENTIVE MAINTENANCE CUSTOM REPORT SAVED CORRECTLY. THE REPORT ID IS :"+ preventiveMaintenanceReport.id)

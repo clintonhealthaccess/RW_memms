@@ -3,7 +3,9 @@
 <div class="entity-list">
 
   <div class="heading1-bar">
-    <h1>Detailed Reports</h1>
+    <h1>
+    <g:message code="default.detailed.report.label" args="[message(code:'default.detailed.report.label')]" />
+    </h1>
   </div>
 
   <!-- filter template -->
@@ -100,7 +102,11 @@
             <!-- spare parts report template -->
             <g:if test="${customizedReportName != null && !customizedReportName.empty}">
               <g:if test="${[ReportSubType.USERATE,ReportSubType.STOCKOUT].contains(reportSubType)}">
-                <g:render template="/reports/listing/sparePartReport/customSparePartTypesListing" />
+              
+
+              <g:render template="/reports/listing/sparePartReport/customSparePartTypesListing" />
+
+                
               </g:if>
               <g:else>
                 <g:render template="/reports/listing/sparePartReport/customSparePartsListing" />

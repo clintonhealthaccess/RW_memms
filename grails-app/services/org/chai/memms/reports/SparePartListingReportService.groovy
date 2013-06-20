@@ -78,8 +78,6 @@ class SparePartListingReportService {
 	// TODO we have to track also the spare part at MMC level which does not have dataLocation.
 	public def getCustomReportOfSpareParts(User user, def customSparePartsParams, Map<String, String> params) {
 
-		//def customSpareParts = []
-
 		def reportType = customSparePartsParams.get('reportType')
 		def reportSubType = customSparePartsParams.get('reportSubType')
 
@@ -98,22 +96,18 @@ class SparePartListingReportService {
 
 			criteriaSpareParts = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 
-				if(dataLocations != null && dataLocations.size() > 0)
+				//Mandatory property
 					inList("dataLocation",dataLocations)
-				if(sparePartTypes != null && sparePartTypes.size() > 0)
+				//Mandatory property
 					inList ("type", sparePartTypes)
-				and{
-					/*if(fromAcquisitionPeriod != null)
-					 gt ("purchaseDate", fromAcquisitionPeriod)
-					 if(toAcquisitionPeriod != null)
-					 lt ("purchaseDate", toAcquisitionPeriod)	*/
-					//TODO
-					/*if(noAcquisitionPeriod != null && noAcquisitionPeriod)
-					 eq ("purchaseDate", null)
-					 */
-					if(sparePartStatus!=null && !sparePartStatus.empty)
-						inList ("status",sparePartStatus)
-				}
+				if(noAcquisitionPeriod != null && noAcquisitionPeriod)
+					eq ("purchaseDate", null)
+				if(sparePartStatus!=null && !sparePartStatus.empty)
+					inList ("status",sparePartStatus)
+				if(fromAcquisitionPeriod && fromAcquisitionPeriod != null)
+					gt ("purchaseDate", fromAcquisitionPeriod)
+				if(toAcquisitionPeriod && toAcquisitionPeriod != null)
+					lt ("purchaseDate", toAcquisitionPeriod)	
 			}
 			if (log.isDebugEnabled()) log.debug("SPARE PARTS SIZE: "+ criteriaSpareParts.size())
 		}
@@ -124,9 +118,9 @@ class SparePartListingReportService {
 			def toStatusChangesPeriod = customSparePartsParams.get('toStatusChangesPeriod')
 
 			criteriaSpareParts = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-				if(dataLocations != null && dataLocations.size() > 0)
+				//Mandatory property
 					inList("dataLocation",dataLocations)
-				if(sparePartTypes != null && sparePartTypes.size() > 0)
+				//Mandatory property
 					inList ("type", sparePartTypes)
 
 				// TODO
@@ -152,10 +146,16 @@ class SparePartListingReportService {
 			def lastYearDateTimeFromNow = todayDateTime.minusDays(365)
 			def lastYearDateFromNow = lastYearDateTimeFromNow.toDate()
 			criteriaSpareParts = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-				if(dataLocations != null && dataLocations.size() > 0)
+				
+				projections {
+					property("type","type")
+				}
+				//Mandatory property
 					inList("dataLocation",dataLocations)
-				if(sparePartTypes != null && sparePartTypes.size() > 0)
+				//Mandatory property
 					inList ("type", sparePartTypes)
+					
+					
 				eq ("status",SparePartStatus.INSTOCK)
 				//gt("deliveryDate", lastYearDateFromNow)
 				/*projections{
@@ -172,10 +172,16 @@ class SparePartListingReportService {
 			def lastYearDateTimeFromNow = todayDateTime.minusDays(365)
 			def lastYearDateFromNow = lastYearDateTimeFromNow.toDate()
 			criteriaSpareParts = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-				if(dataLocations != null && dataLocations.size() > 0)
+				
+				projections {
+					property("type", "type")
+				}
+				//Mandatory property
 					inList("dataLocation",dataLocations)
-				if(sparePartTypes != null && sparePartTypes.size() > 0)
+				//Mandatory property
+					
 					inList ("type", sparePartTypes)
+					
 				eq ("status",SparePartStatus.INSTOCK)
 				//gt("deliveryDate", lastYearDateFromNow)
 				/*projections{

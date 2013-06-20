@@ -11,7 +11,7 @@
 			<g:sortableColumn property="manufacturer"  title="${message(code: 'provider.type.manufacturer')}" params="[q:q]" />
 			<g:sortableColumn property="supplier"  title="${message(code: 'provider.type.supplier')}" params="[q:q]" />
 			<g:sortableColumn property="purchaser"  title="${message(code: 'equipment.purchaser.label')}" params="[q:q]" />
-			<th>Current Value</th>
+			<th><g:message code="equipment.current.value.label"/></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -35,7 +35,7 @@
 				<td>${equipment.manufacturer?.contact?.contactName}</td>
 				<td>${equipment.supplier?.contact?.contactName}</td>
 				<td>${message(code: equipment.purchaser?.messageCode+'.'+equipment.purchaser?.name)}</td>
-				<td>${equipment.currentValueOfThisEquipment}</td>
+				<td><g:formatNumber number="${equipment.currentValueOfThisEquipment}" type="number" format="###.##"/></td>
 			</tr>
 		</g:each>
 

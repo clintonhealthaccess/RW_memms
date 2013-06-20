@@ -1,4 +1,5 @@
 <%@ page import="org.chai.memms.inventory.EquipmentStatus.Status" %>
+<%@ page import="org.chai.memms.util.Utils" %>
 <ul>
   <li>
     <label for="equipmentStatus"><g:message code="reports.inventory.inventory.equipmentStatus"/>:</label>
