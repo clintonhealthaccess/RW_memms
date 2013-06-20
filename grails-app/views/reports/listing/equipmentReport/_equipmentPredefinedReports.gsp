@@ -27,55 +27,44 @@
       <li>
         <a href="${createLinkWithTargetURI(controller: 'listing', action:'underMaintenanceEquipments')}" id="report-4">
           <g:message code="default.under.maintenance.label" />
+          <span class='delete-node' id='js-delete-node'>X</span>
         </a>
       </li>
       <li>
         <a href="${createLinkWithTargetURI(controller: 'listing', action:'inStockEquipments')}" id="report-5">
           <g:message code="default.in.stock.label" />
+          <span class='delete-node' id='js-delete-node'>X</span>
         </a>
       </li>
       <li>
         <a href="${createLinkWithTargetURI(controller: 'listing', action:'inStockEquipments')}" id="report-5">
           <g:message code="default.in.stock.label" />
+          <span class='delete-node' id='js-delete-node'>X</span>
         </a>
       </li>
       <li>
         <a href="${createLinkWithTargetURI(controller: 'listing', action:'inStockEquipments')}" id="report-5">
           <g:message code="default.in.stock.label" />
+          <span class='delete-node' id='js-delete-node'>X</span>
         </a>
       </li>
       <li>
         <a href="${createLinkWithTargetURI(controller: 'listing', action:'inStockEquipments')}" id="report-5">
           <g:message code="default.in.stock.label" />
+          <span class='delete-node' id='js-delete-node'>X</span>
         </a>
       </li>
       <li>
         <a href="${createLinkWithTargetURI(controller: 'listing', action:'inStockEquipments')}" id="report-5">
           <g:message code="default.in.stock.label" />
+          <span class='delete-node' id='js-delete-node'>X</span>
         </a>
       </li>
       <li>
         <a href="${createLinkWithTargetURI(controller: 'listing', action:'inStockEquipments')}" id="report-5">
           <g:message code="default.in.stock.label" />
+          <span class='delete-node' id='js-delete-node'>X</span>
         </a>
-      </li>
-      <li>
-        <a href="${createLinkWithTargetURI(controller: 'listing', action:'disposedEquipments')}" id="report-3">
-          <g:message code="default.disposed.label" />
-        </a>
-        <span class='delete-node' id='js-delete-node'>X</span>
-      </li>
-      <li>
-        <a href="${createLinkWithTargetURI(controller: 'listing', action:'disposedEquipments')}" id="report-3">
-          <g:message code="default.disposed.label" />
-        </a>
-        <span class='delete-node' id='js-delete-node'>X</span>
-      </li>
-      <li>
-        <a href="${createLinkWithTargetURI(controller: 'listing', action:'disposedEquipments')}" id="report-3">
-          <g:message code="default.disposed.label" />
-        </a>
-        <span class='delete-node' id='js-delete-node'>X</span>
       </li>
       %{-- TODO saved reports --}%
     </ul>
