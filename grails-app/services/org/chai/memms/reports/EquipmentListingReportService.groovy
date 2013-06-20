@@ -192,10 +192,9 @@ class EquipmentListingReportService {
 
 			criteriaEquipments = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 				
-				//if(dataLocations != null && dataLocations.size() > 0)
 				//MADE IT MANDATORY, CONDITION REMOVED
 					inList("dataLocation",dataLocations)
-				//if(equipmentTypes != null && equipmentTypes.size() > 0)
+					
 				//MADE IT MANDATORY, CONDITION REMOVED
 					inList ("type", equipmentTypes)
 					
@@ -232,10 +231,9 @@ class EquipmentListingReportService {
 
 			criteriaEquipments = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 				
-				//if(dataLocations != null && dataLocations.size() > 0)
 				//MADE IT MANDATORY, CONDITION REMOVED
 					inList("dataLocation",dataLocations)
-				//if(equipmentTypes != null && equipmentTypes.size() > 0)
+
 				//MADE IT MANDATORY, CONDITION REMOVED
 					inList ("type", equipmentTypes)
 		

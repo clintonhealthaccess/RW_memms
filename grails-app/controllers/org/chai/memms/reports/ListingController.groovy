@@ -79,7 +79,7 @@ class ListingController extends AbstractController{
 	def userService
 
 	def getEntityClass() {
-		return Equipment.class;
+		return Object.class;
 	}
 
 	def getLabel() {
@@ -96,11 +96,11 @@ class ListingController extends AbstractController{
 		]
 	}
 
-	def ajaxModel(def entities,def dataLocation,def searchTerm) {
+	/*def ajaxModel(def entities,def dataLocation,def searchTerm) {
 		def model = model(entities, dataLocation) << [q:searchTerm]
 		def listHtml = g.render(template:"/reports/listing/listing",model:model)
 		render(contentType:"text/json") { results = [listHtml]}
-	}
+	}*/
 
 	def index ={
 		redirect(action: "view", params: params)
