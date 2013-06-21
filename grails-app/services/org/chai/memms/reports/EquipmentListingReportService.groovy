@@ -67,7 +67,7 @@ class EquipmentListingReportService {
 
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(dataLocations)
-				inList('dataLocation',dataLocations)
+				inList("dataLocation",dataLocations)
 		}
 	}
 
@@ -84,7 +84,7 @@ class EquipmentListingReportService {
 
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(dataLocations)
-				inList('dataLocation',dataLocations)
+				inList("dataLocation",dataLocations)
 			eq ("currentStatus",Status.DISPOSED)
 		}
 	}
@@ -103,7 +103,7 @@ class EquipmentListingReportService {
 
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(dataLocations)
-				inList('dataLocation',dataLocations)
+				inList("dataLocation",dataLocations)
 			eq ("obsolete", (obsolete.equals('true'))?true:false)
 		}
 	}
@@ -121,7 +121,7 @@ class EquipmentListingReportService {
 
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(dataLocations)
-				inList('dataLocation',dataLocations)
+				inList("dataLocation",dataLocations)
 			eq ("currentStatus",Status.UNDERMAINTENANCE)
 		}
 	}
@@ -139,7 +139,7 @@ class EquipmentListingReportService {
 
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(dataLocations)
-				inList('dataLocation',dataLocations)
+				inList("dataLocation",dataLocations)
 			eq ("currentStatus",Status.INSTOCK)
 		}
 	}
@@ -158,7 +158,7 @@ class EquipmentListingReportService {
 
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(dataLocations)
-				inList('dataLocation',dataLocations)
+				inList("dataLocation",dataLocations)
 		}
 	}
 
@@ -175,6 +175,7 @@ class EquipmentListingReportService {
 		def lowerLimitCost = customEquipmentParams.get('fromCost')
 		def upperLimitCost = customEquipmentParams.get('toCost')
 		def currency = customEquipmentParams.get('costCurrency')
+		def noCost = customEquipmentParams.get('noCost')
 
 		def criteria = Equipment.createCriteria();
 
@@ -216,7 +217,9 @@ class EquipmentListingReportService {
 				if(fromAcquisitionPeriod && fromAcquisitionPeriod != null)
 					gt ("purchaseDate", fromAcquisitionPeriod)
 				if(toAcquisitionPeriod && toAcquisitionPeriod != null)
-					lt ("purchaseDate", toAcquisitionPeriod)	
+					lt ("purchaseDate", toAcquisitionPeriod)
+				if(noCost != null && noCost)
+					eq ("purchaseCost", null)
 			}
 			customEquipments = criteriaEquipments
 			if (log.isDebugEnabled()) log.debug("EQUIPMENTS SIZE: "+ customEquipments.size())
@@ -243,6 +246,8 @@ class EquipmentListingReportService {
 					lt ("purchaseCost", upperLimitCost)
 				if(currency && currency !=null)
 					eq ("currency",currency)
+				if(noCost != null && noCost)
+					eq ("purchaseCost", null)
 
 				// TODO
 				// if(fromStatusChangesPeriod != null)
@@ -284,13 +289,14 @@ class EquipmentListingReportService {
 		def equipmentStatus = customEquipmentParams.get('equipmentStatus')
 		def obsolete = customEquipmentParams.get('obsolete')
 		def warranty = customEquipmentParams.get('warranty')
+		def noCost = customEquipmentParams.get('noCost')
 		
 		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON EQUIPMENT CUSTOM REPORT: LOWER COST :"+lowerLimitCost+" UPPER COST :"+upperLimitCost)
 		
-		//equipmentReport.underWarranty=warranty
-		equipmentReport.obsolete=obsolete
-		//equipmentReport.equipmentStatus=equipmentStatus
-		// equipmentReport.noAcquisitionPeriod = noAcquisition=='on'?true:false
+		equipmentReport.underWarranty=warranty=='on'?true:false
+		equipmentReport.obsolete=obsolete=='on'?true:false
+		equipmentReport.equipmentStatus=equipmentStatus
+		equipmentReport.noAcquisitionPeriod = noAcquisitionPeriod=='on'?true:false
 		equipmentReport.toDate=toAcquisitionPeriod
 		equipmentReport.fromDate=fromAcquisitionPeriod
 		equipmentReport.currency=currency
@@ -299,9 +305,11 @@ class EquipmentListingReportService {
 		equipmentReport.equipmentTypes=equipmentTypes
 		equipmentReport.departments=departments
 		equipmentReport.dataLocations=dataLocations
-		//equipmentReport.reportSubType=reportSubType
-		//equipmentReport.reportType=reportType
+		equipmentReport.reportSubType=reportSubType
+		equipmentReport.reportType=reportType
 		equipmentReport.reportName=reportName
+		equipmentReport.savedBy=user
+		equipmentReport.noCostSpecified=noCost=="on"?true:false
 		
 		equipmentReport.save(failOnError:true)
 		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON EQUIPMENT CUSTOM REPORT SAVED CORRECTLY. THE REPORT ID IS :"+ equipmentReport.id)

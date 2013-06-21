@@ -95,6 +95,7 @@ class WorkOrderListingReportService {
 		def lowerLimitCost = customWorkOrderParams.('fromCost')
 		def upperLimitCost = customWorkOrderParams.('toCost')
 		def currency = customWorkOrderParams.get('costCurrency')
+		def noCost = customWorkOrderParams.get('noCost')
 		
 		def criteria = WorkOrder.createCriteria();
 
@@ -131,7 +132,9 @@ class WorkOrderListingReportService {
 				if(toWorkOrderPeriod && toWorkOrderPeriod != null)
 				 	le ("openOn", toWorkOrderPeriod)
 				if(warranty!=null && warranty)
-				lt ("equip.warrantyEndDate",today)
+					lt ("equip.warrantyEndDate",today)
+				if(noCost != null && noCost)
+					eq ("equip.purchaseCost", null)
 			}
 			customWorkOrders = criteriaWorkOrders
 		}
@@ -158,6 +161,8 @@ class WorkOrderListingReportService {
 					lt ("equip.purchaseCost", upperLimitCost)
 				if(currency && currency !=null)
 					eq ("equip.currency",currency)
+				if(noCost != null && noCost)
+					eq ("equip.purchaseCost", null)
 
 				// TODO
 				// if(fromStatusChangesPeriod != null)
@@ -190,6 +195,7 @@ class WorkOrderListingReportService {
 		def lowerLimitCost = customWorkOrderParams.get('fromCost')
 		def upperLimitCost = customWorkOrderParams.get('toCost')
 		def currency = customWorkOrderParams.get('costCurrency')
+		def noCost = customWorkOrderParams.get('noCost')
 		
 		def fromWorkOrderPeriod = customWorkOrderParams.get('fromWorkOrderPeriod')
 		def toWorkOrderPeriod = customWorkOrderParams.get('toWorkOrderPeriod')
@@ -212,6 +218,7 @@ class WorkOrderListingReportService {
 		correctiveMaintenanceReport.reportName=reportName
 		correctiveMaintenanceReport.workOrderStatus=workOrderStatus
 		correctiveMaintenanceReport.savedBy=user
+		correctiveMaintenanceReport.noCostSpecified=noCost=="on"?true:false
 		correctiveMaintenanceReport.save(failOnError:true)
 		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON EQUIPMENT CUSTOM REPORT SAVED CORRECTLY. THE REPORT ID IS :"+ correctiveMaintenanceReport.id)
 	}

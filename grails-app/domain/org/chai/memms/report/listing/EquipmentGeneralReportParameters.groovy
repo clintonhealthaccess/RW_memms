@@ -29,6 +29,7 @@ class EquipmentGeneralReportParameters {
 	Date fromDate
 	Date toDate
 	User savedBy
+	boolean noCostSpecified
 
 	static hasMany = [dataLocations:DataLocation,departments:Department,equipmentTypes:EquipmentType]
 	static constraints = {
@@ -41,6 +42,7 @@ class EquipmentGeneralReportParameters {
 		fromDate nullable: true, blank: true
 		toDate nullable: true, blank: true
 		savedBy nullable: false
+		noCostSpecified nullable: false
 	}
 
 	static mapping = {

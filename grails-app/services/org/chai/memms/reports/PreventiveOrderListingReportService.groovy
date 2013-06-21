@@ -83,6 +83,7 @@ class PreventiveOrderListingReportService {
 		def currency = customPreventiveOrderParams.get('costCurrency')
 		def workOrderStatus = customPreventiveOrderParams.get('workOrderStatus')
 		def responsibles = customPreventiveOrderParams.get('whoIsResponsible')
+		def noCost = customPreventiveOrderParams.get('noCost')
 		
 		def criteria = PreventiveOrder.createCriteria();
 	
@@ -106,6 +107,8 @@ class PreventiveOrderListingReportService {
 				eq ("equip.currency",currency)	
 			if(responsibles!=null && !responsibles.empty)
 				inList ("preventionResponsible",responsibles)
+			if(noCost != null && noCost)
+				eq ("equip.purchaseCost", null)
 		}
 	}
 	public def savePreventiveOrderReportParams(User user, def preventiveMaintenanceReport,def customPreventiveOrderParams, Map<String, String> params){
@@ -119,6 +122,7 @@ class PreventiveOrderListingReportService {
 		def lowerLimitCost = customPreventiveOrderParams.get('fromCost')
 		def upperLimitCost = customPreventiveOrderParams.get('toCost')
 		def currency = customPreventiveOrderParams.get('costCurrency')
+		def noCost = customPreventiveOrderParams.get('noCost')
 		
 		def fromWorkOrderPeriod = customPreventiveOrderParams.get('fromWorkOrderPeriod')
 		def toWorkOrderPeriod = customPreventiveOrderParams.get('toWorkOrderPeriod')
@@ -142,6 +146,7 @@ class PreventiveOrderListingReportService {
 		preventiveMaintenanceReport.reportName=reportName
 		preventiveMaintenanceReport.preventionResponsible=responsibles
 		preventiveMaintenanceReport.savedBy=user
+		preventiveMaintenanceReport.noCostSpecified=noCost=="on"?true:false
 		
 		preventiveMaintenanceReport.save(failOnError:true)
 		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON PREVENTIVE MAINTENANCE CUSTOM REPORT SAVED CORRECTLY. THE REPORT ID IS :"+ preventiveMaintenanceReport.id)

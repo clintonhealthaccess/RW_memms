@@ -1,6 +1,7 @@
 <%@ page import="org.chai.memms.util.Utils" %>
 <%@ page import="org.apache.shiro.SecurityUtils" %>
 <%@ page import="org.chai.memms.security.User" %>
+<%@ page import="org.chai.memms.spare.part.SparePart" %>
 <table class="items">
 	<thead>
 		<tr>
