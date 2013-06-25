@@ -197,7 +197,7 @@ class EquipmentListingReportService {
 				//MADE IT MANDATORY, CONDITION REMOVED
 					inList ("type", equipmentTypes)
 					
-				if(departments != null && departments.size() > 0)
+				if(departments && departments != null && departments.size() > 0)
 					inList ("department", departments)
 				if(lowerLimitCost && lowerLimitCost!=null)
 					gt ("purchaseCost", lowerLimitCost)
@@ -211,8 +211,8 @@ class EquipmentListingReportService {
 					eq ("obsolete", (obsolete.equals('true'))?true:false)
 				if(warranty!=null && warranty)
 					lt ("warrantyEndDate",today)
-				if(noAcquisitionPeriod != null && noAcquisitionPeriod)
-					eq ("purchaseDate", null)
+				/*if(noAcquisitionPeriod != null && noAcquisitionPeriod)
+					eq ("purchaseDate", null)*/
 
 				if(fromAcquisitionPeriod && fromAcquisitionPeriod != null)
 					gt ("purchaseDate", fromAcquisitionPeriod)
