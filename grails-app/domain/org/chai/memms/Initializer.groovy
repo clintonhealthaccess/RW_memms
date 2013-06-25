@@ -330,6 +330,7 @@ public class Initializer {
 			nyange.save(failOnError:true)
 		}		
 	}
+	
 	public static createInventoryStructure(){
 		
 		if(!Department.count()){

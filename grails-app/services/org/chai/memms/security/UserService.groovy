@@ -36,6 +36,7 @@ import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocation
 import org.chai.location.Location;
 import org.chai.memms.corrective.maintenance.WorkOrder;
+import org.chai.memms.report.listing.EquipmentReport;
 import org.chai.memms.security.User.UserType;
 import org.chai.memms.security.User;
 import org.chai.memms.util.Utils
@@ -151,10 +152,17 @@ class UserService {
 				eq ("confirmed", (confirmed.equals('true'))?true:false)
 		}
 	}
-		
-	
+
 	boolean canViewManagedSpareParts(User user){
 		return ((user.userType == UserType.TECHNICIANDH) && (user.location instanceof DataLocation) && (user.location as DataLocation).manages)
+	}
+
+	List<EquipmentReport> getSavedReportsByUser(def user, def reportType){
+		def criteria = EquipmentReport.createCriteria();
+		return criteria.list(){
+			eq ("savedBy", user)
+			eq ("reportType", reportType)
+		}
 	}
 	
 }

@@ -11,6 +11,8 @@ import org.chai.memms.inventory.Department;
 import org.chai.memms.inventory.EquipmentType;
 import org.chai.memms.security.User;
 import org.chai.location.DataLocation;
+import org.chai.memms.util.Utils.ReportType;
+import org.chai.memms.util.Utils.ReportSubType;
 
 /**
  * @author Aphrodice Rwagaju
@@ -20,8 +22,8 @@ import org.chai.location.DataLocation;
 class EquipmentGeneralReportParameters {
 
 	String reportName
-	String reportType
-	String reportSubType
+	ReportType reportType
+	ReportSubType reportSubType
 	Date dateCreated
 	Double lowerLimitCost
 	Double upperLimitCost

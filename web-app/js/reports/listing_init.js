@@ -3,14 +3,14 @@ $(document).ready(function(){
 	// load listing stuff here
 	// ...
 
-	// load jqueryui dialog box
+	// load customized report jqueryui dialog box
 	$( "#js-customize-toggle").click(function(e) {
 	  e.preventDefault();
 		$( "#dialog-form" ).dialog({ modal: true });
 		$('.ui-dialog').resizable('destroy');
 	});
 
-	// load jqueryui horizontal scroll
+	// load report list jqueryui horizontal scroll
 	var items, scroller = $('#js-slider-wrapper ul');
 	var width = 0;
 	var item = 0;
@@ -72,6 +72,16 @@ $(document).ready(function(){
 	  scrolledWidth -= scrollWidth;
 	  scroller.animate({'left' : (0 - scrolledWidth) + 'px'}, 'linear');
 	}
+
+	//load report list delete node
+	$("#js-delete-node").click(function(e){
+		e.preventDefault();
+		if(confirm("Are you sure?")){
+			var savedReportId = $(this).data("saved-report-id");
+			$(this).parents('li').remove();
+			// TODO add ajax method in listing controller that deletes the saved report
+		}
+	});
 
 });
 

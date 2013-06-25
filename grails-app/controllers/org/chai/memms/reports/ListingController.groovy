@@ -117,6 +117,8 @@ class ListingController extends AbstractController{
 	def generalEquipmentsListing={
 		if (log.isDebugEnabled()) log.debug("listing.generalEquipmentsListing start, params:"+params)
 
+		def savedReports = userService.getSavedReportsByUser(user, ReportType.INVENTORY)
+
 		adaptParamsForList()
 		def equipments = equipmentListingReportService.getGeneralReportOfEquipments(user,params)
 		if(!request.xhr)
@@ -126,12 +128,15 @@ class ListingController extends AbstractController{
 				reportType: ReportType.INVENTORY,
 				reportSubType: ReportSubType.INVENTORY,
 				selectedReport: message(code:'default.all.equipments.label'),
+				savedReports: savedReports,
 				template:"/reports/listing/listing"
 			])
 	}
 
 	def obsoleteEquipments={
 		if (log.isDebugEnabled()) log.debug("listing.obsoleteEquipments start, params:"+params)
+
+		def savedReports = userService.getSavedReportsByUser(user, ReportType.INVENTORY)
 
 		adaptParamsForList()
 		def equipments = equipmentListingReportService.getObsoleteEquipments(user,params)
@@ -142,12 +147,15 @@ class ListingController extends AbstractController{
 				reportType: ReportType.INVENTORY,
 				reportSubType: ReportSubType.INVENTORY,
 				selectedReport: message(code:'default.obsolete.label'),
+				savedReports: savedReports,
 				template:"/reports/listing/listing"
 			])
 	}
 
 	def disposedEquipments={
 		if (log.isDebugEnabled()) log.debug("listing.disposedEquipments start, params:"+params)
+
+		def savedReports = userService.getSavedReportsByUser(user, ReportType.INVENTORY)
 
 		adaptParamsForList()
 		def equipments = equipmentListingReportService.getDisposedEquipments(user,params)
@@ -158,12 +166,15 @@ class ListingController extends AbstractController{
 				reportType: ReportType.INVENTORY,
 				reportSubType: ReportSubType.INVENTORY,
 				selectedReport: message(code:'default.disposed.label'),
+				savedReports: savedReports,
 				template:"/reports/listing/listing"
 			])
 	}
 
 	def underMaintenanceEquipments={
 		if (log.isDebugEnabled()) log.debug("listing.underMaintenanceEquipments start, params:"+params)
+
+		def savedReports = userService.getSavedReportsByUser(user, ReportType.INVENTORY)
 
 		adaptParamsForList()
 		def equipments = equipmentListingReportService.getUnderMaintenanceEquipments(user,params)
@@ -174,11 +185,16 @@ class ListingController extends AbstractController{
 				reportType: ReportType.INVENTORY,
 				reportSubType: ReportSubType.INVENTORY,
 				selectedReport: message(code:'default.under.maintenance.label'),
+				savedReports: savedReports,
 				template:"/reports/listing/listing"
 			])
 	}
 
 	def inStockEquipments={
+		if (log.isDebugEnabled()) log.debug("listing.inStockEquipments start, params:"+params)
+
+		def savedReports = userService.getSavedReportsByUser(user, ReportType.INVENTORY)
+
 		adaptParamsForList()
 		def equipments = equipmentListingReportService.getInStockEquipments(user,params)
 		if(!request.xhr)
@@ -188,11 +204,16 @@ class ListingController extends AbstractController{
 				reportType: ReportType.INVENTORY,
 				reportSubType: ReportSubType.INVENTORY,
 				selectedReport: message(code:'default.in.stock.label'),
+				savedReports: savedReports,
 				template:"/reports/listing/listing"
 			])
 	}
 
 	def underWarrantyEquipments={
+		if (log.isDebugEnabled()) log.debug("listing.underWarrantyEquipments start, params:"+params)
+
+		def savedReports = userService.getSavedReportsByUser(user, ReportType.INVENTORY)
+
 		adaptParamsForList()
 		def warrantyExpirationDate
 		def equipments = equipmentListingReportService.getUnderWarrantyEquipments(user,params)
@@ -203,7 +224,8 @@ class ListingController extends AbstractController{
 			[
 				reportType: ReportType.INVENTORY,
 				reportSubType: ReportSubType.INVENTORY,
-				//TODO selectedReport: message(code:'default.in.stock.label'),
+				selectedReport: message(code:'default.in.stock.label'),
+				savedReports: savedReports,
 				template:"/reports/listing/listing"
 			])
 	}
@@ -476,9 +498,13 @@ class ListingController extends AbstractController{
 				"Custom Report "+reportTypeTimestamp+" "+reportSubTypeTimestamp+" "+customizedReportTimestamp.format('yyyyMMddHHmmss')
 		}
 		def customizedReportSave = params.get('customizedReportSave')
+
+		def savedReports = userService.getSavedReportsByUser(user, reportType)
+
 		customizedListingParams << [
 			customizedReportName:customizedReportName,
-			customizedReportSave:customizedReportSave
+			customizedReportSave:customizedReportSave,
+			savedReports: savedReports
 		]
 
 		if (log.isDebugEnabled()) log.debug("listing.customizedListing end, customizedListingParams:"+customizedListingParams)
@@ -505,18 +531,48 @@ class ListingController extends AbstractController{
 
 		def reportType = getReportType()
 		def reportSubType = getReportSubType()
-		
-		// TODO get the user's saved report id
-		// TODO get the saved report parameters
 
-		// TODO set the saved report parameters
+		def savedReportId = params.get('id')
+		def savedReport = EquipmentReport.get(savedReportId);
+
+		def savedReports = userService.getSavedReportsByUser(user, reportType)
+
 		def savedCustomizedListingParams = [:]
 		def savedCustomizedListingReport = null
 		
 		switch(reportType){
 			case ReportType.INVENTORY:
-				// TODO get the savedCustomizedListingParams for the saved report
-				savedCustomizedListingReport = equipmentListingReportService.getCustomReportOfEquipments(user,savedCustomizedListingParams,null)
+				savedCustomizedListingParams = [
+					reportType: savedReport.reportType,
+					reportSubType: savedReport.reportSubType,
+					dataLocations: savedReport.dataLocations,
+					departments: savedReport.departments,
+					equipmentTypes: savedReport.equipmentTypes,
+					fromCost: savedReport.lowerLimitCost,
+					toCost: savedReport.upperLimitCost,
+					costCurrency: savedReport.currency,
+					noCost: savedReport.noCostSpecified
+				]
+				if(ReportSubType.INVENTORY){
+					savedCustomizedListingParams << [
+						fromAcquisitionPeriod: savedReport.fromDate,
+						toAcquisitionPeriod: savedReport.toDate,
+						noAcquisitionPeriod: savedReport.noAcquisitionPeriod,
+						equipmentStatus: savedReport.equipmentStatus,
+						obsolete: savedReport.obsolete,
+						warranty: savedReport.underWarranty
+					]
+				}
+				// TODO
+				// if(ReportSubType.STATUSCHANGES){
+				// 	savedCustomizedListingParams << [
+				// 		statusChanges: statusChanges,
+				// 		fromStatusChangesPeriod: fromStatusChangesPeriod,
+				// 		toStatusChangesPeriod: toStatusChangesPeriod
+				// 	]
+				// }
+				adaptParamsForList()
+				savedCustomizedListingReport = equipmentListingReportService.getCustomReportOfEquipments(user,savedCustomizedListingParams,params)
 				if (log.isDebugEnabled()) log.debug("listing.savedCustomizedListing # of equipments:"+savedCustomizedListingReport.size())
 				break;
 			case ReportType.CORRECTIVE:
@@ -541,8 +597,24 @@ class ListingController extends AbstractController{
 				reportSubType: reportSubType,
 				//reportTypeOptions: reportTypeOptions,
 				//customizedReportName: customizedReportName,
+				selectedReport: savedReport.reportName,
+				savedReports: savedReports,
 				template:"/reports/listing/listing"
 			])
+	}
+
+	def deleteCustomizedListing ={
+		if (log.isDebugEnabled()) log.debug("listing.deleteCustomizedListing start, params:"+params)
+		
+		// TODO get the saved report id
+		def savedReport = null
+		if(savedReport != null) 
+			savedReport.delete();
+		else{
+			if (log.isDebugEnabled()) log.debug("listing.deleteCustomizedListing savedReport = null")
+		}
+
+		if (log.isDebugEnabled()) log.debug("listing.deleteCustomizedListing end, params:"+params)
 	}
 
 	// inventory
@@ -566,7 +638,7 @@ class ListingController extends AbstractController{
 		def costCurrency = params.get('costCurrency')
 		def noCost = params.get('noCost')
 
-		def equipmentReport=new EquipmentReport()
+		def equipmentReport = new EquipmentReport()
 
 		def customEquipmentParams = [
 			reportType: reportType,
