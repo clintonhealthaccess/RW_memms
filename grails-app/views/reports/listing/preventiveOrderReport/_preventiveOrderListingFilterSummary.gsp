@@ -2,7 +2,15 @@
 <%@ page import="org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatus" %>
 <%@ page import="org.chai.memms.preventive.maintenance.PreventiveOrder.PreventionResponsible" %>
 <div class="v-tabs-criteria">
-  <ul class="left">
+
+  <g:if test="${customizedReportName != null && !customizedReportName.empty}">
+    <h1>${customizedReportName}</h1>
+  </g:if>
+  <g:else>
+    <h1>${selectedReport}</h1>
+  </g:else>
+
+  <ul>
 
     <li>
       <span>Report Type:</span>
@@ -18,19 +26,6 @@
       <span>Report Total:</span>
       <a href="#">TODO Preventions = ${entities?.size()}</a>
     </li>
-
-    <g:if test="${customizedReportName != null && !customizedReportName.empty}">
-      <li>
-        <span>Custom Report Name:</span>
-        <a href="#">${customizedReportName}</a>
-      </li>
-    </g:if>
-    <g:else>
-      <li>
-        <span>Report Name:</span>
-        <a href="#">${selectedReport}</a>
-      </li>
-    </g:else>
 
     <g:if test="${customizedReportName != null && !customizedReportName.empty}">
       <li>

@@ -29,10 +29,10 @@
           <g:render template="/reports/listing/equipmentReport/equipmentPredefinedReports" />
           <!-- TODO equipment saved reports template -->
           <div id='report-1' class="js-shown-report shown-report">
-            <!-- equipment indicator summary template -->
-            <g:render template ="/reports/listing/equipmentReport/equipmentIndicatorSummary" />
             <!-- listing filter summary template -->
             <g:render template ="/reports/listing/equipmentReport/equipmentListingFilterSummary" />
+            <!-- equipment indicator summary template -->
+            <g:render template ="/reports/listing/equipmentReport/equipmentIndicatorSummary" />
             <!-- equipment report template -->
             <g:if test="${customizedReportName != null && !customizedReportName.empty}">
               <g:render template="/reports/listing/equipmentReport/customEquipmentListing" />

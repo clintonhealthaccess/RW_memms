@@ -2,6 +2,14 @@
 <%@ page import="org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus" %>
 <%@ page import="org.chai.memms.corrective.maintenance.WorkOrderStatus.WorkOrderStatusChange" %>
 <div class="v-tabs-criteria">
+
+  <g:if test="${customizedReportName != null && !customizedReportName.empty}">
+    <h1>${customizedReportName}</h1>
+  </g:if>
+  <g:else>
+    <h1>${selectedReport}</h1>
+  </g:else>
+
   <ul class="left">
 
     <li>
@@ -18,19 +26,6 @@
       <span>Report Total:</span>
       <a href="#"><g:message code="work.orders.label"/> = ${entities?.size()}</a>
     </li>
-
-    <g:if test="${customizedReportName != null && !customizedReportName.empty}">
-      <li>
-        <span>Custom Report Name:</span>
-        <a href="#">${customizedReportName}</a>
-      </li>
-    </g:if>
-    <g:else>
-      <li>
-        <span>Report Name:</span>
-        <a href="#">${selectedReport}</a>
-      </li>
-    </g:else>
 
     <g:if test="${customizedReportName != null && !customizedReportName.empty}">
       <li>
