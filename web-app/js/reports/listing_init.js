@@ -25,7 +25,7 @@ $(document).ready(function(){
 	  e.preventDefault();
 	  items = scroller.children();
 	  if(item > 0) {
-	    item -= 4;
+	    item -= 6;
 	  }
           hideRestOfElements();
 	});
@@ -33,8 +33,8 @@ $(document).ready(function(){
 	$(document).on('click', '#js-scroll-right', function(e){
 	  e.preventDefault();
 	  items = scroller.children();
-	  if(item < (items.length - 3)){
-	    item += 4;
+	  if(item < (items.length - 4)){
+	    item += 6;
 	  }
           hideRestOfElements();
 	});
@@ -44,7 +44,7 @@ $(document).ready(function(){
           items = scroller.children('li');
           items.show();
           items.each(function(idx) {
-            if(idx < item || idx > item + 3) {
+            if(idx < item || idx > item + 4) {
               scrollWidth += $(items[idx]).outerWidth();
               $(items[idx]).hide();
             }
