@@ -207,6 +207,7 @@ class SparePartListingReportService {
 		def toAcquisitionPeriod = customSparePartParams.get('toAcquisitionPeriod')
 		def noAcquisitionPeriod = customSparePartParams.get('noAcquisitionPeriod')
 		def sparePartStatus = customSparePartParams.get('sparePartStatus')
+		def listingReportDisplayOptions = customSparePartParams.get('reportTypeOptions')
 
 		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON SPARE PART CUSTOM REPORT: SPARE PART STATUS :"+sparePartStatus)
 		sparePartReport.sparePartStatus=sparePartStatus
@@ -219,7 +220,7 @@ class SparePartListingReportService {
 		sparePartReport.reportType=reportType
 		sparePartReport.reportName=reportName
 		sparePartReport.savedBy=user
-
+		sparePartReport.displayOptions=listingReportDisplayOptions
 		sparePartReport.save(failOnError:true)
 		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON SPARE PART CUSTOM REPORT SAVED CORRECTLY. THE REPORT ID IS :"+ sparePartReport.id)
 	}

@@ -116,7 +116,7 @@
 					%{-- TODO --}%
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('currentValue')}">
-					<td>${equipment.currentValueOfThisEquipment}</td>
+					<td><g:formatNumber number="${equipment.currentValueOfThisEquipment}" type="number" format="###.##"/></td>
 				</g:if>
 			</tr>
 		</g:each>
