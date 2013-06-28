@@ -38,9 +38,9 @@ class WorkOrderListingReportService {
 			createAlias("equipment","equip")
 			if(dataLocations)
 				inList('equip.dataLocation',dataLocations)
-		}
-		
+		}	
 	}
+
 	def getWorkOrdersEscalatedToMMC(User user,Map<String, String> params) {
 
 		def criteria = WorkOrder.createCriteria();
@@ -184,6 +184,7 @@ class WorkOrderListingReportService {
 		}
 		return customWorkOrders;
 	}
+
 	public def saveWorkOrderReportParams(User user, def correctiveMaintenanceReport,def customWorkOrderParams, Map<String, String> params){
 		def reportName = customWorkOrderParams.get('customizedReportName')
 		def reportType = customWorkOrderParams.get('reportType')
@@ -221,9 +222,9 @@ class WorkOrderListingReportService {
 		correctiveMaintenanceReport.noCostSpecified=noCost=="on"?true:false
 		correctiveMaintenanceReport.save(failOnError:true)
 		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON EQUIPMENT CUSTOM REPORT SAVED CORRECTLY. THE REPORT ID IS :"+ correctiveMaintenanceReport.id)
+
+		return correctiveMaintenanceReport
 	}
-	
-	
 	
 	def getClosedWorkOrdersOfLastYear(User user, def customWorkOrderParams ,Map<String, String> params) {
 		//DATE PROCESSING TO BE REVIEWED EITHER IN THIS SERVICE OR WORKORDER BEAN LEVEL

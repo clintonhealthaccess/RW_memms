@@ -90,8 +90,8 @@ class ListingController extends AbstractController{
 		return [
 			entities: entities,
 			entityCount: entities.totalCount,
-			dataLocation:dataLocation,
-			entityClass:getEntityClass(),
+			dataLocation: dataLocation,
+			entityClass: getEntityClass(),
 			code: getLabel()
 		]
 	}
@@ -118,6 +118,7 @@ class ListingController extends AbstractController{
 		if (log.isDebugEnabled()) log.debug("listing.generalEquipmentsListing start, params:"+params)
 
 		def savedReports = userService.getSavedReportsByUser(user, ReportType.INVENTORY)
+		if (log.isDebugEnabled()) log.debug("listing.generalEquipmentsListing savedReports:"+savedReports.size())
 
 		adaptParamsForList()
 		def equipments = equipmentListingReportService.getGeneralReportOfEquipments(user,params)
@@ -127,7 +128,7 @@ class ListingController extends AbstractController{
 			[
 				reportType: ReportType.INVENTORY,
 				reportSubType: ReportSubType.INVENTORY,
-				selectedReport: message(code:'default.all.equipments.label'),
+				reportName: message(code:'default.all.equipments.label'),
 				savedReports: savedReports,
 				template:"/reports/listing/listing"
 			])
@@ -146,7 +147,7 @@ class ListingController extends AbstractController{
 			[
 				reportType: ReportType.INVENTORY,
 				reportSubType: ReportSubType.INVENTORY,
-				selectedReport: message(code:'default.obsolete.label'),
+				reportName: message(code:'default.obsolete.label'),
 				savedReports: savedReports,
 				template:"/reports/listing/listing"
 			])
@@ -165,7 +166,7 @@ class ListingController extends AbstractController{
 			[
 				reportType: ReportType.INVENTORY,
 				reportSubType: ReportSubType.INVENTORY,
-				selectedReport: message(code:'default.disposed.label'),
+				reportName: message(code:'default.disposed.label'),
 				savedReports: savedReports,
 				template:"/reports/listing/listing"
 			])
@@ -184,7 +185,7 @@ class ListingController extends AbstractController{
 			[
 				reportType: ReportType.INVENTORY,
 				reportSubType: ReportSubType.INVENTORY,
-				selectedReport: message(code:'default.under.maintenance.label'),
+				reportName: message(code:'default.under.maintenance.label'),
 				savedReports: savedReports,
 				template:"/reports/listing/listing"
 			])
@@ -203,7 +204,7 @@ class ListingController extends AbstractController{
 			[
 				reportType: ReportType.INVENTORY,
 				reportSubType: ReportSubType.INVENTORY,
-				selectedReport: message(code:'default.in.stock.label'),
+				reportName: message(code:'default.in.stock.label'),
 				savedReports: savedReports,
 				template:"/reports/listing/listing"
 			])
@@ -224,7 +225,7 @@ class ListingController extends AbstractController{
 			[
 				reportType: ReportType.INVENTORY,
 				reportSubType: ReportSubType.INVENTORY,
-				selectedReport: message(code:'default.in.stock.label'),
+				reportName: message(code:'default.in.stock.label'),
 				savedReports: savedReports,
 				template:"/reports/listing/listing"
 			])
@@ -241,7 +242,7 @@ class ListingController extends AbstractController{
 			[
 				reportType: ReportType.CORRECTIVE,
 				reportSubType: ReportSubType.WORKORDERS,
-				selectedReport: message(code:'default.all.work.order.label'),
+				reportName: message(code:'default.all.work.order.label'),
 				template:"/reports/listing/listing"
 			])
 	}
@@ -255,7 +256,7 @@ class ListingController extends AbstractController{
 			[
 				reportType: ReportType.CORRECTIVE,
 				reportSubType: ReportSubType.WORKORDERS,
-				selectedReport: message(code:'default.work.order.last.month.label'),
+				reportName: message(code:'default.work.order.last.month.label'),
 				template:"/reports/listing/listing"
 			])
 	}
@@ -269,7 +270,7 @@ class ListingController extends AbstractController{
 			[
 				reportType: ReportType.CORRECTIVE,
 				reportSubType: ReportSubType.WORKORDERS,
-				selectedReport: message(code:'default.work.order.escalated.to.mmc.label'),
+				reportName: message(code:'default.work.order.escalated.to.mmc.label'),
 				template:"/reports/listing/listing"
 			])
 	}
@@ -282,7 +283,7 @@ class ListingController extends AbstractController{
 			[
 				reportType: ReportType.CORRECTIVE,
 				reportSubType: ReportSubType.WORKORDERS,
-				selectedReport: message(code:'default.work.order.closed.last.year.label'),
+				reportName: message(code:'default.work.order.closed.last.year.label'),
 				template:"/reports/listing/listing"
 			])
 	}
@@ -298,7 +299,7 @@ class ListingController extends AbstractController{
 			[
 				reportType: ReportType.PREVENTIVE,
 				reportSubType: ReportSubType.WORKORDERS,
-				selectedReport: message(code:'default.all.preventive.order.label'),
+				reportName: message(code:'default.all.preventive.order.label'),
 				template:"/reports/listing/listing"
 			])
 	}
@@ -312,7 +313,7 @@ class ListingController extends AbstractController{
 			[
 				reportType: ReportType.PREVENTIVE,
 				reportSubType: ReportSubType.WORKORDERS,
-				selectedReport: message(code:'default.equipments.with.prevention.label'),
+				reportName: message(code:'default.equipments.with.prevention.label'),
 				template:"/reports/listing/listing"
 			])
 	}
@@ -327,7 +328,7 @@ class ListingController extends AbstractController{
 			[
 				reportType: ReportType.PREVENTIVE,
 				reportSubType: ReportSubType.WORKORDERS,
-				selectedReport: message(code:'default.preventions.delayed.label'),
+				reportName: message(code:'default.preventions.delayed.label'),
 				template:"/reports/listing/listing"
 			])
 	}
@@ -345,6 +346,7 @@ class ListingController extends AbstractController{
 			[
 				reportType: ReportType.SPAREPARTS,
 				reportSubType: ReportSubType.INVENTORY,
+				reportName: "TODO",
 				template:"/reports/listing/listing"
 			])
 	}
@@ -362,6 +364,7 @@ class ListingController extends AbstractController{
 			[
 				reportType: ReportType.SPAREPARTS,
 				reportSubType: ReportSubType.INVENTORY,
+				reportName: "TODO",
 				template:"/reports/listing/listing"
 			])
 	}
@@ -529,11 +532,11 @@ class ListingController extends AbstractController{
 	def savedCustomizedListing ={
 		if (log.isDebugEnabled()) log.debug("listing.savedCustomizedListing start, params:"+params)
 
-		def reportType = getReportType()
-		def reportSubType = getReportSubType()
-
 		def savedReportId = params.get('id')
 		def savedReport = EquipmentReport.get(savedReportId);
+
+		if(savedReport == null)
+			redirect(action: "generalEquipmentsListing", params: params)
 
 		def savedReports = userService.getSavedReportsByUser(user, reportType)
 
@@ -593,11 +596,10 @@ class ListingController extends AbstractController{
 			render(view:"/reports/reports",
 			model: model(savedCustomizedListingReport, "") <<
 			[
-				reportType: reportType,
-				reportSubType: reportSubType,
-				//reportTypeOptions: reportTypeOptions,
-				//customizedReportName: customizedReportName,
-				selectedReport: savedReport.reportName,
+				reportType: savedReport.reportType,
+				reportSubType: savedReport.reportSubType,
+				// TODO reportTypeOptions: reportTypeOptions,
+				selectedReport: savedReport,
 				savedReports: savedReports,
 				template:"/reports/listing/listing"
 			])
@@ -606,15 +608,23 @@ class ListingController extends AbstractController{
 	def deleteCustomizedListing ={
 		if (log.isDebugEnabled()) log.debug("listing.deleteCustomizedListing start, params:"+params)
 		
-		// TODO get the saved report id
-		def savedReport = null
-		if(savedReport != null) 
-			savedReport.delete();
-		else{
-			if (log.isDebugEnabled()) log.debug("listing.deleteCustomizedListing savedReport = null")
+		def savedReportId = params.get('savedReportId')
+		def selectedReportId = params.get('selectedReportId')
+
+		def equipmentReport = EquipmentReport.get(savedReportId);
+
+		def result = false
+
+		if(equipmentReport != null){
+			equipmentReport.delete(flush: true)
+			if (log.isDebugEnabled()) log.debug("listing.deleteCustomizedListing equipmentReport deleted")
+			result = true
+			if(savedReportId == selectedReportId){
+				if (log.isDebugEnabled()) log.debug("listing.deleteCustomizedListing selectedReport deleted")
+			}
 		}
 
-		if (log.isDebugEnabled()) log.debug("listing.deleteCustomizedListing end, params:"+params)
+		render(contentType:"text/json") { results = [result] }
 	}
 
 	// inventory
@@ -691,12 +701,15 @@ class ListingController extends AbstractController{
 
 		if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing end, customEquipmentParams:"+customEquipmentParams)
 
+		def selectedReport = null
 		if(customizedReportSave){
-			equipmentListingReportService.saveEquipmentReportParams(user,equipmentReport, customEquipmentParams, params)
+			selectedReport = equipmentListingReportService.saveEquipmentReportParams(user,equipmentReport, customEquipmentParams, params)
 		}
 
 		def equipments = equipmentListingReportService.getCustomReportOfEquipments(user,customEquipmentParams,params)
 		if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing # of equipments:"+equipments.size())
+
+		def savedReports = userService.getSavedReportsByUser(user, ReportType.INVENTORY)
 
 		if(!request.xhr)
 			render(view:"/reports/reports",
@@ -708,7 +721,8 @@ class ListingController extends AbstractController{
 				customizedReportName: customizedReportName,
 				customizedReportSave: customizedReportSave,
 				customEquipmentParams: customEquipmentParams,
-				selectedReport: customizedReportName,
+				selectedReport: selectedReport,
+				savedReports: savedReports,
 				template:"/reports/listing/listing"
 			])
 	}
@@ -787,6 +801,11 @@ class ListingController extends AbstractController{
 			workOrderListingReportService.saveWorkOrderReportParams(user, correctiveMaintenanceReport, customWorkOrderParams, params)
 		}
 
+		def selectedReport = null
+		if(customizedReportSave){
+			selectedReport = workOrderListingReportService.saveWorkOrderReportParams(user, correctiveMaintenanceReport, customWorkOrderParams, params)
+		}
+
 		adaptParamsForList()
 		def warrantyExpirationDate
 		def workOrders = workOrderListingReportService.getCustomReportOfWorkOrders(user,customWorkOrderParams,params)
@@ -802,7 +821,7 @@ class ListingController extends AbstractController{
 				customizedReportName: customizedReportName,
 				customizedReportSave: customizedReportSave,
 				customWorkOrderParams: customWorkOrderParams,
-				selectedReport: customizedReportName,
+				selectedReport: selectedReport,
 				template:"/reports/listing/listing"
 			])
 	}
@@ -865,8 +884,9 @@ class ListingController extends AbstractController{
 
 		if (log.isDebugEnabled()) log.debug("listing.customPreventiveOrderListing, customPreventiveOrderParams:"+customPreventiveOrderParams)
 
+		def selectedReport = null
 		if(customizedReportSave){
-			preventiveOrderListingReportService.savePreventiveOrderReportParams(user, preventiveMaintenanceReport, customPreventiveOrderParams, params)
+			selectedReport = preventiveOrderListingReportService.savePreventiveOrderReportParams(user, preventiveMaintenanceReport, customPreventiveOrderParams, params)
 		}
 
 		adaptParamsForList()
@@ -881,7 +901,7 @@ class ListingController extends AbstractController{
 				customizedReportName: customizedReportName,
 				customizedReportSave: customizedReportSave,
 				customPreventiveOrderParams: customPreventiveOrderParams,
-				selectedReport: customizedReportName,
+				selectedReport: selectedReport,
 				template:"/reports/listing/listing"
 			])
 	}

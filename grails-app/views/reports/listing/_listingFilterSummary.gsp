@@ -1,8 +1,63 @@
 <%@ page import="org.chai.memms.util.Utils.ReportType" %>
 <%@ page import="org.chai.memms.inventory.EquipmentStatus.Status" %>
 <div class="v-tabs-criteria">
-  <ul class="left">
 
+  <g:if test="${customizedReportName != null && !customizedReportName.empty}">
+    <span><g:message code="reports.name.label"/></span>
+    <h1>${customizedReportName}</h1>
+  </g:if>
+
+  <g:else>
+    <h1>
+      <g:if test="${reportType == ReportType.INVENTORY}">
+        <g:if test="${actionName == 'generalEquipmentsListing'}">
+          <g:message code="default.all.equipments.label" />
+        </g:if>
+        <g:if test="${actionName == 'obsoleteEquipments'}">
+          <g:message code="default.obsolete.label" />
+        </g:if>
+        <g:if test="${actionName == 'disposedEquipments'}">
+          <g:message code="default.disposed.label" />
+        </g:if>
+        <g:if test="${actionName == 'underMaintenanceEquipments'}">
+         <g:message code="default.under.maintenance.label" />
+        </g:if>
+        <g:if test="${actionName == 'inStockEquipments'}">
+          <g:message code="default.in.stock.label" />
+        </g:if>
+        <g:if test="${actionName == 'underWarrantyEquipments'}">
+          <g:message code="default.under.waranty.label" />
+        </g:if>
+      </g:if>
+      <g:if test="${reportType == ReportType.CORRECTIVE}">
+        <g:if test="${actionName == 'generalWorkOrdersListing'}">
+          TODO All Work Orders
+        </g:if>
+        <g:if test="${actionName == 'lastMonthWorkOrders'}">
+          TODO Last Month Work Orders
+        </g:if>
+        <g:if test="${actionName == 'workOrdersEscalatedToMMC'}">
+          TODO Work Orders Escalated to MMC
+        </g:if>
+      </g:if>
+      <g:if test="${reportType == ReportType.PREVENTIVE}">
+        <g:if test="${actionName == 'generalPreventiveOrdersListing'}">
+          TODO All Preventions
+        </g:if>
+        <g:if test="${actionName == 'equipmentsWithPreventionPlan'}">
+          TODO Equipments with Prevention Plan
+        </g:if>
+        <g:if test="${actionName == 'preventionsDelayed'}">
+          TODO Preventions Delayed
+        </g:if>
+      </g:if>
+       <g:if test="${reportType == ReportType.SPAREPARTS}">
+        TODO
+      </g:if>
+    </h1>
+  </g:else>
+
+  <ul>
     <li>
       <span><g:message code="reports.type.label"/></span>
       <a href="#">${message(code:'reports.type.'+reportType?.reportType)}</a>
@@ -28,65 +83,6 @@
         <a href="#">TODO Spare Parts = ${entities?.size()}</a>
       </g:if>
     </li>
-
-    <g:if test="${customizedReportName != null && !customizedReportName.empty}">
-      <li>
-        <span><g:message code="reports.name.label"/></span>
-        <a href="#">${customizedReportName}</a>
-      </li>
-    </g:if>
-    <g:else>
-      <li>
-        <span><g:message code="reports.name.label"/></span>
-        <a href="#">
-          <g:if test="${reportType == ReportType.INVENTORY}">
-            <g:if test="${actionName == 'generalEquipmentsListing'}">
-              <g:message code="default.all.equipments.label" />
-            </g:if>
-            <g:if test="${actionName == 'obsoleteEquipments'}">
-              <g:message code="default.obsolete.label" />
-            </g:if>
-            <g:if test="${actionName == 'disposedEquipments'}">
-              <g:message code="default.disposed.label" />
-            </g:if>
-            <g:if test="${actionName == 'underMaintenanceEquipments'}">
-             <g:message code="default.under.maintenance.label" />
-            </g:if>
-            <g:if test="${actionName == 'inStockEquipments'}">
-              <g:message code="default.in.stock.label" />
-            </g:if>
-            <g:if test="${actionName == 'underWarrantyEquipments'}">
-              <g:message code="default.under.waranty.label" />
-            </g:if>
-          </g:if>
-          <g:if test="${reportType == ReportType.CORRECTIVE}">
-            <g:if test="${actionName == 'generalWorkOrdersListing'}">
-              TODO All Work Orders
-            </g:if>
-            <g:if test="${actionName == 'lastMonthWorkOrders'}">
-              TODO Last Month Work Orders
-            </g:if>
-            <g:if test="${actionName == 'workOrdersEscalatedToMMC'}">
-              TODO Work Orders Escalated to MMC
-            </g:if>
-          </g:if>
-          <g:if test="${reportType == ReportType.PREVENTIVE}">
-            <g:if test="${actionName == 'generalPreventiveOrdersListing'}">
-              TODO All Preventions
-            </g:if>
-            <g:if test="${actionName == 'equipmentsWithPreventionPlan'}">
-              TODO Equipments with Prevention Plan
-            </g:if>
-            <g:if test="${actionName == 'preventionsDelayed'}">
-              TODO Preventions Delayed
-            </g:if>
-          </g:if>
-           <g:if test="${reportType == ReportType.SPAREPARTS}">
-            TODO
-          </g:if>
-        </a>
-      </li>
-    </g:else>
 
     <g:if test="${customizedReportName != null && !customizedReportName.empty}">
       <li>

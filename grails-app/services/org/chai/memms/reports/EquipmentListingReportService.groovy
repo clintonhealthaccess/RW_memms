@@ -313,5 +313,7 @@ class EquipmentListingReportService {
 		
 		equipmentReport.save(failOnError:true)
 		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON EQUIPMENT CUSTOM REPORT SAVED CORRECTLY. THE REPORT ID IS :"+ equipmentReport.id)
+
+		return equipmentReport
 	}
 }

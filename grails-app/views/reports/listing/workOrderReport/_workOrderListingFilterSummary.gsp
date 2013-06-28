@@ -3,8 +3,15 @@
 <%@ page import="org.chai.memms.corrective.maintenance.WorkOrderStatus.WorkOrderStatusChange" %>
 <%@ page import="org.chai.memms.util.Utils" %>
 <div class="v-tabs-criteria">
-  <ul class="left">
 
+  <g:if test="${customizedReportName != null && !customizedReportName.empty}">
+    <h1>${customizedReportName}</h1>
+  </g:if>
+  <g:else>
+    <h1>${reportName}</h1>
+  </g:else>
+
+  <ul>
     <li>
       <span><g:message code="reports.type.label"/></span>
       <a href="#">${message(code:'reports.type.'+reportType?.reportType)}</a>
@@ -14,25 +21,13 @@
       <span><g:message code="reports.subType.label"/></span>
       <a href="#">${message(code:'reports.subType.'+reportSubType?.reportSubType)}</a>
     </li>
-
-    <li>
+%{--     <li>
       <span><g:message code="reports.total.label"/></span>
       <a href="#"><g:message code="work.orders.label"/> = ${entities?.size()}</a>
-    </li>
-
-    <g:if test="${customizedReportName != null && !customizedReportName.empty}">
-      <li>
-        <span>reports.name.label</span>
-        <a href="#">${customizedReportName}</a>
-      </li>
-    </g:if>
-    <g:else>
-      <li>
-        <span>reports.name.label</span>
-        <a href="#">${selectedReport}</a>
-      </li>
-    </g:else>
-
+    </li> --}%
+  </ul>
+  
+  <ul>
     <g:if test="${customizedReportName != null && !customizedReportName.empty}">
       <li>
         <span>Custom Report Filter Summary:</span>

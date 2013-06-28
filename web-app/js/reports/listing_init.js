@@ -19,37 +19,37 @@ $(document).ready(function(){
 	    width += $(this).outerWidth(true);
 	});
 	scroller.css('width', width);
-        hideRestOfElements();
+    hideRestOfElements();
 
 	$(document).on('click', '#js-scroll-left', function(e){
 	  e.preventDefault();
 	  items = scroller.children();
 	  if(item > 0) {
-	    item -= 4;
+	    item -= 6;
 	  }
-          hideRestOfElements();
+      hideRestOfElements();
 	});
 
 	$(document).on('click', '#js-scroll-right', function(e){
 	  e.preventDefault();
 	  items = scroller.children();
-	  if(item < (items.length - 3)){
-	    item += 4;
+	  if(item < (items.length - 4)){
+	    item += 6;
 	  }
-          hideRestOfElements();
+      hideRestOfElements();
 	});
 
-        function hideRestOfElements(){
-          var scrollWidth = 0;
-          items = scroller.children('li');
-          items.show();
-          items.each(function(idx) {
-            if(idx < item || idx > item + 3) {
-              scrollWidth += $(items[idx]).outerWidth();
-              $(items[idx]).hide();
-            }
-          });
+    function hideRestOfElements(){
+      var scrollWidth = 0;
+      items = scroller.children('li');
+      items.show();
+      items.each(function(idx) {
+        if(idx < item || idx > item + 4) {
+          scrollWidth += $(items[idx]).outerWidth();
+          $(items[idx]).hide();
         }
+      });
+    }
 
 	function scrollLeft(item){
 	  var scrollWidth = 0
@@ -74,14 +74,47 @@ $(document).ready(function(){
 	}
 
 	//load report list delete node
-	$("#js-delete-node").click(function(e){
-		e.preventDefault();
-		if(confirm("Are you sure?")){
-			var savedReportId = $(this).data("saved-report-id");
-			$(this).parents('li').remove();
-			// TODO add ajax method in listing controller that deletes the saved report
-		}
-	});
+	// $(".delete-node").click(function(e){
+	//   e.preventDefault();
+	//   if(confirm("Are you sure?")){
+	//     var savedReportId = $(this).data('id');
+	//     $.ajax({
+	//       url:"/memms/listing/deleteCustomizedListing",
+	//       data: { 
+	//         id: savedReportId
+	//       },
+	//       success:function(result){
+	//         $(this).parents('li').remove();
+	//         alert("Success!");
+	//       },
+	//       error:function(){
+	//         alert("Error!");
+	//       }
+	//     });
+	//   }
+	// });
+
+	// $(".delete-node").click(function(e){
+	//   e.preventDefault();
+	//   if(confirm("Are you sure?")){
+	//     var savedReportId = $(this).data('id')
+	//     //var selectedReportId = ${selectedReport != null ? selectedReport.id : 0}
+	//     $.ajax({
+	//       url:"${createLink(controller: 'listing', action:'deleteCustomizedListing')}",
+	//       data: { 
+	//         savedReportId: savedReportId,
+	//         %{-- selectedReportId: selectedReportId --}%
+	//       },
+	//       success:function(){
+	//         alert("Success!");
+	//         $(this).parents('li').remove();
+	//       },
+	//       error:function(){
+	//         alert("Error!");
+	//       }
+	//     });
+	//   }
+	// });
 
 });
 
