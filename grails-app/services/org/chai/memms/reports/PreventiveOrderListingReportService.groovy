@@ -126,6 +126,7 @@ class PreventiveOrderListingReportService {
 		def upperLimitCost = customPreventiveOrderParams.get('toCost')
 		def currency = customPreventiveOrderParams.get('costCurrency')
 		def noCost = customPreventiveOrderParams.get('noCost')
+		def listingReportDisplayOptions = customPreventiveOrderParams.get('reportTypeOptions')
 		
 		def fromWorkOrderPeriod = customPreventiveOrderParams.get('fromWorkOrderPeriod')
 		def toWorkOrderPeriod = customPreventiveOrderParams.get('toWorkOrderPeriod')
@@ -150,6 +151,7 @@ class PreventiveOrderListingReportService {
 		preventiveMaintenanceReport.preventionResponsible=responsibles
 		preventiveMaintenanceReport.savedBy=user
 		preventiveMaintenanceReport.noCostSpecified=noCost=="on"?true:false
+		preventiveMaintenanceReport.displayOptions=listingReportDisplayOptions
 		
 		preventiveMaintenanceReport.save(failOnError:true)
 		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON PREVENTIVE MAINTENANCE CUSTOM REPORT SAVED CORRECTLY. THE REPORT ID IS :"+ preventiveMaintenanceReport.id)

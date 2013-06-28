@@ -274,7 +274,24 @@ class ListingController extends AbstractController{
 				template:"/reports/listing/listing"
 			])
 	}
+
+	// TODO AR null pointer exception
 	def lastYearClosedWorkOrders={
+		adaptParamsForList()
+		def workOrders = workOrderListingReportService.getClosedWorkOrdersOfLastYear(user,null, params)
+		if(!request.xhr)
+			render(view:"/reports/reports",
+			model: model(workOrders, "") <<
+			[
+				reportType: ReportType.CORRECTIVE,
+				reportSubType: ReportSubType.WORKORDERS,
+				reportName: message(code:'default.work.order.closed.last.year.label'),
+				template:"/reports/listing/listing"
+			])
+	}
+
+	// TODO AR
+	def delayedWorkOrders={
 		adaptParamsForList()
 		def workOrders = workOrderListingReportService.getClosedWorkOrdersOfLastYear(user,null, params)
 		if(!request.xhr)
@@ -556,7 +573,7 @@ class ListingController extends AbstractController{
 					costCurrency: savedReport.currency,
 					noCost: savedReport.noCostSpecified
 				]
-				if(ReportSubType.INVENTORY){
+				if(savedReport.reportSubType == ReportSubType.INVENTORY){
 					savedCustomizedListingParams << [
 						fromAcquisitionPeriod: savedReport.fromDate,
 						toAcquisitionPeriod: savedReport.toDate,
@@ -567,23 +584,77 @@ class ListingController extends AbstractController{
 					]
 				}
 				// TODO
-				// if(ReportSubType.STATUSCHANGES){
+				// if(savedReport.reportSubType == ReportSubType.STATUSCHANGES){
 				// 	savedCustomizedListingParams << [
 				// 		statusChanges: statusChanges,
 				// 		fromStatusChangesPeriod: fromStatusChangesPeriod,
 				// 		toStatusChangesPeriod: toStatusChangesPeriod
 				// 	]
 				// }
+				savedCustomizedListingParams << [reportTypeOptions: savedReport.displayOptions]
 				adaptParamsForList()
 				savedCustomizedListingReport = equipmentListingReportService.getCustomReportOfEquipments(user,savedCustomizedListingParams,params)
 				if (log.isDebugEnabled()) log.debug("listing.savedCustomizedListing # of equipments:"+savedCustomizedListingReport.size())
 				break;
 			case ReportType.CORRECTIVE:
-				savedCustomizedListingReport = workOrderListingReportService.getCustomReportOfWorkOrders(user,savedCustomizedListingParams,null)
+				savedCustomizedListingParams = [
+					reportType: savedReport.reportType,
+					reportSubType: savedReport.reportSubType,
+					dataLocations: savedReport.dataLocations,
+					departments: savedReport.departments,
+					equipmentTypes: savedReport.equipmentTypes,
+					fromCost: savedReport.lowerLimitCost,
+					toCost: savedReport.upperLimitCost,
+					costCurrency: savedReport.currency,
+					noCost: savedReport.noCostSpecified,
+					warranty: savedReport.underWarranty
+				]
+				// TODO
+				// if(savedReport.reportSubType == ReportSubType.WORKORDERS){
+				// 	savedCustomizedListingParams << [
+				// 		workOrderStatus: workOrderStatus,
+				// 		fromWorkOrderPeriod: fromWorkOrderPeriod,
+				// 		toWorkOrderPeriod: toWorkOrderPeriod
+				// 	]
+				// }
+				// TODO
+				// if(savedReport.reportSubType == ReportSubType.STATUSCHANGES){
+				// 	savedCustomizedListingParams << [
+				// 		statusChanges: statusChanges,
+				// 		fromStatusChangesPeriod: fromStatusChangesPeriod,
+				// 		toStatusChangesPeriod: toStatusChangesPeriod
+				// 	]
+				// }
+				savedCustomizedListingParams << [reportTypeOptions: savedReport.displayOptions]
+				adaptParamsForList()
+				savedCustomizedListingReport = workOrderListingReportService.getCustomReportOfWorkOrders(user,savedCustomizedListingParams,params)
 				if (log.isDebugEnabled()) log.debug("listing.savedCustomizedListing # of workOrders:"+savedCustomizedListingReport.size())
 				break;
 			case ReportType.PREVENTIVE:
+				savedCustomizedListingParams = [
+					reportType: savedReport.reportType,
+					reportSubType: savedReport.reportSubType,
+					dataLocations: savedReport.dataLocations,
+					departments: savedReport.departments,
+					equipmentTypes: savedReport.equipmentTypes,
+					fromCost: savedReport.lowerLimitCost,
+					toCost: savedReport.upperLimitCost,
+					costCurrency: savedReport.currency,
+					noCost: savedReport.noCostSpecified
+				]
 				// TODO
+				// if(savedReport.reportSubType == ReportSubType.WORKORDERS){
+				// 	savedCustomizedListingParams << [
+				// 		workOrderStatus: workOrderStatus,
+				// 		fromWorkOrderPeriod: fromWorkOrderPeriod,
+				// 		toWorkOrderPeriod: toWorkOrderPeriod,
+				// 		whoIsResponsible: whoIsResponsible
+				// 	]
+				// }
+				savedCustomizedListingParams << [reportTypeOptions: savedReport.displayOptions]
+				adaptParamsForList()
+				savedCustomizedListingReport = preventiveOrderListingReportService.getCustomReportOfPreventiveOrders(user,savedCustomizedListingParams,params)
+				if (log.isDebugEnabled()) log.debug("listing.savedCustomizedListing # of workOrders:"+savedCustomizedListingReport.size())
 				break;
 			case ReportType.SPAREPARTS:
 				// TODO
@@ -598,7 +669,7 @@ class ListingController extends AbstractController{
 			[
 				reportType: savedReport.reportType,
 				reportSubType: savedReport.reportSubType,
-				// TODO reportTypeOptions: reportTypeOptions,
+				reportTypeOptions: savedReport.displayOptions,
 				selectedReport: savedReport,
 				savedReports: savedReports,
 				template:"/reports/listing/listing"
@@ -611,6 +682,7 @@ class ListingController extends AbstractController{
 		def savedReportId = params.get('savedReportId')
 		def selectedReportId = params.get('selectedReportId')
 
+		// TODO get report type to determine equipment report vs work order report ?
 		def equipmentReport = EquipmentReport.get(savedReportId);
 
 		def result = false
@@ -701,15 +773,17 @@ class ListingController extends AbstractController{
 
 		if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing end, customEquipmentParams:"+customEquipmentParams)
 
-		def selectedReport = null
-		if(customizedReportSave){
-			selectedReport = equipmentListingReportService.saveEquipmentReportParams(user,equipmentReport, customEquipmentParams, params)
-		}
-
 		def equipments = equipmentListingReportService.getCustomReportOfEquipments(user,customEquipmentParams,params)
 		if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing # of equipments:"+equipments.size())
 
+		def selectedReport = null
+		if(customizedReportSave){
+			selectedReport = equipmentListingReportService.saveEquipmentReportParams(user,equipmentReport, customEquipmentParams, params)
+			if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing saved report:"+selectedReport)
+		}
+
 		def savedReports = userService.getSavedReportsByUser(user, ReportType.INVENTORY)
+		if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing # of savedReports:"+savedReports.size())
 
 		if(!request.xhr)
 			render(view:"/reports/reports",
@@ -729,6 +803,7 @@ class ListingController extends AbstractController{
 
 	// corrective
 	def customWorkOrderListing ={
+		adaptParamsForList()
 		if (log.isDebugEnabled()) log.debug("listing.customWorkOrderListing start, params:"+params)
 
 		def reportType = getReportType()
@@ -797,19 +872,17 @@ class ListingController extends AbstractController{
 
 		if (log.isDebugEnabled()) log.debug("listing.customWorkOrderListing, customWorkOrderParams:"+customWorkOrderParams)
 
-		if(customizedReportSave){
-			workOrderListingReportService.saveWorkOrderReportParams(user, correctiveMaintenanceReport, customWorkOrderParams, params)
-		}
+		def workOrders = workOrderListingReportService.getCustomReportOfWorkOrders(user,customWorkOrderParams,params)
+		if (log.isDebugEnabled()) log.debug("listing.customWorkOrderListing # of workOrder:"+workOrders.size())
 
 		def selectedReport = null
 		if(customizedReportSave){
 			selectedReport = workOrderListingReportService.saveWorkOrderReportParams(user, correctiveMaintenanceReport, customWorkOrderParams, params)
+			if (log.isDebugEnabled()) log.debug("listing.customWorkOrderListing saved report:"+selectedReport)
 		}
 
-		adaptParamsForList()
-		def warrantyExpirationDate
-		def workOrders = workOrderListingReportService.getCustomReportOfWorkOrders(user,customWorkOrderParams,params)
-		if (log.isDebugEnabled()) log.debug("llisting.customWorkOrderListing # of workOrders:"+workOrders.size())
+		def savedReports = userService.getSavedReportsByUser(user, ReportType.CORRECTIVE)
+		if (log.isDebugEnabled()) log.debug("listing.customWorkOrderListing # of savedReports:"+savedReports.size())
 
 		if(!request.xhr)
 			render(view:"/reports/reports",
@@ -822,12 +895,14 @@ class ListingController extends AbstractController{
 				customizedReportSave: customizedReportSave,
 				customWorkOrderParams: customWorkOrderParams,
 				selectedReport: selectedReport,
+				savedReports: savedReports,
 				template:"/reports/listing/listing"
 			])
 	}
 
 	// preventive
 	def customPreventiveOrderListing ={
+		adaptParamsForList()
 		if (log.isDebugEnabled()) log.debug("listing.customPreventiveOrderListing start, params:"+params)
 
 		def reportType = getReportType()
@@ -889,8 +964,11 @@ class ListingController extends AbstractController{
 			selectedReport = preventiveOrderListingReportService.savePreventiveOrderReportParams(user, preventiveMaintenanceReport, customPreventiveOrderParams, params)
 		}
 
-		adaptParamsForList()
 		def preventiveOrders = preventiveOrderListingReportService.getCustomReportOfPreventiveOrders(user,customPreventiveOrderParams,params)
+		if (log.isDebugEnabled()) log.debug("listing.customPreventiveOrderListing # of preventiveOrders:"+preventiveOrders.size())
+
+		def savedReports = userService.getSavedReportsByUser(user, ReportType.PREVENTIVE)
+
 		if(!request.xhr)
 			render(view:"/reports/reports",
 			model: model(preventiveOrders, "") <<
@@ -902,6 +980,7 @@ class ListingController extends AbstractController{
 				customizedReportSave: customizedReportSave,
 				customPreventiveOrderParams: customPreventiveOrderParams,
 				selectedReport: selectedReport,
+				savedReports: savedReports,
 				template:"/reports/listing/listing"
 			])
 	}

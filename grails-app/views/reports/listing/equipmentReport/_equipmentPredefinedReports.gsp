@@ -48,23 +48,25 @@
 <r:script>
 $(document).ready(function(){
   $(".delete-node").click(function(e){
-      var baseUrl = "${createLink(controller: 'listing', action:'deleteCustomizedListing')}"
-      var savedReportId = $(this).data('id')
-      var selectedReportId = ${selectedReport != null ? selectedReport.id : 0}
-      var savedReport = $(this).parents('li')
-      e.preventDefault();
-      $.ajax({
-        type :'GET',
-        dataType: 'json',
-        data:{"savedReportId":savedReportId, "selectedReportId":selectedReportId},
-        url:baseUrl,
-        success: function(results) {
-          savedReport.remove();
-        },
-        error: function(request, status, error) {
-          alert("Error! "+request+", "+status+", "+error);
-        }
-      });
+      if(confirm('Are you sure?')){
+        var baseUrl = "${createLink(controller: 'listing', action:'deleteCustomizedListing')}"
+        var savedReportId = $(this).data('id')
+        var selectedReportId = ${selectedReport != null ? selectedReport.id : 0}
+        var savedReport = $(this).parents('li')
+        e.preventDefault();
+        $.ajax({
+          type :'GET',
+          dataType: 'json',
+          data:{"savedReportId":savedReportId, "selectedReportId":selectedReportId},
+          url:baseUrl,
+          success: function(results) {
+            savedReport.remove();
+          },
+          error: function(request, status, error) {
+            alert("Error! "+request+", "+status+", "+error);
+          }
+        });
+      }
   });
 });
 </r:script>

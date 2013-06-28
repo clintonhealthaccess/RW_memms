@@ -73,49 +73,6 @@ $(document).ready(function(){
 	  scroller.animate({'left' : (0 - scrolledWidth) + 'px'}, 'linear');
 	}
 
-	//load report list delete node
-	// $(".delete-node").click(function(e){
-	//   e.preventDefault();
-	//   if(confirm("Are you sure?")){
-	//     var savedReportId = $(this).data('id');
-	//     $.ajax({
-	//       url:"/memms/listing/deleteCustomizedListing",
-	//       data: { 
-	//         id: savedReportId
-	//       },
-	//       success:function(result){
-	//         $(this).parents('li').remove();
-	//         alert("Success!");
-	//       },
-	//       error:function(){
-	//         alert("Error!");
-	//       }
-	//     });
-	//   }
-	// });
-
-	// $(".delete-node").click(function(e){
-	//   e.preventDefault();
-	//   if(confirm("Are you sure?")){
-	//     var savedReportId = $(this).data('id')
-	//     //var selectedReportId = ${selectedReport != null ? selectedReport.id : 0}
-	//     $.ajax({
-	//       url:"${createLink(controller: 'listing', action:'deleteCustomizedListing')}",
-	//       data: { 
-	//         savedReportId: savedReportId,
-	//         %{-- selectedReportId: selectedReportId --}%
-	//       },
-	//       success:function(){
-	//         alert("Success!");
-	//         $(this).parents('li').remove();
-	//       },
-	//       error:function(){
-	//         alert("Error!");
-	//       }
-	//     });
-	//   }
-	// });
-
 });
 
 // load customized listing init

@@ -4,33 +4,35 @@
 <%@ page import="org.chai.memms.util.Utils" %>
 <div class="v-tabs-criteria">
 
+  %{-- customized but unsaved listing --}%
   <g:if test="${customizedReportName != null && !customizedReportName.empty}">
     <h1>${customizedReportName}</h1>
   </g:if>
+  %{-- customized saved listing --}%
+  <g:elseif test="${selectedReport != null}">
+    <h1>${selectedReport.reportName}</h1>
+  </g:elseif>
+  %{-- predefined listing --}%
   <g:else>
     <h1>${reportName}</h1>
   </g:else>
 
   <ul>
     <li>
-      <span><g:message code="reports.type.label"/></span>
+      <span><g:message code="reports.type.label"/>:</span>
       <a href="#">${message(code:'reports.type.'+reportType?.reportType)}</a>
     </li>
 
     <li>
-      <span><g:message code="reports.subType.label"/></span>
+      <span><g:message code="reports.subType.label"/>:</span>
       <a href="#">${message(code:'reports.subType.'+reportSubType?.reportSubType)}</a>
     </li>
-%{--     <li>
-      <span><g:message code="reports.total.label"/></span>
-      <a href="#"><g:message code="work.orders.label"/> = ${entities?.size()}</a>
-    </li> --}%
   </ul>
   
   <ul>
     <g:if test="${customizedReportName != null && !customizedReportName.empty}">
       <li>
-        <span>Custom Report Filter Summary:</span>
+        <span>Report Filter Summary:</span>
         <a href="#"><g:message code="reports.dataLocation"/> = 
           ${customWorkOrderParams?.dataLocations?.size()}</a>,
         <a href="#"><g:message code="reports.department"/> = 
@@ -87,12 +89,5 @@
 
       </li>
     </g:if>
-%{-- TODO    
-    <g:else>
-      <li>
-        <span>Report Filter Summary:</span>
-        <a href="#">TODO</a>
-      </li>
-    </g:else> --}%
   </ul>
 </div>
