@@ -32,8 +32,9 @@ class EquipmentGeneralReportParameters {
 	Date toDate
 	User savedBy
 	boolean noCostSpecified
+	String displayOptions
 	
-	static hasMany = [dataLocations:DataLocation,departments:Department,equipmentTypes:EquipmentType, listingReportDisplayOptions:ListingReportDisplayOption]
+	static hasMany = [dataLocations:DataLocation,departments:Department,equipmentTypes:EquipmentType]
 	static constraints = {
 		dataLocations nullable: true, blank: true
 		departments nullable: true, blank: true
@@ -45,6 +46,7 @@ class EquipmentGeneralReportParameters {
 		toDate nullable: true, blank: true
 		savedBy nullable: false
 		noCostSpecified nullable: false
+		displayOptions nullable: false
 	}
 
 	static mapping = {
@@ -53,6 +55,5 @@ class EquipmentGeneralReportParameters {
 		dataLocations joinTable:[name:"memms_equipment_data_location_report_listing",key:"data_location_id",column:"report_listing_id"]
 		departments joinTable:[name:"memms_equipment_department_report_listing",key:"department_id",column:"report_listing_id"]
 		equipmentTypes joinTable:[name:"memms_equipment_type_report_listing",key:"equipment_type_id",column:"report_listing_id"]
-		listingReportDisplayOptions joinTable:[name:"memms_display_options_report_listing",key:"display_option_id",column:"report_listing_id"]
 	}
 }

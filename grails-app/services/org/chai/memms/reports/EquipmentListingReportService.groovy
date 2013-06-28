@@ -290,6 +290,7 @@ class EquipmentListingReportService {
 		def obsolete = customEquipmentParams.get('obsolete')
 		def warranty = customEquipmentParams.get('warranty')
 		def noCost = customEquipmentParams.get('noCost')
+		def listingReportDisplayOptions = customEquipmentParams.get('reportTypeOptions')
 		
 		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON EQUIPMENT CUSTOM REPORT: LOWER COST :"+lowerLimitCost+" UPPER COST :"+upperLimitCost)
 		
@@ -310,6 +311,7 @@ class EquipmentListingReportService {
 		equipmentReport.reportName=reportName
 		equipmentReport.savedBy=user
 		equipmentReport.noCostSpecified=noCost=="on"?true:false
+		equipmentReport.displayOptions=listingReportDisplayOptions
 		
 		equipmentReport.save(failOnError:true)
 		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON EQUIPMENT CUSTOM REPORT SAVED CORRECTLY. THE REPORT ID IS :"+ equipmentReport.id)
