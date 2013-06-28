@@ -23,6 +23,7 @@ class SparePartReport {
 	User savedBy
 	def sparePartStatus
 	boolean noAcquisitionPeriod
+	String displayOptions
 
 	static hasMany = [dataLocations:DataLocation,sparePartTypes:SparePartType]
 	static constraints = {
@@ -33,6 +34,7 @@ class SparePartReport {
 		savedBy nullable: false
 		sparePartStatus nullable: true, blank: true
 		noAcquisitionPeriod nullable: false
+		displayOptions nullable: false
 	}
 
 	static mapping = {

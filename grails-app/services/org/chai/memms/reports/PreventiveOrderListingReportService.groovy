@@ -129,6 +129,7 @@ class PreventiveOrderListingReportService {
 		def workOrderStatus = customPreventiveOrderParams.get('workOrderStatus')
 		def warranty = customPreventiveOrderParams.get('warranty')
 		def responsibles = customPreventiveOrderParams.get('whoIsResponsible')
+		def listingReportDisplayOptions = customPreventiveOrderParams.get('reportTypeOptions')
 		
 		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON PREVENTIVE MAINTENANCE CUSTOM REPORT: LOWER COST :"+lowerLimitCost+" UPPER COST :"+upperLimitCost)
 		
@@ -147,6 +148,7 @@ class PreventiveOrderListingReportService {
 		preventiveMaintenanceReport.preventionResponsible=responsibles
 		preventiveMaintenanceReport.savedBy=user
 		preventiveMaintenanceReport.noCostSpecified=noCost=="on"?true:false
+		preventiveMaintenanceReport.displayOptions=listingReportDisplayOptions
 		
 		preventiveMaintenanceReport.save(failOnError:true)
 		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON PREVENTIVE MAINTENANCE CUSTOM REPORT SAVED CORRECTLY. THE REPORT ID IS :"+ preventiveMaintenanceReport.id)
