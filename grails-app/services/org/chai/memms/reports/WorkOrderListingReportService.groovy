@@ -111,11 +111,11 @@ class WorkOrderListingReportService {
 
 				createAlias("equipment","equip")
 
-				//if(dataLocations!=null && dataLocations.size()>0)
+					//Mandatory property
 					inList('equip.dataLocation',dataLocations)
 				if(departments != null && departments.size()>0)
 					inList ("equip.department", departments)
-				//if(equipmentTypes != null && equipmentTypes.size()>0)
+				//Mandatory property
 					inList ("equip.type", equipmentTypes)
 
 				if(lowerLimitCost && lowerLimitCost!=null)
@@ -228,9 +228,9 @@ class WorkOrderListingReportService {
 	
 	def getClosedWorkOrdersOfLastYear(User user, def customWorkOrderParams ,Map<String, String> params) {
 		//DATE PROCESSING TO BE REVIEWED EITHER IN THIS SERVICE OR WORKORDER BEAN LEVEL
-		DateTime todayDateTime = new DateTime(today)
-		def lastYaerDateTimeFromNow = todayDateTime.minusDays(365)
-		def lastYearDateFromNow = lastYaerDateTimeFromNow.toDate()
+		//DateTime todayDateTime = new DateTime(today)
+		//def lastYaerDateTimeFromNow = todayDateTime.minusDays(365)
+		//def lastYearDateFromNow = lastYaerDateTimeFromNow.toDate()
 
 		def criteria = WorkOrder.createCriteria();
 		def dataLocations = []
@@ -247,15 +247,15 @@ class WorkOrderListingReportService {
 				eq ("currentStatus",OrderStatus.CLOSEDFIXED)
 				eq ("currentStatus",OrderStatus.CLOSEDFORDISPOSAL)
 			}
-			ge ("closedOn",lastYearDateFromNow)
+			//ge ("closedOn",lastYearDateFromNow)
 		}
 		
 		if (log.isDebugEnabled()) log.debug("WORK ORDER SIZE: "+ criteriaWorkOrders.size())
 		 
 		def sparePartTypesUsed = []
 		 for (WorkOrder workOrder:criteriaWorkOrders){
-			 if(workOrder.getSparePartsUsed() != null)
-			 sparePartTypesUsed.add(workOrder.getSparePartsUsed())
+			 if(workOrder.getSparePartTypesUsed() != null)
+			 sparePartTypesUsed.add(workOrder.getSparePartTypesUsed())
 		 }
 		return sparePartTypesUsed
 	}

@@ -30,8 +30,14 @@
 			</a>
 			<span class='delete-node' id='js-delete-node'>X</span>
 		</li>
-      %{-- TODO saved reports --}%
-    </ul>
+		<li>
+			<a href="${createLinkWithTargetURI(controller: 'listing', action:'lastYearClosedWorkOrders')}" id="report-4">
+				<g:message code="default.work.order.last.year.label"/>
+			</a>
+		</li>
+			%{-- TODO saved reports --}%
+	</ul>
+
   </div>
   <a class='v-tabs-dynav-scroll-left' href='#' id='js-scroll-left'></a>
 </div>

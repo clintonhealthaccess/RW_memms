@@ -230,15 +230,15 @@ public class WorkOrder extends MaintenanceOrder{
 	
 	//TODO To finalize this Method on map that must hold key and another map as value
 	@Transient
-	def getSparePartsUsed(){
+	def getSparePartTypesUsed(){
 		Map<SparePartType,Integer> usedSparePartTypes =  [:]
 		DateTime todayDateTime = new DateTime(new Date())
 		def lastYearDateTimeFromNow = todayDateTime.minusDays(365)
 		def lastYearDateFromNow = lastYearDateTimeFromNow.toDate()
 		
-		if (closedOn.after(lastYearDateFromNow) && usedSpareParts.size()!=null && OrderStatus.CLOSEDFIXED)
+		if (closedOn?.after(lastYearDateFromNow) && usedSpareParts.size()!=null && OrderStatus.CLOSEDFIXED)
 		//15 stands for the used quantity for any work order I wait from Jean
-		for (SparePart sparePart: usedSpareParts){
+		for (def sparePart: usedSpareParts){
 			
 			if (usedSparePartTypes.containsKey(sparePart.type)){
 				int previousNumberOfSparePart = getNumberOfSparePartsOnSparePartType(usedSparePartTypes, sparePart.type)
@@ -260,9 +260,10 @@ public class WorkOrder extends MaintenanceOrder{
 	
 	//TODO To finalize this Method By Aphrodice
 	@Transient
-	def getNumberOfSpareParts(SparePart sparePart){
-		if(usedSpareParts.get(sparePart)!=null){
-			return usedSpareParts.get(sparePart)
+	def getNumberOfSpareParts(){
+		for (def spt: getSparePartTypesUsed())
+		if(usedSpareParts.get(spt)!=null){
+			return usedSpareParts.get(spt)
 		}else
 	return 0
 	}

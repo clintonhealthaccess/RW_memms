@@ -53,7 +53,7 @@
 				%{-- TODO --}%
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('currentValue')}">
-				%{-- TODO --}%
+				<g:sortableColumn property="currentValueOfThisEquipment"  title="${message(code: 'equipment.current.value.label')}" params="[q:q]" />
 			</g:if>
 		</tr>
 	</thead>
@@ -116,7 +116,7 @@
 					%{-- TODO --}%
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('currentValue')}">
-					%{-- TODO --}%
+					<td>${equipment.currentValueOfThisEquipment}</td>
 				</g:if>
 			</tr>
 		</g:each>

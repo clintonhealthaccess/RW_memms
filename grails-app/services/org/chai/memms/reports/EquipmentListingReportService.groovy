@@ -197,7 +197,7 @@ class EquipmentListingReportService {
 				//MADE IT MANDATORY, CONDITION REMOVED
 					inList ("type", equipmentTypes)
 					
-				if(departments != null && departments.size() > 0)
+				if(departments && departments != null && departments.size() > 0)
 					inList ("department", departments)
 				if(lowerLimitCost && lowerLimitCost!=null)
 					gt ("purchaseCost", lowerLimitCost)
@@ -211,8 +211,8 @@ class EquipmentListingReportService {
 					eq ("obsolete", (obsolete.equals('true'))?true:false)
 				if(warranty!=null && warranty)
 					lt ("warrantyEndDate",today)
-				if(noAcquisitionPeriod != null && noAcquisitionPeriod)
-					eq ("purchaseDate", null)
+				/*if(noAcquisitionPeriod != null && noAcquisitionPeriod)
+					eq ("purchaseDate", null)*/
 
 				if(fromAcquisitionPeriod && fromAcquisitionPeriod != null)
 					gt ("purchaseDate", fromAcquisitionPeriod)
@@ -290,6 +290,7 @@ class EquipmentListingReportService {
 		def obsolete = customEquipmentParams.get('obsolete')
 		def warranty = customEquipmentParams.get('warranty')
 		def noCost = customEquipmentParams.get('noCost')
+		def listingReportDisplayOptions = customEquipmentParams.get('reportTypeOptions')
 		
 		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON EQUIPMENT CUSTOM REPORT: LOWER COST :"+lowerLimitCost+" UPPER COST :"+upperLimitCost)
 		
@@ -310,6 +311,7 @@ class EquipmentListingReportService {
 		equipmentReport.reportName=reportName
 		equipmentReport.savedBy=user
 		equipmentReport.noCostSpecified=noCost=="on"?true:false
+		equipmentReport.displayOptions=listingReportDisplayOptions
 		
 		equipmentReport.save(failOnError:true)
 		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON EQUIPMENT CUSTOM REPORT SAVED CORRECTLY. THE REPORT ID IS :"+ equipmentReport.id)
