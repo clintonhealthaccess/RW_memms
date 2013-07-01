@@ -217,11 +217,7 @@ function escaletWorkOrder(baseUrl){
 				addListAjaxResponse(data)
 			}
 		});
-		$(this).ajaxError(function(){
-			$(this).nextAll(".ajax-error").show();
-			$(this).nextAll(".ajax-spinner").hide();
-			$(this).fadeIn("slow");
-		});
+		processRefresh(this);
 	})
 }
 /**
@@ -276,11 +272,7 @@ function addWorkOrderProcess(baseUrl,order,errorMsg){
 				refreshList(data.results[1],'.process-list-'+data.results[2])
 			}
 		});
-		$(this).ajaxError(function(){
-			$(this).nextAll(".ajax-error").show();
-			$(this).nextAll(".ajax-spinner").hide();
-			$(this).fadeIn("slow");
-		});
+		processRefresh(this);
 	})
 }
 /**
@@ -311,13 +303,7 @@ function removeWorkOrderProcess(baseUrl){
 				refreshList(data.results[1],'.process-list-'+data.results[2])
 			}
 		});
-
-		$(this).ajaxError(function(){
-			$(this).nextAll(".ajax-error").show();
-			$(this).nextAll(".ajax-spinner").hide();
-			$(this).fadeIn("slow");
-		});
-
+		processRefresh(this);
 	});
 }
 
@@ -341,11 +327,7 @@ function addComment(baseUrl,order){
 				refreshList(data.results[1],'.comment-list')
 			}
 		});
-		$(this).ajaxError(function(){
-			$(this).nextAll(".ajax-error").show();
-			$(this).nextAll(".ajax-spinner").hide();
-			$(this).fadeIn("slow");
-		});
+		processRefresh(this);
 	})
 }
 
@@ -367,11 +349,7 @@ function removeComment(baseUrl){
 				refreshList(data.results[1],'.comment-list')
 			}
 		});
-		$(this).ajaxError(function(){
-			$(this).prevAll(".ajax-error").show();
-			$(this).prevAll(".ajax-spinner").hide();
-			$(this).fadeIn("slow");
-		});
+		processRefresh(this);
 	})
 }
 /**
@@ -470,6 +448,35 @@ function getToHide(parchaseCost,estimatedCost){
 		$("input[name=occurInterval]").nextAll("label.has-helper").html($(this).find("option:selected").text());
 	})
 }
+
+/**
+ * Add Preventive action 
+ */
+ function addPreventiveAction(baseUrl,type,errorMsg){
+ 	$(".ajax-spinner").hide();
+	$(".ajax-error").hide()
+	$('.action').on("click",".add-process-button",function(e){
+		e.preventDefault();
+		$(this).hide();
+		$(this).nextAll(".ajax-spinner").show();
+		$.ajax({
+			type :'GET',
+			dataType: 'json',
+			data:{"type.id":type,"value":$(this).prevAll(".idle-field").attr('value')},
+			url:baseUrl,
+			success: function(data) {
+				$(e.target).nextAll(".ajax-error").hide();
+				$(e.target).nextAll(".ajax-spinner").hide();
+				$(e.target).prevAll(".idle-field").val("")
+				$(e.target).fadeIn("slow");
+				refreshList(data.results[1],'.process-list-'+data.results[2])
+			}
+		});
+		processRefresh(this);
+	})
+
+ }
+
 /**
  * Add Prevention maintenance process
  */
@@ -493,11 +500,7 @@ function addPreventionProcess(baseUrl,prevention,errorMsg){
 				refreshList(data.results[1],'.process-list-'+data.results[2])
 			}
 		});
-		$(this).ajaxError(function(){
-			$(this).nextAll(".ajax-error").show();
-			$(this).nextAll(".ajax-spinner").hide();
-			$(this).fadeIn("slow");
-		});
+		processRefresh(this);
 	})
 }
 /**
@@ -519,13 +522,15 @@ function removePreventionProcess(baseUrl){
 				refreshList(data.results[1],'.process-list-'+data.results[2])
 			}
 		});
+		processRefresh(this);
+	});
+}
 
-		$(this).ajaxError(function(){
-			$(this).nextAll(".ajax-error").show();
-			$(this).nextAll(".ajax-spinner").hide();
-			$(this).fadeIn("slow");
-		});
-
+function processRefresh(action){
+	$(action).ajaxError(function(){
+		$(action).nextAll(".ajax-error").show();
+		$(action).nextAll(".ajax-spinner").hide();
+		$(action).fadeIn("slow");
 	});
 }
 

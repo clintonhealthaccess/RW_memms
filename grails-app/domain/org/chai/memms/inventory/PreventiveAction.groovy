@@ -1,3 +1,4 @@
+
 /** 
  * Copyright (c) 2012, Clinton Health Access Initiative.
  *
@@ -31,72 +32,32 @@ package org.chai.memms.inventory
 import java.util.Date;
 
 import org.chai.memms.Period;
-import org.chai.memms.spare.part.SparePartType;
+import org.chai.memms.inventory.EquipmentType;
 
-import groovy.transform.EqualsAndHashCode;
 import i18nfields.I18nFields
 
 /**
- * @author Eugene Munyaneza
+ *
+ * @author Jean Kahigiso M.
  *
  */
 
 @i18nfields.I18nFields
-@EqualsAndHashCode(includes="code")
-class EquipmentType {
+class PreventiveAction {
 
-	enum Observation{
-		NONE("none"),
-		USEDINMEMMS("used.in.memms"),
-		RETIRED("retired"),
-		TOODETAILED("too.detailed"),
-		NOTINSCOPE("not.in.scope")
-		
-		String messageCode = "equipment.type"	
-		String name
-		Observation(String name){ this.name=name }
-		String getKey() { return name() }
-	}
-	
-	String code
-	String names
 	String descriptions
-	Period expectedLifeTime
-	Observation observation
-
-	static belongsTo = [SparePartType]
-	
 	Date dateCreated
-	Date lastUpdated
-	
-	static embedded = ["expectedLifeTime"]
-	static i18nFields = ["descriptions","names"]
-	static hasMany = [equipments: Equipment,sparePartTypes: SparePartType,preventiveActions: PreventiveAction]
-	
-    static constraints = {
-		
-		code nullable: false, blank: false,  unique: true
-		names nullable: true, blank: true
-		descriptions nullable: true, blank: true
-		
-		expectedLifeTime nullable: true
-		
-		lastUpdated nullable: false, validator:{it <= new Date()}
-		
-		observation nullable: false, inLIst:[Observation.USEDINMEMMS,Observation.RETIRED,Observation.TOODETAILED,Observation.NOTINSCOPE]
-    }
-	
-	static mapping = {
-		table "memms_equipment_type"
-		version false
-		cache true
-	}
 
-	def beforeValidate(){
-		lastUpdated = new Date()
+	static belongsTo = [equipmentType: EquipmentType]
+	static i18nFields = ["descriptions"]
+
+	static constraints = {
+		descriptions nullable: true, blank: true
+	}
+		
+	static mapping = {
+		table "memms_prevention_action"
+		version  false
 	}
 	
-	String toString() {
-		return "EquipmentType[Id=" + id + "code="+code+"]";
-	}
 }

@@ -1,4 +1,4 @@
-/** 
+/**
  * Copyright (c) 2012, Clinton Health Access Initiative.
  *
  * All rights reserved.
@@ -13,7 +13,7 @@
  *     * Neither the name of the <organization> nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -28,75 +28,26 @@
 
 package org.chai.memms.inventory
 
-import java.util.Date;
+import org.chai.memms.Initializer;
+import org.chai.memms.IntegrationTests;
+import org.chai.memms.inventory.EquipmentType;
+import org.chai.memms.inventory.EquipmentType.Observation;
 
-import org.chai.memms.Period;
-import org.chai.memms.spare.part.SparePartType;
 
-import groovy.transform.EqualsAndHashCode;
-import i18nfields.I18nFields
 
-/**
- * @author Eugene Munyaneza
- *
- */
+class PreventionActionSpec extends IntegrationTests{
 
-@i18nfields.I18nFields
-@EqualsAndHashCode(includes="code")
-class EquipmentType {
+		def "can create and save an preventionAction"() {
 
-	enum Observation{
-		NONE("none"),
-		USEDINMEMMS("used.in.memms"),
-		RETIRED("retired"),
-		TOODETAILED("too.detailed"),
-		NOTINSCOPE("not.in.scope")
+		setup:
+		setupSystemUser()
+		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),34)
 		
-		String messageCode = "equipment.type"	
-		String name
-		Observation(String name){ this.name=name }
-		String getKey() { return name() }
-	}
-	
-	String code
-	String names
-	String descriptions
-	Period expectedLifeTime
-	Observation observation
-
-	static belongsTo = [SparePartType]
-	
-	Date dateCreated
-	Date lastUpdated
-	
-	static embedded = ["expectedLifeTime"]
-	static i18nFields = ["descriptions","names"]
-	static hasMany = [equipments: Equipment,sparePartTypes: SparePartType,preventiveActions: PreventiveAction]
-	
-    static constraints = {
-		
-		code nullable: false, blank: false,  unique: true
-		names nullable: true, blank: true
-		descriptions nullable: true, blank: true
-		
-		expectedLifeTime nullable: true
-		
-		lastUpdated nullable: false, validator:{it <= new Date()}
-		
-		observation nullable: false, inLIst:[Observation.USEDINMEMMS,Observation.RETIRED,Observation.TOODETAILED,Observation.NOTINSCOPE]
-    }
-	
-	static mapping = {
-		table "memms_equipment_type"
-		version false
-		cache true
-	}
-
-	def beforeValidate(){
-		lastUpdated = new Date()
-	}
-	
-	String toString() {
-		return "EquipmentType[Id=" + id + "code="+code+"]";
+		when:
+		def preventionAction = new PreventionAction(descriptions:["en":"Clean the accelerometers","fr":"Laver l'accelerometers"])
+		equipmentType.addToPreventionActions(preventionAction)
+		equipmentType.save(failOnError: true)
+		then:
+		PreventionAction.count() == 1
 	}
 }
