@@ -126,7 +126,6 @@ class PreventiveOrderListingReportService {
 		def upperLimitCost = customPreventiveOrderParams.get('toCost')
 		def currency = customPreventiveOrderParams.get('costCurrency')
 		def noCost = customPreventiveOrderParams.get('noCost')
-		def listingReportDisplayOptions = customPreventiveOrderParams.get('reportTypeOptions')
 		
 		def fromWorkOrderPeriod = customPreventiveOrderParams.get('fromWorkOrderPeriod')
 		def toWorkOrderPeriod = customPreventiveOrderParams.get('toWorkOrderPeriod')
