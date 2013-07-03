@@ -7,20 +7,20 @@
     <ul>
 	    <li>
 			<a href="${createLinkWithTargetURI(controller: 'listing', action:'generalSparePartsListing')}" id="report-1"
-				class="tooltip" title="${message(code:'TODO All Spare Parts')}">
-				TODO All Spare Parts
+				class="tooltip" title="${message(code:'spare.part.all.label')}">
+				<g:message code="spare.part.all.label"/>
 			</a>
 		</li>
 		<li>
 			<a href="${createLinkWithTargetURI(controller: 'listing', action:'pendingOrderSparePartsListing')}" id="report-2"
-				class="tooltip" title="${message(code:'TODO Pending Order Spare Parts')}">
-				TODO Pending Order Spare Parts
+				class="tooltip" title="${message(code:'spare.part.pending.order.label')}">
+				<g:message code="spare.part.pending.order.label"/>
 			</a>
 		</li>
 		<li>
 			<a href="${createLinkWithTargetURI(controller: 'listing', action:'pendingOrderSparePartsListing')}" id="report-2"
-				class="tooltip" title="${message(code:'TODO Pending Order Spare Parts')}">
-				TODO Pending Order Spare Parts
+				class="tooltip" title="${message(code:'spare.part.pending.order.label')}">
+				<g:message code="spare.part.pending.order.label"/>
 			</a>
 			<span class='delete-node' id='js-delete-node'>X</span>
 		</li>
