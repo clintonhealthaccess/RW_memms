@@ -7,12 +7,14 @@ import java.util.Map;
 
 import org.chai.location.DataLocation
 import org.chai.location.Location
+import org.chai.memms.preventive.maintenance.Prevention;
 import org.chai.memms.preventive.maintenance.PreventiveOrder;
 import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventionResponsible;
 import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatus;
 import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderType;
 import org.chai.memms.security.User;
 import org.chai.memms.util.Utils;
+import org.chai.memms.inventory.Equipment;
 
 /**
  * @author Aphrodice Rwagaju
@@ -55,7 +57,8 @@ class PreventiveOrderListingReportService {
 
 	//TODO To complete the function of delayed prevention by adding condition of delay
 	def getPreventionsDelayed(User user,Map<String, String> params) {
-		def criteria = PreventiveOrder.createCriteria();
+		//def criteria = PreventiveOrder.createCriteria();
+		def criteria = Prevention.createCriteria()
 		def dataLocations = []
 		if(user.location instanceof Location) dataLocations.addAll(user.location.collectDataLocations(null))
 		else{
@@ -63,15 +66,17 @@ class PreventiveOrderListingReportService {
 			dataLocations.add(user.location as DataLocation)
 		}
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			createAlias("equipment","equip")
+			//createAlias("equipment","equip")
+			createAlias("order","ord")
+			createAlias("ord.equipment","equip")
 			if(dataLocations)
 				inList('equip.dataLocation',dataLocations)
-			or{
-				eq ("status",PreventiveOrderStatus.OPEN)
+			//or{
+				eq ("ord.status",PreventiveOrderStatus.OPEN)
 				//eq ("status",PreventiveOrderStatus.OPEN)
-			}
-			eq ("type",PreventiveOrderType.DURATIONBASED)
-			
+			//}
+			eq ("ord.type",PreventiveOrderType.DURATIONBASED)
+			//eq ("ord.",)
 		}
 	}
 
