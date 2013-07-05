@@ -57,10 +57,13 @@ $(document).ready(function(){
         $.ajax({
           type :'GET',
           dataType: 'json',
-          data:{"savedReportId":savedReportId, "selectedReportId":selectedReportId},
+          data:{"reportType":"${reportType}", "savedReportId":savedReportId, "selectedReportId":selectedReportId},
           url:baseUrl,
           success: function(results) {
             savedReport.remove();
+            if(savedReportId == selectedReportId){
+              window.location = "${createLink(controller: 'listing', action:'generalEquipmentsListing')}";
+            }
           },
           error: function(request, status, error) {
             alert("Error! "+request+", "+status+", "+error);

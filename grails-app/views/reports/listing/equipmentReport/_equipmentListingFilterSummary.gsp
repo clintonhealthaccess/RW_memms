@@ -30,7 +30,7 @@
   </ul>
   
   <ul>
-    <g:if test="${customizedReportName != null && !customizedReportName.empty}">
+    <g:if test="${selectedReport != null || (customizedReportName != null && !customizedReportName.empty)}">
       <li>
         <span>Report Filter Summary:</span>
         <a href="#"><g:message code="reports.dataLocation"/> = 
