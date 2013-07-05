@@ -44,7 +44,7 @@ $(document).ready(function(){
       items = scroller.children('li');
       items.show();
       items.each(function(idx) {
-        if(idx < item || idx > item + 6) {
+        if(idx < item || idx > item + 4) {
           scrollWidth += $(items[idx]).outerWidth();
           $(items[idx]).hide();
         }
@@ -74,9 +74,3 @@ $(document).ready(function(){
 	}
 
 });
-
-// load customized listing init
-$(function(){
-  customizedlisting_init(1);
-});
-
