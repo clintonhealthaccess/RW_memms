@@ -5,9 +5,9 @@ $(document).ready(function(){
 
 	// load customized report jqueryui dialog box
 	$( "#js-customize-toggle").click(function(e) {
-	  e.preventDefault();
+	  	e.preventDefault();
 		$( "#dialog-form" ).dialog({ modal: true });
-		$('.ui-dialog').resizable('destroy');
+		// $('.ui-dialog').resizable('destroy');
 	});
 
 	// load report list jqueryui horizontal scroll
@@ -73,4 +73,8 @@ $(document).ready(function(){
 	  scroller.animate({'left' : (0 - scrolledWidth) + 'px'}, 'linear');
 	}
 
+});
+
+$(function(){
+  customizedlisting_init(1);
 });
