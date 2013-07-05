@@ -74,7 +74,3 @@ $(document).ready(function(){
 	}
 
 });
-
-$(function(){
-  customizedlisting_init(1);
-});
