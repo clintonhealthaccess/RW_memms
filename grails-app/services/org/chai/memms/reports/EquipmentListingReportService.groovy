@@ -271,7 +271,9 @@ class EquipmentListingReportService {
 		return customEquipments
 	}
 
-	public def saveEquipmentReportParams(User user, def equipmentReport,def customEquipmentParams, Map<String, String> params){
+	public def saveEquipmentReportParams(User user, def customEquipmentParams, Map<String, String> params){
+		def equipmentReport = new EquipmentReport()
+
 		def reportName = customEquipmentParams.get('customizedReportName')
 		def reportType = customEquipmentParams.get('reportType')
 		def reportSubType = customEquipmentParams.get('reportSubType')

@@ -518,13 +518,9 @@ class ListingController extends AbstractController{
 				"Custom Report "+reportTypeTimestamp+" "+reportSubTypeTimestamp+" "+customizedReportTimestamp.format('yyyyMMddHHmmss')
 		}
 		def customizedReportSave = params.get('customizedReportSave')
-
-		def savedReports = userService.getSavedReportsByUser(user, reportType)
-
 		customizedListingParams << [
 			customizedReportName:customizedReportName,
-			customizedReportSave:customizedReportSave,
-			savedReports: savedReports
+			customizedReportSave: customizedReportSave
 		]
 
 		if (log.isDebugEnabled()) log.debug("listing.customizedListing end, customizedListingParams:"+customizedListingParams)
@@ -552,11 +548,6 @@ class ListingController extends AbstractController{
 		def savedReportId = params.get('id')
 		def savedReport = EquipmentReport.get(savedReportId);
 
-		// if(savedReport == null){
-		// 	if (log.isDebugEnabled()) log.debug("listing.savedCustomizedListing saved report is null, redirecting to generalEquipmentsListing")
-		// 	redirect(action: "generalEquipmentsListing", params: params)
-		// }
-		// else{
 		def reportType = savedReport.reportType	
 		def savedReports = userService.getSavedReportsByUser(user, reportType)
 
@@ -673,11 +664,11 @@ class ListingController extends AbstractController{
 			reportType: savedReport.reportType,
 			reportSubType: savedReport.reportSubType,
 			reportTypeOptions: savedReport.displayOptions,
+			selectedReportId: savedCustomizedListingReport.id,
 			selectedReport: savedReport,
 			savedReports: savedReports,
 			template:"/reports/listing/listing"
 		])
-		// }
 	}
 
 	def deleteCustomizedListing ={
@@ -723,6 +714,12 @@ class ListingController extends AbstractController{
 		adaptParamsForList()
 		if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing start, params:"+params)
 
+		def selectedReportId = params.int('selectedReportId')
+		if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing saved/selected report id:"+selectedReportId)
+		if(selectedReportId > 0){
+			redirect(action: 'savedCustomizedListing', params: [id: selectedReportId])
+		}
+
 		def reportType = getReportType()
 		def reportSubType = getReportSubType()
 
@@ -738,8 +735,6 @@ class ListingController extends AbstractController{
 			toCost = Double.parseDouble(params.get('toCost'))
 		def costCurrency = params.get('costCurrency')
 		def noCost = params.get('noCost')
-
-		def equipmentReport = new EquipmentReport()
 
 		def customEquipmentParams = [
 			reportType: reportType,
@@ -783,41 +778,35 @@ class ListingController extends AbstractController{
 
 		def reportTypeOptions = getReportTypeOptions('inventoryOptions')
 		def customizedReportName = params.get('customizedReportName')
-		def customizedReportSave = params.get('customizedReportSave')
 		customEquipmentParams << [
 			reportTypeOptions: reportTypeOptions,
-			customizedReportName: customizedReportName,
-			customizedReportSave: customizedReportSave
+			customizedReportName: customizedReportName
 		]
 
-		if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing end, customEquipmentParams:"+customEquipmentParams)
-
-		def equipments = equipmentListingReportService.getCustomReportOfEquipments(user,customEquipmentParams,params)
-		if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing # of equipments:"+equipments.size())
-
-		def selectedReport = null
+		def customizedReportSave = params.get('customizedReportSave')
 		if(customizedReportSave){
-			selectedReport = equipmentListingReportService.saveEquipmentReportParams(user,equipmentReport, customEquipmentParams, params)
-			if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing saved report:"+selectedReport)
+			def selectedReport = equipmentListingReportService.saveEquipmentReportParams(user,customEquipmentParams,params)
+			if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing saved/selected report:"+selectedReport+", id:"+selectedReport.id)
+			redirect(action:"savedCustomizedListing", params:[id: selectedReport.id])
 		}
+		else{
+			def equipments = equipmentListingReportService.getCustomReportOfEquipments(user,customEquipmentParams,params)
+			if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing # of equipments:"+equipments.size())
 
-		def savedReports = userService.getSavedReportsByUser(user, ReportType.INVENTORY)
-		if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing # of savedReports:"+savedReports.size())
+			def savedReports = userService.getSavedReportsByUser(user, ReportType.INVENTORY)
+			if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing # of savedReports:"+savedReports.size())
 
-		if(!request.xhr)
-			render(view:"/reports/reports",
-			model: model(equipments, "") <<
-			[
-				reportType: reportType,
-				reportSubType: reportSubType,
-				reportTypeOptions: reportTypeOptions,
-				customizedReportName: customizedReportName,
-				customizedReportSave: customizedReportSave,
-				customEquipmentParams: customEquipmentParams,
-				selectedReport: selectedReport,
+			customEquipmentParams << [
 				savedReports: savedReports,
 				template:"/reports/listing/listing"
-			])
+			]
+
+			if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing end, customEquipmentParams:"+customEquipmentParams)
+
+			if(!request.xhr)
+				render(view:"/reports/reports",
+				model: model(equipments, "") << customEquipmentParams)
+		}
 	}
 
 	// corrective

@@ -10,6 +10,9 @@ $(document).ready(function(){
 		// $('.ui-dialog').resizable('destroy');
 	});
 
+	// load customized report jquery step 1 init
+	customizedlisting_init(1);
+
 	// load report list jqueryui horizontal scroll
 	var items, scroller = $('#js-slider-wrapper ul');
 	var width = 0;
