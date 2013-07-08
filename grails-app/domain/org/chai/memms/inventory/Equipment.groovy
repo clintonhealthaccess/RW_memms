@@ -223,7 +223,7 @@ public class Equipment {
 		DateTime purchaseDateTime = new DateTime(purchaseDate)
 		if(expectedLifeTime!=null && purchaseDate!=null && purchaseCost!=null){	
 			def currentEquipmentLifeTime= (today-purchaseDate)
-			int currentEquipmentLifeTimeDays= currentEquipmentLifeTime.days
+			def currentEquipmentLifeTimeDays= currentEquipmentLifeTime.days
 			//C-((B/A)*C)
 		 return purchaseCost-((currentEquipmentLifeTimeDays/purchaseCost)*((expectedLifeTime.numberOfMonths)*30))
 		}else 
