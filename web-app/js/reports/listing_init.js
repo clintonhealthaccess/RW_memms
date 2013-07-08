@@ -10,6 +10,9 @@ $(document).ready(function(){
 		// $('.ui-dialog').resizable('destroy');
 	});
 
+	// load customized report jquery step 1 init
+	customizedlisting_init(1);
+
 	// load report list jqueryui horizontal scroll
 	var items, scroller = $('#js-slider-wrapper ul');
 	var width = 0;
@@ -25,7 +28,7 @@ $(document).ready(function(){
 	  e.preventDefault();
 	  items = scroller.children();
 	  if(item > 0) {
-	    item -= 7;
+	    item -= 5;
 	  }
       hideRestOfElements();
 	});
@@ -33,8 +36,8 @@ $(document).ready(function(){
 	$(document).on('click', '#js-scroll-right', function(e){
 	  e.preventDefault();
 	  items = scroller.children();
-	  if(item < (items.length - 6)){
-	    item += 7;
+	  if(item < (items.length - 5)){
+	    item += 5;
 	  }
       hideRestOfElements();
 	});
@@ -73,8 +76,4 @@ $(document).ready(function(){
 	  scroller.animate({'left' : (0 - scrolledWidth) + 'px'}, 'linear');
 	}
 
-});
-
-$(function(){
-  customizedlisting_init(1);
 });
