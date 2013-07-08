@@ -552,9 +552,12 @@ class ListingController extends AbstractController{
 		def savedReportId = params.get('id')
 		def savedReport = EquipmentReport.get(savedReportId);
 
-		if(savedReport == null)
-			redirect(action: "generalEquipmentsListing", params: params)
-
+		// if(savedReport == null){
+		// 	if (log.isDebugEnabled()) log.debug("listing.savedCustomizedListing saved report is null, redirecting to generalEquipmentsListing")
+		// 	redirect(action: "generalEquipmentsListing", params: params)
+		// }
+		// else{
+		def reportType = savedReport.reportType	
 		def savedReports = userService.getSavedReportsByUser(user, reportType)
 
 		def savedCustomizedListingParams = [:]
@@ -664,32 +667,48 @@ class ListingController extends AbstractController{
 		}
 
 		if(!request.xhr)
-			render(view:"/reports/reports",
-			model: model(savedCustomizedListingReport, "") <<
-			[
-				reportType: savedReport.reportType,
-				reportSubType: savedReport.reportSubType,
-				reportTypeOptions: savedReport.displayOptions,
-				selectedReport: savedReport,
-				savedReports: savedReports,
-				template:"/reports/listing/listing"
-			])
+		render(view:"/reports/reports",
+		model: model(savedCustomizedListingReport, "") <<
+		[
+			reportType: savedReport.reportType,
+			reportSubType: savedReport.reportSubType,
+			reportTypeOptions: savedReport.displayOptions,
+			selectedReport: savedReport,
+			savedReports: savedReports,
+			template:"/reports/listing/listing"
+		])
+		// }
 	}
 
 	def deleteCustomizedListing ={
 		if (log.isDebugEnabled()) log.debug("listing.deleteCustomizedListing start, params:"+params)
 		
+		def reportType = params.get('reportType')
 		def savedReportId = params.get('savedReportId')
 		def selectedReportId = params.get('selectedReportId')
 
-		// TODO get report type to determine equipment report vs work order report ?
-		def equipmentReport = EquipmentReport.get(savedReportId);
+		def savedReport = null
+
+		switch(reportType){
+			case ReportType.INVENTORY:
+				savedReport = EquipmentReport.get(savedReportId);
+				break;
+			case ReportType.CORRECTIVE:
+				savedReport = CorrectiveMaintenanceReport.get(savedReportId);
+				break;
+			case ReportType.PREVENTIVE:
+				savedReport = PreventiveMaintenanceReport.get(savedReportId);
+				break;
+			case ReportTYpe.SPAREPARTS:
+				// TODO
+				break;
+		}
 
 		def result = false
 
-		if(equipmentReport != null){
-			equipmentReport.delete(flush: true)
-			if (log.isDebugEnabled()) log.debug("listing.deleteCustomizedListing equipmentReport deleted")
+		if(savedReport != null){
+			savedReport.delete(flush: true)
+			if (log.isDebugEnabled()) log.debug("listing.deleteCustomizedListing savedReport deleted")
 			result = true
 			if(savedReportId == selectedReportId){
 				if (log.isDebugEnabled()) log.debug("listing.deleteCustomizedListing selectedReport deleted")

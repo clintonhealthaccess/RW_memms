@@ -5,9 +5,9 @@ $(document).ready(function(){
 
 	// load customized report jqueryui dialog box
 	$( "#js-customize-toggle").click(function(e) {
-	  e.preventDefault();
+	  	e.preventDefault();
 		$( "#dialog-form" ).dialog({ modal: true });
-		$('.ui-dialog').resizable('destroy');
+		// $('.ui-dialog').resizable('destroy');
 	});
 
 	// load report list jqueryui horizontal scroll
@@ -25,7 +25,7 @@ $(document).ready(function(){
 	  e.preventDefault();
 	  items = scroller.children();
 	  if(item > 0) {
-	    item -= 6;
+	    item -= 7;
 	  }
       hideRestOfElements();
 	});
@@ -33,8 +33,8 @@ $(document).ready(function(){
 	$(document).on('click', '#js-scroll-right', function(e){
 	  e.preventDefault();
 	  items = scroller.children();
-	  if(item < (items.length - 4)){
-	    item += 6;
+	  if(item < (items.length - 6)){
+	    item += 7;
 	  }
       hideRestOfElements();
 	});
@@ -75,8 +75,6 @@ $(document).ready(function(){
 
 });
 
-// load customized listing init
 $(function(){
   customizedlisting_init(1);
 });
-
