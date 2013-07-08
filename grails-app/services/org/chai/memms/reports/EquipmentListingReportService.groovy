@@ -271,7 +271,9 @@ class EquipmentListingReportService {
 		return customEquipments
 	}
 
-	public def saveEquipmentReportParams(User user, def equipmentReport,def customEquipmentParams, Map<String, String> params){
+	public def saveEquipmentReportParams(User user, def customEquipmentParams, Map<String, String> params){
+		def equipmentReport = new EquipmentReport()
+
 		def reportName = customEquipmentParams.get('customizedReportName')
 		def reportType = customEquipmentParams.get('reportType')
 		def reportSubType = customEquipmentParams.get('reportSubType')
@@ -315,5 +317,7 @@ class EquipmentListingReportService {
 		
 		equipmentReport.save(failOnError:true)
 		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON EQUIPMENT CUSTOM REPORT SAVED CORRECTLY. THE REPORT ID IS :"+ equipmentReport.id)
+
+		return equipmentReport
 	}
 }

@@ -1,40 +1,38 @@
 <%@ page import="org.chai.memms.util.Utils.ReportSubType" %>
 <%@ page import="org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatus" %>
 <%@ page import="org.chai.memms.preventive.maintenance.PreventiveOrder.PreventionResponsible" %>
+<%@ page import="org.chai.memms.util.Utils" %>
 <div class="v-tabs-criteria">
-  <ul class="left">
 
+  %{-- customized but unsaved listing --}%
+  <g:if test="${customizedReportName != null && !customizedReportName.empty}">
+    <h1>${customizedReportName}</h1>
+  </g:if>
+  %{-- customized saved listing --}%
+  <g:elseif test="${selectedReport != null}">
+    <h1>${selectedReport.reportName}</h1>
+  </g:elseif>
+  %{-- predefined listing --}%
+  <g:else>
+    <h1>${reportName}</h1>
+  </g:else>
+
+  <ul>
     <li>
-      <span>Report Type:</span>
+       <span><g:message code="reports.type.label"/>:</span>
       <a href="#">${message(code:'reports.type.'+reportType?.reportType)}</a>
     </li>
 
     <li>
-      <span>Report Subtype:</span>
+      <span><g:message code="reports.subType.label"/>:</span>
       <a href="#">${message(code:'reports.subType.'+reportSubType?.reportSubType)}</a>
     </li>
-
-    <li>
-      <span>Report Total:</span>
-      <a href="#">TODO Preventions = ${entities?.size()}</a>
-    </li>
-
+  </ul>
+  
+  <ul>
     <g:if test="${customizedReportName != null && !customizedReportName.empty}">
       <li>
-        <span>Custom Report Name:</span>
-        <a href="#">${customizedReportName}</a>
-      </li>
-    </g:if>
-    <g:else>
-      <li>
-        <span>Report Name:</span>
-        <a href="#">${selectedReport}</a>
-      </li>
-    </g:else>
-
-    <g:if test="${customizedReportName != null && !customizedReportName.empty}">
-      <li>
-        <span>Custom Report Filter Summary:</span>
+        <span>Report Filter Summary:</span>
         <a href="#"><g:message code="reports.dataLocation"/> = 
           ${customPreventiveOrderParams?.dataLocations?.size()}</a>,
         <a href="#"><g:message code="reports.department"/> = 
@@ -78,12 +76,5 @@
         </g:if>
       </li>
     </g:if>
-%{-- TODO
-    <g:else>
-      <li>
-        <span>Report Filter Summary:</span>
-        <a href="#">TODO</a>
-      </li>
-    </g:else> --}%
   </ul>
 </div>

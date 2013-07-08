@@ -200,9 +200,9 @@
     float: right
   a
     color: #bbb
-    display: inline-block
-    max-width: 180px
-    padding: 15px 1px 15px 15px
+    display: block
+    max-width: 167px
+    padding: 15px 10px
     position: relative
     text-decoration: none
     vertical-align: middle
@@ -214,18 +214,17 @@
       color: $primary
     &:hover, &:focus
       color: $primary
+      background: rgba(0, 0, 0, 0.05)
 
     &.v-tabs-dynav-scroll-right, &.v-tabs-dynav-scroll-left
       background: white
       display: inline
-      height: 16px
-      margin-top: 15px
+      height: 46px
       opacity: .6
       padding: 0
       position: relative
       text-indent: -9999em
-      top: 30%
-      width: 10px
+      width: 39px
       z-index: 1000
       +transition(all .4s)
       &:hover, &:focus
@@ -233,7 +232,6 @@
 
     &.v-tabs-dynav-scroll-right
       background: url('../images/arrow-right.png') no-repeat center
-      margin: 15px 15px 0
       &:hover, &:focus
         background-image: url('../images/arrow-right-hover.png')
 
@@ -248,39 +246,32 @@
   line-height: 1.4
   overflow: hidden
   position: relative
-  width: 740px
+  width: 920px
   ul
     height: 46px
     position: absolute
-    width: 1200px
+    min-width: 1200px
   li
-    display: inline
+    border-right: 1px solid rgba(0, 0, 0, 0.05)
+    display: inline-block
+    float: left
     position: relative
-    vertical-align: middle
-
-.v-tabs-chosen-report
-  background: url('../images/bump.png') no-repeat 50px bottom
-  bottom: -1px
-  color: $primary
-  float: left
-  position: relative
-  text-decoration: none
-  max-width: 160px
-  a.active
-    background: none
-    display: block
-    padding: 17px
-    position: relative
-    text-decoration: none
+    width: 183px
+    &:nth-child(7n+5)
+      border-right: none
 
 
 .delete-node
   background: url('../images/icons/mini_delete.png') no-repeat center
+  cursor: pointer
   display: inline-block
   height: 13px
   line-height: 13px
   margin-left: 0
+  position: absolute
+  right: 5px
   text-indent: -9999em
+  top: 5px
   width: 13px
   opacity: 0.25
 
@@ -333,8 +324,7 @@
 
 .v-tabs-summary
   border: 10px solid $filler1
-  border-bottom-width: 4px
-  padding: 6px 0 9px
+  padding: 0 0 9px
   text-align: center
   +box-shadow($filler - #444 0 0 1px 0 inset)
   +pie-clearfix
@@ -374,21 +364,30 @@
 .v-tabs-criteria
   background: $filler1
   border: none
-  padding-bottom: 20px
-  +background(linear-gradient($filler1, #f9fcff))
+  padding: 25px 0 0
   +pie-clearfix
   .tooltip
     color: $primary
     text-decoration: underline
+  h1
+    float: left
+    font-size: 30px
+    //min-width: 520px
+    padding: 5px 25px 20px
+  ul
+    float: left
+    //min-width: 400px
+    padding: 0px 10px 20px
   li
     border-right: 1px solid #e5e5e5
     display: inline-block
     float: left
     line-height: 1.5
-    margin: 10px 0
     padding: 0 25px
     text-align: left
     +text-shadow(#fff 0 1px 0)
+    &:first-child
+      padding-left: 15px
     &:last-child
       border: none
   a

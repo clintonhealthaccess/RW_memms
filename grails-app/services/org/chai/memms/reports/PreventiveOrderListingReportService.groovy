@@ -37,6 +37,7 @@ class PreventiveOrderListingReportService {
 				inList('equip.dataLocation',dataLocations)
 		}
 	}
+
 	def getEquipmentsWithPreventionPlan(User user,Map<String, String> params) {
 
 		def criteria = PreventiveOrder.createCriteria();
@@ -53,6 +54,7 @@ class PreventiveOrderListingReportService {
 			eq ("status",PreventiveOrderStatus.OPEN)
 		}
 	}
+
 	//TODO To complete the function of delayed prevention by adding condition of delay
 	def getPreventionsDelayed(User user,Map<String, String> params) {
 		//def criteria = PreventiveOrder.createCriteria();
@@ -116,6 +118,7 @@ class PreventiveOrderListingReportService {
 				eq ("equip.purchaseCost", null)
 		}
 	}
+
 	public def savePreventiveOrderReportParams(User user, def preventiveMaintenanceReport,def customPreventiveOrderParams, Map<String, String> params){
 		def reportName = customPreventiveOrderParams.get('customizedReportName')
 		def reportType = customPreventiveOrderParams.get('reportType')
@@ -157,5 +160,7 @@ class PreventiveOrderListingReportService {
 		
 		preventiveMaintenanceReport.save(failOnError:true)
 		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON PREVENTIVE MAINTENANCE CUSTOM REPORT SAVED CORRECTLY. THE REPORT ID IS :"+ preventiveMaintenanceReport.id)
+
+		return preventiveMaintenanceReport
 	}
 }
