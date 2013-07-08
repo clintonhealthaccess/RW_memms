@@ -229,20 +229,18 @@ class WorkOrderListingReportService {
 		return correctiveMaintenanceReport
 	}
 	
-	def getClosedWorkOrdersOfLastYear(User user, def customWorkOrderParams ,Map<String, String> params) {
-		//DATE PROCESSING TO BE REVIEWED EITHER IN THIS SERVICE OR WORKORDER BEAN LEVEL
-		//DateTime todayDateTime = new DateTime(today)
-		//def lastYaerDateTimeFromNow = todayDateTime.minusDays(365)
-		//def lastYearDateFromNow = lastYaerDateTimeFromNow.toDate()
+	def getClosedWorkOrdersOfLastYear(User user,Map<String, String> params) {
+		DateTime todayDateTime = new DateTime(today)
+		def lastYaerDateTimeFromNow = todayDateTime.minusDays(365)
+		def lastYearDateFromNow = lastYaerDateTimeFromNow.toDate()
 
 		def criteria = WorkOrder.createCriteria();
 		def dataLocations = []
-		def criteriaWorkOrders=[]
 		if(user.location instanceof Location) dataLocations.addAll(user.location.collectDataLocations(null))
 		else{
 			dataLocations.add(user.location as DataLocation)
 		}
-		criteriaWorkOrders = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			createAlias("equipment","equip")
 			if(dataLocations)
 				inList('equip.dataLocation',dataLocations)
@@ -250,16 +248,9 @@ class WorkOrderListingReportService {
 				eq ("currentStatus",OrderStatus.CLOSEDFIXED)
 				eq ("currentStatus",OrderStatus.CLOSEDFORDISPOSAL)
 			}
-			//ge ("closedOn",lastYearDateFromNow)
+			ge ("closedOn",lastYearDateFromNow)
 		}
 		
-		if (log.isDebugEnabled()) log.debug("WORK ORDER SIZE: "+ criteriaWorkOrders.size())
-		 
-		def sparePartTypesUsed = []
-		 for (WorkOrder workOrder:criteriaWorkOrders){
-			 if(workOrder.getSparePartTypesUsed() != null)
-			 sparePartTypesUsed.add(workOrder.getSparePartTypesUsed())
-		 }
-		return sparePartTypesUsed
+		if (log.isDebugEnabled()) log.debug("WORK ORDER SIZE: "+ criteria.size())
 	}
 }

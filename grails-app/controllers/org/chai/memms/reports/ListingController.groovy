@@ -275,25 +275,9 @@ class ListingController extends AbstractController{
 			])
 	}
 
-	// TODO AR null pointer exception
 	def lastYearClosedWorkOrders={
 		adaptParamsForList()
-		def workOrders = workOrderListingReportService.getClosedWorkOrdersOfLastYear(user,null, params)
-		if(!request.xhr)
-			render(view:"/reports/reports",
-			model: model(workOrders, "") <<
-			[
-				reportType: ReportType.CORRECTIVE,
-				reportSubType: ReportSubType.WORKORDERS,
-				reportName: message(code:'default.work.order.closed.last.year.label'),
-				template:"/reports/listing/listing"
-			])
-	}
-
-	// TODO AR
-	def delayedWorkOrders={
-		adaptParamsForList()
-		def workOrders = workOrderListingReportService.getClosedWorkOrdersOfLastYear(user,null, params)
+		def workOrders = workOrderListingReportService.getClosedWorkOrdersOfLastYear(user, params)
 		if(!request.xhr)
 			render(view:"/reports/reports",
 			model: model(workOrders, "") <<

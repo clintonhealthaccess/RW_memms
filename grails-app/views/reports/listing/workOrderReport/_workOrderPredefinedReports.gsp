@@ -26,12 +26,7 @@
 				<g:message code="default.work.order.closed.last.year.label"/>
 			</a>
 		</li>
-    <li>
-      <a href="${createLinkWithTargetURI(controller: 'listing', action:'delayedWorkOrders')}" id="report-5"
-        class="tooltip" title="${message(code:'default.work.order.delayed.label')}">
-        <g:message code="default.work.order.delayed.label"/>
-      </a>
-    </li>
+		
 		<g:each in="${savedReports}" var="savedReport" status="i">
         <li>
           <a href="${createLinkWithTargetURI(controller: 'listing', action:'savedCustomizedListing', params: [id: savedReport.id])}" id="report-${i+6}"

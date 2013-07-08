@@ -64,7 +64,7 @@
 					<td>${order.equipment.dataLocation.names}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('code')}">
-					<td>${order.equipment.code}</td>
+					<td>${order?.equipment?.code}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('serialNumber')}">
 					<td>${order.equipment.serialNumber}</td>
