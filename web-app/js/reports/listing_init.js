@@ -25,7 +25,7 @@ $(document).ready(function(){
 	  e.preventDefault();
 	  items = scroller.children();
 	  if(item > 0) {
-	    item -= 7;
+	    item -= 5;
 	  }
       hideRestOfElements();
 	});
@@ -33,8 +33,8 @@ $(document).ready(function(){
 	$(document).on('click', '#js-scroll-right', function(e){
 	  e.preventDefault();
 	  items = scroller.children();
-	  if(item < (items.length - 6)){
-	    item += 7;
+	  if(item < (items.length - 5)){
+	    item += 5;
 	  }
       hideRestOfElements();
 	});
