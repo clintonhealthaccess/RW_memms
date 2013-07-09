@@ -35,12 +35,6 @@
   				<g:message code="default.work.order.closed.last.year.label"/>
   			</a>
   		</li>
-      <li>
-        <a href="${createLinkWithTargetURI(controller: 'listing', action:'delayedWorkOrders')}"
-          class="tooltip" title="${message(code:'default.work.order.delayed.label')}">
-          <g:message code="default.work.order.delayed.label"/>
-        </a>
-      </li>
   	</ul>
 
   </div>

@@ -19,8 +19,7 @@
 	</thead>
 	<tbody>
 		<g:each in="${entities}" status="i" var="order">
-			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-				
+			<tr>
 				<td>${order.equipment.code}</td>
 				<td>${order.equipment.serialNumber}</td>
 				<td>${order.equipment.type.names}</td>
