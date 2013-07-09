@@ -12,6 +12,7 @@ import org.chai.memms.preventive.maintenance.PreventiveOrder;
 import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventionResponsible;
 import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatus;
 import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderType;
+import org.chai.memms.report.listing.PreventiveMaintenanceReport;
 import org.chai.memms.security.User;
 import org.chai.memms.util.Utils;
 import org.chai.memms.inventory.Equipment;
@@ -119,7 +120,9 @@ class PreventiveOrderListingReportService {
 		}
 	}
 
-	public def savePreventiveOrderReportParams(User user, def preventiveMaintenanceReport,def customPreventiveOrderParams, Map<String, String> params){
+	public def savePreventiveOrderReportParams(User user, def customPreventiveOrderParams, Map<String, String> params){
+		def preventiveMaintenanceReport = new PreventiveMaintenanceReport()
+
 		def reportName = customPreventiveOrderParams.get('customizedReportName')
 		def reportType = customPreventiveOrderParams.get('reportType')
 		def reportSubType = customPreventiveOrderParams.get('reportSubType')

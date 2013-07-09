@@ -36,10 +36,14 @@ import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocation
 import org.chai.location.Location;
 import org.chai.memms.corrective.maintenance.WorkOrder;
+import org.chai.memms.report.listing.CorrectiveMaintenanceReport;
 import org.chai.memms.report.listing.EquipmentReport;
+import org.chai.memms.report.listing.PreventiveMaintenanceReport;
+import org.chai.memms.report.listing.SparePartReport
 import org.chai.memms.security.User.UserType;
 import org.chai.memms.security.User;
-import org.chai.memms.util.Utils
+import org.chai.memms.util.Utils;
+import org.chai.memms.util.Utils.ReportType;
 import org.hibernate.criterion.MatchMode
 import org.hibernate.criterion.Order
 import org.hibernate.criterion.Projections
@@ -158,11 +162,29 @@ class UserService {
 	}
 
 	List<EquipmentReport> getSavedReportsByUser(def user, def reportType){
-		def criteria = EquipmentReport.createCriteria();
-		return criteria.list(){
-			eq ("savedBy", user)
-			eq ("reportType", reportType)
+		def savedReportsByUser = null
+		def criteria = null
+		switch(reportType){
+			case ReportType.INVENTORY:
+				criteria = EquipmentReport.createCriteria();
+				break;
+			case ReportType.CORRECTIVE:
+				criteria = CorrectiveMaintenanceReport.createCriteria();
+				break;
+			case ReportType.PREVENTIVE:
+				criteria = PreventiveMaintenanceReport.createCriteria();
+				break;
+			case ReportType.SPAREPARTS:
+				// TODO
+				break;
 		}
+		if(criteria != null){
+			savedReportsByUser = criteria.list(){
+				eq ("savedBy", user)
+				eq ("reportType", reportType)
+			}
+		}
+		return savedReportsByUser
 	}
 	
 }
