@@ -13,7 +13,7 @@ $(document).ready(function(){
 	// load customized report jquery step 1 init
 	customizedlisting_init(1);
 
-	// load report list jqueryui horizontal scroll
+	// load predefined/saved report list jqueryui horizontal scroll
 	var items, scroller = $('#js-slider-wrapper ul');
 	var width = 0;
 	var item = 0;
@@ -54,6 +54,7 @@ $(document).ready(function(){
       });
     }
 
+	// load predefined/saved report list jqueryui horizontal scroll left
 	function scrollLeft(item){
 	  var scrollWidth = 0
 	  items.each(function(idx){
@@ -65,6 +66,7 @@ $(document).ready(function(){
 	  scroller.animate({'left' : (0 - scrolledWidth) + 'px'}, 'linear');
 	}
 
+	// load predefined/saved report list jqueryui horizontal scroll right
 	function scrollRight(item){
 	  var scrollWidth = 0
 	  items.each(function(idx){
@@ -75,5 +77,28 @@ $(document).ready(function(){
 	  scrolledWidth -= scrollWidth;
 	  scroller.animate({'left' : (0 - scrolledWidth) + 'px'}, 'linear');
 	}
-
 });
+
+// load predefined/saved report list jqueryui horizontal scroll delete element
+function removeElement(eventItem, elementItem, baseUrl, reportType){
+	if(confirm('Are you sure?')){
+        var savedReportId = $(elementItem).data('saved-report-id')
+        var savedReport = $(elementItem).parents('li')
+        eventItem.preventDefault();
+        $.ajax({
+			type :'GET',
+			dataType: 'json',
+			data:{ "reportType":reportType, "savedReportId":savedReportId },
+			url:baseUrl,
+			success: function(result) {
+				// alert("Success! "+result);
+				if(result[0]){
+				  savedReport.remove();
+				}
+			},
+			error: function(result) {
+				// alert("Error! "+result);
+			}
+        });
+	}
+}

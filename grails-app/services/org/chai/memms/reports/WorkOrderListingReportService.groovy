@@ -12,6 +12,7 @@ import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.memms.security.User;
 import org.chai.memms.util.Utils;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
+import org.chai.memms.report.listing.CorrectiveMaintenanceReport;
 import org.chai.memms.util.Utils.ReportType
 import org.chai.memms.util.Utils.ReportSubType
 import org.joda.time.DateTime
@@ -185,7 +186,9 @@ class WorkOrderListingReportService {
 		return customWorkOrders;
 	}
 
-	public def saveWorkOrderReportParams(User user, def correctiveMaintenanceReport,def customWorkOrderParams, Map<String, String> params){
+	public def saveWorkOrderReportParams(User user, def customWorkOrderParams, Map<String, String> params){
+		def correctiveMaintenanceReport = new CorrectiveMaintenanceReport()
+
 		def reportName = customWorkOrderParams.get('customizedReportName')
 		def reportType = customWorkOrderParams.get('reportType')
 		def reportSubType = customWorkOrderParams.get('reportSubType')
