@@ -221,7 +221,7 @@ public class Equipment {
 		def today=new Date()
 		DateTime todayDateTime = new DateTime(today)
 		DateTime purchaseDateTime = new DateTime(purchaseDate)
-		if(expectedLifeTime!=null && purchaseDate!=null && purchaseCost!=null){	
+		if(id!=null && !id && expectedLifeTime!=null && purchaseDate!=null && purchaseCost!=null){	
 			def currentEquipmentLifeTime= (today-purchaseDate)
 			def currentEquipmentLifeTimeDays= currentEquipmentLifeTime.days
 			//C-((B/A)*C)
