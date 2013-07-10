@@ -3,6 +3,8 @@
  */
 package org.chai.memms.report.listing
 
+import java.util.Date;
+
 import org.chai.memms.inventory.EquipmentStatus.Status;
 
 /**
@@ -15,13 +17,18 @@ class EquipmentReport extends EquipmentGeneralReportParameters {
 	def equipmentStatus
 	boolean underWarranty
 	boolean noAcquisitionPeriod
+	def statusChanges
+	Date fromStatusChangesPeriod
+	Date toStatusChangesPeriod
 
 	static constraints = {
 		obsolete nullable: false
 		equipmentStatus nullable: true
 		underWarranty nullable: false
 		noAcquisitionPeriod nullable: false
-		
+		statusChanges nullable: true
+		fromStatusChangesPeriod nullable: true
+		toStatusChangesPeriod nullable: true
 	}
 
 	static mapping = {

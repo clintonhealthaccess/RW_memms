@@ -578,13 +578,13 @@ class ListingController extends AbstractController{
 						]
 					}
 					// TODO AR - Add these properties to saved report
-					// if(savedReport.reportSubType == ReportSubType.STATUSCHANGES){
-					// 	savedCustomizedListingParams << [
-					// 		statusChanges: statusChanges,
-					// 		fromStatusChangesPeriod: fromStatusChangesPeriod,
-					// 		toStatusChangesPeriod: toStatusChangesPeriod
-					// 	]
-					// }
+					 /*if(savedReport.reportSubType == ReportSubType.STATUSCHANGES){
+					 	savedCustomizedListingParams << [
+					 		statusChanges: statusChanges,
+					 		fromStatusChangesPeriod: fromStatusChangesPeriod,
+					 		toStatusChangesPeriod: toStatusChangesPeriod
+					 	]
+					 }*/
 					savedCustomizedListingParams << [reportTypeOptions: savedReport.displayOptions]
 					adaptParamsForList()
 					savedCustomizedListingReport = equipmentListingReportService.getCustomReportOfEquipments(user,savedCustomizedListingParams,params)
