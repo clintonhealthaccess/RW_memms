@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.chai.location.DataLocation;
 import org.chai.location.Location;
+import org.chai.memms.report.listing.SparePartReport
 import org.chai.memms.security.User;
 import org.chai.memms.security.User.UserType;
 import org.chai.memms.spare.part.SparePart;
@@ -75,6 +76,7 @@ class SparePartListingReportService {
 			}
 		}
 	}
+
 	// TODO we have to track also the spare part at MMC level which does not have dataLocation.
 	public def getCustomReportOfSpareParts(User user, def customSparePartsParams, Map<String, String> params) {
 
@@ -195,7 +197,10 @@ class SparePartListingReportService {
 		}
 		return criteriaSpareParts
 	}
-	public def saveSparePartReportParams(User user, def sparePartReport,def customSparePartParams, Map<String, String> params){
+
+	public def saveSparePartReportParams(User user, def customSparePartParams, Map<String, String> params){
+		def sparePartReport = new SparePartReport()
+
 		def reportName = customSparePartParams.get('customizedReportName')
 		def reportType = customSparePartParams.get('reportType')
 		def reportSubType = customSparePartParams.get('reportSubType')
@@ -223,6 +228,8 @@ class SparePartListingReportService {
 		sparePartReport.displayOptions=listingReportDisplayOptions
 		sparePartReport.save(failOnError:true)
 		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON SPARE PART CUSTOM REPORT SAVED CORRECTLY. THE REPORT ID IS :"+ sparePartReport.id)
+
+		return sparePartReport
 	}
 	
 	def getQuantityOfEachTypeOfSparePartUsedLastYear(User user, Map<SparePart, Integer> usedSpareParts, Map<String, String> params){

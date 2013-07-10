@@ -50,7 +50,6 @@
         </g:if>
         <g:if test="${[ReportType.SPAREPARTS].contains(reportType)}">
           <li>
-            <!-- TODO sparePartTypes -->
             <g:selectFromList name="sparePartTypes" label="${message(code:'reports.sparePartType')}"
               field="type" optionKey="id" multiple="true" value="${sparePartTypes*.id}"
               ajaxLink="${createLink(controller:'SparePartType', action:'getAjaxData', params:[observation:'USEDINMEMMS'])}"

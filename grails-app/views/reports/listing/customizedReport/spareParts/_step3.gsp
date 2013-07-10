@@ -3,7 +3,8 @@
 	<li><g:checkBox name="spartPartsOptions" value="sparePartType" /><span>${message(code:'listing.report.spare.part.type.label')}</span></li>
 	<li><g:checkBox name="spartPartsOptions" value="locationOfStock" /><span>${message(code:'listing.report.spare.part.stock.location.label')}</span></li>
 	<li><g:checkBox name="spartPartsOptions" value="quantityInStock" /><span>${message(code:'listing.report.spare.part.quantity.in.stock.label')}</span></li>
-
+</ul>
+<ul class="onecol-checkboxes right">
 	<g:if test="${[ReportSubType.INVENTORY,ReportSubType.STATUSCHANGES].contains(reportSubType)}">
 		<li><g:checkBox name="spartPartsOptions" value="status" checked="false" /><span>${message(code:'listing.report.spare.part.status.label')}</span></li>
 		<li><g:checkBox name="spartPartsOptions" value="model" checked="false" /><span>${message(code:'listing.report.spare.part.model.label')}</span></li>
@@ -12,8 +13,6 @@
 		<li><g:checkBox name="spartPartsOptions" value="warrantyPeriodRemaining" checked="false" /><span>${message(code:'listing.report.spare.part.warranty.remaining.label')}</span></li>
 		<li><g:checkBox name="spartPartsOptions" value="discontinuedDate" checked="false" /><span>${message(code:'listing.report.spare.part.discontinued.date.label')}</span></li>
 	</g:if>
-</ul>
-<ul class="onecol-checkboxes right">
 	<g:if test="${reportSubType == ReportSubType.STATUSCHANGES}">
 	  <li><g:checkBox name="sparePartsOptions" value="statusChanges" /><span>${message(code:'listing.report.spare.part.status.changes.label')}</span></li>
 	</g:if>

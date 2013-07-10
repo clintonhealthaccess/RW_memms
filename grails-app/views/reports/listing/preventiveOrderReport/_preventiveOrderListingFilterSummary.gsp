@@ -30,49 +30,49 @@
   </ul>
   
   <ul>
-    <g:if test="${customizedReportName != null && !customizedReportName.empty}">
+    <g:if test="${selectedReport != null || (customizedReportName != null && !customizedReportName.empty)}">
       <li>
         <span>Report Filter Summary:</span>
         <a href="#"><g:message code="reports.dataLocation"/> = 
-          ${customPreventiveOrderParams?.dataLocations?.size()}</a>,
+          ${dataLocations?.size()}</a>,
         <a href="#"><g:message code="reports.department"/> = 
-          ${customPreventiveOrderParams?.departments?.size()}</a>,
+          ${departments?.size()}</a>,
         <a href="#"><g:message code="reports.equipmentType"/> = 
-          ${customPreventiveOrderParams?.equipmentTypes?.size()}</a>,
+          ${equipmentTypes?.size()}</a>,
         <a href="#"><g:message code="reports.cost"/> = 
-          ${customPreventiveOrderParams?.fromCost?:message(code:'reports.filters.none')} - 
-          ${customPreventiveOrderParams?.toCost?:message(code:'reports.filters.none')}</a>,
+          ${fromCost?:message(code:'reports.filters.none')} - 
+          ${toCost?:message(code:'reports.filters.none')}</a>,
         <a href="#"><g:message code="reports.currency"/> = 
-          ${customPreventiveOrderParams?.costCurrency?:message(code:'reports.filters.none')}</a>,
+          ${costCurrency?:message(code:'reports.filters.none')}</a>,
 
         <g:if test="${reportSubType == ReportSubType.WORKORDERS}">
           <a href="#"><g:message code="reports.preventive.workOrders.whoIsResponsible"/> =   
-            <g:if test="${customPreventiveOrderParams?.whoIsResponsible == null || customPreventiveOrderParams?.whoIsResponsible.empty}">
+            <g:if test="${whoIsResponsible == null || whoIsResponsible.empty}">
               ${message(code:'reports.filters.none')},
             </g:if>
             <g:else>
               <g:each in="${PreventionResponsible.values() - PreventionResponsible.NONE}" var="statusEnum">
-                <g:if test="${customPreventiveOrderParams?.whoIsResponsible?.contains(statusEnum)}">
+                <g:if test="${whoIsResponsible?.contains(statusEnum)}">
                   ${message(code: statusEnum?.messageCode+'.'+statusEnum?.name)},
                 </g:if>
               </g:each>
             </g:else>
           </a>
           <a href="#"><g:message code="reports.workOrderStatus"/> =   
-            <g:if test="${customPreventiveOrderParams?.workOrderStatus == null || customPreventiveOrderParams?.workOrderStatus.empty}">
+            <g:if test="${workOrderStatus == null || workOrderStatus.empty}">
               ${message(code:'reports.filters.none')},
             </g:if>
             <g:else>
               <g:each in="${PreventiveOrderStatus.values()}" var="statusEnum">
-                <g:if test="${customPreventiveOrderParams?.workOrderStatus?.contains(statusEnum)}">
+                <g:if test="${workOrderStatus?.contains(statusEnum)}">
                   ${message(code: statusEnum?.messageCode+'.'+statusEnum?.name)},
                 </g:if>
               </g:each>
             </g:else>
           </a>
           <a href="#"><g:message code="reports.workOrderPeriod"/> =   
-            ${customPreventiveOrderParams?.fromWorkOrderPeriod?:message(code:'reports.filters.none')} - 
-            ${customPreventiveOrderParams?.toWorkOrderPeriod?:message(code:'reports.filters.none')}</a>,        
+            ${fromWorkOrderPeriod?:message(code:'reports.filters.none')} - 
+            ${toWorkOrderPeriod?:message(code:'reports.filters.none')}</a>,        
         </g:if>
       </li>
     </g:if>
