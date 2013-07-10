@@ -161,7 +161,7 @@ class UserService {
 		return ((user.userType == UserType.TECHNICIANDH) && (user.location instanceof DataLocation) && (user.location as DataLocation).manages)
 	}
 
-	List<EquipmentReport> getSavedReportsByUser(def user, def reportType){
+	def getSavedReportsByUser(def user, ReportType reportType){
 		def savedReportsByUser = null
 		def criteria = null
 		switch(reportType){
@@ -175,7 +175,7 @@ class UserService {
 				criteria = PreventiveMaintenanceReport.createCriteria();
 				break;
 			case ReportType.SPAREPARTS:
-				// TODO
+				criteria = SparePartReport.createCriteria();
 				break;
 		}
 		if(criteria != null){

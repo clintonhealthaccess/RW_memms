@@ -30,61 +30,59 @@
   </ul>
   
   <ul>
-    <g:if test="${customizedReportName != null && !customizedReportName.empty}">
+    <g:if test="${selectedReport != null || (customizedReportName != null && !customizedReportName.empty)}">
       <li>
         <span>Report Filter Summary:</span>
         <a href="#"><g:message code="reports.dataLocation"/> = 
-          ${customWorkOrderParams?.dataLocations?.size()}</a>,
+          ${dataLocations?.size()}</a>,
         <a href="#"><g:message code="reports.department"/> = 
-          ${customWorkOrderParams?.departments?.size()}</a>,
+          ${departments?.size()}</a>,
         <a href="#"><g:message code="reports.equipmentType"/> = 
-          ${customWorkOrderParams?.equipmentTypes?.size()}</a>,
+          ${equipmentTypes?.size()}</a>,
         <a href="#"><g:message code="reports.cost"/> = 
-          ${customWorkOrderParams?.fromCost?:message(code:'reports.filters.none')} - 
-          ${customWorkOrderParams?.toCost?:message(code:'reports.filters.none')}</a>,
+          ${fromCost?:message(code:'reports.filters.none')} - 
+          ${toCost?:message(code:'reports.filters.none')}</a>,
         <a href="#"><g:message code="reports.currency"/> = 
-          ${customWorkOrderParams?.costCurrency?:message(code:'reports.filters.none')}</a>,
+          ${costCurrency?:message(code:'reports.filters.none')}</a>,
 
         <g:if test="${reportSubType == ReportSubType.WORKORDERS}">
           <a href="#"><g:message code="reports.workOrderStatus"/> =   
-            <g:if test="${customWorkOrderParams?.workOrderStatus == null || customWorkOrderParams?.workOrderStatus.empty}">
+            <g:if test="${workOrderStatus == null || workOrderStatus.empty}">
               ${message(code:'reports.filters.none')},
             </g:if>
             <g:else>
               <g:each in="${OrderStatus.values() - OrderStatus.NONE}" var="statusEnum">
-                <g:if test="${customWorkOrderParams?.workOrderStatus?.contains(statusEnum)}">
+                <g:if test="${workOrderStatus?.contains(statusEnum)}">
                   ${message(code: statusEnum?.messageCode+'.'+statusEnum?.name)},
                 </g:if>
               </g:each>
             </g:else>
           </a>
           <a href="#"><g:message code="reports.workOrderPeriod"/> =   
-            ${Utils.formatDate(customWorkOrderParams?.fromWorkOrderPeriod)?:message(code:'reports.filters.none')} - 
-            ${Utils.formatDate(customWorkOrderParams?.toWorkOrderPeriod)?:message(code:'reports.filters.none')}</a>,        
-          
+            ${Utils.formatDate(fromWorkOrderPeriod)?:message(code:'reports.filters.none')} - 
+            ${Utils.formatDate(toWorkOrderPeriod)?:message(code:'reports.filters.none')}</a>,        
           <a href="#"><g:message code="reports.inventory.warranty.label"/> = 
-            ${customWorkOrderParams?.warranty?'&radic;':message(code:'reports.filters.none')}</a>
+            ${warranty?'&radic;':message(code:'reports.filters.none')}</a>
         </g:if>
 
         <g:if test="${reportSubType == ReportSubType.STATUSCHANGES}">
           <a href="#"><g:message code="reports.statusChanges"/> = 
-            <g:if test="${customWorkOrderParams?.statusChanges == null || customWorkOrderParams?.statusChanges.empty}">
+            <g:if test="${statusChanges == null || statusChanges.empty}">
               ${message(code:'reports.filters.none')},
             </g:if>
             <g:else>
               <g:each in="${WorkOrderStatusChange.values()}" var="statusEnum">
-                <g:if test="${customWorkOrderParams?.statusChanges?.contains(statusEnum)}">
+                <g:if test="${statusChanges?.contains(statusEnum)}">
                   ${message(code: statusEnum?.messageCode+'.'+statusEnum?.name)},
                 </g:if>
               </g:each>
             </g:else>
           </a>
           <a href="#"><g:message code="reports.statusChangesPeriod"/> =   
-            ${Utils.formatDate(customWorkOrderParams?.fromStatusChangesPeriod)?:message(code:'reports.filters.none')} - 
-            ${Utils.formatDate(customWorkOrderParams?.toStatusChangesPeriod)?:message(code:'reports.filters.none')}</a>,
-          
+            ${Utils.formatDate(fromStatusChangesPeriod)?:message(code:'reports.filters.none')} - 
+            ${Utils.formatDate(toStatusChangesPeriod)?:message(code:'reports.filters.none')}</a>,
           <a href="#"><g:message code="reports.inventory.warranty.label"/> = 
-            ${customWorkOrderParams?.warranty?'&radic;':message(code:'reports.filters.none')}</a>
+            ${warranty?'&radic;':message(code:'reports.filters.none')}</a>
         </g:if>
 
       </li>
