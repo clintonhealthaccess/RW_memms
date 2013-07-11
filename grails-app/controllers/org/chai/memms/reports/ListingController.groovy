@@ -96,12 +96,6 @@ class ListingController extends AbstractController{
 		]
 	}
 
-	/*def ajaxModel(def entities,def dataLocation,def searchTerm) {
-		def model = model(entities, dataLocation) << [q:searchTerm]
-		def listHtml = g.render(template:"/reports/listing/listing",model:model)
-		render(contentType:"text/json") { results = [listHtml]}
-	}*/
-
 	def index ={
 		redirect(action: "view", params: params)
 	}
@@ -602,14 +596,14 @@ class ListingController extends AbstractController{
 							warranty: savedReport.underWarranty
 						]
 					}
-					// TODO AR - Add these properties to saved report
-					 /*if(savedReport.reportSubType == ReportSubType.STATUSCHANGES){
-					 	savedCustomizedListingParams << [
-					 		statusChanges: statusChanges,
-					 		fromStatusChangesPeriod: fromStatusChangesPeriod,
-					 		toStatusChangesPeriod: toStatusChangesPeriod
+					// DONE AR
+					 if(savedReport.reportSubType == ReportSubType.STATUSCHANGES){
+					 	customizedListingParams << [
+					 		statusChanges: savedReport.statusChanges,
+					 		fromStatusChangesPeriod: savedReport.fromStatusChangesPeriod,
+					 		toStatusChangesPeriod: savedReport.toStatusChangesPeriod
 					 	]
-					 }*/
+					 }
 
 					adaptParamsForList()
 					savedCustomizedListingReport = equipmentListingReportService.getCustomReportOfEquipments(user,customizedListingParams,params)
@@ -628,22 +622,22 @@ class ListingController extends AbstractController{
 						noCost: savedReport.noCostSpecified,
 						warranty: savedReport.underWarranty
 					]
+					// DONE AR
+					 if(savedReport.reportSubType == ReportSubType.WORKORDERS){
+					 	customizedListingParams << [
+					 		workOrderStatus: savedReport.workOrderStatus,
+					 		fromWorkOrderPeriod: savedReport.fromDate,
+					 		toWorkOrderPeriod: savedReport.toDate
+					 	]
+					 }
 					// TODO AR - Add these properties to saved report
-					// if(savedReport.reportSubType == ReportSubType.WORKORDERS){
-					// 	customizedListingParams << [
-					// 		workOrderStatus: workOrderStatus,
-					// 		fromWorkOrderPeriod: fromWorkOrderPeriod,
-					// 		toWorkOrderPeriod: toWorkOrderPeriod
-					// 	]
-					// }
-					// TODO AR - Add these properties to saved report
-					// if(savedReport.reportSubType == ReportSubType.STATUSCHANGES){
-					// 	customizedListingParams << [
-					// 		statusChanges: statusChanges,
-					// 		fromStatusChangesPeriod: fromStatusChangesPeriod,
-					// 		toStatusChangesPeriod: toStatusChangesPeriod
-					// 	]
-					// }
+					 if(savedReport.reportSubType == ReportSubType.STATUSCHANGES){
+					 	customizedListingParams << [
+					 		statusChanges: savedReport.statusChanges,
+					 		fromStatusChangesPeriod: savedReport.fromStatusChangesPeriod,
+					 		toStatusChangesPeriod: savedReport.toStatusChangesPeriod
+					 	]
+					 }
 					customizedListingParams << [reportTypeOptions: savedReport.displayOptions]
 					adaptParamsForList()
 					savedCustomizedListingReport = workOrderListingReportService.getCustomReportOfWorkOrders(user,customizedListingParams,params)
@@ -661,15 +655,15 @@ class ListingController extends AbstractController{
 						costCurrency: savedReport.currency,
 						noCost: savedReport.noCostSpecified
 					]
-					// TODO AR - Add these properties to saved report
-					// if(savedReport.reportSubType == ReportSubType.WORKORDERS){
-					// 	customizedListingParams << [
-					// 		workOrderStatus: workOrderStatus,
-					// 		fromWorkOrderPeriod: fromWorkOrderPeriod,
-					// 		toWorkOrderPeriod: toWorkOrderPeriod,
-					// 		whoIsResponsible: whoIsResponsible
-					// 	]
-					// }
+					// DONE AR
+					if(savedReport.reportSubType == ReportSubType.WORKORDERS){
+					 	customizedListingParams << [
+					 		workOrderStatus: savedReport.preventiveOrderStatus,
+					 		fromWorkOrderPeriod: savedReport.fromDate,
+					 		toWorkOrderPeriod: savedReport.toDate,
+					 		whoIsResponsible: savedReport.preventionResponsible 
+					 	]
+					 }
 					customizedListingParams << [reportTypeOptions: savedReport.displayOptions]
 					adaptParamsForList()
 					savedCustomizedListingReport = preventiveOrderListingReportService.getCustomReportOfPreventiveOrders(user,customizedListingParams,params)
@@ -1084,11 +1078,11 @@ class ListingController extends AbstractController{
 		}
 
 		if(reportSubType == ReportSubType.STATUSCHANGES){
-			//def statusChanges = getSparePartStatusChanges()
+			def statusChanges = getSparePartStatusChanges()
 			def fromStatusChangesPeriod = getPeriod('fromStatusChangesPeriod')
 			def toStatusChangesPeriod = getPeriod('toStatusChangesPeriod')
 			customizedListingParams << [
-			//	statusChanges: statusChanges,
+				statusChanges: statusChanges,
 				fromStatusChangesPeriod: fromStatusChangesPeriod,
 				toStatusChangesPeriod: toStatusChangesPeriod
 			]

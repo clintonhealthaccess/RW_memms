@@ -93,6 +93,10 @@ class PreventiveOrderListingReportService {
 		def responsibles = customPreventiveOrderParams.get('whoIsResponsible')
 		def noCost = customPreventiveOrderParams.get('noCost')
 		
+		def fromWorkOrderPeriod = customPreventiveOrderParams.get('fromWorkOrderPeriod')
+		def toWorkOrderPeriod = customPreventiveOrderParams.get('toWorkOrderPeriod')
+		
+		
 		def criteria = PreventiveOrder.createCriteria();
 	
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
@@ -117,6 +121,12 @@ class PreventiveOrderListingReportService {
 				inList ("preventionResponsible",responsibles)
 			if(noCost != null && noCost)
 				eq ("equip.purchaseCost", null)
+				
+			// TODO
+			// if(fromWorkOrderPeriod != null)
+			// 	gt ("TODO", fromWorkOrderPeriod)
+			// if(toWorkOrderPeriod != null)
+			// 	lt ("TODO", toWorkOrderPeriod)
 		}
 	}
 
