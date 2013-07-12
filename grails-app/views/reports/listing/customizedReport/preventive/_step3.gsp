@@ -16,9 +16,9 @@
 
 <ul class="onecol-checkboxes right">
 	<li><g:checkBox name="preventiveOptions" value="scheduleNextInterventions" checked="false" />
-		<span>${message(code:'listing.report.preventive.location.label')}</span></li>
+		<span>${message(code:'listing.report.preventive.schedule.next.interventions.label')}</span></li>
 	<li><g:checkBox name="preventiveOptions" value="percentageInterventionsDone" checked="false" />
-		<span>${message(code:'listing.report.preventive.location.label')}</span></li>
+		<span>${message(code:'listing.report.preventive.percentage.interventions.done.label')}</span></li>
 	<li><g:checkBox name="preventiveOptions" value="recurrencePeriod" checked="false" /><span>${message(code:'listing.report.preventive.reoccurrence.period.label')}</span></li>
 	<li><g:checkBox name="preventiveOptions" value="startDate" checked="false" /><span>${message(code:'listing.report.preventive.start.date.label')}</span></li>
 	<li><g:checkBox name="preventiveOptions" value="responsible" checked="false" /><span>${message(code:'listing.report.preventive.responsible.label')}</span></li>
