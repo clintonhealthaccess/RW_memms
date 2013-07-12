@@ -35,17 +35,19 @@
             <span><g:message code="reports.selectAll"/></span>
           </li>
           <li class="modular">
-            <label><g:message code="reports.cost"/>:</label>
-            <input type="text" name="fromCost"/><span class="dash">-</span><input type="text" name="toCost"/>
-            <select name="costCurrency">
-              <g:each in="${currencies}" var="currencyEnum">
-                <option value="${currencyEnum.key}">
-                  ${message(code:'currency.'+currencyEnum.value)}
-                </option>
-              </g:each>
-            </select>
+            <div class='row'>
+              <label><g:message code="reports.cost"/>:</label>
+              <input type="text" name="fromCost"/><span class="dash">-</span><input type="text" name="toCost"/>
+              <select name="costCurrency">
+                <g:each in="${currencies}" var="currencyEnum">
+                  <option value="${currencyEnum.key}">
+                    ${message(code:'currency.'+currencyEnum.value)}
+                  </option>
+                </g:each>
+              </select>
+            </div>
             <g:checkBox name="noCost" class='clear-left'/>
-            <span><g:message code="reports.no.cost"/></span>
+            <span class='clear-right'><g:message code="reports.no.cost"/></span>
           </li>
         </g:if>
         <g:if test="${[ReportType.SPAREPARTS].contains(reportType)}">
