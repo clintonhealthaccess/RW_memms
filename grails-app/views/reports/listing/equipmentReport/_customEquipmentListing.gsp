@@ -20,6 +20,7 @@
 			</g:if>
 
 			%{-- <g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
+				// TODO SL AFTER RELEASE
 				<g:sortableColumn property="statusChanges"  title="Status Changes" params="[q:q]" />
 			</g:if> --}%
 
@@ -77,6 +78,7 @@
 				</g:if>
 
 				%{-- <g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
+					// TODO SL AFTER RELEASE
 					<g:set var="statusChangesEnum" value="${equipment.getTimeBasedStatusChange(customEquipmentParams?.statusChanges)}"/>
 					<td>${message(code: statusChangesEnum?.messageCode+'.'+statusChangesEnum?.name)}</td>
 				</g:if> --}%

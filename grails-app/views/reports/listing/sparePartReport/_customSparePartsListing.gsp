@@ -14,9 +14,11 @@
 			<g:if test="${reportTypeOptions.contains('quantityInStock')}">
 				<th>Quantity in Stock</th>
 			</g:if>
-			<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
-				%{-- TODO SL --}%
-			</g:if>
+
+			%{-- <g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
+				// TODO SL AFTER RELEASE
+			</g:if> --}%
+			
 			<g:if test="${reportTypeOptions.contains('status')}">
 				<th>Status</th>
 			</g:if>
@@ -62,9 +64,11 @@
 				<g:if test="${reportTypeOptions.contains('quantityInStock')}">
 					<td>${sparePart.inStockQuantity}</td>
 				</g:if>
-				<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
-					%{-- TODO SL --}%
-				</g:if>
+
+				%{-- <g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
+					// TODO SL AFTER RELEASE
+				</g:if> --}%
+
 				<g:if test="${reportTypeOptions.contains('status')}">
 					<td>${message(code: sparePart.status?.messageCode+'.'+sparePart.status?.name)}</td>
 				</g:if>

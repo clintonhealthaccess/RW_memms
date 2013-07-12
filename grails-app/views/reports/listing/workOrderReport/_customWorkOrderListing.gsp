@@ -26,6 +26,7 @@
 			</g:if>
 
 			%{-- <g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
+				// TODO SL AFTER RELEASE
 				<g:sortableColumn property="statusChanges"  title="Status Changes" params="[q:q]" />
 			</g:if> --}%
 
@@ -81,6 +82,7 @@
 				</g:if>
 
 				%{-- <g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
+					// TODO SL AFTER RELEASE
 					<g:set var="statusChangesEnum" value="${order.getTimeBasedStatusChange(customWorkOrderParams.statusChanges)}"/>
 					<td>${message(code: statusChangesEnum?.messageCode+'.'+statusChangesEnum?.name)}</td>
 				</g:if> --}%
@@ -92,7 +94,7 @@
 					<td>${order.travelTime.numberOfMinutes}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('workTime')}">
-					%{-- TODO AR property = number of minutes --}%
+					%{-- TODO AR property = number of minutes AFTER RELEASE --}%
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('estimatedCost')}">
 					<td>${order.estimatedCost}</td>
@@ -104,7 +106,7 @@
 					<td>${order.failureReasonDetails}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('listPerformedActions')}">
-					%{-- TODO AR corrective process property --}%
+					%{-- TODO AR corrective process property AFTER RELEASE --}%
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('description')}">
 					<td><g:stripHtml field="${order.description}" chars="30"/></td>
