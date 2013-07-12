@@ -87,15 +87,18 @@
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('scheduleNextInterventions')}">
 					%{-- TODO AR calculation AFTER RELEASE --}%
+					<td></td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('percentageInterventionsDone')}">
 					%{-- TODO AR calculation AFTER RELEASE --}%
+					<td></td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('recurrencePeriod')}">
 					%{-- TODO AR calculation AFTER RELEASE --}%
+					<td></td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('startDate')}">
-					<td>${order.firstOccurenceOn}</td>
+					<td>${order.firstOccurenceOn?.timeDate}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('responsible')}">
 					<td>${order.preventionResponsible}</td>
