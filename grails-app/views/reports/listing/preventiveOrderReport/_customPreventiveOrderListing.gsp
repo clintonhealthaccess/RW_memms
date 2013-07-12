@@ -95,16 +95,16 @@
 					%{-- TODO AR calculation AFTER RELEASE --}%
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('startDate')}">
-					%{-- TODO AR property --}%
+					<td>${order.firstOccurenceOn}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('responsible')}">
-					%{-- TODO AR property --}%
+					<td>${order.preventionResponsible}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('actionName')}">
-					%{-- TODO AR property --}%
+					<td>${order.names}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('actionDescription')}">
-					%{-- TODO property --}%
+					<td>${order.description}</td>
 				</g:if>
 			</tr>
 		</g:each>
