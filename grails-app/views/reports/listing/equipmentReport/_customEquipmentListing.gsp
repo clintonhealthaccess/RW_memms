@@ -44,12 +44,10 @@
 				<g:sortableColumn property="purchaseDate"  title="${message(code: 'equipment.purchase.date.label')}" params="[q:q]" />
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('cost')}">
-				%{-- TODO AR --}%
-				<g:sortableColumn property="cost"  title="${message(code: 'equipment.purchase.cost.label')}" params="[q:q]" />
+				<g:sortableColumn property="purchaseCost"  title="${message(code: 'equipment.purchase.cost.label')}" params="[q:q]" />
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('warrantyProvider')}">
-				%{-- TODO AR --}%
-				<th><g:message code="listing.report.equipment.warranty.provider.label"/></th>
+				<g:sortableColumn property="warranty"  title="${message(code: 'listing.report.equipment.warranty.provider.label')}" params="[q:q]" />
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('warrantyPeriodRemaining')}">
 				%{-- TODO AR --}%
@@ -115,6 +113,7 @@
 				<g:if test="${reportTypeOptions.contains('warrantyProvider')}">
 					<td>${equipment.warranty?.contact?.contactName}</td>
 				</g:if>
+				<!-- Calculations -->
 				<g:if test="${reportTypeOptions.contains('warrantyPeriodRemaining')}">
 					%{-- TODO AR --}%
 					<td>${equipment.warrantyPeriod?.numberOfMonths}</td>
