@@ -25,32 +25,34 @@
 			<g:if test="${reportTypeOptions.contains('manufacturer')}">
 				<g:sortableColumn property="manufacturer"  title="${message(code: 'provider.type.manufacturer')}" params="[q:q]" />
 			</g:if>
-			<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
-				%{-- TODO SL --}%
-			</g:if>
+
+			%{-- <g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
+				//TODO SL
+			</g:if> --}%
+
 			<g:if test="${reportTypeOptions.contains('currentStatus')}">
 				<g:sortableColumn property="status"  title="${message(code: 'entity.status.label')}" params="[q:q]" />
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('scheduleNextInterventions')}">
-				%{-- TODO --}%
+				%{-- TODO AR --}%
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('percentageInterventionsDone')}">
-				%{-- TODO --}%
+				%{-- TODO AR --}%
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('recurrencePeriod')}">
-				%{-- TODO --}%
+				%{-- TODO AR --}%
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('startDate')}">
-				%{-- TODO --}%
+				%{-- TODO AR --}%
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('responsible')}">
-				%{-- TODO --}%
+				%{-- TODO AR --}%
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('actionName')}">
-				%{-- TODO --}%
+				%{-- TODO AR --}%
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('actionDescription')}">
-				%{-- TODO --}%
+				%{-- TODO AR --}%
 			</g:if>
 		</tr>
 	</thead>
@@ -75,32 +77,34 @@
 				<g:if test="${reportTypeOptions.contains('manufacturer')}">
 					<td>${order.equipment.manufacturer?.contact?.contactName}</td>
 				</g:if>
-				<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
-					%{-- TODO SL --}%
-				</g:if>
+
+%{-- 				<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
+					// TODO SL
+				</g:if> --}%
+
 				<g:if test="${reportTypeOptions.contains('currentStatus')}">
 					<td>${message(code: order.status?.messageCode+'.'+order.status?.name)}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('scheduleNextInterventions')}">
-					%{-- TODO --}%
+					%{-- TODO AR calculation AFTER RELEASE --}%
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('percentageInterventionsDone')}">
-					%{-- TODO --}%
+					%{-- TODO AR calculation AFTER RELEASE --}%
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('recurrencePeriod')}">
-					%{-- TODO --}%
+					%{-- TODO AR calculation AFTER RELEASE --}%
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('startDate')}">
-					%{-- TODO --}%
+					%{-- TODO AR property --}%
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('responsible')}">
-					%{-- TODO --}%
+					%{-- TODO AR property --}%
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('actionName')}">
-					%{-- TODO --}%
+					%{-- TODO AR property --}%
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('actionDescription')}">
-					%{-- TODO --}%
+					%{-- TODO property --}%
 				</g:if>
 			</tr>
 		</g:each>

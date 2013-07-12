@@ -24,36 +24,37 @@
 			<g:if test="${reportTypeOptions.contains('manufacturer')}">
 				<g:sortableColumn property="manufacturer"  title="${message(code: 'provider.type.manufacturer')}" params="[q:q]" />
 			</g:if>
-			<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
-				%{-- TODO --}%
+
+			%{-- <g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
 				<g:sortableColumn property="statusChanges"  title="Status Changes" params="[q:q]" />
-			</g:if>
+			</g:if> --}%
+
 			<g:if test="${reportTypeOptions.contains('currentStatus')}">
 				<g:sortableColumn property="currentStatus" title="${message(code: 'entity.status.label')}" params="[q:q]" />
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('travelTime')}">
-				%{-- TODO --}%
+				%{-- TODO AR --}%
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('workTime')}">
-				%{-- TODO --}%
+				%{-- TODO AR --}%
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('estimatedCost')}">
-				%{-- TODO --}%
+				%{-- TODO AR --}%
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('departmentRequestedOrder')}">
-				%{-- TODO --}%
+				%{-- TODO AR --}%
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('reasonsEquipmentFailure')}">
-				%{-- TODO --}%
+				%{-- TODO AR --}%
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('listPerformedActions')}">
-				%{-- TODO --}%
+				%{-- TODO AR --}%
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('description')}">
 				<th><g:message code="work.order.description.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('dateOfEvent')}">
-				%{-- TODO --}%
+				%{-- TODO AR --}%
 			</g:if>
 		</tr>
 	</thead>
@@ -79,37 +80,37 @@
 					<td>${order.equipment.manufacturer?.contact?.contactName}</td>
 				</g:if>
 
-				<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
+				%{-- <g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
 					<g:set var="statusChangesEnum" value="${order.getTimeBasedStatusChange(customWorkOrderParams.statusChanges)}"/>
 					<td>${message(code: statusChangesEnum?.messageCode+'.'+statusChangesEnum?.name)}</td>
-				</g:if>
+				</g:if> --}%
 
 				<g:if test="${reportTypeOptions.contains('currentStatus')}">
 					<td>${message(code: order.currentStatus?.messageCode+'.'+order.currentStatus?.name)}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('travelTime')}">
-					%{-- TODO --}%
+					%{-- TODO AR property = number of minutes --}%
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('workTime')}">
-					%{-- TODO --}%
+					%{-- TODO AR property = number of minutes --}%
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('estimatedCost')}">
-					%{-- TODO --}%
+					%{-- TODO AR property --}%
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('departmentRequestedOrder')}">
-					%{-- TODO --}%
+					%{-- TODO AR equipment property --}%
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('reasonsEquipmentFailure')}">
-					%{-- TODO --}%
+					%{-- TODO AR property --}%
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('listPerformedActions')}">
-					%{-- TODO --}%
+					%{-- TODO AR corrective process property --}%
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('description')}">
 					<td><g:stripHtml field="${order.description}" chars="30"/></td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('dateOfEvent')}">
-					%{-- TODO --}%
+					%{-- TODO AR property --}%
 				</g:if>
 			</tr>
 		</g:each>
