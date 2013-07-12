@@ -10,7 +10,7 @@
 		<li><g:checkBox name="spartPartsOptions" value="model" checked="false" /><span>${message(code:'listing.report.spare.part.model.label')}</span></li>
 		<li><g:checkBox name="spartPartsOptions" value="manufacturer" checked="false" /><span>${message(code:'listing.report.spare.part.manufacturer.label')}</span></li>
 		<li><g:checkBox name="spartPartsOptions" value="cost" checked="false" /><span>${message(code:'listing.report.spare.part.cost.label')}</span></li>
-		<li><g:checkBox name="spartPartsOptions" value="warrantyPeriodRemaining" checked="false" /><span>${message(code:'listing.report.spare.part.warranty.remaining.label')}</span></li>
+		%{-- <li><g:checkBox name="spartPartsOptions" value="warrantyPeriodRemaining" checked="false" /><span>${message(code:'listing.report.spare.part.warranty.remaining.label')}</span></li> --}%
 		<li><g:checkBox name="spartPartsOptions" value="discontinuedDate" checked="false" /><span>${message(code:'listing.report.spare.part.discontinued.date.label')}</span></li>
 	</g:if>
 	<g:if test="${reportSubType == ReportSubType.STATUSCHANGES}">

@@ -18,15 +18,12 @@
 			%{-- <g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
 				// TODO SL AFTER RELEASE
 			</g:if> --}%
-			
+
 			<g:if test="${reportTypeOptions.contains('status')}">
 				<th>Status</th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('manufacturer')}">
 				<g:sortableColumn property="manufacturer"  title="${message(code: 'provider.type.manufacturer')}" params="[q:q]" />
-			</g:if>
-			<g:if test="${reportTypeOptions.contains('warrantyPeriodRemaining')}">
-				<th>Warranty Period Remaining</th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('discontinuedDate')}">
 				<th>Discontinued Date</th>
@@ -74,9 +71,6 @@
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('manufacturer')}">
 					<td>${sparePart.type.manufacturer?.contact?.contactName}</td>
-				</g:if>
-				<g:if test="${reportTypeOptions.contains('warrantyPeriodRemaining')}">
-					<td>%{-- TODO --}%</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('discontinuedDate')}">
 					<td>${Utils.formatDate(sparePart.type.discontinuedDate)}</td>
