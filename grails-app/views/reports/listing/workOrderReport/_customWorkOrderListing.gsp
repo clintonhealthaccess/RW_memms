@@ -89,10 +89,11 @@
 					<td>${message(code: order.currentStatus?.messageCode+'.'+order.currentStatus?.name)}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('travelTime')}">
-					<td>${order.travelTime.numberOfMinutes}</td>
+					<td>${order.travelTime?.numberOfMinutes}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('workTime')}">
 					%{-- TODO AR property = number of minutes --}%
+					<td>${order.workTime?.numberOfMinutes}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('estimatedCost')}">
 					<td>${order.estimatedCost}</td>
@@ -105,6 +106,7 @@
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('listPerformedActions')}">
 					%{-- TODO AR corrective process property --}%
+					<td>&nbsp;</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('description')}">
 					<td><g:stripHtml field="${order.description}" chars="30"/></td>

@@ -53,7 +53,7 @@
 				<th><g:message code="listing.report.equipment.warranty.period.remaining.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('currentValue')}">
-				<g:sortableColumn property="currentValueOfThisEquipment"  title="${message(code: 'equipment.current.value.label')}" params="[q:q]" />
+			 	<th><g:message code="equipment.current.value.label"/></th>
 			</g:if>
 		</tr>
 	</thead>
