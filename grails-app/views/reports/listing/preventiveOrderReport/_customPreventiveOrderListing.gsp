@@ -34,25 +34,25 @@
 				<g:sortableColumn property="status"  title="${message(code: 'entity.status.label')}" params="[q:q]" />
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('scheduleNextInterventions')}">
-				%{-- TODO AR --}%
+				<th><g:message code="listing.report.preventive.schedule.next.interventions.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('percentageInterventionsDone')}">
-				%{-- TODO AR --}%
+				<th><g:message code="listing.report.preventive.percentage.interventions.done.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('recurrencePeriod')}">
-				%{-- TODO AR --}%
+				<th><g:message code="listing.report.preventive.reoccurrence.period.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('startDate')}">
-				%{-- TODO AR --}%
+				<th><g:message code="listing.report.preventive.start.date.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('responsible')}">
-				%{-- TODO AR --}%
+				<th><g:message code="listing.report.preventive.responsible.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('actionName')}">
-				%{-- TODO AR --}%
+				<th><g:message code="listing.report.preventive.action.name.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('actionDescription')}">
-				%{-- TODO AR --}%
+				<th><g:message code="listing.report.preventive.action.description.label"/></th>
 			</g:if>
 		</tr>
 	</thead>
@@ -78,7 +78,7 @@
 					<td>${order.equipment.manufacturer?.contact?.contactName}</td>
 				</g:if>
 
-%{-- 				<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
+				%{-- <g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
 					// TODO SL
 				</g:if> --}%
 

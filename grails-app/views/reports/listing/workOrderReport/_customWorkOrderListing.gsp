@@ -33,28 +33,28 @@
 				<g:sortableColumn property="currentStatus" title="${message(code: 'entity.status.label')}" params="[q:q]" />
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('travelTime')}">
-				%{-- TODO AR --}%
+				<th><g:message code="listing.report.corrective.travel.time.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('workTime')}">
-				%{-- TODO AR --}%
+				<th><g:message code="listing.report.corrective.work.time.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('estimatedCost')}">
-				%{-- TODO AR --}%
+				<th><g:message code="listing.report.corrective.estimated.cost.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('departmentRequestedOrder')}">
-				%{-- TODO AR --}%
+				<th><g:message code="listing.report.corrective.department.order.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('reasonsEquipmentFailure')}">
-				%{-- TODO AR --}%
+				<th><g:message code="listing.report.corrective.failure.reason.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('listPerformedActions')}">
-				%{-- TODO AR --}%
+				<th><g:message code="listing.report.corrective.performed.actions.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('description')}">
-				<th><g:message code="work.order.description.label"/></th>
+				<th><g:message code="listing.report.corrective.problem.description.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('dateOfEvent')}">
-				%{-- TODO AR --}%
+				<th><g:message code="listing.report.corrective.event.date.label"/></th>
 			</g:if>
 		</tr>
 	</thead>
