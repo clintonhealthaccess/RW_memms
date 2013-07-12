@@ -33,7 +33,7 @@
 				<g:sortableColumn property="currentStatus" title="${message(code: 'entity.status.label')}" params="[q:q]" />
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('travelTime')}">
-				%{-- TODO AR --}%
+				%{-- TODO AR --}
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('workTime')}">
 				%{-- TODO AR --}%
@@ -89,19 +89,19 @@
 					<td>${message(code: order.currentStatus?.messageCode+'.'+order.currentStatus?.name)}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('travelTime')}">
-					%{-- TODO AR property = number of minutes --}%
+					<td>${order.travelTime.numberOfMinutes}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('workTime')}">
 					%{-- TODO AR property = number of minutes --}%
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('estimatedCost')}">
-					%{-- TODO AR property --}%
+					<td>${order.estimatedCost}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('departmentRequestedOrder')}">
-					%{-- TODO AR equipment property --}%
+					<td>${order.equipment?.department?.code}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('reasonsEquipmentFailure')}">
-					%{-- TODO AR property --}%
+					<td>${order.failureReasonDetails}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('listPerformedActions')}">
 					%{-- TODO AR corrective process property --}%
@@ -110,7 +110,7 @@
 					<td><g:stripHtml field="${order.description}" chars="30"/></td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('dateOfEvent')}">
-					%{-- TODO AR property --}%
+				<td>${order.dateCreated}</td>
 				</g:if>
 			</tr>
 		</g:each>
