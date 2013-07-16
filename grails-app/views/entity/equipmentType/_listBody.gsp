@@ -37,7 +37,7 @@
 				${Utils.formatDateWithTime(type?.lastUpdated)}
 			</td>
 			<td>
-				<g:if test="${!type.preventionActions || type.preventionActions.size()==0}">
+				<g:if test="${!type.preventiveActions || type.preventiveActions.size()==0}">
 					<a href="${createLinkWithTargetURI(controller:'equipmentType', action:'edit', params:[id: type.id])}" class="next gray medium"> 
 							<g:message code="preventive.add.preventive.action.label" />
 					</a>
