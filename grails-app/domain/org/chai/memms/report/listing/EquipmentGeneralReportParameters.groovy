@@ -7,10 +7,12 @@ import groovy.transform.EqualsAndHashCode;
 
 import java.util.Date;
 
-import org.chai.memms.Warranty
 import org.chai.memms.inventory.Department;
 import org.chai.memms.inventory.EquipmentType;
+import org.chai.memms.security.User;
 import org.chai.location.DataLocation;
+import org.chai.memms.util.Utils.ReportType;
+import org.chai.memms.util.Utils.ReportSubType;
 
 /**
  * @author Aphrodice Rwagaju
@@ -19,17 +21,20 @@ import org.chai.location.DataLocation;
 @EqualsAndHashCode(includes='id')
 class EquipmentGeneralReportParameters {
 
+	String reportName
+	ReportType reportType
+	ReportSubType reportSubType
 	Date dateCreated
 	Double lowerLimitCost
 	Double upperLimitCost
 	String currency
 	Date fromDate
 	Date toDate
-	Warranty underWarranty
-
+	User savedBy
+	boolean noCostSpecified
+	String displayOptions
+	
 	static hasMany = [dataLocations:DataLocation,departments:Department,equipmentTypes:EquipmentType]
-	static embedded = ["underWarranty"]
-
 	static constraints = {
 		dataLocations nullable: true, blank: true
 		departments nullable: true, blank: true
@@ -39,7 +44,9 @@ class EquipmentGeneralReportParameters {
 		currency nullable: true, blank: true
 		fromDate nullable: true, blank: true
 		toDate nullable: true, blank: true
-		underWarranty nullable: true, blank: true
+		savedBy nullable: false
+		noCostSpecified nullable: false
+		displayOptions nullable: false
 	}
 
 	static mapping = {

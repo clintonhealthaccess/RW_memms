@@ -1,29 +1,29 @@
 <%@ page import="org.chai.memms.util.Utils.ReportSubType" %>
 
 <ul class="onecol-checkboxes left">
-	<li><g:checkBox name="correctiveOptions" value="location" /><span>Location</span></li>
-	<li><g:checkBox name="correctiveOptions" value="code" /><span>Code</span></li>
-	<li><g:checkBox name="correctiveOptions" value="serialNumber" /><span>Serial Number</span></li>
-	<li><g:checkBox name="correctiveOptions" value="equipmentType" /><span>Equipment Type</span></li>
-	<li><g:checkBox name="correctiveOptions" value="model" /><span>Model</span></li>
-	<li><g:checkBox name="correctiveOptions" value="manufacturer" /><span>Manufacturer</span></li>
+	<li><g:checkBox name="correctiveOptions" value="location" /><span>${message(code:'listing.report.corrective.location.label')}</span></li>
+	<li><g:checkBox name="correctiveOptions" value="code" /><span>${message(code:'listing.report.corrective.code.label')}</span></li>
+	<li><g:checkBox name="correctiveOptions" value="serialNumber" /><span>${message(code:'listing.report.corrective.serial.number.label')}</span></li>
+	<li><g:checkBox name="correctiveOptions" value="equipmentType" /><span>${message(code:'listing.report.corrective.type.label')}</span></li>
+	<li><g:checkBox name="correctiveOptions" value="model" /><span>${message(code:'listing.report.corrective.model.label')}</span></li>
+	<li><g:checkBox name="correctiveOptions" value="manufacturer" /><span>${message(code:'listing.report.corrective.manufacturer.label')}</span></li>
 
 	<g:if test="${reportSubType == ReportSubType.STATUSCHANGES}">
-		<li><g:checkBox name="correctiveOptions" value="statusChanges" /><span>Status Changes</span></li>
+		<li><g:checkBox name="correctiveOptions" value="statusChanges" /><span>${message(code:'listing.report.corrective.status.changes.label')}</span></li>
 	</g:if>
-	<li><g:checkBox name="correctiveOptions" value="currentStatus" /><span>Current Status</span></li>
+	<li><g:checkBox name="correctiveOptions" value="currentStatus" /><span>${message(code:'listing.report.corrective.current.status.label')}</span></li>
 </ul>
 
 <ul class="onecol-checkboxes right">
-	<li><g:checkBox name="correctiveOptions" value="travelTime" checked="false" /><span>Travel Time</span></li>
-	<li><g:checkBox name="correctiveOptions" value="workTime" checked="false" /><span>Work Time</span></li>
-	<li><g:checkBox name="correctiveOptions" value="estimatedCost" checked="false" /><span>Estimated Cost</span></li>
+	<li><g:checkBox name="correctiveOptions" value="travelTime" checked="false" /><span>${message(code:'listing.report.corrective.travel.time.label')}</span></li>
+	<li><g:checkBox name="correctiveOptions" value="workTime" checked="false" /><span>${message(code:'listing.report.corrective.work.time.label')}</span></li>
+	<li><g:checkBox name="correctiveOptions" value="estimatedCost" checked="false" /><span>${message(code:'listing.report.corrective.estimated.cost.label')}</span></li>
 	<li><g:checkBox name="correctiveOptions" value="departmentRequestedOrder" checked="false" />
-		<span>Department Requested Order</span></li>
+		<span>${message(code:'listing.report.corrective.department.order.label')}</span></li>
 	<li><g:checkBox name="correctiveOptions" value="reasonsEquipmentFailure" checked="false" />
-		<span>Reasons Equipment Failure</span></li>
+		<span>${message(code:'listing.report.corrective.failure.reason.label')}</span></li>
 	<li><g:checkBox name="correctiveOptions" value="listPerformedActions" checked="false" />
-		<span>List Performed Actions</span></li>
-	<li><g:checkBox name="correctiveOptions" value="description" checked="false" /><span>Description of Problem</span></li>
-	<li><g:checkBox name="correctiveOptions" value="dateOfEvent" checked="false" /><span>Date of Event</span></li>
+		<span>${message(code:'listing.report.corrective.performed.actions.label')}</span></li>
+	<li><g:checkBox name="correctiveOptions" value="description" checked="false" /><span>${message(code:'listing.report.corrective.problem.description.label')}</span></li>
+	<li><g:checkBox name="correctiveOptions" value="dateOfEvent" checked="false" /><span>${message(code:'listing.report.corrective.event.date.label')}</span></li>
 </ul>

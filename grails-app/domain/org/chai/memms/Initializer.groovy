@@ -330,6 +330,7 @@ public class Initializer {
 			nyange.save(failOnError:true)
 		}		
 	}
+	
 	public static createInventoryStructure(){
 		
 		if(!Department.count()){
@@ -607,7 +608,7 @@ public class Initializer {
 			equipmentTen.warrantyPeriod = newPeriod(28)
 			equipmentTen.save(failOnError:true)
 			
-			def equipmentEleven = newEquipment("SERIAL11",PurchasedBy.BYFACILITY,null,null,true,newPeriod(7),"Room 10A1","290540",['en':'Equipment Descriptions Ten'],
+			def equipmentEleven = newEquipment("SERIAL11",PurchasedBy.BYFACILITY,null,null,true,newPeriod(7),"Room 10A1","200540",['en':'Equipment Descriptions Ten'],
 				getDate(7,4,2013),getDate(12,4,2013),"RWF",
 				'MODELTen3',
 				DataLocation.findByCode(KIREHE),
@@ -748,20 +749,20 @@ public class Initializer {
 		if(!SparePartType.count()){
 
 			//Add spare part types as defined in ecri
-			def spPtTypOne = newSparePartType("4323", ['en':'first spare part','fr':' premiere piece de rechange'],['en':'first spare part description','fr':' description de la premiere piece de rechange'],"4323-XYZ",Provider.findByCode("ONE"),now())
-			def spPtTypTwo = newSparePartType("4324", ['en':'second spare part','fr':' deuxieme piece de rechange'],['en':'second spare part description','fr':' description de la deuxieme piece de rechange'],"4324-ABC",Provider.findByCode("TWO"),now())
-			def spPtTypThree = newSparePartType("4325", ['en':'third spare part','fr':' troisieme piece de rechange'],['en':'third spare part description','fr':' description de la troisieme piece de rechange'],"4325-IJK",Provider.findByCode("THREE"),now())
+			def spPtTypOne = newSparePartType("4323", ['en':'Eleventh spare part type','fr':' Onzieme piece de rechange'],['en':'Eleventh spare part type description','fr':' description de la onzieme piece de rechange'],"4323-XYZ",Provider.findByCode("ONE"),now())
+			def spPtTypTwo = newSparePartType("4324", ['en':'Twelfth spare part type','fr':' Douzieme piece de rechange'],['en':'Twelfth spare part type description','fr':' description de la douzieme piece de rechange'],"4324-ABC",Provider.findByCode("TWO"),now())
+			def spPtTypThree = newSparePartType("4325", ['en':'Thirteenth spare part type','fr':' Tresieme piece de rechange'],['en':'Thirteenth spare part type description','fr':' description de la tresieme piece de rechange'],"4325-IJK",Provider.findByCode("THREE"),now())
    
-			def sparePartTypeOne = newSparePartType("15810", ['en':'first spare part','fr':'premier sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part",Provider.findByCode("ONE"),now())
-			def sparePartTypeTwo = newSparePartType("15819", ['en':'Second spare part','fr':'Second sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 2",Provider.findByCode("TWO"),now())
-			def sparePartTypeThree = newSparePartType("15966", ['en':'Third spare part','fr':'Troisieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 3",Provider.findByCode("THREE"),now())
-			def sparePartTypeFour = newSparePartType("10035", ['en':'Forth spare part','fr':'Quatrieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 4",Provider.findByCode("FOUR"),now())
-			def sparePartTypeFive = newSparePartType("20760", ['en':'Fifth spare part','fr':'Cinquieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 5",Provider.findByCode("ONE"),now())
-			def sparePartTypeSix = newSparePartType("20729", ['en':'Sixth spare part','fr':'Sixieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 6",Provider.findByCode("ONE"),now())
-			def sparePartTypeSeven = newSparePartType("10026", ['en':'Seventh spare part','fr':'premier sp'], ['en':'Septieme spare part','fr':'premier sp'],"CODE Spare Part 7",Provider.findByCode("THREE"),now())
-			def sparePartTypeEight = newSparePartType("10124", ['en':'Eighth spare part','fr':'Huitieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 8",Provider.findByCode("EIGHT"),now())
-			def sparePartTypeNine = newSparePartType("10155", ['en':'Ninth spare part','fr':'Neuvieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 9",Provider.findByCode("THREE"),now())
-			def sparePartTypeTen = newSparePartType("10426", ['en':'Tenth spare part','fr':'Dixieme sp'], ['en':'first spare part','fr':'premier sp'],"CODE Spare Part 10",Provider.findByCode("FOUR"),now())
+			def sparePartTypeOne = newSparePartType("15810", ['en':'first spare part type','fr':'premier sp'], ['en':'first spare part type','fr':'premier type de piece de rechange'],"CODE Spare Part type 1",Provider.findByCode("ONE"),now())
+			def sparePartTypeTwo = newSparePartType("15819", ['en':'Second spare part type','fr':'Second sp'], ['en':'first spare part type','fr':'premier type de piece de rechange'],"CODE Spare Part type 2",Provider.findByCode("TWO"),now())
+			def sparePartTypeThree = newSparePartType("15966", ['en':'Third spare part type','fr':'Troisieme sp'], ['en':'first spare part type','fr':'premier type de piece de rechange'],"CODE Spare Part type 3",Provider.findByCode("THREE"),now())
+			def sparePartTypeFour = newSparePartType("10035", ['en':'Forth spare part type','fr':'Quatrieme sp'], ['en':'first spare part type','fr':'premier type de piece de rechange'],"CODE Spare Part type 4",Provider.findByCode("FOUR"),now())
+			def sparePartTypeFive = newSparePartType("20760", ['en':'Fifth spare part type','fr':'Cinquieme sp'], ['en':'first spare part type','fr':'premier type de piece de rechange'],"CODE Spare Part type 5",Provider.findByCode("ONE"),now())
+			def sparePartTypeSix = newSparePartType("20729", ['en':'Sixth spare part type','fr':'Sixieme sp'], ['en':'first spare part type','fr':'premier type de piece de rechange'],"CODE Spare Part type 6",Provider.findByCode("ONE"),now())
+			def sparePartTypeSeven = newSparePartType("10026", ['en':'Seventh spare part type','fr':'premier sp'], ['en':'Septieme spare part type','fr':'premier type de piece de rechange'],"CODE Spare Part type 7",Provider.findByCode("THREE"),now())
+			def sparePartTypeEight = newSparePartType("10124", ['en':'Eighth spare part type','fr':'Huitieme sp'], ['en':'first spare part type','fr':'premier type de piece de rechange'],"CODE Spare Part type 8",Provider.findByCode("EIGHT"),now())
+			def sparePartTypeNine = newSparePartType("10155", ['en':'Ninth spare part type','fr':'Neuvieme sp'], ['en':'first spare part type','fr':'premier type de piece de rechange'],"CODE Spare Part type 9",Provider.findByCode("THREE"),now())
+			def sparePartTypeTen = newSparePartType("10426", ['en':'Tenth spare part type','fr':'Dixieme sp'], ['en':'first spare part type','fr':'premier type de piece de rechange'],"CODE Spare Part type 10",Provider.findByCode("FOUR"),now())
 			
 			
 			def typeOne = newEquipmentType("158101", ["en":"Accelerometers","fr":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,now(),25)
@@ -925,7 +926,21 @@ public class Initializer {
 				StockLocation.MMC,
 				SparePartStatus.PENDINGORDER,
 				234,0
-				)	
+				)
+			def sparePartEight = newSparePart(
+				SparePartPurchasedBy.BYFACILITY,
+				['en':'Spare Part Descriptions Eight'],
+				getDate(14,8,2008),
+				"98700",
+				"EUR",
+				DataLocation.findByCode(KIVUYE),
+				SparePartType.findByCode("15966"),
+				Provider.findByCode("FIVE"),
+				User.findByUsername("admin"),
+				StockLocation.FACILITY,
+				SparePartStatus.INSTOCK,
+				122,87
+				)
 		}
 	}
 	

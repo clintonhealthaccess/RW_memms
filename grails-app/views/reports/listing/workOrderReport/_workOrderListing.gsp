@@ -14,12 +14,12 @@
 			<g:sortableColumn property="closedOn"  title="${message(code: 'order.closed.on.label')}" params="[q:q]" />
 			<th><g:message code="work.order.description.label"/></th>
 			<th><g:message code="entity.messages.label"/></th>
+			<th>Number of Spare Part</th>
 		</tr>
 	</thead>
 	<tbody>
 		<g:each in="${entities}" status="i" var="order">
-			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-				
+			<tr>
 				<td>${order.equipment.code}</td>
 				<td>${order.equipment.serialNumber}</td>
 				<td>${order.equipment.type.names}</td>
@@ -29,6 +29,7 @@
 				<td>${Utils.formatDateWithTime(order.closedOn)}</td>
 				<td><g:stripHtml field="${order.description}" chars="30"/></td>
 				<td>${order.getUnReadNotificationsForUser(User.findByUuid(SecurityUtils.subject.principal, [cache: true])).size()}</td>
+				<td>${order.numberOfSpareParts}</td>
 			</tr>
 		</g:each>
 	</tbody>

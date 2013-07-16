@@ -37,6 +37,9 @@ import org.chai.memms.inventory.Equipment.PurchasedBy;
 import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.exports.EquipmentExport;
 import org.chai.memms.inventory.Equipment;
+import org.chai.memms.inventory.EquipmentStatus;
+import org.chai.memms.inventory.EquipmentStatus.Status;
+import org.chai.memms.inventory.EquipmentStatus.EquipmentStatusChange;
 import org.chai.location.CalculationLocation;
 import org.chai.location.DataLocation;
 import org.chai.location.DataLocationType;
@@ -154,6 +157,26 @@ class EquipmentService {
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			eq('dataLocation',dataLocation)
 		}
+	}
+
+	public def getEquipmentTimeBasedStatusChange(Equipment equipment, List<EquipmentStatusChange> equipmentStatusChanges){
+		EquipmentStatusChange equipmentStatusChange = null
+
+		def previousStatus = equipment.getTimeBasedPreviousStatus()?.status
+		def currentStatus = equipment.getTimeBasedStatus().status
+
+		if(equipmentStatusChanges == null) equipmentStatusChanges = EquipmentStatusChange.values()
+	 	equipmentStatusChanges.each{ statusChange ->
+ 			
+ 			def previousStatusMap = statusChange.getStatusChange()['previous']
+			def currentStatusMap = statusChange.getStatusChange()['current']
+
+			def previousStatusChange = previousStatusMap.contains(previousStatus) || (previousStatusMap.contains(Status.NONE) && previousStatus == null)
+			def currentStatusChange = currentStatusMap.contains(currentStatus)
+
+			if(previousStatusChange && currentStatusChange) equipmentStatusChange = statusChange
+	 	}
+	 	return equipmentStatusChange
 	}
 
 	// fterrier: signature is very long

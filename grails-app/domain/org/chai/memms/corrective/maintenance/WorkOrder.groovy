@@ -39,6 +39,8 @@ import org.chai.memms.maintenance.MaintenanceOrder;
 import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.memms.security.User;
 import org.chai.memms.spare.part.SparePart
+import org.chai.memms.spare.part.SparePartType
+import org.joda.time.DateTime
 
 /**
  * @author Jean Kahigiso M.
@@ -200,27 +202,6 @@ public class WorkOrder extends MaintenanceOrder{
 		return previousState
 	}
 
-	@Transient
-	WorkOrderStatusChange getTimeBasedStatusChange(List<WorkOrderStatusChange> workOrderStatusChanges){
-		WorkOrderStatusChange workOrderStatusChange = null
-
-		def previousStatus = getTimeBasedPreviousStatus()?.status
-		def currentStatus = getTimeBasedStatus().status
-
-		if(workOrderStatusChanges == null) workOrderStatusChanges = WorkOrderStatusChange.values()
-	 	workOrderStatusChanges.each{ statusChange ->
- 			
- 			def previousStatusMap = statusChange.getStatusChange()['previous']
-			def currentStatusMap = statusChange.getStatusChange()['current']
-
-			def previousStatusChange = previousStatusMap.contains(previousStatus) || (previousStatusMap.contains(OrderStatus.NONE) && previousStatus == null)
-			def currentStatusChange = currentStatusMap.contains(currentStatus)
-
-			if(previousStatusChange && currentStatusChange) workOrderStatusChange = statusChange
-	 	}
-	 	return workOrderStatusChange
-	}
-
 	static mapping = {
 		table "memms_work_order"
 		version false
@@ -242,5 +223,56 @@ public class WorkOrder extends MaintenanceOrder{
 	public String toString() {
 		return "WorkOrder [id= " + id + " currentStatus= "+currentStatus+"]";
 	}
-
+	
+	
+	
+	
+	
+	//TODO To finalize this Method on map that must hold key and another map as value
+	@Transient
+	def getSparePartTypesUsed(){
+		Map<SparePartType,Integer> usedSparePartTypes =  [:]
+		DateTime todayDateTime = new DateTime(new Date())
+		def lastYearDateTimeFromNow = todayDateTime.minusDays(365)
+		def lastYearDateFromNow = lastYearDateTimeFromNow.toDate()
+		
+		if (closedOn?.after(lastYearDateFromNow) && usedSpareParts.size()!=null && OrderStatus.CLOSEDFIXED)
+		//15 stands for the used quantity for any work order I wait from Jean
+		for (def sparePart: usedSpareParts){
+			
+			if (usedSparePartTypes.containsKey(sparePart.type)){
+				int previousNumberOfSparePart = getNumberOfSparePartsOnSparePartType(usedSparePartTypes, sparePart.type)
+				usedSparePartTypes.put(sparePart.type, previousNumberOfSparePart+sparePart.value)
+			}else
+				usedSparePartTypes.put(sparePart.type, sparePart.value)
+		}
+		return usedSparePartTypes
+	}
+	
+	//TODO To finalize this Method By Aphrodice
+	@Transient
+	def getNumberOfSparePartsOnSparePartType(Map<SparePartType,Integer> usedSparePartTypes, SparePartType sparePartType){
+		if(usedSparePartTypes.get(sparePartType)!=null){
+			return usedSparePartTypes.get(sparePartType)
+		}else 
+	return 0	
+	}
+	
+	//TODO To finalize this Method By Aphrodice
+	@Transient
+	def getNumberOfSpareParts(){
+		for (def spt: getSparePartTypesUsed())
+		if(usedSpareParts.get(spt)!=null){
+			return usedSpareParts.get(spt)
+		}else
+	return 0
+	}
+	
+	//TODO To finalize this Method By Aphrodice
+	/*@Transient
+	def getNumberOfSparePartType(SparePartType sparePartType, SparePart sparePart, int countSpareParts) {
+		int previousNumberOfSparePart = getNumberOfSparePartOnSparePartType(sparePart)
+		usedSpareParts.put(sparePart, previousNumberOfSparePart + countSpareParts)
+	}
+*/
 }

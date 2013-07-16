@@ -2,9 +2,9 @@
 #report
   // slister end
 
+
   #values
     overflow: auto
-
   .parent-row
     background-color: $primary
     color: #fff
@@ -112,23 +112,45 @@
       background: #fff
       border: 1px solid rgba(0, 0, 0, 0.1)
       border-bottom: none
+      bottom: -1px
       color: $primary
       font-weight: bold
-      margin: 0 0 -1px 0
       position: relative
 
-.v-tabs-subnav
-  border-bottom: 1px solid $primary
-  padding-left: 5px
+.v-tabs-subnav-wrapper
+  float: left
+  &.slide-wrapper
+    overflow: hidden
+    width: 80%
+
+.v-tabs-box
+  line-height: 1.4
   +pie-clearfix
+  > *
+    float: left
+
+.v-tabs-subnav
+  padding-left: 5px
+  position: relative
+  +pie-clearfix
+
+  ul
+    padding-left: 30px
   li
     display: inline
     float: left
+    max-width: 150px
+    position: relative
+  p
+    float: left
+    max-width: 150px
+    position: relative
   a
+    bottom: -1px
     color: #bbb
-    display: block
-    margin-bottom: -1px
-    padding: 2px 14px 15px
+    display: inline-block
+    padding: 15px 0 15px 15px
+    position: relative
     text-decoration: none
     +transition(color .2s)
     &.active
@@ -136,6 +158,9 @@
       color: $primary
     &:hover, &:focus
       color: $primary
+
+
+
   .right
     float: right !important
     margin-right: 14px
@@ -143,20 +168,127 @@
     a
       font-size: 14px
       font-weight: bold
-
   &.slide
-    .move_left
-      background: url('../images/arrow-left.png') no-repeat
-      height: 16px
-      width: 8px
-    .move_right
+    margin-left: 0
+    padding-left: 0
+
+
+
+
+.v-tabs-subnav-scroll-right, .v-tabs-subnav-scroll-left
+  background: white
+  display: block
+  margin-top: 12px
+  padding: 0
+  width: 10px
+  z-index: 1000
+  text-indent: -9999em
+
+.v-tabs-subnav-scroll-right
+  background: url('../images/arrow-right.png') no-repeat center
+
+.v-tabs-subnav-scroll-left
+  background: url('../images/arrow-left.png') no-repeat center
+
+
+// Dynamic slider navigation
+
+.v-tabs-dynav-wrap
+  position: relative
+  +pie-clearfix
+  > *
+    float: right
+  a
+    color: #bbb
+    display: block
+    max-width: 167px
+    padding: 15px 10px
+    position: relative
+    text-decoration: none
+    vertical-align: middle
+    overflow: hidden
+    text-overflow: ellipsis
+    white-space: nowrap
+    +transition(color .2s)
+    &.active
+      color: $primary
+    &:hover, &:focus
+      color: $primary
+      background: rgba(0, 0, 0, 0.05)
+
+    &.v-tabs-dynav-scroll-right, &.v-tabs-dynav-scroll-left
+      background: white
+      display: inline
+      height: 46px
+      opacity: .6
+      padding: 0
+      position: relative
+      text-indent: -9999em
+      width: 39px
+      z-index: 1000
+      +transition(all .4s)
+      &:hover, &:focus
+        opacity: 1
+
+    &.v-tabs-dynav-scroll-right
+      background: url('../images/arrow-right.png') no-repeat center
+      &:hover, &:focus
+        background-image: url('../images/arrow-right-hover.png')
+
+    &.v-tabs-dynav-scroll-left
+      background: url('../images/arrow-left.png') no-repeat center
+      &:hover, &:focus
+        background-image: url('../images/arrow-left-hover.png')
+
+
+.v-tabs-dynav
+  height: 46px
+  line-height: 1.4
+  overflow: hidden
+  position: relative
+  width: 920px
+  ul
+    height: 46px
+    position: absolute
+    min-width: 1200px
+  li
+    border-right: 1px solid rgba(0, 0, 0, 0.05)
+    display: inline-block
+    float: left
+    position: relative
+    width: 183px
+    &:nth-child(7n+5)
+      border-right: none
+
+
+.delete-node
+  background: url('../images/icons/mini_delete.png') no-repeat center
+  cursor: pointer
+  display: inline-block
+  height: 13px
+  line-height: 13px
+  margin-left: 0
+  position: absolute
+  right: 5px
+  text-indent: -9999em
+  top: 5px
+  width: 13px
+  opacity: 0.25
+
+  &:hover, &:focus
+    opacity: 1
+
+// end
+
+
+.shown-report
+  border-top: 1px solid $primary
 
 .v-tabs-content
   background: #fff
   border: 1px solid rgba(0, 0, 0, 0.1)
   color: #666666
   font-size: 12px
-  padding: 15px 0 0
   width: 1000px - 2px /* minus the border */
   .filters
     border: none !important
@@ -192,8 +324,7 @@
 
 .v-tabs-summary
   border: 10px solid $filler1
-  border-bottom-width: 4px
-  padding: 6px 0 9px
+  padding: 0 0 9px
   text-align: center
   +box-shadow($filler - #444 0 0 1px 0 inset)
   +pie-clearfix
@@ -233,21 +364,30 @@
 .v-tabs-criteria
   background: $filler1
   border: none
-  padding-bottom: 20px
-  +background(linear-gradient($filler1, #f9fcff))
+  padding: 25px 0 0
   +pie-clearfix
   .tooltip
     color: $primary
     text-decoration: underline
+  h1
+    float: left
+    font-size: 30px
+    //min-width: 520px
+    padding: 5px 25px 20px
+  ul
+    float: left
+    //min-width: 400px
+    padding: 0px 10px 20px
   li
     border-right: 1px solid #e5e5e5
     display: inline-block
     float: left
     line-height: 1.5
-    margin: 10px 0
     padding: 0 25px
     text-align: left
     +text-shadow(#fff 0 1px 0)
+    &:first-child
+      padding-left: 15px
     &:last-child
       border: none
   a
@@ -300,8 +440,6 @@
     padding: 0
     &:first-child
       border-top: 0
-    &:last-child
-      //border-bottom: 1px solid rgba(0, 0, 0, 0.1)
     &:hover, &:focus
       background: rgba(0, 0, 0, 0.03)
   .v-tabs-name
@@ -390,7 +528,7 @@ div#comparison, div#geo_trend, div#info_facility, div#preventive, div#equipment,
   .dash
     display: inline-block
     float: left
-    margin: 6px 10px
+    margin: 4px 8px 0
     color: #666
 
   &.step-4 input[type=text]
@@ -462,7 +600,6 @@ div#comparison, div#geo_trend, div#info_facility, div#preventive, div#equipment,
           font-size: 12px
           height: 27px
           margin-left: 20px
-          margin-top: 2px
           padding: 4px 7px
           width: 100px
 
@@ -473,8 +610,8 @@ div#comparison, div#geo_trend, div#info_facility, div#preventive, div#equipment,
     color: $primary
     display: inline-block
     float: left
-    font-size: 12px
-    height: 12px
+    font-size: 11px
+    height: 11px
     padding: 7px
     width: 145px
     +
@@ -510,13 +647,16 @@ div#comparison, div#geo_trend, div#info_facility, div#preventive, div#equipment,
     margin-top: 6px
     margin-left: 158px
     width: auto
-    + span
-      color: #666
-      margin-left: 3px
-      display: inline-block
-      font-size: 11px
-      margin-left: 3px
-      margin-top: 7px
+  input[type=checkbox] + span, .word
+    color: #666
+    margin-left: 3px
+    display: inline-block
+    font-size: 11px
+    margin-left: 3px
+    margin-top: 7px
+    &.push
+      margin-left: 10px
+      margin-right: 10px
   .ui-widget-next
     color: #fff
     margin-top: 15px
@@ -524,7 +664,7 @@ div#comparison, div#geo_trend, div#info_facility, div#preventive, div#equipment,
     margin-top: 18px
   .ui-dialog-content
     background: none
-    padding: 0 30px 30px
+    padding: 0 20px 20px !important
   .twocol-checkboxes
     +pie-clearfix
     li
@@ -578,3 +718,4 @@ div#comparison, div#geo_trend, div#info_facility, div#preventive, div#equipment,
 .search-choice-close /* Chosen.js override */
   background: url('../js/jquery/chosen/chosen-sprite.png') -49px -8px no-repeat !important
   top: 5px !important
+

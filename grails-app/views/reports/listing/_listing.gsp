@@ -3,7 +3,9 @@
 <div class="entity-list">
 
   <div class="heading1-bar">
-    <h1>Detailed Reports</h1>
+    <h1>
+    <g:message code="default.detailed.report.label" args="[message(code:'default.detailed.report.label')]" />
+    </h1>
   </div>
 
   <!-- filter template -->
@@ -26,9 +28,9 @@
           <!-- equipment predefined reports template -->
           <g:render template="/reports/listing/equipmentReport/equipmentPredefinedReports" />
           <!-- TODO equipment saved reports template -->
-          <div id='report-1' class="js-shown-report">
+          <div id='report-1' class="js-shown-report shown-report">
             <!-- equipment indicator summary template -->
-            <g:render template ="/reports/listing/equipmentReport/equipmentIndicatorSummary" />
+            %{-- <g:render template ="/reports/listing/equipmentReport/equipmentIndicatorSummary" /> --}%
             <!-- listing filter summary template -->
             <g:render template ="/reports/listing/equipmentReport/equipmentListingFilterSummary" />
             <!-- equipment report template -->
@@ -48,9 +50,9 @@
         <!-- work order predefined reports template -->
           <g:render template="/reports/listing/workOrderReport/workOrderPredefinedReports" />
           <!-- TODO work order saved reports template -->
-          <div id='report-1' class="js-shown-report">
+          <div id='report-1' class="js-shown-report shown-report">
             <!-- work order indicator summary template -->
-            <g:render template ="/reports/listing/workOrderReport/workOrderIndicatorSummary" />
+            %{-- <g:render template ="/reports/listing/workOrderReport/workOrderIndicatorSummary" /> --}%
             <!-- listing filter summary template -->
             <g:render template ="/reports/listing/workOrderReport/workOrderListingFilterSummary" />
             <!-- work order report template -->
@@ -70,9 +72,9 @@
         <!-- preventive order predefined reports template -->
           <g:render template="/reports/listing/preventiveOrderReport/preventiveOrderPredefinedReports" />
           <!-- TODO preventive order saved reports template -->
-          <div id='report-1' class="js-shown-report">
+          <div id='report-1' class="js-shown-report shown-report">
             <!-- preventive order indicator summary template -->
-            <g:render template ="/reports/listing/preventiveOrderReport/preventiveOrderIndicatorSummary" />
+            %{-- <g:render template ="/reports/listing/preventiveOrderReport/preventiveOrderIndicatorSummary" /> --}%
             <!-- listing filter summary template -->
             <g:render template ="/reports/listing/preventiveOrderReport/preventiveOrderListingFilterSummary" />
             <!-- preventive order report template -->
@@ -92,17 +94,22 @@
         <!-- spare parts predefined reports template -->
           <g:render template="/reports/listing/sparePartReport/sparePartPredefinedReports" />
           <!-- TODO spare parts saved reports template -->
-          <div id='report-1' class="js-shown-report">
+          <div id='report-1' class="js-shown-report shown-report">
             <!-- spare parts indicator summary template -->
-            <g:render template ="/reports/listing/sparePartReport/sparePartIndicatorSummary" />
+            %{-- <g:render template ="/reports/listing/sparePartReport/sparePartIndicatorSummary" /> --}%
             <!-- listing filter summary template -->
-            <g:render template ="/reports/listing/listingFilterSummary" />
+            <g:render template ="/reports/listing/sparePartReport/sparePartListingFilterSummary" />
             <!-- spare parts report template -->
             <g:if test="${customizedReportName != null && !customizedReportName.empty}">
-              <g:render template="/reports/listing/sparePartReport/customSparePartsListing" />
+              %{-- <g:if test="${[ReportSubType.USERATE,ReportSubType.STOCKOUT].contains(reportSubType)}">
+                <g:render template="/reports/listing/sparePartReport/customSparePartTypesListing" />
+              </g:if>
+              <g:else> --}%
+                <g:render template="/reports/listing/sparePartReport/customSparePartsListing" />
+              %{-- </g:else> --}%
             </g:if>
             <g:else>
-              <g:render template="/reports/listing/sparePartReport/sparePartsListing" />
+                <g:render template="/reports/listing/sparePartReport/sparePartsListing" />
             </g:else>
           </div>
       </div>

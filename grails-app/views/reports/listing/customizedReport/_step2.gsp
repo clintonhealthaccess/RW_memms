@@ -1,5 +1,6 @@
 <%@ page import="org.chai.memms.util.Utils.ReportType" %>
 <%@ page import="org.chai.memms.util.Utils.ReportSubType" %>
+<%@ page import="org.chai.memms.util.Utils" %>
 <div class="dialog-form step-2" id='js-step-2'>
   <!-- Step 2 -->
   <h2><g:message code="reports.apply.filters"/><span class="right"><g:message code="reports.step" args="['2','4']"/></span></h2>
@@ -34,20 +35,23 @@
             <span><g:message code="reports.selectAll"/></span>
           </li>
           <li class="modular">
-            <label><g:message code="reports.cost"/>:</label>
-            <input type="text" name="fromCost"/><span class="dash">-</span><input type="text" name="toCost"/>
-            <select name="costCurrency">
-              <g:each in="${currencies}" var="currencyEnum">
-                <option value="${currencyEnum.key}">
-                  ${message(code:'currency.'+currencyEnum.value)}
-                </option>
-              </g:each>
-            </select>
+            <div class='row'>
+              <label><g:message code="reports.cost"/>:</label>
+              <input type="text" name="fromCost"/><span class="dash">-</span><input type="text" name="toCost"/>
+              <select name="costCurrency">
+                <g:each in="${currencies}" var="currencyEnum">
+                  <option value="${currencyEnum.key}">
+                    ${message(code:'currency.'+currencyEnum.value)}
+                  </option>
+                </g:each>
+              </select>
+            </div>
+            <g:checkBox name="noCost" class='clear-left'/>
+            <span class='clear-right'><g:message code="reports.no.cost"/></span>
           </li>
         </g:if>
         <g:if test="${[ReportType.SPAREPARTS].contains(reportType)}">
           <li>
-            <!-- TODO sparePartTypes -->
             <g:selectFromList name="sparePartTypes" label="${message(code:'reports.sparePartType')}"
               field="type" optionKey="id" multiple="true" value="${sparePartTypes*.id}"
               ajaxLink="${createLink(controller:'SparePartType', action:'getAjaxData', params:[observation:'USEDINMEMMS'])}"

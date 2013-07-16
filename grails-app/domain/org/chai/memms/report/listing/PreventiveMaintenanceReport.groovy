@@ -12,8 +12,8 @@ import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStat
  */
 class PreventiveMaintenanceReport extends EquipmentGeneralReportParameters{
 
-	PreventiveOrderStatus preventiveOrderStatus
-	PreventionResponsible  preventionResponsible
+	def preventiveOrderStatus
+	def preventionResponsible
 
 	static constraints = {
 		preventiveOrderStatus nullable: true, blank: true

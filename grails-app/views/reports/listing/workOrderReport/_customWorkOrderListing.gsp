@@ -24,36 +24,38 @@
 			<g:if test="${reportTypeOptions.contains('manufacturer')}">
 				<g:sortableColumn property="manufacturer"  title="${message(code: 'provider.type.manufacturer')}" params="[q:q]" />
 			</g:if>
-			<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
-				%{-- TODO --}%
+
+			%{-- <g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
+				// TODO SL AFTER RELEASE
 				<g:sortableColumn property="statusChanges"  title="Status Changes" params="[q:q]" />
-			</g:if>
+			</g:if> --}%
+
 			<g:if test="${reportTypeOptions.contains('currentStatus')}">
 				<g:sortableColumn property="currentStatus" title="${message(code: 'entity.status.label')}" params="[q:q]" />
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('travelTime')}">
-				%{-- TODO --}%
+				<th><g:message code="listing.report.corrective.travel.time.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('workTime')}">
-				%{-- TODO --}%
+				<th><g:message code="listing.report.corrective.work.time.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('estimatedCost')}">
-				%{-- TODO --}%
+				<th><g:message code="listing.report.corrective.estimated.cost.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('departmentRequestedOrder')}">
-				%{-- TODO --}%
+				<th><g:message code="listing.report.corrective.department.order.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('reasonsEquipmentFailure')}">
-				%{-- TODO --}%
+				<th><g:message code="listing.report.corrective.failure.reason.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('listPerformedActions')}">
-				%{-- TODO --}%
+				<th><g:message code="listing.report.corrective.performed.actions.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('description')}">
-				<th><g:message code="work.order.description.label"/></th>
+				<th><g:message code="listing.report.corrective.problem.description.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('dateOfEvent')}">
-				%{-- TODO --}%
+				<th><g:message code="listing.report.corrective.event.date.label"/></th>
 			</g:if>
 		</tr>
 	</thead>
@@ -64,7 +66,7 @@
 					<td>${order.equipment.dataLocation.names}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('code')}">
-					<td>${order.equipment.code}</td>
+					<td>${order?.equipment?.code}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('serialNumber')}">
 					<td>${order.equipment.serialNumber}</td>
@@ -79,37 +81,39 @@
 					<td>${order.equipment.manufacturer?.contact?.contactName}</td>
 				</g:if>
 
-				<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
+				%{-- <g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
+					// TODO SL AFTER RELEASE
 					<g:set var="statusChangesEnum" value="${order.getTimeBasedStatusChange(customWorkOrderParams.statusChanges)}"/>
 					<td>${message(code: statusChangesEnum?.messageCode+'.'+statusChangesEnum?.name)}</td>
-				</g:if>
+				</g:if> --}%
 
 				<g:if test="${reportTypeOptions.contains('currentStatus')}">
 					<td>${message(code: order.currentStatus?.messageCode+'.'+order.currentStatus?.name)}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('travelTime')}">
-					%{-- TODO --}%
+					<td>${order.travelTime?.numberOfMinutes}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('workTime')}">
-					%{-- TODO --}%
+					<td>${order.workTime?.numberOfMinutes}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('estimatedCost')}">
-					%{-- TODO --}%
+					<td>${order.estimatedCost}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('departmentRequestedOrder')}">
-					%{-- TODO --}%
+					<td>${order.equipment?.department?.code}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('reasonsEquipmentFailure')}">
-					%{-- TODO --}%
+					<td>${order.failureReasonDetails}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('listPerformedActions')}">
-					%{-- TODO --}%
+					%{-- TODO AR corrective process property AFTER RELEASE --}%
+					<td></td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('description')}">
 					<td><g:stripHtml field="${order.description}" chars="30"/></td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('dateOfEvent')}">
-					%{-- TODO --}%
+				<td>${order.dateCreated}</td>
 				</g:if>
 			</tr>
 		</g:each>

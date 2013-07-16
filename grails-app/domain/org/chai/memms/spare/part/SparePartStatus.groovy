@@ -44,15 +44,45 @@ class SparePartStatus {
 		
 		NONE("none"),
 		INSTOCK("in.stock"),
-		OPERATIONAL("operational"),
-		PENDINGORDER("pending.order"),
-		DISPOSED("disposed")
+		//OPERATIONAL("operational"),
+		PENDINGORDER("pending.order")
+		//DISPOSED("disposed")
 		
 		String messageCode = "spare.part.status"
 		
 		final String name
 		StatusOfSparePart(String name){ this.name=name }
 		String getKey() { return name() }
+	}
+
+	enum StatusOfSparePartChange{
+		NEWPENDINGORDER("newPendingOrder",
+			['previous':[StatusOfSparePart.NONE], 'current':[StatusOfSparePart.PENDINGORDER]], true),
+		PENDINGORDERARRIVED("pendingOrderArrived",
+			['previous':[StatusOfSparePart.PENDINGORDER], 'current':[StatusOfSparePart.INSTOCK]], false),
+		// SPAREPARTSASSOCIATEDTOEQUIPMENT("sparePartsAssociatedToEquipment",
+		// 	[
+		// 		'previous':(StatusOfSparePart.values()-[StatusOfSparePart.OPERATIONAL,StatusOfSparePart.DISPOSED]), 
+		// 		'current':[StatusOfSparePart.OPERATIONAL]
+		// 	], true),
+		// DISPOSEDSPAREPARTS("disposedSpareParts",
+		// 	[
+		// 		'previous':(StatusOfSparePart.values()-StatusOfSparePart.DISPOSED), 
+		// 		'current':[StatusOfSparePart.OPERATIONAL]
+		// 	], true)
+
+		String messageCode = "reports.spareParts.statusChanges"
+		final String name
+		final Map<String,List<StatusOfSparePart>> statusChange
+		final String performed
+		StatusOfSparePartChange(String name, Map<String,List<StatusOfSparePart>> statusChange, Boolean performed) {
+			this.name=name
+			this.statusChange=statusChange
+			this.performed=performed
+		}
+		String getKey() { return name }
+		Map<String,List<StatusOfSparePart>> getStatusChange() { return statusChange }
+		Boolean getPerformed() { return performed }
 	}
 
 	Date dateOfEvent
@@ -69,7 +99,7 @@ class SparePartStatus {
 			return (val <= new Date()) &&  (val.after(obj.sparePart.purchaseDate) || (val.compareTo(obj.sparePart.purchaseDate)==0))
 		}
 		changedBy nullable: false
-		statusOfSparePart blank: false, nullable: false, inList:[StatusOfSparePart.OPERATIONAL,StatusOfSparePart.INSTOCK,StatusOfSparePart.PENDINGORDER, StatusOfSparePart.DISPOSED]
+		statusOfSparePart blank: false, nullable: false, inList:[StatusOfSparePart.INSTOCK,StatusOfSparePart.PENDINGORDER]
 		reasons nullable: true, blank: true
 	}
 	

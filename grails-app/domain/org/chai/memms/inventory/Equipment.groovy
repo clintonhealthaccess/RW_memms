@@ -42,6 +42,7 @@ import org.chai.memms.preventive.maintenance.PreventiveOrder;
 import org.chai.memms.security.User;
 import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.location.DataLocation;
+import org.joda.time.DateTime;
 import org.apache.commons.lang.math.RandomUtils;
 import groovy.time.TimeCategory;
 
@@ -216,6 +217,20 @@ public class Equipment {
 	}
 
 	@Transient
+	def getCurrentValueOfThisEquipment(){
+		def today=new Date()
+		DateTime todayDateTime = new DateTime(today)
+		DateTime purchaseDateTime = new DateTime(purchaseDate)
+		if(id!=null && !id && expectedLifeTime!=null && purchaseDate!=null && purchaseCost!=null){	
+			def currentEquipmentLifeTime= (today-purchaseDate)
+			def currentEquipmentLifeTimeDays= currentEquipmentLifeTime.days
+			//C-((B/A)*C)
+		 return purchaseCost-((currentEquipmentLifeTimeDays/purchaseCost)*((expectedLifeTime.numberOfMonths)*30))
+		}else 
+			return null
+	}
+	
+	@Transient
 	def generateWarrantyEndDate(){
 		Integer.metaClass.mixin TimeCategory
 		Date.metaClass.mixin TimeCategory
@@ -268,27 +283,6 @@ public class Equipment {
 			previousState = sortedStatus[-2]
 		}
 		return previousState
-	}
-
-	@Transient
-	EquipmentStatusChange getTimeBasedStatusChange(List<EquipmentStatusChange> equipmentStatusChanges){
-		EquipmentStatusChange equipmentStatusChange = null
-
-		def previousStatus = getTimeBasedPreviousStatus()?.status
-		def currentStatus = getTimeBasedStatus().status
-
-		if(equipmentStatusChanges == null) equipmentStatusChanges = EquipmentStatusChange.values()
-	 	equipmentStatusChanges.each{ statusChange ->
- 			
- 			def previousStatusMap = statusChange.getStatusChange()['previous']
-			def currentStatusMap = statusChange.getStatusChange()['current']
-
-			def previousStatusChange = previousStatusMap.contains(previousStatus) || (previousStatusMap.contains(Status.NONE) && previousStatus == null)
-			def currentStatusChange = currentStatusMap.contains(currentStatus)
-
-			if(previousStatusChange && currentStatusChange) equipmentStatusChange = statusChange
-	 	}
-	 	return equipmentStatusChange
 	}
 
 	String toString() {

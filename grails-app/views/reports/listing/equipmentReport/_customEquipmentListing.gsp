@@ -1,4 +1,5 @@
 <%@ page import="org.chai.memms.util.Utils.ReportSubType" %>
+<%@ page import="org.chai.memms.util.Utils" %>
 <table class="items spaced">
 	<thead>
 		<tr>
@@ -17,11 +18,11 @@
 			<g:if test="${reportTypeOptions.contains('model')}">
 				<g:sortableColumn property="model"  title="${message(code: 'equipment.model.label')}" params="[q:q]" />
 			</g:if>
-			
-			<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
-				%{-- TODO --}%
+
+			%{-- <g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
+				// TODO SL AFTER RELEASE
 				<g:sortableColumn property="statusChanges"  title="Status Changes" params="[q:q]" />
-			</g:if>
+			</g:if> --}%
 
 			<g:if test="${reportTypeOptions.contains('currentStatus')}">
 				<g:sortableColumn property="currentStatus"  title="${message(code: 'equipment.status.label')}" params="[q:q]" />
@@ -40,19 +41,20 @@
 				<g:sortableColumn property="purchaser"  title="${message(code: 'equipment.purchaser.label')}" params="[q:q]" />
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('acquisitionDate')}">
-				%{-- TODO --}%
+				<g:sortableColumn property="purchaseDate"  title="${message(code: 'equipment.purchase.date.label')}" params="[q:q]" />
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('cost')}">
-				<g:sortableColumn property="cost"  title="Cost" params="[q:q]" />
+				<g:sortableColumn property="purchaseCost"  title="${message(code: 'equipment.purchase.cost.label')}" params="[q:q]" />
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('warrantyProvider')}">
-				%{-- TODO --}%
+				<g:sortableColumn property="warranty"  title="${message(code: 'listing.report.equipment.warranty.provider.label')}" params="[q:q]" />
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('warrantyPeriodRemaining')}">
-				%{-- TODO --}%
+				%{-- TODO AR --}%
+				<th><g:message code="listing.report.equipment.warranty.period.remaining.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('currentValue')}">
-				%{-- TODO --}%
+			 	<th><g:message code="equipment.current.value.label"/></th>
 			</g:if>
 		</tr>
 	</thead>
@@ -74,11 +76,12 @@
 				<g:if test="${reportTypeOptions.contains('model')}">
 					<td>${equipment.model}</td>
 				</g:if>
-				
-				<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
-					<g:set var="statusChangesEnum" value="${equipment.getTimeBasedStatusChange(customEquipmentParams.statusChanges)}"/>
+
+				%{-- <g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
+					// TODO SL AFTER RELEASE
+					<g:set var="statusChangesEnum" value="${equipment.getTimeBasedStatusChange(customEquipmentParams?.statusChanges)}"/>
 					<td>${message(code: statusChangesEnum?.messageCode+'.'+statusChangesEnum?.name)}</td>
-				</g:if>
+				</g:if> --}%
 
 				<g:if test="${reportTypeOptions.contains('currentStatus')}">
 					<td>${message(code: equipment.currentStatus?.messageCode+'.'+equipment.currentStatus?.name)}</td>
@@ -100,19 +103,21 @@
 					<td>${message(code: equipment.purchaser?.messageCode+'.'+equipment.purchaser?.name)}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('acquisitionDate')}">
-					%{-- TODO --}%
+					<td>${Utils.formatDate(equipment.purchaseDate)}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('cost')}">
 					<td>${equipment.purchaseCost}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('warrantyProvider')}">
-					%{-- TODO --}%
+					<td>${equipment.warranty?.contact?.contactName}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('warrantyPeriodRemaining')}">
-					%{-- TODO --}%
+					%{-- TODO AR calculation AFTER RELEASE --}%
+					<td>${equipment.warrantyPeriod?.numberOfMonths}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('currentValue')}">
-					%{-- TODO --}%
+					%{-- TODO AR calculation AFTER RELEASE --}%
+					<td><g:formatNumber number="${equipment.currentValueOfThisEquipment}" type="number" format="###.##"/></td>
 				</g:if>
 			</tr>
 		</g:each>
