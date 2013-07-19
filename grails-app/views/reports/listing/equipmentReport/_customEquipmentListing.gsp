@@ -19,10 +19,9 @@
 				<g:sortableColumn property="model"  title="${message(code: 'equipment.model.label')}" params="[q:q]" />
 			</g:if>
 
-			%{-- <g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
-				// TODO SL AFTER RELEASE
-				<g:sortableColumn property="statusChanges"  title="Status Changes" params="[q:q]" />
-			</g:if> --}%
+			<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
+				<g:sortableColumn property="statusChanges"  title="${message(code: 'listing.report.equipment.status.changes.label')}" params="[q:q]" />
+			</g:if>
 
 			<g:if test="${reportTypeOptions.contains('currentStatus')}">
 				<g:sortableColumn property="currentStatus"  title="${message(code: 'equipment.status.label')}" params="[q:q]" />
@@ -77,11 +76,10 @@
 					<td>${equipment.model}</td>
 				</g:if>
 
-				%{-- <g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
-					// TODO SL AFTER RELEASE
-					<g:set var="statusChangesEnum" value="${equipment.getTimeBasedStatusChange(customEquipmentParams?.statusChanges)}"/>
+				<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
+					<g:set var="statusChangesEnum" value="${equipment.getEquipmentTimeBasedStatusChange(customEquipmentParams?.statusChanges)}"/>
 					<td>${message(code: statusChangesEnum?.messageCode+'.'+statusChangesEnum?.name)}</td>
-				</g:if> --}%
+				</g:if>
 
 				<g:if test="${reportTypeOptions.contains('currentStatus')}">
 					<td>${message(code: equipment.currentStatus?.messageCode+'.'+equipment.currentStatus?.name)}</td>

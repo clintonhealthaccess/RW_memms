@@ -33,7 +33,7 @@
 			<g:if test="${reportTypeOptions.contains('currentStatus')}">
 				<g:sortableColumn property="status"  title="${message(code: 'entity.status.label')}" params="[q:q]" />
 			</g:if>
-			<g:if test="${reportTypeOptions.contains('scheduleNextInterventions')}">
+			<g:if test="${reportTypeOptions.contains('nextInterventionScheduledOn')}">
 				<th><g:message code="listing.report.preventive.schedule.next.interventions.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('percentageInterventionsDone')}">
@@ -85,7 +85,7 @@
 				<g:if test="${reportTypeOptions.contains('currentStatus')}">
 					<td>${message(code: order.status?.messageCode+'.'+order.status?.name)}</td>
 				</g:if>
-				<g:if test="${reportTypeOptions.contains('scheduleNextInterventions')}">
+				<g:if test="${reportTypeOptions.contains('nextInterventionScheduledOn')}">
 					%{-- TODO AR calculation AFTER RELEASE --}%
 					<td></td>
 				</g:if>

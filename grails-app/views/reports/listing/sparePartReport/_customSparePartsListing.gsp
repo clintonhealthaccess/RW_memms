@@ -19,7 +19,7 @@
 				// TODO SL AFTER RELEASE
 			</g:if> --}%
 
-			<g:if test="${reportTypeOptions.contains('status')}">
+			<g:if test="${reportTypeOptions.contains('currentStatus')}">
 				<th>Status</th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('manufacturer')}">
@@ -66,7 +66,7 @@
 					// TODO SL AFTER RELEASE
 				</g:if> --}%
 
-				<g:if test="${reportTypeOptions.contains('status')}">
+				<g:if test="${reportTypeOptions.contains('currentStatus')}">
 					<td>${message(code: sparePart.status?.messageCode+'.'+sparePart.status?.name)}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('manufacturer')}">
