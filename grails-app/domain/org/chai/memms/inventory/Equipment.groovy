@@ -43,6 +43,7 @@ import org.chai.memms.security.User;
 import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.location.DataLocation;
 import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.apache.commons.lang.math.RandomUtils;
 import groovy.time.TimeCategory;
 
@@ -220,12 +221,13 @@ public class Equipment {
 	def getCurrentValueOfThisEquipment(){
 		def today=new Date()
 		DateTime todayDateTime = new DateTime(today)
-		DateTime purchaseDateTime = new DateTime(purchaseDate)
-		if(id!=null && !id && expectedLifeTime!=null && purchaseDate!=null && purchaseCost!=null){	
-			def currentEquipmentLifeTime= (today-purchaseDate)
-			def currentEquipmentLifeTimeDays= currentEquipmentLifeTime.days
+		
+		if(id!=null && expectedLifeTime!=null && purchaseDate!=null && purchaseCost!=null){	
+			DateTime purchaseDateTime = new DateTime(purchaseDate)
+			Days d = Days.daysBetween(purchaseDateTime, todayDateTime)
+			int days = d.getDays()
 			//C-((B/A)*C)
-		 return purchaseCost-((currentEquipmentLifeTimeDays/purchaseCost)*((expectedLifeTime.numberOfMonths)*30))
+		 return purchaseCost-((days/purchaseCost)*((expectedLifeTime.numberOfMonths)*30))
 		}else 
 			return null
 	}
