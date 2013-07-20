@@ -32,6 +32,7 @@ import groovy.transform.EqualsAndHashCode;
 import org.chai.memms.TimeSpend;
 import org.chai.memms.security.User;
 import org.chai.memms.TimeDate;
+import org.chai.memms.inventory.PreventiveAction;
 
 
 
@@ -49,14 +50,14 @@ public class Prevention {
 	Date lastUpdated
 	TimeSpend timeSpend
 	User addedBy
-	
+
 	
 	String descriptions
 	
 	
 	static i18nFields = ["descriptions"]
 	static belongsTo = [order:  PreventiveOrder]
-	static hasMany = [processes: PreventiveProcess]
+	static hasMany = [actions: PreventiveAction]
 	static embedded = ["timeSpend","scheduledOn"]
 	
 
@@ -72,7 +73,7 @@ public class Prevention {
 		timeSpend nullable: true
 		scheduledOn nullable: false
 		eventDate nullable: false, validator:{it <= new Date()}
-		lastUpdated nullable: true, validator:{if(it != null) return (it <= new Date())}		
+		lastUpdated nullable: true, validator:{if(it != null) return (it <= new Date())}
 	}
 	
 	

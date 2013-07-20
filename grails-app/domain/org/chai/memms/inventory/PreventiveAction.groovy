@@ -45,14 +45,14 @@ import i18nfields.I18nFields
 @i18nfields.I18nFields
 class PreventiveAction {
 
-	String descriptions
+	String description
 	Date dateCreated
+	Date lastUpdated
 
 	static belongsTo = [equipmentType: EquipmentType]
-	static i18nFields = ["descriptions"]
 
 	static constraints = {
-		descriptions nullable: true, blank: true
+		description nullable: true, blank: true
 	}
 		
 	static mapping = {

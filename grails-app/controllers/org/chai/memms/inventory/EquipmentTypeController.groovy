@@ -39,6 +39,7 @@ import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.inventory.EquipmentType;
 import org.chai.memms.inventory.EquipmentType.Observation;
 import org.chai.memms.spare.part.SparePartType
+import org.chai.memms.inventory.PreventiveAction
 
 /**
  * @author Eugene Munyaneza
@@ -163,5 +164,45 @@ class EquipmentTypeController extends AbstractEntityController{
 		params.exportFilterId = equipmentTypeExportTask.id
 		params.class = "EquipmentTypeExportTask"
 		redirect(controller: "task", action: "create", params: params)
+	}
+
+	def addAction = {
+		def type = EquipmentType.get(params.int("type.id"))
+		def value = params["value"]
+		def result = false
+		def html =""
+		if (type == null || value.equals(""))
+			response.sendError(404)
+		else {
+				if (log.isDebugEnabled()) log.debug("addPreventiveAction params: "+params)
+				def action  = new PreventiveAction(description: value)
+				type.addToPreventiveActions(action)
+				//This has to be flushed to get newly created action on the ux
+				type.save(failOnError: true, flush: true)
+				if(type!=null){
+					result=true
+					html = g.render(template:"/templates/preventiveActionList",model:[type:type])
+				}
+				render(contentType:"text/json") { results = [result,html,"action"] }
+		}
+	}
+
+	def removeAction = {
+		def  action = PreventiveAction.get(params.int("action.id"))
+		def result = false
+		def html =""
+		if(!action) 
+			response.sendError(404)
+		else{
+			EquipmentType type = action.equipmentType
+			type.removeFromPreventiveActions(action)
+			action.delete()
+			type.save(failOnError:true)
+			if(type){ 
+				result = true
+				html = g.render(template:"/templates/preventiveActionList",model:[type:type])
+			}
+		}
+		render(contentType:"text/json") { results = [result,html,"action"]}
 	}
 }

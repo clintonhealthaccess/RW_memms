@@ -34,10 +34,10 @@
                     <span class="question-default">
                       <img src="${resource(dir:'images/icons',file:'star_small.png')}">
                     </span>
-                    <g:message code="prevention.section.process.information.label"/>
+                    <g:message code="preventive.section.action.information.label"/>
                 </h4> 
               <div class="row maintenance-process">
-                <g:render template="/templates/processes" model="['type':type.preventiveActions,'processType':'prevention','label':'prevention.actions.label','readonly':closed]" /> 
+                <g:render template="/templates/preventiveActions" model="['type':type,'label':'preventive.action.label','readonly':closed]" /> 
               </div>
           </fieldset>
         </g:if>
@@ -52,3 +52,11 @@
   	</g:form>
   </div>
 </div>
+<script type="text/javascript">
+  $(document).ready(function() {
+    addPreventiveAction("${createLink(controller:'equipmentType',action: 'addAction')}","${type.id}");
+    removePreventiveAction("${createLink(controller:'equipmentType',action: 'removeAction')}");
+  });
+</script>
+
+

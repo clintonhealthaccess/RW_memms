@@ -44,10 +44,10 @@ class PreventiveActionSpec extends IntegrationTests{
 		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),34)
 		
 		when:
-		def preventiveAction = new PreventiveAction(descriptions:["en":"Clean the accelerometers","fr":"Laver l'accelerometers"])
-		equipmentType.addToPreventiveActions(preventiveAction)
+		def preventionAction = new PreventiveAction(description:"Clean the accelerometers")
+		equipmentType.addToPreventiveActions(preventionAction)
 		equipmentType.save(failOnError: true)
 		then:
-		PreventionAction.count() == 1
+		PreventiveAction.count() == 1
 	}
 }
