@@ -51,6 +51,15 @@
           </li>
         </g:if>
         <g:if test="${[ReportType.SPAREPARTS].contains(reportType)}">
+          <g:if test="${user?.location?.parent == null}">
+            <li class="modular">
+              <div class="row">
+                <label for="showAtMmc"><g:message code="reports.spareParts.showAtMmc.label"/>:</label>
+                <input name="showAtMmc" type="checkbox"/>
+                <span><g:message code="reports.spareParts.showAtMmc"/></span>
+              </div>
+            <li>
+          </g:if>
           <li>
             <g:selectFromList name="sparePartTypes" label="${message(code:'reports.sparePartType')}"
               field="type" optionKey="id" multiple="true" value="${sparePartTypes*.id}"

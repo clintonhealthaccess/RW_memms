@@ -76,10 +76,10 @@
 					<td>${Utils.formatDate(sparePart.type.discontinuedDate)}</td>
 				</g:if>
 				<g:if test="${reportSubType == ReportSubType.STOCKOUT && reportTypeOptions.contains('forecastedStockOut')}">
-				    <td>%{-- TODO --}%</td>
+				    <td>%{-- TODO AR calculation AFTER RELEASE --}%</td>
 				</g:if>
 				<g:if test="${reportSubType == ReportSubType.USERATE && reportTypeOptions.contains('useRate')}">
-				    <td>%{-- TODO --}%</td>
+				    <td>%{-- TODO AR calculation AFTER RELEASE --}%</td>
 				</g:if>
 			</tr>
 		</g:each>

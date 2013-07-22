@@ -20,7 +20,6 @@
 	<g:if test="${reportSubType == ReportSubType.STOCKOUT}">
 		<li><g:checkBox name="spartPartsOptions" value="forecastedStockOut" /><span>${message(code:'listing.report.spare.part.forecasted.stock.out.label')}</span></li>
 	</g:if>
-
 	<g:if test="${reportSubType == ReportSubType.USERATE}">
 	    <li><g:checkBox name="spartPartsOptions" value="useRate" /><span>${message(code:'listing.report.spare.part.use.rate.label')}</span></li>
 	</g:if>
