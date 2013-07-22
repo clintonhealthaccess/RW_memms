@@ -58,6 +58,7 @@ public abstract class PreventiveOrder extends MaintenanceOrder {
 	enum PreventiveOrderStatus{
 		
 		OPEN("open"),
+		OPENLATE("open.late"),
 		CLOSED("closed")
 		
 		String messageCode = "preventive.order.status"

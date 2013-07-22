@@ -25,11 +25,6 @@
 			<g:if test="${reportTypeOptions.contains('manufacturer')}">
 				<g:sortableColumn property="manufacturer"  title="${message(code: 'provider.type.manufacturer')}" params="[q:q]" />
 			</g:if>
-
-			%{-- <g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
-				//TODO SL
-			</g:if> --}%
-
 			<g:if test="${reportTypeOptions.contains('currentStatus')}">
 				<g:sortableColumn property="status"  title="${message(code: 'entity.status.label')}" params="[q:q]" />
 			</g:if>
@@ -77,11 +72,6 @@
 				<g:if test="${reportTypeOptions.contains('manufacturer')}">
 					<td>${order.equipment.manufacturer?.contact?.contactName}</td>
 				</g:if>
-
-				%{-- <g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
-					// TODO SL AFTER RELEASE
-				</g:if> --}%
-
 				<g:if test="${reportTypeOptions.contains('currentStatus')}">
 					<td>${message(code: order.status?.messageCode+'.'+order.status?.name)}</td>
 				</g:if>
