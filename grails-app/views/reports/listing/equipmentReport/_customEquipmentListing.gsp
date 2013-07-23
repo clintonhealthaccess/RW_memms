@@ -98,7 +98,7 @@
 					<td>${equipment.supplier?.contact?.contactName}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('purchaser')}">
-					<td>${message(code: equipment.purchaser?.messageCode+'.'+equipment.purchaser?.name)}</td>
+					<td>${equipment.purchaser?.name}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('acquisitionDate')}">
 					<td>${Utils.formatDate(equipment.purchaseDate)}</td>

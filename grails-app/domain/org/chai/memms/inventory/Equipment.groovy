@@ -44,8 +44,8 @@ import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.location.DataLocation;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
-import org.joda.time.PeriodType;
-import org.joda.time.Period;
+//import org.joda.time.PeriodType;
+//import org.joda.time.Period;
 import org.apache.commons.lang.math.RandomUtils;
 import groovy.time.TimeCategory;
 
@@ -250,11 +250,11 @@ public class Equipment {
 		DateTime todayDateTime = new DateTime(today)
 		if(warrantyEndDate!=null){
 			DateTime warrantyEndDateTime = new DateTime(warrantyEndDate)
-			//Period 
-			Period period = new Period(todayDateTime, warrantyEndDateTime)
+			org.joda.time.Period period = new Period(todayDateTime, warrantyEndDateTime)
 			return period
-		}
+		}else {
 		return null
+		}	
 	}
 	
 	@Transient
