@@ -1541,16 +1541,20 @@ div#comparison, div#geo_trend, div#info_facility, div#preventive, div#equipment,
 /* line 694, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog label + .checkbox-list { padding-left: 160px; }
 /* line 696, ../../src/stylesheets/partials/_report.sass */
-.ui-dialog .ui-dialog-titlebar { background: none !important; border: none !important; padding: 15px; position: relative; }
-/* line 701, ../../src/stylesheets/partials/_report.sass */
-.ui-dialog .ui-dialog-titlebar-close { background: url("../images/icon_close.png") no-repeat !important; height: 18px; position: absolute; right: -8px; text-indent: -9999em !important; top: -8px; width: 18px; }
-/* line 709, ../../src/stylesheets/partials/_report.sass */
+.ui-dialog .ui-dialog-titlebar { background: none !important; border: none !important; height: 30px; padding: 15px; position: relative; }
+/* line 702, ../../src/stylesheets/partials/_report.sass */
+.ui-dialog .ui-dialog-titlebar-close { background: url("../images/icon_close.png") no-repeat !important; border: none !important; height: 18px; margin: 0 !important; opacity: 0.2; padding: 0 !important; right: 10px !important; text-indent: -9999em !important; top: 10px !important; width: 18px; -webkit-transition: all, 0.4s; -moz-transition: all, 0.4s; -o-transition: all, 0.4s; transition: all, 0.4s; }
+/* line 714, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog .ui-dialog-titlebar-close span { display: none !important; }
+/* line 716, ../../src/stylesheets/partials/_report.sass */
+.ui-dialog .ui-dialog-titlebar-close:hover, .ui-dialog .ui-dialog-titlebar-close:focus { opacity: 1; }
+/* line 718, ../../src/stylesheets/partials/_report.sass */
+.ui-dialog .ui-dialog-titlebar-close.ui-state-hover { border: none !important; margin: 0 !important; padding: 0 !important; }
 
-/* line 712, ../../src/stylesheets/partials/_report.sass */
+/* line 723, ../../src/stylesheets/partials/_report.sass */
 .ui-widget-overlay { background: rgba(0, 0, 0, 0.15); position: absolute; top: 0; z-index: 51 !important; }
 
-/* line 718, ../../src/stylesheets/partials/_report.sass */
+/* line 729, ../../src/stylesheets/partials/_report.sass */
 .search-choice-close { background: url("../js/jquery/chosen/chosen-sprite.png") -49px -8px no-repeat !important; top: 5px !important; }
 
 /* line 3, ../../src/stylesheets/partials/_graphs.sass */
