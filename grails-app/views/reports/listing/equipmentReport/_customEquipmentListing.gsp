@@ -110,13 +110,9 @@
 					<td>${equipment.warranty?.contact?.contactName}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('warrantyPeriodRemaining')}">
-<<<<<<< HEAD
-					
-					<td>${equipment.warrantyPeriodRemaining}</td>
-=======
-					%{-- TODO AR calculation AFTER RELEASE --}%
+					%{-- <td>${equipment.warrantyPeriodRemaining}</td>
+					TODO AR calculation AFTER RELEASE --}%
 					<td>${equipment.warrantyPeriod?.numberOfMonths}</td>
->>>>>>> listing-module
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('currentValue')}">
 					<td><g:formatNumber number="${equipment.currentValueOfThisEquipment}" type="number" format="###.##"/> ${equipment.currency}</td>
