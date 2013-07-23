@@ -53,6 +53,13 @@ function step3_init(){
   $('#js-prev-step-3').click(function(e) {
     $('#formRemoteStep3Prev').submit();
   });
+  $(':checkbox').click(function(e) {
+    var checked = $(':checkbox:checked').size()
+    if(checked > 10){
+      alert('A maximum of 10 options is required.');
+      return false;
+    }
+  });
 }
 
 function step4_init(){

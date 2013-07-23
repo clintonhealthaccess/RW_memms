@@ -33,6 +33,8 @@
         <span>Report Filter Summary:</span>
         <a href="#"><g:message code="reports.dataLocation"/> = 
           ${dataLocations?.size()}</a>,
+        <a href="#"><g:message code="reports.spareParts.showAtMmc.label" /> = 
+            ${showAtMmc?'&radic;':message(code:'reports.filters.none')}</a>,
         <a href="#"><g:message code="reports.sparePartType"/> = 
           ${sparePartTypes?.size()}</a>,
 
@@ -52,27 +54,31 @@
           <a href="#"><g:message code="reports.spareParts.inventory.acquisitionPeriod"/> =   
             ${Utils.formatDate(fromAcquisitionPeriod)?:message(code:'reports.filters.none')} - 
             ${Utils.formatDate(toAcquisitionPeriod)?:message(code:'reports.filters.none')}</a>,
-          <a href="#"><g:message code="reports.spareParts.inventory.noAcquisitionPeriod"/> = 
+          <a href="#"><g:message code="reports.spareParts.inventory.noAcquisitionPeriod.label"/> = 
             ${noAcquisitionPeriod?'&radic;':message(code:'reports.filters.none')}</a>
         </g:if>
 
-%{--         <g:if test="${reportSubType == ReportSubType.STATUSCHANGES}">
+        <g:if test="${reportSubType == ReportSubType.STATUSCHANGES}">
           <a href="#"><g:message code="reports.statusChanges"/> = 
             <g:if test="${statusChanges == null || statusChanges.empty}">
               ${message(code:'reports.filters.none')},
             </g:if>
-            <g:else>
+            %{-- <g:else>
               <g:each in="${SparePartStatusChange.values()}" var="statusEnum">
                 <g:if test="${statusChanges?.contains(statusEnum)}">
                   ${message(code: statusEnum?.messageCode+'.'+statusEnum?.name)},
                 </g:if>
               </g:each>
-            </g:else>
+            </g:else> --}%
           </a>
           <a href="#"><g:message code="reports.statusChangesPeriod"/> =   
             ${Utils.formatDate(fromStatusChangesPeriod)?:message(code:'reports.filters.none')} - 
             ${Utils.formatDate(toStatusChangesPeriod)?:message(code:'reports.filters.none')}</a>
-        </g:if> --}%
+        </g:if>
+        <g:if test="${reportSubType == ReportSubType.STOCKOUT}">
+          <a href="#"><g:message code="reports.spareParts.stockOut" /> = 
+            ${stockOutMonths?stockOutMonths+' '+message(code:'reports.spareParts.stockOut.months'):message(code:'reports.filters.none')}</a>
+        </g:if>
       </li>
     </g:if>
   </ul>

@@ -72,6 +72,7 @@ import org.chai.memms.Warranty;
  */
 class ListingController extends AbstractController{
 
+	def equipmentTypeService
 	def equipmentListingReportService
 	def workOrderListingReportService
 	def preventiveOrderListingReportService
@@ -535,10 +536,10 @@ class ListingController extends AbstractController{
 				redirect(action: "customPreventiveOrderListing", params: customizedListingParams)
 				break;
 			case ReportType.SPAREPARTS:
-				if(reportSubType == ReportSubType.INVENTORY || reportSubType == ReportSubType.STATUSCHANGES)
+				// if(reportSubType == ReportSubType.INVENTORY || reportSubType == ReportSubType.STATUSCHANGES)
 					redirect(action: "customSparePartsListing", params: customizedListingParams)
-				if(reportSubType == ReportSubType.STOCKOUT || reportSubType == ReportSubType.USERATE)
-					redirect(action: "customSparePartTypesListing", params: customizedListingParams)
+				// if(reportSubType == ReportSubType.STOCKOUT || reportSubType == ReportSubType.USERATE)
+				// 	redirect(action: "customSparePartTypesListing", params: customizedListingParams)
 				break;
 			default:
 				break;
@@ -687,16 +688,15 @@ class ListingController extends AbstractController{
 					// TODO AR - Add these properties to saved report
 					// if(savedReport.reportSubType == ReportSubType.STATUSCHANGES){
 					// 	customizedListingParams << [
-					// 		statusChanges: statusChanges,
-					// 		fromStatusChangesPeriod: fromStatusChangesPeriod,
-					// 		toStatusChangesPeriod: toStatusChangesPeriod
+					// 		statusChanges: savedReport.statusChanges,
+					// 		fromStatusChangesPeriod: savedReport.fromStatusChangesPeriod,
+					// 		toStatusChangesPeriod: savedReport.toStatusChangesPeriod
 					// 	]
 					// }
 					// TODO AR - Add these properties to saved report
 					// if(savedReport.reportSubType == ReportSubType.STOCKOUT){
 					// 	customizedListingParams << [
-					// 		stockOut: stockOut,
-					// 		stockOutMonths: stockOutMonths
+					// 		stockOutMonths: savedReport.stockOutMonths
 					// 	]
 					// }
 					// TODO AR - Add these properties to saved report
@@ -1057,10 +1057,13 @@ class ListingController extends AbstractController{
 		def dataLocations = getDataLocations()
 		def sparePartTypes = getSparePartTypes()
 
+		def showAtMmc = params.get('showAtMmc')
+
 		def customizedListingParams = [
 			reportType: reportType,
 			reportSubType: reportSubType,
 			dataLocations: dataLocations,
+			showAtMmc: showAtMmc,
 			sparePartTypes: sparePartTypes
 		]
 
@@ -1078,13 +1081,20 @@ class ListingController extends AbstractController{
 		}
 
 		if(reportSubType == ReportSubType.STATUSCHANGES){
-			def statusChanges = getSparePartStatusChanges()
+			// TODO SL def statusChanges = getSparePartStatusChanges()
 			def fromStatusChangesPeriod = getPeriod('fromStatusChangesPeriod')
 			def toStatusChangesPeriod = getPeriod('toStatusChangesPeriod')
 			customizedListingParams << [
-				statusChanges: statusChanges,
+				// TODO SL statusChanges: statusChanges,
 				fromStatusChangesPeriod: fromStatusChangesPeriod,
 				toStatusChangesPeriod: toStatusChangesPeriod
+			]
+		}
+
+		if(reportSubType == ReportSubType.STOCKOUT){
+			def stockOutMonths = params.get('stockOutMonths')
+			customizedListingParams << [
+				stockOutMonths: stockOtMonths
 			]
 		}
 
@@ -1148,10 +1158,8 @@ class ListingController extends AbstractController{
 	// 	]
 
 	// 	if(reportSubType == ReportSubType.STOCKOUT){
-	// 		def stockOut = params.get('stockOut')
 	// 		def stockOutMonths = params.get('stockOutMonths')
 	// 		customizedListingParams << [
-	// 			stockOut: stockOut,
 	// 			stockOutMonths: stockOutMonths
 	// 		]
 	// 	}
@@ -1284,8 +1292,10 @@ class ListingController extends AbstractController{
 		Set<EquipmentType> equipmentTypes = new HashSet<EquipmentType>()
 		if(params.get('allEquipmentTypes')){
 			if(log.isDebugEnabled()) log.debug("abstract.equipmentTypes ALL")
-			//TODO ?
+			// TODO AR - add observation param USEDINMEMMS
+			// TODO AR - or create query to return list of distinct equipment types based on equipments in the system
 			equipmentTypes = EquipmentType.list()
+			// equipmentTypes = equipmentTypeService.searchEquipmentType(params['term'],Observation."$params.observation",[:])
 		}
 		else if (params.list('equipmentTypes') != null && !params.list('equipmentTypes').empty) {
 			if(log.isDebugEnabled()) log.debug("abstract.equipmentTypes CUSTOM")

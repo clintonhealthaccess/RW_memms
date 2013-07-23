@@ -14,17 +14,16 @@
 			<g:if test="${reportTypeOptions.contains('quantityInStock')}">
 				<th>Quantity in Stock</th>
 			</g:if>
-			<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
-				%{-- TODO SL --}%
-			</g:if>
-			<g:if test="${reportTypeOptions.contains('status')}">
+
+			%{-- <g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
+				// TODO SL AFTER RELEASE
+			</g:if> --}%
+
+			<g:if test="${reportTypeOptions.contains('currentStatus')}">
 				<th>Status</th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('manufacturer')}">
 				<g:sortableColumn property="manufacturer"  title="${message(code: 'provider.type.manufacturer')}" params="[q:q]" />
-			</g:if>
-			<g:if test="${reportTypeOptions.contains('warrantyPeriodRemaining')}">
-				<th>Warranty Period Remaining</th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('discontinuedDate')}">
 				<th>Discontinued Date</th>
@@ -62,26 +61,25 @@
 				<g:if test="${reportTypeOptions.contains('quantityInStock')}">
 					<td>${sparePart.inStockQuantity}</td>
 				</g:if>
-				<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
-					%{-- TODO SL --}%
-				</g:if>
-				<g:if test="${reportTypeOptions.contains('status')}">
+
+				%{-- <g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
+					// TODO SL AFTER RELEASE
+				</g:if> --}%
+
+				<g:if test="${reportTypeOptions.contains('currentStatus')}">
 					<td>${message(code: sparePart.status?.messageCode+'.'+sparePart.status?.name)}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('manufacturer')}">
 					<td>${sparePart.type.manufacturer?.contact?.contactName}</td>
 				</g:if>
-				<g:if test="${reportTypeOptions.contains('warrantyPeriodRemaining')}">
-					<td>%{-- TODO --}%</td>
-				</g:if>
 				<g:if test="${reportTypeOptions.contains('discontinuedDate')}">
 					<td>${Utils.formatDate(sparePart.type.discontinuedDate)}</td>
 				</g:if>
 				<g:if test="${reportSubType == ReportSubType.STOCKOUT && reportTypeOptions.contains('forecastedStockOut')}">
-				    <td>%{-- TODO --}%</td>
+				    <td>%{-- TODO AR calculation AFTER RELEASE --}%</td>
 				</g:if>
 				<g:if test="${reportSubType == ReportSubType.USERATE && reportTypeOptions.contains('useRate')}">
-				    <td>%{-- TODO --}%</td>
+				    <td>%{-- TODO AR calculation AFTER RELEASE --}%</td>
 				</g:if>
 			</tr>
 		</g:each>

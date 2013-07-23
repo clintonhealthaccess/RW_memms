@@ -302,6 +302,26 @@ public class Equipment {
 		return previousState
 	}
 
+	public def getEquipmentTimeBasedStatusChange(List<EquipmentStatusChange> equipmentStatusChanges){
+		EquipmentStatusChange equipmentStatusChange = null
+
+		def previousStatus = getTimeBasedPreviousStatus()?.status
+		def currentStatus = getTimeBasedStatus().status
+
+		if(equipmentStatusChanges == null) equipmentStatusChanges = EquipmentStatusChange.values()
+	 	equipmentStatusChanges.each{ statusChange ->
+ 			
+ 			def previousStatusMap = statusChange.getStatusChange()['previous']
+			def currentStatusMap = statusChange.getStatusChange()['current']
+
+			def previousStatusChange = previousStatusMap.contains(previousStatus) || (previousStatusMap.contains(Status.NONE) && previousStatus == null)
+			def currentStatusChange = currentStatusMap.contains(currentStatus)
+
+			if(previousStatusChange && currentStatusChange) equipmentStatusChange = statusChange
+	 	}
+	 	return equipmentStatusChange
+	}
+
 	String toString() {
 		return "Equipment[id= " + id + " code= "+code+" serialNumber= "+serialNumber+" currentState= "+currentStatus+", previousState= "+getTimeBasedPreviousStatus()?.status+"]";
 
