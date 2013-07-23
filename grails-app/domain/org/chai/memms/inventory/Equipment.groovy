@@ -44,6 +44,8 @@ import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.location.DataLocation;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
+import org.joda.time.PeriodType;
+import org.joda.time.Period;
 import org.apache.commons.lang.math.RandomUtils;
 import groovy.time.TimeCategory;
 
@@ -240,6 +242,19 @@ public class Equipment {
 			warrantyEndDate = warranty.startDate + (warrantyPeriod.numberOfMonths).months
 		else
 			warrantyEndDate = null
+	}
+	
+	@Transient
+	def getWarrantyPeriodRemaining(){
+		def today=new Date()
+		DateTime todayDateTime = new DateTime(today)
+		if(warrantyEndDate!=null){
+			DateTime warrantyEndDateTime = new DateTime(warrantyEndDate)
+			//Period 
+			Period period = new Period(todayDateTime, warrantyEndDateTime)
+			return period
+		}
+		return null
 	}
 	
 	@Transient

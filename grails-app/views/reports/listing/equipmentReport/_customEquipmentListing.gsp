@@ -111,11 +111,11 @@
 				</g:if>
 				<!-- Calculations -->
 				<g:if test="${reportTypeOptions.contains('warrantyPeriodRemaining')}">
-					<td>${equipment.warrantyPeriod?.numberOfMonths}</td>
+					
+					<td>${equipment.warrantyPeriodRemaining}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('currentValue')}">
-					%{-- TODO AR calculation AFTER RELEASE --}%
-					<td><g:formatNumber number="${equipment.currentValueOfThisEquipment}" type="number" format="###.##"/></td>
+					<td><g:formatNumber number="${equipment.currentValueOfThisEquipment}" type="number" format="###.##"/> ${equipment.currency}</td>
 				</g:if>
 			</tr>
 		</g:each>
