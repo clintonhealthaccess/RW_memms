@@ -250,8 +250,11 @@ public class Equipment {
 		DateTime todayDateTime = new DateTime(today)
 		if(warrantyEndDate!=null){
 			DateTime warrantyEndDateTime = new DateTime(warrantyEndDate)
-			org.joda.time.Period period = new Period(todayDateTime, warrantyEndDateTime)
-			return period
+			Days d = Days.daysBetween(warrantyEndDateTime, todayDateTime)
+			int days = d.getDays()
+			int months =days/30
+			//org.joda.time.Period period = new Period(todayDateTime, warrantyEndDateTime)
+			return months
 		}else {
 		return null
 		}	
