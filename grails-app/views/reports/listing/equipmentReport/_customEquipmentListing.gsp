@@ -113,7 +113,7 @@
 					<td>${equipment.warrantyPeriodRemaining} <g:message code="listing.report.equipment.warranty.in.months.label" /></td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('currentValue')}">
-					<td><g:formatNumber number="${equipment.currentValueOfThisEquipment}" type="number" format="###.#"/> ${equipment.currency}</td>
+					<td><g:formatNumber number="${equipment.currentValueOfThisEquipment}" type="number" format="###.#" maxFractionDigits="0"/> ${equipment.currency}</td>
 				</g:if>
 			</tr>
 		</g:each>

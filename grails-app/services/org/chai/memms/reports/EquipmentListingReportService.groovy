@@ -199,6 +199,7 @@ class EquipmentListingReportService {
 					
 				if(departments && departments != null && departments.size() > 0)
 					inList ("department", departments)
+					
 				if(lowerLimitCost && lowerLimitCost!=null)
 					gt ("purchaseCost", lowerLimitCost)
 				if(upperLimitCost && upperLimitCost!=null)
@@ -238,7 +239,7 @@ class EquipmentListingReportService {
 				//MADE IT MANDATORY, CONDITION REMOVED
 					inList ("type", equipmentTypes)
 		
-				if(departments != null)
+				if(departments && departments != null && departments.size() > 0)
 					inList ("department", departments)
 				if(lowerLimitCost && lowerLimitCost!=null)
 					gt ("purchaseCost", lowerLimitCost)
