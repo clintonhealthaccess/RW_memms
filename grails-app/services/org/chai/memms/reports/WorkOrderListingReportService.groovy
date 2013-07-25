@@ -164,12 +164,14 @@ class WorkOrderListingReportService {
 					eq ("equip.currency",currency)
 				if(noCost != null && noCost)
 					eq ("equip.purchaseCost", null)
-
-				// TODO
-				// if(fromStatusChangesPeriod != null)
-				// 	gt ("TODO", fromStatusChangesPeriod)
-				// if(toStatusChangesPeriod != null)
-				// 	lt ("TODO", toStatusChangesPeriod)
+					
+				status{
+						if(fromStatusChangesPeriod && fromStatusChangesPeriod != null)
+						gt ("dateCreated", fromStatusChangesPeriod)
+						
+						if(toStatusChangesPeriod && toStatusChangesPeriod != null)
+						lt ("dateCreated", toStatusChangesPeriod)
+				}
 			}
 			if (log.isDebugEnabled()) log.debug("WORK ORDERS SIZE: "+ criteriaWorkOrders.size())
 
@@ -177,7 +179,7 @@ class WorkOrderListingReportService {
 			if(statusChanges != null && !statusChanges.empty){
 				def statusChangesWorkOrders = []
 				criteriaWorkOrders.each { workOrder ->
-					def workOrderStatusChange = workOrderService.getWorkOrderTimeBasedStatusChange(workOrder, statusChanges)
+					def workOrderStatusChange = workOrderService.getWorkOrderTimeBasedStatusChange(workOrder, statusChanges) 
 					if(workOrderStatusChange != null) statusChangesWorkOrders.add(workOrder)
 				}
 				customWorkOrders = statusChangesWorkOrders

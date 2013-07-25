@@ -249,12 +249,15 @@ class EquipmentListingReportService {
 					eq ("currency",currency)
 				if(noCost != null && noCost)
 					eq ("purchaseCost", null)
-
-				// TODO
-				// if(fromStatusChangesPeriod != null)
-				// 	gt ("TODO", fromStatusChangesPeriod)
-				// if(toStatusChangesPeriod != null)
-				// 	lt ("TODO", toStatusChangesPeriod)
+					
+				status{
+						if(fromStatusChangesPeriod && fromStatusChangesPeriod != null)
+						gt ("dateOfEvent", fromStatusChangesPeriod)
+							
+						if(toStatusChangesPeriod && toStatusChangesPeriod != null)
+						lt ("dateOfEvent", toStatusChangesPeriod)
+				}
+					
 			}
 			if (log.isDebugEnabled()) log.debug("EQUIPMENTS SIZE: "+ criteriaEquipments.size())
 

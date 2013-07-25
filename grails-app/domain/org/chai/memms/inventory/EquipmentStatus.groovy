@@ -89,9 +89,10 @@ class EquipmentStatus {
 		 String getKey() { return name }
 		 Map<String,List<Status>> getStatusChange() { return statusChange }
 	}
-	
+	//WHY THIS TWO DATES ASKED BY APHRORWA
 	Date dateOfEvent
 	Date dateCreated
+	
 	User changedBy
 	Status status
 	String reasons

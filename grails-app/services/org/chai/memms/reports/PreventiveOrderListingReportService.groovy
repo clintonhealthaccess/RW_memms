@@ -122,11 +122,11 @@ class PreventiveOrderListingReportService {
 			if(noCost != null && noCost)
 				eq ("equip.purchaseCost", null)
 				
-			// TODO
-			// if(fromWorkOrderPeriod != null)
-			// 	gt ("TODO", fromWorkOrderPeriod)
-			// if(toWorkOrderPeriod != null)
-			// 	lt ("TODO", toWorkOrderPeriod)
+			// DONE
+			 if(fromWorkOrderPeriod && fromWorkOrderPeriod != null)
+			 	gt ("dateCreated", fromWorkOrderPeriod)
+			 if(toWorkOrderPeriod && toWorkOrderPeriod != null)
+			 	lt ("dateCreated", toWorkOrderPeriod)
 		}
 	}
 
