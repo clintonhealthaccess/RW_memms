@@ -704,22 +704,6 @@ class ListingController extends AbstractController{
 		}
 	}
 
-	// def deleteCustomizedListing ={
-	// 	if (log.isDebugEnabled()) log.debug("listing.deleteCustomizedListing start, params:"+params)
-
-	// 	def savedReport = getSavedReport()
-	// 	if (log.isDebugEnabled()) log.debug("listing.deleteCustomizedListing savedReport:"+savedReport)
-
-	// 	def result = false
-	// 	if(savedReport != null){
-	// 		savedReport.delete(flush: true)
-	// 		if (log.isDebugEnabled()) log.debug("listing.deleteCustomizedListing savedReport deleted")
-	// 		result = true
-	// 	}
-
-	// 	render(contentType:"text/json") { result = [result] }
-	// }
-
 	// inventory
 
 	def customEquipmentListing ={

@@ -31,12 +31,3 @@
   </div>
   <a class='v-tabs-dynav-scroll-left' href='#' id='js-scroll-left'></a>
 </div>
-<r:script>
-$(document).ready(function(){
-  $(".delete-node").click(function(e){
-      var baseUrl = "${createLink(controller: 'listing', action:'deleteCustomizedListing')}";
-      var reportType = "${reportType}";
-      removeElement(e, this, baseUrl, reportType);
-  });
-});
-</r:script>
