@@ -80,25 +80,25 @@ $(document).ready(function(){
 });
 
 // load predefined/saved report list jqueryui horizontal scroll delete element
-function removeElement(eventItem, elementItem, baseUrl, reportType){
-	if(confirm('Are you sure?')){
-        var savedReportId = $(elementItem).data('saved-report-id')
-        var savedReport = $(elementItem).parents('li')
-        eventItem.preventDefault();
-        $.ajax({
-			type :'GET',
-			dataType: 'json',
-			data:{ "reportType":reportType, "savedReportId":savedReportId },
-			url:baseUrl,
-			success: function(result) {
-				// alert("Success! "+result);
-				if(result[0]){
-				  savedReport.remove();
-				}
-			},
-			error: function(result) {
-				// alert("Error! "+result);
-			}
-        });
-	}
-}
+// function removeElement(eventItem, elementItem, baseUrl, reportType){
+// 	if(confirm('Are you sure?')){
+//         var savedReportId = $(elementItem).data('saved-report-id')
+//         var savedReport = $(elementItem).parents('li')
+//         eventItem.preventDefault();
+//         $.ajax({
+// 			type :'GET',
+// 			dataType: 'json',
+// 			data:{ "reportType":reportType, "savedReportId":savedReportId },
+// 			url:baseUrl,
+// 			success: function(result) {
+// 				// alert("Success! "+result);
+// 				if(result[0]){
+// 				  savedReport.remove();
+// 				}
+// 			},
+// 			error: function(result) {
+// 				// alert("Error! "+result);
+// 			}
+//         });
+// 	}
+// }

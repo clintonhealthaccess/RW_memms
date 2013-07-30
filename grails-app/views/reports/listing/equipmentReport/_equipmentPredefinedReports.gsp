@@ -4,11 +4,18 @@
     <ul>
       <g:each in="${savedReports}" var="savedReport" status="i">
         <li>
-          <a href="${createLinkWithTargetURI(controller: 'listing', action:'savedCustomizedListing', params: [savedReportId:savedReport.id, reportType:savedReport.reportType])}"
-            class="tooltip" title="${savedReport.reportName}">
+          <%
+            savedReportParams = [:]
+            savedReportParams.putAll params
+            savedReportParams['savedReportId'] = savedReport.id+""
+          %>
+          <a href="${createLinkWithTargetURI(controller: 'listing', action:'savedCustomizedListing', params: [savedReportId:savedReport.id, reportType:savedReport.reportType])}" class="tooltip" title="${savedReport.reportName}">
             ${savedReport.reportName}
           </a>
-          <span class='delete-node' data-saved-report-id="${savedReport.id}">X</span>
+          %{-- old delete --}%
+          %{-- <span class='delete-node' data-saved-report-id="${savedReport.id}">X</span> --}%
+          %{-- new delete! --}%
+          <a class="delete-node" href="${createLink(controller: 'listing', action:'deleteCustomizedReport', params: savedReportParams)}">X</a>
         </li>
       </g:each>
       <li>
@@ -45,12 +52,14 @@
   </div>
   <a class='v-tabs-dynav-scroll-left' href='#' id='js-scroll-left'></a>
 </div>
-<r:script>
+%{-- <r:script>
 $(document).ready(function(){
   $(".delete-node").click(function(e){
+      if(confirm('Are you sure?')) return true;
+      else return false;
       var baseUrl = "${createLink(controller: 'listing', action:'deleteCustomizedListing')}";
       var reportType = "${reportType}";
       removeElement(e, this, baseUrl, reportType);
   });
 });
-</r:script>
+</r:script> --}%
