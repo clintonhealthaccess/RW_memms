@@ -4,11 +4,15 @@
     <ul>
       <g:each in="${savedReports}" var="savedReport" status="i">
         <li>
-          <a href="${createLinkWithTargetURI(controller: 'listing', action:'savedCustomizedListing', params: [savedReportId:savedReport.id, reportType:savedReport.reportType])}"
-            class="tooltip" title="${savedReport.reportName}">
+          <%
+            savedReportParams = [:]
+            savedReportParams.putAll params
+            savedReportParams['savedReportId'] = savedReport.id+""
+          %>
+          <a href="${createLinkWithTargetURI(controller: 'listing', action:'savedCustomizedListing', params: [savedReportId:savedReport.id, reportType:savedReport.reportType])}" class="tooltip" title="${savedReport.reportName}">
             ${savedReport.reportName}
           </a>
-          <span class='delete-node' data-saved-report-id="${savedReport.id}">X</span>
+          <a class="delete-node" href="${createLink(controller: 'listing', action:'deleteCustomizedReport', params: savedReportParams)}">X</a>
         </li>
       </g:each>
 	    <li>

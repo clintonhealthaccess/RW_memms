@@ -23,7 +23,7 @@
 				<th>Status</th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('manufacturer')}">
-				<g:sortableColumn property="manufacturer"  title="${message(code: 'provider.type.manufacturer')}" params="[q:q]" />
+				<g:sortableColumn property="manufacturer"  title="${message(code: 'provider.type.manufacturer')}" params="${params}" />
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('discontinuedDate')}">
 				<th>Discontinued Date</th>
