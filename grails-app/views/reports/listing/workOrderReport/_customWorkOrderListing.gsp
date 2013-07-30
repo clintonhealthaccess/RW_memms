@@ -81,7 +81,9 @@
 				</g:if>
 
 				<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
+					%{--
 					<g:set var="statusChangesEnum" value="${order.getWorkOrderTimeBasedStatusChange(customWorkOrderParams.statusChanges)}"/>
+					--}%
 					<td>${message(code: statusChangesEnum?.messageCode+'.'+statusChangesEnum?.name)}</td>
 				</g:if>
 
@@ -89,10 +91,10 @@
 					<td>${message(code: order.currentStatus?.messageCode+'.'+order.currentStatus?.name)}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('travelTime')}">
-					<td>${order.travelTime?.numberOfMinutes}</td>
+					<td>${order.travelTime?.numberOfMinutes} Minutes</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('workTime')}">
-					<td>${order.workTime?.numberOfMinutes}</td>
+					<td>${order.workTime?.numberOfMinutes} Minutes</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('estimatedCost')}">
 					<td>${order.estimatedCost}</td>
@@ -105,6 +107,7 @@
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('listPerformedActions')}">
 					%{-- TODO AR corrective process property AFTER RELEASE --}%
+					<td>${order.actions}</td>
 					<td></td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('description')}">

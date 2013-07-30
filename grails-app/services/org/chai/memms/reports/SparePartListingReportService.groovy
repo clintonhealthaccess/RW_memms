@@ -7,10 +7,11 @@ import java.util.Map;
 
 import org.chai.location.DataLocation;
 import org.chai.location.Location;
-import org.chai.memms.report.listing.SparePartReport
+import org.chai.memms.report.listing.SparePartReport;
 import org.chai.memms.security.User;
 import org.chai.memms.security.User.UserType;
 import org.chai.memms.spare.part.SparePart;
+import org.chai.memms.spare.part.SparePart.StockLocation;
 import org.chai.memms.spare.part.SparePartType;
 import org.chai.memms.spare.part.SparePart.SparePartStatus;
 import org.chai.memms.util.Utils.ReportType;
@@ -85,6 +86,7 @@ class SparePartListingReportService {
 
 		def dataLocations = customSparePartsParams.get('dataLocations')
 		def sparePartTypes = customSparePartsParams.get('sparePartTypes')
+		def showAtMMC = customSparePartsParams.get('showAtMmc')
 
 		def criteria = SparePart.createCriteria();
 
@@ -97,9 +99,9 @@ class SparePartListingReportService {
 			def sparePartStatus = customSparePartsParams.get('sparePartStatus')
 
 			criteriaSpareParts = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-
-				//Mandatory property
-					inList("dataLocation",dataLocations)
+				
+				/*//Mandatory property
+					inList("dataLocation",dataLocations)*/
 				//Mandatory property
 					inList ("type", sparePartTypes)
 				if(noAcquisitionPeriod != null && noAcquisitionPeriod)
@@ -110,6 +112,18 @@ class SparePartListingReportService {
 					gt ("purchaseDate", fromAcquisitionPeriod)
 				if(toAcquisitionPeriod && toAcquisitionPeriod != null)
 					lt ("purchaseDate", toAcquisitionPeriod)	
+					
+				
+					//TODO to be reviewed by AR
+				if(user.userType.equals(UserType.ADMIN) || user.userType.equals(UserType.TECHNICIANMMC) || user.userType.equals(UserType.SYSTEM) || user.userType.equals(UserType.TECHNICIANDH)){
+					if(showAtMMC && showAtMMC != null)
+						eq("stockLocation",StockLocation.MMC)
+					if(dataLocations && dataLocations != null)
+						inList("dataLocation",dataLocations)
+				}else {
+					if(dataLocations && dataLocations != null)
+					inList("dataLocation",dataLocations)
+				}
 			}
 			if (log.isDebugEnabled()) log.debug("SPARE PARTS SIZE: "+ criteriaSpareParts.size())
 		}

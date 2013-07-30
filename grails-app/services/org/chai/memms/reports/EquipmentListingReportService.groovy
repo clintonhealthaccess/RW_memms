@@ -199,6 +199,7 @@ class EquipmentListingReportService {
 					
 				if(departments && departments != null && departments.size() > 0)
 					inList ("department", departments)
+					
 				if(lowerLimitCost && lowerLimitCost!=null)
 					gt ("purchaseCost", lowerLimitCost)
 				if(upperLimitCost && upperLimitCost!=null)
@@ -238,7 +239,7 @@ class EquipmentListingReportService {
 				//MADE IT MANDATORY, CONDITION REMOVED
 					inList ("type", equipmentTypes)
 		
-				if(departments != null)
+				if(departments && departments != null && departments.size() > 0)
 					inList ("department", departments)
 				if(lowerLimitCost && lowerLimitCost!=null)
 					gt ("purchaseCost", lowerLimitCost)
@@ -248,12 +249,15 @@ class EquipmentListingReportService {
 					eq ("currency",currency)
 				if(noCost != null && noCost)
 					eq ("purchaseCost", null)
-
-				// TODO
-				// if(fromStatusChangesPeriod != null)
-				// 	gt ("TODO", fromStatusChangesPeriod)
-				// if(toStatusChangesPeriod != null)
-				// 	lt ("TODO", toStatusChangesPeriod)
+					
+				status{
+						if(fromStatusChangesPeriod && fromStatusChangesPeriod != null)
+						gt ("dateOfEvent", fromStatusChangesPeriod)
+							
+						if(toStatusChangesPeriod && toStatusChangesPeriod != null)
+						lt ("dateOfEvent", toStatusChangesPeriod)
+				}
+					
 			}
 			if (log.isDebugEnabled()) log.debug("EQUIPMENTS SIZE: "+ criteriaEquipments.size())
 
