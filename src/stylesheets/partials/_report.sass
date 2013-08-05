@@ -199,6 +199,7 @@
   > *
     float: right
   a
+    background-color: none
     color: #bbb
     display: block
     max-width: 167px
@@ -214,7 +215,7 @@
       color: $primary
     &:hover, &:focus
       color: $primary
-      background: rgba(0, 0, 0, 0.05)
+      background: rgba(0, 0, 0, 0.02)
 
     &.v-tabs-dynav-scroll-right, &.v-tabs-dynav-scroll-left
       background: white
@@ -259,23 +260,33 @@
     width: 183px
     &:nth-child(7n+5)
       border-right: none
+    &:hover, &:focus
+      a
+        background: rgba(0, 0, 0, 0.05)
+        color: $primary
+      .delete-node
+        background: url('../images/delete-box.png') no-repeat center transparent !important
 
 
 .delete-node
-  background: url('../images/icons/mini_delete.png') no-repeat center
+  background: url('../images/delete-box.png') no-repeat center
   cursor: pointer
   display: inline-block
-  height: 13px
+  height: 12px
   line-height: 13px
-  margin-left: 0
-  position: absolute
-  right: 5px
+  margin-left: 0 !important
+  padding: 0 !important
+  position: absolute !important
+  right: 3px
   text-indent: -9999em
-  top: 5px
-  width: 13px
+  top: 3px
+  width: 12px
   opacity: 0.25
+  z-index: 1
+  +transition(all, .4s)
 
   &:hover, &:focus
+    background: url('../images/delete-box.png') no-repeat center transparent !important
     opacity: 1
 
 // end
