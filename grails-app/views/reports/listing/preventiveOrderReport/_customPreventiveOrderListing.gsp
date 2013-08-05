@@ -76,19 +76,17 @@
 					<td>${message(code: order.status?.messageCode+'.'+order.status?.name)}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('nextInterventionScheduledOn')}">
-					%{-- TODO AR calculation AFTER RELEASE --}%
-					<td></td>
+					<td>${(order.type.equals(PreventiveOrderType.DURATIONBASED))?Utils.formatDateWithTime(order.nextOccurence):''}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('percentageInterventionsDone')}">
 					%{-- TODO AR calculation AFTER RELEASE --}%
 					<td></td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('recurrencePeriod')}">
-					%{-- TODO AR calculation AFTER RELEASE --}%
-					<td></td>
+					<td>${order.occurInterval}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('startDate')}">
-					<td>${order.firstOccurenceOn?.timeDate}</td>
+					<td>${Utils.formatDateWithTime(order.firstOccurenceOn?.timeDate)}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('responsible')}">
 					<td>${order.preventionResponsible}</td>

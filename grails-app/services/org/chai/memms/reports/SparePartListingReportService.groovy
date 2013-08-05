@@ -100,8 +100,6 @@ class SparePartListingReportService {
 
 			criteriaSpareParts = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 				
-				/*//Mandatory property
-					inList("dataLocation",dataLocations)*/
 				//Mandatory property
 					inList ("type", sparePartTypes)
 				if(noAcquisitionPeriod != null && noAcquisitionPeriod)

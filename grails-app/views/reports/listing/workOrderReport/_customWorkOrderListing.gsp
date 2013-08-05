@@ -91,7 +91,14 @@
 					<td>${message(code: order.currentStatus?.messageCode+'.'+order.currentStatus?.name)}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('travelTime')}">
-					<td>${order.travelTime?.numberOfMinutes} Minutes</td>
+					<td>
+					<g:if test="${order.travelTime?.numberOfMinutes!=null}">
+						${order.travelTime?.numberOfMinutes} Minutes
+					</g:if>
+					<g:else>
+					
+					</g:else>
+					</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('workTime')}">
 					<td>${order.workTime?.numberOfMinutes} Minutes</td>
@@ -107,14 +114,13 @@
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('listPerformedActions')}">
 					%{-- TODO AR corrective process property AFTER RELEASE --}%
-					<td>${order.actions}</td>
-					<td></td>
+					<td>${order.actions?.collect{(it.name)}}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('description')}">
 					<td><g:stripHtml field="${order.description}" chars="30"/></td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('dateOfEvent')}">
-				<td>${order.dateCreated}</td>
+				<td>${Utils.formatDateWithTime(order.dateCreated)}</td>
 				</g:if>
 			</tr>
 		</g:each>

@@ -1,4 +1,3 @@
-
 <%@ page import="org.chai.memms.util.Utils" %>
 <table class="items">
 	<thead>
