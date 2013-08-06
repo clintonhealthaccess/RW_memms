@@ -1364,10 +1364,11 @@ class ListingController extends AbstractController{
 	}
 	public Set<Department> getDepartments() {
 		if(log.isDebugEnabled()) log.debug("abstract.departments params:"+params)
-		Set<Department> departments = new HashSet<Department>()
+		Set<Department> departments = null
 		if(params.get('allDepartments')){
 			if(log.isDebugEnabled()) log.debug("abstract.departments ALL")
 			// if the user selects all, we return a new list
+			departments = new HashSet<Department>()
 			return departments
 		}
 		else if (params.list('departments') != null && !params.list('departments').empty) {
@@ -1384,10 +1385,11 @@ class ListingController extends AbstractController{
 	}
 	public Set<EquipmentType> getEquipmentTypes() {
 		if(log.isDebugEnabled()) log.debug("abstract.equipmentTypes params:"+params)
-		Set<EquipmentType> equipmentTypes = new HashSet<EquipmentType>()
+		Set<EquipmentType> equipmentTypes = null
 		if(params.get('allEquipmentTypes')){
 			if(log.isDebugEnabled()) log.debug("abstract.equipmentTypes ALL")
 			// if the user selects all, we return a new list
+			equipmentTypes = new HashSet<EquipmentType>()
 			return equipmentTypes
 		}
 		else if (params.list('equipmentTypes') != null && !params.list('equipmentTypes').empty) {
@@ -1403,11 +1405,12 @@ class ListingController extends AbstractController{
 	}
 	public Set<SparePartType> getSparePartTypes() {
 		if(log.isDebugEnabled()) log.debug("abstract.sparePartTypes params:"+params)
-		Set<SparePartType> sparePartTypes = new HashSet<SparePartType>()
+		Set<SparePartType> sparePartTypes = null
 		if(log.isDebugEnabled()) log.debug("abstract.sparePartTypes ALL")
 		if(params.get('allSparePartTypes')){
 			if(log.isDebugEnabled()) log.debug("abstract.sparePartTypes ALL")
 			// if the user selects all, we return a new list
+			sparePartTypes = new HashSet<SparePartType>()
 			return sparePartTypes
 		}
 		else if (params.list('sparePartTypes') != null && !params.list('sparePartTypes').empty) {
