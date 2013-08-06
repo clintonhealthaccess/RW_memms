@@ -53,10 +53,11 @@ environments {
     }
     production {
         dataSource {
-dbCreate = "update"
-driverClassName = "com.mysql.jdbc.Driver"
-//dialect = "org.hibernate.dialect.MySQLMyISAMDialect"
-            //url = "jdbc:h2:prodDb;MVCC=TRUE"
+            dbCreate = "update"
+            driverClassName = "com.mysql.jdbc.Driver"
+            username = "memms"
+            password = "memms"
+            url = "jdbc:mysql://localhost/memms"
             pooled = true
             properties {
                maxActive = -1
