@@ -696,18 +696,29 @@ div#comparison, div#geo_trend, div#info_facility, div#preventive, div#equipment,
   .ui-dialog-titlebar
     background: none !important
     border: none !important
+    height: 30px
     padding: 15px
     position: relative
   .ui-dialog-titlebar-close
     background: url("../images/icon_close.png") no-repeat !important
+    border: none !important
     height: 18px
-    position: absolute
-    right: -8px
+    margin: 0 !important
+    opacity: .2
+    padding: 0 !important
+    right: 10px !important
     text-indent: -9999em !important
-    top: -8px
+    top: 10px !important
     width: 18px
+    +transition(all, .4s)
     span
       display: none !important
+    &:hover, &:focus
+      opacity: 1
+    &.ui-state-hover
+      border: none !important
+      margin: 0 !important
+      padding: 0 !important
 
 .ui-widget-overlay
   background: rgba(0, 0, 0, 0.15)

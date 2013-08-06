@@ -7,7 +7,7 @@
 	<thead>
 		<tr>			
 			<g:if test="${reportTypeOptions.contains('location')}">
-				<g:sortableColumn property="dataLocation"  title="${message(code: 'location.label')}" params="[q:q]" />
+				<g:sortableColumn property="dataLocation"  title="${message(code: 'location.label')}" params="${params}" />
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('code')}">
 				<th><g:message code="default.equipment.code.label"/></th>
@@ -19,18 +19,18 @@
 				<th><g:message code="default.equipment.type.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('model')}">
-				<g:sortableColumn property="model"  title="${message(code: 'equipment.model.label')}" params="[q:q]" />
+				<g:sortableColumn property="model"  title="${message(code: 'equipment.model.label')}" params="${params}" />
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('manufacturer')}">
-				<g:sortableColumn property="manufacturer"  title="${message(code: 'provider.type.manufacturer')}" params="[q:q]" />
+				<g:sortableColumn property="manufacturer"  title="${message(code: 'provider.type.manufacturer')}" params="${params}" />
 			</g:if>
 
 			<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
-				<g:sortableColumn property="statusChanges"  title="Status Changes" params="[q:q]" />
+				<g:sortableColumn property="statusChanges"  title="Status Changes" params="${params}" />
 			</g:if>
 
 			<g:if test="${reportTypeOptions.contains('currentStatus')}">
-				<g:sortableColumn property="currentStatus" title="${message(code: 'entity.status.label')}" params="[q:q]" />
+				<g:sortableColumn property="currentStatus" title="${message(code: 'entity.status.label')}" params="${params}" />
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('travelTime')}">
 				<th><g:message code="listing.report.corrective.travel.time.label"/></th>

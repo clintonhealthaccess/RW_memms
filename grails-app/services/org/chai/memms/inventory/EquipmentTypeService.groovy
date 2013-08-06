@@ -62,7 +62,6 @@ class EquipmentTypeService {
 			}
 		}
 	}
-
 	
 	public static List<Observation> getEnumeMatcher(String text){
 		List<Observation> observations=[]

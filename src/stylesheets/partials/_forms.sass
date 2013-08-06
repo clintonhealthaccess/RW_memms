@@ -112,9 +112,8 @@ button, input[type=submit], .next, .btn
     color: #fff
     +background(linear-gradient($yes, $yes - #111))
   &:active
-    position: relative
-    top: 2px
-    +box-shadow(#ddd 0px 1px 1px)
+    background: $yes - #111
+    +box-shadow(rgba(0, 0, 0, 0.3) 0px 1px 3px inset)
   &#cancel-button
     background: none
     border: none
@@ -146,6 +145,9 @@ button, input[type=submit], .next, .btn
       color: #fff
       +background(linear-gradient($yes, $yes - #111))
       +text-shadow($yes - #333 0 1px 0)
+    &:active
+      background: $yes - #111
+      +box-shadow(rgba(0, 0, 0, 0.3) 0px 1px 3px inset)
   &.import
     margin-right: 5px
   &.push-r

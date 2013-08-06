@@ -5,6 +5,7 @@
   %{-- customized but unsaved listing --}%
   <g:if test="${customizedReportName != null && !customizedReportName.empty}">
     <h1>${customizedReportName}</h1>
+    <a href="${createLink(action:'saveCustomizedReport', params: params)}">Save</a>
   </g:if>
   %{-- customized saved listing --}%
   <g:elseif test="${selectedReport != null}">
