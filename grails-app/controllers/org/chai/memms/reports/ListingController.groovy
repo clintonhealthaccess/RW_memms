@@ -1374,6 +1374,7 @@ class ListingController extends AbstractController{
 		else if (params.list('departments') != null && !params.list('departments').empty) {
 			if(log.isDebugEnabled()) log.debug("abstract.departments CUSTOM")
 			def types = params.list('departments')
+			departments = new HashSet<Department>()
 			departments.addAll(types.collect{ it ->
 				if(log.isDebugEnabled())
 					log.debug("abstract.departments department:"+it+", isNumber:"+NumberUtils.isNumber(it as String))
@@ -1395,6 +1396,7 @@ class ListingController extends AbstractController{
 		else if (params.list('equipmentTypes') != null && !params.list('equipmentTypes').empty) {
 			if(log.isDebugEnabled()) log.debug("abstract.equipmentTypes CUSTOM")
 			def types = params.list('equipmentTypes')
+			equipmentTypes = new HashSet<EquipmentType>()
 			equipmentTypes.addAll(types.collect{ it ->
 				if(log.isDebugEnabled())
 					log.debug("abstract.equipmentTypes equipmentType:"+it+", isNumber:"+NumberUtils.isNumber(it as String))
@@ -1416,6 +1418,7 @@ class ListingController extends AbstractController{
 		else if (params.list('sparePartTypes') != null && !params.list('sparePartTypes').empty) {
 			if(log.isDebugEnabled()) log.debug("abstract.sparePartTypes CUSTOM")
 			def types = params.list('sparePartTypes')
+			sparePartTypes = new HashSet<SparePartType>()
 			sparePartTypes.addAll(types.collect{ it ->
 				if(log.isDebugEnabled())
 					log.debug("abstract.sparePartTypes sparePartType:"+it+", isNumber:"+NumberUtils.isNumber(it as String))
