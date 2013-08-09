@@ -32,10 +32,10 @@ package memms.reports.dashboard
  *
  */
 class IndicatorComputationJob {
-    def indicatorReportService
-    def cronExpression = "0 0 0 1 1 * ? *" // s m H d M DOW yyyy
+    // def indicatorReportService
+    // def cronExpression = "0 0 0 1 1 * ? *" // s m H d M DOW yyyy
 
-    def execute() {
-        indicatorReportService.computeCurrentReport()
-    }
+    // def execute() {
+    //     indicatorReportService.computeCurrentReport()
+    // }
 }
