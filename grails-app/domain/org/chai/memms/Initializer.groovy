@@ -143,7 +143,7 @@ public class Initializer {
 			defaultTechnicianDHRole.addToPermissions("notificationWorkOrder:*")
 			defaultTechnicianDHRole.addToPermissions("preventiveOrderView:*")
 			defaultTechnicianDHRole.addToPermissions("home:*")
-			defaultTechnicianDHRole.addToPermissions("menu:home,inventory,maintenance,correctivemaintenance,preventivemaintenance,sparePart,reports")
+			defaultTechnicianDHRole.addToPermissions("menu:home,inventory,maintenance,correctivemaintenance,preventivemaintenance,sparePart,reports,dashboard")
 			defaultTechnicianDHRole.addToPermissions("provider:getAjaxData")
 			defaultTechnicianDHRole.addToPermissions("equipmentType:getAjaxData")
 			defaultTechnicianDHRole.addToPermissions("sparePartType:getAjaxData")
