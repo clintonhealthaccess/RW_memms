@@ -204,7 +204,7 @@ function getHtml(htmls,field){
  * Escalate WorkOrder
  */
 function escaletWorkOrder(baseUrl){
-	$(".ajax-spinner").hide();
+	hideSpinnerAndErrorMsg()
 	$("tr").on("click",".escalate",function(e){
 		e.preventDefault();
 		$(this).nextAll(".ajax-spinner").show();
@@ -217,19 +217,14 @@ function escaletWorkOrder(baseUrl){
 				addListAjaxResponse(data)
 			}
 		});
-		$(this).ajaxError(function(){
-			$(this).nextAll(".ajax-error").show();
-			$(this).nextAll(".ajax-spinner").hide();
-			$(this).fadeIn("slow");
-		});
+		listRefresher(this);
 	})
 }
 /**
  * Edit donation and obsolete
  */
 function updateEquipment(baseUrl){
-	$(".ajax-spinner").hide();
-	$(".ajax-error").hide()
+	hideSpinnerAndErrorMsg()
 	$(".list-check-box").change(function(event){
 		$(event.target).hide();
 	    $(event.target).prev().show();
@@ -257,8 +252,7 @@ function updateEquipment(baseUrl){
  * Add work order maintenance process
  */
 function addWorkOrderProcess(baseUrl,order,errorMsg){
-	$(".ajax-spinner").hide();
-	$(".ajax-error").hide()
+	hideSpinnerAndErrorMsg()
 	$('.process').on("click",".add-process-button",function(e){
 		e.preventDefault();
 		$(this).hide();
@@ -269,18 +263,11 @@ function addWorkOrderProcess(baseUrl,order,errorMsg){
 			data:{"order.id":order,"type":$(this).prevAll(".idle-field").attr('name'),"value":$(this).prevAll(".idle-field").attr('value')},
 			url:baseUrl,
 			success: function(data) {
-				$(e.target).nextAll(".ajax-error").hide();
-				$(e.target).nextAll(".ajax-spinner").hide();
-				$(e.target).prevAll(".idle-field").val("")
-				$(e.target).fadeIn("slow");
+				spinnerHandler(e)
 				refreshList(data.results[1],'.process-list-'+data.results[2])
 			}
 		});
-		$(this).ajaxError(function(){
-			$(this).nextAll(".ajax-error").show();
-			$(this).nextAll(".ajax-spinner").hide();
-			$(this).fadeIn("slow");
-		});
+		listRefresher(this);
 	})
 }
 /**
@@ -296,8 +283,7 @@ function addExpectedLifeYearMonth(expectedLifeTime){
  * Remove Work Order Maintenance Process
  */
 function removeWorkOrderProcess(baseUrl){
-	$(".ajax-spinner").hide();
-	$(".ajax-error").hide();
+	hideSpinnerAndErrorMsg()
 	$('.process').on("click","a.delete-process",function(e){
 		e.preventDefault();
 		$(this).hide();
@@ -305,19 +291,11 @@ function removeWorkOrderProcess(baseUrl){
 		$.ajax({
 			type :'GET',dataType: 'json',data:{"process.id":$(this).attr("name")},url:baseUrl,
 			success: function(data) {
-				$(e.target).nextAll(".ajax-error").hide();
-				$(e.target).nextAll(".ajax-spinner").hide();
-				$(e.target).fadeIn("slow");
+				spinnerHandler(e)
 				refreshList(data.results[1],'.process-list-'+data.results[2])
 			}
 		});
-
-		$(this).ajaxError(function(){
-			$(this).nextAll(".ajax-error").show();
-			$(this).nextAll(".ajax-spinner").hide();
-			$(this).fadeIn("slow");
-		});
-
+		listRefresher(this);
 	});
 }
 
@@ -334,18 +312,11 @@ function addComment(baseUrl,order){
 			data:{"order.id":order,"content":$("#comment-content").val()},
 			url:baseUrl,
 			success: function(data) {
-				$(e.target).nextAll(".ajax-error").hide();
-				$(e.target).nextAll(".ajax-spinner").hide();
-				$(e.target).fadeIn("slow");
-				$("#comment-content").val("")
+				spinnerHandler(e)
 				refreshList(data.results[1],'.comment-list')
 			}
 		});
-		$(this).ajaxError(function(){
-			$(this).nextAll(".ajax-error").show();
-			$(this).nextAll(".ajax-spinner").hide();
-			$(this).fadeIn("slow");
-		});
+		listRefresher(this);
 	})
 }
 
@@ -361,17 +332,11 @@ function removeComment(baseUrl){
 			type :'GET',dataType: 'json',data:{"comment.id":$(this).attr("id")},
 			url:baseUrl,
 			success: function(data) {
-				$(e.target).prevAll(".ajax-error").hide();
-				$(e.target).prevAll(".ajax-spinner").hide();
-				$(e.target).fadeIn("slow");
+				spinnerHandler(e)
 				refreshList(data.results[1],'.comment-list')
 			}
 		});
-		$(this).ajaxError(function(){
-			$(this).prevAll(".ajax-error").show();
-			$(this).prevAll(".ajax-spinner").hide();
-			$(this).fadeIn("slow");
-		});
+		listRefresher(this);
 	})
 }
 /**
@@ -470,12 +435,56 @@ function getToHide(parchaseCost,estimatedCost){
 		$("input[name=occurInterval]").nextAll("label.has-helper").html($(this).find("option:selected").text());
 	})
 }
+
+/**
+ * Add Preventive action 
+ */
+ function addPreventiveAction(baseUrl,type,errorMsg){
+ 	hideSpinnerAndErrorMsg()
+	$('.process').on("click",".add-process-button",function(e){
+		e.preventDefault();
+		$(this).hide();
+		$(this).nextAll(".ajax-spinner").show();
+		$.ajax({
+			type :'GET',
+			dataType: 'json',
+			data:{"type.id":type,"value":$(this).prevAll(".idle-field").attr('value')},
+			url:baseUrl,
+			success: function(data) {
+				spinnerHandler(e)
+				refreshList(data.results[1],'.process-list-'+data.results[2])
+			}
+		});
+		listRefresher(this);
+	})
+
+ }
+
+ /**
+ * Remove Preventive action 
+ */
+function removePreventiveAction(baseUrl){
+	hideSpinnerAndErrorMsg()
+	$('.process').on("click","a.delete-process",function(e){
+		e.preventDefault();
+		$(this).hide();
+		$(this).nextAll(".ajax-spinner").show();
+		$.ajax({
+			type :'GET',dataType: 'json',data:{"action.id":$(this).attr("name")},url:baseUrl,
+			success: function(data) {
+				spinnerHandler(e)
+				refreshList(data.results[1],'.process-list-'+data.results[2])
+			}
+		});
+		listRefresher(this);
+	});
+}
+
 /**
  * Add Prevention maintenance process
  */
 function addPreventionProcess(baseUrl,prevention,errorMsg){
-	$(".ajax-spinner").hide();
-	$(".ajax-error").hide()
+	hideSpinnerAndErrorMsg()
 	$('.process').on("click",".add-process-button",function(e){
 		e.preventDefault();
 		$(this).hide();
@@ -486,26 +495,18 @@ function addPreventionProcess(baseUrl,prevention,errorMsg){
 			data:{"prevention.id":prevention,"value":$(this).prevAll(".idle-field").attr('value')},
 			url:baseUrl,
 			success: function(data) {
-				$(e.target).nextAll(".ajax-error").hide();
-				$(e.target).nextAll(".ajax-spinner").hide();
-				$(e.target).prevAll(".idle-field").val("")
-				$(e.target).fadeIn("slow");
+				spinnerHandler(e)
 				refreshList(data.results[1],'.process-list-'+data.results[2])
 			}
 		});
-		$(this).ajaxError(function(){
-			$(this).nextAll(".ajax-error").show();
-			$(this).nextAll(".ajax-spinner").hide();
-			$(this).fadeIn("slow");
-		});
+		listRefresher(this);
 	})
 }
 /**
  * Remove Prevention Maintenance Process
  */
 function removePreventionProcess(baseUrl){
-	$(".ajax-spinner").hide();
-	$(".ajax-error").hide();
+	hideSpinnerAndErrorMsg()
 	$('.process').on("click","a.delete-process",function(e){
 		e.preventDefault();
 		$(this).hide();
@@ -513,19 +514,34 @@ function removePreventionProcess(baseUrl){
 		$.ajax({
 			type :'GET',dataType: 'json',data:{"process.id":$(this).attr("name")},url:baseUrl,
 			success: function(data) {
-				$(e.target).nextAll(".ajax-error").hide();
-				$(e.target).nextAll(".ajax-spinner").hide();
-				$(e.target).fadeIn("slow");
+				spinnerHandler(e)
 				refreshList(data.results[1],'.process-list-'+data.results[2])
 			}
 		});
-
-		$(this).ajaxError(function(){
-			$(this).nextAll(".ajax-error").show();
-			$(this).nextAll(".ajax-spinner").hide();
-			$(this).fadeIn("slow");
-		});
-
+		listRefresher(this);
 	});
+}
+/**
+ * Utility functions
+ *
+**/
+
+function spinnerHandler(event){
+	$(event.target).nextAll(".ajax-error").hide();
+	$(event.target).nextAll(".ajax-spinner").hide();
+	$(event.target).prevAll(".idle-field").val("");
+	$(event.target).fadeIn("slow");
+	$("#comment-content").val("");
+}
+function listRefresher(action){
+	$(action).ajaxError(function(){
+		$(action).nextAll(".ajax-error").show();
+		$(action).nextAll(".ajax-spinner").hide();
+		$(action).fadeIn("slow");
+	});
+}
+function hideSpinnerAndErrorMsg(){
+	$(".ajax-spinner").hide();
+	$(".ajax-error").hide();
 }
 
