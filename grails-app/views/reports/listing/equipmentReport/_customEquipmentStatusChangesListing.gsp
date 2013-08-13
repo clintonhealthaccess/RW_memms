@@ -19,6 +19,10 @@
 				<g:sortableColumn property="model"  title="${message(code: 'equipment.model.label')}" params="${params}" />
 			</g:if>
 
+			<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
+				<g:sortableColumn property="statusChanges"  title="${message(code: 'listing.report.equipment.status.changes.label')}" params="${params}" />
+			</g:if>
+
 			<g:if test="${reportTypeOptions.contains('currentStatus')}">
 				<g:sortableColumn property="currentStatus"  title="${message(code: 'equipment.status.label')}" params="${params}" />
 			</g:if>
@@ -53,6 +57,7 @@
 			</g:if>
 		</tr>
 	</thead>
+	%{-- TODO AR switch from list of equipments to list of equipment statuses --}%
 	<tbody>
 		<g:each in="${entities}" status="i" var="equipment">
 			<tr>
@@ -71,6 +76,12 @@
 				<g:if test="${reportTypeOptions.contains('model')}">
 					<td>${equipment.model}</td>
 				</g:if>
+
+%{-- 				<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
+					<g:set var="statusChangesEnum" value="${equipment.getEquipmentStatusChange(customEquipmentParams?.statusChanges)}"/>
+					<td>${message(code: statusChangesEnum?.messageCode+'.'+statusChangesEnum?.name)}</td>
+				</g:if> --}%
+
 				<g:if test="${reportTypeOptions.contains('currentStatus')}">
 					<td>${message(code: equipment.currentStatus?.messageCode+'.'+equipment.currentStatus?.name)}</td>
 				</g:if>
@@ -80,6 +91,7 @@
 						<g:else>&nbsp;</g:else>
 					</td>
 				</g:if>
+
 				<g:if test="${reportTypeOptions.contains('manufacturer')}">
 					<td>${equipment.manufacturer?.contact?.contactName}</td>
 				</g:if>

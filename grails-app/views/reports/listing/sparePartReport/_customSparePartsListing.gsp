@@ -15,9 +15,9 @@
 				<th>Quantity in Stock</th>
 			</g:if>
 
-			%{-- <g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
-				// TODO SL AFTER RELEASE
-			</g:if> --}%
+			<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
+				<g:sortableColumn property="statusChanges"  title="Status Changes" params="${params}" />
+			</g:if>
 
 			<g:if test="${reportTypeOptions.contains('currentStatus')}">
 				<th>Status</th>
@@ -62,9 +62,9 @@
 					<td>${sparePart.inStockQuantity}</td>
 				</g:if>
 
-				%{-- <g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
+				<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
 					// TODO SL AFTER RELEASE
-				</g:if> --}%
+				</g:if>
 
 				<g:if test="${reportTypeOptions.contains('currentStatus')}">
 					<td>${message(code: sparePart.status?.messageCode+'.'+sparePart.status?.name)}</td>

@@ -651,7 +651,6 @@ class EquipmentSpec extends IntegrationTests{
 		Equipment.count() == 1
 		Equipment.list()[0].timeBasedStatus.is(statusThree)
 		Equipment.list()[0].timeBasedPreviousStatus?.status == null
-		Equipment.list()[0].getEquipmentTimeBasedStatusChange(null) == EquipmentStatusChange.NEWORDER
 
 		when:
 		equipment.status=[]
@@ -662,7 +661,6 @@ class EquipmentSpec extends IntegrationTests{
 		Equipment.count() == 1
 		Equipment.list()[0].timeBasedStatus.is(statusH)
 		Equipment.list()[0].timeBasedPreviousStatus.is(statusN)
-		Equipment.list()[0].getEquipmentTimeBasedStatusChange(null) == EquipmentStatusChange.FROMSTOCKTOOPERATIONAL
 
 		when:
 		equipment.status=[]
@@ -673,7 +671,6 @@ class EquipmentSpec extends IntegrationTests{
 		Equipment.count() == 1
 		Equipment.list()[0].timeBasedStatus.is(statusFour)
 		Equipment.list()[0].timeBasedPreviousStatus.is(statusFive)
-		Equipment.list()[0].getEquipmentTimeBasedStatusChange(null) == EquipmentStatusChange.FORMAINTENANCE
 
 		when:
 		equipment.status=[]
@@ -684,6 +681,5 @@ class EquipmentSpec extends IntegrationTests{
 		Equipment.count() == 1
 		Equipment.list()[0].timeBasedStatus.is(statusSeven)
 		Equipment.list()[0].timeBasedPreviousStatus.is(statusSix)
-		Equipment.list()[0].getEquipmentTimeBasedStatusChange(null) == EquipmentStatusChange.DISPOSEDEQUIPMENT
 	}	
 }

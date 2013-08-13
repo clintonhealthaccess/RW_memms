@@ -1134,7 +1134,7 @@ public class Initializer {
 	}
 
 	public static newEquipmentStatus(def dateOfEvent,def changedBy,def value, def equipment,def reasons){
-		def status = new EquipmentStatus(dateOfEvent:dateOfEvent,changedBy:changedBy,status:value)
+		def status = new EquipmentStatus(dateOfEvent:dateOfEvent,changedBy:changedBy,previousStatus:equipment?.currentStatus,status:value)
 		Utils.setLocaleValueInMap(status,reasons,"Reasons")
 		equipment.addToStatus(status) 
 		equipment.save(failOnError:true,flush:true)
