@@ -80,10 +80,12 @@
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('percentageInterventionsDone')}">
 					%{-- TODO AR calculation AFTER RELEASE --}%
-					<td></td>
+					<td>
+					${order.percentageOfInterventionsDone} %
+					</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('recurrencePeriod')}">
-					<td>${order.occurInterval}</td>
+					<td>${order.occurInterval} ${message(code: order.occurency?.messageCode+'.'+order.occurency?.name)}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('startDate')}">
 					<td>${Utils.formatDateWithTime(order.firstOccurenceOn?.timeDate)}</td>
