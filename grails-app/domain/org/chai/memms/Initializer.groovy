@@ -37,9 +37,10 @@ import org.chai.memms.inventory.Equipment;
 import org.chai.memms.inventory.NotificationEquipment;
 import org.chai.memms.inventory.Equipment.Donor;
 import org.chai.memms.inventory.EquipmentStatus;
-import org.chai.memms.inventory.EquipmentType
+import org.chai.memms.inventory.EquipmentType;
+import org.chai.memms.inventory.PreventiveAction;
 import org.chai.memms.inventory.EquipmentType.Observation;
-import org.chai.memms.inventory.Provider
+import org.chai.memms.inventory.Provider;
 import org.chai.memms.inventory.Equipment.PurchasedBy;
 import org.chai.memms.inventory.Provider.Type;
 import org.chai.location.CalculationLocation;
@@ -356,6 +357,20 @@ public class Initializer {
 			def typeEight = newEquipmentType("10124", ["en":"AnesthInfusion Pumps, Insulinesia Kits"],["en":"used in memms"],Observation.USEDINMEMMS,now(),7)
 			def typeNine = newEquipmentType("10155", ["en":"Anklets"],["en":"used in memms"],Observation.USEDINMEMMS,now(),60)
 			def typeTen = newEquipmentType("10426", ["en":"Blood Donor Sets"],["en":"used in memms"],Observation.USEDINMEMMS,now(),34)
+
+			def typeEleven = newEquipmentType("158101", ["en":"Accelerometers","fr":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,now(),25)
+			def typeTwelve = newEquipmentType("158191", ["en":"X-Ray Film Cutter"],["en":"used in memms"],Observation.USEDINMEMMS,now(),13)
+			def typeThirteen = newEquipmentType("159661", ["en":"Video Systems"],["en":"used in memms"],Observation.USEDINMEMMS,now(),12)
+			def typeFourteen = newEquipmentType("100351", ["en":"Adhesives, Aerosol"],["en":"not used in memms"],Observation.RETIRED,now(),34)
+		}
+
+		if(!PreventiveAction.count()){
+			def actionOne = newPreventiveAction(EquipmentType.findByCode(100351),"action one")
+			def actionTwo = newPreventiveAction(EquipmentType.findByCode(100351),"action two")
+			def actionThree = newPreventiveAction(EquipmentType.findByCode(100351),"action three")
+			def actionFour = newPreventiveAction(EquipmentType.findByCode(158101),"action four")
+			def actionFive = newPreventiveAction(EquipmentType.findByCode(158101),"action five")
+			def actionSix = newPreventiveAction(EquipmentType.findByCode(20729),"action six")
 		}
 		
 		if(!Provider.count()){
@@ -732,10 +747,10 @@ public class Initializer {
 
 			def dOrderSix = newWorkBasedOrder(equipment09,admin,PreventiveOrderStatus.OPEN,PreventionResponsible.HCTECHNICIAN,techDH,['en':'Second Work Based Six'],"Second Work Based Order",now()+1,null,WorkIntervalType.WEEK,2)
 
-			// def preventionOne = newPrevention(dOrderOne,admin,Utils.addHoursToDate(now(),1),now(),67,['en':'First Duration Order'], [])
-			// def preventionTwo = newPrevention(dOrderTwo,admin,Utils.addHoursToDate(now(),1),now(),30,['en':'First Duration Order'], [])
-			// def processOne = newPreventionProcess(now(), "process one",admin, preventionOne)
-			// def processTwo = newPreventionProcess(now(), "process two",admin, preventionTwo)
+			def preventionOne = newPrevention(dOrderOne,admin,Utils.addHoursToDate(now(),1),now(),67,['en':'First Duration Order'], [])
+			def preventionTwo = newPrevention(dOrderTwo,admin,Utils.addHoursToDate(now(),1),now(),30,['en':'First Duration Order'], [])
+			//def processOne = newPreventionProcess(now(), "process one",admin, preventionOne)
+			//def processTwo = newPreventionProcess(now(), "process two",admin, preventionTwo)
 		}
 		
 	}
@@ -765,11 +780,6 @@ public class Initializer {
 			def sparePartTypeTen = newSparePartType("10426", ['en':'Tenth spare part type','fr':'Dixieme sp'], ['en':'first spare part type','fr':'premier type de piece de rechange'],"CODE Spare Part type 10",Provider.findByCode("FOUR"),now())
 			
 			
-			def typeOne = newEquipmentType("158101", ["en":"Accelerometers","fr":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,now(),25)
-			def typeTwo = newEquipmentType("158191", ["en":"X-Ray Film Cutter"],["en":"used in memms"],Observation.USEDINMEMMS,now(),13)
-			def typeThree = newEquipmentType("159661", ["en":"Video Systems"],["en":"used in memms"],Observation.USEDINMEMMS,now(),12)
-			def typeFour = newEquipmentType("100351", ["en":"Adhesives, Aerosol"],["en":"not used in memms"],Observation.RETIRED,now(),34)
-			
 			def contactFive = newContact(['en':'Address Descriptions Five'],"Supplier Company 1","jkl4@yahoo.com","0768-657-787","Street 153","8988")
 			def contactSix = newContact(['en':'Address Descriptions Six'],"Supplier Company 2","jkl5@yahoo.com","0768-342-787","Street 155","8988")
 			def contactSeven = newContact(['en':'Address Descriptions Seven'],"Supplier Company 3","jkl6@yahoo.com","0768-123-787","Street 156","8988")
@@ -782,25 +792,25 @@ public class Initializer {
 			def both = newProvider("SUPPLIERBOTH",Type.BOTH,contactEight)
 
 		
-			sparePartTypeEight.addToCompatibleEquipmentTypes(typeThree)
-			sparePartTypeEight.addToCompatibleEquipmentTypes(typeFour)
+			sparePartTypeEight.addToCompatibleEquipmentTypes(EquipmentType.findByCode(158101))
+			sparePartTypeEight.addToCompatibleEquipmentTypes(EquipmentType.findByCode(100351))
 			sparePartTypeEight.addToVendors(supplierThree)
 			sparePartTypeEight.addToVendors(both)
 			sparePartTypeEight.save(failOnError:true)
 
-			sparePartTypeOne.addToCompatibleEquipmentTypes(typeOne)
-			sparePartTypeOne.addToCompatibleEquipmentTypes(typeTwo)
+			sparePartTypeOne.addToCompatibleEquipmentTypes(EquipmentType.findByCode(158101))
+			sparePartTypeOne.addToCompatibleEquipmentTypes(EquipmentType.findByCode(158191))
 			sparePartTypeOne.addToVendors(supplierOne)
 			sparePartTypeOne.addToVendors(supplierTwo)
 			sparePartTypeOne.save(failOnError:true)
 
-			sparePartTypeTwo.addToCompatibleEquipmentTypes(typeOne)
-			sparePartTypeTwo.addToCompatibleEquipmentTypes(typeTwo)
+			sparePartTypeTwo.addToCompatibleEquipmentTypes(EquipmentType.findByCode(158101))
+			sparePartTypeTwo.addToCompatibleEquipmentTypes(EquipmentType.findByCode(158191))
 			sparePartTypeTwo.save(failOnError:true)
 			
 
-			sparePartTypeThree.addToCompatibleEquipmentTypes(typeFour)
-			sparePartTypeThree.addToCompatibleEquipmentTypes(typeTwo)
+			sparePartTypeThree.addToCompatibleEquipmentTypes(EquipmentType.findByCode(100351))
+			sparePartTypeThree.addToCompatibleEquipmentTypes(EquipmentType.findByCode(158101))
 			sparePartTypeThree.save(failOnError:true)
 
 			sparePartTypeSeven.addToVendors(supplierThree)
@@ -1023,15 +1033,15 @@ public class Initializer {
 		def prevention = new Prevention(addedBy:addedBy,scheduledOn:timeD,eventDate:eventDate,timeSpend:timeS,processes:processes)
 		Utils.setLocaleValueInMap(prevention,descriptions,"Descriptions")
 		order.addToPreventions(prevention)
-		order.save(failOnError:true)
-		return prevention.save(failOnError:true)
+		return order.save(failOnError:true)
+		//return prevention.save(failOnError:true)
 	}
 	//PreventiveProcess
 	public static newPreventionProcess(def dateCreated, def name,def addedBy, def prevention){
 		def process = new PreventiveProcess(dateCreated:dateCreated,name:name,addedBy:addedBy)
 		prevention.addToProcesses(process)
-		prevention.save(failOnError:true)
-		return process.save(failOnError:true)
+		return prevention.save(failOnError:true)
+		//return process.save(failOnError:true)
 	}
 	public static newTimeDate(def date,def time){
 		return new TimeDate(date,time)
@@ -1124,7 +1134,7 @@ public class Initializer {
 	}
 
 	public static newEquipmentStatus(def dateOfEvent,def changedBy,def value, def equipment,def reasons){
-		def status = new EquipmentStatus(dateOfEvent:dateOfEvent,changedBy:changedBy,status:value)
+		def status = new EquipmentStatus(dateOfEvent:dateOfEvent,changedBy:changedBy,previousStatus:equipment?.currentStatus,status:value)
 		Utils.setLocaleValueInMap(status,reasons,"Reasons")
 		equipment.addToStatus(status) 
 		equipment.save(failOnError:true,flush:true)
@@ -1164,6 +1174,12 @@ public class Initializer {
 		def type = new EquipmentType(code:code,observation:observation,expectedLifeTime:newPeriod(expectedLifeTime))
 		Utils.setLocaleValueInMap(type,names,"Names")
 		Utils.setLocaleValueInMap(type,descriptions,"Descriptions")
+		return type.save(failOnError: true)
+	}
+
+	public static newPreventiveAction(def type, def description){
+		def action  = new PreventiveAction(description:description)
+		type.addToPreventiveActions(action)
 		return type.save(failOnError: true)
 	}
 

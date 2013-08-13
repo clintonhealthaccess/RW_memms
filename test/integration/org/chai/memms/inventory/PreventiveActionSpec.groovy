@@ -1,4 +1,4 @@
-/** 
+/**
  * Copyright (c) 2012, Clinton Health Access Initiative.
  *
  * All rights reserved.
@@ -13,7 +13,7 @@
  *     * Neither the name of the <organization> nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -25,60 +25,29 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.preventive.maintenance
 
-import groovy.transform.EqualsAndHashCode;
+package org.chai.memms.inventory
 
-import org.chai.memms.TimeSpend;
-import org.chai.memms.security.User;
-import org.chai.memms.TimeDate;
-import org.chai.memms.inventory.PreventiveAction;
-
+import org.chai.memms.Initializer;
+import org.chai.memms.IntegrationTests;
+import org.chai.memms.inventory.EquipmentType;
+import org.chai.memms.inventory.EquipmentType.Observation;
 
 
-/**
- * @author Jean Kahigiso M.
- *
- */
-@i18nfields.I18nFields
-@EqualsAndHashCode
-public class Prevention {
-	
-	TimeDate scheduledOn
-	Date eventDate
-	Date dateCreated
-	Date lastUpdated
-	TimeSpend timeSpend
-	User addedBy
 
-	
-	String descriptions
-	
-	
-	static i18nFields = ["descriptions"]
-	static belongsTo = [order:  PreventiveOrder]
-	static hasMany = [actions: PreventiveAction]
-	static embedded = ["timeSpend","scheduledOn"]
-	
+class PreventiveActionSpec extends IntegrationTests{
 
-	static mapping = {
+		def "can create and save an preventionAction"() {
+
+		setup:
+		setupSystemUser()
+		def equipmentType = Initializer.newEquipmentType(CODE(15810),["en":"Accelerometers"],["en":"used in memms"],Observation.USEDINMEMMS,Initializer.now(),34)
 		
-		table "memms_prevention"
-		version false
-	}
-	
-	static constraints = {
-		descriptions nullable: true, blank: true
-		addedBy nullable: false
-		timeSpend nullable: true
-		scheduledOn nullable: false
-		eventDate nullable: false, validator:{it <= new Date()}
-		lastUpdated nullable: true, validator:{if(it != null) return (it <= new Date())}
-	}
-	
-	
-	@Override
-	public String toString() {
-		return "Prevention [id="+id+" addedBy=" + addedBy + "]";
+		when:
+		def preventionAction = new PreventiveAction(description:"Clean the accelerometers")
+		equipmentType.addToPreventiveActions(preventionAction)
+		equipmentType.save(failOnError: true)
+		then:
+		PreventiveAction.count() == 1
 	}
 }

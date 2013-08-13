@@ -84,6 +84,25 @@ public class SparePart {
 		SparePartStatus(String name){ this.name=name }
 		String getKey() { return name() }	
 	}
+
+	enum SparePartStatusChange{
+		// new pending order - purchaseDate != null and deliverydate == null
+		NEWPENDINGORDER("newPendingOrder",
+			['previous':[SparePartStatus.NONE], 'current':[SparePartStatus.PENDINGORDER]]),
+		//pending order arrived - purchaseDate != null and deliverydate != null
+		PENDINGORDERARRIVED("pendingOrderArrived",
+			['previous':[SparePartStatus.PENDINGORDER], 'current':[SparePartStatus.INSTOCK]]),
+
+		String messageCode = "reports.spareParts.statusChanges"
+		final String name
+		final Map<String,List<SparePartStatus>> statusChange
+		SparePartStatusChange(String name, Map<String,List<SparePartStatus>> statusChange) {
+			this.name=name
+			this.statusChange=statusChange
+		}
+		String getKey() { return name }
+		Map<String,List<SparePartStatus>> getStatusChange() { return statusChange }
+	}
 	
 	String descriptions
 	String currency

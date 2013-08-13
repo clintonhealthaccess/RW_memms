@@ -57,32 +57,20 @@ class SparePartStatus {
 
 	enum StatusOfSparePartChange{
 		NEWPENDINGORDER("newPendingOrder",
-			['previous':[StatusOfSparePart.NONE], 'current':[StatusOfSparePart.PENDINGORDER]], true),
+			['previous':[StatusOfSparePart.NONE], 'current':[StatusOfSparePart.PENDINGORDER]]),
 		PENDINGORDERARRIVED("pendingOrderArrived",
-			['previous':[StatusOfSparePart.PENDINGORDER], 'current':[StatusOfSparePart.INSTOCK]], false),
-		// SPAREPARTSASSOCIATEDTOEQUIPMENT("sparePartsAssociatedToEquipment",
-		// 	[
-		// 		'previous':(StatusOfSparePart.values()-[StatusOfSparePart.OPERATIONAL,StatusOfSparePart.DISPOSED]), 
-		// 		'current':[StatusOfSparePart.OPERATIONAL]
-		// 	], true),
-		// DISPOSEDSPAREPARTS("disposedSpareParts",
-		// 	[
-		// 		'previous':(StatusOfSparePart.values()-StatusOfSparePart.DISPOSED), 
-		// 		'current':[StatusOfSparePart.OPERATIONAL]
-		// 	], true)
+			['previous':[StatusOfSparePart.PENDINGORDER], 'current':[StatusOfSparePart.INSTOCK]]),
 
 		String messageCode = "reports.spareParts.statusChanges"
 		final String name
 		final Map<String,List<StatusOfSparePart>> statusChange
 		final String performed
-		StatusOfSparePartChange(String name, Map<String,List<StatusOfSparePart>> statusChange, Boolean performed) {
+		StatusOfSparePartChange(String name, Map<String,List<StatusOfSparePart>> statusChange) {
 			this.name=name
-			this.statusChange=statusChange
-			this.performed=performed
+			this.statusChange=statusChangeperformed
 		}
 		String getKey() { return name }
 		Map<String,List<StatusOfSparePart>> getStatusChange() { return statusChange }
-		Boolean getPerformed() { return performed }
 	}
 
 	Date dateOfEvent

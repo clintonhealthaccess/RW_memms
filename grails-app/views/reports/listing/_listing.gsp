@@ -35,7 +35,12 @@
             <g:render template ="/reports/listing/equipmentReport/equipmentListingFilterSummary" />
             <!-- equipment report template -->
             <g:if test="${customizedReportName != null && !customizedReportName.empty}">
-              <g:render template="/reports/listing/equipmentReport/customEquipmentListing" />
+              <g:if test="${reportSubType == ReportSubType.INVENTORY}">
+                <g:render template="/reports/listing/equipmentReport/customEquipmentListing" />
+              </g:if>
+              <g:if test="${reportSubType == ReportSubType.STATUSCHANGES}">
+                <g:render template="/reports/listing/equipmentReport/customEquipmentStatusChangesListing" />
+              </g:if>
             </g:if>
             <g:else>
               <g:render template="/reports/listing/equipmentReport/equipmentListing" />
@@ -58,6 +63,12 @@
             <!-- work order report template -->
             <g:if test="${customizedReportName != null && !customizedReportName.empty}">
               <g:render template="/reports/listing/workOrderReport/customWorkOrderListing" />
+              <g:if test="${reportSubType == ReportSubType.WORKORDERS}">
+                <g:render template="/reports/listing/workOrderReport/customWorkOrderListing" />
+              </g:if>
+              <g:if test="${reportSubType == ReportSubType.STATUSCHANGES}">
+                <g:render template="/reports/listing/workOrderReport/customWorkOrderStatusChangesListing" />
+              </g:if>
             </g:if>
             <g:else>
               <g:render template="/reports/listing/workOrderReport/workOrderListing" />

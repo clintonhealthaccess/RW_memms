@@ -57,6 +57,9 @@ import org.chai.memms.report.listing.PreventiveMaintenanceReport;
 import org.chai.memms.report.listing.SparePartReport
 import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
 //import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePartChange;
+import org.chai.memms.spare.part.SparePart;
+import org.chai.memms.spare.part.SparePart.SparePartStatus;
+import org.chai.memms.spare.part.SparePart.SparePartStatusChange;
 import org.chai.memms.spare.part.SparePartType;
 import org.chai.memms.security.User;
 import org.chai.memms.security.User.UserType;
@@ -634,6 +637,7 @@ class ListingController extends AbstractController{
 		if(savedReport == null){
 
 			def reportType = getReportType()
+			def reportSubType = getReportSubType()
 
 			switch(reportType){
 				case ReportType.INVENTORY:
@@ -658,14 +662,29 @@ class ListingController extends AbstractController{
 				case ReportType.INVENTORY:
 					customizedListingParams = getSavedEquipmentParams(savedReport)
 					adaptParamsForList()
-					savedCustomizedListingReport = equipmentListingReportService.getCustomReportOfEquipments(user,customizedListingParams,params)
-					if (log.isDebugEnabled()) log.debug("listing.savedCustomizedListing # of equipments:"+savedCustomizedListingReport.size())
+					if(reportSubType == ReportSubType.INVENTORY){
+						savedCustomizedListingReport = equipmentListingReportService.getCustomReportOfEquipments(user,customizedListingParams,params)
+						if (log.isDebugEnabled()) log.debug("listing.savedCustomizedListing # of equipments:"+savedCustomizedListingReport.size())
+					}
+						savedCustomizedListingReport = equipmentListingReportService.getCustomReportOfEquipments(user,customizedListingParams,params)
+					if(reportSubType == ReportSubType.STATUSCHANGES){
+						// TODO AR get saved EquipmentStatus status changes custom report
+						savedCustomizedListingReport = equipmentListingReportService.getCustomReportOfEquipments(user,customizedListingParams,params)
+						if (log.isDebugEnabled()) log.debug("listing.savedCustomizedListing # of equipments statuses:"+savedCustomizedListingReport.size())
+					}
 					break;
 				case ReportType.CORRECTIVE:
 					customizedListingParams = getSavedWorkOrderParams(savedReport)
 					adaptParamsForList()
-					savedCustomizedListingReport = workOrderListingReportService.getCustomReportOfWorkOrders(user,customizedListingParams,params)
-					if (log.isDebugEnabled()) log.debug("listing.savedCustomizedListing # of workOrders:"+savedCustomizedListingReport.size())
+					if(reportSubType == ReportSubType.WORKORDERS){
+						savedCustomizedListingReport = workOrderListingReportService.getCustomReportOfWorkOrders(user,customizedListingParams,params)
+						if (log.isDebugEnabled()) log.debug("listing.savedCustomizedListing # of workOrders:"+savedCustomizedListingReport.size())
+					}
+					if(reportSubType == ReportSubType.STATUSCHANGES){
+						// TODO AR get saved WorkOrderStatus status changes custom report
+						savedCustomizedListingReport = workOrderListingReportService.getCustomReportOfWorkOrders(user,customizedListingParams,params)
+						if (log.isDebugEnabled()) log.debug("listing.savedCustomizedListing # of workOrder statuses:"+savedCustomizedListingReport.size())
+					}
 					break;
 				case ReportType.PREVENTIVE:
 					customizedListingParams = getSavedPreventiveOrderParams(savedReport)
@@ -676,8 +695,15 @@ class ListingController extends AbstractController{
 				case ReportType.SPAREPARTS:
 					customizedListingParams = getSavedSparePartsParams(savedReport)
 					adaptParamsForList()
-					savedCustomizedListingReport = sparePartListingReportService.getCustomReportOfSpareParts(user,customizedListingParams,params)
-					if (log.isDebugEnabled()) log.debug("listing.savedCustomizedListing # of spareParts:"+savedCustomizedListingReport.size())
+					if(reportSubType == ReportSubType.STATUSCHANGES){
+						// TODO AR get saved spare part status changes custom report
+						savedCustomizedListingReport = sparePartListingReportService.getCustomReportOfSpareParts(user,customizedListingParams,params)
+						if (log.isDebugEnabled()) log.debug("listing.savedCustomizedListing # of spareParts:"+savedCustomizedListingReport.size())
+					}
+					else{
+						savedCustomizedListingReport = sparePartListingReportService.getCustomReportOfSpareParts(user,customizedListingParams,params)
+						if (log.isDebugEnabled()) log.debug("listing.savedCustomizedListing # of spareParts:"+savedCustomizedListingReport.size())
+					}
 					break;
 				default:
 					break;
@@ -685,6 +711,7 @@ class ListingController extends AbstractController{
 
 			def savedReports = null
 			// TODO get rid of this condition
+			// TODO figure out why this doesn't work for spare parts
 			if(reportType != ReportType.SPAREPARTS){
 				savedReports = userService.getSavedReportsByUser(user, reportType)
 			}
@@ -726,8 +753,16 @@ class ListingController extends AbstractController{
 			redirect(action:"savedCustomizedListing", params:[savedReportId: selectedReport.id, reportType: selectedReport.reportType])
 		}
 		else{
-			def equipments = equipmentListingReportService.getCustomReportOfEquipments(user,customizedListingParams,params)
-			if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing # of equipments:"+equipments.size())
+			def customEquipmentReport = null
+			if(reportSubType == ReportSubType.INVENTORY){
+				customEquipmentReport = equipmentListingReportService.getCustomReportOfEquipments(user,customizedListingParams,params)
+				if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing # of equipments:"+customEquipmentReport.size())
+			}
+			if(reportSubType == ReportSubType.STATUSCHANGES){
+				// TODO AR switch from list of equipment to list of equipment status
+				customEquipmentReport = equipmentListingReportService.getCustomReportOfEquipments(user,customizedListingParams,params)
+				if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing # of equipment statuses:"+customEquipmentReport.size())
+			}
 
 			def savedReports = userService.getSavedReportsByUser(user, ReportType.INVENTORY)
 			if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing # of savedReports:"+savedReports.size())
@@ -741,7 +776,7 @@ class ListingController extends AbstractController{
 
 			if(!request.xhr){
 				render(view:"/reports/reports",
-					model: model(equipments, "") << customizedListingParams)
+					model: model(customEquipmentReport, "") << customizedListingParams)
 			}
 		}
 	}
@@ -768,8 +803,16 @@ class ListingController extends AbstractController{
 			redirect(action:"savedCustomizedListing", params:[savedReportId: selectedReport.id, reportType: selectedReport.reportType])
 		}
 		else{
-			def workOrders = workOrderListingReportService.getCustomReportOfWorkOrders(user,customizedListingParams,params)
-			if (log.isDebugEnabled()) log.debug("listing.customWorkOrderListing # of workOrder:"+workOrders.size())
+			def customWorkOrderReport = null
+			if(reportSubType == ReportSubType.WORKORDERS){
+				customWorkOrderReport = workOrderListingReportService.getCustomReportOfWorkOrders(user,customizedListingParams,params)
+				if (log.isDebugEnabled()) log.debug("listing.customWorkOrderListing # of workOrder:"+customWorkOrderReport.size())
+			}
+			if(reportSubType == ReportSubType.STATUSCHANGES){
+				// TODO AR switch from list of work orders to list of work order status
+				customWorkOrderReport = workOrderListingReportService.getCustomReportOfWorkOrders(user,customizedListingParams,params)
+				if (log.isDebugEnabled()) log.debug("listing.customWorkOrderListing # of workOrder statuses:"+customWorkOrderReport.size())
+			}
 
 			def savedReports = userService.getSavedReportsByUser(user, ReportType.CORRECTIVE)
 			if (log.isDebugEnabled()) log.debug("listing.customWorkOrderListing # of savedReports:"+savedReports.size())
@@ -783,7 +826,7 @@ class ListingController extends AbstractController{
 
 			if(!request.xhr){
 				render(view:"/reports/reports",
-					model: model(workOrders, "") << customizedListingParams)
+					model: model(customWorkOrderReport, "") << customizedListingParams)
 			}
 		}
 	}
@@ -851,10 +894,19 @@ class ListingController extends AbstractController{
 			redirect(action:"savedCustomizedListing", params:[savedReportId: selectedReport.id, reportType: selectedReport.reportType])
 		}
 		else{
-			def spareParts = sparePartListingReportService.getCustomReportOfSpareParts(user, customizedListingParams, params)
-			if (log.isDebugEnabled()) log.debug("WWWWWWWWWWWHY DON'T I SEE THIS VALUE ON THE INTERFACE?:"+spareParts)
+			def customSparePartReport = null
+			if(reportSubType == ReportSubType.STATUSCHANGES){
+				// TODO AR modify spare parts query to check for status change (status change is based on purchase date and delivery date)
+				customSparePartReport = sparePartListingReportService.getCustomReportOfSpareParts(user, customizedListingParams, params)
+				if (log.isDebugEnabled()) log.debug("listing.customWorkOrderListing # of spare parts:"+customSparePartReport.size())
+			}
+			else{
+				customSparePartReport = sparePartListingReportService.getCustomReportOfSpareParts(user, customizedListingParams, params)
+				if (log.isDebugEnabled()) log.debug("listing.customWorkOrderListing # of spare part statuses:"+customSparePartReport.size())
+			}
 
 			def savedReports = null
+			// TODO figure out why this doesn't work for spare parts
 			// savedReports = userService.getSavedReportsByUser(user, ReportType.SPAREPARTS)
 
 			customizedListingParams << [
@@ -866,7 +918,7 @@ class ListingController extends AbstractController{
 
 			if(!request.xhr){
 				render(view:"/reports/reports",
-					model: model(spareParts, "") << customizedListingParams)
+					model: model(customSparePartReport, "") << customizedListingParams)
 			}
 		}
 	}
@@ -1276,11 +1328,11 @@ class ListingController extends AbstractController{
 		}
 
 		if(reportSubType == ReportSubType.STATUSCHANGES){
-			// TODO SL def statusChanges = getSparePartStatusChanges()
+			def statusChanges = getSparePartStatusChanges()
 			def fromStatusChangesPeriod = getPeriod('fromStatusChangesPeriod')
 			def toStatusChangesPeriod = getPeriod('toStatusChangesPeriod')
 			customizedListingParams << [
-				// TODO SL statusChanges: statusChanges,
+				statusChanges: statusChanges,
 				fromStatusChangesPeriod: fromStatusChangesPeriod,
 				toStatusChangesPeriod: toStatusChangesPeriod
 			]
@@ -1460,7 +1512,7 @@ class ListingController extends AbstractController{
 			if(log.isDebugEnabled()) log.debug("abstract.inventoryStatusChanges statusChanges:"+statusChanges)
 			statusChanges.each { it ->
 				if(log.isDebugEnabled()) log.debug("abstract.inventoryStatusChanges statusChange:"+it)
-				if(it != null) inventoryStatusChanges.add(Enum.valueOf(EquipmentStatusChange.class, it))
+				if(it != null & !it.empty) inventoryStatusChanges.add(Enum.valueOf(EquipmentStatusChange.class, it))
 			}
 		}
 		if(log.isDebugEnabled())
@@ -1521,20 +1573,20 @@ class ListingController extends AbstractController{
 		return preventionResponsible
 	}
 
-	public Set<StatusOfSparePart> getSparePartStatus(){
+	public Set<SparePartStatus> getSparePartStatus(){
 		if(log.isDebugEnabled()) log.debug("abstract.sparePartStatus params:"+params)
-		Set<StatusOfSparePart> sparePartStatus = new HashSet<StatusOfSparePart>()
+		Set<SparePartStatus> sparePartStatus = new HashSet<SparePartStatus>()
 		if (params.list('sparePartStatus') != null && !params.list('sparePartStatus').empty) {
 			def types = params.list('sparePartStatus')
 			types.each{ it ->
 				if(log.isDebugEnabled()) log.debug("abstract.sparePartStatus sparePartStatus:"+it)
-				if(it != null && !it.empty) sparePartStatus.add(Enum.valueOf(StatusOfSparePart.class, it))
+				if(it != null && !it.empty) sparePartStatus.add(Enum.valueOf(SparePartStatus.class, it))
 			}
 		}
 		return sparePartStatus
 	}
-	/*public List<StatusOfSparePartChange> getSparePartStatusChanges(){
-		List<StatusOfSparePartChange> sparePartStatusChanges = []
+	public List<SparePartStatusChange> getSparePartStatusChanges(){
+		List<SparePartStatusChange> sparePartStatusChanges = []
 		if(log.isDebugEnabled()) log.debug("abstract.sparePartStatusChanges start params:"+params)
 		if (params.list('statusChanges') != null && !params.list('statusChanges').empty) {
 			def statusChanges = params.list('statusChanges')
@@ -1546,7 +1598,7 @@ class ListingController extends AbstractController{
 		}
 		if(log.isDebugEnabled()) log.debug("abstract.sparePartStatusChanges end statusChanges:"+sparePartStatusChanges)
 		return sparePartStatusChanges
-	}*/
+	}
 
 	public Set<String> getReportTypeOptions(String reportTypeOptionParam){
 		if(log.isDebugEnabled()) log.debug("abstract.reportTypeOptions params:"+params)
