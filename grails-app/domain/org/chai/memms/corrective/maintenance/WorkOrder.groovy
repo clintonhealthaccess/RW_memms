@@ -202,26 +202,6 @@ public class WorkOrder extends MaintenanceOrder{
 		return previousState
 	}
 
-	public def getWorkOrderTimeBasedStatusChange(List<WorkOrderStatusChange> workOrderStatusChanges){
-		WorkOrderStatusChange workOrderStatusChange = null
-
-		def previousStatus = getTimeBasedPreviousStatus()?.status
-		def currentStatus = getTimeBasedStatus().status
-
-		if(workOrderStatusChanges == null) workOrderStatusChanges = WorkOrderStatusChange.values()
-	 	workOrderStatusChanges.each{ statusChange ->
- 			
- 			def previousStatusMap = statusChange.getStatusChange()['previous']
-			def currentStatusMap = statusChange.getStatusChange()['current']
-
-			def previousStatusChange = previousStatusMap.contains(previousStatus) || (previousStatusMap.contains(OrderStatus.NONE) && previousStatus == null)
-			def currentStatusChange = currentStatusMap.contains(currentStatus)
-
-			if(previousStatusChange && currentStatusChange) workOrderStatusChange = statusChange
-	 	}
-	 	return workOrderStatusChange
-	}
-
 	static mapping = {
 		table "memms_work_order"
 		version false
