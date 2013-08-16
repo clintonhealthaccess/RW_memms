@@ -25,7 +25,7 @@
 				<g:sortableColumn property="manufacturer"  title="${message(code: 'provider.type.manufacturer')}" params="${params}" />
 			</g:if>
 
-			<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
+			<g:if test="${reportTypeOptions.contains('statusChanges')}">
 				<g:sortableColumn property="statusChanges"  title="Status Changes" params="${params}" />
 			</g:if>
 
@@ -81,8 +81,8 @@
 					<td>${order.equipment.manufacturer?.contact?.contactName}</td>
 				</g:if>
 
-%{-- 				<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
-					<g:set var="statusChangesEnum" value="${order.getWorkOrderTimeBasedStatusChange(customWorkOrderParams.statusChanges)}"/>
+%{-- 				<g:if test="${reportTypeOptions.contains('statusChanges')}">
+					<g:set var="statusChangesEnum" value="${workOrderStatus.getWorkOrderStatusChange(customizedListingParams?.statusChanges)}"/>
 					<td>${message(code: statusChangesEnum?.messageCode+'.'+statusChangesEnum?.name)}</td>
 				</g:if> --}%
 

@@ -63,7 +63,8 @@
 				</g:if>
 
 				<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
-					// TODO SL AFTER RELEASE
+					<g:set var="statusChangesEnum" value="${sparePart.getSparePartStatusChange(customizedListingParams?.statusChanges)}"/>
+					<td>${message(code: statusChangesEnum?.messageCode+'.'+statusChangesEnum?.name)}</td>
 				</g:if>
 
 				<g:if test="${reportTypeOptions.contains('currentStatus')}">
