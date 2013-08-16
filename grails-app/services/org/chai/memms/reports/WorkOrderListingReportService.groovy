@@ -112,12 +112,12 @@ class WorkOrderListingReportService {
 
 				createAlias("equipment","equip")
 
-					//Mandatory property
-					inList('equip.dataLocation',dataLocations)
-				if(departments != null && departments.size()>0)
-					inList ("equip.department", departments)
 				//Mandatory property
-					inList ("equip.type", equipmentTypes)
+				inList("equip.dataLocation", dataLocations)
+				//Mandatory property
+				inList ("equip.department", departments)
+				//Mandatory property
+				inList ("equip.type", equipmentTypes)
 
 				if(lowerLimitCost && lowerLimitCost!=null)
 					gt ("equip.purchaseCost", lowerLimitCost)
@@ -150,11 +150,11 @@ class WorkOrderListingReportService {
 				createAlias("equipment","equip")
 
 				//Mandatory property
-					inList('equip.dataLocation',dataLocations)
-				if(departments != null && departments.size()>0)
-					inList ("equip.department", departments)
+				inList("equip.dataLocation", dataLocations)
 				//Mandatory property
-					inList ("equip.type", equipmentTypes)
+				inList ("equip.department", departments)
+				//Mandatory property
+				inList ("equip.type", equipmentTypes)
 
 				if(lowerLimitCost && lowerLimitCost!=null)
 					gt ("equip.purchaseCost", lowerLimitCost)

@@ -35,8 +35,8 @@ import org.chai.memms.report.listing.EquipmentReport;
 import org.chai.memms.report.listing.EquipmentGeneralReportParameters;
 import org.chai.memms.security.User;
 import org.chai.memms.inventory.Equipment;
-import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.inventory.EquipmentStatus;
+import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.inventory.Equipment.PurchasedBy;
 import org.chai.memms.inventory.Equipment.Donor;
 import org.chai.memms.util.Utils.ReportType;
@@ -51,6 +51,7 @@ import org.joda.time.DateTime;
 class EquipmentListingReportService {
 
 	def equipmentService
+	def equipmentTypeService
 	def userService
 	def today =new Date()
 
@@ -191,14 +192,12 @@ class EquipmentListingReportService {
 
 			criteriaEquipments = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 				
-				//MADE IT MANDATORY, CONDITION REMOVED
-					inList("dataLocation",dataLocations)
-					
-				//MADE IT MANDATORY, CONDITION REMOVED
-					inList ("type", equipmentTypes)
-					
-				if(departments && departments != null && departments.size() > 0)
-					inList ("department", departments)
+				//Mandatory property
+				inList("dataLocation", dataLocations)
+				//Mandatory property
+				inList ("department", departments)
+				//Mandatory property
+				inList ("type", equipmentTypes)
 					
 				if(lowerLimitCost && lowerLimitCost!=null)
 					gt ("purchaseCost", lowerLimitCost)
@@ -226,6 +225,7 @@ class EquipmentListingReportService {
 			if (log.isDebugEnabled()) log.debug("EQUIPMENTS SIZE: "+ customEquipments.size())
 		}
 
+		// TODO AR switch from list of equipment to list of equipment status
 		if(reportSubType == ReportSubType.STATUSCHANGES){
 			def statusChanges = customEquipmentParams.get('statusChanges')
 			def fromStatusChangesPeriod = customEquipmentParams.get('fromStatusChangesPeriod')
@@ -233,14 +233,13 @@ class EquipmentListingReportService {
 
 			criteriaEquipments = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 				
-				//MADE IT MANDATORY, CONDITION REMOVED
-					inList("dataLocation",dataLocations)
-
-				//MADE IT MANDATORY, CONDITION REMOVED
-					inList ("type", equipmentTypes)
-		
-				if(departments && departments != null && departments.size() > 0)
-					inList ("department", departments)
+				//Mandatory property
+				inList("dataLocation", dataLocations)
+				//Mandatory property
+				inList ("department", departments)
+				//Mandatory property
+				inList ("type", equipmentTypes)
+				
 				if(lowerLimitCost && lowerLimitCost!=null)
 					gt ("purchaseCost", lowerLimitCost)
 				if(upperLimitCost && upperLimitCost!=null)
@@ -260,16 +259,6 @@ class EquipmentListingReportService {
 					
 			}
 			if (log.isDebugEnabled()) log.debug("EQUIPMENTS SIZE: "+ criteriaEquipments.size())
-
-			if(statusChanges != null && !statusChanges.empty){
-				def statusChangesEquipments = []
-				criteriaEquipments.each { equipment ->
-					def equipmentStatusChange = equipmentService.getEquipmentTimeBasedStatusChange(equipment,statusChanges)
-					if(equipmentStatusChange != null) statusChangesEquipments.add(equipment)
-					statusChangesEquipments.add(equipment)
-				}
-				customEquipments = statusChangesEquipments
-			}
 		}
 
 		return customEquipments

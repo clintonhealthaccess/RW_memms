@@ -75,6 +75,7 @@ import org.chai.memms.Warranty;
  */
 class ListingController extends AbstractController{
 
+	def equipmentTypeService
 	def equipmentListingReportService
 	def workOrderListingReportService
 	def preventiveOrderListingReportService
@@ -756,7 +757,7 @@ class ListingController extends AbstractController{
 				if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing # of equipments:"+customEquipmentReport.size())
 			}
 			if(reportSubType == ReportSubType.STATUSCHANGES){
-				// TODO AR switch from list of equipment to list of equipment status
+				TODO AR switch from list of equipment to list of equipment status
 				customEquipmentReport = equipmentListingReportService.getCustomReportOfEquipments(user,customizedListingParams,params)
 				if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing # of equipment statuses:"+customEquipmentReport.size())
 			}
@@ -1348,8 +1349,8 @@ class ListingController extends AbstractController{
 		Set<Department> departments = null
 		if(params.get('allDepartments')){
 			if(log.isDebugEnabled()) log.debug("abstract.departments ALL")
-			// if the user selects all, we return a new list
 			departments = new HashSet<Department>()
+			departments = Department.list()
 			return departments
 		}
 		else if (params.list('departments') != null && !params.list('departments').empty) {
@@ -1370,8 +1371,8 @@ class ListingController extends AbstractController{
 		Set<EquipmentType> equipmentTypes = null
 		if(params.get('allEquipmentTypes')){
 			if(log.isDebugEnabled()) log.debug("abstract.equipmentTypes ALL")
-			// if the user selects all, we return a new list
 			equipmentTypes = new HashSet<EquipmentType>()
+			equipmentTypes = equipmentTypeService.getEquipmentTypeUsedInMemms()
 			return equipmentTypes
 		}
 		else if (params.list('equipmentTypes') != null && !params.list('equipmentTypes').empty) {
@@ -1392,8 +1393,8 @@ class ListingController extends AbstractController{
 		if(log.isDebugEnabled()) log.debug("abstract.sparePartTypes ALL")
 		if(params.get('allSparePartTypes')){
 			if(log.isDebugEnabled()) log.debug("abstract.sparePartTypes ALL")
-			// if the user selects all, we return a new list
 			sparePartTypes = new HashSet<SparePartType>()
+			sparePartTypes = SparePartType.list()
 			return sparePartTypes
 		}
 		else if (params.list('sparePartTypes') != null && !params.list('sparePartTypes').empty) {

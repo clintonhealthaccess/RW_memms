@@ -101,7 +101,10 @@ class SparePartListingReportService {
 			criteriaSpareParts = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 				
 				//Mandatory property
-					inList ("type", sparePartTypes)
+				inList("dataLocation", dataLocations)
+				//Mandatory property
+				inList ("type", sparePartTypes)
+
 				if(noAcquisitionPeriod != null && noAcquisitionPeriod)
 					eq ("purchaseDate", null)
 				if(sparePartStatus!=null && !sparePartStatus.empty)
@@ -112,7 +115,7 @@ class SparePartListingReportService {
 					lt ("purchaseDate", toAcquisitionPeriod)	
 					
 				
-					//TODO to be reviewed by AR
+				//TODO to be reviewed by AR
 				if(user.userType.equals(UserType.ADMIN) || user.userType.equals(UserType.TECHNICIANMMC) || user.userType.equals(UserType.SYSTEM) || user.userType.equals(UserType.TECHNICIANDH)){
 					if(showAtMMC && showAtMMC != null)
 						eq("stockLocation",StockLocation.MMC)
@@ -132,10 +135,11 @@ class SparePartListingReportService {
 			def toStatusChangesPeriod = customSparePartsParams.get('toStatusChangesPeriod')
 
 			criteriaSpareParts = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+				
 				//Mandatory property
-					inList("dataLocation",dataLocations)
+				inList("dataLocation", dataLocations)
 				//Mandatory property
-					inList ("type", sparePartTypes)
+				inList ("type", sparePartTypes)
 
 				// TODO
 				// if(fromStatusChangesPeriod != null)
@@ -164,10 +168,11 @@ class SparePartListingReportService {
 				projections {
 					property("type","type")
 				}
+				
 				//Mandatory property
-					inList("dataLocation",dataLocations)
+				inList("dataLocation", dataLocations)
 				//Mandatory property
-					inList ("type", sparePartTypes)
+				inList ("type", sparePartTypes)
 					
 					
 				eq ("status",SparePartStatus.INSTOCK)
@@ -190,11 +195,11 @@ class SparePartListingReportService {
 				projections {
 					property("type", "type")
 				}
+				
 				//Mandatory property
-					inList("dataLocation",dataLocations)
+				inList("dataLocation", dataLocations)
 				//Mandatory property
-					
-					inList ("type", sparePartTypes)
+				inList ("type", sparePartTypes)
 					
 				eq ("status",SparePartStatus.INSTOCK)
 				//gt("deliveryDate", lastYearDateFromNow)

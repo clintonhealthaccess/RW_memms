@@ -101,12 +101,14 @@ class PreventiveOrderListingReportService {
 	
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			createAlias("equipment","equip")
+			
 			//Mandatory property
-				inList('equip.dataLocation',dataLocations)
-			if(departments != null && departments.size()>0)
-				inList ("equip.department", departments)
+			inList("equip.dataLocation", dataLocations)
 			//Mandatory property
-				inList ("equip.type", equipmentTypes)
+			inList ("equip.department", departments)
+			//Mandatory property
+			inList ("equip.type", equipmentTypes)
+
 			if(workOrderStatus!=null && !workOrderStatus.empty)
 				inList ("status",workOrderStatus)
 			if(workOrderStatus!=null && !workOrderStatus.empty && workOrderStatus.contains(PreventiveOrderStatus.OPENLATE)){
