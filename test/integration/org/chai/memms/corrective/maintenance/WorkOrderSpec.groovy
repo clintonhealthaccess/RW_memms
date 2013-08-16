@@ -283,7 +283,7 @@ class WorkOrderSpec extends IntegrationTests{
 		workOrder.save(failOnError:true,flush:true)
 		when:
 		workOrder = WorkOrder.list()[0]
-		def workOrderStatusTwo =  new WorkOrderStatus(status:OrderStatus.CLOSEDFIXED,changedBy:user);
+		def workOrderStatusTwo =  new WorkOrderStatus(previousStatus:workOrder.currentStatus,status:OrderStatus.CLOSEDFIXED,changedBy:user);
 		workOrder.closedOn = Initializer.now()
 		workOrder.currentStatus =  OrderStatus.CLOSEDFIXED
 		workOrder.addToStatus(workOrderStatusTwo)
@@ -296,7 +296,7 @@ class WorkOrderSpec extends IntegrationTests{
 		result.timeBasedStatus==workOrderStatusTwo
 		result.timeBasedPreviousStatus==workOrderStatusOne
 		result.timeBasedPreviousStatus==workOrderStatusOne
-		result.getWorkOrderTimeBasedStatusChange(null) == WorkOrderStatusChange.CLOSEDORDERFIXED
+		workOrderStatusTwo.getWorkOrderStatusChange() == WorkOrderStatusChange.CLOSEDORDERFIXED
 	}
 
 	def "get escalation status an escalted workOrder"(){

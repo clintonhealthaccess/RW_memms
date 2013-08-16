@@ -1,3 +1,4 @@
+
 /** 
  * Copyright (c) 2012, Clinton Health Access Initiative.
  *
@@ -25,61 +26,38 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.preventive.maintenance
 
-import groovy.transform.EqualsAndHashCode;
+package org.chai.memms.inventory
 
-import org.chai.memms.TimeSpend;
-import org.chai.memms.security.User;
-import org.chai.memms.TimeDate;
-import org.chai.memms.inventory.PreventiveAction;
+import java.util.Date;
 
+import org.chai.memms.Period;
+import org.chai.memms.inventory.EquipmentType;
 
+import i18nfields.I18nFields
 
 /**
+ *
  * @author Jean Kahigiso M.
  *
  */
+
 @i18nfields.I18nFields
-@EqualsAndHashCode
-public class Prevention {
-	
-	TimeDate scheduledOn
-	Date eventDate
+class PreventiveAction {
+
+	String description
 	Date dateCreated
 	Date lastUpdated
-	TimeSpend timeSpend
-	User addedBy
 
-	
-	String descriptions
-	
-	
-	static i18nFields = ["descriptions"]
-	static belongsTo = [order:  PreventiveOrder]
-	static hasMany = [actions: PreventiveAction]
-	static embedded = ["timeSpend","scheduledOn"]
-	
+	static belongsTo = [equipmentType: EquipmentType]
 
-	static mapping = {
-		
-		table "memms_prevention"
-		version false
-	}
-	
 	static constraints = {
-		descriptions nullable: true, blank: true
-		addedBy nullable: false
-		timeSpend nullable: true
-		scheduledOn nullable: false
-		eventDate nullable: false, validator:{it <= new Date()}
-		lastUpdated nullable: true, validator:{if(it != null) return (it <= new Date())}
+		description nullable: true, blank: true
 	}
-	
-	
-	@Override
-	public String toString() {
-		return "Prevention [id="+id+" addedBy=" + addedBy + "]";
+		
+	static mapping = {
+		table "memms_prevention_action"
+		version  false
 	}
 	
 }

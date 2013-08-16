@@ -24,6 +24,11 @@
 			<g:if test="${reportTypeOptions.contains('manufacturer')}">
 				<g:sortableColumn property="manufacturer"  title="${message(code: 'provider.type.manufacturer')}" params="${params}" />
 			</g:if>
+
+			<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
+				<g:sortableColumn property="statusChanges"  title="Status Changes" params="${params}" />
+			</g:if>
+
 			<g:if test="${reportTypeOptions.contains('currentStatus')}">
 				<g:sortableColumn property="currentStatus" title="${message(code: 'entity.status.label')}" params="${params}" />
 			</g:if>
@@ -53,6 +58,7 @@
 			</g:if>
 		</tr>
 	</thead>
+	%{-- TODO AR switch from list of work orders to list of work order statuses --}%
 	<tbody>
 		<g:each in="${entities}" status="i" var="order">
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
@@ -74,18 +80,17 @@
 				<g:if test="${reportTypeOptions.contains('manufacturer')}">
 					<td>${order.equipment.manufacturer?.contact?.contactName}</td>
 				</g:if>
+
+%{-- 				<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
+					<g:set var="statusChangesEnum" value="${order.getWorkOrderTimeBasedStatusChange(customWorkOrderParams.statusChanges)}"/>
+					<td>${message(code: statusChangesEnum?.messageCode+'.'+statusChangesEnum?.name)}</td>
+				</g:if> --}%
+
 				<g:if test="${reportTypeOptions.contains('currentStatus')}">
 					<td>${message(code: order.currentStatus?.messageCode+'.'+order.currentStatus?.name)}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('travelTime')}">
-					<td>
-					<g:if test="${order.travelTime?.numberOfMinutes!=null}">
-						${order.travelTime?.numberOfMinutes} Minutes
-					</g:if>
-					<g:else>
-					
-					</g:else>
-					</td>
+					<td>${order.travelTime?.numberOfMinutes} Minutes</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('workTime')}">
 					<td>${order.workTime?.numberOfMinutes} Minutes</td>
@@ -101,16 +106,18 @@
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('listPerformedActions')}">
 					%{-- TODO AR corrective process property AFTER RELEASE --}%
-					<td>${order.actions?.collect{(it.name)}}</td>
+					<td>${order.actions}</td>
+					<td></td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('description')}">
 					<td><g:stripHtml field="${order.description}" chars="30"/></td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('dateOfEvent')}">
-				<td>${Utils.formatDateWithTime(order.dateCreated)}</td>
+				<td>${order.dateCreated}</td>
 				</g:if>
 			</tr>
 		</g:each>
+
 	</tbody>
 </table>
 <g:render template="/templates/pagination" />

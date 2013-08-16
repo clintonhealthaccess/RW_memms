@@ -44,6 +44,7 @@ modules = {
 		dependsOn 'jquery,foldable'
 
 		resource url: '/css/screen.css', bundle: 'core'
+		resource url: '/css/print.css', attrs:[media:'print']
 	}
 	error {
 		resource url: '/css/errors.css'

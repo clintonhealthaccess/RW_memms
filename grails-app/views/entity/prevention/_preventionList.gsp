@@ -7,6 +7,7 @@
 			<g:sortableColumn property="scheduledOn"  title="${message(code: 'prevention.scheduled.on.label')}" params="[q:q,'order.id':order?.id]" />
 			<g:sortableColumn property="timeSpend"  title="${message(code: 'prevention.time.spend.label')}" params="[q:q,'order.id':order?.id]" />
 			<th><g:message code="entity.descriptions.label"/></th>
+			<th/>
 		</tr>
 	</thead>
 	<tbody>
@@ -42,6 +43,14 @@
 				</td>
 				<td>
 					<g:stripHtml field="${prevention.descriptions}" chars="40"/>
+				</td>
+				<td>
+					<g:if test="${!prevention.processes || prevention.processes.size()==0}">
+						<a href="${createLinkWithTargetURI(controller:'prevention', action:'edit', params:[id: prevention.id])}" class="next gray medium"> 
+								<g:message code="prevention.add.process.label" />
+						</a>
+						
+					</g:if>
 				</td>
 			</tr>
 		</g:each>

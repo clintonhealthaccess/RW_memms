@@ -71,7 +71,7 @@ class EquipmentType {
 	
 	static embedded = ["expectedLifeTime"]
 	static i18nFields = ["descriptions","names"]
-	static hasMany = [equipments: Equipment,sparePartTypes: SparePartType]
+	static hasMany = [equipments: Equipment,sparePartTypes: SparePartType,preventiveActions: PreventiveAction]
 	
     static constraints = {
 		
