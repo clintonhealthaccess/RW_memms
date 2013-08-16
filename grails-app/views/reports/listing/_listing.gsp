@@ -117,6 +117,7 @@
               <g:else>
                 <g:render template="/reports/listing/sparePartReport/customSparePartsListing" />
               </g:else>
+            </g:if>
             <g:else>
                 <g:render template="/reports/listing/sparePartReport/sparePartsListing" />
             </g:else>

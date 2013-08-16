@@ -37,7 +37,7 @@
           <li class="modular">
             <div class='row'>
               <label><g:message code="reports.cost"/>:</label>
-              <input type="text" name="fromCost"/><span class="dash">-</span><input type="text" name="toCost"/>
+              <input type="text" name="fromCost" class="numbers-only"/><span class="dash">-</span><input type="text" name="toCost" class="numbers-only"/>
               <select name="costCurrency">
                 <g:each in="${currencies}" var="currencyEnum">
                   <option value="${currencyEnum.key}">

@@ -19,7 +19,7 @@
 				<g:sortableColumn property="model"  title="${message(code: 'equipment.model.label')}" params="${params}" />
 			</g:if>
 
-			<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
+			<g:if test="${reportTypeOptions.contains('statusChanges')}">
 				<g:sortableColumn property="statusChanges"  title="${message(code: 'listing.report.equipment.status.changes.label')}" params="${params}" />
 			</g:if>
 
@@ -77,7 +77,7 @@
 					<td>${equipment.model}</td>
 				</g:if>
 
-%{-- 				<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
+%{-- 				<g:if test="${reportTypeOptions.contains('statusChanges')}">
 					<g:set var="statusChangesEnum" value="${equipmentStatus.getEquipmentStatusChange(customizedListingParams?.statusChanges)}"/>
 					<td>${message(code: statusChangesEnum?.messageCode+'.'+statusChangesEnum?.name)}</td>
 				</g:if> --}%

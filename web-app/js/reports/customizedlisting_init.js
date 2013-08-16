@@ -33,6 +33,8 @@ function step2_init(){
   //   select.trigger('liszt:updated');
   // });
 
+  numberOnlyField();
+
   // load jqueryui date time picker
   $(function() {
     $( ".js-date-picker" ).datepicker({ dateFormat: "dd/mm/yy" })
