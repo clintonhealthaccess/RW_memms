@@ -757,7 +757,7 @@ class ListingController extends AbstractController{
 				if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing # of equipments:"+customEquipmentReport.size())
 			}
 			if(reportSubType == ReportSubType.STATUSCHANGES){
-				TODO AR switch from list of equipment to list of equipment status
+				//TODO AR switch from list of equipment to list of equipment status
 				customEquipmentReport = equipmentListingReportService.getCustomReportOfEquipments(user,customizedListingParams,params)
 				if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing # of equipment statuses:"+customEquipmentReport.size())
 			}
