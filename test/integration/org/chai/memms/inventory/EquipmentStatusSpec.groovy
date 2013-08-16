@@ -95,7 +95,6 @@ class EquipmentStatusSpec extends IntegrationTests{
 
 		then:
 		statusTwo.previousStatus.equals(statusOne.status)
-		statusTwo.status.equals(statusTwo.status)
 		statusTwo.getEquipmentStatusChange().equals(EquipmentStatusChange.FROMSTOCKTOOPERATIONAL)
 		statusTwo.getEquipmentStatusChange([EquipmentStatusChange.DISPOSEDEQUIPMENT]).equals(null)
 	}

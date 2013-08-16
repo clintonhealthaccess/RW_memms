@@ -87,7 +87,7 @@
 							</ul>
 			    			</td>
 			    			<td>${message(code: status?.status?.messageCode+'.'+status?.status?.name)}</td>
-                <td>${status?.previousStatus != null? message(code: status?.previousStatus?.messageCode+'.'+status?.previousStatus?.name):''}</td>
+                <td>${status?.previousStatus != null && status?.previousStatus != status?.status? message(code: status?.previousStatus?.messageCode+'.'+status?.previousStatus?.name):''}</td>
 			    			<td>${Utils.formatDate(status?.dateOfEvent)}</td>
 			    			<td>${Utils.formatDateWithTime(status?.dateCreated)}</td>
 			    			<td>${(status==equipment.timeBasedStatus)? '\u2713':''}</td>

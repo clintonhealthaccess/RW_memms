@@ -107,9 +107,7 @@ class EquipmentStatus {
 			return (val <= new Date()) //&&  (val.after(obj.equipment.purchaseDate) || (val.compareTo(obj.equipment.purchaseDate)==0))
 		} 
 		changedBy nullable: false
-		previousStatus nullable: true, validator:{ val, obj ->
-			if(val == null) return (val <= obj.equipment?.currentStatus)
-		}
+		previousStatus nullable: true
 		status blank: false, nullable: false, inList:[Status.OPERATIONAL,Status.PARTIALLYOPERATIONAL,Status.INSTOCK,Status.UNDERMAINTENANCE,Status.FORDISPOSAL,Status.DISPOSED]
 		reasons nullable: true, blank: true
 	}

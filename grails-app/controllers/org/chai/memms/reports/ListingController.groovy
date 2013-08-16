@@ -896,7 +896,7 @@ class ListingController extends AbstractController{
 		else{
 			def customSparePartReport = null
 			if(reportSubType == ReportSubType.STATUSCHANGES){
-				// TODO AR modify spare parts query to check for status change (status change is based on purchase date and delivery date)
+				// TODO AR change spare parts query to check for status change (status change is an extra check for purchase date and delivery date)
 				customSparePartReport = sparePartListingReportService.getCustomReportOfSpareParts(user, customizedListingParams, params)
 				if (log.isDebugEnabled()) log.debug("listing.customWorkOrderListing # of spare parts:"+customSparePartReport.size())
 			}
