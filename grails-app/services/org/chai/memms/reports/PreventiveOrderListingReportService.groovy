@@ -109,6 +109,10 @@ class PreventiveOrderListingReportService {
 				inList ("equip.type", equipmentTypes)
 			if(workOrderStatus!=null && !workOrderStatus.empty)
 				inList ("status",workOrderStatus)
+			if(workOrderStatus!=null && !workOrderStatus.empty && workOrderStatus.contains(PreventiveOrderStatus.OPENLATE)){
+				//le ("eventDate", it.scheduledOn)
+				//le ("scheduledOn", "eventDate")
+			}
 			if(lowerLimitCost && lowerLimitCost!=null)
 			//Including lowerLimitCost by using ge
 				ge ("equip.purchaseCost", lowerLimitCost)
