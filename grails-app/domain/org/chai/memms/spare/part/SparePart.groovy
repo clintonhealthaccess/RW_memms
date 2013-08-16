@@ -183,6 +183,24 @@ public class SparePart {
 			return true
 		else return false
 	}
+
+	public def getSparePartStatusChange(List<SparePartStatusChange> sparePartStatusChanges){
+		SparePartStatusChange sparePartStatusChange = null
+
+		if(sparePartStatusChanges == null) sparePartStatusChanges = SparePartStatusChange.values()
+	 	sparePartStatusChanges.each{ statusChange ->
+ 			
+ 			if(statusChange.equals(SparePartStatusChange.NEWPENDINGORDER)){
+ 				if(purchaseDate != null && deliveryDate == null)
+ 					sparePartStatusChange = statusChange
+ 			}
+ 			else if(statusChange.equals(SparePartStatusChange.PENDINGORDERARRIVED)){
+ 				if(purchaseDate != null && deliveryDate != null)
+ 					sparePartStatusChange = statusChange
+ 			}
+	 	}
+	 	return sparePartStatusChange
+	}
 	
 	static mapping = {
 		table "memms_spare_part"

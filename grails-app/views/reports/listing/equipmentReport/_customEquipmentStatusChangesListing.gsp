@@ -78,7 +78,7 @@
 				</g:if>
 
 %{-- 				<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
-					<g:set var="statusChangesEnum" value="${equipment.getEquipmentStatusChange(customEquipmentParams?.statusChanges)}"/>
+					<g:set var="statusChangesEnum" value="${equipmentStatus.getEquipmentStatusChange(customizedListingParams?.statusChanges)}"/>
 					<td>${message(code: statusChangesEnum?.messageCode+'.'+statusChangesEnum?.name)}</td>
 				</g:if> --}%
 

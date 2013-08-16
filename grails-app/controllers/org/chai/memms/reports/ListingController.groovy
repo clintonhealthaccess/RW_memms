@@ -539,10 +539,7 @@ class ListingController extends AbstractController{
 				redirect(action: "customPreventiveOrderListing", params: customizedListingParams)
 				break;
 			case ReportType.SPAREPARTS:
-				// if(reportSubType == ReportSubType.INVENTORY || reportSubType == ReportSubType.STATUSCHANGES)
 				redirect(action: "customSparePartsListing", params: customizedListingParams)
-				// if(reportSubType == ReportSubType.STOCKOUT || reportSubType == ReportSubType.USERATE)
-				// 	redirect(action: "customSparePartTypesListing", params: customizedListingParams)
 				break;
 			default:
 				break;
@@ -898,11 +895,11 @@ class ListingController extends AbstractController{
 			if(reportSubType == ReportSubType.STATUSCHANGES){
 				// TODO AR change spare parts query to check for status change (status change is an extra check for purchase date and delivery date)
 				customSparePartReport = sparePartListingReportService.getCustomReportOfSpareParts(user, customizedListingParams, params)
-				if (log.isDebugEnabled()) log.debug("listing.customWorkOrderListing # of spare parts:"+customSparePartReport.size())
+				if (log.isDebugEnabled()) log.debug("listing.customSparePartsListing # of spare parts:"+customSparePartReport.size())
 			}
 			else{
 				customSparePartReport = sparePartListingReportService.getCustomReportOfSpareParts(user, customizedListingParams, params)
-				if (log.isDebugEnabled()) log.debug("listing.customWorkOrderListing # of spare part statuses:"+customSparePartReport.size())
+				if (log.isDebugEnabled()) log.debug("listing.customSparePartsListing # of spare part statuses:"+customSparePartReport.size())
 			}
 
 			def savedReports = null
@@ -922,74 +919,6 @@ class ListingController extends AbstractController{
 			}
 		}
 	}
-
-	// spare part types
-
-	// def customSparePartTypesListing ={
-	// 	adaptParamsForList()
-	// 	if (log.isDebugEnabled()) log.debug("listing.customSparePartsListing start, params:"+params)
-
-	// 	def selectedReportId = params.int('selectedReportId')
-	// 	if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing saved/selected report id:"+selectedReportId)
-	// 	if(selectedReportId > 0){
-	// 		redirect(action: 'savedCustomizedListing', params: [id: selectedReportId])
-	// 	}
-
-	// 	def reportType = getReportType()
-	// 	def reportSubType = getReportSubType()
-
-	// 	def dataLocations = getDataLocations()
-	// 	def sparePartTypes = getSparePartTypes()
-
-	// 	def customizedListingParams = [
-	// 		reportType: reportType,
-	// 		reportSubType: reportSubType,
-	// 		dataLocations: dataLocations,
-	// 		sparePartTypes: sparePartTypes
-	// 	]
-
-	// 	if(reportSubType == ReportSubType.STOCKOUT){
-	// 		def stockOutMonths = params.get('stockOutMonths')
-	// 		customizedListingParams << [
-	// 			stockOutMonths: stockOutMonths
-	// 		]
-	// 	}
-
-	// 	if(reportSubType == ReportSubType.USERATE){ }
-
-	// 	def reportTypeOptions = getReportTypeOptions('spartPartsOptions')
-	// 	def customizedReportName = params.get('customizedReportName')
-	// 	customizedListingParams << [
-	// 		reportTypeOptions: reportTypeOptions,
-	// 		customizedReportName: customizedReportName
-	// 	]
-
-	// 	def customizedReportSave = params.get('customizedReportSave')
-	// 	if(customizedReportSave){
-	// 		def selectedReport = sparePartListingReportService.saveSparePartReportParams(user, customizedListingParams, params)
-	// 		if (log.isDebugEnabled()) log.debug("listing.customSparePartsListing saved/selected report:"+selectedReport+", id:"+selectedReport.id)
-	// 		redirect(action:"savedCustomizedListing", params:[savedReportId: selectedReport.id, reportType: selectedReport.reportType])
-	// 	}
-	// 	else{
-	// 		def spareParts = sparePartListingReportService.getCustomReportOfSpareParts(user, customizedListingParams, params)
-	// 		if (log.isDebugEnabled()) log.debug("WWWWWWWWWWWHY DON'T I SEE THIS VALUE ON THE INTERFACE?:"+spareParts)
-
-	// 		def savedReports = null
-	// 		// savedReports = userService.getSavedReportsByUser(user, ReportType.SPAREPARTS)
-
-	// 		customizedListingParams << [
-	// 			savedReports: savedReports,
-	// 			template:"/reports/listing/listing"
-	// 		]
-
-	// 		if (log.isDebugEnabled()) log.debug("listing.customSparePartsListing, customizedListingParams:"+customizedListingParams)
-
-	// 		if(!request.xhr){
-	// 			render(view:"/reports/reports",
-	// 				model: model(spareParts, "") << customizedListingParams)
-	// 		}
-	// 	}
-	// }
 
 	// customized report listing end
 

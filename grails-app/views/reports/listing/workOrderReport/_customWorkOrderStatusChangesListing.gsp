@@ -82,7 +82,7 @@
 				</g:if>
 
 %{-- 				<g:if test="${reportSubType == ReportSubType.STATUSCHANGES && reportTypeOptions.contains('statusChanges')}">
-					<g:set var="statusChangesEnum" value="${order.getWorkOrderTimeBasedStatusChange(customWorkOrderParams.statusChanges)}"/>
+					<g:set var="statusChangesEnum" value="${workOrderStatus.getWorkOrderStatusChange(customizedListingParams?.statusChanges)}"/>
 					<td>${message(code: statusChangesEnum?.messageCode+'.'+statusChangesEnum?.name)}</td>
 				</g:if> --}%
 

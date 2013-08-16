@@ -62,7 +62,6 @@
             <g:render template ="/reports/listing/workOrderReport/workOrderListingFilterSummary" />
             <!-- work order report template -->
             <g:if test="${customizedReportName != null && !customizedReportName.empty}">
-              <g:render template="/reports/listing/workOrderReport/customWorkOrderListing" />
               <g:if test="${reportSubType == ReportSubType.WORKORDERS}">
                 <g:render template="/reports/listing/workOrderReport/customWorkOrderListing" />
               </g:if>
@@ -112,13 +111,12 @@
             <g:render template ="/reports/listing/sparePartReport/sparePartListingFilterSummary" />
             <!-- spare parts report template -->
             <g:if test="${customizedReportName != null && !customizedReportName.empty}">
-              %{-- <g:if test="${[ReportSubType.USERATE,ReportSubType.STOCKOUT].contains(reportSubType)}">
-                <g:render template="/reports/listing/sparePartReport/customSparePartTypesListing" />
+              <g:if test="${reportSubType == ReportSubType.STATUSCHANGES}">
+                <g:render template="/reports/listing/workOrderReport/customSparePartStatusChangesListing" />
               </g:if>
-              <g:else> --}%
+              <g:else>
                 <g:render template="/reports/listing/sparePartReport/customSparePartsListing" />
-              %{-- </g:else> --}%
-            </g:if>
+              </g:else>
             <g:else>
                 <g:render template="/reports/listing/sparePartReport/sparePartsListing" />
             </g:else>
