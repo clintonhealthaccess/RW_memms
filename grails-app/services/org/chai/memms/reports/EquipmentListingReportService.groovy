@@ -165,8 +165,6 @@ class EquipmentListingReportService {
 
 	public def getCustomReportOfEquipments(User user,def customEquipmentParams, Map<String, String> params) {
 
-		def customEquipments = []
-
 		def reportType = customEquipmentParams.get('reportType')
 		def reportSubType = customEquipmentParams.get('reportSubType')
 
@@ -180,9 +178,11 @@ class EquipmentListingReportService {
 
 		def criteria = Equipment.createCriteria();
 
-		def criteriaEquipments = []
-
 		if(reportSubType == ReportSubType.INVENTORY){
+
+			def criteriaEquipments = []
+			def customEquipments = []
+
 			def fromAcquisitionPeriod = customEquipmentParams.get('fromAcquisitionPeriod')
 			def toAcquisitionPeriod = customEquipmentParams.get('toAcquisitionPeriod')
 			def noAcquisitionPeriod = customEquipmentParams.get('noAcquisitionPeriod')
@@ -223,15 +223,21 @@ class EquipmentListingReportService {
 			}
 			customEquipments = criteriaEquipments
 			if (log.isDebugEnabled()) log.debug("EQUIPMENTS SIZE: "+ customEquipments.size())
+
+			return customEquipments
 		}
 
 		// TODO AR switch from list of equipment to list of equipment status
 		if(reportSubType == ReportSubType.STATUSCHANGES){
+
+			def criteriaEquipmentStatuses = []
+			def customEquipmentStatuses = []
+
 			def statusChanges = customEquipmentParams.get('statusChanges')
 			def fromStatusChangesPeriod = customEquipmentParams.get('fromStatusChangesPeriod')
 			def toStatusChangesPeriod = customEquipmentParams.get('toStatusChangesPeriod')
 
-			criteriaEquipments = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			criteriaEquipmentStatuses = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 				
 				//Mandatory property
 				inList("dataLocation", dataLocations)
@@ -239,7 +245,7 @@ class EquipmentListingReportService {
 				inList ("department", departments)
 				//Mandatory property
 				inList ("type", equipmentTypes)
-				
+
 				if(lowerLimitCost && lowerLimitCost!=null)
 					gt ("purchaseCost", lowerLimitCost)
 				if(upperLimitCost && upperLimitCost!=null)
@@ -258,10 +264,15 @@ class EquipmentListingReportService {
 				}
 					
 			}
-			if (log.isDebugEnabled()) log.debug("EQUIPMENTS SIZE: "+ criteriaEquipments.size())
-		}
+			criteriaEquipmentStatus.each{ equipmentStatus ->
+				if(equipmentStatus.getEquipmentStatusChange(statusChanges) != null)
+					customEquipmentStatuses.add(equipmentStatus)
+			}
+			// customEquipments = criteriaEquipments
+			if (log.isDebugEnabled()) log.debug("EQUIPMENTS SIZE: "+ criteriaEquipmentStatuses.size())
 
-		return customEquipments
+			return customEquipmentStatuses
+		}
 	}
 
 	public def saveEquipmentReportParams(User user, def customEquipmentParams, Map<String, String> params){
