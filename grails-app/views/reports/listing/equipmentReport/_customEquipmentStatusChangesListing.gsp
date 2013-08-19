@@ -60,6 +60,7 @@
 	%{-- TODO AR switch from list of equipments to list of equipment statuses --}%
 	<tbody>
 		<g:each in="${entities}" status="i" var="equipment">
+		%{-- <g:each in="${entities}" status="i" var="equipmentStatus"> --}%
 			<tr>
 				<g:if test="${reportTypeOptions.contains('location')}">
 					<td>${equipment.dataLocation.names}</td>
@@ -77,10 +78,10 @@
 					<td>${equipment.model}</td>
 				</g:if>
 
-%{-- 				<g:if test="${reportTypeOptions.contains('statusChanges')}">
+				<g:if test="${reportTypeOptions.contains('statusChanges')}">
 					<g:set var="statusChangesEnum" value="${equipmentStatus.getEquipmentStatusChange(customizedListingParams?.statusChanges)}"/>
 					<td>${message(code: statusChangesEnum?.messageCode+'.'+statusChangesEnum?.name)}</td>
-				</g:if> --}%
+				</g:if>
 
 				<g:if test="${reportTypeOptions.contains('currentStatus')}">
 					<td>${message(code: equipment.currentStatus?.messageCode+'.'+equipment.currentStatus?.name)}</td>

@@ -61,6 +61,7 @@
 	%{-- TODO AR switch from list of work orders to list of work order statuses --}%
 	<tbody>
 		<g:each in="${entities}" status="i" var="order">
+		%{-- <g:each in="${entities}" status="i" var="orderStatus"> --}%
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 				<g:if test="${reportTypeOptions.contains('location')}">
 					<td>${order.equipment.dataLocation.names}</td>
@@ -81,10 +82,10 @@
 					<td>${order.equipment.manufacturer?.contact?.contactName}</td>
 				</g:if>
 
-%{-- 				<g:if test="${reportTypeOptions.contains('statusChanges')}">
-					<g:set var="statusChangesEnum" value="${workOrderStatus.getWorkOrderStatusChange(customizedListingParams?.statusChanges)}"/>
+				<g:if test="${reportTypeOptions.contains('statusChanges')}">
+					<g:set var="statusChangesEnum" value="${orderStatus.getWorkOrderStatusChange(customizedListingParams?.statusChanges)}"/>
 					<td>${message(code: statusChangesEnum?.messageCode+'.'+statusChangesEnum?.name)}</td>
-				</g:if> --}%
+				</g:if>
 
 				<g:if test="${reportTypeOptions.contains('currentStatus')}">
 					<td>${message(code: order.currentStatus?.messageCode+'.'+order.currentStatus?.name)}</td>
