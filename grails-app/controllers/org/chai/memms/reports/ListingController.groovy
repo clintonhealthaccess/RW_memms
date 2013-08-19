@@ -758,8 +758,8 @@ class ListingController extends AbstractController{
 			}
 			if(reportSubType == ReportSubType.STATUSCHANGES){
 				//TODO AR switch from list of equipment to list of equipment status
-				customEquipmentReport = equipmentListingReportService.getCustomReportOfEquipments(user,customizedListingParams,params)
-				if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing # of equipment statuses:"+customEquipmentReport.size())
+				// customEquipmentReport = equipmentListingReportService.getCustomReportOfEquipments(user,customizedListingParams,params)
+				// if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing # of equipment statuses:"+customEquipmentReport.size())
 			}
 
 			def savedReports = userService.getSavedReportsByUser(user, ReportType.INVENTORY)
@@ -808,8 +808,8 @@ class ListingController extends AbstractController{
 			}
 			if(reportSubType == ReportSubType.STATUSCHANGES){
 				// TODO AR switch from list of work orders to list of work order status
-				customWorkOrderReport = workOrderListingReportService.getCustomReportOfWorkOrders(user,customizedListingParams,params)
-				if (log.isDebugEnabled()) log.debug("listing.customWorkOrderListing # of workOrder statuses:"+customWorkOrderReport.size())
+				// customWorkOrderReport = workOrderListingReportService.getCustomReportOfWorkOrders(user,customizedListingParams,params)
+				// if (log.isDebugEnabled()) log.debug("listing.customWorkOrderListing # of workOrder statuses:"+customWorkOrderReport.size())
 			}
 
 			def savedReports = userService.getSavedReportsByUser(user, ReportType.CORRECTIVE)
@@ -895,8 +895,8 @@ class ListingController extends AbstractController{
 			def customSparePartReport = null
 			if(reportSubType == ReportSubType.STATUSCHANGES){
 				// TODO AR change spare parts query to check for status change (status change is an extra check for purchase date and delivery date)
-				customSparePartReport = sparePartListingReportService.getCustomReportOfSpareParts(user, customizedListingParams, params)
-				if (log.isDebugEnabled()) log.debug("listing.customSparePartsListing # of spare parts:"+customSparePartReport.size())
+				// customSparePartReport = sparePartListingReportService.getCustomReportOfSpareParts(user, customizedListingParams, params)
+				// if (log.isDebugEnabled()) log.debug("listing.customSparePartsListing # of spare parts:"+customSparePartReport.size())
 			}
 			else{
 				customSparePartReport = sparePartListingReportService.getCustomReportOfSpareParts(user, customizedListingParams, params)
