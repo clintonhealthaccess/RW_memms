@@ -752,14 +752,15 @@ class ListingController extends AbstractController{
 		}
 		else{
 			def customEquipmentReport = null
+			//def customEquipmentStatusReport = null
 			if(reportSubType == ReportSubType.INVENTORY){
 				customEquipmentReport = equipmentListingReportService.getCustomReportOfEquipments(user,customizedListingParams,params)
 				if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing # of equipments:"+customEquipmentReport.size())
 			}
 			if(reportSubType == ReportSubType.STATUSCHANGES){
 				//TODO AR switch from list of equipment to list of equipment status
-				// customEquipmentReport = equipmentListingReportService.getCustomReportOfEquipments(user,customizedListingParams,params)
-				// if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing # of equipment statuses:"+customEquipmentReport.size())
+				customEquipmentReport = equipmentListingReportService.getCustomReportOfEquipments(user,customizedListingParams,params)
+				if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing # of equipment statuses:"+customEquipmentReport.size())
 			}
 
 			def savedReports = userService.getSavedReportsByUser(user, ReportType.INVENTORY)
@@ -775,6 +776,7 @@ class ListingController extends AbstractController{
 			if(!request.xhr){
 				render(view:"/reports/reports",
 					model: model(customEquipmentReport, "") << customizedListingParams)
+					//model: model(customEquipmentStatusReport, "") << customizedListingParams)
 			}
 		}
 	}
@@ -808,8 +810,8 @@ class ListingController extends AbstractController{
 			}
 			if(reportSubType == ReportSubType.STATUSCHANGES){
 				// TODO AR switch from list of work orders to list of work order status
-				// customWorkOrderReport = workOrderListingReportService.getCustomReportOfWorkOrders(user,customizedListingParams,params)
-				// if (log.isDebugEnabled()) log.debug("listing.customWorkOrderListing # of workOrder statuses:"+customWorkOrderReport.size())
+				customWorkOrderReport = workOrderListingReportService.getCustomReportOfWorkOrders(user,customizedListingParams,params)
+				if (log.isDebugEnabled()) log.debug("listing.customWorkOrderListing # of workOrder statuses:"+customWorkOrderReport.size())
 			}
 
 			def savedReports = userService.getSavedReportsByUser(user, ReportType.CORRECTIVE)

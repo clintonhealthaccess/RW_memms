@@ -30,7 +30,7 @@ package org.chai.memms.corrective.maintenance
 import groovy.transform.EqualsAndHashCode;
 
 import org.chai.memms.security.User;
-
+import org.chai.memms.corrective.maintenance.WorkOrder;
 /**
  * @author Jean Kahigiso M.
  *

@@ -17,12 +17,10 @@
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('model')}">
 				<g:sortableColumn property="model"  title="${message(code: 'equipment.model.label')}" params="${params}" />
-			</g:if>
-
+			</g:if> 
 			<g:if test="${reportTypeOptions.contains('statusChanges')}">
 				<g:sortableColumn property="statusChanges"  title="${message(code: 'listing.report.equipment.status.changes.label')}" params="${params}" />
 			</g:if>
-
 			<g:if test="${reportTypeOptions.contains('currentStatus')}">
 				<g:sortableColumn property="currentStatus"  title="${message(code: 'equipment.status.label')}" params="${params}" />
 			</g:if>
@@ -59,63 +57,61 @@
 	</thead>
 	%{-- TODO AR switch from list of equipments to list of equipment statuses --}%
 	<tbody>
-		<g:each in="${entities}" status="i" var="equipment">
-		%{-- <g:each in="${entities}" status="i" var="equipmentStatus"> --}%
+		<g:each in="${entities}" status="i" var="equipmentStatus">
 			<tr>
 				<g:if test="${reportTypeOptions.contains('location')}">
-					<td>${equipment.dataLocation.names}</td>
+					<td>${equipmentStatus.equipment.dataLocation.names}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('code')}">
-					<td>${equipment.code}</td>
+					<td>${equipmentStatus.equipment.code}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('serialNumber')}">
-					<td>${equipment.serialNumber}</td>
+					<td>${equipmentStatus.equipment.serialNumber}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('equipmentType')}">
-					<td>${equipment.type.names}</td>
+					<td>${equipmentStatus.equipment.type.names}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('model')}">
-					<td>${equipment.model}</td>
-				</g:if>
-
+					<td>${equipmentStatus.equipment.model}</td>
+				</g:if> 
 				<g:if test="${reportTypeOptions.contains('statusChanges')}">
 					<g:set var="statusChangesEnum" value="${equipmentStatus.getEquipmentStatusChange(customizedListingParams?.statusChanges)}"/>
 					<td>${message(code: statusChangesEnum?.messageCode+'.'+statusChangesEnum?.name)}</td>
 				</g:if>
-
 				<g:if test="${reportTypeOptions.contains('currentStatus')}">
-					<td>${message(code: equipment.currentStatus?.messageCode+'.'+equipment.currentStatus?.name)}</td>
+					<td>${message(code: equipmentStatus?.equipment.currentStatus?.messageCode+'.'+equipmentStatus?.equipment?.currentStatus?.name)}</td>
 				</g:if>
+
 				<g:if test="${reportTypeOptions.contains('obsolete')}">
 					<td>
-						<g:if name="obsolete" id="${equipment.id}" test="${(!equipment.obsolete==true)}">&radic;</g:if>
+						<g:if name="obsolete" id="${equipmentStatus.equipment.id}" test="${(!equipmentStatus.equipment.obsolete==true)}">&radic;</g:if>
 						<g:else>&nbsp;</g:else>
 					</td>
 				</g:if>
 
 				<g:if test="${reportTypeOptions.contains('manufacturer')}">
-					<td>${equipment.manufacturer?.contact?.contactName}</td>
+					<td>${equipmentStatus.equipment.manufacturer?.contact?.contactName}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('supplier')}">
-					<td>${equipment.supplier?.contact?.contactName}</td>
+					<td>${equipmentStatus.equipment.supplier?.contact?.contactName}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('purchaser')}">
-					<td>${equipment.purchaser?.name}</td>
+					<td>${equipmentStatus.equipment.purchaser?.name}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('acquisitionDate')}">
-					<td>${Utils.formatDate(equipment.purchaseDate)}</td>
+					<td>${Utils.formatDate(equipmentStatus.equipment.purchaseDate)}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('cost')}">
-					<td>${equipment.purchaseCost}</td>
+					<td>${equipmentStatus.equipment.purchaseCost}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('warrantyProvider')}">
-					<td>${equipment.warranty?.contact?.contactName}</td>
+					<td>${equipmentStatus.equipment.warranty?.contact?.contactName}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('warrantyPeriodRemaining')}">
-					<td>${equipment.warrantyPeriodRemaining} <g:message code="listing.report.equipment.warranty.in.months.label" /></td>
+					<td>${equipmentStatus.equipment.warrantyPeriodRemaining} <g:message code="listing.report.equipment.warranty.in.months.label" /></td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('currentValue')}">
-					<td><g:formatNumber number="${equipment.currentValueOfThisEquipment}" type="number" format="###.#" maxFractionDigits="0"/> ${equipment.currency}</td>
+					<td><g:formatNumber number="${equipmentStatus.equipment.currentValueOfThisEquipment}" type="number" format="###.#" maxFractionDigits="0"/> ${equipmentStatus.equipment.currency}</td>
 				</g:if>
 			</tr>
 		</g:each>
