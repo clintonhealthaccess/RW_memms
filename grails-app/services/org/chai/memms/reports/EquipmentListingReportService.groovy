@@ -176,11 +176,11 @@ class EquipmentListingReportService {
 		def currency = customEquipmentParams.get('costCurrency')
 		def noCost = customEquipmentParams.get('noCost')
 
-		def criteria = Equipment.createCriteria();
+		def criteriaEquipments = Equipment.createCriteria()
 
 		if(reportSubType == ReportSubType.INVENTORY){
 
-			def criteriaEquipments = []
+			//def criteriaEquipments = []
 			def customEquipments = []
 
 			def fromAcquisitionPeriod = customEquipmentParams.get('fromAcquisitionPeriod')
@@ -190,7 +190,7 @@ class EquipmentListingReportService {
 			def obsolete = customEquipmentParams.get('obsolete')
 			def warranty = customEquipmentParams.get('warranty')
 
-			criteriaEquipments = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			return criteriaEquipments.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 				
 				//Mandatory property
 				inList("dataLocation", dataLocations)
@@ -221,57 +221,55 @@ class EquipmentListingReportService {
 				if(noCost != null && noCost)
 					eq ("purchaseCost", null)
 			}
-			customEquipments = criteriaEquipments
+			//customEquipments = criteriaEquipments
 			if (log.isDebugEnabled()) log.debug("EQUIPMENTS SIZE: "+ customEquipments.size())
 
-			return customEquipments
+			//return customEquipments
 		}
 
 		// TODO AR switch from list of equipment to list of equipment status
 		if(reportSubType == ReportSubType.STATUSCHANGES){
 
-			def criteriaEquipmentStatuses = []
+			def criteriaEquipmentStatuses = EquipmentStatus.createCriteria()
 			def customEquipmentStatuses = []
 
 			def statusChanges = customEquipmentParams.get('statusChanges')
 			def fromStatusChangesPeriod = customEquipmentParams.get('fromStatusChangesPeriod')
 			def toStatusChangesPeriod = customEquipmentParams.get('toStatusChangesPeriod')
 
-			criteriaEquipmentStatuses = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-				
+			return criteriaEquipmentStatuses.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+				createAlias("equipment","equip")
 				//Mandatory property
-				inList("dataLocation", dataLocations)
+				inList("equip.dataLocation", dataLocations)
 				//Mandatory property
-				inList ("department", departments)
+				inList ("equip.department", departments)
 				//Mandatory property
-				inList ("type", equipmentTypes)
+				inList ("equip.type", equipmentTypes)
 
 				if(lowerLimitCost && lowerLimitCost!=null)
-					gt ("purchaseCost", lowerLimitCost)
+					gt ("equip.purchaseCost", lowerLimitCost)
 				if(upperLimitCost && upperLimitCost!=null)
-					lt ("purchaseCost", upperLimitCost)
+					lt ("equip.purchaseCost", upperLimitCost)
 				if(currency && currency !=null)
-					eq ("currency",currency)
+					eq ("equip.currency",currency)
 				if(noCost != null && noCost)
-					eq ("purchaseCost", null)
+					eq ("equip.purchaseCost", null)
 					
-				status{
-						if(fromStatusChangesPeriod && fromStatusChangesPeriod != null)
-						gt ("dateOfEvent", fromStatusChangesPeriod)
+				if(fromStatusChangesPeriod && fromStatusChangesPeriod != null)
+					gt ("dateOfEvent", fromStatusChangesPeriod)
 							
-						if(toStatusChangesPeriod && toStatusChangesPeriod != null)
-						lt ("dateOfEvent", toStatusChangesPeriod)
-				}
+				if(toStatusChangesPeriod && toStatusChangesPeriod != null)
+					lt ("dateOfEvent", toStatusChangesPeriod)
 					
 			}
-			criteriaEquipmentStatus.each{ equipmentStatus ->
+			/*criteriaEquipmentStatus.each{ equipmentStatus ->
 				if(equipmentStatus.getEquipmentStatusChange(statusChanges) != null)
 					customEquipmentStatuses.add(equipmentStatus)
-			}
+			}*/
 			// customEquipments = criteriaEquipments
 			if (log.isDebugEnabled()) log.debug("EQUIPMENTS SIZE: "+ criteriaEquipmentStatuses.size())
 
-			return customEquipmentStatuses
+			//return customEquipmentStatuses
 		}
 	}
 

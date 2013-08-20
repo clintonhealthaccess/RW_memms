@@ -3,6 +3,7 @@
 <%@ page import="org.apache.shiro.SecurityUtils" %>
 <%@ page import="org.chai.memms.security.User" %>
 <%@ page import="org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus" %>
+<%@ page import="org.chai.memms.corrective.maintenance.WorkOrder" %>
 <table class="items">
 	<thead>
 		<tr>			
@@ -60,26 +61,26 @@
 	</thead>
 	%{-- TODO AR switch from list of work orders to list of work order statuses --}%
 	<tbody>
-		<g:each in="${entities}" status="i" var="order">
-		%{-- <g:each in="${entities}" status="i" var="orderStatus"> --}%
+		<%--<g:each in="${entities}" status="i" var="order">  --%>
+		<g:each in="${entities}" status="i" var="orderStatus">
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 				<g:if test="${reportTypeOptions.contains('location')}">
-					<td>${order.equipment.dataLocation.names}</td>
+					<td>${orderStatus.workOrder.equipment.dataLocation.names}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('code')}">
-					<td>${order?.equipment?.code}</td>
+					<td>${orderStatus.workOrder?.equipment?.code}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('serialNumber')}">
-					<td>${order.equipment.serialNumber}</td>
+					<td>${orderStatus.workOrder.equipment.serialNumber}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('equipmentType')}">
-					<td>${order.equipment.type.names}</td>
+					<td>${orderStatus.workOrder.equipment.type.names}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('model')}">
-					<td>${order.equipment.model}</td>
+					<td>${orderStatus.workOrder.equipment.model}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('manufacturer')}">
-					<td>${order.equipment.manufacturer?.contact?.contactName}</td>
+					<td>${orderStatus.workOrder.equipment.manufacturer?.contact?.contactName}</td>
 				</g:if>
 
 				<g:if test="${reportTypeOptions.contains('statusChanges')}">
@@ -88,33 +89,33 @@
 				</g:if>
 
 				<g:if test="${reportTypeOptions.contains('currentStatus')}">
-					<td>${message(code: order.currentStatus?.messageCode+'.'+order.currentStatus?.name)}</td>
+					<td>${message(code: orderStatus.workOrder.currentStatus?.messageCode+'.'+orderStatus.workOrder.currentStatus?.name)}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('travelTime')}">
-					<td>${order.travelTime?.numberOfMinutes} Minutes</td>
+					<td>${orderStatus.workOrder.travelTime?.numberOfMinutes} Minutes</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('workTime')}">
-					<td>${order.workTime?.numberOfMinutes} Minutes</td>
+					<td>${orderStatus.workOrder.workTime?.numberOfMinutes} Minutes</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('estimatedCost')}">
-					<td>${order.estimatedCost}</td>
+					<td>${orderStatus.workOrder.estimatedCost}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('departmentRequestedOrder')}">
-					<td>${order.equipment?.department?.code}</td>
+					<td>${orderStatus.workOrder.equipment?.department?.code}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('reasonsEquipmentFailure')}">
-					<td>${order.failureReasonDetails}</td>
+					<td>${orderStatus.workOrder.failureReasonDetails}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('listPerformedActions')}">
 					%{-- TODO AR corrective process property AFTER RELEASE --}%
-					<td>${order.actions}</td>
-					<td></td>
+					<td>${orderStatus.workOrder.actions}</td>
+					
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('description')}">
-					<td><g:stripHtml field="${order.description}" chars="30"/></td>
+					<td><g:stripHtml field="${orderStatus.workOrder.description}" chars="30"/></td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('dateOfEvent')}">
-				<td>${order.dateCreated}</td>
+				<td>${orderStatus.workOrder.dateCreated}</td>
 				</g:if>
 			</tr>
 		</g:each>
