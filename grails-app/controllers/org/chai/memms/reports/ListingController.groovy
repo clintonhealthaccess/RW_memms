@@ -93,8 +93,8 @@ class ListingController extends AbstractController{
 	def model(def entities, def dataLocation) {
 		return [
 			entities: entities,
-			//entityCount: entities.totalCount,
-			entityCount: entities.size(),
+			entityCount: entities.totalCount,
+			//entityCount: entities.size(),
 			dataLocation: dataLocation,
 			entityClass: getEntityClass(),
 			code: getLabel()
@@ -897,8 +897,8 @@ class ListingController extends AbstractController{
 			def customSparePartReport = null
 			if(reportSubType == ReportSubType.STATUSCHANGES){
 				// TODO AR change spare parts query to check for status change (status change is an extra check for purchase date and delivery date)
-				// customSparePartReport = sparePartListingReportService.getCustomReportOfSpareParts(user, customizedListingParams, params)
-				// if (log.isDebugEnabled()) log.debug("listing.customSparePartsListing # of spare parts:"+customSparePartReport.size())
+				customSparePartReport = sparePartListingReportService.getCustomReportOfSpareParts(user, customizedListingParams, params)
+				if (log.isDebugEnabled()) log.debug("listing.customSparePartsListing # of spare parts:"+customSparePartReport.size())
 			}
 			else{
 				customSparePartReport = sparePartListingReportService.getCustomReportOfSpareParts(user, customizedListingParams, params)
