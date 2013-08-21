@@ -113,7 +113,7 @@ class SparePartService {
 		}
 		else{
 			if(user.location instanceof Location)
-				dataLocations.addAll(user.location.getDataLocations([:], [:]))
+				dataLocations.addAll(user.location.collectDataLocations(null))
 			else{
 				def location = (DataLocation)user.location
 				dataLocations.add(location)
@@ -121,7 +121,7 @@ class SparePartService {
 					(location.manages==null)?:dataLocations.addAll(location.manages?.asList())
 			}
 
-			if(log.isDebugEnabled()) log.debug("Current user: " + user + " Current user's managed dataLocations: " + dataLocations)
+			if(log.isDebugEnabled()) log.debug("user: " + user + " user's managed dataLocations: " + dataLocations)
 
 			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){  
 				inList('dataLocation',dataLocations)  
@@ -137,7 +137,7 @@ class SparePartService {
 		if(!user.userType.equals(UserType.ADMIN) && !user.userType.equals(UserType.TECHNICIANMMC) && !user.userType.equals(UserType.SYSTEM) && !user.userType.equals(UserType.TECHNICIANDH)){
 			dataLocations = []
 			if(user.location instanceof Location)
-				dataLocations.addAll(user.location.getDataLocations([:], [:]))
+				dataLocations.addAll(user.location.collectDataLocations(null))
 			else{
 				def location = (DataLocation)user.location
 				dataLocations.add(location)
@@ -145,7 +145,7 @@ class SparePartService {
 					(location.manages==null)?:dataLocations.addAll(location.manages?.asList())
 			}
 
-			if(log.isDebugEnabled()) log.debug("Current user: " + user + " Current user's managed dataLocations: " + dataLocations)
+			if(log.isDebugEnabled()) log.debug(" user: " + user + " user's managed dataLocations: " + dataLocations)
 		}
 
 		def criteria = SparePart.createCriteria();
