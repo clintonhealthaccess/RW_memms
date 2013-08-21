@@ -88,17 +88,19 @@ class SparePartListingReportService {
 		def sparePartTypes = customSparePartsParams.get('sparePartTypes')
 		def showAtMMC = customSparePartsParams.get('showAtMmc')
 
-		def criteria = SparePart.createCriteria();
+		//def criteria = SparePart.createCriteria();
 
-		def criteriaSpareParts = []
+		//def criteriaSpareParts = []
 
 		if(reportSubType == ReportSubType.INVENTORY){
 			def fromAcquisitionPeriod = customSparePartsParams.get('fromAcquisitionPeriod')
 			def toAcquisitionPeriod = customSparePartsParams.get('toAcquisitionPeriod')
 			def noAcquisitionPeriod = customSparePartsParams.get('noAcquisitionPeriod')
 			def sparePartStatus = customSparePartsParams.get('sparePartStatus')
+			
+			def criteriaSpareParts = SparePart.createCriteria();
 
-			criteriaSpareParts = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			return criteriaSpareParts.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 				
 				//Mandatory property
 				inList("dataLocation", dataLocations)
@@ -116,7 +118,7 @@ class SparePartListingReportService {
 					
 				
 				//TODO to be reviewed by AR
-				if(user.userType.equals(UserType.ADMIN) || user.userType.equals(UserType.TECHNICIANMMC) || user.userType.equals(UserType.SYSTEM) || user.userType.equals(UserType.TECHNICIANDH)){
+				/*if(user.userType.equals(UserType.ADMIN) || user.userType.equals(UserType.TECHNICIANMMC) || user.userType.equals(UserType.SYSTEM) || user.userType.equals(UserType.TECHNICIANDH)){
 					if(showAtMMC && showAtMMC != null)
 						eq("stockLocation",StockLocation.MMC)
 					if(dataLocations && dataLocations != null)
@@ -124,7 +126,7 @@ class SparePartListingReportService {
 				}else {
 					if(dataLocations && dataLocations != null)
 					inList("dataLocation",dataLocations)
-				}
+				}*/
 			}
 			if (log.isDebugEnabled()) log.debug("SPARE PARTS SIZE: "+ criteriaSpareParts.size())
 		}
@@ -133,13 +135,28 @@ class SparePartListingReportService {
 			def statusChanges = customSparePartsParams.get('statusChanges')
 			def fromStatusChangesPeriod = customSparePartsParams.get('fromStatusChangesPeriod')
 			def toStatusChangesPeriod = customSparePartsParams.get('toStatusChangesPeriod')
+			def fromAcquisitionPeriod = customSparePartsParams.get('fromAcquisitionPeriod')
+			def toAcquisitionPeriod = customSparePartsParams.get('toAcquisitionPeriod')
+			def noAcquisitionPeriod = customSparePartsParams.get('noAcquisitionPeriod')
+			def sparePartStatus = customSparePartsParams.get('sparePartStatus')
 
-			criteriaSpareParts = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			def criteriaSpareParts = SparePart.createCriteria();
+
+			return criteriaSpareParts.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 				
 				//Mandatory property
 				inList("dataLocation", dataLocations)
 				//Mandatory property
 				inList ("type", sparePartTypes)
+
+				if(noAcquisitionPeriod != null && noAcquisitionPeriod)
+					eq ("purchaseDate", null)
+				if(sparePartStatus!=null && !sparePartStatus.empty)
+					inList ("status",sparePartStatus)
+				if(fromAcquisitionPeriod && fromAcquisitionPeriod != null)
+					gt ("purchaseDate", fromAcquisitionPeriod)
+				if(toAcquisitionPeriod && toAcquisitionPeriod != null)
+					lt ("purchaseDate", toAcquisitionPeriod)
 
 				// TODO
 				// if(fromStatusChangesPeriod != null)
@@ -163,7 +180,10 @@ class SparePartListingReportService {
 			DateTime todayDateTime = new DateTime(today)
 			def lastYearDateTimeFromNow = todayDateTime.minusDays(365)
 			def lastYearDateFromNow = lastYearDateTimeFromNow.toDate()
-			criteriaSpareParts = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			
+			def criteriaSpareParts = SparePart.createCriteria();
+			
+			return criteriaSpareParts.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 				
 				projections {
 					property("type","type")
@@ -190,7 +210,10 @@ class SparePartListingReportService {
 			DateTime todayDateTime = new DateTime(today)
 			def lastYearDateTimeFromNow = todayDateTime.minusDays(365)
 			def lastYearDateFromNow = lastYearDateTimeFromNow.toDate()
-			criteriaSpareParts = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			
+			def criteriaSpareParts = SparePart.createCriteria();
+			
+			return criteriaSpareParts.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 				
 				projections {
 					property("type", "type")
@@ -212,7 +235,6 @@ class SparePartListingReportService {
 			if (log.isDebugEnabled()) log.debug("SPARE PARTS SIZE ON USE RATE: "+ criteriaSpareParts.size())
 			//customSpareParts=criteriaSpareParts
 		}
-		return criteriaSpareParts
 	}
 
 	public def saveSparePartReportParams(User user, def customSparePartParams, Map<String, String> params){
