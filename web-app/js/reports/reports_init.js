@@ -11,7 +11,6 @@ $(document).ready(function(){
     e.preventDefault();
     $('.filters-box').slideToggle();
   });
-
   $('.v-tabs-fold-toggle').click(function(event) {
     var toggle = $(this);
     var tabs = $('.v-tabs-nested-nav').children('li').children('a');
