@@ -69,10 +69,9 @@ class IndicatorComputationService {
         for(User user: User.findAll()) {
             if ((user.location != null) && !locations.contains(user.location.id)) {
                 locations.add(user.location.id);
-                  if(user.location.names.contains("Rwanda")){
                 computeLocationReport(currentDate, user.location, memmsReport)
                break
-                }
+                
             }
         }
     }
