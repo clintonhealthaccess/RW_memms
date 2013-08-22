@@ -94,7 +94,7 @@ class IndicatorComputationService {
                       
                         for (Map.Entry<String, Double> entry : (Set)map.entrySet()){
                             def groupIndicatorValue=new GroupIndicatorValue(generatedAt:currentDate,name:entry.getKey(),value:entry.getValue(),indicatorValue:indicatorValue).save()
-                         println" hapa0 saved val :"+groupIndicatorValue.value+" id :"+groupIndicatorValue.id
+                         
                         }
                           
                     }
