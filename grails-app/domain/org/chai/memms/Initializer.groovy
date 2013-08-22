@@ -284,9 +284,15 @@ public class Initializer {
 		
 		if (!Location.count()) {
 			//Add Location types
-			def hc = newDataLocationType(['en':HEALTH_CENTER_GROUP], HEALTH_CENTER_GROUP);
-			def dh = newDataLocationType(['en':DISTRICT_HOSPITAL_GROUP], DISTRICT_HOSPITAL_GROUP);
-			//Add Location Level
+                        println"data location types--------------------------------"
+			def hc = new DataLocationType(['en':HEALTH_CENTER_GROUP], HEALTH_CENTER_GROUP);
+			
+                        println"data location types00000000000000000000000"
+            
+                        def dh = new DataLocationType(['en':DISTRICT_HOSPITAL_GROUP], DISTRICT_HOSPITAL_GROUP);
+			 println"data location types erorrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr"
+            
+            //Add Location Level
 			def country = newLocationLevel(['en':NATIONAL], NATIONAL,1)
 			def province = newLocationLevel(['en':PROVINCE], PROVINCE,2)
 			def district = newLocationLevel(['en':DISTRICT], DISTRICT,3)

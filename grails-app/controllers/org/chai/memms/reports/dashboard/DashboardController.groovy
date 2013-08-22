@@ -43,16 +43,17 @@ class DashboardController extends AbstractController {
 
     def dashboardService
     def indicatorComputationService
-
+ 
     def indicators = {
+        indicatorComputationService.computeCurrentReport()
         LocationReport report = getUserReport()
         List<IndicatorItem> indicatorItems = new ArrayList<IndicatorItem>()
-        Map<String, CategoryItem> categoryItems = new HashMap<String, CategoryItem>()
+        Map<String, CategoryItem> categoryItems = new LinkedHashMap<String, CategoryItem>()
         if(report != null) {
             for(IndicatorValue i : IndicatorValue.findAllByLocationReport(report)) {
                 indicatorItems.add(new IndicatorItem(i))
             }
-            for(IndicatorCategory category : IndicatorCategory.findAll()){
+            for(IndicatorCategory category : IndicatorCategory.findAll([sort: "id", order: "asc"])){
                 CategoryItem categoryItem = new CategoryItem(category, indicatorItems)
                 if (categoryItem.indicatorItems.size() > 0){
                     categoryItems.put(category.code, categoryItem)
@@ -64,7 +65,7 @@ class DashboardController extends AbstractController {
                 template:"/reports/dashboard/dashboard"
             ])
     }
-
+       
     def getUserReport() {
         MemmsReport memmsReport = dashboardService.getCurrentMemmsReport()
         if(memmsReport == null) {

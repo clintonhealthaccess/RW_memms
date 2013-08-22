@@ -1,0 +1,11 @@
+diff a/grails-app/conf/BootStrap.groovy b/grails-app/conf/BootStrap.groovy	(rejected hunks)
+@@ -60,9 +60,7 @@ class BootStrap {
+ 			case "production":
+                             // This is needed for the first time use only.
+                             DashboardInitializer.createDashboardStructure()
+-
+                             indicatorComputationService.computeCurrentReport()
+-
+ 			break;
+ 		}
+     }
