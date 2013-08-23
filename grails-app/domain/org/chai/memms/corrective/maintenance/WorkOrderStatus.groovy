@@ -52,7 +52,7 @@ public class WorkOrderStatus {
 	enum WorkOrderStatusChange{
 		NEWORDER("newOrder",
 			[
-				'previous':[OrderStatus.NONE],
+				'previous':[null,OrderStatus.NONE],
 				'current':[OrderStatus.OPENATFOSA,OrderStatus.OPENATMMC]
 			]),
 		ORDERESCALATEDTOMMC("orderEscalatedToMmc",

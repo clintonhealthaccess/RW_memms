@@ -75,8 +75,8 @@ public class SparePart {
 	enum SparePartStatus{
 		
 		NONE('none'),
-		INSTOCK("in.stock"),
-		PENDINGORDER("pending.order")
+		PENDINGORDER("pending.order"),
+		INSTOCK("in.stock")
 
 		String messageCode = "spare.part.status"
 
@@ -88,7 +88,7 @@ public class SparePart {
 	enum SparePartStatusChange{
 		// new pending order - purchaseDate != null and deliverydate == null
 		NEWPENDINGORDER("newPendingOrder",
-			['previous':[SparePartStatus.NONE], 'current':[SparePartStatus.PENDINGORDER]]),
+			['previous':[null, SparePartStatus.NONE], 'current':[SparePartStatus.PENDINGORDER]]),
 		//pending order arrived - purchaseDate != null and deliverydate != null
 		PENDINGORDERARRIVED("pendingOrderArrived",
 			['previous':[SparePartStatus.PENDINGORDER], 'current':[SparePartStatus.INSTOCK]]),

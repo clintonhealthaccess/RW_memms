@@ -21,8 +21,11 @@
 	<li><g:checkBox name="reportTypeOptions" value="equipmentType" /><span>${message(code:'listing.report.corrective.type.label')}</span></li>
 	<li><g:checkBox name="reportTypeOptions" value="model" /><span>${message(code:'listing.report.corrective.model.label')}</span></li>
 	<li><g:checkBox name="reportTypeOptions" value="manufacturer" /><span>${message(code:'listing.report.corrective.manufacturer.label')}</span></li>
-	<li><g:checkBox name="reportTypeOptions" value="currentStatus" /><span>${message(code:'listing.report.corrective.current.status.label')}</span></li>
 	<g:if test="${reportSubType == ReportSubType.STATUSCHANGES}">
-		<li><g:checkBox name="reportTypeOptions" value="statusChanges" /><span>${message(code:'listing.report.corrective.status.changes.label')}</span></li>
+		<li><g:checkBox name="reportTypeOptions" value="previousStatus" /><span>${message(code:'listing.report.equipment.previous.status.label')}</span></li>
+	</g:if>
+	<li><g:checkBox name="reportTypeOptions" value="currentStatus" /><span>${message(code:'listing.report.equipment.current.status.label')}</span></li>
+	<g:if test="${reportSubType == ReportSubType.STATUSCHANGES}">
+		<li><g:checkBox name="reportTypeOptions" value="statusChanges" /><span>${message(code:'reports.statusChange')}</span></li>
 	</g:if>
 </ul>

@@ -59,7 +59,7 @@ class EquipmentStatus {
 	enum EquipmentStatusChange{
 		NEWORDER("newEquipment", 
 			[
-				'previous':[Status.NONE], 
+				'previous':[null,Status.NONE],
 				'current':(Status.values()-[Status.NONE])
 			]),
 		DISPOSEDEQUIPMENT("disposedEquipment", 
@@ -126,7 +126,7 @@ class EquipmentStatus {
  			def previousStatusMap = statusChange.getStatusChange()['previous']
 			def currentStatusMap = statusChange.getStatusChange()['current']
 
-			def previousStatusChange = previousStatusMap.contains(previousStatus) || (previousStatusMap.contains(Status.NONE) && previousStatus == null)
+			def previousStatusChange = previousStatusMap.contains(previousStatus) // || (previousStatusMap.contains(Status.NONE) && previousStatus == null)
 			def currentStatusChange = currentStatusMap.contains(status)
 
 			if(previousStatusChange && currentStatusChange) equipmentStatusChange = statusChange

@@ -37,6 +37,7 @@ import org.chai.memms.security.User;
 import org.chai.memms.inventory.Equipment;
 import org.chai.memms.inventory.EquipmentStatus;
 import org.chai.memms.inventory.EquipmentStatus.Status;
+import org.chai.memms.inventory.EquipmentStatus.EquipmentStatusChange;
 import org.chai.memms.inventory.Equipment.PurchasedBy;
 import org.chai.memms.inventory.Equipment.Donor;
 import org.chai.memms.util.Utils.ReportType;
@@ -176,12 +177,9 @@ class EquipmentListingReportService {
 		def currency = customEquipmentParams.get('costCurrency')
 		def noCost = customEquipmentParams.get('noCost')
 
-		def criteriaEquipments = Equipment.createCriteria()
-
 		if(reportSubType == ReportSubType.INVENTORY){
 
-			//def criteriaEquipments = []
-			def customEquipments = []
+			def equipmentCriteria = Equipment.createCriteria()
 
 			def fromAcquisitionPeriod = customEquipmentParams.get('fromAcquisitionPeriod')
 			def toAcquisitionPeriod = customEquipmentParams.get('toAcquisitionPeriod')
@@ -190,8 +188,8 @@ class EquipmentListingReportService {
 			def obsolete = customEquipmentParams.get('obsolete')
 			def warranty = customEquipmentParams.get('warranty')
 
-			return criteriaEquipments.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-				
+			return equipmentCriteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+
 				//Mandatory property
 				inList("dataLocation", dataLocations)
 				//Mandatory property
@@ -221,24 +219,21 @@ class EquipmentListingReportService {
 				if(noCost != null && noCost)
 					eq ("purchaseCost", null)
 			}
-			//customEquipments = criteriaEquipments
-			if (log.isDebugEnabled()) log.debug("EQUIPMENTS SIZE: "+ customEquipments.size())
-
-			//return customEquipments
 		}
 
-		// TODO AR switch from list of equipment to list of equipment status
 		if(reportSubType == ReportSubType.STATUSCHANGES){
 
-			def criteriaEquipmentStatuses = EquipmentStatus.createCriteria()
-			def customEquipmentStatuses = []
+			def equipmentStatusCriteria = EquipmentStatus.createCriteria()
 
-			def statusChanges = customEquipmentParams.get('statusChanges')
+			def equipmentStatusChanges = customEquipmentParams.get('statusChanges')
+
 			def fromStatusChangesPeriod = customEquipmentParams.get('fromStatusChangesPeriod')
 			def toStatusChangesPeriod = customEquipmentParams.get('toStatusChangesPeriod')
 
-			return criteriaEquipmentStatuses.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			return equipmentStatusCriteria.list(offset:params.offset,max:params.max, sort:params.sort ?:"id",order: params.order ?:"desc"){
+
 				createAlias("equipment","equip")
+
 				//Mandatory property
 				inList("equip.dataLocation", dataLocations)
 				//Mandatory property
@@ -254,22 +249,26 @@ class EquipmentListingReportService {
 					eq ("equip.currency",currency)
 				if(noCost != null && noCost)
 					eq ("equip.purchaseCost", null)
-					
+
+				//Status changes
+				if(equipmentStatusChanges != null || !equipmentStatusChanges.empty){
+					or {
+						equipmentStatusChanges.each{ equipmentStatusChange ->
+							def previousStatus = equipmentStatusChange.statusChange['previous']
+							def currentStatus = equipmentStatusChange.statusChange['current']
+							and {
+								inList("previousStatus", previousStatus)
+								inList("status", currentStatus)
+							}
+						}
+					}
+				}
+
 				if(fromStatusChangesPeriod && fromStatusChangesPeriod != null)
 					gt ("dateOfEvent", fromStatusChangesPeriod)
-							
 				if(toStatusChangesPeriod && toStatusChangesPeriod != null)
 					lt ("dateOfEvent", toStatusChangesPeriod)
-					
 			}
-			/*criteriaEquipmentStatus.each{ equipmentStatus ->
-				if(equipmentStatus.getEquipmentStatusChange(statusChanges) != null)
-					customEquipmentStatuses.add(equipmentStatus)
-			}*/
-			// customEquipments = criteriaEquipments
-			if (log.isDebugEnabled()) log.debug("EQUIPMENTS SIZE: "+ criteriaEquipmentStatuses.size())
-
-			//return customEquipmentStatuses
 		}
 	}
 

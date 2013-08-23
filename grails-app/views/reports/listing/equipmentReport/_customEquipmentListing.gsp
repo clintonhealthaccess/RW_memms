@@ -18,7 +18,6 @@
 			<g:if test="${reportTypeOptions.contains('model')}">
 				<g:sortableColumn property="model"  title="${message(code: 'equipment.model.label')}" params="${params}" />
 			</g:if>
-
 			<g:if test="${reportTypeOptions.contains('currentStatus')}">
 				<g:sortableColumn property="currentStatus"  title="${message(code: 'equipment.status.label')}" params="${params}" />
 			</g:if>
@@ -76,7 +75,7 @@
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('obsolete')}">
 					<td>
-						<g:if name="obsolete" id="${equipment.id}" test="${(!equipment.obsolete==true)}">&radic;</g:if>
+						<g:if test="${(!equipment.obsolete==true)}">&radic;</g:if>
 						<g:else>&nbsp;</g:else>
 					</td>
 				</g:if>

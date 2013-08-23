@@ -752,13 +752,11 @@ class ListingController extends AbstractController{
 		}
 		else{
 			def customEquipmentReport = null
-			//def customEquipmentStatusReport = null
 			if(reportSubType == ReportSubType.INVENTORY){
 				customEquipmentReport = equipmentListingReportService.getCustomReportOfEquipments(user,customizedListingParams,params)
 				if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing # of equipments:"+customEquipmentReport.size())
 			}
 			if(reportSubType == ReportSubType.STATUSCHANGES){
-				//TODO AR switch from list of equipment to list of equipment status
 				customEquipmentReport = equipmentListingReportService.getCustomReportOfEquipments(user,customizedListingParams,params)
 				if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing # of equipment statuses:"+customEquipmentReport.size())
 			}
@@ -776,7 +774,6 @@ class ListingController extends AbstractController{
 			if(!request.xhr){
 				render(view:"/reports/reports",
 					model: model(customEquipmentReport, "") << customizedListingParams)
-					//model: model(customEquipmentStatusReport, "") << customizedListingParams)
 			}
 		}
 	}
@@ -809,7 +806,6 @@ class ListingController extends AbstractController{
 				if (log.isDebugEnabled()) log.debug("listing.customWorkOrderListing # of workOrder:"+customWorkOrderReport.size())
 			}
 			if(reportSubType == ReportSubType.STATUSCHANGES){
-				// TODO AR switch from list of work orders to list of work order status
 				customWorkOrderReport = workOrderListingReportService.getCustomReportOfWorkOrders(user,customizedListingParams,params)
 				if (log.isDebugEnabled()) log.debug("listing.customWorkOrderListing # of workOrder statuses:"+customWorkOrderReport.size())
 			}
@@ -895,15 +891,8 @@ class ListingController extends AbstractController{
 		}
 		else{
 			def customSparePartReport = null
-			if(reportSubType == ReportSubType.STATUSCHANGES){
-				// TODO AR change spare parts query to check for status change (status change is an extra check for purchase date and delivery date)
-				// customSparePartReport = sparePartListingReportService.getCustomReportOfSpareParts(user, customizedListingParams, params)
-				// if (log.isDebugEnabled()) log.debug("listing.customSparePartsListing # of spare parts:"+customSparePartReport.size())
-			}
-			else{
-				customSparePartReport = sparePartListingReportService.getCustomReportOfSpareParts(user, customizedListingParams, params)
-				if (log.isDebugEnabled()) log.debug("listing.customSparePartsListing # of spare part statuses:"+customSparePartReport.size())
-			}
+			customSparePartReport = sparePartListingReportService.getCustomReportOfSpareParts(user, customizedListingParams, params)
+			if (log.isDebugEnabled()) log.debug("listing.customSparePartsListing # of spare part statuses:"+customSparePartReport.size())
 
 			def savedReports = null
 			// TODO figure out why this doesn't work for spare parts
@@ -1273,7 +1262,7 @@ class ListingController extends AbstractController{
 		if(reportSubType == ReportSubType.STOCKOUT){
 			def stockOutMonths = params.get('stockOutMonths')
 			customizedListingParams << [
-				stockOutMonths: stockOtMonths
+				stockOutMonths: stockOutMonths
 			]
 		}
 
@@ -1434,6 +1423,9 @@ class ListingController extends AbstractController{
 				if(it != null && !it.empty) inventoryStatus.add(Enum.valueOf(Status.class, it))
 			}
 		}
+		else{
+			inventoryStatus = Status.values()
+		}
 		return inventoryStatus
 	}
 	public List<EquipmentStatusChange> getInventoryStatusChanges(){
@@ -1446,6 +1438,9 @@ class ListingController extends AbstractController{
 				if(log.isDebugEnabled()) log.debug("abstract.inventoryStatusChanges statusChange:"+it)
 				if(it != null & !it.empty) inventoryStatusChanges.add(Enum.valueOf(EquipmentStatusChange.class, it))
 			}
+		}
+		else{
+			inventoryStatusChanges = EquipmentStatusChange.values()
 		}
 		if(log.isDebugEnabled())
 			log.debug("abstract.inventoryStatusChanges end statusChanges:"+inventoryStatusChanges)
@@ -1462,6 +1457,9 @@ class ListingController extends AbstractController{
 				if(it != null && !it.empty) correctiveStatus.add(Enum.valueOf(OrderStatus.class, it))
 			}
 		}
+		else{
+			correctiveStatus = OrderStatus.values()
+		}
 		return correctiveStatus
 	}
 	public List<WorkOrderStatusChange> getCorrectiveStatusChanges(){
@@ -1474,6 +1472,9 @@ class ListingController extends AbstractController{
 				if(log.isDebugEnabled()) log.debug("abstract.correctiveStatusChanges statusChange:"+it)
 				if(it != null) correctiveStatusChanges.add(Enum.valueOf(WorkOrderStatusChange.class, it))
 			}
+		}
+		else{
+			correctiveStatusChanges = WorkOrderStatusChange.values()
 		}
 		if(log.isDebugEnabled())
 			log.debug("abstract.correctiveStatusChanges end statusChanges:"+correctiveStatusChanges)
@@ -1490,6 +1491,9 @@ class ListingController extends AbstractController{
 				if(it != null && !it.empty) preventiveStatus.add(Enum.valueOf(PreventiveOrderStatus.class, it))
 			}
 		}
+		else{
+			preventiveStatus = PreventiveOrderStatus.values()
+		}
 		return preventiveStatus
 	}
 	public List<PreventionResponsible> getPreventionResponsible(String preventionResponsibleParam){
@@ -1501,6 +1505,9 @@ class ListingController extends AbstractController{
 				if(log.isDebugEnabled()) log.debug("abstract.PreventionResponsible PreventionResponsible:"+it)
 				if(it != null) preventionResponsible.add(Enum.valueOf(PreventionResponsible.class, it))
 			}
+		}
+		else{
+			preventionResponsible = PreventionResponsible.values()
 		}
 		return preventionResponsible
 	}
@@ -1515,6 +1522,9 @@ class ListingController extends AbstractController{
 				if(it != null && !it.empty) sparePartStatus.add(Enum.valueOf(SparePartStatus.class, it))
 			}
 		}
+		else{
+			sparePartStatus = SparePartStatus.values()
+		}
 		return sparePartStatus
 	}
 	public List<SparePartStatusChange> getSparePartStatusChanges(){
@@ -1527,6 +1537,9 @@ class ListingController extends AbstractController{
 				if(log.isDebugEnabled()) log.debug("abstract.sparePartStatusChanges statusChange:"+it)
 				if(it != null) sparePartStatusChanges.add(it)
 			}
+		}
+		else{
+			sparePartStatusChanges = SparePartStatusChange.values()
 		}
 		if(log.isDebugEnabled()) log.debug("abstract.sparePartStatusChanges end statusChanges:"+sparePartStatusChanges)
 		return sparePartStatusChanges

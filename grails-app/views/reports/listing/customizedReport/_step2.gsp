@@ -10,28 +10,28 @@
     <fieldset>
       <ul>
         <li>
-          <g:selectFromList name="dataLocations" label="${message(code:'reports.dataLocation')}" field="dataLocations"
-            optionKey="id" multiple="true" value="${dataLocations*.id}"
+          <g:selectFromList name="dataLocations" label="${message(code:'reports.dataLocation')}" required="true"
+            field="dataLocations" optionKey="id" multiple="true" value="${dataLocations*.id}"
             ajaxLink="${createLink(controller: 'dataLocation', action:'getAjaxData')}"
             values="${dataLocations.collect{it.names+' '+it.id+' ['+it.location.names+']'}}" />
-          <g:checkBox name="allDataLocations" class='js-select-all'/>
+          <g:checkBox name="allDataLocations" class='js-select-all' />
           <span><g:message code="reports.selectAll"/></span>
         </li>
         <g:if test="${[ReportType.INVENTORY,ReportType.CORRECTIVE,ReportType.PREVENTIVE].contains(reportType)}">
           <li>
-            <g:selectFromList name="departments" label="${message(code:'reports.department')}" field="departments"
-              optionKey="id" multiple="true" value="${departments*.id}"
+            <g:selectFromList name="departments" label="${message(code:'reports.department')}" required="true"
+              field="departments" optionKey="id" multiple="true" value="${departments*.id}"
               ajaxLink="${createLink(controller: 'department', action:'getAjaxData')}"
               values="${departments.collect{it.names+' ['+it.id+']'}}" />
-            <g:checkBox name="allDepartments" class='js-select-all'/>
+            <g:checkBox name="allDepartments" class='js-select-all' />
             <span><g:message code="reports.selectAll"/></span>
           </li>
           <li>
-            <g:selectFromList name="equipmentTypes" label="${message(code:'reports.equipmentType')}"
+            <g:selectFromList name="equipmentTypes" label="${message(code:'reports.equipmentType')}" required="true" 
               field="type" optionKey="id" multiple="true" value="${equipmentTypes*.id}"
               ajaxLink="${createLink(controller:'EquipmentType', action:'getAjaxData', params:[observation:'USEDINMEMMS'])}"
               values="${equipmentTypes.collect{it.names + ' ['+ it.code +']'}}"/>
-            <g:checkBox name="allEquipmentTypes" class='js-select-all'/>
+            <g:checkBox name="allEquipmentTypes" class='js-select-all' />
             <span><g:message code="reports.selectAll"/></span>
           </li>
           <li class="modular">
@@ -61,11 +61,11 @@
             <li>
           </g:if>
           <li>
-            <g:selectFromList name="sparePartTypes" label="${message(code:'reports.sparePartType')}"
+            <g:selectFromList name="sparePartTypes" label="${message(code:'reports.sparePartType')}" required="true" 
               field="type" optionKey="id" multiple="true" value="${sparePartTypes*.id}"
               ajaxLink="${createLink(controller:'SparePartType', action:'getAjaxData', params:[observation:'USEDINMEMMS'])}"
               values="${sparePartTypes.collect{it.names + ' ['+ it.code +']'}}"/>
-            <g:checkBox name="allSparePartTypes" class='js-select-all'/>
+            <g:checkBox name="allSparePartTypes" class='js-select-all' />
             <span><g:message code="reports.selectAll"/></span>
           </li>
         </g:if>
@@ -74,6 +74,7 @@
         <g:render
             template="/reports/listing/customizedReport/${reportType.getReportType()}/${reportSubType.getReportSubType()}"/>
       </g:if>
+      <label>* = <g:message code="reports.required.filter"/></label>
     </fieldset>
   </g:formRemote>
   <g:formRemote name="formRemoteStep2Prev" url="[action:'step1', params:step2Params]" update="dialog-form"

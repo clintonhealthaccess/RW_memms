@@ -79,10 +79,8 @@
 					<td>${(order.type.equals(PreventiveOrderType.DURATIONBASED))?Utils.formatDateWithTime(order.nextOccurence):''}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('percentageInterventionsDone')}">
-					%{-- TODO AR calculation AFTER RELEASE --}%
-					<td>
-					${order.percentageOfInterventionsDone} %
-					</td>
+					%{-- TODO AR create util method for formatting percentage --}%
+					<td>${order.percentageOfInterventionsDone} %</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('recurrencePeriod')}">
 					<td>${order.occurInterval} ${message(code: order.occurency?.messageCode+'.'+order.occurency?.name)}</td>

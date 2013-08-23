@@ -12,6 +12,7 @@ import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.memms.security.User;
 import org.chai.memms.util.Utils;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
+import org.chai.memms.corrective.maintenance.WorkOrderStatus.WorkOrderStatusChange;
 import org.chai.memms.report.listing.CorrectiveMaintenanceReport;
 import org.chai.memms.util.Utils.ReportType
 import org.chai.memms.util.Utils.ReportSubType
@@ -85,8 +86,6 @@ class WorkOrderListingReportService {
 
 	def getCustomReportOfWorkOrders(User user, def customWorkOrderParams, Map<String, String> params) {
 
-		def customWorkOrders = []
-
 		def reportType = customWorkOrderParams.get('reportType')
 		def reportSubType = customWorkOrderParams.get('reportSubType')
 
@@ -104,9 +103,9 @@ class WorkOrderListingReportService {
 			def toWorkOrderPeriod = customWorkOrderParams.get('toWorkOrderPeriod')
 			def warranty = customWorkOrderParams.get('warranty')
 			
-			def criteriaWorkOrders = WorkOrder.createCriteria();
+			def workOrderCriteria = WorkOrder.createCriteria();
 
-			return criteriaWorkOrders.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			return workOrderCriteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 
 				createAlias("equipment","equip")
 
@@ -135,17 +134,16 @@ class WorkOrderListingReportService {
 				if(noCost != null && noCost)
 					eq ("equip.purchaseCost", null)
 			}
-			//customWorkOrders = criteriaWorkOrders
 		}
 
 		if(reportSubType == ReportSubType.STATUSCHANGES){
-			def statusChanges = customWorkOrderParams.get('statusChanges')
+			def workOrderStatusChanges = customWorkOrderParams.get('statusChanges')
 			def fromStatusChangesPeriod = customWorkOrderParams.get('fromStatusChangesPeriod')
 			def toStatusChangesPeriod = customWorkOrderParams.get('toStatusChangesPeriod')
 			
-			def criteriaWorkOrderStatus= WorkOrderStatus.createCriteria();
+			def workOrderStatusCriteria= WorkOrderStatus.createCriteria();
 
-			return criteriaWorkOrderStatus.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			return workOrderStatusCriteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 
 				createAlias("workOrder","wo")
 				createAlias("wo.equipment","equipment")
@@ -166,15 +164,27 @@ class WorkOrderListingReportService {
 				if(noCost != null && noCost)
 					eq ("equipment.purchaseCost", null)
 
+				//Status changes
+				if(workOrderStatusChanges != null || !workOrderStatusChanges.empty){
+					or {
+						workOrderStatusChanges.each{ workOrderStatusChange ->
+							def previousStatus = workOrderStatusChange.statusChange['previous']
+							def currentStatus = workOrderStatusChange.statusChange['current']
+							and {
+								inList("previousStatus", previousStatus)
+								inList("status", currentStatus)
+							}
+						}
+					}
+				}
+
 				if(fromStatusChangesPeriod && fromStatusChangesPeriod != null)
 					gt ("dateCreated", fromStatusChangesPeriod)
 						
 				if(toStatusChangesPeriod && toStatusChangesPeriod != null)
 					lt ("dateCreated", toStatusChangesPeriod)
 			}
-			if (log.isDebugEnabled()) log.debug("WORK ORDERS SIZE: "+ criteriaWorkOrderStatus.size())
 		}
-		//return customWorkOrders;
 	}
 
 	public def saveWorkOrderReportParams(User user, def customWorkOrderParams, Map<String, String> params){

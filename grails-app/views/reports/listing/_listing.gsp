@@ -111,15 +111,10 @@
             <g:render template ="/reports/listing/sparePartReport/sparePartListingFilterSummary" />
             <!-- spare parts report template -->
             <g:if test="${customizedReportName != null && !customizedReportName.empty}">
-              <g:if test="${reportSubType == ReportSubType.STATUSCHANGES}">
-                <g:render template="/reports/listing/workOrderReport/customSparePartStatusChangesListing" />
-              </g:if>
-              <g:else>
-                <g:render template="/reports/listing/sparePartReport/customSparePartsListing" />
-              </g:else>
+              <g:render template="/reports/listing/sparePartReport/customSparePartsListing" />
             </g:if>
             <g:else>
-                <g:render template="/reports/listing/sparePartReport/sparePartsListing" />
+              <g:render template="/reports/listing/sparePartReport/sparePartsListing" />
             </g:else>
           </div>
       </div>

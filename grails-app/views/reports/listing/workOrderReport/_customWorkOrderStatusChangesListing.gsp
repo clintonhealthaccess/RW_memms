@@ -8,7 +8,7 @@
 	<thead>
 		<tr>			
 			<g:if test="${reportTypeOptions.contains('location')}">
-				<g:sortableColumn property="dataLocation"  title="${message(code: 'location.label')}" params="${params}" />
+				<th><g:message code="location.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('code')}">
 				<th><g:message code="default.equipment.code.label"/></th>
@@ -20,18 +20,19 @@
 				<th><g:message code="default.equipment.type.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('model')}">
-				<g:sortableColumn property="model"  title="${message(code: 'equipment.model.label')}" params="${params}" />
+				<th><g:message code="equipment.model.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('manufacturer')}">
-				<g:sortableColumn property="manufacturer"  title="${message(code: 'provider.type.manufacturer')}" params="${params}" />
+				<th><g:message code="provider.type.manufacturer"/></th>
 			</g:if>
-
-			<g:if test="${reportTypeOptions.contains('statusChanges')}">
-				<g:sortableColumn property="statusChanges"  title="Status Changes" params="${params}" />
+			<g:if test="${reportTypeOptions.contains('previousStatus')}">
+				<g:sortableColumn property="previousStatus" title="${message(code: 'entity.previous.status.label')}" params="${params}" />
 			</g:if>
-
 			<g:if test="${reportTypeOptions.contains('currentStatus')}">
-				<g:sortableColumn property="currentStatus" title="${message(code: 'entity.status.label')}" params="${params}" />
+				<g:sortableColumn property="status" title="${message(code: 'entity.status.label')}" params="${params}" />
+			</g:if>
+			<g:if test="${reportTypeOptions.contains('statusChanges')}">
+				<th><g:message code="reports.statusChange"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('travelTime')}">
 				<th><g:message code="listing.report.corrective.travel.time.label"/></th>
@@ -59,9 +60,7 @@
 			</g:if>
 		</tr>
 	</thead>
-	%{-- TODO AR switch from list of work orders to list of work order statuses --}%
 	<tbody>
-		<%--<g:each in="${entities}" status="i" var="order">  --%>
 		<g:each in="${entities}" status="i" var="orderStatus">
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 				<g:if test="${reportTypeOptions.contains('location')}">
@@ -82,19 +81,22 @@
 				<g:if test="${reportTypeOptions.contains('manufacturer')}">
 					<td>${orderStatus.workOrder.equipment.manufacturer?.contact?.contactName}</td>
 				</g:if>
-
+				<g:if test="${reportTypeOptions.contains('previousStatus')}">
+					<td>${message(code: orderStatus.previousStatus?.messageCode+'.'+orderStatus.previousStatus?.name)}</td>
+				</g:if>
+				<g:if test="${reportTypeOptions.contains('currentStatus')}">
+					<td>${message(code: orderStatus.status?.messageCode+'.'+orderStatus.status?.name)}</td>
+				</g:if>
 				<g:if test="${reportTypeOptions.contains('statusChanges')}">
 					<g:set var="statusChangesEnum" value="${orderStatus.getWorkOrderStatusChange(customizedListingParams?.statusChanges)}"/>
 					<td>${message(code: statusChangesEnum?.messageCode+'.'+statusChangesEnum?.name)}</td>
 				</g:if>
-
-				<g:if test="${reportTypeOptions.contains('currentStatus')}">
-					<td>${message(code: orderStatus.workOrder.currentStatus?.messageCode+'.'+orderStatus.workOrder.currentStatus?.name)}</td>
-				</g:if>
 				<g:if test="${reportTypeOptions.contains('travelTime')}">
+					%{-- TODO AR create util method for formatting minutes --}%
 					<td>${orderStatus.workOrder.travelTime?.numberOfMinutes} Minutes</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('workTime')}">
+					%{-- TODO AR create util method for formatting minutes --}%
 					<td>${orderStatus.workOrder.workTime?.numberOfMinutes} Minutes</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('estimatedCost')}">
@@ -107,9 +109,7 @@
 					<td>${orderStatus.workOrder.failureReasonDetails}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('listPerformedActions')}">
-					%{-- TODO AR corrective process property AFTER RELEASE --}%
 					<td>${orderStatus.workOrder.actions}</td>
-					
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('description')}">
 					<td><g:stripHtml field="${orderStatus.workOrder.description}" chars="30"/></td>
