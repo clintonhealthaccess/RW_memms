@@ -26,13 +26,10 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package org.chai.memms.reports.dashboard
-
 import groovy.sql.Sql
-
 import java.util.List
 import java.util.regex.Matcher
 import java.util.regex.Pattern
-
 import org.chai.location.CalculationLocation
 import org.chai.location.DataLocation
 import org.chai.location.Location
@@ -40,9 +37,9 @@ import org.joda.time.DateTime
 import org.chai.location.LocationLevel
 import org.chai.memms.security.User
 import java.sql.ResultSet
-
 /**
- * @author Antoine Nzeyi, Donatien Masengesho, Pivot Access Ltd
+ * 
+ *@author Antoine Nzeyi, Donatien Masengesho, Pivot Access Ltd
  *
  */
 class IndicatorComputationService {
