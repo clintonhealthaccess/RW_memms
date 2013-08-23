@@ -45,8 +45,13 @@ class DashboardController extends AbstractController {
     def indicatorComputationService
  
     def indicators = {
-      //indicatorComputationService.computeCurrentReport()
+     indicatorComputationService.computeCurrentReport()
       
+        String query="select 1.0*count(wo.id)/(select count(wo.id) from WorkOrder wo join wo.equipment as equ where equ.dataLocation @DATA_LOCATION) from WorkOrder wo join wo.equipment as equ where wo.currentStatus='OPENATMMC' and equ.dataLocation @DATA_LOCATION"
+         def result1=indicatorComputationService.executeHQL(query.replace("@DATA_LOCATION","is not null"));
+        def result=indicatorComputationService.executeHQL(query.replace("@DATA_LOCATION","is not null"));
+        println" out put :"+result
+        
         LocationReport report = getUserReport()
         
         List<IndicatorItem> indicatorItems = new ArrayList<IndicatorItem>()
