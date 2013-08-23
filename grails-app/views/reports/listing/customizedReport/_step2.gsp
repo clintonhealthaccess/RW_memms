@@ -14,7 +14,7 @@
             field="dataLocations" optionKey="id" multiple="true" value="${dataLocations*.id}"
             ajaxLink="${createLink(controller: 'dataLocation', action:'getAjaxData')}"
             values="${dataLocations.collect{it.names+' '+it.id+' ['+it.location.names+']'}}" />
-          <g:checkBox name="allDataLocations" class='js-select-all' />
+          <input type="checkbox" name="allDataLocations" class='js-select-all' checked="checked"/>
           <span><g:message code="reports.selectAll"/></span>
         </li>
         <g:if test="${[ReportType.INVENTORY,ReportType.CORRECTIVE,ReportType.PREVENTIVE].contains(reportType)}">
@@ -23,7 +23,7 @@
               field="departments" optionKey="id" multiple="true" value="${departments*.id}"
               ajaxLink="${createLink(controller: 'department', action:'getAjaxData')}"
               values="${departments.collect{it.names+' ['+it.id+']'}}" />
-            <g:checkBox name="allDepartments" class='js-select-all' />
+            <input type="checkbox" name="allDepartments" class='js-select-all' checked="checked"/>
             <span><g:message code="reports.selectAll"/></span>
           </li>
           <li>
@@ -31,7 +31,7 @@
               field="type" optionKey="id" multiple="true" value="${equipmentTypes*.id}"
               ajaxLink="${createLink(controller:'EquipmentType', action:'getAjaxData', params:[observation:'USEDINMEMMS'])}"
               values="${equipmentTypes.collect{it.names + ' ['+ it.code +']'}}"/>
-            <g:checkBox name="allEquipmentTypes" class='js-select-all' />
+            <input type="checkbox" name="allEquipmentTypes" class='js-select-all' checked="checked"/>
             <span><g:message code="reports.selectAll"/></span>
           </li>
           <li class="modular">
@@ -46,7 +46,7 @@
                 </g:each>
               </select>
             </div>
-            <g:checkBox name="noCost" class='clear-left'/>
+            <input type="checkbox" name="noCost" class='clear-left'/>
             <span class='clear-right'><g:message code="reports.no.cost"/></span>
           </li>
         </g:if>
@@ -55,7 +55,7 @@
             <li class="modular">
               <div class="row">
                 <label for="showAtMmc"><g:message code="reports.spareParts.showAtMmc.label"/>:</label>
-                <input name="showAtMmc" type="checkbox"/>
+                <input type="checkbox" name="showAtMmc" checked="checked"/>
                 <span><g:message code="reports.spareParts.showAtMmc"/></span>
               </div>
             <li>
@@ -65,7 +65,7 @@
               field="type" optionKey="id" multiple="true" value="${sparePartTypes*.id}"
               ajaxLink="${createLink(controller:'SparePartType', action:'getAjaxData', params:[observation:'USEDINMEMMS'])}"
               values="${sparePartTypes.collect{it.names + ' ['+ it.code +']'}}"/>
-            <g:checkBox name="allSparePartTypes" class='js-select-all' />
+            <input type="checkbox" name="allSparePartTypes" class='js-select-all' checked="checked"/>
             <span><g:message code="reports.selectAll"/></span>
           </li>
         </g:if>
