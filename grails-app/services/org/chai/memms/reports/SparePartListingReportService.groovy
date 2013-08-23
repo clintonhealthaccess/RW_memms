@@ -143,7 +143,27 @@ class SparePartListingReportService {
 
 				//Status changes
 				if(sparePartStatusChanges != null || !sparePartStatusChanges.empty){
-					or {
+					if(sparePartStatusChanges.size() > 1){
+						or {
+							if(sparePartStatusChanges.contains(SparePartStatusChange.NEWPENDINGORDER)){
+								and {
+									isNotNull("purchaseDate")
+									isNull("deliveryDate")
+									eq("status",SparePartStatus.PENDINGORDER)
+								}
+							}
+							if(sparePartStatusChanges.contains(SparePartStatusChange.PENDINGORDERARRIVED)){
+								and {
+									isNotNull("purchaseDate")
+									or{
+										isNotNull("deliveryDate")
+										eq("status",SparePartStatus.INSTOCK)
+									}
+								}
+							}
+						}
+					}
+					else{
 						if(sparePartStatusChanges.contains(SparePartStatusChange.NEWPENDINGORDER)){
 							and {
 								isNotNull("purchaseDate")
@@ -154,7 +174,10 @@ class SparePartListingReportService {
 						if(sparePartStatusChanges.contains(SparePartStatusChange.PENDINGORDERARRIVED)){
 							and {
 								isNotNull("purchaseDate")
-								eq("status",SparePartStatus.INSTOCK)
+								or{
+									isNotNull("deliveryDate")
+									eq("status",SparePartStatus.INSTOCK)
+								}
 							}
 						}
 					}

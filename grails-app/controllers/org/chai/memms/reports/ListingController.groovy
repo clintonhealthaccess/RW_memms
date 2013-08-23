@@ -55,8 +55,6 @@ import org.chai.memms.report.listing.CorrectiveMaintenanceReport;
 import org.chai.memms.report.listing.EquipmentReport;
 import org.chai.memms.report.listing.PreventiveMaintenanceReport;
 import org.chai.memms.report.listing.SparePartReport
-import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePart;
-//import org.chai.memms.spare.part.SparePartStatus.StatusOfSparePartChange;
 import org.chai.memms.spare.part.SparePart;
 import org.chai.memms.spare.part.SparePart.SparePartStatus;
 import org.chai.memms.spare.part.SparePart.SparePartStatusChange;
@@ -1435,7 +1433,7 @@ class ListingController extends AbstractController{
 			if(log.isDebugEnabled()) log.debug("abstract.inventoryStatusChanges statusChanges:"+statusChanges)
 			statusChanges.each { it ->
 				if(log.isDebugEnabled()) log.debug("abstract.inventoryStatusChanges statusChange:"+it)
-				if(it != null & !it.empty) inventoryStatusChanges.add(Enum.valueOf(EquipmentStatusChange.class, it))
+				if(it != null && !it.empty) inventoryStatusChanges.add(Enum.valueOf(EquipmentStatusChange.class, it))
 			}
 		}
 		else{
@@ -1469,7 +1467,7 @@ class ListingController extends AbstractController{
 			if(log.isDebugEnabled()) log.debug("abstract.correctiveStatusChanges statusChanges:"+statusChanges)
 			statusChanges.each { it ->
 				if(log.isDebugEnabled()) log.debug("abstract.correctiveStatusChanges statusChange:"+it)
-				if(it != null) correctiveStatusChanges.add(Enum.valueOf(WorkOrderStatusChange.class, it))
+				if(it != null && !it.empty) correctiveStatusChanges.add(Enum.valueOf(WorkOrderStatusChange.class, it))
 			}
 		}
 		else{
@@ -1502,7 +1500,7 @@ class ListingController extends AbstractController{
 			def types = params.list(preventionResponsibleParam)
 			types.each{ it ->
 				if(log.isDebugEnabled()) log.debug("abstract.PreventionResponsible PreventionResponsible:"+it)
-				if(it != null) preventionResponsible.add(Enum.valueOf(PreventionResponsible.class, it))
+				if(it != null && !it.empty) preventionResponsible.add(Enum.valueOf(PreventionResponsible.class, it))
 			}
 		}
 		else{
@@ -1534,7 +1532,7 @@ class ListingController extends AbstractController{
 			if(log.isDebugEnabled()) log.debug("abstract.sparePartStatusChanges statusChanges:"+statusChanges)
 			statusChanges.each { it ->
 				if(log.isDebugEnabled()) log.debug("abstract.sparePartStatusChanges statusChange:"+it)
-				if(it != null) sparePartStatusChanges.add(it)
+				if(it != null && !it.empty) sparePartStatusChanges.add(Enum.valueOf(SparePartStatusChange.class, it))
 			}
 		}
 		else{
