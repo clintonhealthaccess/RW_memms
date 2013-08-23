@@ -127,7 +127,7 @@
 					<td>${sparePart.inStockQuantity}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('usedQuantity')}">
-					<td>${sparePart.usedQuantity}</td>
+					<td>${sparePart.usedQuantity?:0}</td>
 				</g:if>
 
 				<g:if test="${reportSubType == ReportSubType.STOCKOUT && reportTypeOptions.contains('forecastedStockOut')}">

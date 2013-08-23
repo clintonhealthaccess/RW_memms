@@ -63,7 +63,7 @@
 					${sparePart.inStockQuantity}
 				</td>		
 				<td>
-					${sparePart.usedQuantity}
+					${sparePart.usedQuantity?:0}
 				</td>								
 			</tr>
 		</g:each>

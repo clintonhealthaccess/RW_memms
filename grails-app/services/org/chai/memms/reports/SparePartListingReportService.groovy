@@ -88,13 +88,15 @@ class SparePartListingReportService {
 		def sparePartTypes = customSparePartsParams.get('sparePartTypes')
 		def showAtMMC = customSparePartsParams.get('showAtMmc')
 
+		def sparePartCriteria = SparePart.createCriteria()
+
 		if(reportSubType == ReportSubType.INVENTORY){
 			def sparePartStatus = customSparePartsParams.get('sparePartStatus')
 			def fromAcquisitionPeriod = customSparePartsParams.get('fromAcquisitionPeriod')
 			def toAcquisitionPeriod = customSparePartsParams.get('toAcquisitionPeriod')
 			def noAcquisitionPeriod = customSparePartsParams.get('noAcquisitionPeriod')
 
-			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			return sparePartCriteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 
 				//Mandatory property
 				or {
@@ -128,7 +130,7 @@ class SparePartListingReportService {
 			def noAcquisitionPeriod = customSparePartsParams.get('noAcquisitionPeriod')
 			def sparePartStatus = customSparePartsParams.get('sparePartStatus')
 
-			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			return sparePartCriteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 				
 				//Mandatory property
 				or {
@@ -146,12 +148,13 @@ class SparePartListingReportService {
 							and {
 								isNotNull("purchaseDate")
 								isNull("deliveryDate")
+								eq("status",SparePartStatus.PENDINGORDER)
 							}
 						}
 						if(sparePartStatusChanges.contains(SparePartStatusChange.PENDINGORDERARRIVED)){
 							and {
 								isNotNull("purchaseDate")
-								isNotNull("deliveryDate")
+								eq("status",SparePartStatus.INSTOCK)
 							}
 						}
 					}
@@ -163,7 +166,7 @@ class SparePartListingReportService {
 			def lastYearDateTimeFromNow = todayDateTime.minusDays(365)
 			def lastYearDateFromNow = lastYearDateTimeFromNow.toDate()
 			
-			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			return sparePartCriteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 				
 				// projections {
 				// 	property("type","type")
@@ -194,7 +197,7 @@ class SparePartListingReportService {
 			def lastYearDateTimeFromNow = todayDateTime.minusDays(365)
 			def lastYearDateFromNow = lastYearDateTimeFromNow.toDate()
 			
-			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			return sparePartCriteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 				
 				// projections {
 				// 	property("type", "type")

@@ -5,6 +5,7 @@
 	<li><g:checkBox name="reportTypeOptions" value="supplier" checked="false" /><span>${message(code:'listing.report.spare.part.supplier.label')}</span></li>
 	<li><g:checkBox name="reportTypeOptions" value="purchaser" checked="false" /><span>${message(code:'listing.report.spare.part.purchaser.label')}</span></li>
 	<li><g:checkBox name="reportTypeOptions" value="cost" checked="false" /><span>${message(code:'listing.report.spare.part.cost.label')}</span></li>
+	<li><g:checkBox name="reportTypeOptions" value="deliveryDate" checked="false" /><span>${message(code:'listing.report.spare.part.delivery.date.label')}</span></li>
 	<li><g:checkBox name="reportTypeOptions" value="discontinuedDate" checked="false" /><span>${message(code:'listing.report.spare.part.discontinued.date.label')}</span></li>
 </ul>
 
@@ -12,7 +13,6 @@
 	<li><g:checkBox name="reportTypeOptions" value="sparePartType" /><span>${message(code:'listing.report.spare.part.type.label')}</span></li>
 	<li><g:checkBox name="reportTypeOptions" value="locationOfStock" /><span>${message(code:'listing.report.spare.part.stock.location.label')}</span></li>
 	<li><g:checkBox name="reportTypeOptions" value="purchaseDate" /><span>${message(code:'listing.report.spare.part.purchase.date.label')}</span></li>
-	<li><g:checkBox name="reportTypeOptions" value="deliveryDate" /><span>${message(code:'listing.report.spare.part.delivery.date.label')}</span></li>
 	<li><g:checkBox name="reportTypeOptions" value="currentStatus" /><span>${message(code:'listing.report.spare.part.current.status.label')}</span></li>
 	<g:if test="${reportSubType == ReportSubType.STATUSCHANGES}">
 	  <li><g:checkBox name="reportTypeOptions" value="statusChanges" /><span>${message(code:'listing.report.spare.part.status.changes.label')}</span></li>

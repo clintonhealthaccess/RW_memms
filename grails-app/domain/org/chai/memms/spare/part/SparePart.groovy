@@ -191,11 +191,14 @@ public class SparePart {
 	 	sparePartStatusChanges.each{ statusChange ->
  			
  			if(statusChange.equals(SparePartStatusChange.NEWPENDINGORDER)){
- 				if(purchaseDate != null && deliveryDate == null)
+ 				if(purchaseDate != null && deliveryDate == null && status == SparePartStatus.PENDINGORDER)
  					sparePartStatusChange = statusChange
  			}
  			else if(statusChange.equals(SparePartStatusChange.PENDINGORDERARRIVED)){
- 				if(purchaseDate != null && deliveryDate != null)
+ 				if(purchaseDate != null && deliveryDate == null && status == SparePartStatus.INSTOCK){
+ 					sparePartStatusChange = statusChange
+ 				}
+ 				else if(purchaseDate != null && deliveryDate != null)
  					sparePartStatusChange = statusChange
  			}
 	 	}
