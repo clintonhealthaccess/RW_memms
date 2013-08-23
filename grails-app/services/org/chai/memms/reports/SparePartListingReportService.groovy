@@ -77,8 +77,7 @@ class SparePartListingReportService {
 			}
 		}
 	}
-
-	// TODO we have to track also the spare part at MMC level which does not have dataLocation.
+	
 	public def getCustomReportOfSpareParts(User user, def customSparePartsParams, Map<String, String> params) {
 
 		def reportType = customSparePartsParams.get('reportType')
@@ -87,10 +86,6 @@ class SparePartListingReportService {
 		def dataLocations = customSparePartsParams.get('dataLocations')
 		def sparePartTypes = customSparePartsParams.get('sparePartTypes')
 		def showAtMMC = customSparePartsParams.get('showAtMmc')
-
-		//def criteria = SparePart.createCriteria();
-
-		//def criteriaSpareParts = []
 
 		if(reportSubType == ReportSubType.INVENTORY){
 			def fromAcquisitionPeriod = customSparePartsParams.get('fromAcquisitionPeriod')
@@ -102,9 +97,6 @@ class SparePartListingReportService {
 
 			return criteriaSpareParts.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 				
-				//Mandatory property
-				inList("dataLocation", dataLocations)
-				//Mandatory property
 				inList ("type", sparePartTypes)
 
 				if(noAcquisitionPeriod != null && noAcquisitionPeriod)
@@ -115,18 +107,18 @@ class SparePartListingReportService {
 					gt ("purchaseDate", fromAcquisitionPeriod)
 				if(toAcquisitionPeriod && toAcquisitionPeriod != null)
 					lt ("purchaseDate", toAcquisitionPeriod)	
-					
 				
-				//TODO to be reviewed by AR
-				/*if(user.userType.equals(UserType.ADMIN) || user.userType.equals(UserType.TECHNICIANMMC) || user.userType.equals(UserType.SYSTEM) || user.userType.equals(UserType.TECHNICIANDH)){
-					if(showAtMMC && showAtMMC != null)
+					
+				if(user.userType.equals(UserType.ADMIN) || user.userType.equals(UserType.TECHNICIANMMC) || user.userType.equals(UserType.SYSTEM) || user.userType.equals(UserType.TECHNICIANDH)){
+					or{
+						if(showAtMMC && showAtMMC != null)
 						eq("stockLocation",StockLocation.MMC)
-					if(dataLocations && dataLocations != null)
-						inList("dataLocation",dataLocations)
+						//Mandatory property
+						inList("dataLocation", dataLocations)
+					}
 				}else {
-					if(dataLocations && dataLocations != null)
-					inList("dataLocation",dataLocations)
-				}*/
+						inList("dataLocation",dataLocations)
+				}
 			}
 			if (log.isDebugEnabled()) log.debug("SPARE PARTS SIZE: "+ criteriaSpareParts.size())
 		}
@@ -144,9 +136,6 @@ class SparePartListingReportService {
 
 			return criteriaSpareParts.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 				
-				//Mandatory property
-				inList("dataLocation", dataLocations)
-				//Mandatory property
 				inList ("type", sparePartTypes)
 
 				if(noAcquisitionPeriod != null && noAcquisitionPeriod)
@@ -156,7 +145,19 @@ class SparePartListingReportService {
 				if(fromAcquisitionPeriod && fromAcquisitionPeriod != null)
 					gt ("purchaseDate", fromAcquisitionPeriod)
 				if(toAcquisitionPeriod && toAcquisitionPeriod != null)
-					lt ("purchaseDate", toAcquisitionPeriod)
+					lt ("purchaseDate", toAcquisitionPeriod)	
+				
+					
+				if(user.userType.equals(UserType.ADMIN) || user.userType.equals(UserType.TECHNICIANMMC) || user.userType.equals(UserType.SYSTEM) || user.userType.equals(UserType.TECHNICIANDH)){
+					or{
+						if(showAtMMC && showAtMMC != null)
+						eq("stockLocation",StockLocation.MMC)
+						//Mandatory property
+						inList("dataLocation", dataLocations)
+					}
+				}else {
+						inList("dataLocation",dataLocations)
+				}
 
 				// TODO
 				// if(fromStatusChangesPeriod != null)
