@@ -77,7 +77,7 @@ class IndicatorItem {
         this.unit = iv.indicator.unit
         this.groupName = iv.indicator.groupName
         this.totalHistoryItems = iv.indicator.historyItems
-        this.facilityName = iv.locationReport.location.names_en
+        this.facilityName = iv.locationReport.location.names
         Double red = iv.indicator.redToYellowThreshold
         Double green =  iv.indicator.yellowToGreenThreshold
         if(red < green) {
