@@ -234,7 +234,7 @@ class SparePartListingReportService {
 		def sparePartStatus = customSparePartParams.get('sparePartStatus')
 		def listingReportDisplayOptions = customSparePartParams.get('reportTypeOptions')
 
-		//TODO AR add status changes to saved report
+		//TODO AR add status changes and status changes period to saved report
 		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON SPARE PART CUSTOM REPORT: SPARE PART STATUS :"+sparePartStatus)
 		sparePartReport.sparePartStatus=sparePartStatus
 		sparePartReport.noAcquisitionPeriod=noAcquisitionPeriod=="on"?true:false
