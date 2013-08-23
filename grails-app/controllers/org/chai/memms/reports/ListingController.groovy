@@ -93,8 +93,8 @@ class ListingController extends AbstractController{
 	def model(def entities, def dataLocation) {
 		return [
 			entities: entities,
-			//entityCount: entities.totalCount,
-			entityCount: entities.size(),
+			entityCount: entities.totalCount,
+			//entityCount: entities.size(),
 			dataLocation: dataLocation,
 			entityClass: getEntityClass(),
 			code: getLabel()
@@ -895,8 +895,7 @@ class ListingController extends AbstractController{
 			if (log.isDebugEnabled()) log.debug("listing.customSparePartsListing # of spare part statuses:"+customSparePartReport.size())
 
 			def savedReports = null
-			// TODO figure out why this doesn't work for spare parts
-			// savedReports = userService.getSavedReportsByUser(user, ReportType.SPAREPARTS)
+			savedReports = userService.getSavedReportsByUser(user, ReportType.SPAREPARTS)
 
 			customizedListingParams << [
 				savedReports: savedReports,

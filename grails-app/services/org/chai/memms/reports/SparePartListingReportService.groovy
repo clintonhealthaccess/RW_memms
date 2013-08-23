@@ -88,8 +88,6 @@ class SparePartListingReportService {
 		def sparePartTypes = customSparePartsParams.get('sparePartTypes')
 		def showAtMMC = customSparePartsParams.get('showAtMmc')
 
-		def criteria = SparePart.createCriteria();
-
 		if(reportSubType == ReportSubType.INVENTORY){
 			def sparePartStatus = customSparePartsParams.get('sparePartStatus')
 			def fromAcquisitionPeriod = customSparePartsParams.get('fromAcquisitionPeriod')
@@ -125,6 +123,10 @@ class SparePartListingReportService {
 			def sparePartStatusChanges = customSparePartsParams.get('statusChanges')
 			def fromStatusChangesPeriod = customSparePartsParams.get('fromStatusChangesPeriod')
 			def toStatusChangesPeriod = customSparePartsParams.get('toStatusChangesPeriod')
+			def fromAcquisitionPeriod = customSparePartsParams.get('fromAcquisitionPeriod')
+			def toAcquisitionPeriod = customSparePartsParams.get('toAcquisitionPeriod')
+			def noAcquisitionPeriod = customSparePartsParams.get('noAcquisitionPeriod')
+			def sparePartStatus = customSparePartsParams.get('sparePartStatus')
 
 			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 				
