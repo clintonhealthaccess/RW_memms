@@ -54,8 +54,8 @@ class BootStrap {
 //			    Initializer.createCorrectiveMaintenanceStructure()
 //			    Initializer.createPreventiveMaintenanceStructure()
 //			    Initializer.createSparePartStructure()
-//                          DashboardInitializer.createDashboardStructure()
-//                          indicatorComputationService.computeCurrentReport()
+                          DashboardInitializer.createDashboardStructure()
+                          indicatorComputationService.computeCurrentReport()
 			break;
 			case "production":
                             // This is needed for the first time use only.
