@@ -4,23 +4,18 @@
 	<thead>
 		<tr>
 			<g:if test="${reportTypeOptions.contains('location')}">
-				%{-- <g:sortableColumn property="dataLocation"  title="${message(code: 'location.label')}" params="${params}" /> --}%
 				<th><g:message code="location.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('code')}">
-				%{-- <g:sortableColumn property="code"  title="${message(code: 'equipment.code.label')}" params="${params}" /> --}%
 				<th><g:message code="equipment.code.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('serialNumber')}">
-				%{-- <g:sortableColumn property="serialNumber"  title="${message(code: 'equipment.serial.number.label')}" params="${params}" /> --}%
 				<th><g:message code="equipment.serial.number.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('equipmentType')}">
-				%{-- <g:sortableColumn property="type"  title="${message(code: 'equipment.type.label')}" params="${params}" /> --}%
 				<th><g:message code="equipment.type.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('model')}">
-				%{-- <g:sortableColumn property="model"  title="${message(code: 'equipment.model.label')}" params="${params}" /> --}%
 				<th><g:message code="equipment.model.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('previousStatus')}">
@@ -33,31 +28,24 @@
 				<th><g:message code="listing.report.equipment.status.changes.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('obsolete')}">
-				%{-- <g:sortableColumn property="obsolete"  title="${message(code: 'equipment.obsolete.label')}" params="${listingParams}"/> --}%
 				<th><g:message code="equipment.obsolete.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('manufacturer')}">
-				%{-- <g:sortableColumn property="manufacturer"  title="${message(code: 'provider.type.manufacturer')}" params="${params}" /> --}%
 				<th><g:message code="provider.type.manufacturer"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('supplier')}">
-				%{-- <g:sortableColumn property="supplier"  title="${message(code: 'provider.type.supplier')}" params="${params}" /> --}%
 				<th><g:message code="provider.type.supplier"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('purchaser')}">
-				%{-- <g:sortableColumn property="purchaser"  title="${message(code: 'equipment.purchaser.label')}" params="${params}" /> --}%
 				<th><g:message code="equipment.purchaser.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('acquisitionDate')}">
-				%{-- <g:sortableColumn property="purchaseDate"  title="${message(code: 'equipment.purchase.date.label')}" params="${params}" /> --}%
 				<th><g:message code="equipment.purchase.date.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('cost')}">
-				%{-- <g:sortableColumn property="purchaseCost"  title="${message(code: 'equipment.purchase.cost.label')}" params="${params}" /> --}%
 				<th><g:message code="equipment.purchase.cost.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('warrantyProvider')}">
-				%{-- <g:sortableColumn property="warranty"  title="${message(code: 'listing.report.equipment.warranty.provider.label')}" params="${params}" /> --}%
 				<th><g:message code="listing.report.equipment.warranty.provider.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('warrantyPeriodRemaining')}">
@@ -68,10 +56,9 @@
 			</g:if>
 		</tr>
 	</thead>
-	%{-- TODO AR switch from list of equipments to list of equipment statuses --}%
 	<tbody>
 		<g:each in="${entities}" status="i" var="equipmentStatus">
-			<tr>
+			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 				<g:if test="${reportTypeOptions.contains('location')}">
 					<td>${equipmentStatus.equipment.dataLocation.names}</td>
 				</g:if>

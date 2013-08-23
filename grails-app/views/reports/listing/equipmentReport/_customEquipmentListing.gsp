@@ -44,7 +44,6 @@
 				<g:sortableColumn property="warranty"  title="${message(code: 'listing.report.equipment.warranty.provider.label')}" params="${params}" />
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('warrantyPeriodRemaining')}">
-				%{-- TODO AR --}%
 				<th><g:message code="listing.report.equipment.warranty.period.remaining.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('currentValue')}">
@@ -54,7 +53,7 @@
 	</thead>
 	<tbody>
 		<g:each in="${entities}" status="i" var="equipment">
-			<tr>
+			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 				<g:if test="${reportTypeOptions.contains('location')}">
 					<td>${equipment.dataLocation.names}</td>
 				</g:if>

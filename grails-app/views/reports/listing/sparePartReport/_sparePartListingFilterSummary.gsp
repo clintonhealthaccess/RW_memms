@@ -87,15 +87,14 @@
             <g:else>
                ${message(code:'reports.filters.all')}
             </g:else>
+          </a>
         </g:if>
         <g:if test="${reportSubType == ReportSubType.STOCKOUT}">
           <a href="#"><g:message code="reports.spareParts.stockOut" /> = 
             <g:if test="${stockOutMonths != null && !stockOutMonths.empty}">
               ${stockOutMonths+' '+message(code:'reports.spareParts.stockOut.months')}
             </g:if>
-            <g:else>
-              ${message(code:'reports.filters.all')}
-            </g:else>
+            <g:else>${message(code:'reports.filters.all')}</g:else>
           </a>
         </g:if>
       </li>

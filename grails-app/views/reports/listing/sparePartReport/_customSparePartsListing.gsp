@@ -62,7 +62,7 @@
 	</thead>
 	<tbody>
 		<g:each in="${entities}" status="i" var="sparePart">
-			<tr >
+			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 				<td>
 					<g:if test="${sparePart.dataLocation != null}">
 						<g:message code="datalocation.label"/>: ${sparePart.dataLocation?.names}<br/>
@@ -87,11 +87,9 @@
 				</g:if>
 
 				<g:if test="${reportTypeOptions.contains('purchaseDate')}">
-					%{-- TODO AR format date? --}%
 					<td>${Utils.formatDate(sparePart.purchaseDate)}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('deliveryDate')}">
-					%{-- TODO AR format date? --}%
 					<td>${Utils.formatDate(sparePart.deliveryDate)}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('currentStatus')}">
