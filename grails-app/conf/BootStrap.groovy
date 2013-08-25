@@ -48,14 +48,14 @@ class BootStrap {
 		
 		switch (GrailsUtil.environment) {
 			case "development":
-//			    Initializer.createDummyStructure();
-//			    Initializer.createUsers();
-//			    Initializer.createInventoryStructure()
-//			    Initializer.createCorrectiveMaintenanceStructure()
-//			    Initializer.createPreventiveMaintenanceStructure()
-//			    Initializer.createSparePartStructure()
-                          DashboardInitializer.createDashboardStructure()
-                          indicatorComputationService.computeCurrentReport()
+			    //Initializer.createDummyStructure();
+			    //Initializer.createUsers();
+			   // Initializer.createInventoryStructure()
+			    // Initializer.createCorrectiveMaintenanceStructure()
+			    //Initializer.createPreventiveMaintenanceStructure()
+			    //Initializer.createSparePartStructure()
+                            //DashboardInitializer.createDashboardStructure()
+                          //indicatorComputationService.computeCurrentReport()
 			break;
 			case "production":
                             // This is needed for the first time use only.
