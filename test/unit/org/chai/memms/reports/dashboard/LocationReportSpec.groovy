@@ -15,14 +15,12 @@ import org.chai.location.LocationLevel
 @TestFor(LocationReport)
 class LocationReportSpec extends UnitSpec {
 	
-	  def "location report is valid"() {
+	  def "location report is valid and persistable"() {
           setup:
           mockForConstraintsTests(LocationReport)
           mockDomain(LocationReport)
           mockDomain(MemmsReport)
-          def locationReportNot
-          def exceptionMesasage=""
-
+          
           when:
             def memmsReport=new MemmsReport(generatedAt:new Date()).save(failOnError: true, flush:true)
             memmsReport.validate()
@@ -32,27 +30,23 @@ class LocationReportSpec extends UnitSpec {
          
           then:
            assert locationReport.validate()
-           assert locationReport!=null
-           
-           when:
+           assert locationReport!=null  
           
-           
-              def locationReportNotInit = new LocationReport(generatedAt: null, memmsReport: memmsReport, location:null)
-              
-              locationReportNot=locationReportNotInit.save()
-        
-         
-          then:
-            assert !locationReportNotInit.validate()
-            assert locationReportNot==null
-           
-           
-           
-          
-
    }
    
-    
-    
+     def "location report with null generatedAt is inavalid"() {
+          setup:
+          mockForConstraintsTests(LocationReport)
+          mockDomain(LocationReport)
+          mockDomain(MemmsReport)
+         
+           when:
+             def memmsReport=new MemmsReport(generatedAt:new Date()).save(failOnError: true, flush:true)
+             def locationReportNotInit = new LocationReport(generatedAt: null, memmsReport: memmsReport, location:null)
+             
+          then:
+            assert !locationReportNotInit.validate()
+       
+   }
 }
 

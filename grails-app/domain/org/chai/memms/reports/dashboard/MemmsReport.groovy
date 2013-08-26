@@ -44,6 +44,6 @@ class MemmsReport {
 
     @Override
     public String toString() {
-        return "MemmsReport[#id = " + id + ", @" + generatedAt.getTime() + "]"
+        return "MemmsReport[#id = " + id + ", @" + generatedAt + "]"
     }
 }

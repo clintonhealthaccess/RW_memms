@@ -19,19 +19,34 @@ class UserDefinedVariableSpec extends UnitSpec {
           when:
           
            def userDefVal=new UserDefinedVariable(code:"WO_REINCIDENCE_DAYS test",name_en:"Work order re-incidence period(days)",name_fr:"Work order re-incidence period(days)",currentValue:365.0).save(failOnError: true, flush:true)
-             userDefVal.validate()
-            
-         def userDefValCanotbeSaved=new UserDefinedVariable(code:"WO_REINCIDENCE_DAYS test",name_en:"Work order re-incidence period(days)",name_fr:"Work order re-incidence period(days)",currentValue:365.0).save(failOnError: true, flush:true)
-             userDefVal.validate()
+         
           then:
           !userDefVal.errors.hasFieldErrors("name_en")
           !userDefVal.errors.hasFieldErrors("name_fr")
           !userDefVal.errors.hasFieldErrors("code")
           !userDefVal.errors.hasFieldErrors("currentValue")
+          assert userDefVal.validate()
+          assert userDefVal!=null
+         
+      
+   }
+    // validation should fail
+     def "user defined valiable with null code or null currentValue  is invalid"() {
+          setup:
+          mockForConstraintsTests(UserDefinedVariable)
+          mockDomain(UserDefinedVariable)
+
+          when:
           
-         assert userDefVal!=null
+           def userDefVal=new UserDefinedVariable(code:null,name_en:"Work order re-incidence period(days)",name_fr:"Work order re-incidence period(days)",currentValue:null)
+             
+          then:
+          !userDefVal.errors.hasFieldErrors("name_en")
+          !userDefVal.errors.hasFieldErrors("name_fr")  
+          !userDefVal.errors.hasFieldErrors("currentValue")
+          assert !userDefVal.validate()
           
-          assert userDefValCanotbeSaved==null
+        
           
            
           

@@ -38,7 +38,7 @@ environments {
     }
     test {
         dataSource {
-            dbCreate = "crate-drop"
+            dbCreate = "update"
             url = "jdbc:h2:mem:testDb;MVCC=TRUE"
             
         }

@@ -12,10 +12,11 @@ def userDefinedVariableService
    
     def  "list All User Defined Variables"() {
                 setup:
+                  createDashboardTestData()
 		when:
-		def result=userDefinedVariableService.listAllUserDefinedVariables()
+		List<UserDefinedVariable> result=userDefinedVariableService.listAllUserDefinedVariables()
 		then:
-                assert result!=null
+                assert result.size()==1
                  println" Test passed wit listing result :"+result
         
     }

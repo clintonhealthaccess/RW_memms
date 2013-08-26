@@ -11,19 +11,32 @@ import org.chai.memms.reports.dashboard.MemmsReport
 @TestFor(MemmsReport)
 class MemmsReportSpec extends UnitSpec {
     
-	  def "Memms Report is valid"() {
+	  def "Memms Report is valid and can be saved"() {
           setup:
           mockForConstraintsTests(MemmsReport)
           mockDomain(MemmsReport)
 
           when:
           def memmsReport=new MemmsReport(generatedAt:new Date()).save(failOnError: true, flush:true)
-            memmsReport.validate()
-            println" category is :"+memmsReport
           then:
-           memmsReport!=null
-           !memmsReport.errors.hasFieldErrors("generatedAt")
-           assert memmsReport!=null
+           assert !memmsReport.errors.hasFieldErrors("generatedAt")
+           assert memmsReport.validate()
+           assert  memmsReport!=null
+       
+   }
+   
+    // validation should fail
+    def "memms Report without generatedAt date is invalid"() {
+          setup:
+          mockForConstraintsTests(MemmsReport)
+          mockDomain(MemmsReport)
+
+          when:
+            def memmsReport=new MemmsReport(generatedAt:null)
+          then:
+            
+           assert !memmsReport.validate()
+           println" out put from null :"+memmsReport
        
    }
    

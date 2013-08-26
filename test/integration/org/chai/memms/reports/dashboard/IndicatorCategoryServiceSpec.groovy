@@ -14,17 +14,12 @@ def indicatorCategoryService
     def "list All Indicator Categories test"() {
     
                 setup:
+                createDashboardTestData()
 		when:
-                  def code=DashboardInitializer.CORRECTIVE_MAINTENANCE+"TESTTunique"
-                 
-                  def indicatorCategory=IndicatorCategory.findByCode(code)
-                  if(indicatorCategory==null)
-                     indicatorCategory=new IndicatorCategory(code:code,name_en:"Corrective maintenance",redToYellowThreshold:60,yellowToGreenThreshold:80).save(failOnError: true, flush:true)
-       
-		   def result=indicatorCategoryService.listAllIndicatorCategories()
+                List<IndicatorCategory> result=indicatorCategoryService.listAllIndicatorCategories()
                    
 		then:
-                assert result!=null
+                assert result.size()==1
                  println" This test passed wit listing result :"+result
         
         

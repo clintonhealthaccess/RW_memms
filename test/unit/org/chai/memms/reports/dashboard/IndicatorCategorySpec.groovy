@@ -21,37 +21,36 @@ class IndicatorCategorySpec extends UnitSpec {
           when:
           def code=DashboardInitializer.CORRECTIVE_MAINTENANCE+"TEST"
           def category=new IndicatorCategory(code:code,name_en:"Corrective maintenance",redToYellowThreshold:60,yellowToGreenThreshold:80).save(failOnError: true, flush:true)
-          category.validate()
-
+          
           then:
-          category!=null
+          assert(category.validate())
           !category.errors.hasFieldErrors("name_en")
           !category.errors.hasFieldErrors("name_fr")
           !category.errors.hasFieldErrors("redToYellowThreshold")
           !category.errors.hasFieldErrors("yellowToGreenThreshold")
           assert category!=null
-          
-         // here the category will not be persisted
-         
-        
-        when:
-         def categoryNot
-          try{
-            def category1=new IndicatorCategory(code:code,name_en:"Corrective maintenance",redToYellowThreshold:60,yellowToGreenThreshold:80)
-            categoryNot=category1.save()
-        
-           }catch(Exception e){}
-
-          then:
-          
-          assert categoryNot==null
-          
-           
-          
+       
 
    }
-   
-    
+   // category.validate() should fail
+    def "indicator category  with null code is inavlid"(){
+          setup:
+          mockForConstraintsTests(IndicatorCategory)
+          mockDomain(IndicatorCategory)
+
+          when:
+         
+          def category=new IndicatorCategory(code:null,name_en:"Corrective maintenance",redToYellowThreshold:60,yellowToGreenThreshold:80)
+          then:
+          assert !category.validate()
+          assert category.errors.hasFieldErrors("code")
+          assert !category.errors.hasFieldErrors("name_en")
+          assert !category.errors.hasFieldErrors("name_fr")
+          assert  !category.errors.hasFieldErrors("redToYellowThreshold")
+          assert  !category.errors.hasFieldErrors("yellowToGreenThreshold")
+         
+         
+   }
     
 }
 
