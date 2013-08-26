@@ -20,15 +20,19 @@ class UserDefinedVariableSpec extends UnitSpec {
           
            def userDefVal=new UserDefinedVariable(code:"WO_REINCIDENCE_DAYS test",name_en:"Work order re-incidence period(days)",name_fr:"Work order re-incidence period(days)",currentValue:365.0).save(failOnError: true, flush:true)
              userDefVal.validate()
-             println" user defined value :"+userDefVal
+            
+         def userDefValCanotbeSaved=new UserDefinedVariable(code:"WO_REINCIDENCE_DAYS test",name_en:"Work order re-incidence period(days)",name_fr:"Work order re-incidence period(days)",currentValue:365.0).save(failOnError: true, flush:true)
+             userDefVal.validate()
           then:
-          userDefVal!=null
           !userDefVal.errors.hasFieldErrors("name_en")
           !userDefVal.errors.hasFieldErrors("name_fr")
           !userDefVal.errors.hasFieldErrors("code")
           !userDefVal.errors.hasFieldErrors("currentValue")
           
-         
+         assert userDefVal!=null
+          
+          assert userDefValCanotbeSaved==null
+          
            
           
 

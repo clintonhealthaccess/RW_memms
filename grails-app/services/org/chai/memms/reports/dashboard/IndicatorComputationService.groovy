@@ -64,7 +64,7 @@ class IndicatorComputationService {
         // 4. Compute report for all locations with registered users.
         Set<Long> locations = new HashSet<Long>();
         for(User user: User.findAll()) {
-            if ((user.location != null) && !locations.contains(user.location.id)) {
+            if ((user.location != null) && !locations.contains(user.location.id)){
                 locations.add(user.location.id);
                 computeLocationReport(currentDate, user.location, memmsReport)
                break

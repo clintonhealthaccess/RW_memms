@@ -20,27 +20,39 @@ class LocationReportSpec extends UnitSpec {
           mockForConstraintsTests(LocationReport)
           mockDomain(LocationReport)
           mockDomain(MemmsReport)
+          def locationReportNot
+          def exceptionMesasage=""
 
           when:
             def memmsReport=new MemmsReport(generatedAt:new Date()).save(failOnError: true, flush:true)
             memmsReport.validate()
-           // LocationLevel nationalLevel = LocationLevel.findByCode('National')
-           
-            
             def locationReport = new LocationReport(generatedAt: new Date(), memmsReport: memmsReport, location:null).save()
       
              locationReport.validate()
-             println" the created location report  with null location is :"+locationReport
-
+         
           then:
-           locationReport!=null
+           assert locationReport.validate()
+           assert locationReport!=null
            
+           when:
           
-          
-          
+           
+              def locationReportNotInit = new LocationReport(generatedAt: null, memmsReport: memmsReport, location:null)
+              
+              locationReportNot=locationReportNotInit.save()
+        
+         
+          then:
+            assert !locationReportNotInit.validate()
+            assert locationReportNot==null
+           
+           
            
           
 
    }
+   
+    
+    
 }
 

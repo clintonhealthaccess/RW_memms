@@ -31,10 +31,27 @@ class IndicatorCategorySpec extends UnitSpec {
           !category.errors.hasFieldErrors("yellowToGreenThreshold")
           assert category!=null
           
+         // here the category will not be persisted
          
+        
+        when:
+         def categoryNot
+          try{
+            def category1=new IndicatorCategory(code:code,name_en:"Corrective maintenance",redToYellowThreshold:60,yellowToGreenThreshold:80)
+            categoryNot=category1.save()
+        
+           }catch(Exception e){}
+
+          then:
+          
+          assert categoryNot==null
+          
            
           
 
    }
+   
+    
+    
 }
 

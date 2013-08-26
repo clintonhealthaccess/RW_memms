@@ -24,11 +24,9 @@ class MemmsReportSpec extends UnitSpec {
            memmsReport!=null
            !memmsReport.errors.hasFieldErrors("generatedAt")
            assert memmsReport!=null
-         
-          
-           
-          
-
+       
    }
+   
+     
 }
 
