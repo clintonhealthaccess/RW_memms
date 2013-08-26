@@ -6,7 +6,7 @@ import grails.test.mixin.*
 import grails.test.mixin.support.*
 import org.junit.*
 import org.chai.memms.IntegrationTests
-
+import org.chai.memms.reports.dashboard.DashboardInitializer
 class IndicatorCategoryServiceSpec extends IntegrationTests {
 def indicatorCategoryService 
 
@@ -15,8 +15,14 @@ def indicatorCategoryService
     
                 setup:
 		when:
-               
-		def result=indicatorCategoryService.listAllIndicatorCategories()
+                  def code=DashboardInitializer.CORRECTIVE_MAINTENANCE+"TESTTunique"
+                 
+                  def indicatorCategory=IndicatorCategory.findByCode(code)
+                  if(indicatorCategory==null)
+                     indicatorCategory=new IndicatorCategory(code:code,name_en:"Corrective maintenance",redToYellowThreshold:60,yellowToGreenThreshold:80).save(failOnError: true, flush:true)
+       
+		   def result=indicatorCategoryService.listAllIndicatorCategories()
+                   
 		then:
                 assert result!=null
                  println" This test passed wit listing result :"+result
