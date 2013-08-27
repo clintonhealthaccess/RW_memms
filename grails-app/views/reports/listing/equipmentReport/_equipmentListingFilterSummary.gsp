@@ -96,11 +96,12 @@
           <a href="#"><g:message code="reports.statusChangesPeriod"/> =   
             <g:if test="${fromStatusChangesPeriod!=null || toStatusChangesPeriod!=null}">
               ${Utils.formatDate(fromStatusChangesPeriod)?:message(code:'reports.filters.none')} - 
-              ${Utils.formatDate(toStatusChangesPeriod)?:message(code:'reports.filters.none')}</a>
+              ${Utils.formatDate(toStatusChangesPeriod)?:message(code:'reports.filters.none')}
             </g:if>
             <g:else>
               <g:message code="reports.filters.all"/>,
             </g:else>
+          </a>
         </g:if>
       </li>
     </g:if>
