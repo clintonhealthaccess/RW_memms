@@ -36,7 +36,7 @@
 				<th><g:message code="listing.report.spare.part.purchaser.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('cost')}">
-				<th><g:message code="provider.type.cost"/></th>
+				<th><g:message code="listing.report.spare.part.cost.label"/></th>
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('discontinuedDate')}">
 				<th><g:message code="listing.report.spare.part.discontinued.date.label"/></th>
