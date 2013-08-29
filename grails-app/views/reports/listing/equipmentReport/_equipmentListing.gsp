@@ -35,7 +35,7 @@
 				<td>${equipment.manufacturer?.contact?.contactName}</td>
 				<td>${equipment.supplier?.contact?.contactName}</td>
 				<td>${message(code: equipment.purchaser?.messageCode+'.'+equipment.purchaser?.name)}</td>
-				<td><g:formatNumber number="${equipment.currentValueOfThisEquipment}" type="number" format="###.##"/></td>
+				<td><g:formatNumber number="${equipment.currentValueOfThisEquipment}" type="number" format="###.#" maxFractionDigits="0"/> ${equipment.currency} </td>
 			</tr>
 		</g:each>
 

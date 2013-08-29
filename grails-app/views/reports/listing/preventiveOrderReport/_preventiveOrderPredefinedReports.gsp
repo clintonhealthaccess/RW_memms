@@ -4,21 +4,25 @@
     <ul>
 	    <g:each in="${savedReports}" var="savedReport" status="i">
         <li>
-          <a href="${createLinkWithTargetURI(controller: 'listing', action:'savedCustomizedListing', params: [savedReportId:savedReport.id, reportType:savedReport.reportType])}"
-            class="tooltip" title="${savedReport.reportName}">
+          <%
+            savedReportParams = [:]
+            savedReportParams.putAll params
+            savedReportParams['savedReportId'] = savedReport.id+""
+          %>
+          <a href="${createLink(controller: 'listing', action:'savedCustomizedListing', params: savedReportParams)}" class="tooltip" title="${savedReport.reportName}">
             ${savedReport.reportName}
           </a>
-          <span class='delete-node' data-saved-report-id="${savedReport.id}">X</span>
+          <a class="delete-node" href="${createLink(controller: 'listing', action:'deleteCustomizedReport', params: savedReportParams)}">X</a>
         </li>
       </g:each>
 			<li>
-				<a href="${createLinkWithTargetURI(controller: 'listing', action:'generalPreventiveOrdersListing')}"
+				<a href="${createLink(controller: 'listing', action:'generalPreventiveOrdersListing')}"
 					class="tooltip" title="${message(code:'default.all.preventive.order.label')}">
 					<g:message code="default.all.preventive.order.label"/>
 				</a>
 			</li>
 			<li>
-				<a href="${createLinkWithTargetURI(controller: 'listing', action:'equipmentsWithPreventionPlan')}"
+				<a href="${createLink(controller: 'listing', action:'equipmentsWithPreventionPlan')}"
 					class="tooltip" title="${message(code:'default.equipments.with.prevention.label')}">
 					<g:message code="default.equipments.with.prevention.label"/>
 				</a>
@@ -27,12 +31,3 @@
   </div>
   <a class='v-tabs-dynav-scroll-left' href='#' id='js-scroll-left'></a>
 </div>
-<r:script>
-$(document).ready(function(){
-  $(".delete-node").click(function(e){
-      var baseUrl = "${createLink(controller: 'listing', action:'deleteCustomizedListing')}";
-      var reportType = "${reportType}";
-      removeElement(e, this, baseUrl, reportType);
-  });
-});
-</r:script>

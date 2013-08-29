@@ -12,6 +12,7 @@ import org.chai.memms.corrective.maintenance.WorkOrder;
 import org.chai.memms.security.User;
 import org.chai.memms.util.Utils;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
+import org.chai.memms.corrective.maintenance.WorkOrderStatus.WorkOrderStatusChange;
 import org.chai.memms.report.listing.CorrectiveMaintenanceReport;
 import org.chai.memms.util.Utils.ReportType
 import org.chai.memms.util.Utils.ReportSubType
@@ -85,8 +86,6 @@ class WorkOrderListingReportService {
 
 	def getCustomReportOfWorkOrders(User user, def customWorkOrderParams, Map<String, String> params) {
 
-		def customWorkOrders = []
-
 		def reportType = customWorkOrderParams.get('reportType')
 		def reportSubType = customWorkOrderParams.get('reportSubType')
 
@@ -97,27 +96,25 @@ class WorkOrderListingReportService {
 		def upperLimitCost = customWorkOrderParams.('toCost')
 		def currency = customWorkOrderParams.get('costCurrency')
 		def noCost = customWorkOrderParams.get('noCost')
-		
-		def criteria = WorkOrder.createCriteria();
-
-		def criteriaWorkOrders = []
 
 		if(reportSubType == ReportSubType.WORKORDERS){
 			def workOrderStatus = customWorkOrderParams.get('workOrderStatus')
 			def fromWorkOrderPeriod = customWorkOrderParams.get('fromWorkOrderPeriod')
 			def toWorkOrderPeriod = customWorkOrderParams.get('toWorkOrderPeriod')
 			def warranty = customWorkOrderParams.get('warranty')
+			
+			def workOrderCriteria = WorkOrder.createCriteria();
 
-			criteriaWorkOrders = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			return workOrderCriteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 
 				createAlias("equipment","equip")
 
-					//Mandatory property
-					inList('equip.dataLocation',dataLocations)
-				if(departments != null && departments.size()>0)
-					inList ("equip.department", departments)
 				//Mandatory property
-					inList ("equip.type", equipmentTypes)
+				inList("equip.dataLocation", dataLocations)
+				//Mandatory property
+				inList ("equip.department", departments)
+				//Mandatory property
+				inList ("equip.type", equipmentTypes)
 
 				if(lowerLimitCost && lowerLimitCost!=null)
 					gt ("equip.purchaseCost", lowerLimitCost)
@@ -137,53 +134,57 @@ class WorkOrderListingReportService {
 				if(noCost != null && noCost)
 					eq ("equip.purchaseCost", null)
 			}
-			customWorkOrders = criteriaWorkOrders
 		}
 
 		if(reportSubType == ReportSubType.STATUSCHANGES){
-			def statusChanges = customWorkOrderParams.get('statusChanges')
+			def workOrderStatusChanges = customWorkOrderParams.get('statusChanges')
 			def fromStatusChangesPeriod = customWorkOrderParams.get('fromStatusChangesPeriod')
 			def toStatusChangesPeriod = customWorkOrderParams.get('toStatusChangesPeriod')
+			
+			def workOrderStatusCriteria= WorkOrderStatus.createCriteria();
 
-			criteriaWorkOrders = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			return workOrderStatusCriteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 
-				createAlias("equipment","equip")
+				createAlias("workOrder","wo")
+				createAlias("wo.equipment","equipment")
 
 				//Mandatory property
-					inList('equip.dataLocation',dataLocations)
-				if(departments != null && departments.size()>0)
-					inList ("equip.department", departments)
+				//inList("wo.equipment.dataLocation", dataLocations)
 				//Mandatory property
-					inList ("equip.type", equipmentTypes)
+				inList ("equipment.department", departments)
+				//Mandatory property
+				inList ("equipment.type", equipmentTypes)
 
 				if(lowerLimitCost && lowerLimitCost!=null)
-					gt ("equip.purchaseCost", lowerLimitCost)
+					gt ("equipment.purchaseCost", lowerLimitCost)
 				if(upperLimitCost && upperLimitCost!=null)
-					lt ("equip.purchaseCost", upperLimitCost)
+					lt ("equipment.purchaseCost", upperLimitCost)
 				if(currency && currency !=null)
-					eq ("equip.currency",currency)
+					eq ("equipment.currency",currency)
 				if(noCost != null && noCost)
-					eq ("equip.purchaseCost", null)
+					eq ("equipment.purchaseCost", null)
 
-				// TODO
-				// if(fromStatusChangesPeriod != null)
-				// 	gt ("TODO", fromStatusChangesPeriod)
-				// if(toStatusChangesPeriod != null)
-				// 	lt ("TODO", toStatusChangesPeriod)
-			}
-			if (log.isDebugEnabled()) log.debug("WORK ORDERS SIZE: "+ criteriaWorkOrders.size())
-
-			// TODO build into criteria
-			if(statusChanges != null && !statusChanges.empty){
-				def statusChangesWorkOrders = []
-				criteriaWorkOrders.each { workOrder ->
-					def workOrderStatusChange = workOrderService.getWorkOrderTimeBasedStatusChange(workOrder, statusChanges)
-					if(workOrderStatusChange != null) statusChangesWorkOrders.add(workOrder)
+				//Status changes
+				if(workOrderStatusChanges != null || !workOrderStatusChanges.empty){
+					or {
+						workOrderStatusChanges.each{ workOrderStatusChange ->
+							def previousStatus = workOrderStatusChange.statusChange['previous']
+							def currentStatus = workOrderStatusChange.statusChange['current']
+							and {
+								inList("previousStatus", previousStatus)
+								inList("status", currentStatus)
+							}
+						}
+					}
 				}
-				customWorkOrders = statusChangesWorkOrders
+
+				if(fromStatusChangesPeriod && fromStatusChangesPeriod != null)
+					gt ("dateCreated", fromStatusChangesPeriod)
+						
+				if(toStatusChangesPeriod && toStatusChangesPeriod != null)
+					lt ("dateCreated", toStatusChangesPeriod)
 			}
 		}
-		return customWorkOrders;
 	}
 
 	public def saveWorkOrderReportParams(User user, def customWorkOrderParams, Map<String, String> params){

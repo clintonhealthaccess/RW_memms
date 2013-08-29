@@ -159,26 +159,6 @@ class EquipmentService {
 		}
 	}
 
-	public def getEquipmentTimeBasedStatusChange(Equipment equipment, List<EquipmentStatusChange> equipmentStatusChanges){
-		EquipmentStatusChange equipmentStatusChange = null
-
-		def previousStatus = equipment.getTimeBasedPreviousStatus()?.status
-		def currentStatus = equipment.getTimeBasedStatus().status
-
-		if(equipmentStatusChanges == null) equipmentStatusChanges = EquipmentStatusChange.values()
-	 	equipmentStatusChanges.each{ statusChange ->
- 			
- 			def previousStatusMap = statusChange.getStatusChange()['previous']
-			def currentStatusMap = statusChange.getStatusChange()['current']
-
-			def previousStatusChange = previousStatusMap.contains(previousStatus) || (previousStatusMap.contains(Status.NONE) && previousStatus == null)
-			def currentStatusChange = currentStatusMap.contains(currentStatus)
-
-			if(previousStatusChange && currentStatusChange) equipmentStatusChange = statusChange
-	 	}
-	 	return equipmentStatusChange
-	}
-
 	// fterrier: signature is very long
 	public def filterEquipment(def user, def dataLocation, def supplier, def manufacturer,def serviceProvider, def equipmentType, 
 		def purchaser,def donor,def obsolete,def status,Map<String, String> params){

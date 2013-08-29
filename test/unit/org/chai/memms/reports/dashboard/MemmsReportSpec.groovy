@@ -17,22 +17,22 @@ class MemmsReportSpec extends UnitSpec {
           mockDomain(MemmsReport)
 
           when:
-          def memmsReport=new MemmsReport(generatedAt:new Date()).save(failOnError: true, flush:true)
+          def memmsReport=new MemmsReport(eventDate:new Date()).save(failOnError: true, flush:true)
           then:
-           assert !memmsReport.errors.hasFieldErrors("generatedAt")
+           assert !memmsReport.errors.hasFieldErrors("eventDate")
            assert memmsReport.validate()
            assert  memmsReport!=null
        
    }
    
     // validation should fail
-    def "memms Report without generatedAt date is invalid"() {
+    def "memms Report without event date is invalid"() {
           setup:
           mockForConstraintsTests(MemmsReport)
           mockDomain(MemmsReport)
 
           when:
-            def memmsReport=new MemmsReport(generatedAt:null)
+            def memmsReport=new MemmsReport(eventDate:null)
           then:
             
            assert !memmsReport.validate()
