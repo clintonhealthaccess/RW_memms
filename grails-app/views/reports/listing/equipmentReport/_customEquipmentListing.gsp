@@ -91,7 +91,7 @@
 					<td>${Utils.formatDate(equipment.purchaseDate)}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('cost')}">
-					<td>${equipment.purchaseCost}</td>
+					<td>${equipment.purchaseCost} ${equipment.currency}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('warrantyProvider')}">
 					<td>${equipment.warranty?.contact?.contactName}</td>

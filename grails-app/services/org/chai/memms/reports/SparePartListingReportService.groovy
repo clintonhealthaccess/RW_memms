@@ -190,11 +190,7 @@ class SparePartListingReportService {
 			def lastYearDateFromNow = lastYearDateTimeFromNow.toDate()
 			
 			return sparePartCriteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-				
-				// projections {
-				// 	property("type","type")
-				// }
-				
+				createAlias("type","t")
 				//Mandatory property
 				or {
 					inList("dataLocation", dataLocations)
@@ -207,11 +203,11 @@ class SparePartListingReportService {
 					
 				eq ("status",SparePartStatus.INSTOCK)
 				//gt("deliveryDate", lastYearDateFromNow)
-				/*projections{
-					property("id")
-					groupProperty("type")
-					rowCount("inStockQuantity")
-				}*/
+				//projections{
+					//property("t.id")
+					//groupProperty("t.id")
+					//rowCount("inStockQuantity")
+				//}
 			}
 		}
 
@@ -221,11 +217,12 @@ class SparePartListingReportService {
 			def lastYearDateFromNow = lastYearDateTimeFromNow.toDate()
 			
 			return sparePartCriteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-				
-				// projections {
-				// 	property("type", "type")
-				// }
-				
+			def sparePartCount=	sparePartCriteria.get{
+				//projections{
+					//property("type")
+					//groupProperty("t.id")
+					//rowCount("inStockQuantity")
+				//}
 				//Mandatory property
 				or {
 					inList("dataLocation", dataLocations)
@@ -237,11 +234,7 @@ class SparePartListingReportService {
 					
 				eq ("status",SparePartStatus.INSTOCK)
 				//gt("deliveryDate", lastYearDateFromNow)
-				/*projections{
-					property("id")
-					groupProperty("type")
-					rowCount("inStockQuantity")
-				}*/
+			}
 			}
 		}
 	}

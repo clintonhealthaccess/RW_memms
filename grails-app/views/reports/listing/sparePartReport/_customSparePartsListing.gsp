@@ -112,7 +112,7 @@
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('cost')}">
 					%{-- TODO AR format cost --}%
-					<td>sparePart.purchaseCost</td>
+					<td>${sparePart.purchaseCost} ${sparePart.currency}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('discontinuedDate')}">
 					<td>${Utils.formatDate(sparePart.type.discontinuedDate)}</td>
