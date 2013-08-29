@@ -9,20 +9,20 @@
             savedReportParams.putAll params
             savedReportParams['savedReportId'] = savedReport.id+""
           %>
-          <a href="${createLinkWithTargetURI(controller: 'listing', action:'savedCustomizedListing', params: [savedReportId:savedReport.id, reportType:savedReport.reportType])}" class="tooltip" title="${savedReport.reportName}">
+          <a href="${createLink(controller: 'listing', action:'savedCustomizedListing', params: savedReportParams)}" class="tooltip" title="${savedReport.reportName}">
             ${savedReport.reportName}
           </a>
           <a class="delete-node" href="${createLink(controller: 'listing', action:'deleteCustomizedReport', params: savedReportParams)}">X</a>
         </li>
       </g:each>
 			<li>
-				<a href="${createLinkWithTargetURI(controller: 'listing', action:'generalPreventiveOrdersListing')}"
+				<a href="${createLink(controller: 'listing', action:'generalPreventiveOrdersListing')}"
 					class="tooltip" title="${message(code:'default.all.preventive.order.label')}">
 					<g:message code="default.all.preventive.order.label"/>
 				</a>
 			</li>
 			<li>
-				<a href="${createLinkWithTargetURI(controller: 'listing', action:'equipmentsWithPreventionPlan')}"
+				<a href="${createLink(controller: 'listing', action:'equipmentsWithPreventionPlan')}"
 					class="tooltip" title="${message(code:'default.equipments.with.prevention.label')}">
 					<g:message code="default.equipments.with.prevention.label"/>
 				</a>
