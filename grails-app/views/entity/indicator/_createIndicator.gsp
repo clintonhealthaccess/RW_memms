@@ -17,16 +17,16 @@
       <g:selectFromList name="category.id" label="${message(code:'indicator.category.label')}" bean="${indicator}" field="category" optionKey="id" multiple="false"
                         from="${IndicatorCategory.list()}" value="${indicator?.category?.id}" optionValue="name" />
       <g:input name="code" label="${message(code:'indicator.code.label')}" bean="${indicator}" field="code" width="100"/>
-      <g:i18nInput name="name" label="${message(code:'indicator.name.label')}" bean="${indicator}" field="name" width="100"/>
-      <g:i18nTextarea  name="description" label="${message(code:'indicator.description.label')}" bean="${indicator}" field="description" height="200" width="500" maxHeight="300" />
-      <g:i18nTextarea name="formula" label="${message(code:'indicator.formula.label')}" bean="${indicator}" field="formula" height="200" width="500" maxHeight="300" />
+      <g:i18nInput name="names" label="${message(code:'indicator.name.label')}" bean="${indicator}" field="names" width="100"/>
+      <g:i18nTextarea  name="descriptions" label="${message(code:'indicator.description.label')}" bean="${indicator}" field="descriptions" height="200" width="500" maxHeight="300" />
+      <g:i18nTextarea name="formulas" label="${message(code:'indicator.formula.label')}" bean="${indicator}" field="formulas" height="200" width="500" maxHeight="300" />
       <g:input name="unit" label="${message(code:'indicator.unit.label')}" bean="${indicator}" field="unit" width="20"/>
       <g:input name="redToYellowThreshold" label="${message(code:'indicator.redToYellowThreshold.label')}" bean="${indicator}" field="redToYellowThreshold"/>
       <g:input name="yellowToGreenThreshold" label="${message(code:'indicator.yellowToGreenThreshold.label')}" bean="${indicator}" field="yellowToGreenThreshold"/>
       <g:selectFromEnum name="historicalPeriod" bean="${indicator}" values="${HistoricalPeriod.values()}" value="${indicator.historicalPeriod}" field="historicalPeriod" label="${message(code:'indicator.historicalPeriod.label')}"/>
       <g:input name="historyItems" label="${message(code:'indicator.historyItems.label')}" bean="${indicator}" field="historyItems"/>
       <g:textarea name="queryScript" label="${message(code:'indicator.queryScript.label')}" bean="${indicator}" field="queryScript" height="200" width="500" maxHeight="300" value="${indicator.queryScript}" />
-      <g:i18nInput name="groupName" label="${message(code:'indicator.groupName.label')}" bean="${indicator}" field="groupName" width="100"/>
+      <g:i18nInput name="groupNames" label="${message(code:'indicator.groupName.label')}" bean="${indicator}" field="groupNames" width="100"/>
       <g:textarea name="groupQueryScript" label="${message(code:'indicator.groupQueryScript.label')}" bean="${indicator}" field="groupQueryScript" height="200" width="500" maxHeight="300" value="${indicator.groupQueryScript}" />
       <g:inputBox name="sqlQuery"  label="${message(code:'indicator.sqlQuery.label')}" bean="${indicator}" field="sqlQuery" value="${indicator.sqlQuery}" checked="${(indicator.sqlQuery)? true:false}"/>
       <g:inputBox name="active"  label="${message(code:'indicator.active.label')}" bean="${indicator}" field="active" value="${indicator.active}" checked="${(indicator.active)? true:false}"/>

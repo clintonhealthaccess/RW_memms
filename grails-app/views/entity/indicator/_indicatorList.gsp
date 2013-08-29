@@ -3,7 +3,7 @@
     <tr>
       <th/>
   <g:sortableColumn property="code"  title="${message(code: 'indicator.category.label')}" params="[q:q]" />
-  <g:sortableColumn property="name"  title="${message(code: 'indicator.name.label')}" params="[q:q]" />
+  <g:sortableColumn property="${i18nField(field: 'names')}"  title="${message(code: 'indicator.name.label')}" params="[q:q]" />
   <g:sortableColumn property="code"  title="${message(code: 'indicator.formula.label')}" params="[q:q]" />
   <th><g:message code="indicator.redToYellowThreshold.label"/></th>
 <th><g:message code="indicator.yellowToGreenThreshold.label"/></th>
@@ -22,8 +22,8 @@
       </ul>
     </td>
     <td><g:stripHtml field="${indicator.category.name}" chars="20"/></td>
-  <td><g:stripHtml field="${indicator.name}" chars="60"/></td>
-  <td><g:stripHtml field="${indicator.formula}" chars="30"/></td>
+  <td><g:stripHtml field="${indicator.names}" chars="60"/></td>
+  <td><g:stripHtml field="${indicator.formulas}" chars="30"/></td>
   <g:if test="${indicator.unit=='%'}">
     <td><g:formatNumber number="${indicator.redToYellowThreshold}" format="0%"/></td>
     <td><g:formatNumber number="${indicator.yellowToGreenThreshold}" format="0%"/></td>

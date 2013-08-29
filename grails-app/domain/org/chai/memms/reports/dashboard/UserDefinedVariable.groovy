@@ -37,10 +37,10 @@ import i18nfields.I18nFields
 class UserDefinedVariable {
 
     String code
-    String name
+    String names
     Double currentValue
 
-    static i18nFields = ["name"]
+    static i18nFields = ["names"]
 
     static mapping ={
         table "memms_report_user_defined_variable"
@@ -51,7 +51,7 @@ class UserDefinedVariable {
 
     static constraints = {
         code (blank:false, nullable:false, unique:true)
-        name (blank:false, nullable:false, size:3..100)
+        names (blank:false, nullable:false, size:3..100)
         currentValue (nullable: false, blank: false)
     }
     @Override
