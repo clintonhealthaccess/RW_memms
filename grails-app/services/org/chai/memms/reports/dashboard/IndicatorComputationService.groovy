@@ -26,13 +26,10 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package org.chai.memms.reports.dashboard
-
 import groovy.sql.Sql
-
 import java.util.List
 import java.util.regex.Matcher
 import java.util.regex.Pattern
-
 import org.chai.location.CalculationLocation
 import org.chai.location.DataLocation
 import org.chai.location.Location
@@ -40,9 +37,9 @@ import org.joda.time.DateTime
 import org.chai.location.LocationLevel
 import org.chai.memms.security.User
 import java.sql.ResultSet
-
 /**
- * @author Antoine Nzeyi, Donatien Masengesho, Pivot Access Ltd
+ * 
+ *@author Antoine Nzeyi, Donatien Masengesho, Pivot Access Ltd
  *
  */
 class IndicatorComputationService {
@@ -67,29 +64,39 @@ class IndicatorComputationService {
         // 4. Compute report for all locations with registered users.
         Set<Long> locations = new HashSet<Long>();
         for(User user: User.findAll()) {
-            if ((user.location != null) && !locations.contains(user.location.id)) {
+            if ((user.location != null) && !locations.contains(user.location.id)){
                 locations.add(user.location.id);
                 computeLocationReport(currentDate, user.location, memmsReport)
+               break
+                
             }
         }
     }
 
-    def computeLocationReport(Date currentDate, CalculationLocation location, MemmsReport memmsReport) {
+     def computeLocationReport(Date currentDate, CalculationLocation location, MemmsReport memmsReport) {
         LocationReport locationReport = new LocationReport(generatedAt: currentDate, memmsReport: memmsReport, location:location).save()
         for(Indicator indicator: Indicator.findAllByActive(true)) {
             System.out.println(" >>> Calculating report " + indicator.code + " for " + location.names);
             try{
+                
                 def compvalue = computeIndicatorForLocation(indicator, location)
+                
                 IndicatorValue indicatorValue=new IndicatorValue(computedAt: currentDate, locationReport: locationReport, indicator: indicator, computedValue:compvalue).save()
+                
                 if(indicatorValue!=null) {
+                   
                     Map<String,Double> map= groupComputeIndicatorForLocation(indicatorValue.indicator,location)
                     if(map!=null) {
+                      
                         for (Map.Entry<String, Double> entry : (Set)map.entrySet()){
                             def groupIndicatorValue=new GroupIndicatorValue(generatedAt:currentDate,name:entry.getKey(),value:entry.getValue(),indicatorValue:indicatorValue).save()
+                         
                         }
+                          
                     }
                 }
             } catch(Exception ex) {
+                ex.printStackTrace()
             }
         }
     }
@@ -108,6 +115,7 @@ class IndicatorComputationService {
             return 0.0
         }
         if(dataLocations!=null&& dataLocations.size() == DataLocation.count()) {
+            
             return computeIndicatorForAllDataLocations(indicator)
         }
         return computeIndicatorForDataLocations(indicator, dataLocations)
@@ -135,6 +143,7 @@ class IndicatorComputationService {
     }
 
     def computeIndicatorForAllDataLocations(Indicator indicator) {
+      
         return computeIndicatorWithDataLocationCondition(indicator, " is not null ")
     }
 
@@ -220,6 +229,7 @@ class IndicatorComputationService {
     }
 
     def groupComputeIndicatorForAllDataLocations(Indicator indicator) {
+        
         return groupComputeIndicatorWithDataLocationCondition(indicator, " is not null ")
     }
 
@@ -233,16 +243,19 @@ class IndicatorComputationService {
                 Double value = UserDefinedVariable.findByCode(code.replace("#", "")).currentValue
                 mScript = mScript.replace(code, "" + value)
             }
+        
             return groupComputeScriptWithDataLocationCondition(mScript, indicator.sqlQuery, dataLocationCondition)
         }
         return null
     }
 
     def groupComputeScriptWithDataLocationCondition(String script, Boolean sql, String dataLocationCondition) {
+      
         return groupComputeScript(script.replace(DATA_LOCATION_TOKEN, dataLocationCondition), sql);
     }
 
     def groupComputeScript(String script, Boolean sql) {
+      
         if(sql) {
             return groupExecuteSQL(script)
         } else {
@@ -263,10 +276,11 @@ class IndicatorComputationService {
         return map
     }
 
-    def groupExecuteSQL(String sql) {
+      def groupExecuteSQL(String sql) {
+         
         Map<String, Double> map = new HashMap<String, Double>()
         if(sql != null) {
-            def res =  sessionFactory.getCurrentSession().createSQLQuery(sql).list()
+            def res = sessionFactory.getCurrentSession().createSQLQuery(sql).list()
             if(res[0] != null) {
                 for(Object arr : res) {
                     if(Double.parseDouble(arr[1] + ""))

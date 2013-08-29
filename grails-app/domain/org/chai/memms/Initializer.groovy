@@ -284,14 +284,13 @@ public class Initializer {
 		
 		if (!Location.count()) {
 			//Add Location types
-                        println"data location types--------------------------------"
+                       
 			def hc = new DataLocationType(['en':HEALTH_CENTER_GROUP], HEALTH_CENTER_GROUP);
 			
-                        println"data location types00000000000000000000000"
+                       
             
                         def dh = new DataLocationType(['en':DISTRICT_HOSPITAL_GROUP], DISTRICT_HOSPITAL_GROUP);
-			 println"data location types erorrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr"
-            
+			 
             //Add Location Level
 			def country = newLocationLevel(['en':NATIONAL], NATIONAL,1)
 			def province = newLocationLevel(['en':PROVINCE], PROVINCE,2)
@@ -335,7 +334,9 @@ public class Initializer {
 			def kayonza = newDataLocation(['en':KAYONZA],KAYONZA,kibuye,hc)
 			[gitwe,kirehe,kayonza].each{it -> nyange.addToManages(it)}
 			nyange.save(failOnError:true)
-		}		
+		}
+
+       
 	}
 	
 	public static createInventoryStructure(){

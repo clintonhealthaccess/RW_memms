@@ -28,7 +28,7 @@
                   </a>
                   <span class="tooltip v-tabs-formula" style="background: ${indicatorItem.color}" original-title="${indicatorItem.formula}">${indicatorItem.formula}</span>
               <g:if test="${indicatorItem.unit=='%'}">
-                <span class="v-tabs-value"><g:formatNumber number="${indicatorItem.value}" format="0%"/></span>
+                <span class="v-tabs-value"><g:formatNumber number="${indicatorItem.value}" format="0.00%"/></span>
               </g:if>
               <g:if test="${indicatorItem.unit!='%'}">
                 <span class="v-tabs-value"><g:formatNumber number="${indicatorItem.value}" format="###,##0"/> ${indicatorItem.unit}</span>
@@ -66,7 +66,7 @@
                               height: 300});
                         }
                     </script>
-                    <div id="historic_trend_chart_timeline_${indicatorItem.code}" style="width:800px; height:400px;"></div>
+                    <div id="historic_trend_chart_timeline_${indicatorItem.code}" style="width:800px; height:400px; overflow: auto;" ></div>
                   </g:if>
                 </div>
                 <div id="comparison">
