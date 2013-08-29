@@ -98,18 +98,19 @@
     addPreventionProcess("${createLink(controller:'prevention',action: 'addProcess')}","${prevention.id}","");
     removePreventionProcess("${createLink(controller:'prevention',action: 'removeProcess')}");
     getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}");
-    var source;
-    var destination;
-    var fn = function(event, ui) {
+    
+
+    $(".droppable").droppable({ hoverClass:'dragging',drop: function(event, ui) {
         $(".droppable").prepend($(ui.draggable[0]).removeAttr("style"));
-    };
-    var fn1 = function(event, ui) {
+    }});
+
+    $(".draggable").droppable({ hoverClass:'dragging',drop: function(event, ui) {
         $(".draggable").prepend($(ui.draggable[0]).removeAttr("style"));
-    };
-    $(".draggable li").draggable();
-    $(".droppable").droppable({ drop: fn });
-    $(".droppable li").draggable();
-    $(".draggable").droppable({ drop: fn1 });
+    }});
+
+    $(".draggable li").draggable({ addClasses:'.dragging',addClasses:'',containment: 'document',cursor:'pointer',helper: 'clone'});
+    $(".droppable li").draggable({ addClasses:'.dragging',addClasses:'',containment: 'document',cursor:'pointer',helper: 'clone'});
+    
   });
 </script>
 
