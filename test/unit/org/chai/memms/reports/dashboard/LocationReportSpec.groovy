@@ -22,9 +22,9 @@ class LocationReportSpec extends UnitSpec {
           mockDomain(MemmsReport)
           
           when:
-            def memmsReport=new MemmsReport(generatedAt:new Date()).save(failOnError: true, flush:true)
+            def memmsReport=new MemmsReport(eventDate:new Date()).save(failOnError: true, flush:true)
             memmsReport.validate()
-            def locationReport = new LocationReport(generatedAt: new Date(), memmsReport: memmsReport, location:null).save()
+            def locationReport = new LocationReport(eventDate: new Date(), memmsReport: memmsReport, location:null).save()
       
              locationReport.validate()
          
@@ -34,15 +34,15 @@ class LocationReportSpec extends UnitSpec {
           
    }
    
-     def "location report with null generatedAt is inavalid"() {
+     def "location report with null event date is inavalid"() {
           setup:
           mockForConstraintsTests(LocationReport)
           mockDomain(LocationReport)
           mockDomain(MemmsReport)
          
            when:
-             def memmsReport=new MemmsReport(generatedAt:new Date()).save(failOnError: true, flush:true)
-             def locationReportNotInit = new LocationReport(generatedAt: null, memmsReport: memmsReport, location:null)
+             def memmsReport=new MemmsReport(eventDate:new Date()).save(failOnError: true, flush:true)
+             def locationReportNotInit = new LocationReport(eventDate: null, memmsReport: memmsReport, location:null)
              
           then:
             assert !locationReportNotInit.validate()

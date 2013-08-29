@@ -37,7 +37,7 @@ import org.chai.location.DataLocation
 class LocationReport {
 
     CalculationLocation location
-    Date generatedAt
+    Date eventDate
 
     static belongsTo = [memmsReport:MemmsReport]
     static hasMany = [indicatorValues:IndicatorValue]
@@ -48,12 +48,12 @@ class LocationReport {
     }
 
     static constraints = {
-        generatedAt (blank:false, nullable:false)
+        eventDate (blank:false, nullable:false)
         location (nullable:true)
     }
 
     @Override
     public String toString() {
-        return "LocationReport[#id = " + id + ", @" + generatedAt.getTime() + "]"
+        return "LocationReport[#id = " + id + ", @" + eventDate.getTime() + "]"
     }
 }

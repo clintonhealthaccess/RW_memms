@@ -33,7 +33,8 @@ package org.chai.memms.reports.dashboard
  */
 class MemmsReport {
 
-    Date generatedAt
+    //Date generatedAt
+	Date eventDate
 
     static hasMany = [s:LocationReport]
     static mapping ={
@@ -44,6 +45,6 @@ class MemmsReport {
 
     @Override
     public String toString() {
-        return "MemmsReport[#id = " + id + ", @" + generatedAt + "]"
+        return "MemmsReport[#id = " + id + ", @" + eventDate + "]"
     }
 }
