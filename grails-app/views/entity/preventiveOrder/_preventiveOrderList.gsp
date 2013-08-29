@@ -54,7 +54,7 @@
 					${message(code: order.occurency?.messageCode+'.'+order.occurency?.name)}					
 				</td>
 				<td>
-					${order.occurInterval}					
+					${order.occurInterval}			
 				</td>
 				<td>
 					${message(code: order.status?.messageCode+'.'+order.status?.name)}

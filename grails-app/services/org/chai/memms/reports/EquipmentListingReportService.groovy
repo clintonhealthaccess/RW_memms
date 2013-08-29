@@ -35,8 +35,9 @@ import org.chai.memms.report.listing.EquipmentReport;
 import org.chai.memms.report.listing.EquipmentGeneralReportParameters;
 import org.chai.memms.security.User;
 import org.chai.memms.inventory.Equipment;
-import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.inventory.EquipmentStatus;
+import org.chai.memms.inventory.EquipmentStatus.Status;
+import org.chai.memms.inventory.EquipmentStatus.EquipmentStatusChange;
 import org.chai.memms.inventory.Equipment.PurchasedBy;
 import org.chai.memms.inventory.Equipment.Donor;
 import org.chai.memms.util.Utils.ReportType;
@@ -51,6 +52,7 @@ import org.joda.time.DateTime;
 class EquipmentListingReportService {
 
 	def equipmentService
+	def equipmentTypeService
 	def userService
 	def today =new Date()
 
@@ -164,8 +166,6 @@ class EquipmentListingReportService {
 
 	public def getCustomReportOfEquipments(User user,def customEquipmentParams, Map<String, String> params) {
 
-		def customEquipments = []
-
 		def reportType = customEquipmentParams.get('reportType')
 		def reportSubType = customEquipmentParams.get('reportSubType')
 
@@ -177,11 +177,10 @@ class EquipmentListingReportService {
 		def currency = customEquipmentParams.get('costCurrency')
 		def noCost = customEquipmentParams.get('noCost')
 
-		def criteria = Equipment.createCriteria();
-
-		def criteriaEquipments = []
-
 		if(reportSubType == ReportSubType.INVENTORY){
+
+			def equipmentCriteria = Equipment.createCriteria()
+
 			def fromAcquisitionPeriod = customEquipmentParams.get('fromAcquisitionPeriod')
 			def toAcquisitionPeriod = customEquipmentParams.get('toAcquisitionPeriod')
 			def noAcquisitionPeriod = customEquipmentParams.get('noAcquisitionPeriod')
@@ -189,16 +188,15 @@ class EquipmentListingReportService {
 			def obsolete = customEquipmentParams.get('obsolete')
 			def warranty = customEquipmentParams.get('warranty')
 
-			criteriaEquipments = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-				
-				//MADE IT MANDATORY, CONDITION REMOVED
-					inList("dataLocation",dataLocations)
+			return equipmentCriteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+
+				//Mandatory property
+				inList("dataLocation", dataLocations)
+				//Mandatory property
+				inList ("department", departments)
+				//Mandatory property
+				inList ("type", equipmentTypes)
 					
-				//MADE IT MANDATORY, CONDITION REMOVED
-					inList ("type", equipmentTypes)
-					
-				if(departments && departments != null && departments.size() > 0)
-					inList ("department", departments)
 				if(lowerLimitCost && lowerLimitCost!=null)
 					gt ("purchaseCost", lowerLimitCost)
 				if(upperLimitCost && upperLimitCost!=null)
@@ -221,54 +219,57 @@ class EquipmentListingReportService {
 				if(noCost != null && noCost)
 					eq ("purchaseCost", null)
 			}
-			customEquipments = criteriaEquipments
-			if (log.isDebugEnabled()) log.debug("EQUIPMENTS SIZE: "+ customEquipments.size())
 		}
 
 		if(reportSubType == ReportSubType.STATUSCHANGES){
-			def statusChanges = customEquipmentParams.get('statusChanges')
+
+			def equipmentStatusCriteria = EquipmentStatus.createCriteria()
+
+			def equipmentStatusChanges = customEquipmentParams.get('statusChanges')
+
 			def fromStatusChangesPeriod = customEquipmentParams.get('fromStatusChangesPeriod')
 			def toStatusChangesPeriod = customEquipmentParams.get('toStatusChangesPeriod')
 
-			criteriaEquipments = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-				
-				//MADE IT MANDATORY, CONDITION REMOVED
-					inList("dataLocation",dataLocations)
+			return equipmentStatusCriteria.list(offset:params.offset,max:params.max, sort:params.sort ?:"id",order: params.order ?:"desc"){
 
-				//MADE IT MANDATORY, CONDITION REMOVED
-					inList ("type", equipmentTypes)
-		
-				if(departments != null)
-					inList ("department", departments)
+				createAlias("equipment","equip")
+
+				//Mandatory property
+				inList("equip.dataLocation", dataLocations)
+				//Mandatory property
+				inList ("equip.department", departments)
+				//Mandatory property
+				inList ("equip.type", equipmentTypes)
+
 				if(lowerLimitCost && lowerLimitCost!=null)
-					gt ("purchaseCost", lowerLimitCost)
+					gt ("equip.purchaseCost", lowerLimitCost)
 				if(upperLimitCost && upperLimitCost!=null)
-					lt ("purchaseCost", upperLimitCost)
+					lt ("equip.purchaseCost", upperLimitCost)
 				if(currency && currency !=null)
-					eq ("currency",currency)
+					eq ("equip.currency",currency)
 				if(noCost != null && noCost)
-					eq ("purchaseCost", null)
+					eq ("equip.purchaseCost", null)
 
-				// TODO
-				// if(fromStatusChangesPeriod != null)
-				// 	gt ("TODO", fromStatusChangesPeriod)
-				// if(toStatusChangesPeriod != null)
-				// 	lt ("TODO", toStatusChangesPeriod)
-			}
-			if (log.isDebugEnabled()) log.debug("EQUIPMENTS SIZE: "+ criteriaEquipments.size())
-
-			if(statusChanges != null && !statusChanges.empty){
-				def statusChangesEquipments = []
-				criteriaEquipments.each { equipment ->
-					def equipmentStatusChange = equipmentService.getEquipmentTimeBasedStatusChange(equipment,statusChanges)
-					if(equipmentStatusChange != null) statusChangesEquipments.add(equipment)
-					statusChangesEquipments.add(equipment)
+				//Status changes
+				if(equipmentStatusChanges != null || !equipmentStatusChanges.empty){
+					or {
+						equipmentStatusChanges.each{ equipmentStatusChange ->
+							def previousStatus = equipmentStatusChange.statusChange['previous']
+							def currentStatus = equipmentStatusChange.statusChange['current']
+							and {
+								inList("previousStatus", previousStatus)
+								inList("status", currentStatus)
+							}
+						}
+					}
 				}
-				customEquipments = statusChangesEquipments
+
+				if(fromStatusChangesPeriod && fromStatusChangesPeriod != null)
+					gt ("dateOfEvent", fromStatusChangesPeriod)
+				if(toStatusChangesPeriod && toStatusChangesPeriod != null)
+					lt ("dateOfEvent", toStatusChangesPeriod)
 			}
 		}
-
-		return customEquipments
 	}
 
 	public def saveEquipmentReportParams(User user, def customEquipmentParams, Map<String, String> params){

@@ -101,14 +101,20 @@ class PreventiveOrderListingReportService {
 	
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			createAlias("equipment","equip")
+			
 			//Mandatory property
-				inList('equip.dataLocation',dataLocations)
-			if(departments != null && departments.size()>0)
-				inList ("equip.department", departments)
+			inList("equip.dataLocation", dataLocations)
 			//Mandatory property
-				inList ("equip.type", equipmentTypes)
+			inList ("equip.department", departments)
+			//Mandatory property
+			inList ("equip.type", equipmentTypes)
+
 			if(workOrderStatus!=null && !workOrderStatus.empty)
 				inList ("status",workOrderStatus)
+			if(workOrderStatus!=null && !workOrderStatus.empty && workOrderStatus.contains(PreventiveOrderStatus.OPENLATE)){
+				//le ("eventDate", it.scheduledOn)
+				//le ("scheduledOn", "eventDate")
+			}
 			if(lowerLimitCost && lowerLimitCost!=null)
 			//Including lowerLimitCost by using ge
 				ge ("equip.purchaseCost", lowerLimitCost)
@@ -122,11 +128,11 @@ class PreventiveOrderListingReportService {
 			if(noCost != null && noCost)
 				eq ("equip.purchaseCost", null)
 				
-			// TODO
-			// if(fromWorkOrderPeriod != null)
-			// 	gt ("TODO", fromWorkOrderPeriod)
-			// if(toWorkOrderPeriod != null)
-			// 	lt ("TODO", toWorkOrderPeriod)
+			// DONE
+			 if(fromWorkOrderPeriod && fromWorkOrderPeriod != null)
+			 	gt ("dateCreated", fromWorkOrderPeriod)
+			 if(toWorkOrderPeriod && toWorkOrderPeriod != null)
+			 	lt ("dateCreated", toWorkOrderPeriod)
 		}
 	}
 

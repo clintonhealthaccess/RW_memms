@@ -7,12 +7,14 @@ import java.util.Map;
 
 import org.chai.location.DataLocation;
 import org.chai.location.Location;
-import org.chai.memms.report.listing.SparePartReport
+import org.chai.memms.report.listing.SparePartReport;
 import org.chai.memms.security.User;
 import org.chai.memms.security.User.UserType;
 import org.chai.memms.spare.part.SparePart;
+import org.chai.memms.spare.part.SparePart.StockLocation;
 import org.chai.memms.spare.part.SparePartType;
 import org.chai.memms.spare.part.SparePart.SparePartStatus;
+import org.chai.memms.spare.part.SparePart.SparePartStatusChange;
 import org.chai.memms.util.Utils.ReportType;
 import org.chai.memms.util.Utils.ReportSubType;
 import org.chai.memms.util.Utils;
@@ -77,7 +79,6 @@ class SparePartListingReportService {
 		}
 	}
 
-	// TODO we have to track also the spare part at MMC level which does not have dataLocation.
 	public def getCustomReportOfSpareParts(User user, def customSparePartsParams, Map<String, String> params) {
 
 		def reportType = customSparePartsParams.get('reportType')
@@ -85,117 +86,157 @@ class SparePartListingReportService {
 
 		def dataLocations = customSparePartsParams.get('dataLocations')
 		def sparePartTypes = customSparePartsParams.get('sparePartTypes')
+		def showAtMMC = customSparePartsParams.get('showAtMmc')
 
-		def criteria = SparePart.createCriteria();
-
-		def criteriaSpareParts = []
+		def sparePartCriteria = SparePart.createCriteria()
 
 		if(reportSubType == ReportSubType.INVENTORY){
+			def sparePartStatus = customSparePartsParams.get('sparePartStatus')
+			def fromAcquisitionPeriod = customSparePartsParams.get('fromAcquisitionPeriod')
+			def toAcquisitionPeriod = customSparePartsParams.get('toAcquisitionPeriod')
+			def noAcquisitionPeriod = customSparePartsParams.get('noAcquisitionPeriod')
+
+			return sparePartCriteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+
+				//Mandatory property
+				or {
+					inList("dataLocation", dataLocations)
+					if(showAtMMC != null)
+						eq("stockLocation",StockLocation.MMC)
+				}
+				//Mandatory property
+				inList ("type", sparePartTypes)
+
+				if(sparePartStatus!=null && !sparePartStatus.empty)
+					inList ("status",sparePartStatus)
+				
+				or{
+					if(fromAcquisitionPeriod != null)
+						gt ("purchaseDate", fromAcquisitionPeriod)
+					if(toAcquisitionPeriod != null)
+						lt ("purchaseDate", toAcquisitionPeriod)	
+					if(noAcquisitionPeriod != null)
+						eq ("purchaseDate", null)
+				}
+			}
+		}
+
+		if(reportSubType == ReportSubType.STATUSCHANGES){
+			def sparePartStatusChanges = customSparePartsParams.get('statusChanges')
+			def fromStatusChangesPeriod = customSparePartsParams.get('fromStatusChangesPeriod')
+			def toStatusChangesPeriod = customSparePartsParams.get('toStatusChangesPeriod')
 			def fromAcquisitionPeriod = customSparePartsParams.get('fromAcquisitionPeriod')
 			def toAcquisitionPeriod = customSparePartsParams.get('toAcquisitionPeriod')
 			def noAcquisitionPeriod = customSparePartsParams.get('noAcquisitionPeriod')
 			def sparePartStatus = customSparePartsParams.get('sparePartStatus')
 
-			criteriaSpareParts = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			return sparePartCriteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+				
+				//Mandatory property
+				or {
+					inList("dataLocation", dataLocations)
+					if(showAtMMC != null)
+						eq("stockLocation",StockLocation.MMC)
+				}
+				//Mandatory property
+				inList ("type", sparePartTypes)
 
-				//Mandatory property
-					inList("dataLocation",dataLocations)
-				//Mandatory property
-					inList ("type", sparePartTypes)
-				if(noAcquisitionPeriod != null && noAcquisitionPeriod)
-					eq ("purchaseDate", null)
-				if(sparePartStatus!=null && !sparePartStatus.empty)
-					inList ("status",sparePartStatus)
-				if(fromAcquisitionPeriod && fromAcquisitionPeriod != null)
-					gt ("purchaseDate", fromAcquisitionPeriod)
-				if(toAcquisitionPeriod && toAcquisitionPeriod != null)
-					lt ("purchaseDate", toAcquisitionPeriod)	
+				//Status changes
+				if(sparePartStatusChanges != null || !sparePartStatusChanges.empty){
+					if(sparePartStatusChanges.size() > 1){
+						or {
+							if(sparePartStatusChanges.contains(SparePartStatusChange.NEWPENDINGORDER)){
+								and {
+									isNotNull("purchaseDate")
+									isNull("deliveryDate")
+									eq("status",SparePartStatus.PENDINGORDER)
+								}
+							}
+							if(sparePartStatusChanges.contains(SparePartStatusChange.PENDINGORDERARRIVED)){
+								and {
+									isNotNull("purchaseDate")
+									or{
+										isNotNull("deliveryDate")
+										eq("status",SparePartStatus.INSTOCK)
+									}
+								}
+							}
+						}
+					}
+					else{
+						if(sparePartStatusChanges.contains(SparePartStatusChange.NEWPENDINGORDER)){
+							and {
+								isNotNull("purchaseDate")
+								isNull("deliveryDate")
+								eq("status",SparePartStatus.PENDINGORDER)
+							}
+						}
+						if(sparePartStatusChanges.contains(SparePartStatusChange.PENDINGORDERARRIVED)){
+							and {
+								isNotNull("purchaseDate")
+								or{
+									isNotNull("deliveryDate")
+									eq("status",SparePartStatus.INSTOCK)
+								}
+							}
+						}
+					}
+				}
 			}
-			if (log.isDebugEnabled()) log.debug("SPARE PARTS SIZE: "+ criteriaSpareParts.size())
-		}
-
-		if(reportSubType == ReportSubType.STATUSCHANGES){
-			def statusChanges = customSparePartsParams.get('statusChanges')
-			def fromStatusChangesPeriod = customSparePartsParams.get('fromStatusChangesPeriod')
-			def toStatusChangesPeriod = customSparePartsParams.get('toStatusChangesPeriod')
-
-			criteriaSpareParts = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-				//Mandatory property
-					inList("dataLocation",dataLocations)
-				//Mandatory property
-					inList ("type", sparePartTypes)
-
-				// TODO
-				// if(fromStatusChangesPeriod != null)
-				// 	gt ("TODO", fromStatusChangesPeriod)
-				// if(toStatusChangesPeriod != null)
-				// 	lt ("TODO", toStatusChangesPeriod)
-			}
-			if (log.isDebugEnabled()) log.debug("SPARE PARTS SIZE: "+ criteriaSpareParts.size())
-			//TODO add getSparePartTimeBasedStatusChange method into sparePartService
-			/*if(statusChanges != null && !statusChanges.empty){
-			 def statusChangesSpareParts = []
-			 criteriaSpareParts.each { sparePart ->
-			 def sparePartStatusChange = sparePartService.getSparePartTimeBasedStatusChange(sparePart,statusChanges)
-			 if(sparePartStatusChange != null) statusChangesSpareParts.add(sparePart)
-			 statusChangesSpareParts.add(sparePart)
-			 }
-			 customSpareParts = statusChangesSpareParts
-			 }*/
 		}
 		if(reportSubType == ReportSubType.USERATE){
 			DateTime todayDateTime = new DateTime(today)
 			def lastYearDateTimeFromNow = todayDateTime.minusDays(365)
 			def lastYearDateFromNow = lastYearDateTimeFromNow.toDate()
-			criteriaSpareParts = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-				
-				projections {
-					property("type","type")
+			
+			return sparePartCriteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+				createAlias("type","t")
+				//Mandatory property
+				or {
+					inList("dataLocation", dataLocations)
+					if(showAtMMC != null)
+						eq("stockLocation",StockLocation.MMC)
 				}
 				//Mandatory property
-					inList("dataLocation",dataLocations)
-				//Mandatory property
-					inList ("type", sparePartTypes)
+				inList ("type", sparePartTypes)
 					
 					
 				eq ("status",SparePartStatus.INSTOCK)
 				//gt("deliveryDate", lastYearDateFromNow)
-				/*projections{
-					property("id")
-					groupProperty("type")
-					rowCount("inStockQuantity")
-				}*/
+				//projections{
+					//property("t.id")
+					//groupProperty("t.id")
+					//rowCount("inStockQuantity")
+				//}
 			}
-			if (log.isDebugEnabled()) log.debug("SPARE PARTS SIZE ON USE RATE: "+ criteriaSpareParts.size())
 		}
 
 		if(reportSubType == ReportSubType.STOCKOUT){
 			DateTime todayDateTime = new DateTime(today)
 			def lastYearDateTimeFromNow = todayDateTime.minusDays(365)
 			def lastYearDateFromNow = lastYearDateTimeFromNow.toDate()
-			criteriaSpareParts = criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-				
-				projections {
-					property("type", "type")
+			
+			return sparePartCriteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			def sparePartCount=	sparePartCriteria.get{
+				//projections{
+					//property("type")
+					//groupProperty("t.id")
+					//rowCount("inStockQuantity")
+				//}
+				//Mandatory property
+				or {
+					inList("dataLocation", dataLocations)
+					if(showAtMMC != null)
+						eq("stockLocation",StockLocation.MMC)
 				}
 				//Mandatory property
-					inList("dataLocation",dataLocations)
-				//Mandatory property
-					
-					inList ("type", sparePartTypes)
+				inList ("type", sparePartTypes)
 					
 				eq ("status",SparePartStatus.INSTOCK)
 				//gt("deliveryDate", lastYearDateFromNow)
-				/*projections{
-					property("id")
-					groupProperty("type")
-					rowCount("inStockQuantity")
-				}*/
 			}
-			if (log.isDebugEnabled()) log.debug("SPARE PARTS SIZE ON USE RATE: "+ criteriaSpareParts.size())
-			//customSpareParts=criteriaSpareParts
+			}
 		}
-		return criteriaSpareParts
 	}
 
 	public def saveSparePartReportParams(User user, def customSparePartParams, Map<String, String> params){
@@ -214,6 +255,7 @@ class SparePartListingReportService {
 		def sparePartStatus = customSparePartParams.get('sparePartStatus')
 		def listingReportDisplayOptions = customSparePartParams.get('reportTypeOptions')
 
+		//TODO AR add status changes and status changes period to saved report
 		if (log.isDebugEnabled()) log.debug("PARAMS TO BE SAVED ON SPARE PART CUSTOM REPORT: SPARE PART STATUS :"+sparePartStatus)
 		sparePartReport.sparePartStatus=sparePartStatus
 		sparePartReport.noAcquisitionPeriod=noAcquisitionPeriod=="on"?true:false
