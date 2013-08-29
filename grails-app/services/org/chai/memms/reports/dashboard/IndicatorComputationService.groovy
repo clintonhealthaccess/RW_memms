@@ -55,12 +55,12 @@ class IndicatorComputationService {
         DateTime now = DateTime.now()
         Date currentDate = now.toDate()
         // 2. REMOVE PREVIOUS REPORTS IN THE SAME MONTH
-        GroupIndicatorValue.executeUpdate("delete from GroupIndicatorValue where month(generatedAt) = " + now.getMonthOfYear() + " and year(generatedAt) = " + now.getYear())
+        GroupIndicatorValue.executeUpdate("delete from GroupIndicatorValue where month(eventDate) = " + now.getMonthOfYear() + " and year(eventDate) = " + now.getYear())
         IndicatorValue.executeUpdate("delete from IndicatorValue where month(computedAt) = " + now.getMonthOfYear() + " and year(computedAt) = " + now.getYear())
-        LocationReport.executeUpdate("delete from LocationReport where month(generatedAt) = " + now.getMonthOfYear() + " and year(generatedAt) = " + now.getYear())
-        MemmsReport.executeUpdate("delete from MemmsReport where month(generatedAt) = " + now.getMonthOfYear() + " and year(generatedAt) = " + now.getYear())
+        LocationReport.executeUpdate("delete from LocationReport where month(eventDate) = " + now.getMonthOfYear() + " and year(eventDate) = " + now.getYear())
+        MemmsReport.executeUpdate("delete from MemmsReport where month(eventDate) = " + now.getMonthOfYear() + " and year(eventDate) = " + now.getYear())
         // 3. SAVE NEW MEMMS REPORT
-        MemmsReport memmsReport = new MemmsReport(generatedAt: currentDate).save()
+        MemmsReport memmsReport = new MemmsReport(eventDate: currentDate).save()
         // 4. Compute report for all locations with registered users.
         Set<Long> locations = new HashSet<Long>();
         for(User user: User.findAll()) {
@@ -74,7 +74,7 @@ class IndicatorComputationService {
     }
 
      def computeLocationReport(Date currentDate, CalculationLocation location, MemmsReport memmsReport) {
-        LocationReport locationReport = new LocationReport(generatedAt: currentDate, memmsReport: memmsReport, location:location).save()
+        LocationReport locationReport = new LocationReport(eventDate: currentDate, memmsReport: memmsReport, location:location).save()
         for(Indicator indicator: Indicator.findAllByActive(true)) {
             System.out.println(" >>> Calculating report " + indicator.code + " for " + location.names);
             try{
@@ -89,7 +89,7 @@ class IndicatorComputationService {
                     if(map!=null) {
                       
                         for (Map.Entry<String, Double> entry : (Set)map.entrySet()){
-                            def groupIndicatorValue=new GroupIndicatorValue(generatedAt:currentDate,name:entry.getKey(),value:entry.getValue(),indicatorValue:indicatorValue).save()
+                            def groupIndicatorValue=new GroupIndicatorValue(eventDate:currentDate,name:entry.getKey(),value:entry.getValue(),indicatorValue:indicatorValue).save()
                          
                         }
                           

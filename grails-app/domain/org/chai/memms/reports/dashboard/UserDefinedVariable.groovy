@@ -51,7 +51,7 @@ class UserDefinedVariable {
 
     static constraints = {
         code (blank:false, nullable:false, unique:true)
-        names (blank:false, nullable:false, size:3..100)
+        names (blank:true, nullable:true, size:3..100)
         currentValue (nullable: false, blank: false)
     }
     @Override
