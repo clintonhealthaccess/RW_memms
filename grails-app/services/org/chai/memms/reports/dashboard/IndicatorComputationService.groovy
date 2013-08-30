@@ -55,7 +55,7 @@ class IndicatorComputationService {
         DateTime now = DateTime.now()
         Date currentDate = now.toDate()
         // 2. REMOVE PREVIOUS REPORTS IN THE SAME MONTH
-        GroupIndicatorValue.executeUpdate("delete from GroupIndicatorValue where month(eventDate) = " + now.getMonthOfYear() + " and year(eventDate) = " + now.getYear())
+        GroupIndicatorValue.executeUpdate("delete from GroupIndicatorValue where month(generatedAt) = " + now.getMonthOfYear() + " and year(generatedAt) = " + now.getYear())
         IndicatorValue.executeUpdate("delete from IndicatorValue where month(computedAt) = " + now.getMonthOfYear() + " and year(computedAt) = " + now.getYear())
         LocationReport.executeUpdate("delete from LocationReport where month(eventDate) = " + now.getMonthOfYear() + " and year(eventDate) = " + now.getYear())
         MemmsReport.executeUpdate("delete from MemmsReport where month(eventDate) = " + now.getMonthOfYear() + " and year(eventDate) = " + now.getYear())
