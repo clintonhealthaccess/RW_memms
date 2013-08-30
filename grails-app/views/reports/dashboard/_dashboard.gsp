@@ -24,9 +24,9 @@
               <li class="v-tabs-row v-tabs-row-${indicatorItem.color}">
                 <p>
                   <a class="v-tabs-name v-tabs-fold-toggle">
-                    <span class="v-tabs-switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span> ${indicatorItem.name}
+                    <span class="v-tabs-switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span> ${indicatorItem.names}
                   </a>
-                  <span class="tooltip v-tabs-formula" style="background: ${indicatorItem.color}" original-title="${indicatorItem.formula}">${indicatorItem.formula}</span>
+                  <span class="tooltip v-tabs-formula" style="background: ${indicatorItem.color}" original-title="${indicatorItem.formulas}">${indicatorItem.formulas}</span>
               <g:if test="${indicatorItem.unit=='%'}">
                 <span class="v-tabs-value"><g:formatNumber number="${indicatorItem.value}" format="0.00%"/></span>
               </g:if>
@@ -39,7 +39,7 @@
                   <li><a id='historic_trend' class='active' href="#">Historic trend</a></li>
                   <li><a id='comparison' href="#">Comparison to other facilities</a></li>
                   <li><a id='geo_trend' href="#">Geographic trend</a></li>
-                  <li><a id='info_facility' href="#">Information by ${indicatorItem.groupName}</a></li>
+                  <li><a id='info_facility' href="#">Information by ${indicatorItem.groupNames}</a></li>
                 </ul>
                 <div id="historic_trend" class='toggled_tab'>
                   <g:if test="${indicatorItem.historicalTrendData()!=null}">
@@ -49,7 +49,7 @@
                         function drawVisualization() {
                             data = new google.visualization.DataTable();
                             data.addColumn('string', 'Date');
-                            data.addColumn('number', '${indicatorItem.name}');
+                            data.addColumn('number', '${indicatorItem.names}');
                             data.addRows(${indicatorItem.historicalTrendData()});
                             formatter = new google.visualization.NumberFormat({pattern:'${indicatorItem.historicalTrendVAxisFormat()}'});
                             formatter.format(data,1);
@@ -59,7 +59,7 @@
                               legend: 'none',
                               pointSize: 12,
                               colors: [['${indicatorItem.color}']],
-                              vAxis: {format:'${indicatorItem.historicalTrendVAxisFormat()}', title: '${indicatorItem.name}', gridlines:{color: 'lightgray' ${indicatorItem.historicalTrendLineCount()}}, minValue: 0 ${indicatorItem.historicalTrendMaxValue()}},
+                              vAxis: {format:'${indicatorItem.historicalTrendVAxisFormat()}', title: '${indicatorItem.names}', gridlines:{color: 'lightgray' ${indicatorItem.historicalTrendLineCount()}}, minValue: 0 ${indicatorItem.historicalTrendMaxValue()}},
                               hAxis: {gridlines:{color: 'lightgray', count: ${indicatorItem.totalHistoryItems + 1}}, minValue: 0, maxValue: ${indicatorItem.totalHistoryItems}},
                               fontSize: 12,
                               width: 900,
@@ -103,7 +103,7 @@
                       </g:each>
                     </g:if>
                     <li class="v-tabs-row" style="font-size:15px;font-weight:bold;color:#258CD5">
-                      <span class="v-tabs-name">${indicatorItem.facilityName}</span>
+                      <span class="v-tabs-name">${indicatorItem.facilityNames}</span>
                       <span class="v-tabs-formula" style="background: ${indicatorItem.color}"  original-title="${indicatorItem.color}">${indicatorItem.color}</span>
                     <g:if test="${indicatorItem.unit=='%'}">
                       <span class="v-tabs-value"><g:formatNumber number="${indicatorItem.value}" format="0%"/></span>
