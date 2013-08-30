@@ -48,13 +48,13 @@ import java.util.Collections;
 class IndicatorItem {
 
     IndicatorComputationService indicatorComputationService
-    String facilityName
+    String facilityNames
     String categoryCode
     Date dateTime
     String code
-    String name
-    String groupName
-    String formula
+    String names
+    String groupNames
+    String formulas
     Double value
     String unit
     String color
@@ -71,13 +71,13 @@ class IndicatorItem {
         this.categoryCode = iv.indicator.category.code
         this.dateTime = iv.computedAt
         this.code = iv.indicator.code
-        this.name = iv.indicator.name
-        this.formula = iv.indicator.formula
+        this.names = iv.indicator.names
+        this.formulas = iv.indicator.formulas
         this.value = iv.computedValue
         this.unit = iv.indicator.unit
-        this.groupName = iv.indicator.groupName
+        this.groupNames = iv.indicator.groupNames
         this.totalHistoryItems = iv.indicator.historyItems
-        this.facilityName = iv.locationReport.location.names
+        this.facilityNames = iv.locationReport.location.names
         Double red = iv.indicator.redToYellowThreshold
         Double green =  iv.indicator.yellowToGreenThreshold
         if(red < green) {
@@ -128,11 +128,11 @@ class IndicatorItem {
         if(iv != null) {
             def locationReports=null
             if(iv.indicator.historicalPeriod.equals(Indicator.HistoricalPeriod.MONTHLY)){
-                locationReports = LocationReport.findAll("from LocationReport as locationReport  where locationReport.location.id='"+iv.locationReport.location.id+"' order by locationReport.generatedAt desc limit "+iv.indicator.historyItems+"")
+                locationReports = LocationReport.findAll("from LocationReport as locationReport  where locationReport.location.id='"+iv.locationReport.location.id+"' order by locationReport.eventDate desc limit "+iv.indicator.historyItems+"")
             } else if(iv.indicator.historicalPeriod.equals(Indicator.HistoricalPeriod.QUARTERLY)){
-                locationReports = LocationReport.findAll("from LocationReport as locationReport where month(locationReport.generatedAt) in (3,6,9,12) and locationReport.location.id='"+iv.locationReport.location.id+"' order by locationReport.generatedAt desc limit "+iv.indicator.historyItems+"")
+                locationReports = LocationReport.findAll("from LocationReport as locationReport where month(locationReport.eventDate) in (3,6,9,12) and locationReport.location.id='"+iv.locationReport.location.id+"' order by locationReport.eventDate desc limit "+iv.indicator.historyItems+"")
             } else if(iv.indicator.historicalPeriod.equals(Indicator.HistoricalPeriod.YEARLY)) {
-                locationReports = LocationReport.findAll("from LocationReport as locationReport where month(locationReport.generatedAt) = 12 and locationReport.location.id='"+iv.locationReport.location.id+"' order by locationReport.generatedAt desc limit "+iv.indicator.historyItems+"")
+                locationReports = LocationReport.findAll("from LocationReport as locationReport where month(locationReport.eventDate) = 12 and locationReport.location.id='"+iv.locationReport.location.id+"' order by locationReport.eventDate desc limit "+iv.indicator.historyItems+"")
             }
             return IndicatorValue.findAllByLocationReportInListAndIndicator(locationReports,iv.indicator)
         }
@@ -287,7 +287,7 @@ class IndicatorItem {
     }
 
     public geoData() {
-        def ret = [["\'LATITUDE\'", "\'LONGITUDE\'", "\'LOCATION\'", "\'"+name+"\'"]]
+        def ret = [["\'LATITUDE\'", "\'LONGITUDE\'", "\'LOCATION\'", "\'"+names+"\'"]]
         def i = 1
         for(GeographicalValueItem geo: geographicalValueItems) {
             if((geo.latitude != null) && (geo.longitude != null) &&(geo.latitude != 0.0) && (geo.longitude != 0.0)) {
