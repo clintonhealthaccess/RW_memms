@@ -97,6 +97,11 @@ grails.project.dependency.resolution = {
 		compile ":rabbitmq-tasks:0.5.3-SNAPSHOT"
 		compile ":chai-locations:0.5.1-CHAI"
 		compile ":build-info-tag:0.3.1"
+		compile ":quartz:1.0-RC2"
+		compile ":google-visualization:0.6.2"
+		compile ":rest-client-builder:1.0.2"
+		compile ":release:2.0.3" 
+		compile ":webxml:1.4.1"
 		//compile ':cloud-foundry:1.2.3'
 		test (":spock:0.6") {changing = false}
 		//		test ":geb:0.7.1"
