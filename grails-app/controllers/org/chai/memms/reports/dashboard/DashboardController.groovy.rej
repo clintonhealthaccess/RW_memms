@@ -1,0 +1,16 @@
+diff a/grails-app/controllers/org/chai/memms/reports/dashboard/DashboardController.groovy b/grails-app/controllers/org/chai/memms/reports/dashboard/DashboardController.groovy	(rejected hunks)
+@@ -48,12 +48,12 @@ class DashboardController extends AbstractController {
+         indicatorComputationService.computeCurrentReport()
+         LocationReport report = getUserReport()
+         List<IndicatorItem> indicatorItems = new ArrayList<IndicatorItem>()
+-        Map<String, CategoryItem> categoryItems = new HashMap<String, CategoryItem>()
++        Map<String, CategoryItem> categoryItems = new LinkedHashMap<String, CategoryItem>()
+         if(report != null) {
+             for(IndicatorValue i : IndicatorValue.findAllByLocationReport(report)) {
+                 indicatorItems.add(new IndicatorItem(i))
+             }
+-            for(IndicatorCategory category : IndicatorCategory.findAll()){
++            for(IndicatorCategory category : IndicatorCategory.findAll([sort: "id", order: "asc"])){
+                 CategoryItem categoryItem = new CategoryItem(category, indicatorItems)
+                 if (categoryItem.indicatorItems.size() > 0){
+                     categoryItems.put(category.code, categoryItem)

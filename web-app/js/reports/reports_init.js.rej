@@ -1,0 +1,63 @@
+diff a/web-app/js/reports/reports_init.js b/web-app/js/reports/reports_init.js	(rejected hunks)
+@@ -14,16 +14,27 @@ $(document).ready(function(){
+ 
+   $('.v-tabs-fold-toggle').click(function(event) {
+     var toggle = $(this);
++    var tabs = $('.v-tabs-nested-nav').children('li').children('a');
+     var li = toggle.parent().parent();
+     if(li.hasClass('selected')) {
+-      li.children('.v-tabs-fold-container').children().hide();
++      //li.children('.v-tabs-fold-container').children().hide();
+       li.removeClass('selected');
++      tabs.removeClass('active');
++      li.find('div#historic_trend').hide().removeClass('toggled_tab');
++      li.find('div#comparison').hide().removeClass('toggled_tab');
++      li.find('div#geo_trend').hide().removeClass('toggled_tab');
++      li.find('div#info_facility').hide().removeClass('toggled_tab');
+     } else {
+-      li.children('.v-tabs-fold-container').children().show();
++      //li.children('.v-tabs-fold-container').children().show();
+       li.addClass('selected');
+-      li.find('div#comparison').hide();
+-      li.find('div#geo_trend').hide();
+-      li.find('div#info_facility').hide();
++      tabs.removeClass('active');
++      li.find('div#historic_trend').hide().removeClass('toggled_tab');
++      li.find('div#comparison').hide().removeClass('toggled_tab');
++      li.find('div#geo_trend').hide().removeClass('toggled_tab');
++      li.find('div#info_facility').hide().removeClass('toggled_tab');
++      li.find('a#historic_trend').addClass('active');
++      li.find('div#historic_trend').addClass('toggled_tab');
++      li.find('div#historic_trend').show();
+     }
+     li.children('.v-tabs-fold-container').toggle(500);
+   });
+@@ -60,4 +71,28 @@ $(document).ready(function(){
+     $('div#' + id).show();
+   });
+ 
++  $('#checkbox-green').change(function() {
++    if(this.checked) {
++        $('.v-tabs-row-green').show();
++    } else {
++        $('.v-tabs-row-green').hide();
++    }
++   });
++
++  $('#checkbox-yellow').change(function() {
++    if(this.checked) {
++        $('.v-tabs-row-yellow').show();
++    } else {
++        $('.v-tabs-row-yellow').hide();
++    }
++   });
++
++  $('#checkbox-red').change(function() {
++    if(this.checked) {
++        $('.v-tabs-row-red').show();
++    } else {
++        $('.v-tabs-row-red').hide();
++    }
++   });
++
+ });

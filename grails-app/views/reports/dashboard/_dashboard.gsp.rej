@@ -1,0 +1,32 @@
+diff a/grails-app/views/reports/dashboard/_dashboard.gsp b/grails-app/views/reports/dashboard/_dashboard.gsp	(rejected hunks)
+@@ -3,7 +3,7 @@
+   <div id="list-grid" class="v-tabs">
+     <ul id='top_tabs' class="v-tabs-nav left" >
+       <g:each in="${categoryItems}" status="i" var="mapItem">
+-        <li ${(i==0)?'class="active"':''}>
++        <li>
+           <span class="v-tabs-formula" style="background: ${mapItem.value.color}; z-index: 5000"> </span>
+           <a id="${mapItem.key}">${mapItem.value.name}</a>
+         </li>
+@@ -11,9 +11,9 @@
+     </ul>
+     <div class="v-tabs-content right">
+       <ul class="v-tabs-filters">
+-        <li><input type="checkbox" name="green" checked="checked"/><label>Green</label></li>
+-        <li><input type="checkbox" name="yellow" checked="checked"/><label>Yellow</label></li>
+-        <li><input type="checkbox" name="red" checked="checked"/><label>Red</label></li>
++        <li><input type="checkbox" id="checkbox-green" name="green" checked="checked"/><label>Green</label></li>
++        <li><input type="checkbox" id="checkbox-yellow" name="yellow" checked="checked"/><label>Yellow</label></li>
++        <li><input type="checkbox" id="checkbox-red" name="red" checked="checked"/><label>Red</label></li>
+       </ul>
+       <g:each in="${categoryItems}" status="categoryCount" var="mapItem">
+         <g:set var="categoryCode" value="${mapItem.key}" />
+@@ -21,7 +21,7 @@
+         <div id="${categoryCode}" style="display: none">
+           <ul class="v-tabs-list">
+             <g:each in="${categoryItem.indicatorItems}" status="indicatorCount" var="indicatorItem">
+-              <li class="v-tabs-row">
++              <li class="v-tabs-row v-tabs-row-${indicatorItem.color}">
+                 <p>
+                   <a class="v-tabs-name v-tabs-fold-toggle">
+                     <span class="v-tabs-switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span> ${indicatorItem.name}
