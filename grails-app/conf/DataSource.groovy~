@@ -43,7 +43,7 @@ environments {
         dataSource {
 
 
- dbCreate = "update"
+ dbCreate = "create-drop"
             driverClassName = "com.mysql.jdbc.Driver"
             username = "root"
             password = "MYSQLnpf2020."

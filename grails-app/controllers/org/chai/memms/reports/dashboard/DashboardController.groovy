@@ -43,8 +43,9 @@ class DashboardController extends AbstractController {
 
     def dashboardService
     def indicatorComputationService
-
+ 
     def indicators = {
+        indicatorComputationService.computeCurrentReport()
         LocationReport report = getUserReport()
         List<IndicatorItem> indicatorItems = new ArrayList<IndicatorItem>()
         Map<String, CategoryItem> categoryItems = new HashMap<String, CategoryItem>()
@@ -64,7 +65,7 @@ class DashboardController extends AbstractController {
                 template:"/reports/dashboard/dashboard"
             ])
     }
-
+       
     def getUserReport() {
         MemmsReport memmsReport = dashboardService.getCurrentMemmsReport()
         if(memmsReport == null) {
