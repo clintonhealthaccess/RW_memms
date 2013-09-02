@@ -36,7 +36,7 @@ class MemmsReport {
     //Date generatedAt
 	Date eventDate
 
-    static hasMany = [s:LocationReport]
+    static hasMany = [locationReport:LocationReport]
     static mapping ={
         table "memms_report_memms_report"
         version false
