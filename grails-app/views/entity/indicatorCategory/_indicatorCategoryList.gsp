@@ -21,7 +21,7 @@
       </ul>
     </td>
     <td><g:stripHtml field="${indicatorCategory.code}" chars="25"/></td>
-  <td><g:stripHtml field="${indicatorCategory.name}" chars="50"/></td>
+  <td><g:i18n field="${indicatorCategory.names}"/></td>
   <td><g:formatNumber number="${indicatorCategory.redToYellowThreshold}" format="0%"/></td>
   <td><g:formatNumber number="${indicatorCategory.yellowToGreenThreshold}" format="0%"/></td>
   </tr>

@@ -37,6 +37,7 @@ import org.joda.time.DateTime
 import org.chai.location.LocationLevel
 import org.chai.memms.security.User
 import java.sql.ResultSet
+import org.chai.memms.util.Utils;
 /**
  * 
  *@author Antoine Nzeyi, Donatien Masengesho, Pivot Access Ltd
@@ -76,7 +77,7 @@ class IndicatorComputationService {
      def computeLocationReport(Date currentDate, CalculationLocation location, MemmsReport memmsReport) {
         LocationReport locationReport = new LocationReport(eventDate: currentDate, memmsReport: memmsReport, location:location).save()
         for(Indicator indicator: Indicator.findAllByActive(true)) {
-            System.out.println(" >>> Calculating report " + indicator.code + " for " + location.names);
+            if (log.isDebugEnabled()) log.debug("computeLocationReport calculating report " + indicator.code + " for " + location.names);
             try{
                 
                 def compvalue = computeIndicatorForLocation(indicator, location)
@@ -86,11 +87,17 @@ class IndicatorComputationService {
                 if(indicatorValue!=null) {
                    
                     Map<String,Double> map= groupComputeIndicatorForLocation(indicatorValue.indicator,location)
+
                     if(map!=null) {
-                      
+
                         for (Map.Entry<String, Double> entry : (Set)map.entrySet()){
-                            def groupIndicatorValue=new GroupIndicatorValue(eventDate:currentDate,name:entry.getKey(),value:entry.getValue(),indicatorValue:indicatorValue).save()
-                         
+
+                            if (log.isDebugEnabled()) log.debug("computeLocationReport entry.getKey() " + entry.getKey() + " entry.getValue() " + entry.getValue());
+
+                            // def groupIndicatorValue=new GroupIndicatorValue(generatedAt:currentDate,names:entry.getKey(),value:entry.getValue(),indicatorValue:indicatorValue).save()
+                            def groupIndicatorValue=new GroupIndicatorValue(generatedAt:currentDate,value:entry.getValue(),indicatorValue:indicatorValue)
+                            Utils.setLocaleValueInMap(groupIndicatorValue,['en':entry.getKey(),'fr':entry.getKey()],"Names")
+                            groupIndicatorValue.save()
                         }
                           
                     }
@@ -100,6 +107,8 @@ class IndicatorComputationService {
             }
         }
     }
+
+    // compute indicator
 
     def computeIndicatorForLocation(Indicator indicator, CalculationLocation location) {
         if (location == null) {
@@ -188,7 +197,11 @@ class IndicatorComputationService {
         return ret
     }
 
+    // compute group
+
     def groupComputeIndicatorForLocation(Indicator indicator, CalculationLocation location) {
+        if (log.isDebugEnabled()) log.debug("groupComputeIndicatorForLocation indicator " + indicator + ", location " + location);
+
         if (location == null) {
             return  null
         }
@@ -208,6 +221,8 @@ class IndicatorComputationService {
     }
 
     def groupComputeIndicatorForDataLocations(Indicator indicator, def dataLocations) {
+        if (log.isDebugEnabled()) log.debug("groupComputeIndicatorForDataLocations indicator " + indicator + ", dataLocations " + dataLocations);
+
         if(dataLocations == null)
         return null
         String cond = "";
@@ -229,11 +244,14 @@ class IndicatorComputationService {
     }
 
     def groupComputeIndicatorForAllDataLocations(Indicator indicator) {
+        if (log.isDebugEnabled()) log.debug("groupComputeIndicatorForAllDataLocations indicator " + indicator);
         
         return groupComputeIndicatorWithDataLocationCondition(indicator, " is not null ")
     }
 
     def groupComputeIndicatorWithDataLocationCondition(Indicator indicator, String dataLocationCondition) {
+        if (log.isDebugEnabled()) log.debug("groupComputeIndicatorWithDataLocationCondition indicator " + indicator + ", dataLocationCondition " + dataLocationCondition);
+
         String mScript = ""
         if(indicator.groupQueryScript != null) {
             mScript = indicator.groupQueryScript
@@ -250,11 +268,13 @@ class IndicatorComputationService {
     }
 
     def groupComputeScriptWithDataLocationCondition(String script, Boolean sql, String dataLocationCondition) {
-      
+        if (log.isDebugEnabled()) log.debug("groupComputeScriptWithDataLocationCondition script " + script + ", dataLocationCondition " + dataLocationCondition);
+
         return groupComputeScript(script.replace(DATA_LOCATION_TOKEN, dataLocationCondition), sql);
     }
 
     def groupComputeScript(String script, Boolean sql) {
+        if (log.isDebugEnabled()) log.debug("groupComputeScript script " + script + ", sql " + sql);
       
         if(sql) {
             return groupExecuteSQL(script)
@@ -264,11 +284,14 @@ class IndicatorComputationService {
     }
 
     def groupExecuteHQL(String hql) {
+        if (log.isDebugEnabled()) log.debug("groupExecuteHQL hql " + hql);
+
         Map<String, Double> map = new HashMap<String, Double>()
         if(hql!=null) {
             def res =  sessionFactory.getCurrentSession().createQuery(hql).list()
             if(res[0] != null) {
                 for(Object arr : res) {
+                    if (log.isDebugEnabled()) log.debug("groupExecuteHQL arr " + arr);
                     map.put((String)arr[0], (Double)arr[1])
                 }
             }
@@ -277,12 +300,14 @@ class IndicatorComputationService {
     }
 
       def groupExecuteSQL(String sql) {
+        if (log.isDebugEnabled()) log.debug("groupExecuteHQL sql " + sql);
          
         Map<String, Double> map = new HashMap<String, Double>()
         if(sql != null) {
             def res = sessionFactory.getCurrentSession().createSQLQuery(sql).list()
             if(res[0] != null) {
                 for(Object arr : res) {
+                    if (log.isDebugEnabled()) log.debug("groupExecuteSQL arr " + arr);
                     if(Double.parseDouble(arr[1] + ""))
                     map.put(arr[0], (Double)arr[1])
                 }
