@@ -54,9 +54,9 @@ class Indicator {
     }
 
     String code
-    String name
-    String description
-    String formula
+    String names
+    String descriptions
+    String formulas
     String unit
 
     Double redToYellowThreshold
@@ -68,13 +68,14 @@ class Indicator {
     String queryScript
     Boolean sqlQuery
     Boolean active
-    String groupName
+    String groupNames
     String groupQueryScript
 
     static i18nFields = [
-		"name",
-		"description",
-		"formula","groupName"
+		"names",
+		"descriptions",
+		"formulas",
+        "groupNames"
     ]
     static belongsTo = [category:IndicatorCategory]
     static hasMany = [values:IndicatorValue]
@@ -88,9 +89,9 @@ class Indicator {
 
     static constraints = {
         code (blank:false, nullable:false, unique:true)
-        name (blank:false, nullable:false, size:3..250)
-        description (blank:true, nullable:true, size:0..1000)
-        formula (blank:false, nullable:false, size:0..1000)
+        names (blank:true, nullable:true, size:3..250)
+        descriptions (blank:true, nullable:true, size:0..1000)
+        formulas (blank:true, nullable:true, size:0..1000)
         unit (blank:false, nullable:false)
         redToYellowThreshold (blank:false, nullable:false)
         yellowToGreenThreshold (blank:false, nullable:false)
@@ -98,7 +99,7 @@ class Indicator {
         sqlQuery (blank:false, nullable:false)
         active (blank:false, nullable:false)
         category (nullable: false)
-        groupName (blank:false, nullable:true, unique:false)
+        groupNames (blank:true, nullable:true, unique:false)
         groupQueryScript (blank:false, nullable:true, size:0..8000)
     }
 

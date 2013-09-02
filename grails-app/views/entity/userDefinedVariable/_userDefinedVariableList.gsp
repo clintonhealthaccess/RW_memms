@@ -20,7 +20,7 @@
       </ul>
     </td>
     <td><g:stripHtml field="${userDefinedVariable.code}" chars="25"/></td>
-  <td><g:stripHtml field="${userDefinedVariable.name}" chars="50"/></td>
+  <td><g:stripHtml field="${userDefinedVariable.names}" chars="50"/></td>
   <td>${userDefinedVariable.currentValue}</td>
   </tr>
 </g:each>

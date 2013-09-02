@@ -37,16 +37,16 @@ class IndicatorService {
     def sessionFactory;
 
     List<Indicator> searchIndicator(String text, Map<String, String> params) {
+        def dbFieldNames = 'names_'+languageService.getCurrentLanguagePrefix();
+        def dbFieldDescritpions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
+        def dbFieldFormulas = 'formulas_'+languageService.getCurrentLanguagePrefix();
         def criteria = Indicator.createCriteria()
         return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
             or {
                 ilike("code", "%" + text + "%")
-                ilike("name_en", "%" + text + "%")
-                ilike("description_en", "%" + text + "%")
-                ilike("formula_en", "%" + text + "%")
-                ilike("name_fr", "%" + text + "%")
-                ilike("description_fr", "%" + text + "%")
-                ilike("formula_fr", "%" + text + "%")
+                ilike(dbFieldNames, "%" + text + "%")
+                ilike(dbFieldDescritpions, "%" + text + "%")
+                ilike(dbFieldFormulas, "%" + text + "%")
             }
         }
     }
