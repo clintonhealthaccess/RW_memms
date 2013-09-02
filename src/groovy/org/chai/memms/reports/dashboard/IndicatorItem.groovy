@@ -41,6 +41,7 @@ import java.util.*
 import org.chai.memms.security.User
 import org.apache.shiro.SecurityUtils
 import java.util.Collections;
+import org.joda.time.format.DateTimeFormat
 /**
  * @author Antoine Nzeyi, Donatien Masengesho, Pivot Access Ltd
  *
@@ -50,7 +51,7 @@ class IndicatorItem {
     IndicatorComputationService indicatorComputationService
     String facilityNames
     String categoryCode
-    Date dateTime
+    Date computedAt
     String code
     String names
     String groupNames
@@ -69,7 +70,7 @@ class IndicatorItem {
 
     public IndicatorItem(IndicatorValue iv) {
         this.categoryCode = iv.indicator.category.code
-        this.dateTime = iv.computedAt
+        this.computedAt = iv.computedAt
         this.code = iv.indicator.code
         this.names = iv.indicator.names
         this.formulas = iv.indicator.formulas
@@ -275,9 +276,9 @@ class IndicatorItem {
     public def historicalTrendData() {
         def ret = []
         def i = 0
-        def fmt = org.joda.time.format.DateTimeFormat.forPattern("MMM d, y")
+        def fmt = DateTimeFormat.forPattern("MMM d, y")
         for(HistoricalValueItem h: historicalValueItems) {
-            ret[i] = ["\""+fmt.print(h.dateTime.time)+"\"",h.value]
+            ret[i] = ["\""+fmt.print(h.computedAt.time)+"\"",h.value]
             i++
         }
         if(i == 0) {

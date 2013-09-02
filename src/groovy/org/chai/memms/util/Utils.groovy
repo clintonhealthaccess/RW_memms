@@ -242,6 +242,15 @@ public class Utils {
 				object."$methodName"("",new Locale(loc))
 		}
 	}
+
+    public static buildSubQueryLanguages(def queryPortion){
+        def queryPortions = [] 
+        def grailsApplication = new User().domainClass.grailsApplication
+        grailsApplication.config.i18nFields.locales.each{ loc ->
+            queryPortions.add(queryPortion+'_'+loc)
+        }
+        return queryPortions.join(",")
+    }
 	
 	public static Date getDate( int day, int month, int year) {
 		final Calendar calendar = Calendar.getInstance();

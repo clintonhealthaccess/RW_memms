@@ -33,12 +33,12 @@ import org.chai.memms.reports.dashboard.IndicatorValue;
  *
  */
 class HistoricalValueItem {
-    Date dateTime
+    Date computedAt
     Double value
     String unit
     String color
     public HistoricalValueItem(IndicatorValue iv){
-        this.dateTime = iv.computedAt
+        this.computedAt = iv.computedAt
         this.value = iv.computedValue
         this.unit = iv.indicator.unit
         Double red = iv.indicator.redToYellowThreshold

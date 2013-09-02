@@ -26,6 +26,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package org.chai.memms.reports.dashboard
+import org.chai.memms.util.Utils;
 /**
  * @author Antoine Nzeyi, Donatien Masengesho, Pivot Access Ltd
  *
@@ -41,7 +42,7 @@ class DashboardInitializer {
     //Indicator computation scripts
     //Slid 7:Share of operational equipment
     public static final String SHARE_OPERATIONAL_SIMPLE_SLD7="select 1.0*count(equ.id)/(select count(equIn.id) as count1 from Equipment as equIn where equIn.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equIn.dataLocation @DATA_LOCATION) from Equipment as equ where equ.currentStatus='OPERATIONAL' and equ.dataLocation @DATA_LOCATION"
-    public static final String SHARE_OPERATIONAL_GROUP_SLD7="select equ.type.names_en,1.0*count(equ.id)/(select count(equIn.id) as count1 from Equipment as equIn where equIn.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equIn.dataLocation @DATA_LOCATION) from Equipment as equ where equ.currentStatus='OPERATIONAL' and equ.dataLocation @DATA_LOCATION group by equ.type"
+    public static final String SHARE_OPERATIONAL_GROUP_SLD7="select "+Utils.buildSubQueryLanguages("equ.type.names")+",1.0*count(equ.id)/(select count(equIn.id) as count1 from Equipment as equIn where equIn.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equIn.dataLocation @DATA_LOCATION) from Equipment as equ where equ.currentStatus='OPERATIONAL' and equ.dataLocation @DATA_LOCATION group by equ.type"
     // //Slie 8:Share of equipment for disposal
     // public static final String SHARE_DISPOSAL_SIMPLE_SLD8="select 1.0*count(equ.id)/(select count(equIn.id) as count1 from Equipment as equIn where equIn.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equIn.dataLocation @DATA_LOCATION) from Equipment as equ where equ.currentStatus='FORDISPOSAL' and equ.dataLocation @DATA_LOCATION"
     // public static final String SHARE_DISPOSAL_GROUP_SLD8="select equ.type.names_en,1.0*count(equ.code)/(select count(equIn.code) as count1 from Equipment as equIn where equIn.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equIn.dataLocation @DATA_LOCATION) from Equipment as equ where equ.currentStatus='FORDISPOSAL' and equ.dataLocation @DATA_LOCATION group by equ.type"
@@ -54,9 +55,9 @@ class DashboardInitializer {
     // //Slie 11:Share of equipment donated
     // public static final String SHARE_DONATED_SIMPLE_SLD11="select 1.0*count(equ.id)/(select count(equIn.id) as count1 from Equipment as equIn where equIn.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equIn.dataLocation @DATA_LOCATION) from Equipment as equ where equ.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equ.purchaser='BYDONOR' and equ.dataLocation @DATA_LOCATION"
     // public static final String SHARE_DONATED_GROUP_SLD11="select equ.type.names_en,1.0*count(equ.code)/(select count(equIn.code) as count1 from Equipment as equIn where equIn.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equIn.dataLocation @DATA_LOCATION) from Equipment as equ where equ.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equ.purchaser='BYDONOR' and equ.dataLocation @DATA_LOCATION group by equ.type"
-    // //Slie 12:Share of obsolete equipment
+    //Slie 12:Share of obsolete equipment
     public static final String SHARE_OBSOLETE_SIMPLE_SLD12="select 1.0*count(equ.code)/(select count(equIn.code) as count1 from Equipment as equIn where equIn.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equIn.dataLocation @DATA_LOCATION) from Equipment as equ where equ.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equ.obsolete=1 and equ.dataLocation @DATA_LOCATION"
-    public static final String SHARE_OBSOLETE_GROUP_SLD12="select equ.type.names_en,1.0*count(equ.code)/(select count(equIn.code) as count1 from Equipment as equIn where equIn.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equIn.dataLocation @DATA_LOCATION) from Equipment as equ where equ.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equ.obsolete=1 and equ.dataLocation @DATA_LOCATION group by equ.type"
+    public static final String SHARE_OBSOLETE_GROUP_SLD12="select "+Utils.buildSubQueryLanguages("equ.type.names")+",1.0*count(equ.code)/(select count(equIn.code) as count1 from Equipment as equIn where equIn.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equIn.dataLocation @DATA_LOCATION) from Equipment as equ where equ.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equ.obsolete=1 and equ.dataLocation @DATA_LOCATION group by equ.type"
     // //Slie 13:Share of equipment under active warranty or an active service provider contract
     // public static final String SHARE_ACTIVE_WARANTY_SIMPLE_SLD13="select count(equ.code)/(select count(f.code) from memms_equipment f where f.current_status in ('OPERATIONAL','PARTIALLYOPERATIONAL','UNDERMAINTENANCE','INSTOCK') and f.data_location_id @DATA_LOCATION) as final_result from memms_equipment as equ where equ.current_status in ('OPERATIONAL','UNDERMAINTENANCE','PARTIALLYOPERATIONAL','INSTOCK') and (dateDiff(NOW(),equ.warranty_start_date)<(equ.warranty_period_number_of_months)*30 or dateDiff(NOW(),equ.service_contract_start_date)<(equ.service_contract_period_number_of_months)*30) and equ.data_location_id @DATA_LOCATION"
     // public static final String SHARE_ACTIVE_WARANTY_GROUP_SLD13="select et.names_en,count(equ.code)/(select count(f.code) from memms_equipment f where f.current_status in ('OPERATIONAL','PARTIALLYOPERATIONAL','UNDERMAINTENANCE','INSTOCK') and f.data_location_id @DATA_LOCATION) as final_result from memms_equipment as equ,memms_equipment_type et where equ.type_id=et.id and equ.current_status in ('OPERATIONAL','UNDERMAINTENANCE','PARTIALLYOPERATIONAL','INSTOCK') and (dateDiff(NOW(),equ.warranty_start_date)<(equ.warranty_period_number_of_months)*30 or dateDiff(NOW(),equ.service_contract_start_date)<(equ.service_contract_period_number_of_months)*30) and equ.data_location_id @DATA_LOCATION group by equ.type_id"
@@ -66,9 +67,10 @@ class DashboardInitializer {
     // //Slie 15:Share of equipments for which a work order was generated=>rev ok
     // public static final String SHARE_WORK_ORDER_GEN_SIMPLE_SLD15="select 1.0*count(equ.code)/(select count(f.code) from Equipment f where f.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and f.dataLocation @DATA_LOCATION)  from WorkOrder wo join wo.equipment equ where wo.equipment.id is not null and equ.dataLocation @DATA_LOCATION"
     // public static final String SHARE_WORK_ORDER_GEN_GROUP_SLD15="select wo.equipment.type.names_en,1.0*count(wo.equipment.id)/(select count(f.code) from Equipment f where f.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and f.dataLocation @DATA_LOCATION)  from WorkOrder wo  where wo.equipment.id is not null and wo.equipment.dataLocation @DATA_LOCATION group by  wo.equipment.type"
-    // //Slie 16:Degree of corrective maintenance execution according to benchmark=rev ok
-    // public static final String DEGREE_CORRECTIVE_EX_SIMPLE_SLD16="select 1.0*count(wo1.id)/(select count(wo.id) from WorkOrderStatus wos join wos.workOrder wo join wo.equipment as equ where equ.dataLocation @DATA_LOCATION) from WorkOrderStatus wos1 join wos1.workOrder wo1 join wo1.equipment as equ1 where wo1.currentStatus='CLOSEDFIXED' and (dateDiff(NOW(),wo1.returnedOn) < #DEGGREE_CORRE_MAINT_EXECUTION or dateDiff(NOW(),wos1.dateCreated) < #DEGGREE_CORRE_MAINT_EXECUTION) and equ1.dataLocation @DATA_LOCATION"
-    // public static final String DEGREE_CORRECTIVE_EX_GROUP_SLD16="select equ1.type.names_en as names,1.0*count(wo1.id)/(select count(wo.id) from WorkOrderStatus wos join wos.workOrder wo join wo.equipment as equ where equ.dataLocation @DATA_LOCATION) as final_result from WorkOrderStatus wos1 join wos1.workOrder wo1 join wo1.equipment as equ1 where wo1.currentStatus='CLOSEDFIXED' and (dateDiff(NOW(),wo1.returnedOn) < #DEGGREE_CORRE_MAINT_EXECUTION or dateDiff(NOW(),wos1.dateCreated) < #DEGGREE_CORRE_MAINT_EXECUTION) and equ1.dataLocation @DATA_LOCATION group by equ1.type"
+    //Slie 16:Degree of corrective maintenance execution according to benchmark=rev ok
+    public static final String DEGREE_CORRECTIVE_EX_SIMPLE_SLD16="select 1.0*count(wo1.id)/(select count(wo.id) from WorkOrderStatus wos join wos.workOrder wo join wo.equipment as equ where equ.dataLocation @DATA_LOCATION) from WorkOrderStatus wos1 join wos1.workOrder wo1 join wo1.equipment as equ1 where wo1.currentStatus='CLOSEDFIXED' and (dateDiff(NOW(),wo1.returnedOn) < #DEGGREE_CORRE_MAINT_EXECUTION or dateDiff(NOW(),wos1.dateCreated) < #DEGGREE_CORRE_MAINT_EXECUTION) and equ1.dataLocation @DATA_LOCATION"
+    //time frame to be decided by the user
+    public static final String DEGREE_CORRECTIVE_EX_GROUP_SLD16="select equ1.type.names_en as names,1.0*count(wo1.id)/(select count(wo.id) from WorkOrderStatus wos join wos.workOrder wo join wo.equipment as equ where equ.dataLocation @DATA_LOCATION) as final_result from WorkOrderStatus wos1 join wos1.workOrder wo1 join wo1.equipment as equ1 where wo1.currentStatus='CLOSEDFIXED' and (dateDiff(NOW(),wo1.returnedOn) < #DEGGREE_CORRE_MAINT_EXECUTION or dateDiff(NOW(),wos1.dateCreated) < #DEGGREE_CORRE_MAINT_EXECUTION) and equ1.dataLocation @DATA_LOCATION group by equ1.type"
     // //Slie 17:Share of work orders witnessing re-incidence in a period of time (user defined)
     // public static final String SHARE_WORK_ORDER_WITNESSING_SIMPLE_SLD17="select numerator.reincidenceorders/denominator.denominatorRes as final_result from (select count(woo.equipment_id) as reincidenceorders,st.contact_contact_name as providername from memms_equipment equ,memms_provider st,memms_work_order woo  where (equ.service_provider_id=st.id or equ.supplier_id=st.id or equ.manufacturer_id=st.id ) and equ.id=woo.equipment_id and dateDiff(NOW(),woo.open_on)<=#WO_REINCIDENCE_DAYS and equ.data_location_id @DATA_LOCATION)numerator,(select count(woo1.equipment_id) as denominatorRes from memms_equipment equ1,memms_work_order woo1  where equ1.id=woo1.equipment_id and dateDiff(NOW(),woo1.open_on)<=#WO_REINCIDENCE_DAYS and equ1.data_location_id @DATA_LOCATION) denominator where numerator.reincidenceorders >=2"
     // public static final String SHARE_WORK_ORDER_WITNESSING_GROUP_SLD17="select numerator.providername,numerator.reincidenceorders/denominator.denominatorRes as final_result from (select count(woo.equipment_id) as reincidenceorders,st.contact_contact_name as providername from memms_equipment equ,memms_provider st,memms_work_order woo  where (equ.service_provider_id=st.id or equ.supplier_id=st.id or equ.manufacturer_id=st.id ) and equ.id=woo.equipment_id and dateDiff(NOW(),woo.open_on)<=#WO_REINCIDENCE_DAYS and equ.data_location_id @DATA_LOCATION group by st.id)numerator,(select count(woo1.equipment_id) as denominatorRes from memms_equipment equ1,memms_work_order woo1 where equ1.id=woo1.equipment_id and dateDiff(NOW(),woo1.open_on)<=#WO_REINCIDENCE_DAYS and equ1.data_location_id @DATA_LOCATION) denominator where numerator.reincidenceorders>=2"
@@ -94,8 +96,8 @@ class DashboardInitializer {
     // public static final String SHARE_PROBLEM_MISUSE_SIMPLE_SLD24="select 1.0*count(wo.id)/(select count(wo.id) from WorkOrder wo join wo.equipment as equ where equ.dataLocation @DATA_LOCATION) from WorkOrder wo join wo.equipment as equ where wo.failureReason='MISUSE' and equ.dataLocation @DATA_LOCATION"
     // public static final String SHARE_PROBLEM_MISUSE_GROUP_SLD24="select equ.type.names_en,1.0*count(wo.id)/(select count(wo.id) from WorkOrder wo join wo.equipment as equ where equ.dataLocation @DATA_LOCATION) from WorkOrder wo join wo.equipment as equ where wo.failureReason='MISUSE' and equ.dataLocation @DATA_LOCATION group by equ.type"
     // //Slie 26:Degree of execution of preventive maintenance
-    // public static final String DEGREE_EXCUTION_PREV_SIMPLE_SLD26="select 1.0*count(prwo.id)/(select count(prwo.id) FROM PreventiveOrder prwo join prwo.equipment as equ1  where equ1.dataLocation @DATA_LOCATION) FROM PreventiveProcess prProc join prProc.prevention pr join pr.order as prwo join prwo.equipment as equ where equ.dataLocation @DATA_LOCATION"
-    // public static final String DEGREE_EXCUTION_PREV_GROUP_SLD26="select equ.type.names_en,1.0*count(prwo.id)/(select count(prwo.id) FROM PreventiveOrder prwo join prwo.equipment as equ1  where equ1.dataLocation @DATA_LOCATION) FROM PreventiveProcess prProc join prProc.prevention pr join pr.order as prwo join prwo.equipment as equ where equ.dataLocation @DATA_LOCATION group by equ.type"
+     public static final String DEGREE_EXCUTION_PREV_SIMPLE_SLD26="select 1.0*count(prevention.id)/(select count(prwo.id) FROM PreventiveOrder prwo join prwo.equipment as equ1  where equ1.dataLocation @DATA_LOCATION) FROM Prevention prevention join prevention.order as pOrder join pOrder.equipment as equ where equ.dataLocation @DATA_LOCATION"
+     public static final String DEGREE_EXCUTION_PREV_GROUP_SLD26="select "+Utils.buildSubQueryLanguages("equ.type.names")+",1.0*count(prevention.id)/(select count(prwo.id) FROM PreventiveOrder prwo join prwo.equipment as equ1  where equ1.dataLocation @DATA_LOCATION) FROM Prevention prevention  join prevention.order as pOrder join pOrder.equipment as equ where equ.dataLocation @DATA_LOCATION group by equ.type"
     // //Slie 27:Share of maintenance executed at the facility
     // public static final String SHARE_MAIN_EXC_SIMPLE_SLD27="select 1.0*count(prwo.id)/(select count(prwo.id) FROM PreventiveOrder prwo join prwo.equipment as equ1  where equ1.dataLocation @DATA_LOCATION) FROM Prevention pr join pr.order as prwo join prwo.equipment as equ where equ.dataLocation @DATA_LOCATION"
     // public static final String SHARE_MAIN_EXC_GROUP_SLD27="select equ.type.names_en,1.0*count(prwo.id)/(select count(prwo.id) FROM PreventiveOrder prwo join prwo.equipment as equ1  where equ1.dataLocation @DATA_LOCATION) FROM Prevention pr join pr.order as prwo join prwo.equipment as equ where equ.dataLocation @DATA_LOCATION group by equ.type"
@@ -146,54 +148,40 @@ class DashboardInitializer {
     public static createIndicators() {
         def equipementManagment = IndicatorCategory.findByCode(MANAGEMENT_EQUIPMENT)
         if(equipementManagment != null) {
+
             //Slid 7:Share of operational equipment
-            new Indicator(
-
-                category:equipementManagment, 
-                code:"SHARE_OPE_EQUIPMENT", 
-                names:['en':'Share of operational equipment','fr':'Share of operational equipment'],
-                descriptions:['en':'Share of operational equipment','fr':'Share of operational equipment'],
-                formulas:[
-                    'en':'(total number equipment with STATUS=Operational) / by (total number equipment with STATUS={Operational Partially operational Under maintenance})',
-                    'fr':'(total number equipment with STATUS=Operational) / by (total number equipment with STATUS={Operational Partially operational Under maintenance})'
+            newIndicator(
+                equipementManagment,
+                "SHARE_OPE_EQUIPMENT", 
+                ["en":"Share of operational equipment","fr":"Share of operational equipment fr"],
+                ["en":"Share of operational equipment","fr":"Share of operational equipment fr"],
+                [
+                    "en":"(total number equipment with STATUS=Operational) / by (total number equipment with STATUS={Operational Partially operational Under maintenance})",
+                    "fr":"(total number equipment with STATUS=Operational) / by (total number equipment with STATUS={Operational Partially operational Under maintenance}) fr"
                 ],
-                unit:"%",
-                redToYellowThreshold:0.8,
-                yellowToGreenThreshold:0.9, 
-                historicalPeriod:Indicator.HistoricalPeriod.QUARTERLY, 
-                historyItems:8, 
-                queryScript:SHARE_OPERATIONAL_SIMPLE_SLD7, 
-                groupNames:['en':'Type of Equipment','fr':'Type d\'equipment'],
-                groupQueryScript:SHARE_OPERATIONAL_GROUP_SLD7,
-                sqlQuery:false, 
-                active:true
-
-                ).save(failOnError: true, flush:true)
+                "%",0.8,0.9,Indicator.HistoricalPeriod.QUARTERLY,8, 
+                SHARE_OPERATIONAL_SIMPLE_SLD7, 
+                ["en":"Type of Equipment","fr":"Type d'equipment fr"],
+                SHARE_OPERATIONAL_GROUP_SLD7,
+                false,true
+            )
 
             // //Slie 12:Share of obsolete equipment
-            new Indicator(
-
-                category:equipementManagment, 
-                code:"SHARE_OBSOLETE_EQUIPMENT", 
-                names:['en':'Share of obsolete equipment','fr':'Share of obsolete equipment'],
-                descriptions:['en':'Share of obsolete equipment','fr':'Share of obsolete equipment'],
-                formulas:[
-                    'en':'(total number equipment with STATUS={Operational; Partially operational, Under maintenance} and OBSELETE BOX CHECKED)/(total number equipment with  STATUS = {Operational; Partially operational, Under maintenance})',
-                    'fr':'(total number equipment with STATUS={Operational; Partially operational, Under maintenance} and OBSELETE BOX CHECKED)/(total number equipment with  STATUS = {Operational; Partially operational, Under maintenance})'
+            newIndicator(
+                equipementManagment, 
+                "SHARE_OBSOLETE_EQUIPMENT", 
+                ["en":"Share of obsolete equipment","fr":"Share of obsolete equipment fr"],
+                ["en":"Share of obsolete equipment","fr":"Share of obsolete equipment fr"],
+                [
+                    "en":"(total number equipment with STATUS={Operational; Partially operational, Under maintenance} and OBSELETE BOX CHECKED)/(total number equipment with  STATUS = {Operational; Partially operational, Under maintenance})",
+                    "fr":"(total number equipment with STATUS={Operational; Partially operational, Under maintenance} and OBSELETE BOX CHECKED)/(total number equipment with  STATUS = {Operational; Partially operational, Under maintenance}) fr"
                 ],
-                unit:"%",
-                redToYellowThreshold:0.30,
-                yellowToGreenThreshold:0.10, 
-                historicalPeriod:Indicator.HistoricalPeriod.MONTHLY, 
-                historyItems:5, 
-                queryScript:SHARE_OBSOLETE_SIMPLE_SLD12, 
-                groupNames:['en':'Type of Equipment','fr':'Type d\'equipment'],
-                groupQueryScript:SHARE_OBSOLETE_GROUP_SLD12,
-                sqlQuery:false, 
-                active:true
-
-                ).save(failOnError: true, flush:true)
-
+                "%",0.30,0.10,Indicator.HistoricalPeriod.MONTHLY,5, 
+                SHARE_OBSOLETE_SIMPLE_SLD12, 
+                ["en":"Type of Equipment","fr":"Type d'equipment fr"],
+                SHARE_OBSOLETE_GROUP_SLD12,
+                false,true
+            )
             // //Slie 8:Share of equipment for disposal
             // new Indicator(category:equipementManagment, code:"SHARE_DISPOSAL_MANAGEMENT", name_en:"Share of equipment for disposal",name_fr:"Share of equipment for disposal",description_en:"Share of equipment for disposal",description_fr:"Share of equipment for disposal", formula_en:"total number equipment with STATUS=For disposal)/ (total number equipment with STATUS={Operational; Partially operational Under maintenanceFor disposal})", formula_fr:"total number equipment with STATUS=For disposal)/ (total number equipment with STATUS={Operational; Partially operational Under maintenanceFor disposal})",unit:"%",redToYellowThreshold:0.06,yellowToGreenThreshold:0.09, historicalPeriod:Indicator.HistoricalPeriod.QUARTERLY, historyItems:8, queryScript:SHARE_DISPOSAL_SIMPLE_SLD8, groupName_en:"Type of Equipment", groupName_fr:"Type of Equipment", groupQueryScript:SHARE_DISPOSAL_GROUP_SLD8,sqlQuery:false, active:true).save(failOnError: true, flush:true)
             // //Slie 9:Share of equipment in stock
@@ -213,8 +201,22 @@ class DashboardInitializer {
         if(correctiveMaintenance != null) {
      //        //Slie 15:Share of equipments for which a work order was generated
      //        new Indicator(category:correctiveMaintenance, code:"SHARE_WORK_ORDER_CORR_MAINTENANCE", name_en:"Share of equipments for which a work order was generated",name_fr:"Share of equipments for which a work order was generated",description_en:"Share of equipments for which a work order was generated",description_fr:"Share of equipments for which a work order was generated", formula_en:"Total number of equipments for which work order was generated / total number of equipment with status ={ “Operational”, “Partially operational”,”Under maintenance”}", formula_fr:"Total number of equipments for which work order was generated / total number of equipment with status ={ “Operational”, “Partially operational”,”Under maintenance”}",unit:"%",redToYellowThreshold:0.15,yellowToGreenThreshold:0.20, historicalPeriod:Indicator.HistoricalPeriod.QUARTERLY, historyItems:8, queryScript:SHARE_WORK_ORDER_GEN_SIMPLE_SLD15, groupName_en:"Type of Equipment", groupName_fr:"Type of Equipment", groupQueryScript:SHARE_WORK_ORDER_GEN_GROUP_SLD15,sqlQuery:false, active:true).save(failOnError: true, flush:true)
-     //        //Slie 16:Degree of corrective maintenance execution according to benchmark
-     //        new Indicator(category:correctiveMaintenance, code:"DEGREE_CORR_EXEC_BENCHNARK_MAINTENANCE", name_en:"Degree of corrective maintenance execution according to benchmark",name_fr:"Degree of corrective maintenance execution according to benchmark",description_en:"Degree of corrective maintenance execution according to benchmark",description_fr:"Degree of corrective maintenance execution according to benchmark", formula_en:"Total no. of work orders with status changed from “open at facility” or “open at MM” to “Closed fixed”/ total no. of work orders generated in a given time frame (time frame to be decided by the user)", formula_fr:"Total no. of work orders with status changed from “open at facility” or “open at MM” to “Closed fixed”/ total no. of work orders generated in a given time frame (time frame to be decided by the user)",unit:"%",redToYellowThreshold:0.85,yellowToGreenThreshold:0.95, historicalPeriod:Indicator.HistoricalPeriod.QUARTERLY, historyItems:8, queryScript:DEGREE_CORRECTIVE_EX_SIMPLE_SLD16, groupName_en:"Type of Equipment", groupName_fr:"Type of Equipment", groupQueryScript:DEGREE_CORRECTIVE_EX_GROUP_SLD16,sqlQuery:false, active:true).save(failOnError: true, flush:true)
+            //Slie 16:Degree of corrective maintenance execution according to benchmark
+            newIndicator(
+                correctiveMaintenance, 
+                "DEGREE_CORR_EXEC_BENCHNARK_MAINTENANCE", 
+                ["en":"Degree of corrective maintenance execution according to benchmark","fr":"Degree of corrective maintenance execution according to benchmark fr"],
+                ["en":"Degree of corrective maintenance execution according to benchmark","fr":"Degree of corrective maintenance execution according to benchmark fr"], 
+                [
+                    "en":"Total no. of work orders with status changed from “open at facility” or “open at MM” to “Closed fixed”/ total no. of work orders generated in a given time frame (time frame to be decided by the user)", 
+                    "fr":"Total no. of work orders with status changed from “open at facility” or “open at MM” to “Closed fixed”/ total no. of work orders generated in a given time frame (time frame to be decided by the user) fr"
+                ],
+                "%", 0.85, 0.95, Indicator.HistoricalPeriod.QUARTERLY, 8, 
+                DEGREE_CORRECTIVE_EX_SIMPLE_SLD16, 
+                ["en":"Type of Equipment","fr":"Type of Equipment fr"], 
+                DEGREE_CORRECTIVE_EX_GROUP_SLD16,
+                false, true
+            )
      //        //Slie 17:Share of work orders witnessing re-incidence in a period of time (user defined)
      //        new Indicator(category:correctiveMaintenance, code:"SHARE_REINCIDENCE_CORR_MAINTENANCE", name_en:"Share of work orders witnessing re-incidence in a period of time (user defined)",name_fr:"Share of work orders witnessing re-incidence in a period of time (user defined)",description_en:"Share of work orders witnessing re-incidence in a period of time (user defined)",description_fr:"Share of work orders witnessing re-incidence in a period of time (user defined)", formula_en:"Total no. of work orders witnessing re-incidence in a given time frame/total no. Of work orders in that time frame", formula_fr:"Total no. of work orders witnessing re-incidence in a given time frame/total no. Of work orders in that time frame",unit:"%",redToYellowThreshold:0.01,yellowToGreenThreshold:0.05, historicalPeriod:Indicator.HistoricalPeriod.QUARTERLY, historyItems:8, queryScript:SHARE_WORK_ORDER_WITNESSING_SIMPLE_SLD17, groupName_en:"Service Provider", groupName_fr:"Service Provider", groupQueryScript:SHARE_WORK_ORDER_WITNESSING_GROUP_SLD17,sqlQuery:true, active:true).save(failOnError: true, flush:true)
      //        //Slie 18:Cost effectiveness of corrective maintenance
@@ -232,15 +234,29 @@ class DashboardInitializer {
      //        //Slie 24:Share of problems caused by misuse
      //        new Indicator(category:correctiveMaintenance, code:"SHARE_PROBLEMS_MISIUSE_MAINTENANCE", name_en:"Share of problems caused by misuse",name_fr:"Share of problems caused by misuse",description_en:"Share of problems caused by misuse",description_fr:"Share of problems caused by misuse", formula_en:"number of work orders with “misuse” as reason of equipment failure / total number of work orders generated", formula_fr:"number of work orders with “misuse” as reason of equipment failure / total number of work orders generated",unit:"%",redToYellowThreshold:0.30,yellowToGreenThreshold:0.30, historicalPeriod:Indicator.HistoricalPeriod.QUARTERLY, historyItems:8, queryScript:SHARE_PROBLEM_MISUSE_SIMPLE_SLD24, groupName_en:"Type of Equipment", groupName_fr:"Type of Equipment", groupQueryScript:SHARE_PROBLEM_MISUSE_GROUP_SLD24,sqlQuery:false, active:true).save(failOnError: true, flush:true)
         }
-        // def priventiveMaintenance=IndicatorCategory.findByCode(PRIVENTIVE_MAINTENANCE)
-        // if(priventiveMaintenance != null) {
-        //     // //Slie 26:Degree of execution of preventive maintenance
-        //     // new Indicator(category:priventiveMaintenance, code:"DEGREE_EXECUTION_PREV_MAINTENANCE", name_en:"Degree of execution of preventive maintenance",name_fr:"Degree of execution of preventive maintenance",description_en:"Degree of execution of preventive maintenance",description_fr:"Degree of execution of preventive maintenance", formula_en:"Number of preventive maintenance deadlines met / total  number of preventive maintenance deadlines", formula_fr:"Number of preventive maintenance deadlines met / total  number of preventive maintenance deadlines",unit:"%",redToYellowThreshold:0.80,yellowToGreenThreshold:0.90, historicalPeriod:Indicator.HistoricalPeriod.QUARTERLY, historyItems:8, queryScript:DEGREE_EXCUTION_PREV_SIMPLE_SLD26, groupName_en:"Type of Equipment", groupName_fr:"Type of Equipment", groupQueryScript:DEGREE_EXCUTION_PREV_GROUP_SLD26,sqlQuery:false, active:true).save(failOnError: true, flush:true)
-        //     // //Slie 27:Share of maintenance executed at the facility
-        //     // new Indicator(category:priventiveMaintenance, code:"SHARE_FACILITY_MAINTENANCE", name_en:"Share of maintenance executed at the facility",name_fr:"Share of maintenance executed at the facility",description_en:"Share of maintenance executed at the facility",description_fr:"Share of maintenance executed at the facility", formula_en:"Number of PM deadlines adhered to at the facility /Total number of PM deadlines", formula_fr:"Number of PM deadlines adhered to at the facility /Total number of PM deadlines",unit:"%",redToYellowThreshold:0.80,yellowToGreenThreshold:0.90, historicalPeriod:Indicator.HistoricalPeriod.QUARTERLY, historyItems:8, queryScript:SHARE_MAIN_EXC_SIMPLE_SLD27, groupName_en:"Type of Equipment", groupName_fr:"Type of Equipment", groupQueryScript:SHARE_MAIN_EXC_GROUP_SLD27,sqlQuery:false, active:true).save(failOnError: false, flush:true)
-        //     // //Slie 28:Deviation against scheduled date
-        //     // new Indicator(category:priventiveMaintenance, code:"DEVIATN_AGNST_SCHDLD_DATE_MAINTENANCE", name_en:"Deviation against scheduled date",name_fr:"Deviation against scheduled date",description_en:"Deviation against scheduled date",description_fr:"Deviation against scheduled date", formula_en:"Average difference between the time when the deadline was supposed to be met and the time when the deadline was actually met", formula_fr:"Average difference between the time when the deadline was supposed to be met and the time when the deadline was actually met",unit:"day(s)",redToYellowThreshold:2,yellowToGreenThreshold:1, historicalPeriod:Indicator.HistoricalPeriod.QUARTERLY, historyItems:8, queryScript:DEVIATION_AGAIST_SIMPLE_SLD28, groupName_en:"Type of Equipment", groupName_fr:"Type of Equipment", groupQueryScript:DEVIATION_AGAIST_GROUP_SLD28,sqlQuery:false, active:true).save(failOnError: true, flush:true)
-        // }
+    def priventiveMaintenance = IndicatorCategory.findByCode(PRIVENTIVE_MAINTENANCE)
+        if(priventiveMaintenance != null) {
+            // //Slie 26:Degree of execution of preventive maintenance
+            newIndicator(
+                priventiveMaintenance, 
+                "DEGREE_EXECUTION_PREV_MAINTENANCE", 
+                ["en":"Degree of execution of preventive maintenance","fr":"Degree of execution of preventive maintenance fr"],
+                ["en":"Degree of execution of preventive maintenance","fr":"Degree of execution of preventive maintenance fr"], 
+                [
+                    "en":"Number of preventive maintenance deadlines met / total  number of preventive maintenance deadlines",
+                    "fr":"Number of preventive maintenance deadlines met / total  number of preventive maintenance deadlines fr"
+                ],
+                "%",0.80,0.90, Indicator.HistoricalPeriod.QUARTERLY,8,
+                DEGREE_EXCUTION_PREV_SIMPLE_SLD26,
+                ["en":"Type of Equipment","fr":"Type of Equipment fr"],
+                DEGREE_EXCUTION_PREV_GROUP_SLD26,
+                false,true
+            )
+            // //Slie 27:Share of maintenance executed at the facility
+            // new Indicator(category:priventiveMaintenance, code:"SHARE_FACILITY_MAINTENANCE", name_en:"Share of maintenance executed at the facility",name_fr:"Share of maintenance executed at the facility",description_en:"Share of maintenance executed at the facility",description_fr:"Share of maintenance executed at the facility", formula_en:"Number of PM deadlines adhered to at the facility /Total number of PM deadlines", formula_fr:"Number of PM deadlines adhered to at the facility /Total number of PM deadlines",unit:"%",redToYellowThreshold:0.80,yellowToGreenThreshold:0.90, historicalPeriod:Indicator.HistoricalPeriod.QUARTERLY, historyItems:8, queryScript:SHARE_MAIN_EXC_SIMPLE_SLD27, groupName_en:"Type of Equipment", groupName_fr:"Type of Equipment", groupQueryScript:SHARE_MAIN_EXC_GROUP_SLD27,sqlQuery:false, active:true).save(failOnError: false, flush:true)
+            // //Slie 28:Deviation against scheduled date
+            // new Indicator(category:priventiveMaintenance, code:"DEVIATN_AGNST_SCHDLD_DATE_MAINTENANCE", name_en:"Deviation against scheduled date",name_fr:"Deviation against scheduled date",description_en:"Deviation against scheduled date",description_fr:"Deviation against scheduled date", formula_en:"Average difference between the time when the deadline was supposed to be met and the time when the deadline was actually met", formula_fr:"Average difference between the time when the deadline was supposed to be met and the time when the deadline was actually met",unit:"day(s)",redToYellowThreshold:2,yellowToGreenThreshold:1, historicalPeriod:Indicator.HistoricalPeriod.QUARTERLY, historyItems:8, queryScript:DEVIATION_AGAIST_SIMPLE_SLD28, groupName_en:"Type of Equipment", groupName_fr:"Type of Equipment", groupQueryScript:DEVIATION_AGAIST_GROUP_SLD28,sqlQuery:false, active:true).save(failOnError: true, flush:true)
+        }
         // def sparePartsManagment = IndicatorCategory.findByCode(MANAGEMENT_SPARE_PARTS)
         // if(sparePartsManagment != null) {
         //     //Slie 29:Number of types of spare parts about to be discontinued in a year
@@ -271,40 +287,27 @@ class DashboardInitializer {
      //    }
     }
     public static createUserDefinedVariables() {
-        new UserDefinedVariable(
-            code:"WO_REINCIDENCE_DAYS",
-            names:[
-            'en':"Work order re-incidence period(days)",
-            'fr':"Work order re-incidence period(days)"
-            ],
-            currentValue:365.0
-            ).save(failOnError: true, flush:true)
-        new UserDefinedVariable(
-            code:"DEGGREE_CORRE_MAINT_EXECUTION",
-            names:[
-            'en':"Degree of corrective maintenance execution time frame",
-            'fr':"Degree of corrective maintenance execution time frame"
-            ],
-            currentValue:365.0
-            ).save(failOnError: true, flush:true)
-        new UserDefinedVariable(
-            code:"TRASHHOLD_MIN_STOCT_OUT",
-            names:[
-            'en':"Minimum Stock-Out time threshold(days)",
-            'fr':"Minimum Stock-Out time threshold(days)"
-            ],
-            currentValue:365.0
-            ).save(failOnError: true, flush:true)
-        new UserDefinedVariable(
-            code:"TRASHHOLD_MAX_STOCT_OUT",
-            names:[
-            'en':"Maximum Stock-Out time threshold(days)",
-            'fr':"Maximum Stock-Out time threshold(days)"
-            ],
-            currentValue:30.0
-            ).save(failOnError: true, flush:true)
+            newUserDefinedVariable(
+                "WO_REINCIDENCE_DAYS",
+                ["en":"Work order re-incidence period(days)","fr":"Work order re-incidence period(days) fr"], 
+                365.0
+            )
+            newUserDefinedVariable(
+                "DEGGREE_CORRE_MAINT_EXECUTION",
+                ["en":"Degree of corrective maintenance execution time frame","fr":"Degree of corrective maintenance execution time frame fr"], 
+                365.0
+            )
+            newUserDefinedVariable(
+                "TRASHHOLD_MIN_STOCT_OUT",
+                ["en":"Minimum Stock-Out time threshold(days)","fr":"Minimum Stock-Out time threshold(days) fr"], 
+                365.0
+            )
+            newUserDefinedVariable(
+                "TRASHHOLD_MAX_STOCT_OUT",
+                ["en":"Maximum Stock-Out time threshold(days)","fr":"Maximum Stock-Out time threshold(days) fr"], 
+                30.0
+            )
     }
-
     public static createIndicatorCategories() {
         new IndicatorCategory(
             code:CORRECTIVE_MAINTENANCE,
@@ -337,4 +340,46 @@ class DashboardInitializer {
             yellowToGreenThreshold:0.8
             ).save(failOnError: true, flush:true)
     }
+
+    public static newIndicatorCategory(def code, def names, def redToYellowThreshold, def yellowToGreenThreshold){
+            def category = new IndicatorCategory(
+                code:code,
+                redToYellowThreshold:redToYellowThreshold,
+                yellowToGreenThreshold:yellowToGreenThreshold
+            )
+            Utils.setLocaleValueInMap(category,names,"Names")
+            return category.save(failOnError: true, flush:true)
+    }
+
+    public static newUserDefinedVariable(def code,def names, def currentValue){
+            def userDefinedVariable = new UserDefinedVariable(
+                code:code,
+                currentValue:currentValue
+            )
+            Utils.setLocaleValueInMap(userDefinedVariable,names,"Names")
+            return userDefinedVariable.save(failOnError: true, flush:true)
+    }
+           
+    public static newIndicator(def category, def code, def names, def descriptions, def formulas, def unit, def redToYellowThreshold, def yellowToGreenThreshold, def historicalPeriod, def historyItems, def queryScript, def groupNames, def groupQueryScript, def sqlQuery, def active){
+
+            def indicator = new Indicator(
+                category:category, 
+                code:code,
+                unit:unit,
+                redToYellowThreshold:redToYellowThreshold,
+                yellowToGreenThreshold:yellowToGreenThreshold, 
+                historicalPeriod:historicalPeriod, 
+                historyItems:historyItems, 
+                queryScript:queryScript, 
+                groupQueryScript:groupQueryScript,
+                sqlQuery:sqlQuery, 
+                active:active
+            )
+            Utils.setLocaleValueInMap(indicator,names,"Names")
+            Utils.setLocaleValueInMap(indicator,descriptions,"Descriptions")
+            Utils.setLocaleValueInMap(indicator,formulas,"Formulas")
+            Utils.setLocaleValueInMap(indicator,groupNames,"GroupNames")
+            return indicator.save(failOnError: true, flush:true)
+    }
+
 }
