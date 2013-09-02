@@ -1,16 +1,29 @@
 <div class="entity-list">
-  <div class="heading1-bar"></div>
+
+  <div class="heading1-bar">
+    <h1>
+    <g:message code="default.detailed.report.label" args="[message(code:'default.detailed.report.label')]" />
+    </h1>
+  </div>
+
+  <!-- filter template -->
+  <g:if test="${filterTemplate!=null}">
+    <g:render template="/entity/${filterTemplate}" />
+  </g:if>
+
+  <!-- start dashboard template -->
   <div id="list-grid" class="v-tabs">
+    
     <ul id='top_tabs' class="v-tabs-nav left" >
       <g:each in="${categoryItems}" status="i" var="mapItem">
         <li>
-          <span class="v-tabs-formula" style="background: ${mapItem.value.color}; z-index: 5000"> </span>
-          <a id="${mapItem.key}">
-            ${mapItem.value.names}
-          </a>
+          <span class="v-tabs-formula" style="background: ${mapItem.value.color}; z-index: 5000"></span>
+          <a id="${mapItem.key}">${mapItem.value.names}</a>
         </li>
       </g:each>
     </ul>
+
+    <!-- report type tabs template -->
     <div class="v-tabs-content right">
       <ul class="v-tabs-filters">
         <li><input type="checkbox" id="checkbox-green" name="green" checked="checked"/><label>Green</label></li>
@@ -43,6 +56,7 @@
                   <li><a id='geo_trend' href="#">Geographic trend</a></li>
                   <li><a id='info_facility' href="#">Information by ${indicatorItem.groupNames}</a></li>
                 </ul>
+                
                 <div id="historic_trend" class='toggled_tab'>
                   <g:if test="${indicatorItem.historicalTrendData()!=null}">
                     <script type="text/javascript">
@@ -71,6 +85,7 @@
                     <div id="historic_trend_chart_timeline_${indicatorItem.code}" style="width:800px; height:400px; overflow: auto;" ></div>
                   </g:if>
                 </div>
+
                 <div id="comparison">
                   <ul class="v-tabs-nested">
                     <g:if test="${indicatorItem.highestComparisonValueItems != null && !indicatorItem.highestComparisonValueItems.isEmpty()}">
@@ -147,6 +162,7 @@
                     </g:if>
                   </ul>
                 </div>
+
                 <div id="geo_trend">
                   <g:if test="${(indicatorItem.geographicalValueItems != null) && !indicatorItem.geographicalValueItems.isEmpty()}">
                     <script type='text/javascript'>
@@ -168,6 +184,7 @@
                     <div id="geo_chart_${indicatorItem.code}" style="width:800px; height:400px;"></div>
                   </g:if>
                 </div>
+
                 <div id="info_facility" style="width:auto; height: 400px; overflow: auto;">
                   <ul class="v-tabs-nested">
                     <g:each in="${indicatorItem.valuesPerGroup}" var="itemsMap">
@@ -185,6 +202,7 @@
                     </g:each>
                   </ul>
                 </div>
+
               </div>
               </li>
             </g:each>
