@@ -119,7 +119,7 @@ class IndicatorItem {
         getComparisonValueItems(iv)
         //## adding groupValues
         for(GroupIndicatorValue grV:iv.groupIndicatorValues){
-            this.valuesPerGroup.put(grV.name,grV.value)
+            this.valuesPerGroup.put(grV.names,grV.value)
         }
     }
     /**

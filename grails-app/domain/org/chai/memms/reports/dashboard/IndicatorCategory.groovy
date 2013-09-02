@@ -32,19 +32,20 @@ import groovy.transform.EqualsAndHashCode
  * @author Antoine Nzeyi, Donatien Masengesho, Pivot Access Ltd
  *
  */
-@I18nFields
+@i18nfields.I18nFields
 @EqualsAndHashCode(includes="code")
 class IndicatorCategory {
 
     String code
-    String name
+    String names
 
     Double redToYellowThreshold
     Double yellowToGreenThreshold
 
+    static i18nFields = ["names"]
 
-    static i18nFields = ["name"]
     static hasMany = [indicators:Indicator]
+
     static mapping ={
         table "memms_report_indicator_category"
         version false
@@ -53,11 +54,11 @@ class IndicatorCategory {
 
     static constraints = {
         code (blank:false, nullable:false, unique:true)
-        name (blank:true, nullable:true, size:3..100)
+        names (blank:true, nullable:true, size:3..100)
     }
 
     @Override
     public String toString() {
-        return "IndicatorCategory[#id = " + id + ", code = " + code + "]"
+        return "IndicatorCategory[#id = " + id + ", code = " + code + ", names = " + names + "]"
     }
 }
