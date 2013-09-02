@@ -5,7 +5,9 @@
       <g:each in="${categoryItems}" status="i" var="mapItem">
         <li>
           <span class="v-tabs-formula" style="background: ${mapItem.value.color}; z-index: 5000"> </span>
-          <a id="${mapItem.key}">${mapItem.value.name}</a>
+          <a id="${mapItem.key}">
+            ${mapItem.value.names}
+          </a>
         </li>
       </g:each>
     </ul>

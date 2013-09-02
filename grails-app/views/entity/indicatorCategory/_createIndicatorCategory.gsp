@@ -13,7 +13,7 @@
   <div class="main">
     <g:form url="[controller:'indicatorCategory', action:'save', params:[targetURI: targetURI]]" useToken="true" class="simple-list">
       <g:input name="code" label="${message(code:'indicatorCategory.code.label')}" bean="${indicatorCategory}" field="code" width="100"/>
-      <g:i18nInput name="name" label="${message(code:'indicatorCategory.name.label')}" bean="${indicatorCategory}" field="name" width="100"/>
+      <g:i18nInput name="names" label="${message(code:'indicatorCategory.name.label')}" bean="${indicatorCategory}" field="names" width="100"/>
       <g:input name="redToYellowThreshold" label="${message(code:'indicatorCategory.redToYellowThreshold.label')}" bean="${indicatorCategory}" field="redToYellowThreshold" width="10"/>
       <g:input name="yellowToGreenThreshold" label="${message(code:'indicatorCategory.yellowToGreenThreshold.label')}" bean="${indicatorCategory}" field="yellowToGreenThreshold" width="10"/>
       <g:if test="${indicatorCategory.id != null}">

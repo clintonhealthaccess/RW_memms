@@ -10,8 +10,9 @@ package org.chai.memms.reports.dashboard
  * @author donatien
  */
 class GroupIndicatorValue {
+	
     Date generatedAt
-    String name
+    String names
     Double value
 
     static belongsTo = [indicatorValue:IndicatorValue]
@@ -20,5 +21,13 @@ class GroupIndicatorValue {
         table "memms_report_group_indicator_value"
         version false
         content type:"text"
+    }
+
+    static i18nFields = [
+		"names"
+    ]
+
+     static constraints = {
+        names (blank:true, nullable:true, size:3..250)
     }
 }

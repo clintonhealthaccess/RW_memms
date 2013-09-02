@@ -45,7 +45,7 @@ class DashboardController extends AbstractController {
     def indicatorComputationService
  
     def indicators = {
-    //indicatorComputationService.computeCurrentReport()
+        //indicatorComputationService.computeCurrentReport()
      
         LocationReport report = getUserReport()
         
@@ -56,6 +56,7 @@ class DashboardController extends AbstractController {
                 indicatorItems.add(new IndicatorItem(i))
             }
             for(IndicatorCategory category : IndicatorCategory.findAll([sort: "id", order: "asc"])){
+                if (log.isDebugEnabled()) log.debug("dashboard.indicators category:" + category + ", indicatorItems:" + indicatorItems);
                 CategoryItem categoryItem = new CategoryItem(category, indicatorItems)
                 if (categoryItem.indicatorItems.size() > 0){
                     categoryItems.put(category.code, categoryItem)

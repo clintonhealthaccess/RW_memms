@@ -37,17 +37,22 @@ class CategoryItem {
 
     String code
     Date dateTime
-    String name
+    String names
     Double value
     String color
+    IndicatorCategory indicatorCategory
     List<IndicatorItem> indicatorItems
 
     public CategoryItem(IndicatorCategory cat, List<IndicatorItem> items) {
         this.indicatorItems = new ArrayList<IndicatorItem>()
         this.code = cat.code
-        this.name = cat.name
+        this.names = cat.names
+        this.indicatorCategory = cat
         Double totalValue = 0.0
         Integer counter = 0
+
+        if (log.isDebugEnabled()) log.debug("categoryItem categoryItem:" + this);
+
         for(IndicatorItem i : items) {
             if(i.categoryCode.equals(this.code)) {
                 if("green".equals(i.color)) {
@@ -81,5 +86,12 @@ class CategoryItem {
                 }
             }
         }
+
+        if (log.isDebugEnabled()) log.debug("categoryItem categoryItem:" + this);
+    }
+
+    @Override
+    public String toString() {
+        return "CategoryItem[code = " + code + ", names = " + names + ", indicatorCategory = " + indicatorCategory + "]";
     }
 }
