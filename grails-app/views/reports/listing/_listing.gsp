@@ -2,6 +2,7 @@
 <%@ page import="org.chai.memms.util.Utils.ReportSubType" %>
 <div class="entity-list">
 
+  <!-- listing title -->
   <div class="heading1-bar">
     <h1>
     <g:message code="default.detailed.report.label" args="[message(code:'default.detailed.report.label')]" />

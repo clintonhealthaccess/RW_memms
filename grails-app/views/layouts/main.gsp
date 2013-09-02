@@ -18,16 +18,16 @@
       </h1>
 
       <ul class="locales" id="switcher">
-<% def languageService = grailsApplication.mainContext.getBean('languageService') %>
+        <% def languageService = grailsApplication.mainContext.getBean('languageService') %>
         <g:each in="${languageService.availableLanguages}" var="language" status="i">
-<% params['lang'] = language %>
+          <% params['lang'] = language %>
           <li><a class="${languageService.currentLanguage.language==language? 'no-link':''}" href="${createLink(controller: controllerName, action: actionName, params: params)}">${language}</a></li>
         </g:each>
       </ul>
 
       <ul id="top_nav">
         <shiro:user>
-<% def user = User.findByUuid(SecurityUtils.subject.principal, [cache: true])%>
+          <% def user = User.findByUuid(SecurityUtils.subject.principal, [cache: true])%>
           <li>
             <a href="${createLinkWithTargetURI(controller: 'account', action:'editAccount')}">
               <g:message code="header.navigation.myaccount"/> : ${user.names}
@@ -77,7 +77,7 @@
     </div>
 
   </div>
-<% def user = User.findByUuid(SecurityUtils.subject.principal, [cache: true]) %>
+  <% def user = User.findByUuid(SecurityUtils.subject.principal, [cache: true]) %>
   <div id="navigation">
     <div class="wrapper">
       <ul id="main-menu" class="menu">
@@ -146,7 +146,7 @@
             <ul class="submenu">
               <shiro:hasPermission permission="menu:dashboard">
                 <li>
-                  <a href="${createLink(controller:'dashboard', action:'indicators')}">
+                  <a href="${createLink(controller:'dashboard', action:'view')}">
                     <g:message code="header.navigation.reports.dashboard"/>
                   </a>
                 </li>
