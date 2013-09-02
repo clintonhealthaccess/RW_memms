@@ -286,10 +286,7 @@ public class Initializer {
 			//Add Location types
                        
 			def hc = new DataLocationType(['en':HEALTH_CENTER_GROUP], HEALTH_CENTER_GROUP);
-			
-                       
-            
-                        def dh = new DataLocationType(['en':DISTRICT_HOSPITAL_GROUP], DISTRICT_HOSPITAL_GROUP);
+			def dh = new DataLocationType(['en':DISTRICT_HOSPITAL_GROUP], DISTRICT_HOSPITAL_GROUP);
 			 
             //Add Location Level
 			def country = newLocationLevel(['en':NATIONAL], NATIONAL,1)
