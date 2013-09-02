@@ -33,7 +33,6 @@ package org.chai.memms.reports.dashboard
  */
 class MemmsReport {
 
-    //Date generatedAt
 	Date eventDate
 
     static hasMany = [locationReport:LocationReport]
