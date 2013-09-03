@@ -32,7 +32,7 @@ import i18nfields.I18nFields
  * @author Antoine Nzeyi, Donatien Masengesho, Pivot Access Ltd
  *
  */
-@I18nFields
+@i18nfields.I18nFields
 @EqualsAndHashCode(includes="code")
 class UserDefinedVariable {
 
@@ -51,7 +51,7 @@ class UserDefinedVariable {
 
     static constraints = {
         code (blank:false, nullable:false, unique:true)
-        names (blank:true, nullable:true, size:3..100)
+        names (blank:true, nullable:true)
         currentValue (nullable: false, blank: false)
     }
     @Override

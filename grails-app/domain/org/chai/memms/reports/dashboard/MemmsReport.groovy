@@ -33,10 +33,9 @@ package org.chai.memms.reports.dashboard
  */
 class MemmsReport {
 
-    //Date generatedAt
 	Date eventDate
 
-    static hasMany = [s:LocationReport]
+    static hasMany = [locationReports: LocationReport]
     static mapping ={
         table "memms_report_memms_report"
         version false
@@ -45,6 +44,6 @@ class MemmsReport {
 
     @Override
     public String toString() {
-        return "MemmsReport[#id = " + id + ", @" + eventDate + "]"
+        return "MemmsReport[id = " + id + ", eventDate = " + eventDate + "]"
     }
 }

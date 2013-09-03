@@ -21,8 +21,8 @@
         </li>
       </ul>
     </td>
-    <td><g:stripHtml field="${indicator.category.name}" chars="20"/></td>
-  <td><g:stripHtml field="${indicator.names}" chars="60"/></td>
+    <td>${indicator.category.names}</td>
+  <td>${indicator.names}</td>
   <td><g:stripHtml field="${indicator.formulas}" chars="30"/></td>
   <g:if test="${indicator.unit=='%'}">
     <td><g:formatNumber number="${indicator.redToYellowThreshold}" format="0%"/></td>

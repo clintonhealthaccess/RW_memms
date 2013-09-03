@@ -159,6 +159,27 @@ class EquipmentService {
 		}
 	}
 
+	//Return list dataLocations that has at least one equipment associated to it
+	public def getDataLocationsWithEquipments(){
+		def equipments = this.getDistinctEquipmentsByLocation()
+		def dataLocations = []
+		for(def equipment: equipments){
+			def dataLoc = DataLocation.get(equipment.id)
+			if(dataLoc!=null) dataLocations.add(dataLoc)
+		}
+		return dataLocations
+	}
+
+	//Return equipments based on distinct dataLocation
+	public def getDistinctEquipmentsByLocation(){
+		def criteria = Equipment.createCriteria()
+		return criteria.list(){
+			projections{
+			  distinct("dataLocation")
+			}
+		}
+	}
+
 	// fterrier: signature is very long
 	public def filterEquipment(def user, def dataLocation, def supplier, def manufacturer,def serviceProvider, def equipmentType, 
 		def purchaser,def donor,def obsolete,def status,Map<String, String> params){

@@ -39,8 +39,8 @@ class LocationReport {
     CalculationLocation location
     Date eventDate
 
-    static belongsTo = [memmsReport:MemmsReport]
-    static hasMany = [indicatorValues:IndicatorValue]
+    static belongsTo = [ memmsReport: MemmsReport]
+    static hasMany = [ indicatorValues: IndicatorValue]
     static mapping = {
         table "memms_report_location_report"
         version false
@@ -49,11 +49,11 @@ class LocationReport {
 
     static constraints = {
         eventDate (blank:false, nullable:false)
-        location (nullable:true)
+        location (nullable:false)
     }
 
     @Override
     public String toString() {
-        return "LocationReport[#id = " + id + ", @" + eventDate.getTime() + "]"
+        return "LocationReport[ id = " + id + ", eventDate =" + eventDate + "]"
     }
 }
