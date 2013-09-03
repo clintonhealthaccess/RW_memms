@@ -1,3 +1,5 @@
+<%@ page import="org.chai.memms.util.Utils.ReportType" %>
+<%@ page import="org.chai.memms.util.Utils.ReportSubType" %>
 <div class="v-tabs-dynav-wrap">
   <a class='v-tabs-dynav-scroll-right' href='#' id='js-scroll-right'></a>
   <div class="v-tabs-dynav" id='js-slider-wrapper'>
@@ -16,7 +18,7 @@
         </li>
       </g:each>
       <li>
-        <a href="${createLink(controller: 'listing', action:'generalEquipmentsListing')}"
+        <a href="${createLink(params:[reportType: ReportType.INVENTORY, reportSubType:ReportSubType.INVENTORY])}"
           class="tooltip" title="${message(code:'default.all.equipments.label')}">
           <g:message code="default.all.equipments.label" />
         </a>

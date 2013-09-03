@@ -267,7 +267,9 @@ public class Utils {
 		INVENTORY("inventory"),
 		CORRECTIVE("corrective"),
 		PREVENTIVE("preventive"),
-		SPAREPARTS("spareParts")
+		EQUIPMENT("equipment"),
+		SPAREPARTS("spareParts"),
+		MEMMS("monitoring")
 		
 		String messageCode = "reports.type."
 

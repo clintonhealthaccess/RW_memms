@@ -27,6 +27,7 @@
  */
 package org.chai.memms.reports.dashboard
 import org.chai.memms.util.Utils;
+import org.chai.memms.util.Utils.ReportType;
 /**
  * @author Antoine Nzeyi, Donatien Masengesho, Pivot Access Ltd
  *
@@ -34,11 +35,11 @@ import org.chai.memms.util.Utils;
 class DashboardInitializer {
 
     //Indicator category codes
-    public static final String CORRECTIVE_MAINTENANCE="corrective"
-    public static final String PREVENTIVE_MAINTENANCE="preventive"
-    public static final String MANAGEMENT_SPARE_PARTS="spare_parts"
-    public static final String MANAGEMENT_EQUIPMENT="equipment"
-    public static final String MONITORING_MEMMS_USE="monitoring"
+    public static final String CORRECTIVE_MAINTENANCE = ReportType.CORRECTIVE.reportType  //"corrective"
+    public static final String PREVENTIVE_MAINTENANCE = ReportType.PREVENTIVE.reportType  //"preventive"
+    public static final String MANAGEMENT_SPAREPARTS = ReportType.SPAREPARTS.reportType   //"spareParts"
+    public static final String MANAGEMENT_EQUIPMENT = ReportType.EQUIPMENT.reportType     //"equipment"
+    public static final String MONITORING_MEMMS_USE = ReportType.MEMMS.reportType         //"monitoring"
 
     //Indicator computation scripts
     //Slid 7:Share of operational equipment
@@ -152,7 +153,7 @@ class DashboardInitializer {
         System.out.println("createIndicatorCategories preventive:" + preventive);
         def equipment = newIndicatorCategory(MANAGEMENT_EQUIPMENT, ["en":"Management of Medical Equipment","fr":"Management of Medical Equipment"], 0.6, 0.8)
         System.out.println("createIndicatorCategories equipment:" + equipment);
-        def spareParts = newIndicatorCategory(MANAGEMENT_SPARE_PARTS, ["en":"Management of Spare Parts","fr":"Management of Spare Parts"], 0.6, 0.8)
+        def spareParts = newIndicatorCategory(MANAGEMENT_SPAREPARTS, ["en":"Management of Spare Parts","fr":"Management of Spare Parts"], 0.6, 0.8)
         System.out.println("createIndicatorCategories spare parts:" + spareParts);
         def monitoring = newIndicatorCategory(MONITORING_MEMMS_USE, ["en":"Monitoring of MEMMS Use","fr":"Monitoring of MEMMS Use"], 0.6, 0.8)
         System.out.println("createIndicatorCategories monitoring:" + monitoring);
@@ -297,7 +298,7 @@ class DashboardInitializer {
             // new Indicator(category:preventiveMaintenance, code:"DEVIATN_AGNST_SCHDLD_DATE_MAINTENANCE", name_en:"Deviation against scheduled date",name_fr:"Deviation against scheduled date",description_en:"Deviation against scheduled date",description_fr:"Deviation against scheduled date", formula_en:"Average difference between the time when the deadline was supposed to be met and the time when the deadline was actually met", formula_fr:"Average difference between the time when the deadline was supposed to be met and the time when the deadline was actually met",unit:"day(s)",redToYellowThreshold:2,yellowToGreenThreshold:1, historicalPeriod:Indicator.HistoricalPeriod.QUARTERLY, historyItems:8, queryScript:DEVIATION_AGAIST_SIMPLE_SLD28, groupName_en:"Type of Equipment", groupName_fr:"Type of Equipment", groupQueryScript:DEVIATION_AGAIST_GROUP_SLD28,sqlQuery:false, active:true).save(failOnError: true, flush:true)
         }
 
-        // def sparePartsManagment = IndicatorCategory.findByCode(MANAGEMENT_SPARE_PARTS)
+        // def sparePartsManagment = IndicatorCategory.findByCode(MANAGEMENT_SPAREPARTS)
         // if(sparePartsManagment != null) {
         //     //Slide 29:Number of types of spare parts about to be discontinued in a year
         //     new Indicator(category:sparePartsManagment, code:"NUMBER_DISCONTINUED_YEAR_MAN_SPARE_PART", name_en:"Number of types of spare parts about to be discontinued in a year",name_fr:"Number of types of spare parts about to be discontinued in a year",description_en:"Number of types of spare parts about to be discontinued in a year",description_fr:"Number of types of spare parts about to be discontinued in a year", formula_en:"Total number of types of spare parts with their discontinuation date within a year;", formula_fr:"Total number of types of spare parts with their discontinuation date within a year;",unit:"Spare Part Type(s)",redToYellowThreshold:20,yellowToGreenThreshold:10, historicalPeriod:Indicator.HistoricalPeriod.QUARTERLY, historyItems:8, queryScript:NUMBER_TYPE_SPARE_DISC_SIMPLE_SLD29, groupName_en:"Spare Part Type", groupName_fr:"Spare Part Type", groupQueryScript:NUMBER_TYPE_SPARE_DISC_GROUP_SLD29,sqlQuery:false, active:true).save(failOnError: true, flush:true)

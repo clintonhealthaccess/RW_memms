@@ -104,32 +104,58 @@ class ListingController extends AbstractController{
 	}
 
 	def view ={
-		redirect(action: "generalEquipmentsListing", params: params)
+		redirect(action: "listing", params: params)
+	}
+
+	def listing={
+
+		ReportType reportType = getReportType()
+		ReportSubType reportSubType = getReportSubType()
+
+		def reportName = null
+
+		def savedReports = userService.getSavedReportsByUser(user, reportType)
+		if (log.isDebugEnabled()) log.debug("listing.listing savedReports:"+savedReports?.size())
+
+		def listing = null
+		switch(reportType){
+			case ReportType.INVENTORY:
+				reportName = message(code:'default.all.equipments.label')
+				listing = equipmentListingReportService.getGeneralReportOfEquipments(user,params)
+				break;
+			case ReportType.CORRECTIVE:
+				reportName = message(code:'default.all.work.order.label')
+				listing = workOrderListingReportService.getAllWorkOrders(user,params)
+				break;
+			case ReportType.PREVENTIVE:
+				reportName = message(code:'default.all.preventive.order.label')
+				listing = preventiveOrderListingReportService.getAllPreventions(user,params)
+				break;
+			case ReportType.SPAREPARTS:
+				def type = SparePartType.get(params.long('type.id'))
+				reportName = message(code:'default.all.spare.parts.label')
+				listing = sparePartListingReportService.getGeneralReportOfSpareParts(user,type, params)
+				break;
+			default:
+				break;
+		}
+
+		adaptParamsForList()
+		if(!request.xhr)
+			render(view:"/reports/reports",
+			model: model(listing, "") <<
+			[
+				reportType: reportType,
+				reportSubType: reportSubType,
+				reportName: reportName,
+				savedReports: savedReports,
+				template:"/reports/listing/listing"
+			])
 	}
 
 	// predefined reports start
 
 	// inventory
-
-	def generalEquipmentsListing={
-		if (log.isDebugEnabled()) log.debug("listing.generalEquipmentsListing start, params:"+params)
-
-		def savedReports = userService.getSavedReportsByUser(user, ReportType.INVENTORY)
-		if (log.isDebugEnabled()) log.debug("listing.generalEquipmentsListing savedReports:"+savedReports.size())
-
-		adaptParamsForList()
-		def equipments = equipmentListingReportService.getGeneralReportOfEquipments(user,params)
-		if(!request.xhr)
-			render(view:"/reports/reports",
-			model: model(equipments, "") <<
-			[
-				reportType: ReportType.INVENTORY,
-				reportSubType: ReportSubType.INVENTORY,
-				reportName: message(code:'default.all.equipments.label'),
-				savedReports: savedReports,
-				template:"/reports/listing/listing"
-			])
-	}
 
 	def obsoleteEquipments={
 		if (log.isDebugEnabled()) log.debug("listing.obsoleteEquipments start, params:"+params)
@@ -230,25 +256,6 @@ class ListingController extends AbstractController{
 
 	// corrective
 
-	def generalWorkOrdersListing={
-		if (log.isDebugEnabled()) log.debug("listing.generalWorkOrdersListing start, params:"+params)
-
-		def savedReports = userService.getSavedReportsByUser(user, ReportType.CORRECTIVE)
-
-		adaptParamsForList()
-		def workOrders = workOrderListingReportService.getAllWorkOrders(user,params)
-		if(!request.xhr)
-			render(view:"/reports/reports",
-			model: model(workOrders, "") <<
-			[
-				reportType: ReportType.CORRECTIVE,
-				reportSubType: ReportSubType.WORKORDERS,
-				reportName: message(code:'default.all.work.order.label'),
-				savedReports: savedReports,
-				template:"/reports/listing/listing"
-			])
-	}
-
 	def lastMonthWorkOrders={
 		if (log.isDebugEnabled()) log.debug("listing.lastMonthWorkOrders start, params:"+params)
 
@@ -308,25 +315,6 @@ class ListingController extends AbstractController{
 
 	// preventive
 
-	def generalPreventiveOrdersListing={
-		if (log.isDebugEnabled()) log.debug("listing.generalPreventiveOrdersListing start, params:"+params)
-
-		def savedReports = userService.getSavedReportsByUser(user, ReportType.PREVENTIVE)
-
-		adaptParamsForList()
-		def preventiveOrders = preventiveOrderListingReportService.getAllPreventions(user,params)
-		if(!request.xhr)
-			render(view:"/reports/reports",
-			model: model(preventiveOrders, "") <<
-			[
-				reportType: ReportType.PREVENTIVE,
-				reportSubType: ReportSubType.WORKORDERS,
-				reportName: message(code:'default.all.preventive.order.label'),
-				savedReports: savedReports,
-				template:"/reports/listing/listing"
-			])
-	}
-
 	def equipmentsWithPreventionPlan={
 		if (log.isDebugEnabled()) log.debug("listing.equipmentsWithPreventionPlan start, params:"+params)
 
@@ -348,28 +336,8 @@ class ListingController extends AbstractController{
 
 	// spare parts
 
-	def generalSparePartsListing={
-		if (log.isDebugEnabled()) log.debug("listing.generalSparePartsListing start, params:"+params)
-
-		// def savedReports = userService.getSavedReportsByUser(user, ReportType.SPAREPARTS)
-
-		adaptParamsForList()
-		def type = SparePartType.get(params.long('type.id'))
-		def spareParts = sparePartListingReportService.getGeneralReportOfSpareParts(user,type, params)
-		if(!request.xhr)
-			render(view:"/reports/reports",
-			model: model(spareParts, "") <<
-			[
-				reportType: ReportType.SPAREPARTS,
-				reportSubType: ReportSubType.INVENTORY,
-				reportName: message(code:'default.all.spare.parts.label'),
-				// savedReports: savedReports,
-				template:"/reports/listing/listing"
-			])
-	}
-
 	def pendingOrderSparePartsListing={
-		if (log.isDebugEnabled()) log.debug("listing.generalSparePartsListing start, params:"+params)
+		if (log.isDebugEnabled()) log.debug("listing.sparePartsListing start, params:"+params)
 
 		// def savedReports = userService.getSavedReportsByUser(user, ReportType.SPAREPARTS)
 
@@ -635,16 +603,16 @@ class ListingController extends AbstractController{
 
 			switch(reportType){
 				case ReportType.INVENTORY:
-					redirect(action:"generalEquipmentsListing")
+					redirect(action:"equipmentsListing")
 					break;
 				case ReportType.CORRECTIVE:
-					redirect(action:"generalWorkOrdersListing")
+					redirect(action:"workOrdersListing")
 					break;
 				case ReportType.PREVENTIVE:
-					redirect(action:"generalPreventiveOrdersListing")
+					redirect(action:"preventiveOrdersListing")
 					break;
 				case ReportType.SPAREPARTS:
-					redirect(action:"generalSparePartsListing")
+					redirect(action:"sparePartsListing")
 					break;
 			}
 		}
@@ -725,8 +693,6 @@ class ListingController extends AbstractController{
 		}
 	}
 
-	// inventory
-
 	def customEquipmentListing ={
 		adaptParamsForList()
 		if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing start, params:"+params)
@@ -773,8 +739,6 @@ class ListingController extends AbstractController{
 			}
 		}
 	}
-
-	// corrective
 
 	def customWorkOrderListing ={
 		adaptParamsForList()
@@ -823,8 +787,6 @@ class ListingController extends AbstractController{
 		}
 	}
 
-	// preventive
-
 	def customPreventiveOrderListing ={
 		adaptParamsForList()
 		if (log.isDebugEnabled()) log.debug("listing.customPreventiveOrderListing start, params:"+params)
@@ -863,8 +825,6 @@ class ListingController extends AbstractController{
 			}
 		}
 	}
-
-	// spare parts
 
 	def customSparePartsListing ={
 		adaptParamsForList()
@@ -1556,6 +1516,4 @@ class ListingController extends AbstractController{
 	}
 	
 	// customized report wizard params end
-	
-	// customized report wizard end
 }
