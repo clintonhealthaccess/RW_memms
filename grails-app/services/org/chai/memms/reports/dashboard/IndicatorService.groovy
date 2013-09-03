@@ -35,6 +35,7 @@ class IndicatorService {
 
     static transactional = true
     def sessionFactory;
+	def languageService;
 
     List<Indicator> searchIndicator(String text, Map<String, String> params) {
         def dbFieldNames = 'names_'+languageService.getCurrentLanguagePrefix();

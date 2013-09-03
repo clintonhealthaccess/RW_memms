@@ -50,7 +50,7 @@ class IndicatorCategoryController extends AbstractEntityController {
                 indicatorCategories.each { indicatorCategory ->
                     elem (
                         key: indicatorCategory.id,
-                        value: indicatorCategory.name
+                        value: indicatorCategory.names
                     )
                 }
             }

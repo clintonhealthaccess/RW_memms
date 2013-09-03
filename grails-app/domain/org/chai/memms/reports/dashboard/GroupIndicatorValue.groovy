@@ -9,6 +9,7 @@ package org.chai.memms.reports.dashboard
  *
  * @author donatien
  */
+@i18nfields.I18nFields
 class GroupIndicatorValue {
 	
     Date generatedAt
@@ -23,9 +24,7 @@ class GroupIndicatorValue {
         content type:"text"
     }
 
-    static i18nFields = [
-		"names"
-    ]
+    static i18nFields = ["names"]
 
      static constraints = {
         names (blank:true, nullable:true, size:3..250)
