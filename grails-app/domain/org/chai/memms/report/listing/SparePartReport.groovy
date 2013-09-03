@@ -8,6 +8,8 @@ import java.util.Date;
 import org.chai.memms.security.User;
 import org.chai.location.DataLocation;
 import org.chai.memms.spare.part.SparePartType;
+import org.chai.memms.util.Utils.ReportType;
+import org.chai.memms.util.Utils.ReportSubType;
 
 /**
  * @author Aphrodice Rwagaju
@@ -15,8 +17,8 @@ import org.chai.memms.spare.part.SparePartType;
  */
 class SparePartReport {
 	String reportName
-	String reportType
-	String reportSubType
+	ReportType reportType
+	ReportSubType reportSubType
 	Date dateCreated
 	Date fromDate
 	Date toDate

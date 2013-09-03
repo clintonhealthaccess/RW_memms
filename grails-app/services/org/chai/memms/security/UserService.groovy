@@ -174,9 +174,11 @@ class UserService {
 			case ReportType.PREVENTIVE:
 				criteria = PreventiveMaintenanceReport.createCriteria();
 				break;
-			// case ReportType.SPAREPARTS:
-			// 	criteria = SparePartReport.createCriteria();
-			// 	break;
+			case ReportType.SPAREPARTS:
+				criteria = SparePartReport.createCriteria();
+				break;
+			default:
+				break;
 		}
 		if(criteria != null){
 			savedReportsByUser = criteria.list(){

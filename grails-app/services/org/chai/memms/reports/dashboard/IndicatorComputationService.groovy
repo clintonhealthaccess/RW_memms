@@ -97,10 +97,7 @@ class IndicatorComputationService {
 
                         for (Map.Entry<String, Double> entry : (Set)map.entrySet()){
                             if (log.isDebugEnabled()) log.debug("computeLocationReport entry.getKey() " + entry.getKey() + " entry.getValue() " + entry.getValue());
-                            def groupIndicatorValue=new GroupIndicatorValue(generatedAt:currentDate,value:entry.getValue(),indicatorValue:indicatorValue)
-                            Utils.setLocaleValueInMap(groupIndicatorValue,['en':entry.getKey(),'fr':entry.getKey()],"Names")
-                            groupIndicatorValue.save()
-
+                            newGroupIndicatorValue(currentDate,['en':entry.getKey(),'fr':entry.getKey()],entry.getValue(),indicatorValue)
                         }
                           
                     }
@@ -201,6 +198,13 @@ class IndicatorComputationService {
     }
 
     // compute group
+
+    def newGroupIndicatorValue(def generatedAt, def names, def value, def indicatorValue){
+        def groupIndicatorValue = new GroupIndicatorValue(generatedAt:currentDate,value:value,indicatorValue:indicatorValue)
+        Utils.setLocaleValueInMap(groupIndicatorValue,names,'Names')
+        groupIndicatorValue.save(failOnError: true, flush:true)
+        return groupIndicatorValue
+    }
 
     def groupComputeIndicatorForLocation(Indicator indicator, CalculationLocation location) {
         if (log.isDebugEnabled()) log.debug("groupComputeIndicatorForLocation indicator " + indicator + ", location " + location);

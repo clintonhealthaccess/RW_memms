@@ -27,6 +27,7 @@
  */
 package org.chai.memms.reports.dashboard
 import org.chai.memms.util.Utils;
+import org.chai.memms.util.Utils.ReportType;
 /**
  * @author Antoine Nzeyi, Donatien Masengesho, Pivot Access Ltd
  *
@@ -34,11 +35,11 @@ import org.chai.memms.util.Utils;
 class DashboardInitializer {
 
     //Indicator category codes
-    public static final String CORRECTIVE_MAINTENANCE="corrective"
-    public static final String PREVENTIVE_MAINTENANCE="preventive"
-    public static final String MANAGEMENT_SPARE_PARTS="spare_parts"
-    public static final String MANAGEMENT_EQUIPMENT="equipment"
-    public static final String MONITORING_MEMMS_USE="monitoring"
+    public static final String CORRECTIVE_MAINTENANCE = ReportType.CORRECTIVE.reportType  //"corrective"
+    public static final String PREVENTIVE_MAINTENANCE = ReportType.PREVENTIVE.reportType  //"preventive"
+    public static final String MANAGEMENT_SPAREPARTS = ReportType.SPAREPARTS.reportType   //"spareParts"
+    public static final String MANAGEMENT_EQUIPMENT = ReportType.EQUIPMENT.reportType     //"equipment"
+    public static final String MONITORING_MEMMS_USE = ReportType.MEMMS.reportType         //"monitoring"
 
     //Indicator computation scripts
     //Slid 7:Share of operational equipment
@@ -66,7 +67,6 @@ class DashboardInitializer {
         createUserDefinedVariables()
         createIndicators()
     }
-
     public static createIndicators() {
 
         def equipementManagment = IndicatorCategory.findByCode(MANAGEMENT_EQUIPMENT)
