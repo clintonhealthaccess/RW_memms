@@ -68,7 +68,6 @@ class DashboardController extends AbstractController {
                 indicatorItems.add(new IndicatorItem(i))
             }
             def category = IndicatorCategory.findByCode(reportType.reportType)
-            if (log.isDebugEnabled()) log.debug("dashboard.dashboard category:" + category + ", indicatorItems:" + indicatorItems);
             categoryItem = new CategoryItem(category, indicatorItems)
         }
         def model = [
