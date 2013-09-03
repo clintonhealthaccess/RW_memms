@@ -100,7 +100,7 @@ class Indicator {
         active (blank:false, nullable:false)
         category (nullable: false)
         groupNames (blank:true, nullable:true, unique:false)
-        groupQueryScript (blank:false, nullable:true, size:0..8000)
+        groupQueryScript (blank:true, nullable:true, size:0..8000)
     }
 
     @Override

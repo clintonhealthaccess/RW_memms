@@ -306,7 +306,7 @@ public class Equipment {
 	}
 
 	String toString() {
-		return "Equipment[id= " + id + " code= "+code+" serialNumber= "+serialNumber+" currentState= "+currentStatus+", previousState= "+getTimeBasedPreviousStatus()?.status+"]";
+		return "Equipment[id= " + id + " code= "+code+" dataLocationId= "+dataLocation.id+" serialNumber= "+serialNumber+" currentState= "+currentStatus+", previousState= "+getTimeBasedPreviousStatus()?.status+"]";
 
 	}
 }
