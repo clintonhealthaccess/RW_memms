@@ -27,13 +27,15 @@
  */
 package org.chai.memms.reports.dashboard
 
-import java.util.*
-import org.chai.memms.security.User
-import org.apache.shiro.SecurityUtils
-import org.chai.memms.AbstractController
 import org.chai.location.Location
+import org.chai.memms.AbstractController
 import org.chai.memms.inventory.EquipmentType
-import java.lang.reflect.*;
+import org.chai.memms.security.User
+import org.chai.memms.util.Utils.ReportType
+
+import java.lang.reflect.*
+import java.util.*
+import org.apache.shiro.SecurityUtils
 
 /**
  * @author Antoine Nzeyi, Donatien Masengesho, Pivot Access Ltd
@@ -43,29 +45,41 @@ class DashboardController extends AbstractController {
 
     def dashboardService
     def indicatorComputationService
- 
-    def indicators = {
+
+    def index ={
+        redirect(action: "view", params: params)
+    }
+
+    def view ={
+        redirect(action: "dashboard", params: params)
+    }
+
+    def dashboard = {
         //indicatorComputationService.computeCurrentReport()
-     
+
+        def reportType = getReportType()
+
         LocationReport report = getUserReport()
         
         List<IndicatorItem> indicatorItems = new ArrayList<IndicatorItem>()
-        Map<String, CategoryItem> categoryItems = new LinkedHashMap<String, CategoryItem>()
+        CategoryItem categoryItem = null
         if(report != null) {
             for(IndicatorValue i : IndicatorValue.findAllByLocationReport(report)) {
                 indicatorItems.add(new IndicatorItem(i))
             }
-            for(IndicatorCategory category : IndicatorCategory.findAll([sort: "id", order: "asc"])){
-                if (log.isDebugEnabled()) log.debug("dashboard.indicators category:" + category + ", indicatorItems:" + indicatorItems);
-                CategoryItem categoryItem = new CategoryItem(category, indicatorItems)
-                if (categoryItem.indicatorItems.size() > 0){
-                    categoryItems.put(category.code, categoryItem)
-                }
-            }
+            def category = IndicatorCategory.findByCode(reportType.reportType)
+            if (log.isDebugEnabled()) log.debug("dashboard.dashboard category:" + category + ", indicatorItems:" + indicatorItems);
+            categoryItem = new CategoryItem(category, indicatorItems)
         }
-        def model = [categoryItems: categoryItems]
-        render(view:"/reports/reports", model:model << [
-                template:"/reports/dashboard/dashboard"
+        def model = [
+            reportType: reportType,
+            categoryItem: categoryItem
+        ]
+
+        render(view:"/reports/reports", 
+            model:model << [
+                template:"/reports/dashboard/dashboard",
+                filterTemplate:"/reports/dashboard/dashboardFilter"
             ])
     }
        
@@ -79,5 +93,14 @@ class DashboardController extends AbstractController {
             return null
         }
         return LocationReport.findByMemmsReportAndLocation(memmsReport, user.location)
+    }
+
+    def getReportType(){
+        ReportType reportType = null
+        if(params.get('reportType') != null && !params.get('reportType').empty)
+            reportType = params.get('reportType')
+        if(log.isDebugEnabled()) log.debug("abstract.reportType param:"+reportType+")")
+        if(reportType == null) reportType = ReportType.PREVENTIVE
+        return reportType
     }
 }
