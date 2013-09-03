@@ -79,28 +79,38 @@ class IndicatorComputationService {
         for(Indicator indicator: Indicator.findAllByActive(true)) {
             if (log.isDebugEnabled()) log.debug("computeLocationReport calculating report " + indicator.code + " for " + location.names);
             try{
-                
+                if (log.isDebugEnabled()) log.debug("computeLocationReport computing compValue " + indicator.code + " for " + location.names);
+
                 def compvalue = computeIndicatorForLocation(indicator, location)
                 
+                if (log.isDebugEnabled()) log.debug("computeLocationReport computing indicatorValue " + indicator.code + " for " + location.names);
+
                 IndicatorValue indicatorValue=new IndicatorValue(computedAt: currentDate, locationReport: locationReport, indicator: indicator, computedValue:compvalue).save()
+
+                if (log.isDebugEnabled()) log.debug("indicatorValue " + indicatorValue);
                 
                 if(indicatorValue!=null) {
                    
                     Map<String,Double> map= groupComputeIndicatorForLocation(indicatorValue.indicator,location)
+
+                    if (log.isDebugEnabled()) log.debug("map " + map);
 
                     if(map!=null) {
 
                         for (Map.Entry<String, Double> entry : (Set)map.entrySet()){
                             if (log.isDebugEnabled()) log.debug("computeLocationReport entry.getKey() " + entry.getKey() + " entry.getValue() " + entry.getValue());
 
-                            newGroupIndicatorValue(currentDate,['en':entry.getKey(),'fr':entry.getKey()],entry.getValue(),indicatorValue)
+                            GroupIndicatorValue groupIndicatorValue = newGroupIndicatorValue(currentDate,['en':entry.getKey(),'fr':entry.getKey()],entry.getValue(),indicatorValue)
+                            if (log.isDebugEnabled()) log.debug("groupIndicatorValue " + groupIndicatorValue);
                         }
                           
                     }
                 }
             } catch(Exception ex) {
+                if (log.isDebugEnabled()) log.debug("computeLocationReport error calculating report " + indicator.code + " for " + location.names);
                 ex.printStackTrace()
             }
+            if (log.isDebugEnabled()) log.debug("computeLocationReport done calculating report " + indicator.code + " for " + location.names);
         }
     }
 
@@ -112,15 +122,15 @@ class IndicatorComputationService {
         }
         List<DataLocation> dataLocations = new ArrayList<DataLocation>()
         if (location instanceof Location) {
-            dataLocations = location.getDataLocations(LocationLevel.findAll(), null)
+            // dataLocations = location.getDataLocations(LocationLevel.findAll(), null)
+            dataLocations = location.collectDataLocations(null)
         } else if (location instanceof DataLocation) {
             dataLocations.add(location)
             dataLocations.addAll(location.manages)
         } else {
             return 0.0
         }
-        if(dataLocations!=null&& dataLocations.size() == DataLocation.count()) {
-            
+        if(dataLocations!=null && dataLocations.size() == DataLocation.count()) {
             return computeIndicatorForAllDataLocations(indicator)
         }
         return computeIndicatorForDataLocations(indicator, dataLocations)
@@ -210,7 +220,7 @@ class IndicatorComputationService {
         }
         List<DataLocation> dataLocations = new ArrayList<DataLocation>()
         if (location instanceof Location) {
-            dataLocations = location.getDataLocations(LocationLevel.findAll(), null)
+            dataLocations.addAll(location.collectDataLocations(null))
         } else if (location instanceof DataLocation) {
             dataLocations.add(location)
             dataLocations.addAll(location.manages)
@@ -227,7 +237,8 @@ class IndicatorComputationService {
         if (log.isDebugEnabled()) log.debug("groupComputeIndicatorForDataLocations indicator " + indicator + ", dataLocations " + dataLocations);
 
         if(dataLocations == null)
-        return null
+            return null
+        
         String cond = "";
         int counter = 0
         for(DataLocation loc : dataLocations) {
@@ -237,6 +248,8 @@ class IndicatorComputationService {
             cond += "" + loc.id
             counter++
         }
+        if (log.isDebugEnabled()) log.debug("groupComputeIndicatorForDataLocations cond = " + cond);
+
         if(counter == 0) {
             return null
         } else if(counter == 1) {

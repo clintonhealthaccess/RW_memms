@@ -30,4 +30,9 @@ class GroupIndicatorValue {
      static constraints = {
         names (blank:true, nullable:true, size:3..250)
     }
+
+    @Override
+    public String toString() {
+        return "GroupIndicatorValue[#id = " + id + ", @" + generatedAt?.getTime() + ", names = " + names + ", value = " + value + "]"
+    }
 }

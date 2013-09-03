@@ -5,7 +5,7 @@
   <!-- listing title -->
   <div class="heading1-bar">
     <h1>
-    <g:message code="default.detailed.report.label" args="[message(code:'default.detailed.report.label')]" />
+      <g:message code="default.detailed.report.label" args="[message(code:'default.detailed.report.label')]" />
     </h1>
   </div>
 

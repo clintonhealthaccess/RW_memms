@@ -53,8 +53,10 @@ class IndicatorCategory {
     }
 
     static constraints = {
-        code (blank:false, nullable:false, unique:true)
-        names (blank:true, nullable:true, size:3..100)
+        code blank:false, nullable:false, unique:true
+        names blank:true, nullable:true, size:3..100
+        redToYellowThreshold nullable:false, validator: {return (it <= 100 && it >= 0)}
+        yellowToGreenThreshold nullable:false, validator: {return (it <= 100 && it >= 0)}
     }
 
     @Override
