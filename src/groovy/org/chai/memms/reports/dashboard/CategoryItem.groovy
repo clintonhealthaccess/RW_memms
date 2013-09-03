@@ -36,7 +36,7 @@ import org.chai.memms.reports.dashboard.IndicatorCategory;
 class CategoryItem {
 
     String code
-    Date dateTime
+    Date computedAt
     String names
     Double value
     String color
