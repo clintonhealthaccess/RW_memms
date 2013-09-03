@@ -89,9 +89,14 @@ class IndicatorComputationService {
             try{
                 def compvalue = computeIndicatorForLocation(indicator, location)
                 IndicatorValue indicatorValue=new IndicatorValue(computedAt: currentDate, locationReport: locationReport, indicator: indicator, computedValue:compvalue).save(failOnError:true,flush:true)
+
                 if(indicatorValue!=null) {
-                   
+
+                    if (log.isDebugEnabled()) log.debug("computeLocationReport creating map " + indicator.code + " for " + location.names);
+
                     Map<String,Double> map= groupComputeIndicatorForLocation(indicatorValue.indicator,location)
+
+                    if (log.isDebugEnabled()) log.debug("computeLocationReport  map " + map);
 
                     if(map!=null) {
 
@@ -103,8 +108,10 @@ class IndicatorComputationService {
                     }
                 }
             } catch(Exception ex) {
+                if (log.isDebugEnabled()) log.debug("computeLocationReport error calculating report " + indicator.code + " for " + location.names);
                 ex.printStackTrace()
             }
+            if (log.isDebugEnabled()) log.debug("computeLocationReport done calculating report " + indicator.code + " for " + location.names);
         }
     }
 

@@ -67,6 +67,7 @@ class DashboardInitializer {
         createUserDefinedVariables()
         createIndicators()
     }
+
     public static createIndicators() {
 
         def equipementManagment = IndicatorCategory.findByCode(MANAGEMENT_EQUIPMENT)
@@ -161,7 +162,7 @@ class DashboardInitializer {
             )
         }
 
-        def sparePartsManagment = IndicatorCategory.findByCode(MANAGEMENT_SPARE_PARTS)
+        def sparePartsManagment = IndicatorCategory.findByCode(MANAGEMENT_SPAREPARTS)
         if(sparePartsManagment != null) {
             //Slie 31:Number of types of spare parts with stock more than a given time period
             newIndicator(
@@ -180,17 +181,16 @@ class DashboardInitializer {
                 true, true
             )
         }
-
-     
     }
 
      public static createIndicatorCategories() {
          newIndicatorCategory(CORRECTIVE_MAINTENANCE, ["en":"Corrective Maintenance","fr":"Corrective Maintenance"], 0.6, 0.8)
          newIndicatorCategory(PREVENTIVE_MAINTENANCE, ["en":"Preventive Maintenance","fr":"Preventive Maintenance"], 0.6, 0.8)
          newIndicatorCategory(MANAGEMENT_EQUIPMENT, ["en":"Management of Medical Equipment","fr":"Management of Medical Equipment"], 0.6, 0.8)
-         newIndicatorCategory(MANAGEMENT_SPARE_PARTS, ["en":"Management of Spare Parts","fr":"Management of Spare Parts"], 0.6, 0.8)
+         newIndicatorCategory(MANAGEMENT_SPAREPARTS, ["en":"Management of Spare Parts","fr":"Management of Spare Parts"], 0.6, 0.8)
          newIndicatorCategory(MONITORING_MEMMS_USE, ["en":"Monitoring of MEMMS Use","fr":"Monitoring of MEMMS Use"], 0.6, 0.8)
     }
+
     public static createUserDefinedVariables() {
         newUserDefinedVariable("WO_REINCIDENCE_DAYS",["en":"Work order re-incidence period(days)","fr":"Work order re-incidence period(days) fr"],365.0)
         newUserDefinedVariable("DEGGREE_CORRE_MAINT_EXECUTION",["en":"Degree of corrective maintenance execution time frame","fr":"Degree of corrective maintenance execution time frame fr"],365.0)
