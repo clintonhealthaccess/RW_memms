@@ -108,61 +108,61 @@ class DashboardInitializer {
         def correctiveMaintenance = IndicatorCategory.findByCode(CORRECTIVE_MAINTENANCE)
         if(correctiveMaintenance != null) {
             //Slie 15:Share of equipments for which a work order was generated
-            newIndicator(
-                correctiveMaintenance, 
-                "SHARE_WORK_ORDER_CORR_MAINTENANCE", 
-                ["en":"Share of equipments for which a work order was generated", "fr":"Share of equipments for which a work order was generated fr"],
-                ["en":"Share of equipments for which a work order was generated", "fr":"Share of equipments for which a work order was generated fr"], 
-                [
-                    "en":"Total number of equipments for which work order was generated / total number of equipment with status ={ “Operational”, “Partially operational”,”Under maintenance”}", 
-                    "fr":"Total number of equipments for which work order was generated / total number of equipment with status ={ “Operational”, “Partially operational”,”Under maintenance fr”}"
-                ],
-                "%", 0.15, 0.20, Indicator.HistoricalPeriod.QUARTERLY, 8, 
-                SHARE_WORK_ORDER_GEN_SIMPLE_SLD15, 
-                ["en":"Type of Equipment", "fr":"Type of Equipment fr"], 
-                SHARE_WORK_ORDER_GEN_GROUP_SLD15,
-                false, true
-            )
-           // Slie 16:Degree of corrective maintenance execution according to benchmark
-            newIndicator(
-                correctiveMaintenance, 
-                "DEGREE_CORR_EXEC_BENCHNARK_MAINTENANCE", 
-                ["en":"Degree of corrective maintenance execution according to benchmark","fr":"Degree of corrective maintenance execution according to benchmark fr"],
-                ["en":"Degree of corrective maintenance execution according to benchmark","fr":"Degree of corrective maintenance execution according to benchmark fr"], 
-                [
-                    "en":"Total no. of work orders with status changed from “open at facility” or “open at MM” to “Closed fixed”/ total no. of work orders generated in a given time frame (time frame to be decided by the user)", 
-                    "fr":"Total no. of work orders with status changed from “open at facility” or “open at MM” to “Closed fixed”/ total no. of work orders generated in a given time frame (time frame to be decided by the user) fr"
-                ],
-                "%", 0.85, 0.95, Indicator.HistoricalPeriod.QUARTERLY, 8, 
-                DEGREE_CORRECTIVE_EX_SIMPLE_SLD16, 
-                ["en":"Type of Equipment","fr":"Type of Equipment fr"], 
-                DEGREE_CORRECTIVE_EX_GROUP_SLD16,
-                false, true
-            )
+            // newIndicator(
+            //     correctiveMaintenance, 
+            //     "SHARE_WORK_ORDER_CORR_MAINTENANCE", 
+            //     ["en":"Share of equipments for which a work order was generated", "fr":"Share of equipments for which a work order was generated fr"],
+            //     ["en":"Share of equipments for which a work order was generated", "fr":"Share of equipments for which a work order was generated fr"], 
+            //     [
+            //         "en":"Total number of equipments for which work order was generated / total number of equipment with status ={ “Operational”, “Partially operational”,”Under maintenance”}", 
+            //         "fr":"Total number of equipments for which work order was generated / total number of equipment with status ={ “Operational”, “Partially operational”,”Under maintenance fr”}"
+            //     ],
+            //     "%", 0.15, 0.20, Indicator.HistoricalPeriod.QUARTERLY, 8, 
+            //     SHARE_WORK_ORDER_GEN_SIMPLE_SLD15, 
+            //     ["en":"Type of Equipment", "fr":"Type of Equipment fr"], 
+            //     SHARE_WORK_ORDER_GEN_GROUP_SLD15,
+            //     false, true
+            // )
+        //    // Slie 16:Degree of corrective maintenance execution according to benchmark
+            // newIndicator(
+            //     correctiveMaintenance, 
+            //     "DEGREE_CORR_EXEC_BENCHNARK_MAINTENANCE", 
+            //     ["en":"Degree of corrective maintenance execution according to benchmark","fr":"Degree of corrective maintenance execution according to benchmark fr"],
+            //     ["en":"Degree of corrective maintenance execution according to benchmark","fr":"Degree of corrective maintenance execution according to benchmark fr"], 
+            //     [
+            //         "en":"Total no. of work orders with status changed from “open at facility” or “open at MM” to “Closed fixed”/ total no. of work orders generated in a given time frame (time frame to be decided by the user)", 
+            //         "fr":"Total no. of work orders with status changed from “open at facility” or “open at MM” to “Closed fixed”/ total no. of work orders generated in a given time frame (time frame to be decided by the user) fr"
+            //     ],
+            //     "%", 0.85, 0.95, Indicator.HistoricalPeriod.QUARTERLY, 8, 
+            //     DEGREE_CORRECTIVE_EX_SIMPLE_SLD16, 
+            //     ["en":"Type of Equipment","fr":"Type of Equipment fr"], 
+            //     DEGREE_CORRECTIVE_EX_GROUP_SLD16,
+            //     false, true
+            // )
         }
 
         def preventiveMaintenance = IndicatorCategory.findByCode(PREVENTIVE_MAINTENANCE)
-        if(preventiveMaintenance != null) {
-            //Slide 26:Degree of execution of preventive maintenance
-            newIndicator(
-                preventiveMaintenance, 
-                "DEGREE_EXECUTION_PREV_MAINTENANCE", 
-                ["en":"Degree of execution of preventive maintenance","fr":"Degree of execution of preventive maintenance fr"],
-                ["en":"Degree of execution of preventive maintenance","fr":"Degree of execution of preventive maintenance fr"], 
-                [
-                    "en":"Number of preventive maintenance deadlines met / total  number of preventive maintenance deadlines",
-                    "fr":"Number of preventive maintenance deadlines met / total  number of preventive maintenance deadlines fr"
-                ],
-                "%",0.80,0.90, Indicator.HistoricalPeriod.QUARTERLY,8,
-                DEGREE_EXCUTION_PREV_SIMPLE_SLD26,
-                ["en":"Type of Equipment","fr":"Type of Equipment fr"],
-                DEGREE_EXCUTION_PREV_GROUP_SLD26,
-                false,true
-            )
-        }
+         if(preventiveMaintenance != null) {
+        //     //Slide 26:Degree of execution of preventive maintenance
+        //     newIndicator(
+        //         preventiveMaintenance, 
+        //         "DEGREE_EXECUTION_PREV_MAINTENANCE", 
+        //         ["en":"Degree of execution of preventive maintenance","fr":"Degree of execution of preventive maintenance fr"],
+        //         ["en":"Degree of execution of preventive maintenance","fr":"Degree of execution of preventive maintenance fr"], 
+        //         [
+        //             "en":"Number of preventive maintenance deadlines met / total  number of preventive maintenance deadlines",
+        //             "fr":"Number of preventive maintenance deadlines met / total  number of preventive maintenance deadlines fr"
+        //         ],
+        //         "%",0.80,0.90, Indicator.HistoricalPeriod.QUARTERLY,8,
+        //         DEGREE_EXCUTION_PREV_SIMPLE_SLD26,
+        //         ["en":"Type of Equipment","fr":"Type of Equipment fr"],
+        //         DEGREE_EXCUTION_PREV_GROUP_SLD26,
+        //         false,true
+        //     )
+         }
 
-        def sparePartsManagment = IndicatorCategory.findByCode(MANAGEMENT_SPARE_PARTS)
-        if(sparePartsManagment != null) {
+         def sparePartsManagment = IndicatorCategory.findByCode(MANAGEMENT_SPAREPARTS)
+         if(sparePartsManagment != null) {
             //Slie 31:Number of types of spare parts with stock more than a given time period
             newIndicator(
                 sparePartsManagment, 
@@ -183,12 +183,13 @@ class DashboardInitializer {
 
      
     }
+  
 
      public static createIndicatorCategories() {
          newIndicatorCategory(CORRECTIVE_MAINTENANCE, ["en":"Corrective Maintenance","fr":"Corrective Maintenance"], 0.6, 0.8)
          newIndicatorCategory(PREVENTIVE_MAINTENANCE, ["en":"Preventive Maintenance","fr":"Preventive Maintenance"], 0.6, 0.8)
          newIndicatorCategory(MANAGEMENT_EQUIPMENT, ["en":"Management of Medical Equipment","fr":"Management of Medical Equipment"], 0.6, 0.8)
-         newIndicatorCategory(MANAGEMENT_SPARE_PARTS, ["en":"Management of Spare Parts","fr":"Management of Spare Parts"], 0.6, 0.8)
+         newIndicatorCategory(MANAGEMENT_SPAREPARTS, ["en":"Management of Spare Parts","fr":"Management of Spare Parts"], 0.6, 0.8)
          newIndicatorCategory(MONITORING_MEMMS_USE, ["en":"Monitoring of MEMMS Use","fr":"Monitoring of MEMMS Use"], 0.6, 0.8)
     }
     public static createUserDefinedVariables() {
@@ -197,6 +198,23 @@ class DashboardInitializer {
         newUserDefinedVariable("TRASHHOLD_MIN_STOCT_OUT",["en":"Minimum Stock-Out time threshold(days)","fr":"Minimum Stock-Out time threshold(days) fr"],365.0)
         newUserDefinedVariable("TRASHHOLD_MAX_STOCT_OUT",["en":"Maximum Stock-Out time threshold(days)","fr":"Maximum Stock-Out time threshold(days) fr"],30.0)
     }
+
+    public static newGroupIndicatorValue(def generatedAt, def names, def value, def indicatorValue){
+        def groupIndicatorValue = new GroupIndicatorValue(generatedAt:generatedAt,value:value)
+         Utils.setLocaleValueInMap(groupIndicatorValue,names,'Names')
+        indicatorValue.addToGroupIndicatorValues(groupIndicatorValue)
+        indicatorValue.save(failOnError: true, flush:true)
+        return groupIndicatorValue
+    }
+
+    public static newIndicatorValue(def computedAt, def locationReport, def indicator, def computedValue){
+        def indicatorValue = new IndicatorValue(computedAt:computedAt, computedValue:computedValue)
+        indicator.addToValues(indicatorValue)
+        locationReport.addToIndicatorValues(indicatorValue)
+        locationReport.save(failOnError: true, flush:true)
+        return indicatorValue
+    }
+    
 
     public static newIndicatorCategory(def code, def names, def redToYellowThreshold, def yellowToGreenThreshold){
         def category = new IndicatorCategory(
