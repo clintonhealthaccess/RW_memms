@@ -35,11 +35,11 @@ import org.chai.memms.util.Utils.ReportType;
 class DashboardInitializer {
 
     //Indicator category codes
-    public static final String CORRECTIVE_MAINTENANCE = ReportType.CORRECTIVE.reportType  //"corrective"
-    public static final String PREVENTIVE_MAINTENANCE = ReportType.PREVENTIVE.reportType  //"preventive"
-    public static final String MANAGEMENT_SPAREPARTS = ReportType.SPAREPARTS.reportType   //"spareParts"
-    public static final String MANAGEMENT_EQUIPMENT = ReportType.EQUIPMENT.reportType     //"equipment"
-    public static final String MONITORING_MEMMS_USE = ReportType.MEMMS.reportType         //"monitoring"
+    public static final String CORRECTIVE_MAINTENANCE = ReportType.CORRECTIVE.reportType //"corrective"
+    public static final String PREVENTIVE_MAINTENANCE = ReportType.PREVENTIVE.reportType //"preventive"
+    public static final String MANAGEMENT_SPAREPARTS = ReportType.SPAREPARTS.reportType //"spareParts"
+    public static final String MANAGEMENT_EQUIPMENT = ReportType.EQUIPMENT.reportType //"equipment"
+    public static final String MONITORING_MEMMS_USE = ReportType.MEMMS.reportType //"monitoring"
 
     //Indicator computation scripts
     //Slid 7:Share of operational equipment
@@ -49,7 +49,7 @@ class DashboardInitializer {
     public static final String SHARE_OBSOLETE_SIMPLE_SLD12="select 1.0*count(equ.code)/(select count(equIn.code) as count1 from Equipment as equIn where equIn.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equIn.dataLocation @DATA_LOCATION) from Equipment as equ where equ.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equ.obsolete=1 and equ.dataLocation @DATA_LOCATION"
     public static final String SHARE_OBSOLETE_GROUP_SLD12="select "+Utils.buildSubQueryLanguages("equ.type.names")+",1.0*count(equ.code)/(select count(equIn.code) as count1 from Equipment as equIn where equIn.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equIn.dataLocation @DATA_LOCATION) from Equipment as equ where equ.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equ.obsolete=1 and equ.dataLocation @DATA_LOCATION group by equ.type"
     //Slie 15:Share of equipments for which a work order was generated=>rev ok
-    public static final String SHARE_WORK_ORDER_GEN_SIMPLE_SLD15="select 1.0*count(equ.code)/(select count(eq.code) from Equipment eq where eq.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and eq.dataLocation @DATA_LOCATION)  from WorkOrder order join order.equipment equ where order.equipment.id is not null and equ.dataLocation @DATA_LOCATION"
+    public static final String SHARE_WORK_ORDER_GEN_SIMPLE_SLD15="select 1.0*count(equ.code)/(select count(eq.code) from Equipment eq where eq.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and eq.dataLocation @DATA_LOCATION)  from WorkOrder wOrder join wOrder.equipment equ where wOrder.equipment.id is not null and equ.dataLocation @DATA_LOCATION"
     public static final String SHARE_WORK_ORDER_GEN_GROUP_SLD15="select "+Utils.buildSubQueryLanguages("wOrder.equipment.type.names")+",1.0*count(wOrder.equipment.id)/(select count(eq.code) from Equipment eq where eq.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and eq.dataLocation @DATA_LOCATION)  from WorkOrder wOrder  where wOrder.equipment.id is not null and wOrder.equipment.dataLocation @DATA_LOCATION group by  wOrder.equipment.type"
     //Slie 16:Degree of corrective maintenance execution according to benchmark=rev ok
     public static final String DEGREE_CORRECTIVE_EX_SIMPLE_SLD16="select 1.0*count(wo1.id)/(select count(wo.id) from WorkOrderStatus wos join wos.workOrder wo join wo.equipment as equ where equ.dataLocation @DATA_LOCATION) from WorkOrderStatus wos1 join wos1.workOrder wo1 join wo1.equipment as equ1 where wo1.currentStatus='CLOSEDFIXED' and (dateDiff(NOW(),wo1.returnedOn) < #DEGGREE_CORRE_MAINT_EXECUTION or dateDiff(NOW(),wos1.dateCreated) < #DEGGREE_CORRE_MAINT_EXECUTION) and equ1.dataLocation @DATA_LOCATION"
@@ -67,6 +67,7 @@ class DashboardInitializer {
         createUserDefinedVariables()
         createIndicators()
     }
+
     public static createIndicators() {
 
         def equipementManagment = IndicatorCategory.findByCode(MANAGEMENT_EQUIPMENT)
@@ -107,58 +108,58 @@ class DashboardInitializer {
     
         def correctiveMaintenance = IndicatorCategory.findByCode(CORRECTIVE_MAINTENANCE)
         if(correctiveMaintenance != null) {
-            //Slie 15:Share of equipments for which a work order was generated
-            // newIndicator(
-            //     correctiveMaintenance, 
-            //     "SHARE_WORK_ORDER_CORR_MAINTENANCE", 
-            //     ["en":"Share of equipments for which a work order was generated", "fr":"Share of equipments for which a work order was generated fr"],
-            //     ["en":"Share of equipments for which a work order was generated", "fr":"Share of equipments for which a work order was generated fr"], 
-            //     [
-            //         "en":"Total number of equipments for which work order was generated / total number of equipment with status ={ “Operational”, “Partially operational”,”Under maintenance”}", 
-            //         "fr":"Total number of equipments for which work order was generated / total number of equipment with status ={ “Operational”, “Partially operational”,”Under maintenance fr”}"
-            //     ],
-            //     "%", 0.15, 0.20, Indicator.HistoricalPeriod.QUARTERLY, 8, 
-            //     SHARE_WORK_ORDER_GEN_SIMPLE_SLD15, 
-            //     ["en":"Type of Equipment", "fr":"Type of Equipment fr"], 
-            //     SHARE_WORK_ORDER_GEN_GROUP_SLD15,
-            //     false, true
-            // )
-        //    // Slie 16:Degree of corrective maintenance execution according to benchmark
-            // newIndicator(
-            //     correctiveMaintenance, 
-            //     "DEGREE_CORR_EXEC_BENCHNARK_MAINTENANCE", 
-            //     ["en":"Degree of corrective maintenance execution according to benchmark","fr":"Degree of corrective maintenance execution according to benchmark fr"],
-            //     ["en":"Degree of corrective maintenance execution according to benchmark","fr":"Degree of corrective maintenance execution according to benchmark fr"], 
-            //     [
-            //         "en":"Total no. of work orders with status changed from “open at facility” or “open at MM” to “Closed fixed”/ total no. of work orders generated in a given time frame (time frame to be decided by the user)", 
-            //         "fr":"Total no. of work orders with status changed from “open at facility” or “open at MM” to “Closed fixed”/ total no. of work orders generated in a given time frame (time frame to be decided by the user) fr"
-            //     ],
-            //     "%", 0.85, 0.95, Indicator.HistoricalPeriod.QUARTERLY, 8, 
-            //     DEGREE_CORRECTIVE_EX_SIMPLE_SLD16, 
-            //     ["en":"Type of Equipment","fr":"Type of Equipment fr"], 
-            //     DEGREE_CORRECTIVE_EX_GROUP_SLD16,
-            //     false, true
-            // )
+           //Slie 15:Share of equipments for which a work order was generated
+            newIndicator(
+                correctiveMaintenance, 
+                "SHARE_WORK_ORDER_CORR_MAINTENANCE", 
+                ["en":"Share of equipments for which a work order was generated", "fr":"Share of equipments for which a work order was generated fr"],
+                ["en":"Share of equipments for which a work order was generated", "fr":"Share of equipments for which a work order was generated fr"], 
+                [
+                    "en":"Total number of equipments for which work order was generated / total number of equipment with status ={ “Operational”, “Partially operational”,”Under maintenance”}", 
+                    "fr":"Total number of equipments for which work order was generated / total number of equipment with status ={ “Operational”, “Partially operational”,”Under maintenance fr”}"
+                ],
+                "%", 0.15, 0.20, Indicator.HistoricalPeriod.QUARTERLY, 8, 
+                SHARE_WORK_ORDER_GEN_SIMPLE_SLD15, 
+                ["en":"Type of Equipment", "fr":"Type of Equipment fr"], 
+                SHARE_WORK_ORDER_GEN_GROUP_SLD15,
+                false, true
+            )
+           // Slie 16:Degree of corrective maintenance execution according to benchmark
+            newIndicator(
+                correctiveMaintenance, 
+                "DEGREE_CORR_EXEC_BENCHNARK_MAINTENANCE", 
+                ["en":"Degree of corrective maintenance execution according to benchmark","fr":"Degree of corrective maintenance execution according to benchmark fr"],
+                ["en":"Degree of corrective maintenance execution according to benchmark","fr":"Degree of corrective maintenance execution according to benchmark fr"], 
+                [
+                    "en":"Total no. of work orders with status changed from “open at facility” or “open at MM” to “Closed fixed”/ total no. of work orders generated in a given time frame (time frame to be decided by the user)", 
+                    "fr":"Total no. of work orders with status changed from “open at facility” or “open at MM” to “Closed fixed”/ total no. of work orders generated in a given time frame (time frame to be decided by the user) fr"
+                ],
+                "%", 0.85, 0.95, Indicator.HistoricalPeriod.QUARTERLY, 8, 
+                DEGREE_CORRECTIVE_EX_SIMPLE_SLD16, 
+                ["en":"Type of Equipment","fr":"Type of Equipment fr"], 
+                DEGREE_CORRECTIVE_EX_GROUP_SLD16,
+                false, true
+            )
         }
 
         def preventiveMaintenance = IndicatorCategory.findByCode(PREVENTIVE_MAINTENANCE)
          if(preventiveMaintenance != null) {
-        //     //Slide 26:Degree of execution of preventive maintenance
-        //     newIndicator(
-        //         preventiveMaintenance, 
-        //         "DEGREE_EXECUTION_PREV_MAINTENANCE", 
-        //         ["en":"Degree of execution of preventive maintenance","fr":"Degree of execution of preventive maintenance fr"],
-        //         ["en":"Degree of execution of preventive maintenance","fr":"Degree of execution of preventive maintenance fr"], 
-        //         [
-        //             "en":"Number of preventive maintenance deadlines met / total  number of preventive maintenance deadlines",
-        //             "fr":"Number of preventive maintenance deadlines met / total  number of preventive maintenance deadlines fr"
-        //         ],
-        //         "%",0.80,0.90, Indicator.HistoricalPeriod.QUARTERLY,8,
-        //         DEGREE_EXCUTION_PREV_SIMPLE_SLD26,
-        //         ["en":"Type of Equipment","fr":"Type of Equipment fr"],
-        //         DEGREE_EXCUTION_PREV_GROUP_SLD26,
-        //         false,true
-        //     )
+            //Slide 26:Degree of execution of preventive maintenance
+            newIndicator(
+                preventiveMaintenance, 
+                "DEGREE_EXECUTION_PREV_MAINTENANCE", 
+                ["en":"Degree of execution of preventive maintenance","fr":"Degree of execution of preventive maintenance fr"],
+                ["en":"Degree of execution of preventive maintenance","fr":"Degree of execution of preventive maintenance fr"], 
+                [
+                    "en":"Number of preventive maintenance deadlines met / total  number of preventive maintenance deadlines",
+                    "fr":"Number of preventive maintenance deadlines met / total  number of preventive maintenance deadlines fr"
+                ],
+                "%",0.80,0.90, Indicator.HistoricalPeriod.QUARTERLY,8,
+                DEGREE_EXCUTION_PREV_SIMPLE_SLD26,
+                ["en":"Type of Equipment","fr":"Type of Equipment fr"],
+                DEGREE_EXCUTION_PREV_GROUP_SLD26,
+                false,true
+            )
          }
 
          def sparePartsManagment = IndicatorCategory.findByCode(MANAGEMENT_SPAREPARTS)
@@ -179,19 +180,18 @@ class DashboardInitializer {
                 NUMBER_SP_PAT_STOCK_MORE_GROUP_SLD31,
                 true, true
             )
-        }
-
-     
+         }
     }
   
 
-     public static createIndicatorCategories() {
+    public static createIndicatorCategories() {
          newIndicatorCategory(CORRECTIVE_MAINTENANCE, ["en":"Corrective Maintenance","fr":"Corrective Maintenance"], 0.6, 0.8)
          newIndicatorCategory(PREVENTIVE_MAINTENANCE, ["en":"Preventive Maintenance","fr":"Preventive Maintenance"], 0.6, 0.8)
          newIndicatorCategory(MANAGEMENT_EQUIPMENT, ["en":"Management of Medical Equipment","fr":"Management of Medical Equipment"], 0.6, 0.8)
          newIndicatorCategory(MANAGEMENT_SPAREPARTS, ["en":"Management of Spare Parts","fr":"Management of Spare Parts"], 0.6, 0.8)
          newIndicatorCategory(MONITORING_MEMMS_USE, ["en":"Monitoring of MEMMS Use","fr":"Monitoring of MEMMS Use"], 0.6, 0.8)
     }
+
     public static createUserDefinedVariables() {
         newUserDefinedVariable("WO_REINCIDENCE_DAYS",["en":"Work order re-incidence period(days)","fr":"Work order re-incidence period(days) fr"],365.0)
         newUserDefinedVariable("DEGGREE_CORRE_MAINT_EXECUTION",["en":"Degree of corrective maintenance execution time frame","fr":"Degree of corrective maintenance execution time frame fr"],365.0)

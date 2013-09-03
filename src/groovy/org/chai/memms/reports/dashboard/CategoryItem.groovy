@@ -51,8 +51,6 @@ class CategoryItem {
         Double totalValue = 0.0
         Integer counter = 0
 
-        if (log.isDebugEnabled()) log.debug("categoryItem categoryItem:" + this);
-
         for(IndicatorItem i : items) {
             if(i.categoryCode.equals(this.code)) {
                 if("green".equals(i.color)) {

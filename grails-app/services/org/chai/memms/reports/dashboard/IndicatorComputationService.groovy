@@ -49,14 +49,17 @@ class IndicatorComputationService {
     def equipmentService
     def indicatorValueService
     def locationReportService
-
-
     static final String DATA_LOCATION_TOKEN = "@DATA_LOCATION"
     static final String USER_DEFINED_VARIABLE_REGEX = "#[0-9a-zA-Z_]+"
     static final Pattern userDefinedVariablePattern = Pattern.compile(USER_DEFINED_VARIABLE_REGEX)
 
     public def computeCurrentReport() {
         // 1. GET CURRENT DATE
+        DateTime lastYear = DateTime.now().minusYears(1)
+        DateTime lastHalfYear = DateTime.now().minusMonths(6)
+        DateTime lastQuarter = DateTime.now().minusMonths(3)
+        DateTime lastMonth = DateTime.now().minusMonths(1)
+        DateTime lastWeek = DateTime.now().minusWeeks(1)
         DateTime now = DateTime.now()
         Date currentDate = now.toDate()
         // 2. REMOVE PREVIOUS REPORTS IN THE SAME MONTH
@@ -65,11 +68,38 @@ class IndicatorComputationService {
         LocationReport.executeUpdate("delete from LocationReport where month(eventDate) = " + now.getMonthOfYear() + " and year(eventDate) = " + now.getYear())
         MemmsReport.executeUpdate("delete from MemmsReport where month(eventDate) = " + now.getMonthOfYear() + " and year(eventDate) = " + now.getYear())
         // 3. SAVE NEW MEMMS REPORT
-        MemmsReport memmsReport = new MemmsReport(eventDate: currentDate).save()
+        MemmsReport memmsReportYear = new MemmsReport(eventDate: lastYear.toDate()).save()
+        MemmsReport memmsReportHalfYear = new MemmsReport(eventDate: lastHalfYear.toDate()).save()
+        MemmsReport memmsReportQuarter = new MemmsReport(eventDate: lastQuarter.toDate()).save()
+        MemmsReport memmsReportMonth = new MemmsReport(eventDate: lastMonth.toDate()).save()
+        MemmsReport memmsReportWeek = new MemmsReport(eventDate: lastWeek.toDate()).save()
+        MemmsReport memmsReportToday = new MemmsReport(eventDate: currentDate).save()
         // 4. Compute report for all locations with registered users.
-        def dataLocations = equipmentService.getDataLocationsWithEquipments()  
-        for(def dataLocation: dataLocations){
-            computeLocationReport(currentDate, dataLocation, memmsReport)
+        // def dataLocations = equipmentService.getDataLocationsWithEquipments()  
+        // for(def dataLocation: dataLocations){
+        //     computeLocationReport(currentDate, dataLocation, memmsReport)
+        // }
+
+         Set<Long> locations = new HashSet<Long>();
+
+         for(User user: User.findAll()) {
+            if ((user.location != null) && !locations.contains(user.location.id)){
+                locations.add(user.location.id);
+                if (log.isDebugEnabled()) log.debug("memmsReport  lastYear =>>");
+                computeLocationReport(lastYear.toDate(), user.location, memmsReportYear)
+                if (log.isDebugEnabled()) log.debug("memmsReport  lastHalfYear =>>");
+                computeLocationReport(lastHalfYear.toDate(), user.location, memmsReportHalfYear)
+                if (log.isDebugEnabled()) log.debug("memmsReport  lastQuarter =>>");
+                computeLocationReport(lastQuarter.toDate(), user.location, memmsReportQuarter)
+                if (log.isDebugEnabled()) log.debug("memmsReport  lastMonth =>>");
+                computeLocationReport(lastMonth.toDate(), user.location, memmsReportMonth)
+                if (log.isDebugEnabled()) log.debug("memmsReport  lastWeek =>>");
+                computeLocationReport(lastWeek.toDate(), user.location, memmsReportWeek)
+                if (log.isDebugEnabled()) log.debug("memmsReport  today =>>");
+                computeLocationReport(currentDate, user.location, memmsReportToday)
+               break
+                
+            }
         }
     }
 
@@ -79,30 +109,28 @@ class IndicatorComputationService {
         for(Indicator indicator: indicators) {
             if (log.isDebugEnabled()) log.debug("computeLocationReport calculating report " + indicator.code + " for " + location.names);
             def compvalue = this.computeIndicatorForLocation(indicator, location)
-            def indicatorValue = this.indicatorValueService.newIndicatorValue(currentDate,locationReport,indicator, compvalue)
+            def indicatorValue = indicatorValueService.newIndicatorValue(currentDate,locationReport,indicator, compvalue)
             try{
                 if(indicatorValue!=null) {
                     if (log.isDebugEnabled()) log.debug(">> map building indicatorValue =" + indicatorValue + " location = " + location);
                     Map<String,Double> map = this.groupComputeIndicatorForLocation(indicatorValue.indicator,location)
-
                     if (log.isDebugEnabled()) log.debug(">> built map =" + map );
                     if(map!=null) {
                         for (Map.Entry<String, Double> entry : (Set)map.entrySet()){
                             if (log.isDebugEnabled()) log.debug("computeLocationReport entry.getKey() " + entry.getKey() + " entry.getValue() " + entry.getValue());
                             DashboardInitializer.newGroupIndicatorValue(currentDate,['en':entry.getKey(),'fr':entry.getKey()],entry.getValue(),indicatorValue)
+                            if (log.isDebugEnabled()) log.debug("groupIndicatorValue +++====>" + groupIndicatorValue);
                         }
                           
                     }
                 }
 
             } catch(Exception ex) {
-               if (log.isDebugEnabled()) log.debug("exception catched in computeLocationReport computedValue = " +compvalue  + " indicatorValue = " +indicatorValue);
                 ex.printStackTrace()
             }
+            if (log.isDebugEnabled()) log.debug("computeLocationReport done calculating report " + indicator.code + " for " + location.names);
         }
     }
-
-    // compute indicator
 
     def computeIndicatorForLocation(Indicator indicator, CalculationLocation location) {
         if (location == null) {
@@ -110,7 +138,7 @@ class IndicatorComputationService {
         }
         List<DataLocation> dataLocations = new ArrayList<DataLocation>()
         if (location instanceof Location) {
-            dataLocations = location.getDataLocations()
+            dataLocations = location.collectDataLocations(null)
         } else if (location instanceof DataLocation) {
             dataLocations.add(location)
             if(location.manages !=null) dataLocations.addAll(location?.manages)
@@ -118,15 +146,14 @@ class IndicatorComputationService {
             return 0.0
         }
         if(dataLocations!=null && dataLocations.size() == DataLocation.count()) {
-            
             return computeIndicatorForAllDataLocations(indicator)
         }
         return computeIndicatorForDataLocations(indicator, dataLocations)
     }
 
     def computeIndicatorForDataLocations(Indicator indicator, def dataLocations) {
-        if(dataLocations == null) 
-            return 0.0
+        if(dataLocations == null)
+        return 0.0
         String cond = "";
         int counter = 0
         for(DataLocation loc : dataLocations) {
@@ -146,7 +173,7 @@ class IndicatorComputationService {
     }
 
     def computeIndicatorForAllDataLocations(Indicator indicator) {
-      
+        if (log.isDebugEnabled()) log.debug("computing IndicatorForAllDataLocations indicator= " + indicator.code );
         return computeIndicatorWithDataLocationCondition(indicator, " is not null ")
     }
 
@@ -200,10 +227,10 @@ class IndicatorComputationService {
         }
         List<DataLocation> dataLocations = new ArrayList<DataLocation>()
         if (location instanceof Location) {
-            dataLocations = location.getDataLocations(LocationLevel.findAll(), null)
+            dataLocations = location.collectDataLocations(null)
         } else if (location instanceof DataLocation) {
             dataLocations.add(location)
-            dataLocations.addAll(location.manages)
+            if(location.manages != null) dataLocations.addAll(location.manages)
         } else {
             return null
         }
@@ -217,7 +244,8 @@ class IndicatorComputationService {
         if (log.isDebugEnabled()) log.debug("groupComputeIndicatorForDataLocations indicator " + indicator + ", dataLocations " + dataLocations);
 
         if(dataLocations == null)
-        return null
+            return null
+        
         String cond = "";
         int counter = 0
         for(DataLocation loc : dataLocations) {
@@ -227,6 +255,8 @@ class IndicatorComputationService {
             cond += "" + loc.id
             counter++
         }
+        if (log.isDebugEnabled()) log.debug("groupComputeIndicatorForDataLocations cond = " + cond);
+
         if(counter == 0) {
             return null
         } else if(counter == 1) {
