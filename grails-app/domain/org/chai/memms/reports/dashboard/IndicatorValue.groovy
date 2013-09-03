@@ -53,7 +53,7 @@ class IndicatorValue implements Comparable<IndicatorValue>{
 
     @Override
     public String toString() {
-        return "IndicatorValue[ id = " + id + ", computedAt = " + computedAt + "]"
+        return "IndicatorValue[#id = " + id + ", @" + computedAt?.getTime() + ", indicator = " + indicator + "]"
     }
 
     @Override

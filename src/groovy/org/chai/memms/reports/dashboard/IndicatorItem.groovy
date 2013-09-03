@@ -49,7 +49,7 @@ import org.joda.time.format.DateTimeFormat
 class IndicatorItem {
 
     IndicatorComputationService indicatorComputationService
-    String facilityNames
+    String locationNames
     String categoryCode
     Date computedAt
     String code
@@ -59,6 +59,7 @@ class IndicatorItem {
     Double value
     String unit
     String color
+
     List<HistoricalValueItem> historicalValueItems
     List<ComparisonValueItem> highestComparisonValueItems
     List<ComparisonValueItem> higherComparisonValueItems
@@ -78,7 +79,8 @@ class IndicatorItem {
         this.unit = iv.indicator.unit
         this.groupNames = iv.indicator.groupNames
         this.totalHistoryItems = iv.indicator.historyItems
-        this.facilityNames = iv.locationReport.location.names
+        this.locationNames = iv.locationReport.location.names
+
         Double red = iv.indicator.redToYellowThreshold
         Double green =  iv.indicator.yellowToGreenThreshold
         if(red < green) {
@@ -98,6 +100,7 @@ class IndicatorItem {
                 this.color = "green"
             }
         }
+
         this.historicalValueItems = new ArrayList<HistoricalValueItem>()
         this.geographicalValueItems = new ArrayList<GeographicalValueItem>()
         this.highestComparisonValueItems= new ArrayList<ComparisonValueItem>()
@@ -105,19 +108,25 @@ class IndicatorItem {
         this.lowerComparisonValueItems= new ArrayList<ComparisonValueItem>()
         this.lowestComparisonValueItems= new ArrayList<ComparisonValueItem>()
         this.valuesPerGroup=new HashMap<String,Double>()
-        //####adding historical values
+
+        // add historical values
         this.historicalValueItems.add(new HistoricalValueItem(iv))
         for(IndicatorValue indV :  getHistoricValueItems(iv)) {
             this.historicalValueItems.add(new HistoricalValueItem(indV))
         }
-        //#### adding geographical values
+
+        // add geographical values
         this.geographicalValueItems.add(new GeographicalValueItem(iv))
         for(IndicatorValue indV : getGeographicalValueItems(iv)) {
             this.geographicalValueItems.add(new GeographicalValueItem(indV))
         }
-        //###adding comparison value items
-        getComparisonValueItems(iv)
-        //## adding groupValues
+
+        // add comparison value items
+        if(iv.locationReport.location.parent != null){
+            getComparisonValueItems(iv)
+        }
+
+        // add group value items
         for(GroupIndicatorValue grV:iv.groupIndicatorValues){
             this.valuesPerGroup.put(grV.names,grV.value)
         }
@@ -203,18 +212,19 @@ class IndicatorItem {
         }
         this.higherComparisonValueItems.reverse()
     }
+
     /**
-     *
      *Gets geographical values for the current report
      **/
     public def getGeographicalValueItems(IndicatorValue indicatorValue){
         if(indicatorValue!=null){
-            def  geographicalLocations=getDataLocationsInLocation(indicatorValue.locationReport.location)
+            def geographicalLocations = getDataLocationsInLocation(indicatorValue.locationReport.location)
             def locationReports=LocationReport.findAllByMemmsReportAndLocationInList(indicatorValue.locationReport.memmsReport,geographicalLocations)
             return IndicatorValue.findAllByLocationReportInListAndIndicator(locationReports,indicatorValue.indicator)
         }
         return null
     }
+
     /**
      *Gets  facilities or locations similar to the curent facility/location from this indicator value
      */
