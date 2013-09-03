@@ -35,11 +35,11 @@ import org.chai.memms.util.Utils.ReportType;
 class DashboardInitializer {
 
     //Indicator category codes
-    public static final String CORRECTIVE_MAINTENANCE = ReportType.CORRECTIVE.reportType  //"corrective"
-    public static final String PREVENTIVE_MAINTENANCE = ReportType.PREVENTIVE.reportType  //"preventive"
-    public static final String MANAGEMENT_SPAREPARTS = ReportType.SPAREPARTS.reportType   //"spareParts"
-    public static final String MANAGEMENT_EQUIPMENT = ReportType.EQUIPMENT.reportType     //"equipment"
-    public static final String MONITORING_MEMMS_USE = ReportType.MEMMS.reportType         //"monitoring"
+    public static final String CORRECTIVE_MAINTENANCE = ReportType.CORRECTIVE.reportType //"corrective"
+    public static final String PREVENTIVE_MAINTENANCE = ReportType.PREVENTIVE.reportType //"preventive"
+    public static final String MANAGEMENT_SPAREPARTS = ReportType.SPAREPARTS.reportType //"spareParts"
+    public static final String MANAGEMENT_EQUIPMENT = ReportType.EQUIPMENT.reportType //"equipment"
+    public static final String MONITORING_MEMMS_USE = ReportType.MEMMS.reportType //"monitoring"
 
     //Indicator computation scripts
     //Slid 7:Share of operational equipment
@@ -183,7 +183,7 @@ class DashboardInitializer {
         }
     }
 
-     public static createIndicatorCategories() {
+    public static createIndicatorCategories() {
          newIndicatorCategory(CORRECTIVE_MAINTENANCE, ["en":"Corrective Maintenance","fr":"Corrective Maintenance"], 0.6, 0.8)
          newIndicatorCategory(PREVENTIVE_MAINTENANCE, ["en":"Preventive Maintenance","fr":"Preventive Maintenance"], 0.6, 0.8)
          newIndicatorCategory(MANAGEMENT_EQUIPMENT, ["en":"Management of Medical Equipment","fr":"Management of Medical Equipment"], 0.6, 0.8)

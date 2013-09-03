@@ -69,20 +69,20 @@ class IndicatorItem {
     Map<String, Double> valuesPerGroup
     Integer totalHistoryItems
 
-    public IndicatorItem(IndicatorValue iv) {
-        this.categoryCode = iv.indicator.category.code
-        this.computedAt = iv.computedAt
-        this.code = iv.indicator.code
-        this.names = iv.indicator.names
-        this.formulas = iv.indicator.formulas
-        this.value = iv.computedValue
-        this.unit = iv.indicator.unit
-        this.groupNames = iv.indicator.groupNames
-        this.totalHistoryItems = iv.indicator.historyItems
-        this.locationNames = iv.locationReport.location.names
+    public IndicatorItem(IndicatorValue indicatorValue) {
+        this.categoryCode = indicatorValue.indicator.category.code
+        this.computedAt = indicatorValue.computedAt
+        this.code = indicatorValue.indicator.code
+        this.names = indicatorValue.indicator.names
+        this.formulas = indicatorValue.indicator.formulas
+        this.value = indicatorValue.computedValue
+        this.unit = indicatorValue.indicator.unit
+        this.groupNames = indicatorValue.indicator.groupNames
+        this.totalHistoryItems = indicatorValue.indicator.historyItems
+        this.locationNames = indicatorValue.locationReport.location.names
 
-        Double red = iv.indicator.redToYellowThreshold
-        Double green =  iv.indicator.yellowToGreenThreshold
+        Double red = indicatorValue.indicator.redToYellowThreshold
+        Double green =  indicatorValue.indicator.yellowToGreenThreshold
         if(red < green) {
             if(this.value < red) {
                 this.color = "red"
@@ -110,41 +110,55 @@ class IndicatorItem {
         this.valuesPerGroup=new HashMap<String,Double>()
 
         // add historical values
-        this.historicalValueItems.add(new HistoricalValueItem(iv))
-        for(IndicatorValue indV :  getHistoricValueItems(iv)) {
-            this.historicalValueItems.add(new HistoricalValueItem(indV))
-        }
+        // TODO is this necessary?
+        // def historicalValueItem = new HistoricalValueItem(indicatorValue)
+        // this.historicalValueItems.add(historicalValueItem)
+        this.historicalValueItems.addAll(getHistoricValueItems(indicatorValue))
+        if (log.isDebugEnabled()) log.debug("getHistoricalValueItems historical value items=" + historicalValueItems + ", size="+historicalValueItems.size());
 
         // add geographical values
-        this.geographicalValueItems.add(new GeographicalValueItem(iv))
-        for(IndicatorValue indV : getGeographicalValueItems(iv)) {
+        this.geographicalValueItems.add(new GeographicalValueItem(indicatorValue))
+        for(IndicatorValue indV : getGeographicalValueItems(indicatorValue)) {
             this.geographicalValueItems.add(new GeographicalValueItem(indV))
         }
 
         // add comparison value items
-        if(iv.locationReport.location.parent != null){
-            getComparisonValueItems(iv)
+        if(indicatorValue.locationReport.location.parent != null){
+            getComparisonValueItems(indicatorValue)
         }
 
         // add group value items
-        for(GroupIndicatorValue grV:iv.groupIndicatorValues){
+        for(GroupIndicatorValue grV:indicatorValue.groupIndicatorValues){
             this.valuesPerGroup.put(grV.names,grV.value)
         }
     }
     /**
-     *Get historical values for this indicators = for diferent location reports
+     *Get historical values for this indicators = for different location reports
      */
-    public def getHistoricValueItems(IndicatorValue iv) {
-        if(iv != null) {
-            def locationReports=null
-            if(iv.indicator.historicalPeriod.equals(Indicator.HistoricalPeriod.MONTHLY)){
-                locationReports = LocationReport.findAll("from LocationReport as locationReport  where locationReport.location.id='"+iv.locationReport.location.id+"' order by locationReport.eventDate desc limit "+iv.indicator.historyItems+"")
-            } else if(iv.indicator.historicalPeriod.equals(Indicator.HistoricalPeriod.QUARTERLY)){
-                locationReports = LocationReport.findAll("from LocationReport as locationReport where month(locationReport.eventDate) in (3,6,9,12) and locationReport.location.id='"+iv.locationReport.location.id+"' order by locationReport.eventDate desc limit "+iv.indicator.historyItems+"")
-            } else if(iv.indicator.historicalPeriod.equals(Indicator.HistoricalPeriod.YEARLY)) {
-                locationReports = LocationReport.findAll("from LocationReport as locationReport where month(locationReport.eventDate) = 12 and locationReport.location.id='"+iv.locationReport.location.id+"' order by locationReport.eventDate desc limit "+iv.indicator.historyItems+"")
+    public def getHistoricValueItems(IndicatorValue indicatorValue) {
+        def historicalValueItems = new ArrayList<HistoricalValueItem>();
+
+        if(indicatorValue != null) {
+            if (log.isDebugEnabled()) log.debug("getHistoricalValueItems period " + indicatorValue.indicator.historicalPeriod);
+
+            def locationReports = null
+            if(indicatorValue.indicator.historicalPeriod.equals(Indicator.HistoricalPeriod.MONTHLY)){
+                locationReports = LocationReport.findAll("from LocationReport as locationReport  where locationReport.location.id='"+indicatorValue.locationReport.location.id+"' order by locationReport.eventDate desc limit "+indicatorValue.indicator.historyItems+"")
+            } 
+            else if(indicatorValue.indicator.historicalPeriod.equals(Indicator.HistoricalPeriod.QUARTERLY)){
+                locationReports = LocationReport.findAll("from LocationReport as locationReport where month(locationReport.eventDate) in (3,6,9,12) and locationReport.location.id='"+indicatorValue.locationReport.location.id+"' order by locationReport.eventDate desc limit "+indicatorValue.indicator.historyItems+"")
+            } 
+            else if(indicatorValue.indicator.historicalPeriod.equals(Indicator.HistoricalPeriod.YEARLY)) {
+                locationReports = LocationReport.findAll("from LocationReport as locationReport where month(locationReport.eventDate) = 12 and locationReport.location.id='"+indicatorValue.locationReport.location.id+"' order by locationReport.eventDate desc limit "+indicatorValue.indicator.historyItems+"")
             }
-            return IndicatorValue.findAllByLocationReportInListAndIndicator(locationReports,iv.indicator)
+
+            def indicatorValues = IndicatorValue.findAllByLocationReportInListAndIndicator(locationReports,indicatorValue.indicator)
+            indicatorValues.each{ indV ->
+                def historicalValueItem = new HistoricalValueItem(indV)
+                historicalValueItems.add(historicalValueItem)
+            }
+            if (log.isDebugEnabled()) log.debug("getHistoricalValueItems historical value items =" + historicalValueItems + ", size="+historicalValueItems.size());
+            return historicalValueItems
         }
         return null
     }
@@ -167,7 +181,7 @@ class IndicatorItem {
             Double red = currentValue.indicator.redToYellowThreshold
             Double green =  currentValue.indicator.yellowToGreenThreshold
             if(red < green) {
-                for(IndicatorValue iv:invVs){
+                for(IndicatorValue indicatorValue:invVs){
                     if(iv.computedValue <= currentValue.computedValue && iv.id!=currentValue.id){
                         listOfLowest.add(iv)
                     } else if(iv.computedValue >= currentValue.computedValue && iv.id!=currentValue.id){

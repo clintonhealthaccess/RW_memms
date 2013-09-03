@@ -57,19 +57,23 @@ class DashboardController extends AbstractController {
     def dashboard = {
         //indicatorComputationService.computeCurrentReport()
 
+        def report = getUserReport()
         def reportType = getReportType()
-
-        LocationReport report = getUserReport()
         
-        List<IndicatorItem> indicatorItems = new ArrayList<IndicatorItem>()
-        CategoryItem categoryItem = null
+        def category = IndicatorCategory.findByCode(reportType.reportType)
+        def categoryItem = new CategoryItem(category, new ArrayList<IndicatorItem>())
+
         if(report != null) {
-            for(IndicatorValue i : IndicatorValue.findAllByLocationReport(report)) {
-                indicatorItems.add(new IndicatorItem(i))
+            Set<IndicatorValue> indicatorValues = report.indicatorValues.findAll{ it.indicator.category.equals(category) }
+            
+            if(indicatorValues != null && !indicatorValues.empty){
+                indicatorValues.each { indicatorValue ->
+                    def indicatorItem = new IndicatorItem(indicatorValue)
+                    categoryItem.indicatorItems.add(indicatorItem)
+                }
             }
-            def category = IndicatorCategory.findByCode(reportType.reportType)
-            categoryItem = new CategoryItem(category, indicatorItems)
         }
+
         def model = [
             reportType: reportType,
             categoryItem: categoryItem
@@ -84,13 +88,11 @@ class DashboardController extends AbstractController {
        
     def getUserReport() {
         MemmsReport memmsReport = dashboardService.getCurrentMemmsReport()
-        if(memmsReport == null) {
-            return null
-        }
+        if(memmsReport == null) return null
+
         User user =  User.findByUuid(SecurityUtils.subject.principal, [cache: true])
-        if(user == null) {
-            return null
-        }
+        if(user == null) return null
+
         return LocationReport.findByMemmsReportAndLocation(memmsReport, user.location)
     }
 
