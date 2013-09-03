@@ -46,7 +46,6 @@ import org.chai.memms.util.Utils;
 class IndicatorComputationService {
     static transactional = true
     def sessionFactory
-    def equipmentService
 
     static final String DATA_LOCATION_TOKEN = "@DATA_LOCATION"
     static final String USER_DEFINED_VARIABLE_REGEX = "#[0-9a-zA-Z_]+"
@@ -65,7 +64,6 @@ class IndicatorComputationService {
         MemmsReport memmsReport = new MemmsReport(eventDate: currentDate).save()
         // 4. Compute report for all locations with registered users.
         Set<Long> locations = new HashSet<Long>();
-
         for(User user: User.findAll()) {
             if ((user.location != null) && !locations.contains(user.location.id)){
                 locations.add(user.location.id);
@@ -74,22 +72,22 @@ class IndicatorComputationService {
                 
             }
         }
-        // def dataLocations = equipmentService.getDataLocationsWithEquipments()  
-        // if(log.isDebugEnabled()) log.debug(">> dataLocations with Equipment = " + dataLocations+"\n")
-        // for(def dataLocation: dataLocations){
-        //     computeLocationReport(currentDate, dataLocation, memmsReport)
-        // }
     }
 
      def computeLocationReport(Date currentDate, CalculationLocation location, MemmsReport memmsReport) {
-        LocationReport locationReport = new LocationReport(eventDate: currentDate, memmsReport: memmsReport, location:location).save(failOnError:true,flush:true)
-        def indicators = Indicator.findAllByActive(true)
-        for(Indicator indicator: indicators) {
+        LocationReport locationReport = new LocationReport(eventDate: currentDate, memmsReport: memmsReport, location:location).save()
+        for(Indicator indicator: Indicator.findAllByActive(true)) {
             if (log.isDebugEnabled()) log.debug("computeLocationReport calculating report " + indicator.code + " for " + location.names);
             try{
-                def compvalue = computeIndicatorForLocation(indicator, location)
-                IndicatorValue indicatorValue=new IndicatorValue(computedAt: currentDate, locationReport: locationReport, indicator: indicator, computedValue:compvalue).save(failOnError:true,flush:true)
+                
+                if (log.isDebugEnabled()) log.debug("computeLocationReport computing compValue " + indicator.code + " for " + location.names);
 
+                def compvalue = computeIndicatorForLocation(indicator, location)
+                
+                if (log.isDebugEnabled()) log.debug("computeLocationReport creating indicatorValue " + indicator.code + " for " + location.names);
+
+                IndicatorValue indicatorValue=new IndicatorValue(computedAt: currentDate, locationReport: locationReport, indicator: indicator, computedValue:compvalue).save()
+                
                 if(indicatorValue!=null) {
 
                     if (log.isDebugEnabled()) log.debug("computeLocationReport creating map " + indicator.code + " for " + location.names);
@@ -102,6 +100,9 @@ class IndicatorComputationService {
 
                         for (Map.Entry<String, Double> entry : (Set)map.entrySet()){
                             if (log.isDebugEnabled()) log.debug("computeLocationReport entry.getKey() " + entry.getKey() + " entry.getValue() " + entry.getValue());
+
+                            if (log.isDebugEnabled()) log.debug("computeLocationReport creating groupIndicatorValue " + indicator.code + " for " + location.names);
+
                             newGroupIndicatorValue(currentDate,['en':entry.getKey(),'fr':entry.getKey()],entry.getValue(),indicatorValue)
                         }
                           
@@ -130,7 +131,7 @@ class IndicatorComputationService {
         } else {
             return 0.0
         }
-        if(dataLocations!=null && dataLocations.size() == DataLocation.count()) {
+        if(dataLocations!=null&& dataLocations.size() == DataLocation.count()) {
             
             return computeIndicatorForAllDataLocations(indicator)
         }
@@ -138,8 +139,8 @@ class IndicatorComputationService {
     }
 
     def computeIndicatorForDataLocations(Indicator indicator, def dataLocations) {
-        if(dataLocations == null) 
-            return 0.0
+        if(dataLocations == null)
+        return 0.0
         String cond = "";
         int counter = 0
         for(DataLocation loc : dataLocations) {
