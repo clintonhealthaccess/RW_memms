@@ -37,7 +37,7 @@ class CategoryItem {
 
     String code
     Date dateTime
-    String name
+    String names
     Double value
     String color
     List<IndicatorItem> indicatorItems
@@ -45,7 +45,7 @@ class CategoryItem {
     public CategoryItem(IndicatorCategory cat, List<IndicatorItem> items) {
         this.indicatorItems = new ArrayList<IndicatorItem>()
         this.code = cat.code
-        this.name = cat.name
+        this.names = cat.names
         Double totalValue = 0.0
         Integer counter = 0
         for(IndicatorItem i : items) {
