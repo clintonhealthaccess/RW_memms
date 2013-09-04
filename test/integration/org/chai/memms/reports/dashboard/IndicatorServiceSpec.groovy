@@ -11,16 +11,16 @@ class IndicatorServiceSpec  extends IntegrationTests{
 def indicatorService
    
 
-    void "search Indicator"() {
-                 setup:
-                  createDashboardTestData()
-		when:
-                def params=new HashMap<String,String>()
-                params.put("order","desc")
-                params.put("sort","id")
-		List<Indicator> result=indicatorService.searchIndicator("Degree of equipment standardization", params)
-		then:
-                assert result.size()==1
-                println" This test passed wit search result :"+result
-    }
+  //   void "search Indicator"() {
+  //                setup:
+  //                 createDashboardTestData()
+		// when:
+  //               def params=new HashMap<String,String>()
+  //               params.put("order","desc")
+  //               params.put("sort","id")
+		// List<Indicator> result=indicatorService.searchIndicator("Degree of equipment standardization", params)
+		// then:
+  //               assert result.size()==1
+  //               println" This test passed wit search result :"+result
+  //   }
 }

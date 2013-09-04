@@ -10,14 +10,14 @@ import org.chai.memms.IntegrationTests
 class UserDefinedVariableServiceSpec extends IntegrationTests {
 def userDefinedVariableService
    
-    def  "list All User Defined Variables"() {
-                setup:
-                  createDashboardTestData()
-		when:
-		List<UserDefinedVariable> result=userDefinedVariableService.listAllUserDefinedVariables()
-		then:
-                assert result.size()==1
-                 println" Test passed wit listing result :"+result
+  //   def  "list All User Defined Variables"() {
+  //               setup:
+  //                 createDashboardTestData()
+		// when:
+		// List<UserDefinedVariable> result=userDefinedVariableService.listAllUserDefinedVariables()
+		// then:
+  //               assert result.size()==1
+  //                println" Test passed wit listing result :"+result
         
-    }
+  //   }
 }
