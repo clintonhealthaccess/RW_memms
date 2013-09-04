@@ -4,6 +4,7 @@
  */
 
 package org.chai.memms.reports.dashboard
+import i18nfields.I18nFields
 
 /**
  *
