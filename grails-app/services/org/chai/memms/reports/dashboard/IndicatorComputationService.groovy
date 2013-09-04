@@ -33,6 +33,7 @@ import java.util.regex.Pattern
 import org.chai.location.CalculationLocation
 import org.chai.location.DataLocation
 import org.chai.location.Location
+import org.chai.location.LocationService
 import org.joda.time.DateTime
 import org.chai.location.LocationLevel
 import org.chai.memms.security.User
@@ -49,6 +50,8 @@ class IndicatorComputationService {
     def equipmentService
     def indicatorValueService
     def locationReportService
+    def locationService
+
     static final String DATA_LOCATION_TOKEN = "@DATA_LOCATION"
     static final String USER_DEFINED_VARIABLE_REGEX = "#[0-9a-zA-Z_]+"
     static final Pattern userDefinedVariablePattern = Pattern.compile(USER_DEFINED_VARIABLE_REGEX)
@@ -74,37 +77,63 @@ class IndicatorComputationService {
         MemmsReport memmsReportMonth = new MemmsReport(eventDate: lastMonth.toDate()).save()
         MemmsReport memmsReportWeek = new MemmsReport(eventDate: lastWeek.toDate()).save()
         MemmsReport memmsReportToday = new MemmsReport(eventDate: currentDate).save()
+        
         // 4. Compute report for all locations with registered users.
-        // def dataLocations = equipmentService.getDataLocationsWithEquipments()  
-        // for(def dataLocation: dataLocations){
-        //     computeLocationReport(currentDate, dataLocation, memmsReport)
+        def rootLocation = locationService.getRootLocation() 
+        if (log.isDebugEnabled()) log.debug("computeCurrentReport rootLocation " + rootLocation);
+
+        def locationsWithEquipment = null
+        if(rootLocation != null){
+            locationsWithEquipment = rootLocation.collectTreeWithDataLocations(null,null)
+            if (log.isDebugEnabled()) log.debug("computeCurrentReport locationsWithEquipment " + locationsWithEquipment);
+        }
+
+        def dataLocationsWithEquipment = equipmentService.getDataLocationsWithEquipments()
+        if (log.isDebugEnabled()) log.debug("computeCurrentReport dataLocationsWithEquipment " + dataLocationsWithEquipment);
+
+        locationsWithEquipment.addAll(dataLocationsWithEquipment)
+
+        for(def locationWithEquipment : locationsWithEquipment){
+                if (log.isDebugEnabled()) log.debug("memmsReport ==> lastYear ");
+                computeLocationReport(lastYear.toDate(), locationWithEquipment, memmsReportYear)
+                if (log.isDebugEnabled()) log.debug("memmsReport ==> lastHalfYear");
+                computeLocationReport(lastHalfYear.toDate(), locationWithEquipment, memmsReportHalfYear)
+                if (log.isDebugEnabled()) log.debug("memmsReport ==> lastQuarter");
+                computeLocationReport(lastQuarter.toDate(), locationWithEquipment, memmsReportQuarter)
+                if (log.isDebugEnabled()) log.debug("memmsReport ==> lastMonth");
+                computeLocationReport(lastMonth.toDate(), locationWithEquipment, memmsReportMonth)
+                if (log.isDebugEnabled()) log.debug("memmsReport ==> lastWeek");
+                computeLocationReport(lastWeek.toDate(), locationWithEquipment, memmsReportWeek)
+                if (log.isDebugEnabled()) log.debug("memmsReport ==> today");
+                computeLocationReport(currentDate, locationWithEquipment, memmsReportToday)
+        }
+
+        //  Set<Long> locations = new HashSet<Long>();
+
+        //  for(User user: User.findAll()) {
+        //     if ((user.location != null) && !locations.contains(user.location.id)){
+        //         locations.add(user.location.id);
+        //         if (log.isDebugEnabled()) log.debug("memmsReport ==> lastYear ");
+        //         computeLocationReport(lastYear.toDate(), user.location, memmsReportYear)
+        //         if (log.isDebugEnabled()) log.debug("memmsReport ==> lastHalfYear");
+        //         computeLocationReport(lastHalfYear.toDate(), user.location, memmsReportHalfYear)
+        //         if (log.isDebugEnabled()) log.debug("memmsReport ==> lastQuarter");
+        //         computeLocationReport(lastQuarter.toDate(), user.location, memmsReportQuarter)
+        //         if (log.isDebugEnabled()) log.debug("memmsReport ==> lastMonth");
+        //         computeLocationReport(lastMonth.toDate(), user.location, memmsReportMonth)
+        //         if (log.isDebugEnabled()) log.debug("memmsReport ==> lastWeek");
+        //         computeLocationReport(lastWeek.toDate(), user.location, memmsReportWeek)
+        //         if (log.isDebugEnabled()) log.debug("memmsReport ==> today");
+        //         computeLocationReport(currentDate, user.location, memmsReportToday)
+        //     }
         // }
 
-         Set<Long> locations = new HashSet<Long>();
-
-         for(User user: User.findAll()) {
-            if ((user.location != null) && !locations.contains(user.location.id)){
-                locations.add(user.location.id);
-                if (log.isDebugEnabled()) log.debug("memmsReport  lastYear =>>");
-                computeLocationReport(lastYear.toDate(), user.location, memmsReportYear)
-                if (log.isDebugEnabled()) log.debug("memmsReport  lastHalfYear =>>");
-                computeLocationReport(lastHalfYear.toDate(), user.location, memmsReportHalfYear)
-                if (log.isDebugEnabled()) log.debug("memmsReport  lastQuarter =>>");
-                computeLocationReport(lastQuarter.toDate(), user.location, memmsReportQuarter)
-                if (log.isDebugEnabled()) log.debug("memmsReport  lastMonth =>>");
-                computeLocationReport(lastMonth.toDate(), user.location, memmsReportMonth)
-                if (log.isDebugEnabled()) log.debug("memmsReport  lastWeek =>>");
-                computeLocationReport(lastWeek.toDate(), user.location, memmsReportWeek)
-                if (log.isDebugEnabled()) log.debug("memmsReport  today =>>");
-                computeLocationReport(currentDate, user.location, memmsReportToday)
-               break
-                
-            }
-        }
+        if (log.isDebugEnabled()) log.debug("computeCurrentReport memmsReport " + memmsReportToday + ", locationReports " + memmsReportToday.locationReports.size());
     }
 
      def computeLocationReport(Date currentDate, CalculationLocation location, MemmsReport memmsReport) {
         def locationReport = locationReportService.newLocationReport(memmsReport,currentDate,location)
+        if (log.isDebugEnabled()) log.debug("computeLocationReport new location report for " + location);
         def indicators = Indicator.findAllByActive(true)
         for(Indicator indicator: indicators) {
             if (log.isDebugEnabled()) log.debug("computeLocationReport calculating report " + indicator.code + " for " + location.names);

@@ -590,7 +590,6 @@ form.search-form
     background-image: url('../images/icons/toggle_plus.png')
     &.toggled
       background-image: url('../images/icons/toggle_minus.png')
-
 .filter-bar
   color: #888888
   font-size: 11px
@@ -712,6 +711,8 @@ form.search-form
   border: 1px solid $primary + #222
   max-height: 188px
   overflow-y: scroll
+.draggable, .droppable 
+  min-height: 50px !important
 
 .hide-list
   display: none
@@ -770,7 +771,6 @@ a.delete-row
     opacity: 1
 
 // ui-datepicker overrides
-
 .filters .ui-datepicker-trigger
   position: absolute
   right: 13px
@@ -781,7 +781,6 @@ a.delete-row
   top: 4px
 .ui-datepicker-title, .ui-datepicker-calendar
   font-size: 12px !important
-
 //expected life time aligned in one row
 
 .period-month-year

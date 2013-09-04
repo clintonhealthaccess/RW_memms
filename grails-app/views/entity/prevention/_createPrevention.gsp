@@ -30,7 +30,6 @@
             <g:inputHourMinute name="timeSpend" field="timeSpend" hours="${prevention.timeSpend?.hours}" minutes="${prevention.timeSpend?.minutes}" label='prevention.work.time.label' bean="${order}"/>
             <g:inputTimeDate name="scheduledOn" field="scheduledOn" date="${(scheduledOn)?scheduledOn.date:prevention.scheduledOn?.date}" time="${(scheduledOn)?scheduledOn.time:prevention.scheduledOn?.time}" label='prevention.scheduled.on.label' bean="${prevention}" dateClass="date-picker" timeClass="time-picker"/>
             <g:i18nTextarea name="descriptions" bean="${prevention}" label="${message(code:'entity.descriptions.label')}" field="descriptions" height="150" width="300" maxHeight="150" />
-            ${prevention.order.equipment.type}======>please remove me
             </fieldset>
             </div>
             <g:if test="${prevention.id != null}">
@@ -47,6 +46,9 @@
                     <label>Possible processes</label>
                     <fieldset>
                      <ul class="draggable process-list-action">
+                       <g:if test="${prevention.actions.size()==0}" >
+                          <li value="_">No process available add some form equipment type</li>
+                      </g:if>  
                        <g:each in="${actions}" status="i" var="action">
                           <li value="${action.id}">
                             ${action.description}
@@ -59,22 +61,22 @@
                     <label>Used processes</label>
                     <fieldset>
                       <ul class="droppable process-list-material">
-                      <li value="">sjdhgjhsagdjh asjdhgasjhdgjsajdgas</li>
-                      <li value="">sjdhgjhsagdjh asjdhgasjhdgjsajdgasjhdga 9879</li>
-                      <li value="">sjdhgjhsagdjh asjdhgasjhdgjsajdgasjhdgasjh</li>
-                      <li value="">0-89 sjdhgjhsagdjh asjdhgasjhdgjsajdgasjhdgasjh</li>
-                      <li value="">897887 sjdhgjhsagdjh jhdgasjh</li>
-                      <li value="">ghhhh asjdhgasjhdgjsajdgasjhdgasjh</li>
-                      <li value="">sjdhgjhsagdjh asjdhgasjhdgjsajdgasjhdgasjh</li>
-                      <li value="">uy 87868 hdgasjh</li>
-                      <li value="">sjdhgjhsagdjh989 gasjhdgasjh</li>
+                      <g:if test="${prevention.actions.size()==0}" >
+                          <li value="_">Dragge process here</li>
+                      </g:if>                       
                         <g:each in="${prevention.actions}" var="action">
-                         <li value="${action.id}">sjdhgjhsagdjh asjdhgasjhdgjsajdgasjhdgasjh</li>
-                          <li value="${action.id}">
+                          <li value="${action.id}" name="test">
                             ${action.description}
                           </li>
                         </g:each>
                       </ul>
+                      <div class="added-processes" >  
+                        <select name="actions[]" multiple="true" style="diplay:none">
+                          <g:each in="${prevention.actions}" var="action">
+                            <option value="${action.id}"></option>
+                          </g:each>
+                        </select>
+                      </div>
                     </fieldset>
                   </div>
               </div>
@@ -99,13 +101,16 @@
     removePreventionProcess("${createLink(controller:'prevention',action: 'removeProcess')}");
     getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}");
     
+    $('.added-processes').hide();
 
     $(".droppable").droppable({ hoverClass:'dragging',drop: function(event, ui) {
         $(".droppable").prepend($(ui.draggable[0]).removeAttr("style"));
     }});
 
     $(".draggable").droppable({ hoverClass:'dragging',drop: function(event, ui) {
-        $(".draggable").prepend($(ui.draggable[0]).removeAttr("style"));
+      var currentTag = $(ui.draggable[0])
+      alert("==>: "+ui.attr("value"))
+        $(".draggable").prepend(currentTag.removeAttr("style"));
     }});
 
     $(".draggable li").draggable({ addClasses:'.dragging',addClasses:'',containment: 'document',cursor:'pointer',helper: 'clone'});

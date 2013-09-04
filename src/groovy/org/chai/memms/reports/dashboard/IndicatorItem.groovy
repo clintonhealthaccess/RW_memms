@@ -123,9 +123,15 @@ class IndicatorItem {
         }
 
         // add comparison value items
-        if(indicatorValue.locationReport.location.parent != null){
+        if(indicatorValue.locationReport.location instanceof Location){
+            if(indicatorValue.locationReport.location.parent != null){
+                getComparisonValueItems(indicatorValue)
+            }
+        }
+        else{
             getComparisonValueItems(indicatorValue)
         }
+
 
         // add group value items
         for(GroupIndicatorValue grV:indicatorValue.groupIndicatorValues){
@@ -182,45 +188,45 @@ class IndicatorItem {
             Double green =  currentValue.indicator.yellowToGreenThreshold
             if(red < green) {
                 for(IndicatorValue indicatorValue:invVs){
-                    if(iv.computedValue <= currentValue.computedValue && iv.id!=currentValue.id){
-                        listOfLowest.add(iv)
-                    } else if(iv.computedValue >= currentValue.computedValue && iv.id!=currentValue.id){
-                        listOfHighest.add(iv)
-                    } else if(iv.id == currentValue.id) {
+                    if(indicatorValue.computedValue <= currentValue.computedValue && indicatorValue.id!=currentValue.id){
+                        listOfLowest.add(indicatorValue)
+                    } else if(indicatorValue.computedValue >= currentValue.computedValue && indicatorValue.id!=currentValue.id){
+                        listOfHighest.add(indicatorValue)
+                    } else if(indicatorValue.id == currentValue.id) {
                         for(def i = 1 ; i <= 2 ; i++) {
-                            if(invVs.indexOf(iv)+i<invVs.size())
-                            this.higherComparisonValueItems.add(new ComparisonValueItem(invVs.get(invVs.indexOf(iv)+i)))
-                            if(invVs.indexOf(iv)-i>=0)
-                            this.lowerComparisonValueItems.add(new ComparisonValueItem(invVs.get(invVs.indexOf(iv)-i)))
+                            if(invVs.indexOf(indicatorValue)+i<invVs.size())
+                            this.higherComparisonValueItems.add(new ComparisonValueItem(invVs.get(invVs.indexOf(indicatorValue)+i)))
+                            if(invVs.indexOf(indicatorValue)-i>=0)
+                            this.lowerComparisonValueItems.add(new ComparisonValueItem(invVs.get(invVs.indexOf(indicatorValue)-i)))
                         }
                     }
                 }
             } else {
-                for(IndicatorValue iv:invVs){
-                    if(iv.computedValue<=currentValue.computedValue  && iv.id!=currentValue.id){
-                        listOfHighest.add(iv)
-                    }else if(iv.computedValue >= currentValue.computedValue  && iv.id!=currentValue.id){
-                        listOfLowest.add(iv)
-                    }else if(iv.id == currentValue.id){
+                for(IndicatorValue indicatorValue:invVs){
+                    if(indicatorValue.computedValue<=currentValue.computedValue  && indicatorValue.id!=currentValue.id){
+                        listOfHighest.add(indicatorValue)
+                    }else if(indicatorValue.computedValue >= currentValue.computedValue  && indicatorValue.id!=currentValue.id){
+                        listOfLowest.add(indicatorValue)
+                    }else if(indicatorValue.id == currentValue.id){
                         for(def i=1 ; i<=2 ; i++){
-                            if(invVs.indexOf(iv)+i<invVs.size())
-                            this.lowerComparisonValueItems.add(new ComparisonValueItem(invVs.get(invVs.indexOf(iv)+i)))
-                            if(invVs.indexOf(iv)-i>=0)
-                            this.higherComparisonValueItems.add(new ComparisonValueItem(invVs.get(invVs.indexOf(iv)-i)))
+                            if(invVs.indexOf(indicatorValue)+i<invVs.size())
+                            this.lowerComparisonValueItems.add(new ComparisonValueItem(invVs.get(invVs.indexOf(indicatorValue)+i)))
+                            if(invVs.indexOf(indicatorValue)-i>=0)
+                            this.higherComparisonValueItems.add(new ComparisonValueItem(invVs.get(invVs.indexOf(indicatorValue)-i)))
                         }
                     }
                 }
             }
             def lowestCounter=0
             def highestcounter=0
-            for(IndicatorValue iv: listOfLowest.reverse()){
+            for(IndicatorValue indicatorValue: listOfLowest.reverse()){
                 if(lowestCounter < 3)
-                this.lowestComparisonValueItems.add(new ComparisonValueItem(iv))
+                this.lowestComparisonValueItems.add(new ComparisonValueItem(indicatorValue))
                 lowestCounter++
             }
-            for(IndicatorValue iv:listOfHighest.reverse()){
+            for(IndicatorValue indicatorValue:listOfHighest.reverse()){
                 if(highestcounter < 3)
-                this.highestComparisonValueItems.add(new ComparisonValueItem(iv))
+                this.highestComparisonValueItems.add(new ComparisonValueItem(indicatorValue))
                 highestcounter++
             }
         }

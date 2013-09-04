@@ -128,7 +128,7 @@ class DashboardInitializer {
                 SHARE_WORK_ORDER_GEN_GROUP_SLD15,
                 false, true
             )
-           // Slie 16:Degree of corrective maintenance execution according to benchmark
+           // Slie 16:Degree of corrective maintenance execution according to benchmark - sql not compatible with in memory db
             newIndicator(
                 correctiveMaintenance, 
                 "DEGREE_CORR_EXEC_BENCHNARK_MAINTENANCE", 
@@ -168,24 +168,7 @@ class DashboardInitializer {
 
          def sparePartsManagment = IndicatorCategory.findByCode(MANAGEMENT_SPAREPARTS)
          if(sparePartsManagment != null) {
-            //Slie 31:Number of types of spare parts with stock more than a given time period
-            // newIndicator(
-            //     sparePartsManagment, 
-            //     "NUMBER_TYPES_STC_OUNT_MORE_SPAREPART", 
-            //     ["en":"Number of types of spare parts with stock more than a given time period", "fr":"Number of types of spare parts with stock more than a given time period fr"],
-            //     ["en":"Number of types of spare parts with stock more than a given time period", "fr":"Number of types of spare parts with stock more than a given time period fr"], 
-            //     [
-            //         "en":"No. Of spare part types at a facility with stock out time more than a certain threshold (to be defined by the administrator) / total number of spare part types at the facility", 
-            //         "fr":"No. Of spare part types at a facility with stock out time more than a certain threshold (to be defined by the administrator) / total number of spare part types at the facility"
-            //     ],
-            //     "%", 0.20, 0.10, Indicator.HistoricalPeriod.QUARTERLY, 8, 
-            //     NUMBER_SP_PAT_STOCK_MORE_SIMPLE_SLD31, 
-            //     ["en":"Spare Part Type", "fr":"Spare Part Type fr"], 
-            //     NUMBER_SP_PAT_STOCK_MORE_GROUP_SLD31,
-            //     true, true
-            // )
-
-            //Slie 30:Share of types of spare parts about to stock out in a given time period
+            //Slie 30:Share of types of spare parts about to stock out in a given time period - sql not compatible with in memory db
             newIndicator(
                 sparePartsManagment, 
                 "SHARE_TYPES_SP_PRT_STOC_OUT_LESS", 
