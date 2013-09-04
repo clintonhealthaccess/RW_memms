@@ -36,21 +36,18 @@ import org.chai.memms.reports.dashboard.IndicatorCategory;
 class CategoryItem {
 
     String code
-    Date dateTime
+    Date computedAt
     String names
     Double value
     String color
-    IndicatorCategory indicatorCategory
     List<IndicatorItem> indicatorItems
 
     public CategoryItem(IndicatorCategory cat, List<IndicatorItem> items) {
         this.indicatorItems = new ArrayList<IndicatorItem>()
         this.code = cat.code
         this.names = cat.names
-        this.indicatorCategory = cat
         Double totalValue = 0.0
         Integer counter = 0
-
         for(IndicatorItem i : items) {
             if(i.categoryCode.equals(this.code)) {
                 if("green".equals(i.color)) {
@@ -84,12 +81,5 @@ class CategoryItem {
                 }
             }
         }
-
-        if (log.isDebugEnabled()) log.debug("categoryItem categoryItem:" + this);
-    }
-
-    @Override
-    public String toString() {
-        return "CategoryItem[code = " + code + ", names = " + names + ", indicatorCategory = " + indicatorCategory + "]";
     }
 }

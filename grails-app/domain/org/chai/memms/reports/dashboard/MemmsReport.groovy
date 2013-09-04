@@ -34,7 +34,7 @@ package org.chai.memms.reports.dashboard
 class MemmsReport {
 
 	Date eventDate
-
+	
     static hasMany = [locationReports: LocationReport]
     static mapping ={
         table "memms_report_memms_report"
