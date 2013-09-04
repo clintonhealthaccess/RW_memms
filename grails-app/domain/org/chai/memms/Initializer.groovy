@@ -154,6 +154,11 @@ public class Initializer {
 			defaultTechnicianDHRole.addToPermissions("auth:saveAccount")
 			defaultTechnicianDHRole.addToPermissions("auth:setPassword")
 			defaultTechnicianDHRole.addToPermissions("auth:retrievePassword")
+			defaultTechnicianDHRole.addToPermissions("menu:reports")
+			defaultTechnicianDHRole.addToPermissions("menu:dashboard")
+			defaultTechnicianDHRole.addToPermissions("menu:listing")
+			defaultTechnicianDHRole.addToPermissions("dashboard:*")
+			defaultTechnicianDHRole.addToPermissions("listing:*")
 			defaultTechnicianDHRole.save(failOnError: true, flush:true)
 			
 			def defaultTechnicianMMCRole = new Role(name: "Technician MMC")
