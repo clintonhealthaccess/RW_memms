@@ -49,7 +49,7 @@ class DashboardInitializer {
     public static final String SHARE_OBSOLETE_SIMPLE_SLD12="select 1.0*count(equ.code)/(select count(equIn.code) as count1 from Equipment as equIn where equIn.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equIn.dataLocation @DATA_LOCATION) from Equipment as equ where equ.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equ.obsolete=1 and equ.dataLocation @DATA_LOCATION"
     public static final String SHARE_OBSOLETE_GROUP_SLD12="select "+Utils.buildSubQueryLanguages("equ.type.names")+",1.0*count(equ.code)/(select count(equIn.code) as count1 from Equipment as equIn where equIn.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equIn.dataLocation @DATA_LOCATION) from Equipment as equ where equ.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equ.obsolete=1 and equ.dataLocation @DATA_LOCATION group by equ.type"
     //Slie 15:Share of equipments for which a work order was generated=>rev ok
-    public static final String SHARE_WORK_ORDER_GEN_SIMPLE_SLD15="select 1.0*count(equ.code)/(select count(eq.code) from Equipment eq where eq.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and eq.dataLocation @DATA_LOCATION)  from WorkOrder order join order.equipment equ where order.equipment.id is not null and equ.dataLocation @DATA_LOCATION"
+    public static final String SHARE_WORK_ORDER_GEN_SIMPLE_SLD15="select 1.0*count(equ.code)/(select count(eq.code) from Equipment eq where eq.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and eq.dataLocation @DATA_LOCATION)  from WorkOrder wOrder join wOrder.equipment equ where wOrder.equipment.id is not null and equ.dataLocation @DATA_LOCATION"
     public static final String SHARE_WORK_ORDER_GEN_GROUP_SLD15="select "+Utils.buildSubQueryLanguages("wOrder.equipment.type.names")+",1.0*count(wOrder.equipment.id)/(select count(eq.code) from Equipment eq where eq.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and eq.dataLocation @DATA_LOCATION)  from WorkOrder wOrder  where wOrder.equipment.id is not null and wOrder.equipment.dataLocation @DATA_LOCATION group by  wOrder.equipment.type"
     //Slie 16:Degree of corrective maintenance execution according to benchmark=rev ok
     public static final String DEGREE_CORRECTIVE_EX_SIMPLE_SLD16="select 1.0*count(wo1.id)/(select count(wo.id) from WorkOrderStatus wos join wos.workOrder wo join wo.equipment as equ where equ.dataLocation @DATA_LOCATION) from WorkOrderStatus wos1 join wos1.workOrder wo1 join wo1.equipment as equ1 where wo1.currentStatus='CLOSEDFIXED' and (dateDiff(NOW(),wo1.returnedOn) < #DEGGREE_CORRE_MAINT_EXECUTION or dateDiff(NOW(),wos1.dateCreated) < #DEGGREE_CORRE_MAINT_EXECUTION) and equ1.dataLocation @DATA_LOCATION"
@@ -108,7 +108,7 @@ class DashboardInitializer {
     
         def correctiveMaintenance = IndicatorCategory.findByCode(CORRECTIVE_MAINTENANCE)
         if(correctiveMaintenance != null) {
-            //Slie 15:Share of equipments for which a work order was generated
+           //Slie 15:Share of equipments for which a work order was generated
             newIndicator(
                 correctiveMaintenance, 
                 "SHARE_WORK_ORDER_CORR_MAINTENANCE", 
@@ -143,7 +143,7 @@ class DashboardInitializer {
         }
 
         def preventiveMaintenance = IndicatorCategory.findByCode(PREVENTIVE_MAINTENANCE)
-        if(preventiveMaintenance != null) {
+         if(preventiveMaintenance != null) {
             //Slide 26:Degree of execution of preventive maintenance
             newIndicator(
                 preventiveMaintenance, 
@@ -160,10 +160,10 @@ class DashboardInitializer {
                 DEGREE_EXCUTION_PREV_GROUP_SLD26,
                 false,true
             )
-        }
+         }
 
-        def sparePartsManagment = IndicatorCategory.findByCode(MANAGEMENT_SPAREPARTS)
-        if(sparePartsManagment != null) {
+         def sparePartsManagment = IndicatorCategory.findByCode(MANAGEMENT_SPAREPARTS)
+         if(sparePartsManagment != null) {
             //Slie 31:Number of types of spare parts with stock more than a given time period
             newIndicator(
                 sparePartsManagment, 
@@ -180,8 +180,9 @@ class DashboardInitializer {
                 NUMBER_SP_PAT_STOCK_MORE_GROUP_SLD31,
                 true, true
             )
-        }
+         }
     }
+  
 
     public static createIndicatorCategories() {
          newIndicatorCategory(CORRECTIVE_MAINTENANCE, ["en":"Corrective Maintenance","fr":"Corrective Maintenance"], 0.6, 0.8)
@@ -197,6 +198,23 @@ class DashboardInitializer {
         newUserDefinedVariable("TRASHHOLD_MIN_STOCT_OUT",["en":"Minimum Stock-Out time threshold(days)","fr":"Minimum Stock-Out time threshold(days) fr"],365.0)
         newUserDefinedVariable("TRASHHOLD_MAX_STOCT_OUT",["en":"Maximum Stock-Out time threshold(days)","fr":"Maximum Stock-Out time threshold(days) fr"],30.0)
     }
+
+    public static newGroupIndicatorValue(def generatedAt, def names, def value, def indicatorValue){
+        def groupIndicatorValue = new GroupIndicatorValue(generatedAt:generatedAt,value:value)
+         Utils.setLocaleValueInMap(groupIndicatorValue,names,'Names')
+        indicatorValue.addToGroupIndicatorValues(groupIndicatorValue)
+        indicatorValue.save(failOnError: true, flush:true)
+        return groupIndicatorValue
+    }
+
+    public static newIndicatorValue(def computedAt, def locationReport, def indicator, def computedValue){
+        def indicatorValue = new IndicatorValue(computedAt:computedAt, computedValue:computedValue)
+        indicator.addToValues(indicatorValue)
+        locationReport.addToIndicatorValues(indicatorValue)
+        locationReport.save(failOnError: true, flush:true)
+        return indicatorValue
+    }
+    
 
     public static newIndicatorCategory(def code, def names, def redToYellowThreshold, def yellowToGreenThreshold){
         def category = new IndicatorCategory(

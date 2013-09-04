@@ -46,13 +46,20 @@ import org.chai.memms.util.Utils;
 class IndicatorComputationService {
     static transactional = true
     def sessionFactory
-
+    def equipmentService
+    def indicatorValueService
+    def locationReportService
     static final String DATA_LOCATION_TOKEN = "@DATA_LOCATION"
     static final String USER_DEFINED_VARIABLE_REGEX = "#[0-9a-zA-Z_]+"
     static final Pattern userDefinedVariablePattern = Pattern.compile(USER_DEFINED_VARIABLE_REGEX)
 
     public def computeCurrentReport() {
         // 1. GET CURRENT DATE
+        DateTime lastYear = DateTime.now().minusYears(1)
+        DateTime lastHalfYear = DateTime.now().minusMonths(6)
+        DateTime lastQuarter = DateTime.now().minusMonths(3)
+        DateTime lastMonth = DateTime.now().minusMonths(1)
+        DateTime lastWeek = DateTime.now().minusWeeks(1)
         DateTime now = DateTime.now()
         Date currentDate = now.toDate()
         // 2. REMOVE PREVIOUS REPORTS IN THE SAME MONTH
@@ -61,13 +68,35 @@ class IndicatorComputationService {
         LocationReport.executeUpdate("delete from LocationReport where month(eventDate) = " + now.getMonthOfYear() + " and year(eventDate) = " + now.getYear())
         MemmsReport.executeUpdate("delete from MemmsReport where month(eventDate) = " + now.getMonthOfYear() + " and year(eventDate) = " + now.getYear())
         // 3. SAVE NEW MEMMS REPORT
-        MemmsReport memmsReport = new MemmsReport(eventDate: currentDate).save()
+        MemmsReport memmsReportYear = new MemmsReport(eventDate: lastYear.toDate()).save()
+        MemmsReport memmsReportHalfYear = new MemmsReport(eventDate: lastHalfYear.toDate()).save()
+        MemmsReport memmsReportQuarter = new MemmsReport(eventDate: lastQuarter.toDate()).save()
+        MemmsReport memmsReportMonth = new MemmsReport(eventDate: lastMonth.toDate()).save()
+        MemmsReport memmsReportWeek = new MemmsReport(eventDate: lastWeek.toDate()).save()
+        MemmsReport memmsReportToday = new MemmsReport(eventDate: currentDate).save()
         // 4. Compute report for all locations with registered users.
-        Set<Long> locations = new HashSet<Long>();
-        for(User user: User.findAll()) {
+        // def dataLocations = equipmentService.getDataLocationsWithEquipments()  
+        // for(def dataLocation: dataLocations){
+        //     computeLocationReport(currentDate, dataLocation, memmsReport)
+        // }
+
+         Set<Long> locations = new HashSet<Long>();
+
+         for(User user: User.findAll()) {
             if ((user.location != null) && !locations.contains(user.location.id)){
                 locations.add(user.location.id);
-                computeLocationReport(currentDate, user.location, memmsReport)
+                if (log.isDebugEnabled()) log.debug("memmsReport  lastYear =>>");
+                computeLocationReport(lastYear.toDate(), user.location, memmsReportYear)
+                if (log.isDebugEnabled()) log.debug("memmsReport  lastHalfYear =>>");
+                computeLocationReport(lastHalfYear.toDate(), user.location, memmsReportHalfYear)
+                if (log.isDebugEnabled()) log.debug("memmsReport  lastQuarter =>>");
+                computeLocationReport(lastQuarter.toDate(), user.location, memmsReportQuarter)
+                if (log.isDebugEnabled()) log.debug("memmsReport  lastMonth =>>");
+                computeLocationReport(lastMonth.toDate(), user.location, memmsReportMonth)
+                if (log.isDebugEnabled()) log.debug("memmsReport  lastWeek =>>");
+                computeLocationReport(lastWeek.toDate(), user.location, memmsReportWeek)
+                if (log.isDebugEnabled()) log.debug("memmsReport  today =>>");
+                computeLocationReport(currentDate, user.location, memmsReportToday)
                break
                 
             }
@@ -75,46 +104,33 @@ class IndicatorComputationService {
     }
 
      def computeLocationReport(Date currentDate, CalculationLocation location, MemmsReport memmsReport) {
-        LocationReport locationReport = new LocationReport(eventDate: currentDate, memmsReport: memmsReport, location:location).save()
-        for(Indicator indicator: Indicator.findAllByActive(true)) {
+        def locationReport = locationReportService.newLocationReport(memmsReport,currentDate,location)
+        def indicators = Indicator.findAllByActive(true)
+        for(Indicator indicator: indicators) {
             if (log.isDebugEnabled()) log.debug("computeLocationReport calculating report " + indicator.code + " for " + location.names);
+            def compvalue = this.computeIndicatorForLocation(indicator, location)
+            def indicatorValue = indicatorValueService.newIndicatorValue(currentDate,locationReport,indicator, compvalue)
             try{
-                if (log.isDebugEnabled()) log.debug("computeLocationReport computing compValue " + indicator.code + " for " + location.names);
-
-                def compvalue = computeIndicatorForLocation(indicator, location)
-                
-                if (log.isDebugEnabled()) log.debug("computeLocationReport computing indicatorValue " + indicator.code + " for " + location.names);
-
-                IndicatorValue indicatorValue=new IndicatorValue(computedAt: currentDate, locationReport: locationReport, indicator: indicator, computedValue:compvalue).save()
-
-                if (log.isDebugEnabled()) log.debug("indicatorValue " + indicatorValue);
-                
                 if(indicatorValue!=null) {
-                   
-                    Map<String,Double> map= groupComputeIndicatorForLocation(indicatorValue.indicator,location)
-
-                    if (log.isDebugEnabled()) log.debug("map " + map);
-
+                    if (log.isDebugEnabled()) log.debug(">> map building indicatorValue =" + indicatorValue + " location = " + location);
+                    Map<String,Double> map = this.groupComputeIndicatorForLocation(indicatorValue.indicator,location)
+                    if (log.isDebugEnabled()) log.debug(">> built map =" + map );
                     if(map!=null) {
-
                         for (Map.Entry<String, Double> entry : (Set)map.entrySet()){
                             if (log.isDebugEnabled()) log.debug("computeLocationReport entry.getKey() " + entry.getKey() + " entry.getValue() " + entry.getValue());
-
-                            GroupIndicatorValue groupIndicatorValue = newGroupIndicatorValue(currentDate,['en':entry.getKey(),'fr':entry.getKey()],entry.getValue(),indicatorValue)
-                            if (log.isDebugEnabled()) log.debug("groupIndicatorValue " + groupIndicatorValue);
+                            DashboardInitializer.newGroupIndicatorValue(currentDate,['en':entry.getKey(),'fr':entry.getKey()],entry.getValue(),indicatorValue)
+                            if (log.isDebugEnabled()) log.debug("groupIndicatorValue +++====>" + groupIndicatorValue);
                         }
                           
                     }
                 }
+
             } catch(Exception ex) {
-                if (log.isDebugEnabled()) log.debug("computeLocationReport error calculating report " + indicator.code + " for " + location.names);
                 ex.printStackTrace()
             }
             if (log.isDebugEnabled()) log.debug("computeLocationReport done calculating report " + indicator.code + " for " + location.names);
         }
     }
-
-    // compute indicator
 
     def computeIndicatorForLocation(Indicator indicator, CalculationLocation location) {
         if (location == null) {
@@ -122,11 +138,10 @@ class IndicatorComputationService {
         }
         List<DataLocation> dataLocations = new ArrayList<DataLocation>()
         if (location instanceof Location) {
-            // dataLocations = location.getDataLocations(LocationLevel.findAll(), null)
             dataLocations = location.collectDataLocations(null)
         } else if (location instanceof DataLocation) {
             dataLocations.add(location)
-            dataLocations.addAll(location.manages)
+            if(location.manages !=null) dataLocations.addAll(location?.manages)
         } else {
             return 0.0
         }
@@ -158,7 +173,7 @@ class IndicatorComputationService {
     }
 
     def computeIndicatorForAllDataLocations(Indicator indicator) {
-      
+        if (log.isDebugEnabled()) log.debug("computing IndicatorForAllDataLocations indicator= " + indicator.code );
         return computeIndicatorWithDataLocationCondition(indicator, " is not null ")
     }
 
@@ -203,14 +218,6 @@ class IndicatorComputationService {
         return ret
     }
 
-    // compute group
-
-    def newGroupIndicatorValue(def generatedAt, def names, def value, def indicatorValue){
-        def groupIndicatorValue = new GroupIndicatorValue(generatedAt:currentDate,value:value,indicatorValue:indicatorValue)
-        Utils.setLocaleValueInMap(groupIndicatorValue,names,'Names')
-        groupIndicatorValue.save(failOnError: true, flush:true)
-        return groupIndicatorValue
-    }
 
     def groupComputeIndicatorForLocation(Indicator indicator, CalculationLocation location) {
         if (log.isDebugEnabled()) log.debug("groupComputeIndicatorForLocation indicator " + indicator + ", location " + location);
@@ -223,9 +230,10 @@ class IndicatorComputationService {
 			//To be checked by Aphrorwa
 			//dataLocations = location.getDataLocations(LocationLevel.findAll(), null)
             dataLocations.addAll(location.collectDataLocations(null))
+
         } else if (location instanceof DataLocation) {
             dataLocations.add(location)
-            dataLocations.addAll(location.manages)
+            if(location.manages != null) dataLocations.addAll(location.manages)
         } else {
             return null
         }
@@ -318,7 +326,7 @@ class IndicatorComputationService {
         return map
     }
 
-      def groupExecuteSQL(String sql) {
+    def groupExecuteSQL(String sql) {
         if (log.isDebugEnabled()) log.debug("groupExecuteHQL sql " + sql);
          
         Map<String, Double> map = new HashMap<String, Double>()

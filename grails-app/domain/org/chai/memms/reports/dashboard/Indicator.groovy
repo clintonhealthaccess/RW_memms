@@ -88,19 +88,19 @@ class Indicator {
     }
 
     static constraints = {
-        code (blank:false, nullable:false, unique:true)
-        names (blank:true, nullable:true, size:3..250)
-        descriptions (blank:true, nullable:true, size:0..1000)
-        formulas (blank:true, nullable:true, size:0..1000)
-        unit (blank:false, nullable:false)
-        redToYellowThreshold (blank:false, nullable:false)
-        yellowToGreenThreshold (blank:false, nullable:false)
-        queryScript (blank:false, nullable:false,size:0..8000)
-        sqlQuery (blank:false, nullable:false)
-        active (blank:false, nullable:false)
-        category (nullable: false)
-        groupNames (blank:true, nullable:true, unique:false)
-        groupQueryScript (blank:true, nullable:true, size:0..8000)
+        code blank:false, nullable:false, unique:true
+        names blank:true, nullable:true, size:3..250
+        descriptions blank:true, nullable:true, size:0..1000
+        formulas blank:true, nullable:true, size:0..1000
+        unit blank:false, nullable:false
+        redToYellowThreshold blank:false, nullable:false, validator: {return (it <= 1 && it >= 0)}
+        yellowToGreenThreshold blank:false, nullable:false, validator: {return (it <= 1 && it >= 0)}
+        queryScript blank:false, nullable:false,size:0..8000
+        sqlQuery blank:false, nullable:false
+        active blank:false, nullable:false
+        category nullable: false
+        groupNames blank:true, nullable:true, unique:false
+        groupQueryScript blank:true, nullable:true, size:0..8000
     }
 
     @Override
