@@ -108,9 +108,9 @@ class IndicatorComputationService {
         def indicators = Indicator.findAllByActive(true)
         for(Indicator indicator: indicators) {
             if (log.isDebugEnabled()) log.debug("computeLocationReport calculating report " + indicator.code + " for " + location.names);
-            def compvalue = this.computeIndicatorForLocation(indicator, location)
-            def indicatorValue = indicatorValueService.newIndicatorValue(currentDate,locationReport,indicator, compvalue)
             try{
+				def compvalue = this.computeIndicatorForLocation(indicator, location)
+				def indicatorValue = indicatorValueService.newIndicatorValue(currentDate,locationReport,indicator, compvalue)
                 if(indicatorValue!=null) {
                     if (log.isDebugEnabled()) log.debug(">> map building indicatorValue =" + indicatorValue + " location = " + location);
                     Map<String,Double> map = this.groupComputeIndicatorForLocation(indicatorValue.indicator,location)
