@@ -220,6 +220,8 @@ class IndicatorComputationService {
         }
         List<DataLocation> dataLocations = new ArrayList<DataLocation>()
         if (location instanceof Location) {
+			//To be checked by Aphrorwa
+			//dataLocations = location.getDataLocations(LocationLevel.findAll(), null)
             dataLocations.addAll(location.collectDataLocations(null))
         } else if (location instanceof DataLocation) {
             dataLocations.add(location)
@@ -230,6 +232,7 @@ class IndicatorComputationService {
         if ((dataLocations != null) && (dataLocations.size() == DataLocation.count())) {
             return groupComputeIndicatorForAllDataLocations(indicator)
         }
+		if (log.isDebugEnabled()) log.debug("LOCATION SIZE AS EXPECTED BY APHRO " + dataLocations.size());
         return groupComputeIndicatorForDataLocations(indicator, dataLocations)
     }
 
