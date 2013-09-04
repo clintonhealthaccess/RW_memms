@@ -58,9 +58,13 @@ class DashboardInitializer {
     // //Slide 26:Degree of execution of preventive maintenance
     public static final String DEGREE_EXCUTION_PREV_SIMPLE_SLD26="select 1.0*count(prevention.id)/(select count(prwo.id) FROM PreventiveOrder prwo join prwo.equipment as equ1  where equ1.dataLocation @DATA_LOCATION) FROM Prevention prevention join prevention.order as pOrder join pOrder.equipment as equ where equ.dataLocation @DATA_LOCATION"
     public static final String DEGREE_EXCUTION_PREV_GROUP_SLD26="select "+Utils.buildSubQueryLanguages("equ.type.names")+",1.0*count(prevention.id)/(select count(prwo.id) FROM PreventiveOrder prwo join prwo.equipment as equ1  where equ1.dataLocation @DATA_LOCATION) FROM Prevention prevention  join prevention.order as pOrder join pOrder.equipment as equ where equ.dataLocation @DATA_LOCATION group by equ.type"
-    //Slie 31:Number of types of spare parts with stock more than a given time period
-    public static final String NUMBER_SP_PAT_STOCK_MORE_SIMPLE_SLD31="select count(temp.spTypeTimount)/(SELECT count(mmm.id)  FROM memms_spare_part mmm where mmm.data_location_id @DATA_LOCATION) as final_result from (SELECT count(mm.type_id)/(SELECT ROUND((count(m.id)/12),0)  FROM memms_spare_part m where m.status='OPERATIONAL' and dateDiff(NOW(),m.delivery_date)<=365 and m.data_location_id @DATA_LOCATION group by mm.type_id) as spTypeTimount   FROM memms_spare_part mm where mm.data_location_id @DATA_LOCATION group by mm.type_id) temp where temp.spTypeTimount>#TRASHHOLD_MAX_STOCT_OUT"
-    public static final String NUMBER_SP_PAT_STOCK_MORE_GROUP_SLD31="select temp.namesEn,temp.spTypeTimount/(SELECT count(mmm.id)  FROM memms_spare_part mmm where mmm.data_location_id @DATA_LOCATION) as final_result from (SELECT count(mm.type_id)/(SELECT count(m.id)/12  FROM memms_spare_part m where m.status='OPERATIONAL' and dateDiff(NOW(),m.delivery_date)<=365 and m.data_location_id @DATA_LOCATION group by mm.type_id) as spTypeTimount,spt.names_en as namesEn FROM memms_spare_part mm,memms_spare_part_type spt where mm.type_id=spt.id and mm.data_location_id @DATA_LOCATION group by mm.type_id) temp where temp.spTypeTimount>#TRASHHOLD_MAX_STOCT_OUT"
+    
+    //Slie 30:Share of types of spare parts about to stock out in a given time period
+    public static final String SHARE_TYPE_SP_PART_STOCK_OUT_SIMPLE_SLD30="select count(temp.spTypeTimount)/(SELECT count(mmm.id)  FROM memms_spare_part mmm where mmm.data_location_id @DATA_LOCATION) as final_result from (SELECT count(mm.type_id)/(SELECT ROUND((count(m.id)/12),0)  FROM memms_spare_part m where m.status='OPERATIONAL' and dateDiff(NOW(),m.delivery_date)<=365 and m.data_location_id @DATA_LOCATION group by mm.type_id) as spTypeTimount   FROM memms_spare_part mm where mm.data_location_id @DATA_LOCATION group by mm.type_id) temp where temp.spTypeTimount<#TRASHHOLD_MIN_STOCT_OUT"
+    public static final String SHARE_TYPE_SP_PART_STOCK_OUT_GROUP_SLD30="select temp.descen,temp.spTypeTimount/(SELECT count(mmm.id)  FROM memms_spare_part mmm where mmm.data_location_id @DATA_LOCATION) as final_result from (SELECT count(mm.type_id)/(SELECT ROUND(count(m.id)/12)  FROM memms_spare_part m where m.status='OPERATIONAL' and dateDiff(NOW(),m.delivery_date)<=365 and m.data_location_id @DATA_LOCATION group by mm.type_id) as spTypeTimount,spt.names_en as descen   FROM memms_spare_part mm,memms_spare_part_type spt where mm.type_id=spt.id and mm.data_location_id @DATA_LOCATION group by mm.type_id) temp where temp.spTypeTimount<#TRASHHOLD_MIN_STOCT_OUT"
+    // //Slie 31:Number of types of spare parts with stock more than a given time period
+    // public static final String NUMBER_SP_PAT_STOCK_MORE_SIMPLE_SLD31="select count(temp.spTypeTimount)/(SELECT count(mmm.id)  FROM memms_spare_part mmm where mmm.data_location_id @DATA_LOCATION) as final_result from (SELECT count(mm.type_id)/(SELECT ROUND((count(m.id)/12),0)  FROM memms_spare_part m where m.status='OPERATIONAL' and dateDiff(NOW(),m.delivery_date)<=365 and m.data_location_id @DATA_LOCATION group by mm.type_id) as spTypeTimount   FROM memms_spare_part mm where mm.data_location_id @DATA_LOCATION group by mm.type_id) temp where temp.spTypeTimount>#TRASHHOLD_MAX_STOCT_OUT"
+    // public static final String NUMBER_SP_PAT_STOCK_MORE_GROUP_SLD31="select temp.namesEn,temp.spTypeTimount/(SELECT count(mmm.id)  FROM memms_spare_part mmm where mmm.data_location_id @DATA_LOCATION) as final_result from (SELECT count(mm.type_id)/(SELECT count(m.id)/12  FROM memms_spare_part m where m.status='OPERATIONAL' and dateDiff(NOW(),m.delivery_date)<=365 and m.data_location_id @DATA_LOCATION group by mm.type_id) as spTypeTimount,spt.names_en as namesEn FROM memms_spare_part mm,memms_spare_part_type spt where mm.type_id=spt.id and mm.data_location_id @DATA_LOCATION group by mm.type_id) temp where temp.spTypeTimount>#TRASHHOLD_MAX_STOCT_OUT"
     
     public static createDashboardStructure() {
         createIndicatorCategories()
@@ -165,20 +169,37 @@ class DashboardInitializer {
          def sparePartsManagment = IndicatorCategory.findByCode(MANAGEMENT_SPAREPARTS)
          if(sparePartsManagment != null) {
             //Slie 31:Number of types of spare parts with stock more than a given time period
+            // newIndicator(
+            //     sparePartsManagment, 
+            //     "NUMBER_TYPES_STC_OUNT_MORE_SPAREPART", 
+            //     ["en":"Number of types of spare parts with stock more than a given time period", "fr":"Number of types of spare parts with stock more than a given time period fr"],
+            //     ["en":"Number of types of spare parts with stock more than a given time period", "fr":"Number of types of spare parts with stock more than a given time period fr"], 
+            //     [
+            //         "en":"No. Of spare part types at a facility with stock out time more than a certain threshold (to be defined by the administrator) / total number of spare part types at the facility", 
+            //         "fr":"No. Of spare part types at a facility with stock out time more than a certain threshold (to be defined by the administrator) / total number of spare part types at the facility"
+            //     ],
+            //     "%", 0.20, 0.10, Indicator.HistoricalPeriod.QUARTERLY, 8, 
+            //     NUMBER_SP_PAT_STOCK_MORE_SIMPLE_SLD31, 
+            //     ["en":"Spare Part Type", "fr":"Spare Part Type fr"], 
+            //     NUMBER_SP_PAT_STOCK_MORE_GROUP_SLD31,
+            //     true, true
+            // )
+
+            //Slie 30:Share of types of spare parts about to stock out in a given time period
             newIndicator(
                 sparePartsManagment, 
-                "NUMBER_TYPES_STC_OUNT_MORE_SPAREPART", 
-                ["en":"Number of types of spare parts with stock more than a given time period", "fr":"Number of types of spare parts with stock more than a given time period fr"],
-                ["en":"Number of types of spare parts with stock more than a given time period", "fr":"Number of types of spare parts with stock more than a given time period fr"], 
+                "SHARE_TYPES_SP_PRT_STOC_OUT_LESS", 
+                ["en":"Share of types of spare parts about to stock out in a given time period","fr":"Share of types of spare parts about to stock out in a given time period fr"],
+                ["en":"Share of types of spare parts about to stock out in a given time period","fr":"Share of types of spare parts about to stock out in a given time period fr"], 
                 [
-                    "en":"No. Of spare part types at a facility with stock out time more than a certain threshold (to be defined by the administrator) / total number of spare part types at the facility", 
-                    "fr":"No. Of spare part types at a facility with stock out time more than a certain threshold (to be defined by the administrator) / total number of spare part types at the facility"
+                    "en":"No. Of spare part types at a facility with stock out time less than a certain threshold (to be defined by the administrator) / total number of spare part types at the facility", 
+                    "fr":"No. Of spare part types at a facility with stock out time less than a certain threshold (to be defined by the administrator) / total number of spare part types at the facility fr"
                 ],
                 "%", 0.20, 0.10, Indicator.HistoricalPeriod.QUARTERLY, 8, 
-                NUMBER_SP_PAT_STOCK_MORE_SIMPLE_SLD31, 
-                ["en":"Spare Part Type", "fr":"Spare Part Type fr"], 
-                NUMBER_SP_PAT_STOCK_MORE_GROUP_SLD31,
-                true, true
+                SHARE_TYPE_SP_PART_STOCK_OUT_SIMPLE_SLD30, 
+                ["en":"Spare Part", "fr":"Spare Part  fr"], 
+                SHARE_TYPE_SP_PART_STOCK_OUT_GROUP_SLD30,
+                true,true
             )
          }
     }

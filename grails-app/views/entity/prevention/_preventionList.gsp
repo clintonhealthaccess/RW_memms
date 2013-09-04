@@ -44,14 +44,6 @@
 				<td>
 					<g:stripHtml field="${prevention.descriptions}" chars="40"/>
 				</td>
-				<td>
-					<g:if test="${!prevention.processes || prevention.processes.size()==0}">
-						<a href="${createLinkWithTargetURI(controller:'prevention', action:'edit', params:[id: prevention.id])}" class="next gray medium"> 
-								<g:message code="prevention.add.process.label" />
-						</a>
-						
-					</g:if>
-				</td>
 			</tr>
 		</g:each>
 	</tbody>
