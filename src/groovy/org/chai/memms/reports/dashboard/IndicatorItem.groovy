@@ -110,9 +110,6 @@ class IndicatorItem {
         this.valuesPerGroup=new HashMap<String,Double>()
 
         // add historical values
-        // TODO is this necessary?
-        // def historicalValueItem = new HistoricalValueItem(indicatorValue)
-        // this.historicalValueItems.add(historicalValueItem)
         this.historicalValueItems.addAll(getHistoricValueItems(indicatorValue))
         if (log.isDebugEnabled()) log.debug("getHistoricalValueItems historical value items=" + historicalValueItems + ", size="+historicalValueItems.size());
 
@@ -159,7 +156,11 @@ class IndicatorItem {
                 locationReports = LocationReport.findAll("from LocationReport as locationReport where month(locationReport.eventDate) = 12 and locationReport.location.id='"+indicatorValue.locationReport.location.id+"' order by locationReport.eventDate desc limit "+indicatorValue.indicator.historyItems+"")
             }
 
+            // start TODO AR create indicator value service method
             def indicatorValues = IndicatorValue.findAllByLocationReportInListAndIndicator(locationReports,indicatorValue.indicator)
+            indicatorValues.sort{ a,b -> (a.computedAt <=> b.computedAt) }
+            // end TODO
+
             indicatorValues.each{ indV ->
                 def historicalValueItem = new HistoricalValueItem(indV)
                 historicalValueItems.add(historicalValueItem)
@@ -241,8 +242,6 @@ class IndicatorItem {
         if(indicatorValue!=null){
             def geographicalLocations = getDataLocationsInLocation(indicatorValue.locationReport.location)
             def memmsReport = indicatorValue.locationReport.memmsReport
-            if (log.isDebugEnabled()) log.debug("getGeographicalValueItems memmsReport=" + memmsReport);
-            if (log.isDebugEnabled()) log.debug("getGeographicalValueItems locationReports=" + LocationReport.list());
             def locationReports=LocationReport.findAllByMemmsReportAndLocationInList(memmsReport,geographicalLocations)
             if (log.isDebugEnabled()) log.debug("getGeographicalValueItems location report items=" + locationReports + ", size="+locationReports.size());
             def indicatorValues = IndicatorValue.findAllByLocationReportInListAndIndicator(locationReports,indicatorValue.indicator)

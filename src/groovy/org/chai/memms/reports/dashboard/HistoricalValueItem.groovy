@@ -28,6 +28,7 @@
 package org.chai.memms.reports.dashboard
 
 import org.chai.memms.reports.dashboard.IndicatorValue;
+import org.chai.memms.util.Utils;
 /**
  * @author Antoine Nzeyi, Donatien Masengesho, Pivot Access Ltd
  *
@@ -37,6 +38,7 @@ class HistoricalValueItem {
     Double value
     String unit
     String color
+
     public HistoricalValueItem(IndicatorValue iv){
         this.computedAt = iv.computedAt
         this.value = iv.computedValue
@@ -60,5 +62,10 @@ class HistoricalValueItem {
                 this.color = "green"
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        return "HistoricalValueItem[computedAt:"+Utils.formatDate(this.computedAt)+" value:"+this.value+" unit:" +this.unit+" color:"+this.color+"]"
     }
 }

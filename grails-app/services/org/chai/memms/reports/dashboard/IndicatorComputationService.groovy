@@ -62,16 +62,38 @@ class IndicatorComputationService {
         if (log.isDebugEnabled()) log.debug("computeCurrentReport start memmsReports " + memmsReports);
 
         // 1. GET DATES
-        def lastYear = DateTime.now().minusYears(1)
-        def lastHalfYear = DateTime.now().minusMonths(6)
+        def reportDates = []
+
+        // year and half year reports
+        def oneYearAgo = DateTime.now().minusYears(1)
+        def sixMonthsAgo = DateTime.now().minusMonths(6)
+        reportDates = [oneYearAgo, sixMonthsAgo]
+
+        // quarterly reports
+        // def fourQuartersAgo = DateTime.now().minusMonths(12) ==> same as oneYearAgo
+        def threeQuartersAgo = DateTime.now().minusMonths(9)
+        // def twoQuartersAgo = DateTime.now().minusMonths(6) ==> same as sixMonthsAgo
         def lastQuarter = DateTime.now().minusMonths(3)
+        reportDates.addAll([threeQuartersAgo, lastQuarter])
+
+        // monthly reports
+        // def sixMonthsAgo = DateTime.now().minusMonths(6) ==> same as sixMonthsAgo
+        def fiveMonthsAgo = DateTime.now().minusMonths(5)
+        def fourMonthsAgo = DateTime.now().minusMonths(4)
+        // def threeMonthsAgo = DateTime.now().minusMonths(3) ==> same as lastQuarter
+        def twoMonthsAgo = DateTime.now().minusMonths(2)
         def lastMonth = DateTime.now().minusMonths(1)
+        reportDates.addAll([fiveMonthsAgo, fourMonthsAgo, twoMonthsAgo, lastMonth])
 
-        //TODO BUG because each report removes previous reports in the same month, last week's report should never display !
-        def lastWeek = DateTime.now().minusWeeks(1)
-
-        def now = DateTime.now()
-        def reportDates = [lastYear, lastHalfYear, lastQuarter, lastMonth, lastWeek, now]
+        // today and yesterday reports
+        def today = DateTime.now()
+        def yesterday = null //if "yesterday" is in the same month as "today", it will be computed, but will be removed when "today" is computed
+        if(today.minus(1).getMonthOfYear() == today.getMonthOfYear()){
+            yesterday = today.minus(1)
+            reportDates.add(yesterday)
+        }
+        reportDates.add(today)
+        if (log.isDebugEnabled()) log.debug("computeCurrentReport reportDates " + reportDates);
 
         // 1a. GET LOCATIONS WITH EQUIPMENTS
         def rootLocation = locationService.getRootLocation() 
@@ -89,7 +111,6 @@ class IndicatorComputationService {
 
         reportDates.each{ reportDate ->
             // 2. REMOVE PREVIOUS REPORTS IN THE SAME MONTH
-            //TODO BUG because each report removes previous reports in the same month, last week's report should never display !
             GroupIndicatorValue.executeUpdate("delete from GroupIndicatorValue where month(generatedAt) = " + reportDate.getMonthOfYear() + " and year(generatedAt) = " + reportDate.getYear())
             IndicatorValue.executeUpdate("delete from IndicatorValue where month(computedAt) = " + reportDate.getMonthOfYear() + " and year(computedAt) = " + reportDate.getYear())
             LocationReport.executeUpdate("delete from LocationReport where month(eventDate) = " + reportDate.getMonthOfYear() + " and year(eventDate) = " + reportDate.getYear())
@@ -98,10 +119,10 @@ class IndicatorComputationService {
             // 3. SAVE NEW MEMMS REPORT
             MemmsReport memmsReport = new MemmsReport(eventDate: reportDate.toDate()).save()
 
-            // 4. COMPUTE MEMMS REPORT FOR ALL LOCATIONS WITH EQUIPMENTS
+            // 4. COMPUTE MEMMS LOCATION REPORTS FOR ALL LOCATIONS WITH EQUIPMENTS
             for(def locationWithEquipment : locationsWithEquipment){
                     if (log.isDebugEnabled()) log.debug("computeCurrentReport memmsReport "+memmsReport);
-                    computeLocationReport(memmsReport.eventDate.toDate(), locationWithEquipment, memmsReport)
+                    computeLocationReport(memmsReport.eventDate, locationWithEquipment, memmsReport)
                     if (log.isDebugEnabled()) log.debug("computeCurrentReport memmsReport "+memmsReport);
             }
             memmsReports.add(memmsReport)
