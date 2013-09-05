@@ -25,38 +25,27 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.report.listing
+package org.chai.memms.reports.listing
 
-import java.util.Date;
-
-import org.chai.memms.inventory.EquipmentStatus.Status;
+import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventionResponsible;
+import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatus;
 
 /**
  * @author Aphrodice Rwagaju
  *
  */
-class EquipmentReport extends EquipmentGeneralReportParameters {
+class PreventiveMaintenanceReport extends EquipmentGeneralReportParameters{
 
-	boolean obsolete
-	def equipmentStatus
-	boolean underWarranty
-	boolean noAcquisitionPeriod
-	def statusChanges
-	Date fromStatusChangesPeriod
-	Date toStatusChangesPeriod
+	def preventiveOrderStatus
+	def preventionResponsible
 
 	static constraints = {
-		obsolete nullable: false
-		equipmentStatus nullable: true
-		underWarranty nullable: false
-		noAcquisitionPeriod nullable: false
-		statusChanges nullable: true
-		fromStatusChangesPeriod nullable: true
-		toStatusChangesPeriod nullable: true
+		preventiveOrderStatus nullable: true, blank: true
+		preventionResponsible nullable: true, blank: true
 	}
 
 	static mapping = {
-		table "memms_equipment_report_listing"
+		table "memms_preventive_maintenance_report_listing"
 		version false
 	}
 }

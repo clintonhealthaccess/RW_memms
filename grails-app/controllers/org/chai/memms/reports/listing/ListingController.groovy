@@ -25,7 +25,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.reports
+package org.chai.memms.reports.listing
 
 import java.util.Map;
 import java.util.Set;
@@ -51,10 +51,6 @@ import org.chai.memms.inventory.EquipmentType;
 import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatus;
 //import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatusChange;
 import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventionResponsible;
-import org.chai.memms.report.listing.CorrectiveMaintenanceReport;
-import org.chai.memms.report.listing.EquipmentReport;
-import org.chai.memms.report.listing.PreventiveMaintenanceReport;
-import org.chai.memms.report.listing.SparePartReport
 import org.chai.memms.spare.part.SparePart;
 import org.chai.memms.spare.part.SparePart.SparePartStatus;
 import org.chai.memms.spare.part.SparePart.SparePartStatusChange;

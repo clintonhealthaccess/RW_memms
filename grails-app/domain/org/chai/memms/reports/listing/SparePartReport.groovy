@@ -25,27 +25,49 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.report.listing
+package org.chai.memms.reports.listing
 
-import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventionResponsible;
-import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatus;
+import java.util.Date;
+
+import org.chai.memms.security.User;
+import org.chai.location.DataLocation;
+import org.chai.memms.spare.part.SparePartType;
+import org.chai.memms.util.Utils.ReportType;
+import org.chai.memms.util.Utils.ReportSubType;
 
 /**
  * @author Aphrodice Rwagaju
  *
  */
-class PreventiveMaintenanceReport extends EquipmentGeneralReportParameters{
+class SparePartReport {
+	String reportName
+	ReportType reportType
+	ReportSubType reportSubType
+	Date dateCreated
+	Date fromDate
+	Date toDate
+	User savedBy
+	def sparePartStatus
+	boolean noAcquisitionPeriod
+	String displayOptions
 
-	def preventiveOrderStatus
-	def preventionResponsible
-
+	static hasMany = [dataLocations:DataLocation,sparePartTypes:SparePartType]
 	static constraints = {
-		preventiveOrderStatus nullable: true, blank: true
-		preventionResponsible nullable: true, blank: true
+		dataLocations nullable: true, blank: true
+		sparePartTypes nullable: true, blank: true
+		fromDate nullable: true, blank: true
+		toDate nullable: true, blank: true
+		savedBy nullable: false
+		sparePartStatus nullable: true, blank: true
+		noAcquisitionPeriod nullable: false
+		displayOptions nullable: false
 	}
 
 	static mapping = {
-		table "memms_preventive_maintenance_report_listing"
+		table "memms_spare_part_report_listing"
 		version false
+		dataLocations joinTable:[name:"memms_spare_part_data_location_report_listing",key:"data_location_id",column:"report_listing_id"]
+		sparePartTypes joinTable:[name:"memms_spare_part_type_report_listing",key:"spare_part_type_id",column:"report_listing_id"]
 	}
+
 }

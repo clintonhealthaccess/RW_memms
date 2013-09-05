@@ -25,7 +25,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.reports
+package org.chai.memms.reports.listing
 
 import java.util.Map;
 
@@ -37,7 +37,6 @@ import org.chai.memms.security.User;
 import org.chai.memms.util.Utils;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.WorkOrderStatusChange;
-import org.chai.memms.report.listing.CorrectiveMaintenanceReport;
 import org.chai.memms.util.Utils.ReportType
 import org.chai.memms.util.Utils.ReportSubType
 import org.joda.time.DateTime
