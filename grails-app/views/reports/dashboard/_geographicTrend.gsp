@@ -12,7 +12,8 @@
             region: 'RW',
             resolution: 'provinces',
             displayMode: 'markers',
-            colorAxis: {values:${indicatorItem.geoValues()},colors:${indicatorItem.geoColors()}}
+            colorAxis: {values:${indicatorItem.geoValues()},
+            colors:${indicatorItem.geoColors()}
           });
         };
     </script>

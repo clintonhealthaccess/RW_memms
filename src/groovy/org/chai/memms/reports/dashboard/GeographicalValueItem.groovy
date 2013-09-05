@@ -46,7 +46,9 @@ class GeographicalValueItem {
     double latitude
 
     def geoDataRow() {
-        return [latitude,longitude,"\'"+dataLocation+"\'",value]
+        def row = [latitude,longitude,"\'"+dataLocation+"\'",value]
+        if (log.isDebugEnabled()) log.debug("geoDataRow row " + row);
+        return row
     }
 
     public GeographicalValueItem(IndicatorValue iv){
@@ -54,33 +56,45 @@ class GeographicalValueItem {
         this.unit = iv.indicator.unit
         this.dataLocation = iv.locationReport.location.names
         if(iv.locationReport.location.coordinates != null){
-            String raw = iv.locationReport.location.coordinates;
-            int alpha = raw.indexOf("[");
-            int omega = raw.lastIndexOf("]");
-            if((alpha >=0)&& (omega >=0)){
-                while(raw.charAt(alpha+1) == '[') {
-                    alpha++;
-                }
-                while(raw.charAt(omega-1) == ']') {
-                    omega--;
-                }
-                String[] tokens = raw.substring(alpha,omega+1).split(splitter);
-                double longs = 0.0;
-                double lats = 0.0;
-                long counter = 0;
-                for(String token: tokens) {
-                    try {
-                        String[] nums = token.substring(1,token.length()-1).split(",");
-                        longs += Double.parseDouble(nums[0].trim());
-                        lats += Double.parseDouble(nums[1].trim());
-                        counter++;
-                    } catch(Exception ex) {
-                    }
-                }
-                this.longitude = longs/counter;
-                this.latitude = lats/counter;
-            }
+            if (log.isDebugEnabled()) log.debug("GeographicalValueItem coordinates " + coordinates);
+            // def coordinates = iv.locationReport.location.coordinates
+            // def coordinate = coordinates.replace(/(\[|\])/g,"");
+            // def lat = coordinate.split(',')[0];
+            // def lng = coordinate.split(',')[1];
+            // this.latitude = lat;
+            // this.longitude = lng;
+
+        //     String raw = iv.locationReport.location.coordinates;
+        //     int alpha = raw.indexOf("[");
+        //     int omega = raw.lastIndexOf("]");
+        //     if((alpha >=0)&& (omega >=0)){
+        //         while(raw.charAt(alpha+1) == '[') {
+        //             alpha++;
+        //         }
+        //         while(raw.charAt(omega-1) == ']') {
+        //             omega--;
+        //         }
+        //         String[] tokens = raw.substring(alpha,omega+1).split(splitter);
+        //         double longs = 0.0;
+        //         double lats = 0.0;
+        //         long counter = 0;
+        //         for(String token: tokens) {
+        //             try {
+        //                 String[] nums = token.substring(1,token.length()-1).split(",");
+        //                 longs += Double.parseDouble(nums[0].trim());
+        //                 lats += Double.parseDouble(nums[1].trim());
+        //                 counter++;
+        //             } catch(Exception ex) {
+        //             }
+        //         }
+        //         this.longitude = longs/counter;
+        //         this.latitude = lats/counter;
+        //     }
         }
+
+        this.latitude = 1.9439
+        this.longitude = 30.0594
+
         Double red = iv.indicator.redToYellowThreshold
         Double green =  iv.indicator.yellowToGreenThreshold
         if(red < green) {
@@ -104,6 +118,6 @@ class GeographicalValueItem {
 
     @Override
     public String toString() {
-        return "GeographicalValueItem[dataLocation:" +this.dataLocation + "value:"+this.value+" Latitude :"+this.latitude+"Longitude"+this.longitude+ "]"
+        return "GeographicalValueItem[Latitude:"+this.latitude+" Longitude:"+this.longitude+" Location:" +this.dataLocation+" Value:"+this.value+"]"
     }
 }

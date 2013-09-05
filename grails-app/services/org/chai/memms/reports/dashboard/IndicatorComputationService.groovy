@@ -57,78 +57,58 @@ class IndicatorComputationService {
     static final Pattern userDefinedVariablePattern = Pattern.compile(USER_DEFINED_VARIABLE_REGEX)
 
     public def computeCurrentReport() {
-        // 1. GET CURRENT DATE
-        DateTime lastYear = DateTime.now().minusYears(1)
-        DateTime lastHalfYear = DateTime.now().minusMonths(6)
-        DateTime lastQuarter = DateTime.now().minusMonths(3)
-        DateTime lastMonth = DateTime.now().minusMonths(1)
-        DateTime lastWeek = DateTime.now().minusWeeks(1)
-        DateTime now = DateTime.now()
-        Date currentDate = now.toDate()
-        // 2. REMOVE PREVIOUS REPORTS IN THE SAME MONTH
-        GroupIndicatorValue.executeUpdate("delete from GroupIndicatorValue where month(generatedAt) = " + now.getMonthOfYear() + " and year(generatedAt) = " + now.getYear())
-        IndicatorValue.executeUpdate("delete from IndicatorValue where month(computedAt) = " + now.getMonthOfYear() + " and year(computedAt) = " + now.getYear())
-        LocationReport.executeUpdate("delete from LocationReport where month(eventDate) = " + now.getMonthOfYear() + " and year(eventDate) = " + now.getYear())
-        MemmsReport.executeUpdate("delete from MemmsReport where month(eventDate) = " + now.getMonthOfYear() + " and year(eventDate) = " + now.getYear())
-        // 3. SAVE NEW MEMMS REPORT
-        MemmsReport memmsReportYear = new MemmsReport(eventDate: lastYear.toDate()).save()
-        MemmsReport memmsReportHalfYear = new MemmsReport(eventDate: lastHalfYear.toDate()).save()
-        MemmsReport memmsReportQuarter = new MemmsReport(eventDate: lastQuarter.toDate()).save()
-        MemmsReport memmsReportMonth = new MemmsReport(eventDate: lastMonth.toDate()).save()
-        MemmsReport memmsReportWeek = new MemmsReport(eventDate: lastWeek.toDate()).save()
-        MemmsReport memmsReportToday = new MemmsReport(eventDate: currentDate).save()
-        
-        // 4. Compute report for all locations with registered users.
+        def memmsReports = []
+
+        if (log.isDebugEnabled()) log.debug("computeCurrentReport start memmsReports " + memmsReports);
+
+        // 1. GET DATES
+        def lastYear = DateTime.now().minusYears(1)
+        def lastHalfYear = DateTime.now().minusMonths(6)
+        def lastQuarter = DateTime.now().minusMonths(3)
+        def lastMonth = DateTime.now().minusMonths(1)
+
+        //TODO BUG because each report removes previous reports in the same month, last week's report should never display !
+        def lastWeek = DateTime.now().minusWeeks(1)
+
+        def now = DateTime.now()
+        def reportDates = [lastYear, lastHalfYear, lastQuarter, lastMonth, lastWeek, now]
+
+        // 1a. GET LOCATIONS WITH EQUIPMENTS
         def rootLocation = locationService.getRootLocation() 
         if (log.isDebugEnabled()) log.debug("computeCurrentReport rootLocation " + rootLocation);
-
         def locationsWithEquipment = null
         if(rootLocation != null){
+            //TODO optimize this method !
             locationsWithEquipment = rootLocation.collectTreeWithDataLocations(null,null)
             if (log.isDebugEnabled()) log.debug("computeCurrentReport locationsWithEquipment " + locationsWithEquipment);
         }
-
         def dataLocationsWithEquipment = equipmentService.getDataLocationsWithEquipments()
         if (log.isDebugEnabled()) log.debug("computeCurrentReport dataLocationsWithEquipment " + dataLocationsWithEquipment);
-
+        //TODO optimize this method !
         locationsWithEquipment.addAll(dataLocationsWithEquipment)
 
-        for(def locationWithEquipment : locationsWithEquipment){
-                if (log.isDebugEnabled()) log.debug("memmsReport ==> lastYear ");
-                computeLocationReport(lastYear.toDate(), locationWithEquipment, memmsReportYear)
-                if (log.isDebugEnabled()) log.debug("memmsReport ==> lastHalfYear");
-                computeLocationReport(lastHalfYear.toDate(), locationWithEquipment, memmsReportHalfYear)
-                if (log.isDebugEnabled()) log.debug("memmsReport ==> lastQuarter");
-                computeLocationReport(lastQuarter.toDate(), locationWithEquipment, memmsReportQuarter)
-                if (log.isDebugEnabled()) log.debug("memmsReport ==> lastMonth");
-                computeLocationReport(lastMonth.toDate(), locationWithEquipment, memmsReportMonth)
-                if (log.isDebugEnabled()) log.debug("memmsReport ==> lastWeek");
-                computeLocationReport(lastWeek.toDate(), locationWithEquipment, memmsReportWeek)
-                if (log.isDebugEnabled()) log.debug("memmsReport ==> today");
-                computeLocationReport(currentDate, locationWithEquipment, memmsReportToday)
+        reportDates.each{ reportDate ->
+            // 2. REMOVE PREVIOUS REPORTS IN THE SAME MONTH
+            //TODO BUG because each report removes previous reports in the same month, last week's report should never display !
+            GroupIndicatorValue.executeUpdate("delete from GroupIndicatorValue where month(generatedAt) = " + reportDate.getMonthOfYear() + " and year(generatedAt) = " + reportDate.getYear())
+            IndicatorValue.executeUpdate("delete from IndicatorValue where month(computedAt) = " + reportDate.getMonthOfYear() + " and year(computedAt) = " + reportDate.getYear())
+            LocationReport.executeUpdate("delete from LocationReport where month(eventDate) = " + reportDate.getMonthOfYear() + " and year(eventDate) = " + reportDate.getYear())
+            MemmsReport.executeUpdate("delete from MemmsReport where month(eventDate) = " + reportDate.getMonthOfYear() + " and year(eventDate) = " + reportDate.getYear())
+            
+            // 3. SAVE NEW MEMMS REPORT
+            MemmsReport memmsReport = new MemmsReport(eventDate: reportDate.toDate()).save()
+
+            // 4. COMPUTE MEMMS REPORT FOR ALL LOCATIONS WITH EQUIPMENTS
+            for(def locationWithEquipment : locationsWithEquipment){
+                    if (log.isDebugEnabled()) log.debug("computeCurrentReport memmsReport "+memmsReport);
+                    computeLocationReport(memmsReport.eventDate.toDate(), locationWithEquipment, memmsReport)
+                    if (log.isDebugEnabled()) log.debug("computeCurrentReport memmsReport "+memmsReport);
+            }
+            memmsReports.add(memmsReport)
+
         }
 
-        //  Set<Long> locations = new HashSet<Long>();
-
-        //  for(User user: User.findAll()) {
-        //     if ((user.location != null) && !locations.contains(user.location.id)){
-        //         locations.add(user.location.id);
-        //         if (log.isDebugEnabled()) log.debug("memmsReport ==> lastYear ");
-        //         computeLocationReport(lastYear.toDate(), user.location, memmsReportYear)
-        //         if (log.isDebugEnabled()) log.debug("memmsReport ==> lastHalfYear");
-        //         computeLocationReport(lastHalfYear.toDate(), user.location, memmsReportHalfYear)
-        //         if (log.isDebugEnabled()) log.debug("memmsReport ==> lastQuarter");
-        //         computeLocationReport(lastQuarter.toDate(), user.location, memmsReportQuarter)
-        //         if (log.isDebugEnabled()) log.debug("memmsReport ==> lastMonth");
-        //         computeLocationReport(lastMonth.toDate(), user.location, memmsReportMonth)
-        //         if (log.isDebugEnabled()) log.debug("memmsReport ==> lastWeek");
-        //         computeLocationReport(lastWeek.toDate(), user.location, memmsReportWeek)
-        //         if (log.isDebugEnabled()) log.debug("memmsReport ==> today");
-        //         computeLocationReport(currentDate, user.location, memmsReportToday)
-        //     }
-        // }
-
-        if (log.isDebugEnabled()) log.debug("computeCurrentReport memmsReport " + memmsReportToday + ", locationReports " + memmsReportToday.locationReports.size());
+        if (log.isDebugEnabled()) log.debug("computeCurrentReport done memmsReports " + memmsReports);
     }
 
      def computeLocationReport(Date currentDate, CalculationLocation location, MemmsReport memmsReport) {

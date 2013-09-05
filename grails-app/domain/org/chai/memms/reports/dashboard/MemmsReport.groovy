@@ -44,6 +44,6 @@ class MemmsReport {
 
     @Override
     public String toString() {
-        return "MemmsReport[id = " + id + ", eventDate = " + eventDate + "]"
+        return "MemmsReport[id = " + id + ", eventDate = " + eventDate + ", locationReports.size = " + locationReports?.size() + "]"
     }
 }

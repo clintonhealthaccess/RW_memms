@@ -121,6 +121,7 @@ class IndicatorItem {
         for(IndicatorValue indV : getGeographicalValueItems(indicatorValue)) {
             this.geographicalValueItems.add(new GeographicalValueItem(indV))
         }
+        if (log.isDebugEnabled()) log.debug("getGeographicalValueItems geographical value items=" + geographicalValueItems + ", size="+geographicalValueItems.size());
 
         // add comparison value items
         if(indicatorValue.locationReport.location instanceof Location){
@@ -239,8 +240,14 @@ class IndicatorItem {
     public def getGeographicalValueItems(IndicatorValue indicatorValue){
         if(indicatorValue!=null){
             def geographicalLocations = getDataLocationsInLocation(indicatorValue.locationReport.location)
-            def locationReports=LocationReport.findAllByMemmsReportAndLocationInList(indicatorValue.locationReport.memmsReport,geographicalLocations)
-            return IndicatorValue.findAllByLocationReportInListAndIndicator(locationReports,indicatorValue.indicator)
+            def memmsReport = indicatorValue.locationReport.memmsReport
+            if (log.isDebugEnabled()) log.debug("getGeographicalValueItems memmsReport=" + memmsReport);
+            if (log.isDebugEnabled()) log.debug("getGeographicalValueItems locationReports=" + LocationReport.list());
+            def locationReports=LocationReport.findAllByMemmsReportAndLocationInList(memmsReport,geographicalLocations)
+            if (log.isDebugEnabled()) log.debug("getGeographicalValueItems location report items=" + locationReports + ", size="+locationReports.size());
+            def indicatorValues = IndicatorValue.findAllByLocationReportInListAndIndicator(locationReports,indicatorValue.indicator)
+            if (log.isDebugEnabled()) log.debug("getGeographicalValueItems indicator value items=" + indicatorValues + ", size="+indicatorValues.size());
+            return indicatorValues
         }
         return null
     }
@@ -264,12 +271,14 @@ class IndicatorItem {
     public def getDataLocationsInLocation(CalculationLocation location) {
         List<DataLocation> dataLocations = new ArrayList<DataLocation>()
         if (location instanceof Location) {
-            dataLocations = location.getDataLocations(LocationLevel.findAll(), null)
-            dataLocations.addAll(location.getChildren(null))
+            // dataLocations = location.getDataLocations(LocationLevel.findAll(), null)
+            // dataLocations.addAll(location.getChildren(null))
+            dataLocations = location.collectDataLocations(null)
         } else if (location instanceof DataLocation) {
             dataLocations.add(location)
             dataLocations.addAll(location.manages)
         }
+        if (log.isDebugEnabled()) log.debug("getDataLocationsInLocation data location items=" + dataLocations + ", size="+dataLocations.size());
         return dataLocations;
     }
 
@@ -318,7 +327,7 @@ class IndicatorItem {
     }
 
     public geoData() {
-        def ret = [["\'LATITUDE\'", "\'LONGITUDE\'", "\'LOCATION\'", "\'"+names+"\'"]]
+        def ret = [["\'Latitude\'", "\'Longitude\'", "\'Location\'", "\'"+names+"\'"]]
         def i = 1
         for(GeographicalValueItem geo: geographicalValueItems) {
             if((geo.latitude != null) && (geo.longitude != null) &&(geo.latitude != 0.0) && (geo.longitude != 0.0)) {
@@ -356,6 +365,7 @@ class IndicatorItem {
     }
 
     public def geoChartValueFormat() {
+        if (log.isDebugEnabled()) log.debug("geoChartValueFormat unit=" + unit);
         if(unit == '%') {
             return '0%';
         }
