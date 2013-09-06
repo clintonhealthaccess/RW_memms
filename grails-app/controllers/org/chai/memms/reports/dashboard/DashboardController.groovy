@@ -34,7 +34,6 @@ import org.chai.memms.security.User
 import org.chai.memms.util.Utils.ReportType
 
 import java.lang.reflect.*
-import java.util.*
 import org.apache.shiro.SecurityUtils
 
 /**
