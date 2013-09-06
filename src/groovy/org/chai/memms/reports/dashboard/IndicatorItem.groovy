@@ -27,16 +27,18 @@
  */
 package org.chai.memms.reports.dashboard
 
-import org.chai.memms.reports.dashboard.LocationReport;
-import org.chai.memms.reports.dashboard.Indicator;
-import org.chai.memms.reports.dashboard.IndicatorValue;
-import org.chai.memms.reports.dashboard.MemmsReport;
-import org.chai.memms.reports.dashboard.GroupIndicatorValue;
 import org.chai.location.CalculationLocation
 import org.chai.location.DataLocationType
 import org.chai.location.DataLocation
 import org.chai.location.Location
 import org.chai.location.LocationLevel
+import org.chai.memms.reports.dashboard.LocationReport;
+import org.chai.memms.reports.dashboard.Indicator;
+import org.chai.memms.reports.dashboard.IndicatorValue;
+import org.chai.memms.reports.dashboard.MemmsReport;
+import org.chai.memms.reports.dashboard.GroupIndicatorValue;
+import org.chai.memms.util.Utils;
+
 import java.util.*
 import org.chai.memms.security.User
 import org.apache.shiro.SecurityUtils
@@ -111,14 +113,15 @@ class IndicatorItem {
 
         // add historical values
         this.historicalValueItems.addAll(getHistoricValueItems(indicatorValue))
-        if (log.isDebugEnabled()) log.debug("getHistoricalValueItems historical value items=" + historicalValueItems + ", size="+historicalValueItems.size());
+        if (log.isDebugEnabled()) {
+            log.debug("IndicatorItem getHistoricalValueItems historical value items=" + historicalValueItems + ", size="+historicalValueItems.size());
+        }
 
         // add geographical values
-        this.geographicalValueItems.add(new GeographicalValueItem(indicatorValue))
-        for(IndicatorValue indV : getGeographicalValueItems(indicatorValue)) {
-            this.geographicalValueItems.add(new GeographicalValueItem(indV))
+        this.geographicalValueItems.addAll(getGeographicalValueItems(indicatorValue))
+        if (log.isDebugEnabled()) {
+            log.debug("IndicatorItem getGeographicalValueItems geographical value items=" + geographicalValueItems + ", size="+geographicalValueItems.size());
         }
-        if (log.isDebugEnabled()) log.debug("getGeographicalValueItems geographical value items=" + geographicalValueItems + ", size="+geographicalValueItems.size());
 
         // add comparison value items
         if(indicatorValue.locationReport.location instanceof Location){
@@ -239,14 +242,23 @@ class IndicatorItem {
      *Gets geographical values for the current report
      **/
     public def getGeographicalValueItems(IndicatorValue indicatorValue){
+        def geographicalValueItems = new ArrayList<GeographicalValueItem>();
+
         if(indicatorValue!=null){
-            def geographicalLocations = getDataLocationsInLocation(indicatorValue.locationReport.location)
+            def geographicalValueItem = new GeographicalValueItem(indicatorValue)
+            geographicalValueItems.add(geographicalValueItem)
+
+            def dataLocations = indicatorValue.locationReport.location.collectDataLocations(null)
             def memmsReport = indicatorValue.locationReport.memmsReport
-            def locationReports=LocationReport.findAllByMemmsReportAndLocationInList(memmsReport,geographicalLocations)
+            def locationReports=LocationReport.findAllByMemmsReportAndLocationInList(memmsReport,dataLocations)
             if (log.isDebugEnabled()) log.debug("getGeographicalValueItems location report items=" + locationReports + ", size="+locationReports.size());
             def indicatorValues = IndicatorValue.findAllByLocationReportInListAndIndicator(locationReports,indicatorValue.indicator)
-            if (log.isDebugEnabled()) log.debug("getGeographicalValueItems indicator value items=" + indicatorValues + ", size="+indicatorValues.size());
-            return indicatorValues
+            indicatorValues.each{ indV ->
+                geographicalValueItem = new GeographicalValueItem(indV)
+                geographicalValueItems.add(geographicalValueItem)
+            }
+            if (log.isDebugEnabled()) log.debug("getGeographicalValueItems geographical value items=" + geographicalValueItems + ", size="+geographicalValueItems.size());
+            return geographicalValueItems
         }
         return null
     }
@@ -267,52 +279,60 @@ class IndicatorItem {
         return simmilarFacilitiesOrLocations
     }
 
-    public def getDataLocationsInLocation(CalculationLocation location) {
-        List<DataLocation> dataLocations = new ArrayList<DataLocation>()
-        if (location instanceof Location) {
-            // dataLocations = location.getDataLocations(LocationLevel.findAll(), null)
-            // dataLocations.addAll(location.getChildren(null))
-            dataLocations = location.collectDataLocations(null)
-        } else if (location instanceof DataLocation) {
-            dataLocations.add(location)
-            dataLocations.addAll(location.manages)
-        }
-        if (log.isDebugEnabled()) log.debug("getDataLocationsInLocation data location items=" + dataLocations + ", size="+dataLocations.size());
-        return dataLocations;
-    }
+    // public def getDataLocationsInLocation(CalculationLocation location) {
+    //     List<DataLocation> dataLocations = new ArrayList<DataLocation>()
+    //     if (location instanceof Location) {
+    //         // dataLocations = location.getDataLocations(LocationLevel.findAll(), null)
+    //         // dataLocations.addAll(location.getChildren(null))
+    //         dataLocations = location.collectDataLocations(null)
+    //     } else if (location instanceof DataLocation) {
+    //         dataLocations.add(location)
+    //         dataLocations.addAll(location.manages)
+    //     }
+    //     if (log.isDebugEnabled()) log.debug("getDataLocationsInLocation data location items=" + dataLocations + ", size="+dataLocations.size());
+    //     return dataLocations;
+    // }
 
-    public def getLocationsIdWithUsers(){
-        List<Long> locations=new ArrayList<Long>();
-        for(User user:User.findAll()){
-            if(user.location!=null)
-            locations.add(user.location.id)
-        }
-        return locations
-    }
+    // public def getLocationsIdWithUsers(){
+    //     List<Long> locations=new ArrayList<Long>();
+    //     for(User user:User.findAll()){
+    //         if(user.location!=null)
+    //         locations.add(user.location.id)
+    //     }
+    //     return locations
+    // }
 
     public def historicalTrendVAxisFormat() {
-        if(unit == '%') {
-            return '0%';
-        }
+        if (log.isDebugEnabled()) log.debug("historicalTrendVAxisFormat unit=" + unit);
+
+        if(unit == '%') return '0%';
         return '###,##0 ' + unit;
     }
 
     public def historicalTrendMaxValue() {
-        if(unit == '%') {
-            return ', maxValue: 1';
-        }
+        if (log.isDebugEnabled()) log.debug("historicalTrendMaxValue unit=" + unit);
+
+        if(unit == '%') return ', maxValue: 1';
         return '';
     }
 
     public def historicalTrendLineCount() {
-        if(unit == '%') {
-            return ', count: 5';
-        }
+        if (log.isDebugEnabled()) log.debug("historicalTrendLineCount unit=" + unit);
+
+        if(unit == '%') return ', count: 5';
         return ', count: -1';
     }
 
     public def historicalTrendData() {
         def ret = []
+
+        // if(historicalValueItems != null & !historicalValueItems.empty){
+        //     ret = []
+        //     historicalValueItems.eachWithIndex{ historicalValueItem, i ->
+        //         ret[i] = ["\""+Utils.formatDate(this.computedAt)+"\"",historicalValueItem.value]
+        //     }
+        // }
+
         def i = 0
         def fmt = DateTimeFormat.forPattern("MMM d, y")
         for(HistoricalValueItem h: historicalValueItems) {
@@ -322,52 +342,101 @@ class IndicatorItem {
         if(i == 0) {
             ret = null
         }
+
+        if (log.isDebugEnabled()) log.debug("historicalTrendData ret=" + ret);
         return ret
     }
 
     public geoData() {
-        def ret = [["\'Latitude\'", "\'Longitude\'", "\'Location\'", "\'"+names+"\'"]]
-        def i = 1
-        for(GeographicalValueItem geo: geographicalValueItems) {
-            if((geo.latitude != null) && (geo.longitude != null) &&(geo.latitude != 0.0) && (geo.longitude != 0.0)) {
-                ret[i] = geo.geoDataRow()
-                i++;
-            }
+        def ret = []
+
+        if(geographicalValueItems == null || geographicalValueItems.empty){
+            this.geographicalValueItems.addAll(getGeographicalValueItems(indicatorValue))
         }
+
+        ret.add(["\'Lat\'", "\'Long\'", "\'Location\'", "\'"+names+"\'"])
+        geographicalValueItems.eachWithIndex{ geoValueItem, i ->
+            if((geoValueItem.latitude != null) && (geoValueItem.latitude != 0.0) && 
+                    (geoValueItem.longitude != null) && (geoValueItem.longitude != 0.0))
+                ret.add(geoValueItem.geoDataRow())
+        }
+
+        // def i = 1
+        // for(GeographicalValueItem geo: geographicalValueItems) {
+        //     if((geo.latitude != null) && (geo.latitude != 0.0) && (geo.longitude != null) && (geo.longitude != 0.0)) {
+        //         ret[i] = geo.geoDataRow()
+        //         i++;
+        //     }
+        // }
+
+        if (log.isDebugEnabled()) log.debug("geoData ret=" + ret);
         return ret
     }
 
     public geoValues() {
-        Map<Double,String> map = new TreeMap<Double,String>()
-        for(GeographicalValueItem geo: geographicalValueItems) {
-            map.put(geo.value,geo.color)
+
+        if(geographicalValueItems == null || geographicalValueItems.empty){
+            this.geographicalValueItems.addAll(getGeographicalValueItems(indicatorValue))
         }
+
+        // for(GeographicalValueItem geo: geographicalValueItems) {
+        //     map.put(geo.value,geo.color)
+        // }
+
+        Map<Double,String> map = new TreeMap<Double,String>()
+        geographicalValueItems.each{ geoValueItem ->
+            map.put(geoValueItem.value,geoValueItem.color)
+        }
+
         def ret = []
-        int i = 0
-        for(Double val:map.keySet()) {
+        map.keySet().eachWithIndex{ val, i ->
             ret[i++] = val
         }
+
+        // def ret = []
+        // int i = 0
+        // for(Double val:map.keySet()) {
+        //     ret[i++] = val
+        // }
+
+        if (log.isDebugEnabled()) log.debug("geoValues ret=" + ret);
         return ret
     }
 
     public geoColors() {
         Map<Double,String> map = new TreeMap<Double,String>()
-        for(GeographicalValueItem geo: geographicalValueItems) {
-            map.put(geo.value,geo.color)
+
+        if(geographicalValueItems == null || geographicalValueItems.empty){
+            this.geographicalValueItems.addAll(getGeographicalValueItems(indicatorValue))
         }
+
+        // for(GeographicalValueItem geo: geographicalValueItems) {
+        //     map.put(geo.value,geo.color)
+        // }
+
+        geographicalValueItems.each{ geoValueItem ->
+            map.put(geoValueItem.value,geoValueItem.color)
+        }
+
         def ret = []
-        int i = 0
-        for(Double val:map.keySet()) {
+        map.keySet().eachWithIndex{ val, i ->
             ret[i++] = "\'"+map.get(val)+"\'"
         }
+
+        // def ret = []
+        // int i = 0
+        // for(Double val:map.keySet()) {
+        //     ret[i++] = "\'"+map.get(val)+"\'"
+        // }
+
+        if (log.isDebugEnabled()) log.debug("geoColors ret=" + ret);
         return ret
     }
 
     public def geoChartValueFormat() {
         if (log.isDebugEnabled()) log.debug("geoChartValueFormat unit=" + unit);
-        if(unit == '%') {
-            return '0%';
-        }
+
+        if(unit == '%') return '0%';
         return '###,##0 ' + unit;
     }
 }

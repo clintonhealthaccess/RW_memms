@@ -27,6 +27,8 @@
  */
 package org.chai.memms.reports.dashboard
 
+import org.chai.location.Location
+
 import java.util.StringTokenizer;
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -36,14 +38,12 @@ import java.util.regex.Pattern
  */
 class GeographicalValueItem {
 
-    public static final String splitter = "(?<=\\]),(?=\\[)";
-
     String dataLocation
     Double value
     String unit
     String color
-    double longitude
     double latitude
+    double longitude
 
     def geoDataRow() {
         def row = [latitude,longitude,"\'"+dataLocation+"\'",value]
@@ -54,46 +54,73 @@ class GeographicalValueItem {
     public GeographicalValueItem(IndicatorValue iv){
         this.value = iv.computedValue
         this.unit = iv.indicator.unit
-        this.dataLocation = iv.locationReport.location.names
-        if(iv.locationReport.location.coordinates != null){
-            if (log.isDebugEnabled()) log.debug("GeographicalValueItem coordinates " + coordinates);
-            // def coordinates = iv.locationReport.location.coordinates
-            // def coordinate = coordinates.replace(/(\[|\])/g,"");
-            // def lat = coordinate.split(',')[0];
-            // def lng = coordinate.split(',')[1];
-            // this.latitude = lat;
-            // this.longitude = lng;
 
-        //     String raw = iv.locationReport.location.coordinates;
-        //     int alpha = raw.indexOf("[");
-        //     int omega = raw.lastIndexOf("]");
-        //     if((alpha >=0)&& (omega >=0)){
-        //         while(raw.charAt(alpha+1) == '[') {
-        //             alpha++;
-        //         }
-        //         while(raw.charAt(omega-1) == ']') {
-        //             omega--;
-        //         }
-        //         String[] tokens = raw.substring(alpha,omega+1).split(splitter);
-        //         double longs = 0.0;
-        //         double lats = 0.0;
-        //         long counter = 0;
-        //         for(String token: tokens) {
-        //             try {
-        //                 String[] nums = token.substring(1,token.length()-1).split(",");
-        //                 longs += Double.parseDouble(nums[0].trim());
-        //                 lats += Double.parseDouble(nums[1].trim());
-        //                 counter++;
-        //             } catch(Exception ex) {
-        //             }
-        //         }
-        //         this.longitude = longs/counter;
-        //         this.latitude = lats/counter;
-        //     }
+        def location = iv.locationReport.location
+        this.dataLocation = location.names
+
+        def coordinates = location.coordinates
+        if (log.isDebugEnabled()) log.debug("GeographicalValueItem coordinates " + coordinates);
+
+        if(coordinates != null && !coordinates.empty){
+            if(location instanceof Location){
+                
+                // calculate the centroid
+                // double xMin = 0
+                // double xMax = 0
+                // double yMin = 0
+                // double yMax = 0
+
+                double totalLatCoordinates = 0
+                double totalLngCoordinates = 0
+                double totalNumberOfCoordinates = 0
+
+                def latlonRegex = /\[(\-|\d|\.)*,(\-|\d|\.)*\]/
+                def regionCoordinates = (coordinates =~ latlonRegex).collect{ it[0] } // http://naleid.com/blog/2008/05/19/dont-fear-the-regexp/
+                if (log.isDebugEnabled()) log.debug("GeographicalValueItem regionCoordinates " + regionCoordinates[0]);
+
+                // int i = 0
+                regionCoordinates.each{ regionCoordinate ->
+                    def coordinate = regionCoordinate.replaceAll(~/(\[|\])/,"")
+                    double lng = coordinate.split(',')[0].toDouble();
+                    double lat = coordinate.split(',')[1].toDouble();
+
+                    // if(i == 0){
+                    //     xMin = lat
+                    //     xMax = lat
+                    //     yMin = lng
+                    //     yMax = lng
+                    // }
+                    // else{
+                    //     if(lat < xMin) xMin = lat
+                    //     if(lat > xMax) xMax = lat
+                    //     if(lng < yMin) yMin = lng
+                    //     if(lng > yMax) yMax = lng
+                    // }
+                    // i++
+
+                    totalLatCoordinates += lat;
+                    totalLngCoordinates += lng;
+                    totalNumberOfCoordinates++;
+                }
+
+                def latCentroid = totalLatCoordinates / totalNumberOfCoordinates
+                def lngCentroid = totalLngCoordinates / totalNumberOfCoordinates
+
+                // def latCentroid = xMin + ((xMax - xMin) / 2);
+                // def lngCentroid = yMin + ((yMax - yMin) / 2);
+
+                this.latitude = latCentroid
+                this.longitude = lngCentroid
+            }
+            else{
+
+                def coordinate = coordinates.replaceAll(~/(\[|\])/,"")
+                def lng = coordinate.split(',')[0];
+                def lat = coordinate.split(',')[1];
+                this.latitude = lat.toDouble();
+                this.longitude = lng.toDouble();
+            }
         }
-
-        this.latitude = 1.9439
-        this.longitude = 30.0594
 
         Double red = iv.indicator.redToYellowThreshold
         Double green =  iv.indicator.yellowToGreenThreshold
