@@ -67,14 +67,12 @@ class IndicatorComputationService {
         // year and half year reports
         def oneYearAgo = DateTime.now().minusYears(1)
         def sixMonthsAgo = DateTime.now().minusMonths(6)
-        reportDates = [oneYearAgo, sixMonthsAgo]
 
         // quarterly reports
         // def fourQuartersAgo = DateTime.now().minusMonths(12) ==> same as oneYearAgo
         def threeQuartersAgo = DateTime.now().minusMonths(9)
         // def twoQuartersAgo = DateTime.now().minusMonths(6) ==> same as sixMonthsAgo
         def lastQuarter = DateTime.now().minusMonths(3)
-        reportDates.addAll([threeQuartersAgo, lastQuarter])
 
         // monthly reports
         // def sixMonthsAgo = DateTime.now().minusMonths(6) ==> same as sixMonthsAgo
@@ -83,7 +81,6 @@ class IndicatorComputationService {
         // def threeMonthsAgo = DateTime.now().minusMonths(3) ==> same as lastQuarter
         def twoMonthsAgo = DateTime.now().minusMonths(2)
         def lastMonth = DateTime.now().minusMonths(1)
-        reportDates.addAll([fiveMonthsAgo, fourMonthsAgo, twoMonthsAgo, lastMonth])
 
         // today and yesterday reports
         def today = DateTime.now()
@@ -92,6 +89,10 @@ class IndicatorComputationService {
             yesterday = today.minus(1)
             reportDates.add(yesterday)
         }
+
+        reportDates.addAll([oneYearAgo, sixMonthsAgo])
+        reportDates.addAll([threeQuartersAgo, lastQuarter])
+        reportDates.addAll([fiveMonthsAgo, fourMonthsAgo, twoMonthsAgo, lastMonth])
         reportDates.add(today)
         if (log.isDebugEnabled()) log.debug("computeCurrentReport reportDates " + reportDates);
 
