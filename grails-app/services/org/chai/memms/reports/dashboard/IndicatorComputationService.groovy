@@ -51,12 +51,15 @@ class IndicatorComputationService {
     def indicatorValueService
     def locationReportService
     def locationService
+    def grailsApplication = new User().domainClass.grailsApplication
 
     static final String DATA_LOCATION_TOKEN = "@DATA_LOCATION"
     static final String USER_DEFINED_VARIABLE_REGEX = "#[0-9a-zA-Z_]+"
     static final Pattern userDefinedVariablePattern = Pattern.compile(USER_DEFINED_VARIABLE_REGEX)
+    def  skipLevelCode = grailsApplication.config.location.sector.skip.level[0]
 
     public def computeCurrentReport() {
+        def skippedLevel =  LocationLevel.findByCode(skipLevelCode)
         def memmsReports = []
 
         if (log.isDebugEnabled()) log.debug("computeCurrentReport start memmsReports " + memmsReports);
@@ -96,13 +99,13 @@ class IndicatorComputationService {
         reportDates.add(today)
         if (log.isDebugEnabled()) log.debug("computeCurrentReport reportDates " + reportDates);
 
-        // 1a. GET LOCATIONS WITH EQUIPMENTS
+        // 1. GET LOCATIONS WITH EQUIPMENTS
         def rootLocation = locationService.getRootLocation() 
         if (log.isDebugEnabled()) log.debug("computeCurrentReport rootLocation " + rootLocation);
         def locationsWithEquipment = null
         if(rootLocation != null){
             //TODO optimize this method !
-            locationsWithEquipment = rootLocation.collectTreeWithDataLocations(null,null)
+            locationsWithEquipment = rootLocation.collectTreeWithDataLocations((skippedLevel!=null)?[skippedLevel]:null,null)
             if (log.isDebugEnabled()) log.debug("computeCurrentReport locationsWithEquipment " + locationsWithEquipment);
         }
         def dataLocationsWithEquipment = equipmentService.getDataLocationsWithEquipments()
