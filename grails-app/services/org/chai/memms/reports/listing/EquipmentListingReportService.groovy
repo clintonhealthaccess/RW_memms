@@ -194,11 +194,14 @@ class EquipmentListingReportService {
 				inList ("department", departments)
 				//Mandatory property
 				inList ("type", equipmentTypes)
-					
+				or{	
 				if(lowerLimitCost && lowerLimitCost!=null)
 					gt ("purchaseCost", lowerLimitCost)
 				if(upperLimitCost && upperLimitCost!=null)
 					lt ("purchaseCost", upperLimitCost)
+				if(noCost != null && noCost)
+					isNull ("purchaseCost")
+				}
 				if(currency && currency !=null)
 					eq ("currency", currency)
 				if(equipmentStatus!=null && !equipmentStatus.empty)
@@ -214,8 +217,6 @@ class EquipmentListingReportService {
 					gt ("purchaseDate", fromAcquisitionPeriod)
 				if(toAcquisitionPeriod && toAcquisitionPeriod != null)
 					lt ("purchaseDate", toAcquisitionPeriod)
-				if(noCost != null && noCost)
-					eq ("purchaseCost", null)
 			}
 		}
 
@@ -246,7 +247,7 @@ class EquipmentListingReportService {
 				if(currency && currency !=null)
 					eq ("equip.currency",currency)
 				if(noCost != null && noCost)
-					eq ("equip.purchaseCost", null)
+					isNull ("equip.purchaseCost")
 
 				//Status changes
 				if(equipmentStatusChanges != null || !equipmentStatusChanges.empty){
