@@ -38,6 +38,7 @@ import org.chai.memms.reports.dashboard.IndicatorValue;
 import org.chai.memms.reports.dashboard.MemmsReport;
 import org.chai.memms.reports.dashboard.GroupIndicatorValue;
 import org.chai.memms.util.Utils;
+import org.chai.memms.util.Utils.ReportChartType;
 
 import java.util.*
 import org.chai.memms.security.User
@@ -51,7 +52,7 @@ import org.joda.time.format.DateTimeFormat
 class IndicatorItem {
 
     IndicatorComputationService indicatorComputationService
-    String locationNames
+    String indicatorValueId
     String categoryCode
     Date computedAt
     String code
@@ -61,6 +62,7 @@ class IndicatorItem {
     Double value
     String unit
     String color
+    String locationNames
 
     List<HistoricalValueItem> historicalValueItems
     List<ComparisonValueItem> highestComparisonValueItems
@@ -71,7 +73,8 @@ class IndicatorItem {
     Map<String, Double> valuesPerGroup
     Integer totalHistoryItems
 
-    public IndicatorItem(IndicatorValue indicatorValue) {
+    public IndicatorItem(IndicatorValue indicatorValue, ReportChartType reportChartType) {
+        this.indicatorValueId = indicatorValue.id
         this.categoryCode = indicatorValue.indicator.category.code
         this.computedAt = indicatorValue.computedAt
         this.code = indicatorValue.indicator.code
@@ -103,42 +106,51 @@ class IndicatorItem {
             }
         }
 
-        this.historicalValueItems = new ArrayList<HistoricalValueItem>()
-        this.geographicalValueItems = new ArrayList<GeographicalValueItem>()
-        this.highestComparisonValueItems= new ArrayList<ComparisonValueItem>()
-        this.higherComparisonValueItems= new ArrayList<ComparisonValueItem>()
-        this.lowerComparisonValueItems= new ArrayList<ComparisonValueItem>()
-        this.lowestComparisonValueItems= new ArrayList<ComparisonValueItem>()
-        this.valuesPerGroup=new HashMap<String,Double>()
-
-        // add historical values
-        this.historicalValueItems.addAll(getHistoricValueItems(indicatorValue))
-        if (log.isDebugEnabled()) {
-            log.debug("IndicatorItem getHistoricalValueItems historical value items=" + historicalValueItems + ", size="+historicalValueItems.size());
+        // add historical value items
+        if(reportChartType == null || reportChartType == ReportChartType.HISTORIC){
+            this.historicalValueItems = new ArrayList<HistoricalValueItem>()
+            this.historicalValueItems.addAll(getHistoricValueItems(indicatorValue))
+            if (log.isDebugEnabled()) {
+                log.debug("IndicatorItem getHistoricalValueItems historical value items=" + historicalValueItems + ", size="+historicalValueItems?.size());
+            }
         }
 
-        // add geographical values
-        this.geographicalValueItems.addAll(getGeographicalValueItems(indicatorValue))
-        if (log.isDebugEnabled()) {
-            log.debug("IndicatorItem getGeographicalValueItems geographical value items=" + geographicalValueItems + ", size="+geographicalValueItems.size());
+        // add geographical value items
+        if(reportChartType == ReportChartType.GEOGRAPHIC){
+            this.geographicalValueItems = new ArrayList<GeographicalValueItem>()
+            this.geographicalValueItems.addAll(getGeographicalValueItems(indicatorValue))
+            if (log.isDebugEnabled()) {
+                log.debug("IndicatorItem getGeographicalValueItems geographical value items=" + geographicalValueItems + ", size="+geographicalValueItems?.size());
+            }
         }
 
         // add comparison value items
-        if(indicatorValue.locationReport.location instanceof Location){
-            if(indicatorValue.locationReport.location.parent != null){
-                getComparisonValueItems(indicatorValue)
+        if(reportChartType == ReportChartType.COMPARISON){
+            this.highestComparisonValueItems= new ArrayList<ComparisonValueItem>()
+            this.higherComparisonValueItems= new ArrayList<ComparisonValueItem>()
+            this.lowerComparisonValueItems= new ArrayList<ComparisonValueItem>()
+            this.lowestComparisonValueItems= new ArrayList<ComparisonValueItem>()
+            getComparisonValueItems(indicatorValue)
+            // TODO combine lists
+            if (log.isDebugEnabled()) {
+                log.debug("IndicatorItem getComparisonValueItems comparison value items=" + highestComparisonValueItems + ", size="+highestComparisonValueItems?.size());
+                log.debug("IndicatorItem getComparisonValueItems comparison value items=" + higherComparisonValueItems + ", size="+higherComparisonValueItems?.size());
+                log.debug("IndicatorItem getComparisonValueItems comparison value items=" + lowerComparisonValueItems + ", size="+lowerComparisonValueItems?.size());
+                log.debug("IndicatorItem getComparisonValueItems comparison value items=" + lowestComparisonValueItems + ", size="+lowestComparisonValueItems?.size());
             }
         }
-        else{
-            getComparisonValueItems(indicatorValue)
-        }
 
-
-        // add group value items
-        for(GroupIndicatorValue grV:indicatorValue.groupIndicatorValues){
-            this.valuesPerGroup.put(grV.names,grV.value)
+        // add info by x value items
+        if(reportChartType == ReportChartType.INFOBY){
+            this.valuesPerGroup=new HashMap<String,Double>()
+            for(GroupIndicatorValue grV:indicatorValue.groupIndicatorValues)
+                this.valuesPerGroup.put(grV.names,grV.value)
+            if (log.isDebugEnabled()) {
+                log.debug("IndicatorItem getInfoByXValueItems info by x value items=" + valuesPerGroup + ", size="+valuesPerGroup?.size());
+            }
         }
     }
+
     /**
      *Get historical values for this indicators = for different location reports
      */
@@ -174,11 +186,49 @@ class IndicatorItem {
         return null
     }
 
+    public def historicalTrendData() {
+        def ret = []
+
+        def i = 0
+        def fmt = DateTimeFormat.forPattern("MMM d, y")
+        for(HistoricalValueItem h: historicalValueItems) {
+            ret[i] = ["\""+fmt.print(h.computedAt.time)+"\"",h.value]
+            i++
+        }
+        if(i == 0) {
+            ret = null
+        }
+
+        if (log.isDebugEnabled()) log.debug("historicalTrendData ret=" + ret);
+        return ret
+    }
+
+    public def historicalTrendVAxisFormat() {
+        if (log.isDebugEnabled()) log.debug("historicalTrendVAxisFormat unit=" + unit);
+
+        if(unit == '%') return '0%';
+        return '###,##0 ' + unit;
+    }
+
+    public def historicalTrendMaxValue() {
+        if (log.isDebugEnabled()) log.debug("historicalTrendMaxValue unit=" + unit);
+
+        if(unit == '%') return ', maxValue: 1';
+        return '';
+    }
+
+    public def historicalTrendLineCount() {
+        if (log.isDebugEnabled()) log.debug("historicalTrendLineCount unit=" + unit);
+
+        if(unit == '%') return ', count: 5';
+        return ', count: -1';
+    }
+
     public void getComparisonValueItems(IndicatorValue currentValue){
         List<IndicatorValue> invVs=new ArrayList<IndicatorValue>()
         if(currentValue!=null) {
-            def  simmilarFacilitiesOrLocations=getSimmilarFacilitiesOrlocations(currentValue)
-            def locationReports=LocationReport.findAllByMemmsReportAndLocationInList(currentValue.locationReport.memmsReport,simmilarFacilitiesOrLocations)
+            def  similarLocations=getSimilarLocations(currentValue)
+            def locationReports=LocationReport.findAllByMemmsReportAndLocationInList(currentValue.locationReport.memmsReport,similarLocations)
             invVs.addAll(IndicatorValue.findAllByLocationReportInListAndIndicator(locationReports,currentValue.indicator))
             sortComparisonValues(currentValue,invVs)
         }
@@ -238,6 +288,15 @@ class IndicatorItem {
         this.higherComparisonValueItems.reverse()
     }
 
+    public def getLocationsIdWithUsers(){
+        List<Long> locations=new ArrayList<Long>();
+        for(User user:User.findAll()){
+            if(user.location!=null)
+            locations.add(user.location.id)
+        }
+        return locations
+    }
+
     /**
      *Gets geographical values for the current report
      **/
@@ -266,91 +325,28 @@ class IndicatorItem {
     /**
      *Gets  facilities or locations similar to the curent facility/location from this indicator value
      */
-    public def getSimmilarFacilitiesOrlocations(IndicatorValue indicatorValue){
-        def  simmilarFacilitiesOrLocations=null
+    public def getSimilarLocations(IndicatorValue indicatorValue){
+        def  similarLocations=[]
         def locationIds=getLocationsIdWithUsers()
         if(indicatorValue!=null){
-            if(indicatorValue.locationReport.location instanceof DataLocation){
-                simmilarFacilitiesOrLocations=DataLocation.findAllByTypeAndIdInList(indicatorValue.locationReport.location.type,locationIds)
-            } else if(indicatorValue.locationReport.location instanceof Location){
-                simmilarFacilitiesOrLocations=Location.findAllByLevelAndIdInList(indicatorValue.locationReport.location.level,locationIds)
-            }
+            // if(indicatorValue.locationReport.location instanceof DataLocation){
+            //     similarLocations=DataLocation.findAllByTypeAndIdInList(indicatorValue.locationReport.location.type,locationIds)
+            // } else if(indicatorValue.locationReport.location instanceof Location){
+            //     similarLocations=Location.findAllByLevelAndIdInList(indicatorValue.locationReport.location.level,locationIds)
+            // }
+            def location = indicatorValue.locationReport.location
+            if (log.isDebugEnabled()) log.debug("getSimilarLocations location="+location);
+            // similarLocations = location.collectTreeWithDataLocations(null,null)
+            similarLocations.addAll(location.collectDataLocations(null))
         }
-        return simmilarFacilitiesOrLocations
-    }
-
-    // public def getDataLocationsInLocation(CalculationLocation location) {
-    //     List<DataLocation> dataLocations = new ArrayList<DataLocation>()
-    //     if (location instanceof Location) {
-    //         // dataLocations = location.getDataLocations(LocationLevel.findAll(), null)
-    //         // dataLocations.addAll(location.getChildren(null))
-    //         dataLocations = location.collectDataLocations(null)
-    //     } else if (location instanceof DataLocation) {
-    //         dataLocations.add(location)
-    //         dataLocations.addAll(location.manages)
-    //     }
-    //     if (log.isDebugEnabled()) log.debug("getDataLocationsInLocation data location items=" + dataLocations + ", size="+dataLocations.size());
-    //     return dataLocations;
-    // }
-
-    // public def getLocationsIdWithUsers(){
-    //     List<Long> locations=new ArrayList<Long>();
-    //     for(User user:User.findAll()){
-    //         if(user.location!=null)
-    //         locations.add(user.location.id)
-    //     }
-    //     return locations
-    // }
-
-    public def historicalTrendVAxisFormat() {
-        if (log.isDebugEnabled()) log.debug("historicalTrendVAxisFormat unit=" + unit);
-
-        if(unit == '%') return '0%';
-        return '###,##0 ' + unit;
-    }
-
-    public def historicalTrendMaxValue() {
-        if (log.isDebugEnabled()) log.debug("historicalTrendMaxValue unit=" + unit);
-
-        if(unit == '%') return ', maxValue: 1';
-        return '';
-    }
-
-    public def historicalTrendLineCount() {
-        if (log.isDebugEnabled()) log.debug("historicalTrendLineCount unit=" + unit);
-
-        if(unit == '%') return ', count: 5';
-        return ', count: -1';
-    }
-
-    public def historicalTrendData() {
-        def ret = []
-
-        // if(historicalValueItems != null & !historicalValueItems.empty){
-        //     ret = []
-        //     historicalValueItems.eachWithIndex{ historicalValueItem, i ->
-        //         ret[i] = ["\""+Utils.formatDate(this.computedAt)+"\"",historicalValueItem.value]
-        //     }
-        // }
-
-        def i = 0
-        def fmt = DateTimeFormat.forPattern("MMM d, y")
-        for(HistoricalValueItem h: historicalValueItems) {
-            ret[i] = ["\""+fmt.print(h.computedAt.time)+"\"",h.value]
-            i++
-        }
-        if(i == 0) {
-            ret = null
-        }
-
-        if (log.isDebugEnabled()) log.debug("historicalTrendData ret=" + ret);
-        return ret
+        if (log.isDebugEnabled()) log.debug("getSimilarLocations similarLocations size="+similarLocations?.size());
+        return similarLocations
     }
 
     public geoData() {
         def ret = []
 
-        if(geographicalValueItems == null || geographicalValueItems.empty){
+        if(this.geographicalValueItems == null || this.geographicalValueItems.empty){
             this.geographicalValueItems.addAll(getGeographicalValueItems(indicatorValue))
         }
 
@@ -361,27 +357,15 @@ class IndicatorItem {
                 ret.add(geoValueItem.geoDataRow())
         }
 
-        // def i = 1
-        // for(GeographicalValueItem geo: geographicalValueItems) {
-        //     if((geo.latitude != null) && (geo.latitude != 0.0) && (geo.longitude != null) && (geo.longitude != 0.0)) {
-        //         ret[i] = geo.geoDataRow()
-        //         i++;
-        //     }
-        // }
-
         if (log.isDebugEnabled()) log.debug("geoData ret=" + ret);
         return ret
     }
 
     public geoValues() {
 
-        if(geographicalValueItems == null || geographicalValueItems.empty){
+        if(this.geographicalValueItems == null || this.geographicalValueItems.empty){
             this.geographicalValueItems.addAll(getGeographicalValueItems(indicatorValue))
         }
-
-        // for(GeographicalValueItem geo: geographicalValueItems) {
-        //     map.put(geo.value,geo.color)
-        // }
 
         Map<Double,String> map = new TreeMap<Double,String>()
         geographicalValueItems.each{ geoValueItem ->
@@ -393,26 +377,23 @@ class IndicatorItem {
             ret[i++] = val
         }
 
-        // def ret = []
-        // int i = 0
-        // for(Double val:map.keySet()) {
-        //     ret[i++] = val
-        // }
-
         if (log.isDebugEnabled()) log.debug("geoValues ret=" + ret);
         return ret
+    }
+
+    public def geoValuesFormat() {
+        if (log.isDebugEnabled()) log.debug("geoValuesFormat unit=" + unit);
+
+        if(unit == '%') return '0%';
+        return '###,##0 ' + unit;
     }
 
     public geoColors() {
         Map<Double,String> map = new TreeMap<Double,String>()
 
-        if(geographicalValueItems == null || geographicalValueItems.empty){
+        if(this.geographicalValueItems == null || this.geographicalValueItems.empty){
             this.geographicalValueItems.addAll(getGeographicalValueItems(indicatorValue))
         }
-
-        // for(GeographicalValueItem geo: geographicalValueItems) {
-        //     map.put(geo.value,geo.color)
-        // }
 
         geographicalValueItems.each{ geoValueItem ->
             map.put(geoValueItem.value,geoValueItem.color)
@@ -423,20 +404,12 @@ class IndicatorItem {
             ret[i++] = "\'"+map.get(val)+"\'"
         }
 
-        // def ret = []
-        // int i = 0
-        // for(Double val:map.keySet()) {
-        //     ret[i++] = "\'"+map.get(val)+"\'"
-        // }
-
         if (log.isDebugEnabled()) log.debug("geoColors ret=" + ret);
         return ret
     }
 
-    public def geoChartValueFormat() {
-        if (log.isDebugEnabled()) log.debug("geoChartValueFormat unit=" + unit);
-
-        if(unit == '%') return '0%';
-        return '###,##0 ' + unit;
+        @Override
+    public String toString() {
+        return "IndicatorItem[@" + computedAt?.getTime() + ", code = " + code + "]"
     }
 }

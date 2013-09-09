@@ -1,4 +1,4 @@
-<div id="info_facility" style="width:auto; height: 400px; overflow: auto;">
+<div>
   <ul class="v-tabs-nested">
     <g:each in="${indicatorItem.valuesPerGroup}" var="itemsMap">
       <g:set var="itemKey" value="${itemsMap.key}" />

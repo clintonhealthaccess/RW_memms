@@ -29,9 +29,9 @@
       <div>
         <ul class="v-tabs-list">
           <g:each in="${categoryItem.indicatorItems}" status="indicatorCount" var="indicatorItem">
-            <li class="v-tabs-row v-tabs-row-${indicatorItem.color}">
+            <li class="v-tabs-row v-tabs-row-${indicatorItem.color}" data-indicator-code="${indicatorItem.code}">
               <p>
-                <a class="v-tabs-name v-tabs-fold-toggle">
+                <a class="v-tabs-name v-tabs-fold-toggle" data-indicator-code="${indicatorItem.code}">
                   <span class="v-tabs-switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>${indicatorItem.names}
                 </a>
                 <span class="tooltip v-tabs-formula" style="background: ${indicatorItem.color}" original-title="${indicatorItem.formulas}">
@@ -43,24 +43,35 @@
                 <g:if test="${indicatorItem.unit!='%'}">
                   <span class="v-tabs-value"><g:formatNumber number="${indicatorItem.value}" format="###,##0"/>${indicatorItem.unit}</span>
                 </g:if>
-            </p>
-            <div class="v-tabs-fold-container">
-             
-              <!-- chart type tabs template -->
-              <g:render template="/reports/dashboard/dashboardChartTypeTabs" model="[indicatorItem:indicatorItem]" />
-
-              <!-- historic trend -->
-              <g:render template="/reports/dashboard/historicTrend" model="[indicatorItem:indicatorItem]" />
-              
-              <!-- comparison to other facilities -->
-              <g:render template="/reports/dashboard/comparisonChart" model="[indicatorItem:indicatorItem]" />
-
-              <!-- geographic trend -->
-              <g:render template="/reports/dashboard/geographicTrend" model="[indicatorItem:indicatorItem]" />
-
-              <!-- info by x -->
-              <g:render template="/reports/dashboard/infoByChart" model="[indicatorItem:indicatorItem]" />
-            </div>
+              </p>
+              <div class="v-tabs-fold-container" data-indicator-code="${indicatorItem.code}">
+                <!-- chart type tabs template -->
+                <g:render template="/reports/dashboard/dashboardChartTypeTabs" model="[indicatorItem:indicatorItem]" />
+                <!-- historic trend -->
+                <div class="v-chart" data-chart-type="historic_trend">
+                  <div id="historicTrend_${indicatorItem.code}">
+                    <g:render template="/reports/dashboard/historicTrend" model="[indicatorItem:indicatorItem]" />
+                  </div>
+                </div>
+                <!-- comparison to other facilities -->
+                <div class="v-chart" data-chart-type="comparison">
+                  <div id="comparisonChart_${indicatorItem.code}">
+                    <g:render template="/reports/dashboard/comparisonChart" model="[indicatorItem:indicatorItem]" />
+                  </div>
+                </div>
+                <!-- geographic trend -->
+                <div class="v-chart" data-chart-type="geo_trend">
+                  <div id="geographicTrend_${indicatorItem.code}">
+                    <g:render template="/reports/dashboard/geographicTrend" model="[indicatorItem:indicatorItem]" />
+                  </div>
+                </div>
+                <!-- info by x -->
+                <div class="v-chart" data-chart-type="info_by">
+                  <div id="infoByChart_${indicatorItem.code}">
+                    <g:render template="/reports/dashboard/infoByChart" model="[indicatorItem:indicatorItem]" />
+                  </div>
+                </div>
+              </div>
             </li>
           </g:each>
         </ul>

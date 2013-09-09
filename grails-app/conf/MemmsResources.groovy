@@ -136,10 +136,8 @@ modules = {
 	reports {
 		dependsOn 'core,form,tipsy,jquery,jqueryui,chosen,fieldselection'
 
-		// TODO ?
-		// Load Droid Sans remotely from Google Webfonts
-		// resource url: 'http://fonts.googleapis.com/css?family=Droid+Sans:400,700&subset=latin'
 		resource url: '/js/reports/reports_init.js'
+		resource url: '/js/reports/dashboard_init.js'
 		resource url: '/js/reports/listing_init.js'
 		resource url: '/js/reports/customizedlisting_init.js'
 	}

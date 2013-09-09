@@ -1,4 +1,4 @@
-<div id="comparison">
+<div>
   <ul class="v-tabs-nested">
 
     <!-- highest -->

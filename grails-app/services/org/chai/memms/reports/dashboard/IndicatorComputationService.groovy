@@ -90,9 +90,11 @@ class IndicatorComputationService {
             reportDates.add(yesterday)
         }
 
-        reportDates.addAll([oneYearAgo, sixMonthsAgo])
-        reportDates.addAll([threeQuartersAgo, lastQuarter])
-        reportDates.addAll([fiveMonthsAgo, fourMonthsAgo, twoMonthsAgo, lastMonth])
+        // These are only needed for dev historic trend chart
+        // reportDates.addAll([oneYearAgo, sixMonthsAgo])
+        // reportDates.addAll([threeQuartersAgo, lastQuarter])
+        // reportDates.addAll([fiveMonthsAgo, fourMonthsAgo, twoMonthsAgo, lastMonth])
+
         reportDates.add(today)
         if (log.isDebugEnabled()) log.debug("computeCurrentReport reportDates " + reportDates);
 

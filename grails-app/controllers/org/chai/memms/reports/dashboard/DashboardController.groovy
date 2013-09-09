@@ -32,6 +32,7 @@ import org.chai.memms.AbstractController
 import org.chai.memms.inventory.EquipmentType
 import org.chai.memms.security.User
 import org.chai.memms.util.Utils.ReportType
+import org.chai.memms.util.Utils.ReportChartType
 
 import java.lang.reflect.*
 import java.util.*
@@ -57,7 +58,7 @@ class DashboardController extends AbstractController {
     def dashboard = {
         //indicatorComputationService.computeCurrentReport()
 
-        def report = getUserReport()
+        LocationReport report = getUserReport()
         def reportType = getReportType()
         
         def category = IndicatorCategory.findByCode(reportType.reportType)
@@ -65,10 +66,9 @@ class DashboardController extends AbstractController {
 
         if(report != null) {
             Set<IndicatorValue> indicatorValues = report.indicatorValues.findAll{ it.indicator.category.equals(category) }
-            
             if(indicatorValues != null && !indicatorValues.empty){
                 indicatorValues.each { indicatorValue ->
-                    def indicatorItem = new IndicatorItem(indicatorValue)
+                    def indicatorItem = new IndicatorItem(indicatorValue, null)
                     categoryItem.indicatorItems.add(indicatorItem)
                 }
             }
@@ -81,9 +81,51 @@ class DashboardController extends AbstractController {
 
         render(view:"/reports/reports", 
             model:model << [
+
                 template:"/reports/dashboard/dashboard",
                 filterTemplate:"/reports/dashboard/dashboardFilter"
             ])
+    }
+
+    def dashboardChart= {
+        if (log.isDebugEnabled())
+            log.debug("dashboard.dashboardChart start, params:"+params)
+
+        def reportType = getReportType()
+        def reportChartType = getReportChartType()
+
+        def category = IndicatorCategory.findByCode(reportType.reportType)
+        def indicatorValue = IndicatorValue.get(params.get('indicatorValueId'))
+
+        def indicatorItem = null
+        if(indicatorValue != null){
+            indicatorItem = new IndicatorItem(indicatorValue, reportChartType)
+        }
+
+        def template = null
+        switch(reportChartType){
+            case ReportChartType.HISTORIC:
+                template = "historicTrend"
+                break;
+            case ReportChartType.COMPARISON:
+                template = "comparisonChart"
+                break;
+            case ReportChartType.GEOGRAPHIC:
+                template = "geographicTrend"
+                break;
+            case ReportChartType.INFOBY:
+                template = "infoByChart"
+        }
+
+        template = "/reports/dashboard/"+template
+        if (log.isDebugEnabled()) log.debug("dashboard.dashboardChart template:"+template)
+
+        if (log.isDebugEnabled()) log.debug("dashboard.dashboardChart end, indicatorItem:"+indicatorItem)
+
+        render(template:template,
+        model:[
+            indicatorItem: indicatorItem
+        ])
     }
        
     def getUserReport() {
@@ -103,5 +145,14 @@ class DashboardController extends AbstractController {
         if(log.isDebugEnabled()) log.debug("abstract.reportType param:"+reportType+")")
         if(reportType == null) reportType = ReportType.PREVENTIVE
         return reportType
+    }
+
+    def getReportChartType(){
+        ReportChartType reportChartType = null
+        if(params.get('reportChartType') != null && !params.get('reportChartType').empty)
+            reportChartType = params.get('reportChartType')
+        if(log.isDebugEnabled()) log.debug("abstract.reportChartType param:"+reportChartType+")")
+        if(reportChartType == null) reportChartType = ReportChartType.HISTORIC
+        return reportChartType
     }
 }

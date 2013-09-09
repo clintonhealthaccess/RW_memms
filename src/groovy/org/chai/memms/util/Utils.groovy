@@ -263,6 +263,7 @@ public class Utils {
 		return calendar.getTime();
 	}
 
+	// report types
 	public enum ReportType{
 		INVENTORY("inventory"),
 		CORRECTIVE("corrective"),
@@ -278,6 +279,22 @@ public class Utils {
 		String getReportType() { return reportType }
 	}
 
+	// dashboard report chart types
+	public enum ReportChartType{
+		HISTORIC("historic.trend"),
+		COMPARISON("comparison.facilities"),
+		GEOGRAPHIC("geographic.trend"),
+		INFOBY("info.by")
+
+		String messageCode = "dashboard."
+
+		final String reportChartType
+		ReportChartType(String reportChartType){ this.reportChartType=reportChartType }
+		String getReportChartType() { return reportChartType }
+
+	}
+
+	// listing report sub types
 	public enum ReportSubType{
 		INVENTORY("inventory"),
 		WORKORDERS("workOrders"),

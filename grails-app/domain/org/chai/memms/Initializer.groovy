@@ -299,7 +299,7 @@ public class Initializer {
 			def district = newLocationLevel(['en':DISTRICT], DISTRICT,3)
 			def sector = newLocationLevel(['en':SECTOR], SECTOR,4)
 
-			def countryCoordinates = '[[[29.9811,-1.9094],[29.9916,-1.9052],[29.9811,-1.891],[29.9767,-1.8768],[29.9783,-1.8697],[29.9883,-1.8633],'+
+			def rwandaCoordinates = '[[[29.9811,-1.9094],[29.9916,-1.9052],[29.9811,-1.891],[29.9767,-1.8768],[29.9783,-1.8697],[29.9883,-1.8633],'+
 									'[29.9919,-1.8528],[29.9905,-1.8452],[29.9991,-1.8387],[30.0146,-1.8335],[30.0209,-1.8499],[30.0254,-1.8533],'+
 									'[30.0286,-1.8626],[30.048,-1.8479],[30.0591,-1.8287],[30.0692,-1.8243],[30.0796,-1.8235],[30.096,-1.8164],'+
 									'[30.0981,-1.8106],[30.1132,-1.8183],[30.1183,-1.8167],[30.1274,-1.8064],[30.132,-1.7769],[30.1418,-1.778],'+
@@ -323,7 +323,7 @@ public class Initializer {
 									'[29.9868,-1.921],[29.9811,-1.9094]]]'
 
 			//Add Location
-			def rwanda = newLocation(['en':RWANDA], RWANDA,null,country,countryCoordinates)
+			def rwanda = newLocation(['en':RWANDA], RWANDA,null,country,rwandaCoordinates)
 			
 			def kigali = newLocation(['en':KIGALI_CITY],KIGALI_CITY,rwanda,province,'')
 			def north = newLocation(['en':NORTH], NORTH, rwanda, province,'')
