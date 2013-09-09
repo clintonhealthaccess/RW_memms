@@ -104,6 +104,7 @@ class ListingController extends AbstractController{
 	}
 
 	def listing={
+		if (log.isDebugEnabled()) log.debug("listing.listing start, params:"+params)
 
 		ReportType reportType = getReportType()
 		ReportSubType reportSubType = getReportSubType()
@@ -113,6 +114,7 @@ class ListingController extends AbstractController{
 		def savedReports = userService.getSavedReportsByUser(user, reportType)
 		if (log.isDebugEnabled()) log.debug("listing.listing savedReports:"+savedReports?.size())
 
+		adaptParamsForList()
 		def listing = null
 		switch(reportType){
 			case ReportType.INVENTORY:
@@ -136,7 +138,6 @@ class ListingController extends AbstractController{
 				break;
 		}
 
-		adaptParamsForList()
 		if(!request.xhr)
 			render(view:"/reports/reports",
 			model: model(listing, "") <<

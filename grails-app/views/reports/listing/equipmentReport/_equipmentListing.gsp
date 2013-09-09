@@ -17,7 +17,7 @@
 	<tbody>
 	 
 		<g:each in="${entities}" status="i" var="equipment">
-			<tr >
+			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 				<td>${equipment.dataLocation.names}</td>
 				<td>${equipment.code}</td>
 				<td>${equipment.serialNumber}</td>
@@ -41,4 +41,4 @@
 
 	</tbody>	
 </table>
-<g:render template="/templates/pagination" />
+<g:render template="/templates/pagination" model="[entities:entities, entityCount:entities.totalCount]" />

@@ -20,7 +20,7 @@
 	</thead>
 	<tbody>
 		<g:each in="${entities}" status="i" var="sparePart">
-			<tr >
+			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 				<td>
 					<g:if test="${sparePart.dataLocation != null}">
 					<g:message code="datalocation.label"/>: ${sparePart.dataLocation?.names}<br/>
@@ -69,4 +69,4 @@
 		</g:each>
 	</tbody>
 </table>
-<g:render template="/templates/pagination" />
+<g:render template="/templates/pagination" model="[entities:entities, entityCount:entities.totalCount]" />
