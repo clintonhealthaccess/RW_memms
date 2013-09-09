@@ -189,18 +189,27 @@ class DashboardInitializer {
   
 
     public static createIndicatorCategories() {
-         newIndicatorCategory(CORRECTIVE_MAINTENANCE, ["en":"Corrective Maintenance","fr":"Corrective Maintenance"], 0.6, 0.8)
-         newIndicatorCategory(PREVENTIVE_MAINTENANCE, ["en":"Preventive Maintenance","fr":"Preventive Maintenance"], 0.6, 0.8)
-         newIndicatorCategory(MANAGEMENT_EQUIPMENT, ["en":"Management of Medical Equipment","fr":"Management of Medical Equipment"], 0.6, 0.8)
-         newIndicatorCategory(MANAGEMENT_SPAREPARTS, ["en":"Management of Spare Parts","fr":"Management of Spare Parts"], 0.6, 0.8)
-         newIndicatorCategory(MONITORING_MEMMS_USE, ["en":"Monitoring of MEMMS Use","fr":"Monitoring of MEMMS Use"], 0.6, 0.8)
+        if(!IndicatorCategory.findByCode(CORRECTIVE_MAINTENANCE))
+            newIndicatorCategory(CORRECTIVE_MAINTENANCE, ["en":"Corrective Maintenance","fr":"Corrective Maintenance"], 0.6, 0.8)
+        if(!IndicatorCategory.findByCode(PREVENTIVE_MAINTENANCE))
+            newIndicatorCategory(PREVENTIVE_MAINTENANCE, ["en":"Preventive Maintenance","fr":"Preventive Maintenance"], 0.6, 0.8)
+        if(!IndicatorCategory.findByCode(MANAGEMENT_EQUIPMENT))
+            newIndicatorCategory(MANAGEMENT_EQUIPMENT, ["en":"Management of Medical Equipment","fr":"Management of Medical Equipment"], 0.6, 0.8)
+        if(!IndicatorCategory.findByCode(MANAGEMENT_SPAREPARTS))
+            newIndicatorCategory(MANAGEMENT_SPAREPARTS, ["en":"Management of Spare Parts","fr":"Management of Spare Parts"], 0.6, 0.8)
+        if(!IndicatorCategory.findByCode(MONITORING_MEMMS_USE))
+            newIndicatorCategory(MONITORING_MEMMS_USE, ["en":"Monitoring of MEMMS Use","fr":"Monitoring of MEMMS Use"], 0.6, 0.8)
     }
 
     public static createUserDefinedVariables() {
-        newUserDefinedVariable("WO_REINCIDENCE_DAYS",["en":"Work order re-incidence period(days)","fr":"Work order re-incidence period(days) fr"],365.0)
-        newUserDefinedVariable("DEGGREE_CORRE_MAINT_EXECUTION",["en":"Degree of corrective maintenance execution time frame","fr":"Degree of corrective maintenance execution time frame fr"],365.0)
-        newUserDefinedVariable("TRASHHOLD_MIN_STOCT_OUT",["en":"Minimum Stock-Out time threshold(days)","fr":"Minimum Stock-Out time threshold(days) fr"],365.0)
-        newUserDefinedVariable("TRASHHOLD_MAX_STOCT_OUT",["en":"Maximum Stock-Out time threshold(days)","fr":"Maximum Stock-Out time threshold(days) fr"],30.0)
+        if(!UserDefinedVariable.findByCode("WO_REINCIDENCE_DAYS"))
+            newUserDefinedVariable("WO_REINCIDENCE_DAYS",["en":"Work order re-incidence period(days)","fr":"Work order re-incidence period(days) fr"],365.0)
+        if(!UserDefinedVariable.findByCode("DEGGREE_CORRE_MAINT_EXECUTION"))
+            newUserDefinedVariable("DEGGREE_CORRE_MAINT_EXECUTION",["en":"Degree of corrective maintenance execution time frame","fr":"Degree of corrective maintenance execution time frame fr"],365.0)
+        if(!UserDefinedVariable.findByCode("TRASHHOLD_MIN_STOCT_OUT"))
+            newUserDefinedVariable("TRASHHOLD_MIN_STOCT_OUT",["en":"Minimum Stock-Out time threshold(days)","fr":"Minimum Stock-Out time threshold(days) fr"],365.0)
+        if(!UserDefinedVariable.findByCode("TRASHHOLD_MAX_STOCT_OUT"))
+            newUserDefinedVariable("TRASHHOLD_MAX_STOCT_OUT",["en":"Maximum Stock-Out time threshold(days)","fr":"Maximum Stock-Out time threshold(days) fr"],30.0)
     }
 
     public static newGroupIndicatorValue(def generatedAt, def names, def value, def indicatorValue){
