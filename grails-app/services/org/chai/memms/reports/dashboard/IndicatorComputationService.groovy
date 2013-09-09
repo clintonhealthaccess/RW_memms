@@ -99,6 +99,7 @@ class IndicatorComputationService {
         // reportDates.addAll([oneYearAgo, sixMonthsAgo])
         // reportDates.addAll([threeQuartersAgo, lastQuarter])
         // reportDates.addAll([fiveMonthsAgo, fourMonthsAgo, twoMonthsAgo, lastMonth])
+
         reportDates.add(today)
         if (log.isDebugEnabled()) log.debug("computeCurrentReport reportDates " + reportDates);
 
@@ -356,6 +357,7 @@ class IndicatorComputationService {
             if(res[0] != null) {
                 for(Object arr : res) {
                     if (log.isDebugEnabled()) log.debug("groupExecuteHQL arr " + arr);
+                    
                     map.put((String)arr[0], (Double)arr[1])
                 }
             }

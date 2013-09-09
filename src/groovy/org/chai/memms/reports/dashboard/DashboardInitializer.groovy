@@ -44,20 +44,24 @@ class DashboardInitializer {
     //Indicator computation scripts
     //Slid 7:Share of operational equipment
     public static final String SHARE_OPERATIONAL_SIMPLE_SLD7="select 1.0*count(equ.code)/(select count(equIn.id) as count1 from Equipment as equIn where equIn.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equIn.dataLocation @DATA_LOCATION) from Equipment as equ where equ.currentStatus='OPERATIONAL' and equ.dataLocation @DATA_LOCATION"
-    public static final String SHARE_OPERATIONAL_GROUP_SLD7="select "+Utils.buildSubQueryLanguages("equ.type.names")+",1.0*count(equ.code)/(select count(equIn.id) as count1 from Equipment as equIn where equIn.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equIn.dataLocation @DATA_LOCATION) from Equipment as equ where equ.currentStatus='OPERATIONAL' and equ.dataLocation @DATA_LOCATION group by equ.type"
+    public static final String SHARE_OPERATIONAL_GROUP_SLD7="select equ.type.names_en,1.0*count(equ.code)/(select count(equIn.id) as count1 from Equipment as equIn where equIn.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equIn.dataLocation @DATA_LOCATION) from Equipment as equ where equ.currentStatus='OPERATIONAL' and equ.dataLocation @DATA_LOCATION group by equ.type"
+    //public static final String SHARE_OPERATIONAL_GROUP_SLD7="select "+Utils.buildSubQueryLanguages("equ.type.names")+",1.0*count(equ.code)/(select count(equIn.id) as count1 from Equipment as equIn where equIn.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equIn.dataLocation @DATA_LOCATION) from Equipment as equ where equ.currentStatus='OPERATIONAL' and equ.dataLocation @DATA_LOCATION group by equ.type"
     //Slide 12:Share of obsolete equipment
     public static final String SHARE_OBSOLETE_SIMPLE_SLD12="select 1.0*count(equ.code)/(select count(equIn.code) as count1 from Equipment as equIn where equIn.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equIn.dataLocation @DATA_LOCATION) from Equipment as equ where equ.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equ.obsolete=1 and equ.dataLocation @DATA_LOCATION"
-    public static final String SHARE_OBSOLETE_GROUP_SLD12="select "+Utils.buildSubQueryLanguages("equ.type.names")+",1.0*count(equ.code)/(select count(equIn.code) as count1 from Equipment as equIn where equIn.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equIn.dataLocation @DATA_LOCATION) from Equipment as equ where equ.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equ.obsolete=1 and equ.dataLocation @DATA_LOCATION group by equ.type"
+    public static final String SHARE_OBSOLETE_GROUP_SLD12="select equ.type.names_en,1.0*count(equ.code)/(select count(equIn.code) as count1 from Equipment as equIn where equIn.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equIn.dataLocation @DATA_LOCATION) from Equipment as equ where equ.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equ.obsolete=1 and equ.dataLocation @DATA_LOCATION group by equ.type"
+    //public static final String SHARE_OBSOLETE_GROUP_SLD12="select "+Utils.buildSubQueryLanguages("equ.type.names")+",1.0*count(equ.code)/(select count(equIn.code) as count1 from Equipment as equIn where equIn.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equIn.dataLocation @DATA_LOCATION) from Equipment as equ where equ.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equ.obsolete=1 and equ.dataLocation @DATA_LOCATION group by equ.type"
     //Slie 15:Share of equipments for which a work order was generated=>rev ok
     public static final String SHARE_WORK_ORDER_GEN_SIMPLE_SLD15="select 1.0*count(equ.code)/(select count(eq.code) from Equipment eq where eq.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and eq.dataLocation @DATA_LOCATION)  from WorkOrder wOrder join wOrder.equipment equ where wOrder.equipment.id is not null and equ.dataLocation @DATA_LOCATION"
-    public static final String SHARE_WORK_ORDER_GEN_GROUP_SLD15="select "+Utils.buildSubQueryLanguages("wOrder.equipment.type.names")+",1.0*count(wOrder.equipment.id)/(select count(eq.code) from Equipment eq where eq.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and eq.dataLocation @DATA_LOCATION)  from WorkOrder wOrder  where wOrder.equipment.id is not null and wOrder.equipment.dataLocation @DATA_LOCATION group by  wOrder.equipment.type"
+    public static final String SHARE_WORK_ORDER_GEN_GROUP_SLD15="select wOrder.equipment.type.names_en,1.0*count(wOrder.equipment.id)/(select count(eq.code) from Equipment eq where eq.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and eq.dataLocation @DATA_LOCATION)  from WorkOrder wOrder  where wOrder.equipment.id is not null and wOrder.equipment.dataLocation @DATA_LOCATION group by  wOrder.equipment.type"
+    //public static final String SHARE_WORK_ORDER_GEN_GROUP_SLD15="select "+Utils.buildSubQueryLanguages("wOrder.equipment.type.names")+",1.0*count(wOrder.equipment.id)/(select count(eq.code) from Equipment eq where eq.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and eq.dataLocation @DATA_LOCATION)  from WorkOrder wOrder  where wOrder.equipment.id is not null and wOrder.equipment.dataLocation @DATA_LOCATION group by  wOrder.equipment.type"
     //Slie 16:Degree of corrective maintenance execution according to benchmark=rev ok
     public static final String DEGREE_CORRECTIVE_EX_SIMPLE_SLD16="select 1.0*count(wo1.id)/(select count(wo.id) from WorkOrderStatus wos join wos.workOrder wo join wo.equipment as equ where equ.dataLocation @DATA_LOCATION) from WorkOrderStatus wos1 join wos1.workOrder wo1 join wo1.equipment as equ1 where wo1.currentStatus='CLOSEDFIXED' and (dateDiff(NOW(),wo1.returnedOn) < #DEGGREE_CORRE_MAINT_EXECUTION or dateDiff(NOW(),wos1.dateCreated) < #DEGGREE_CORRE_MAINT_EXECUTION) and equ1.dataLocation @DATA_LOCATION"
     //time frame to be decided by the user
     public static final String DEGREE_CORRECTIVE_EX_GROUP_SLD16="select equ1.type.names_en as names,1.0*count(wo1.id)/(select count(wo.id) from WorkOrderStatus wos join wos.workOrder wo join wo.equipment as equ where equ.dataLocation @DATA_LOCATION) as final_result from WorkOrderStatus wos1 join wos1.workOrder wo1 join wo1.equipment as equ1 where wo1.currentStatus='CLOSEDFIXED' and (dateDiff(NOW(),wo1.returnedOn) < #DEGGREE_CORRE_MAINT_EXECUTION or dateDiff(NOW(),wos1.dateCreated) < #DEGGREE_CORRE_MAINT_EXECUTION) and equ1.dataLocation @DATA_LOCATION group by equ1.type"
     // //Slide 26:Degree of execution of preventive maintenance
     public static final String DEGREE_EXCUTION_PREV_SIMPLE_SLD26="select 1.0*count(prevention.id)/(select count(prwo.id) FROM PreventiveOrder prwo join prwo.equipment as equ1  where equ1.dataLocation @DATA_LOCATION) FROM Prevention prevention join prevention.order as pOrder join pOrder.equipment as equ where equ.dataLocation @DATA_LOCATION"
-    public static final String DEGREE_EXCUTION_PREV_GROUP_SLD26="select "+Utils.buildSubQueryLanguages("equ.type.names")+",1.0*count(prevention.id)/(select count(prwo.id) FROM PreventiveOrder prwo join prwo.equipment as equ1  where equ1.dataLocation @DATA_LOCATION) FROM Prevention prevention  join prevention.order as pOrder join pOrder.equipment as equ where equ.dataLocation @DATA_LOCATION group by equ.type"
+    public static final String DEGREE_EXCUTION_PREV_GROUP_SLD26="select equ.type.names_en,1.0*count(prevention.id)/(select count(prwo.id) FROM PreventiveOrder prwo join prwo.equipment as equ1  where equ1.dataLocation @DATA_LOCATION) FROM Prevention prevention  join prevention.order as pOrder join pOrder.equipment as equ where equ.dataLocation @DATA_LOCATION group by equ.type"
+    //public static final String DEGREE_EXCUTION_PREV_GROUP_SLD26="select "+Utils.buildSubQueryLanguages("equ.type.names")+",1.0*count(prevention.id)/(select count(prwo.id) FROM PreventiveOrder prwo join prwo.equipment as equ1  where equ1.dataLocation @DATA_LOCATION) FROM Prevention prevention  join prevention.order as pOrder join pOrder.equipment as equ where equ.dataLocation @DATA_LOCATION group by equ.type"
     
     //Slie 30:Share of types of spare parts about to stock out in a given time period
     public static final String SHARE_TYPE_SP_PART_STOCK_OUT_SIMPLE_SLD30="select count(temp.spTypeTimount)/(SELECT count(mmm.id)  FROM memms_spare_part mmm where mmm.data_location_id @DATA_LOCATION) as final_result from (SELECT count(mm.type_id)/(SELECT ROUND((count(m.id)/12),0)  FROM memms_spare_part m where m.status='OPERATIONAL' and dateDiff(NOW(),m.delivery_date)<=365 and m.data_location_id @DATA_LOCATION group by mm.type_id) as spTypeTimount   FROM memms_spare_part mm where mm.data_location_id @DATA_LOCATION group by mm.type_id) temp where temp.spTypeTimount<#TRASHHOLD_MIN_STOCT_OUT"
@@ -189,18 +193,27 @@ class DashboardInitializer {
   
 
     public static createIndicatorCategories() {
-         newIndicatorCategory(CORRECTIVE_MAINTENANCE, ["en":"Corrective Maintenance","fr":"Corrective Maintenance"], 0.6, 0.8)
-         newIndicatorCategory(PREVENTIVE_MAINTENANCE, ["en":"Preventive Maintenance","fr":"Preventive Maintenance"], 0.6, 0.8)
-         newIndicatorCategory(MANAGEMENT_EQUIPMENT, ["en":"Management of Medical Equipment","fr":"Management of Medical Equipment"], 0.6, 0.8)
-         newIndicatorCategory(MANAGEMENT_SPAREPARTS, ["en":"Management of Spare Parts","fr":"Management of Spare Parts"], 0.6, 0.8)
-         newIndicatorCategory(MONITORING_MEMMS_USE, ["en":"Monitoring of MEMMS Use","fr":"Monitoring of MEMMS Use"], 0.6, 0.8)
+        if(!IndicatorCategory.findByCode(CORRECTIVE_MAINTENANCE))
+            newIndicatorCategory(CORRECTIVE_MAINTENANCE, ["en":"Corrective Maintenance","fr":"Corrective Maintenance"], 0.6, 0.8)
+        if(!IndicatorCategory.findByCode(PREVENTIVE_MAINTENANCE))
+            newIndicatorCategory(PREVENTIVE_MAINTENANCE, ["en":"Preventive Maintenance","fr":"Preventive Maintenance"], 0.6, 0.8)
+        if(!IndicatorCategory.findByCode(MANAGEMENT_EQUIPMENT))
+            newIndicatorCategory(MANAGEMENT_EQUIPMENT, ["en":"Management of Medical Equipment","fr":"Management of Medical Equipment"], 0.6, 0.8)
+        if(!IndicatorCategory.findByCode(MANAGEMENT_SPAREPARTS))
+            newIndicatorCategory(MANAGEMENT_SPAREPARTS, ["en":"Management of Spare Parts","fr":"Management of Spare Parts"], 0.6, 0.8)
+        if(!IndicatorCategory.findByCode(MONITORING_MEMMS_USE))
+            newIndicatorCategory(MONITORING_MEMMS_USE, ["en":"Monitoring of MEMMS Use","fr":"Monitoring of MEMMS Use"], 0.6, 0.8)
     }
 
     public static createUserDefinedVariables() {
-        newUserDefinedVariable("WO_REINCIDENCE_DAYS",["en":"Work order re-incidence period(days)","fr":"Work order re-incidence period(days) fr"],365.0)
-        newUserDefinedVariable("DEGGREE_CORRE_MAINT_EXECUTION",["en":"Degree of corrective maintenance execution time frame","fr":"Degree of corrective maintenance execution time frame fr"],365.0)
-        newUserDefinedVariable("TRASHHOLD_MIN_STOCT_OUT",["en":"Minimum Stock-Out time threshold(days)","fr":"Minimum Stock-Out time threshold(days) fr"],365.0)
-        newUserDefinedVariable("TRASHHOLD_MAX_STOCT_OUT",["en":"Maximum Stock-Out time threshold(days)","fr":"Maximum Stock-Out time threshold(days) fr"],30.0)
+        if(!UserDefinedVariable.findByCode("WO_REINCIDENCE_DAYS"))
+            newUserDefinedVariable("WO_REINCIDENCE_DAYS",["en":"Work order re-incidence period(days)","fr":"Work order re-incidence period(days) fr"],365.0)
+        if(!UserDefinedVariable.findByCode("DEGGREE_CORRE_MAINT_EXECUTION"))
+            newUserDefinedVariable("DEGGREE_CORRE_MAINT_EXECUTION",["en":"Degree of corrective maintenance execution time frame","fr":"Degree of corrective maintenance execution time frame fr"],365.0)
+        if(!UserDefinedVariable.findByCode("TRASHHOLD_MIN_STOCT_OUT"))
+            newUserDefinedVariable("TRASHHOLD_MIN_STOCT_OUT",["en":"Minimum Stock-Out time threshold(days)","fr":"Minimum Stock-Out time threshold(days) fr"],365.0)
+        if(!UserDefinedVariable.findByCode("TRASHHOLD_MAX_STOCT_OUT"))
+            newUserDefinedVariable("TRASHHOLD_MAX_STOCT_OUT",["en":"Maximum Stock-Out time threshold(days)","fr":"Maximum Stock-Out time threshold(days) fr"],30.0)
     }
 
     public static newGroupIndicatorValue(def generatedAt, def names, def value, def indicatorValue){

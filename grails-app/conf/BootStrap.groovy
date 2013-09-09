@@ -59,8 +59,8 @@ class BootStrap {
 			break;
 			case "production":
                	// This is needed for the first time use only.
-               	 // DashboardInitializer.createDashboardStructure()
-                 // indicatorComputationService.computeCurrentReport()
+               	 DashboardInitializer.createDashboardStructure()
+                 indicatorComputationService.computeCurrentReport()
 
 			break;
 		}
