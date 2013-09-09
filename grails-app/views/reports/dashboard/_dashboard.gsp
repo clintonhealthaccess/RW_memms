@@ -1,3 +1,4 @@
+<%@ page import="org.chai.memms.util.Utils.ReportChartType" %>
 <div class="entity-list">
 
   <!-- dashboard title -->
@@ -31,9 +32,16 @@
           <g:each in="${categoryItem.indicatorItems}" status="indicatorCount" var="indicatorItem">
             <li class="v-tabs-row v-tabs-row-${indicatorItem.color}" data-indicator-code="${indicatorItem.code}">
               <p>
-                <a class="v-tabs-name v-tabs-fold-toggle" data-indicator-code="${indicatorItem.code}">
-                  <span class="v-tabs-switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>${indicatorItem.names}
-                </a>
+                %{-- <a class="v-tabs-name v-tabs-fold-toggle" data-indicator-code="${indicatorItem.code}">
+                  <span class="v-tabs-switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
+                  ${indicatorItem.names}
+                </a> --}%
+                <g:remoteLink class="v-tabs-name v-tabs-fold-toggle" data-indicator-code="${indicatorItem.code}"
+                    action="dashboardChart" update="historicTrend_${indicatorItem.code}" 
+                    params="[indicatorValueId:indicatorItem.indicatorValueId, reportChartType:ReportChartType.HISTORIC]" onSuccess="drawLineChart()">
+                  <span class="v-tabs-switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
+                  ${indicatorItem.names}
+                </g:remoteLink>
                 <span class="tooltip v-tabs-formula" style="background: ${indicatorItem.color}" original-title="${indicatorItem.formulas}">
                   ${indicatorItem.formulas}
                 </span>

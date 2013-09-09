@@ -1208,88 +1208,88 @@ table.nice-table .cell { cursor: default; }
 /* line 87, ../../src/stylesheets/partials/_report.sass */
 .v-tabs .tipsy-inner { font-weight: regular; }
 /* line 89, ../../src/stylesheets/partials/_report.sass */
-.v-tabs a { cursor: pointer; }
-/* line 92, ../../src/stylesheets/partials/_report.sass */
+.v-tabs a { cursor: pointer; text-decoration: none; }
+/* line 93, ../../src/stylesheets/partials/_report.sass */
 .v-tabs .custom { position: absolute; right: 0; }
 
-/* line 96, ../../src/stylesheets/partials/_report.sass */
+/* line 97, ../../src/stylesheets/partials/_report.sass */
 .v-tabs-nav { width: 100%; }
-/* line 98, ../../src/stylesheets/partials/_report.sass */
+/* line 99, ../../src/stylesheets/partials/_report.sass */
 .v-tabs-nav li { display: inline; float: left; }
-/* line 101, ../../src/stylesheets/partials/_report.sass */
+/* line 102, ../../src/stylesheets/partials/_report.sass */
 .v-tabs-nav a { color: #888888; display: block; font-size: 13px; padding: 14px 18px; text-decoration: none; text-shadow: white 0 1px 0; -webkit-transition: color 0.2s; -moz-transition: color 0.2s; -o-transition: color 0.2s; transition: color 0.2s; }
-/* line 109, ../../src/stylesheets/partials/_report.sass */
+/* line 110, ../../src/stylesheets/partials/_report.sass */
 .v-tabs-nav a:hover, .v-tabs-nav a:focus { color: #258cd5; }
-/* line 111, ../../src/stylesheets/partials/_report.sass */
+/* line 112, ../../src/stylesheets/partials/_report.sass */
 .v-tabs-nav a.active { background: white; border: 1px solid rgba(0, 0, 0, 0.1); border-bottom: none; bottom: -1px; color: #258cd5; font-weight: bold; position: relative; }
 
-/* line 120, ../../src/stylesheets/partials/_report.sass */
+/* line 121, ../../src/stylesheets/partials/_report.sass */
 .v-tabs-subnav-wrapper { float: left; }
-/* line 122, ../../src/stylesheets/partials/_report.sass */
+/* line 123, ../../src/stylesheets/partials/_report.sass */
 .v-tabs-subnav-wrapper.slide-wrapper { overflow: hidden; width: 80%; }
 
-/* line 126, ../../src/stylesheets/partials/_report.sass */
+/* line 127, ../../src/stylesheets/partials/_report.sass */
 .v-tabs-box { line-height: 1.4; *zoom: 1; }
 /* line 38, ../../../../../../../Library/Frameworks/JRuby.framework/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .v-tabs-box:after { content: ""; display: table; clear: both; }
-/* line 129, ../../src/stylesheets/partials/_report.sass */
+/* line 130, ../../src/stylesheets/partials/_report.sass */
 .v-tabs-box > * { float: left; }
 
-/* line 132, ../../src/stylesheets/partials/_report.sass */
+/* line 133, ../../src/stylesheets/partials/_report.sass */
 .v-tabs-subnav { padding-left: 5px; position: relative; *zoom: 1; }
 /* line 38, ../../../../../../../Library/Frameworks/JRuby.framework/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .v-tabs-subnav:after { content: ""; display: table; clear: both; }
-/* line 137, ../../src/stylesheets/partials/_report.sass */
+/* line 138, ../../src/stylesheets/partials/_report.sass */
 .v-tabs-subnav ul { padding-left: 30px; }
-/* line 139, ../../src/stylesheets/partials/_report.sass */
+/* line 140, ../../src/stylesheets/partials/_report.sass */
 .v-tabs-subnav li { display: inline; float: left; max-width: 150px; position: relative; }
-/* line 144, ../../src/stylesheets/partials/_report.sass */
+/* line 145, ../../src/stylesheets/partials/_report.sass */
 .v-tabs-subnav p { float: left; max-width: 150px; position: relative; }
-/* line 148, ../../src/stylesheets/partials/_report.sass */
+/* line 149, ../../src/stylesheets/partials/_report.sass */
 .v-tabs-subnav a { bottom: -1px; color: #bbbbbb; display: inline-block; padding: 15px 0 15px 15px; position: relative; text-decoration: none; -webkit-transition: color 0.2s; -moz-transition: color 0.2s; -o-transition: color 0.2s; transition: color 0.2s; }
-/* line 156, ../../src/stylesheets/partials/_report.sass */
+/* line 157, ../../src/stylesheets/partials/_report.sass */
 .v-tabs-subnav a.active { background: url("../images/bump.png") no-repeat bottom center; color: #258cd5; }
-/* line 159, ../../src/stylesheets/partials/_report.sass */
+/* line 160, ../../src/stylesheets/partials/_report.sass */
 .v-tabs-subnav a:hover, .v-tabs-subnav a:focus { color: #258cd5; }
-/* line 164, ../../src/stylesheets/partials/_report.sass */
+/* line 165, ../../src/stylesheets/partials/_report.sass */
 .v-tabs-subnav .right { float: right !important; margin-right: 14px; margin-top: -3px; }
-/* line 168, ../../src/stylesheets/partials/_report.sass */
+/* line 169, ../../src/stylesheets/partials/_report.sass */
 .v-tabs-subnav .right a { font-size: 14px; font-weight: bold; }
-/* line 171, ../../src/stylesheets/partials/_report.sass */
+/* line 172, ../../src/stylesheets/partials/_report.sass */
 .v-tabs-subnav.slide { margin-left: 0; padding-left: 0; }
 
-/* line 178, ../../src/stylesheets/partials/_report.sass */
+/* line 179, ../../src/stylesheets/partials/_report.sass */
 .v-tabs-subnav-scroll-right, .v-tabs-subnav-scroll-left { background: white; display: block; margin-top: 12px; padding: 0; width: 10px; z-index: 1000; text-indent: -9999em; }
 
-/* line 187, ../../src/stylesheets/partials/_report.sass */
+/* line 188, ../../src/stylesheets/partials/_report.sass */
 .v-tabs-subnav-scroll-right { background: url("../images/arrow-right.png") no-repeat center; }
 
-/* line 190, ../../src/stylesheets/partials/_report.sass */
+/* line 191, ../../src/stylesheets/partials/_report.sass */
 .v-tabs-subnav-scroll-left { background: url("../images/arrow-left.png") no-repeat center; }
 
-/* line 196, ../../src/stylesheets/partials/_report.sass */
+/* line 197, ../../src/stylesheets/partials/_report.sass */
 .v-tabs-dynav-wrap { position: relative; *zoom: 1; }
 /* line 38, ../../../../../../../Library/Frameworks/JRuby.framework/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .v-tabs-dynav-wrap:after { content: ""; display: table; clear: both; }
-/* line 199, ../../src/stylesheets/partials/_report.sass */
+/* line 200, ../../src/stylesheets/partials/_report.sass */
 .v-tabs-dynav-wrap > * { float: right; }
-/* line 201, ../../src/stylesheets/partials/_report.sass */
+/* line 202, ../../src/stylesheets/partials/_report.sass */
 .v-tabs-dynav-wrap a { background-color: none; color: #bbbbbb; display: block; max-width: 167px; padding: 15px 10px; position: relative; text-decoration: none; vertical-align: middle; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; -webkit-transition: color 0.2s; -moz-transition: color 0.2s; -o-transition: color 0.2s; transition: color 0.2s; }
-/* line 214, ../../src/stylesheets/partials/_report.sass */
+/* line 215, ../../src/stylesheets/partials/_report.sass */
 .v-tabs-dynav-wrap a.active { color: #258cd5; }
-/* line 216, ../../src/stylesheets/partials/_report.sass */
+/* line 217, ../../src/stylesheets/partials/_report.sass */
 .v-tabs-dynav-wrap a:hover, .v-tabs-dynav-wrap a:focus { color: #258cd5; background: rgba(0, 0, 0, 0.02); }
-/* line 220, ../../src/stylesheets/partials/_report.sass */
+/* line 221, ../../src/stylesheets/partials/_report.sass */
 .v-tabs-dynav-wrap a.v-tabs-dynav-scroll-right, .v-tabs-dynav-wrap a.v-tabs-dynav-scroll-left { background: white; display: inline; height: 46px; opacity: 0.6; padding: 0; position: relative; text-indent: -9999em; width: 39px; z-index: 1000; -webkit-transition: all 0.4s; -moz-transition: all 0.4s; -o-transition: all 0.4s; transition: all 0.4s; }
-/* line 231, ../../src/stylesheets/partials/_report.sass */
+/* line 232, ../../src/stylesheets/partials/_report.sass */
 .v-tabs-dynav-wrap a.v-tabs-dynav-scroll-right:hover, .v-tabs-dynav-wrap a.v-tabs-dynav-scroll-right:focus, .v-tabs-dynav-wrap a.v-tabs-dynav-scroll-left:hover, .v-tabs-dynav-wrap a.v-tabs-dynav-scroll-left:focus { opacity: 1; }
-/* line 234, ../../src/stylesheets/partials/_report.sass */
+/* line 235, ../../src/stylesheets/partials/_report.sass */
 .v-tabs-dynav-wrap a.v-tabs-dynav-scroll-right { background: url("../images/arrow-right.png") no-repeat center; }
-/* line 236, ../../src/stylesheets/partials/_report.sass */
+/* line 237, ../../src/stylesheets/partials/_report.sass */
 .v-tabs-dynav-wrap a.v-tabs-dynav-scroll-right:hover, .v-tabs-dynav-wrap a.v-tabs-dynav-scroll-right:focus { background-image: url("../images/arrow-right-hover.png"); }
-/* line 239, ../../src/stylesheets/partials/_report.sass */
+/* line 240, ../../src/stylesheets/partials/_report.sass */
 .v-tabs-dynav-wrap a.v-tabs-dynav-scroll-left { background: url("../images/arrow-left.png") no-repeat center; }
-/* line 241, ../../src/stylesheets/partials/_report.sass */
+/* line 242, ../../src/stylesheets/partials/_report.sass */
 .v-tabs-dynav-wrap a.v-tabs-dynav-scroll-left:hover, .v-tabs-dynav-wrap a.v-tabs-dynav-scroll-left:focus { background-image: url("../images/arrow-left-hover.png"); }
 
 /* line 245, ../../src/stylesheets/partials/_report.sass */
@@ -1447,126 +1447,126 @@ table.nice-table .cell { cursor: default; }
 /* line 508, ../../src/stylesheets/partials/_report.sass */
 .v-tabs-fold-container { display: none; }
 
-/* line 512, ../../src/stylesheets/partials/_report.sass */
+/* line 511, ../../src/stylesheets/partials/_report.sass */
 div.comparison, div.geo_trend, div.info_by, div.preventive, div.equipment, div.spare_parts, div.monitoring { display: none; }
 
-/* line 526, ../../src/stylesheets/partials/_report.sass */
+/* line 525, ../../src/stylesheets/partials/_report.sass */
 #dialog-form { display: none; }
 
-/* line 530, ../../src/stylesheets/partials/_report.sass */
+/* line 529, ../../src/stylesheets/partials/_report.sass */
 .dialog-form { *zoom: 1; }
 /* line 38, ../../../../../../../Library/Frameworks/JRuby.framework/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .dialog-form:after { content: ""; display: table; clear: both; }
-/* line 533, ../../src/stylesheets/partials/_report.sass */
+/* line 532, ../../src/stylesheets/partials/_report.sass */
 .dialog-form .date-picker { background: url("../images/icon_calendar.png") no-repeat 94% 50%; border: 1px solid #aaaaaa; font-size: 12px; height: auto; width: 100px; }
-/* line 539, ../../src/stylesheets/partials/_report.sass */
+/* line 538, ../../src/stylesheets/partials/_report.sass */
 .dialog-form .dash { display: inline-block; float: left; margin: 4px 8px 0; color: #666666; }
-/* line 545, ../../src/stylesheets/partials/_report.sass */
+/* line 544, ../../src/stylesheets/partials/_report.sass */
 .dialog-form.step-4 input[type=text] { height: auto; }
 
-/* line 548, ../../src/stylesheets/partials/_report.sass */
+/* line 547, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog { background: white !important; border: 1px solid rgba(0, 0, 0, 0.2); outline: none; padding: 0; position: absolute; top: 24% !important; width: 640px !important; z-index: 51; -webkit-border-radius: 3px; -moz-border-radius: 3px; -ms-border-radius: 3px; -o-border-radius: 3px; border-radius: 3px; -webkit-box-shadow: rgba(0, 0, 0, 0.1) 0 0 5px, rgba(0, 0, 0, 0.15) 0 0 200px; -moz-box-shadow: rgba(0, 0, 0, 0.1) 0 0 5px, rgba(0, 0, 0, 0.15) 0 0 200px; box-shadow: rgba(0, 0, 0, 0.1) 0 0 5px, rgba(0, 0, 0, 0.15) 0 0 200px; }
-/* line 560, ../../src/stylesheets/partials/_report.sass */
+/* line 559, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog .ui-resizable-handle { display: none; }
-/* line 563, ../../src/stylesheets/partials/_report.sass */
+/* line 562, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog .ui-button-icon-only .ui-button-text, .ui-dialog .ui-button-icons-only .ui-button-text { text-indent: 0; }
-/* line 566, ../../src/stylesheets/partials/_report.sass */
+/* line 565, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog .row + .row { margin-top: 10px; }
-/* line 569, ../../src/stylesheets/partials/_report.sass */
+/* line 568, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog h2 { border-bottom: 1px solid #dddddd; color: #258cd5; font-size: 22px; margin: 10px 0 0; padding-bottom: 10px; }
-/* line 575, ../../src/stylesheets/partials/_report.sass */
+/* line 574, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog h2 span { color: #aaaaaa; font-size: 15px; font-weight: normal; margin-top: 3px; text-transform: uppercase; }
-/* line 581, ../../src/stylesheets/partials/_report.sass */
+/* line 580, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog h2 b { color: #666666; font-weight: bold; }
-/* line 584, ../../src/stylesheets/partials/_report.sass */
+/* line 583, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog p { background: #fcfcfc; border-bottom: 1px solid #e9e9e9; color: #888888; font-size: 11px; padding: 8px; }
-/* line 591, ../../src/stylesheets/partials/_report.sass */
+/* line 590, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog p b { color: #666666; font-weight: bold; }
-/* line 595, ../../src/stylesheets/partials/_report.sass */
+/* line 594, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog form fieldset { clear: both; margin-top: 25px; *zoom: 1; }
 /* line 38, ../../../../../../../Library/Frameworks/JRuby.framework/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .ui-dialog form fieldset:after { content: ""; display: table; clear: both; }
-/* line 599, ../../src/stylesheets/partials/_report.sass */
+/* line 598, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog form fieldset li { border-bottom: 1px solid whitesmoke; margin-bottom: 5px; padding-bottom: 5px; *zoom: 1; }
 /* line 38, ../../../../../../../Library/Frameworks/JRuby.framework/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .ui-dialog form fieldset li:after { content: ""; display: table; clear: both; }
-/* line 605, ../../src/stylesheets/partials/_report.sass */
+/* line 604, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog form fieldset li.modular input[type=text] { border: 1px solid #aaaaaa; font-size: 12px; height: auto; width: 100px; }
-/* line 610, ../../src/stylesheets/partials/_report.sass */
+/* line 609, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog form fieldset li.modular select { font-size: 12px; height: 27px; margin-left: 20px; padding: 4px 7px; width: 100px; }
-/* line 617, ../../src/stylesheets/partials/_report.sass */
+/* line 616, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog input, .ui-dialog select, .ui-dialog textarea { font-size: 12px !important; }
-/* line 620, ../../src/stylesheets/partials/_report.sass */
+/* line 619, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog label { color: #258cd5; display: inline-block; float: left; font-size: 11px; height: 11px; padding: 7px; width: 145px; }
-/* line 629, ../../src/stylesheets/partials/_report.sass */
+/* line 628, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog label + input[type=checkbox] { margin-left: 0; }
-/* line 631, ../../src/stylesheets/partials/_report.sass */
+/* line 630, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog .no-margin { margin-left: 0 !important; }
-/* line 634, ../../src/stylesheets/partials/_report.sass */
+/* line 633, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog input, .ui-dialog select, .ui-dialog textarea { display: inline-block; float: left; padding: 5px 7px; }
-/* line 638, ../../src/stylesheets/partials/_report.sass */
+/* line 637, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog input, .ui-dialog textarea { width: 380px; }
-/* line 640, ../../src/stylesheets/partials/_report.sass */
+/* line 639, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog input, .ui-dialog select { height: 28px; }
-/* line 643, ../../src/stylesheets/partials/_report.sass */
+/* line 642, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog .chzn-search input { float: none; height: auto; }
-/* line 647, ../../src/stylesheets/partials/_report.sass */
+/* line 646, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog select { color: #258cd5; font-size: 12px; width: 420px; -webkit-border-radius: 0; -moz-border-radius: 0; -ms-border-radius: 0; -o-border-radius: 0; border-radius: 0; }
-/* line 652, ../../src/stylesheets/partials/_report.sass */
+/* line 651, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog select:hover, .ui-dialog select:focus, .ui-dialog select:active { outline: none; }
-/* line 654, ../../src/stylesheets/partials/_report.sass */
+/* line 653, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog select + input[type=checkbox] { margin-bottom: 5px; }
-/* line 656, ../../src/stylesheets/partials/_report.sass */
+/* line 655, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog input[type=checkbox] { height: auto; margin-top: 6px; margin-left: 158px; width: auto; }
-/* line 661, ../../src/stylesheets/partials/_report.sass */
+/* line 660, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog input[type=checkbox] + span, .ui-dialog .word { color: #666666; margin-left: 3px; display: inline-block; font-size: 11px; margin-left: 3px; margin-top: 7px; }
-/* line 668, ../../src/stylesheets/partials/_report.sass */
+/* line 667, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog input[type=checkbox] + span.push, .ui-dialog .word.push { margin-left: 10px; margin-right: 10px; }
-/* line 671, ../../src/stylesheets/partials/_report.sass */
+/* line 670, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog .ui-widget-next { color: white; margin-top: 15px; }
-/* line 674, ../../src/stylesheets/partials/_report.sass */
+/* line 673, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog .ui-widget-previous { margin-top: 18px; }
-/* line 676, ../../src/stylesheets/partials/_report.sass */
+/* line 675, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog .ui-dialog-content { background: none; padding: 0 20px 20px !important; }
-/* line 679, ../../src/stylesheets/partials/_report.sass */
+/* line 678, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog .twocol-checkboxes { *zoom: 1; }
 /* line 38, ../../../../../../../Library/Frameworks/JRuby.framework/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .ui-dialog .twocol-checkboxes:after { content: ""; display: table; clear: both; }
-/* line 681, ../../src/stylesheets/partials/_report.sass */
+/* line 680, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog .twocol-checkboxes li { display: inline; float: left; width: 50%; }
-/* line 686, ../../src/stylesheets/partials/_report.sass */
+/* line 685, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog .onecol-checkboxes input[type=checkbox], .ui-dialog .twocol-checkboxes input[type=checkbox], .ui-dialog .checkbox-list input[type=checkbox] { margin-left: 0; }
-/* line 688, ../../src/stylesheets/partials/_report.sass */
+/* line 687, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog .onecol-checkboxes input[type=checkbox] + label, .ui-dialog .twocol-checkboxes input[type=checkbox] + label, .ui-dialog .checkbox-list input[type=checkbox] + label { color: #666666; font-size: 11px; }
-/* line 691, ../../src/stylesheets/partials/_report.sass */
+/* line 690, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog .onecol-checkboxes { width: 50%; *zoom: 1; }
 /* line 38, ../../../../../../../Library/Frameworks/JRuby.framework/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .ui-dialog .onecol-checkboxes:after { content: ""; display: table; clear: both; }
-/* line 694, ../../src/stylesheets/partials/_report.sass */
+/* line 693, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog .checkbox-list { *zoom: 1; }
 /* line 38, ../../../../../../../Library/Frameworks/JRuby.framework/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .ui-dialog .checkbox-list:after { content: ""; display: table; clear: both; }
-/* line 696, ../../src/stylesheets/partials/_report.sass */
+/* line 695, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog .checkbox-list li { border-bottom: none; display: inline; float: left; margin-bottom: 0; padding-bottom: 0; width: 50%; }
-/* line 703, ../../src/stylesheets/partials/_report.sass */
+/* line 702, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog .checkbox-list li input[type=checkbox] { margin-left: 0; }
-/* line 705, ../../src/stylesheets/partials/_report.sass */
+/* line 704, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog label + .checkbox-list { padding-left: 160px; }
-/* line 707, ../../src/stylesheets/partials/_report.sass */
+/* line 706, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog .ui-dialog-titlebar { background: none !important; border: none !important; height: 30px; padding: 15px; position: relative; }
-/* line 713, ../../src/stylesheets/partials/_report.sass */
+/* line 712, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog .ui-dialog-titlebar-close { background: url("../images/icon_close.png") no-repeat !important; border: none !important; height: 18px; margin: 0 !important; opacity: 0.2; padding: 0 !important; right: 10px !important; text-indent: -9999em !important; top: 10px !important; width: 18px; -webkit-transition: all, 0.4s; -moz-transition: all, 0.4s; -o-transition: all, 0.4s; transition: all, 0.4s; }
-/* line 725, ../../src/stylesheets/partials/_report.sass */
+/* line 724, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog .ui-dialog-titlebar-close span { display: none !important; }
-/* line 727, ../../src/stylesheets/partials/_report.sass */
+/* line 726, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog .ui-dialog-titlebar-close:hover, .ui-dialog .ui-dialog-titlebar-close:focus { opacity: 1; }
-/* line 729, ../../src/stylesheets/partials/_report.sass */
+/* line 728, ../../src/stylesheets/partials/_report.sass */
 .ui-dialog .ui-dialog-titlebar-close.ui-state-hover { border: none !important; margin: 0 !important; padding: 0 !important; }
 
-/* line 734, ../../src/stylesheets/partials/_report.sass */
+/* line 733, ../../src/stylesheets/partials/_report.sass */
 .ui-widget-overlay { background: rgba(0, 0, 0, 0.15); position: absolute; top: 0; z-index: 51 !important; }
 
-/* line 740, ../../src/stylesheets/partials/_report.sass */
+/* line 739, ../../src/stylesheets/partials/_report.sass */
 .search-choice-close { background: url("../js/jquery/chosen/chosen-sprite.png") -49px -8px no-repeat !important; top: 5px !important; }
 
 /* line 3, ../../src/stylesheets/partials/_graphs.sass */
