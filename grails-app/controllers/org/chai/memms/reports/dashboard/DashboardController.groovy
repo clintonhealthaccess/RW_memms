@@ -81,8 +81,8 @@ class DashboardController extends AbstractController {
         render(view:"/reports/reports", 
             model:model << [
 
-                template:"/reports/dashboard/dashboard",
-                filterTemplate:"/reports/dashboard/dashboardFilter"
+                template:"/reports/dashboard/dashboard"
+                // filterTemplate:"/reports/dashboard/dashboardFilter"
             ])
     }
 

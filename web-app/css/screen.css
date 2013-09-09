@@ -1334,7 +1334,7 @@ table.nice-table .cell { cursor: default; }
 .v-tabs-row p:after { content: ""; display: table; clear: both; }
 
 /* line 326, ../../src/stylesheets/partials/_report.sass */
-.v-tabs-filters { border-bottom: 1px solid #258cd5; padding: 0 0 10px 15px; *zoom: 1; }
+.v-tabs-filters { border-bottom: 1px solid #258cd5; padding: 10px 0 10px 15px; *zoom: 1; }
 /* line 38, ../../../../../../../Library/Frameworks/JRuby.framework/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .v-tabs-filters:after { content: ""; display: table; clear: both; }
 /* line 330, ../../src/stylesheets/partials/_report.sass */
