@@ -138,11 +138,14 @@ class WorkOrderListingReportService {
 				inList ("equip.department", departments)
 				//Mandatory property
 				inList ("equip.type", equipmentTypes)
-
-				if(lowerLimitCost && lowerLimitCost!=null)
-					gt ("equip.purchaseCost", lowerLimitCost)
-				if(upperLimitCost && upperLimitCost!=null)
-					lt ("equip.purchaseCost", upperLimitCost)
+				or{
+					if(lowerLimitCost && lowerLimitCost!=null)
+						gt ("equip.purchaseCost", lowerLimitCost)
+					if(upperLimitCost && upperLimitCost!=null)
+						lt ("equip.purchaseCost", upperLimitCost)
+					if(noCost != null && noCost)
+						isNull ("equip.purchaseCost")
+				}
 				if(currency && currency !=null)
 					eq ("equip.currency",currency)
 
@@ -154,8 +157,6 @@ class WorkOrderListingReportService {
 				 	le ("openOn", toWorkOrderPeriod)
 				if(warranty!=null && warranty)
 					lt ("equip.warrantyEndDate",today)
-				if(noCost != null && noCost)
-					eq ("equip.purchaseCost", null)
 			}
 		}
 
@@ -172,20 +173,21 @@ class WorkOrderListingReportService {
 				createAlias("wo.equipment","equipment")
 
 				//Mandatory property
-				//inList("wo.equipment.dataLocation", dataLocations)
+				inList("equipment.dataLocation", dataLocations)
 				//Mandatory property
 				inList ("equipment.department", departments)
 				//Mandatory property
 				inList ("equipment.type", equipmentTypes)
-
-				if(lowerLimitCost && lowerLimitCost!=null)
-					gt ("equipment.purchaseCost", lowerLimitCost)
-				if(upperLimitCost && upperLimitCost!=null)
-					lt ("equipment.purchaseCost", upperLimitCost)
+				or{
+					if(lowerLimitCost && lowerLimitCost!=null)
+						gt ("equipment.purchaseCost", lowerLimitCost)
+					if(upperLimitCost && upperLimitCost!=null)
+						lt ("equipment.purchaseCost", upperLimitCost)
+					if(noCost != null && noCost)
+						isNull ("equipment.purchaseCost")
+				}
 				if(currency && currency !=null)
 					eq ("equipment.currency",currency)
-				if(noCost != null && noCost)
-					eq ("equipment.purchaseCost", null)
 
 				//Status changes
 				if(workOrderStatusChanges != null || !workOrderStatusChanges.empty){

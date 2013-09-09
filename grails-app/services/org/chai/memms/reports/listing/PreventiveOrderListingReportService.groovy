@@ -138,18 +138,20 @@ class PreventiveOrderListingReportService {
 				//le ("eventDate", it.scheduledOn)
 				//le ("scheduledOn", "eventDate")
 			}
-			if(lowerLimitCost && lowerLimitCost!=null)
+			or{
+				if(lowerLimitCost && lowerLimitCost!=null)
 			//Including lowerLimitCost by using ge
-				ge ("equip.purchaseCost", lowerLimitCost)
-			if(upperLimitCost && upperLimitCost!=null)
+					ge ("equip.purchaseCost", lowerLimitCost)
+				if(upperLimitCost && upperLimitCost!=null)
 			//Including upperLimitCost by using le
-				le ("equip.purchaseCost", upperLimitCost)
+					le ("equip.purchaseCost", upperLimitCost)
+				if(noCost != null && noCost)
+					isNull ("equip.purchaseCost")
+			}
 			if(currency && currency !=null)
-				eq ("equip.currency",currency)	
+				eq ("equip.currency",currency)
 			if(responsibles!=null && !responsibles.empty)
 				inList ("preventionResponsible",responsibles)
-			if(noCost != null && noCost)
-				eq ("equip.purchaseCost", null)
 				
 			// DONE
 			 if(fromWorkOrderPeriod && fromWorkOrderPeriod != null)

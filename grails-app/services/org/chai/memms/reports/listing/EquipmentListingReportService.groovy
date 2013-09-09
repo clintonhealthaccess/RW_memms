@@ -194,28 +194,31 @@ class EquipmentListingReportService {
 				inList ("department", departments)
 				//Mandatory property
 				inList ("type", equipmentTypes)
-					
-				if(lowerLimitCost && lowerLimitCost!=null)
-					gt ("purchaseCost", lowerLimitCost)
-				if(upperLimitCost && upperLimitCost!=null)
-					lt ("purchaseCost", upperLimitCost)
-				if(currency && currency !=null)
-					eq ("currency", currency)
+				or{	
+					if(lowerLimitCost && lowerLimitCost!=null)
+						gt ("purchaseCost", lowerLimitCost)
+					if(upperLimitCost && upperLimitCost!=null)
+						lt ("purchaseCost", upperLimitCost)
+					if(noCost != null && noCost)
+						isNull ("purchaseCost")
+					if(currency && currency !=null && ((lowerLimitCost && lowerLimitCost!=null)||(upperLimitCost && upperLimitCost!=null)))
+						eq ("currency", currency)
+				}
+				
 				if(equipmentStatus!=null && !equipmentStatus.empty)
 					inList ("currentStatus",equipmentStatus)
 				if(obsolete != null && obsolete)
 					eq ("obsolete", (obsolete.equals('true'))?true:false)
 				if(warranty!=null && warranty)
 					lt ("warrantyEndDate",today)
-				/*if(noAcquisitionPeriod != null && noAcquisitionPeriod)
-					eq ("purchaseDate", null)*/
-
-				if(fromAcquisitionPeriod && fromAcquisitionPeriod != null)
-					gt ("purchaseDate", fromAcquisitionPeriod)
-				if(toAcquisitionPeriod && toAcquisitionPeriod != null)
-					lt ("purchaseDate", toAcquisitionPeriod)
-				if(noCost != null && noCost)
-					eq ("purchaseCost", null)
+				or{
+					if(fromAcquisitionPeriod && fromAcquisitionPeriod != null)
+						gt ("purchaseDate", fromAcquisitionPeriod)
+					if(toAcquisitionPeriod && toAcquisitionPeriod != null)
+						lt ("purchaseDate", toAcquisitionPeriod)
+					if(noAcquisitionPeriod != null && noAcquisitionPeriod)
+						isNull ("purchaseDate")
+				}
 			}
 		}
 
@@ -246,7 +249,7 @@ class EquipmentListingReportService {
 				if(currency && currency !=null)
 					eq ("equip.currency",currency)
 				if(noCost != null && noCost)
-					eq ("equip.purchaseCost", null)
+					isNull ("equip.purchaseCost")
 
 				//Status changes
 				if(equipmentStatusChanges != null || !equipmentStatusChanges.empty){

@@ -51,12 +51,15 @@ class IndicatorComputationService {
     def indicatorValueService
     def locationReportService
     def locationService
+    def grailsApplication = new User().domainClass.grailsApplication
 
     static final String DATA_LOCATION_TOKEN = "@DATA_LOCATION"
     static final String USER_DEFINED_VARIABLE_REGEX = "#[0-9a-zA-Z_]+"
     static final Pattern userDefinedVariablePattern = Pattern.compile(USER_DEFINED_VARIABLE_REGEX)
+    def  skipLevelCode = grailsApplication.config.location.sector.skip.level[0]
 
     public def computeCurrentReport() {
+        def skippedLevel =  LocationLevel.findByCode(skipLevelCode)
         def memmsReports = []
 
         if (log.isDebugEnabled()) log.debug("computeCurrentReport start memmsReports " + memmsReports);
@@ -65,8 +68,9 @@ class IndicatorComputationService {
         def reportDates = []
 
         // year and half year reports
-        def oneYearAgo = DateTime.now().minusYears(1)
-        def sixMonthsAgo = DateTime.now().minusMonths(6)
+        //def oneYearAgo = DateTime.now().minusYears(1)
+        //def sixMonthsAgo = DateTime.now().minusMonths(6)
+        //reportDates = [oneYearAgo, sixMonthsAgo]
 
         // quarterly reports
         // def fourQuartersAgo = DateTime.now().minusMonths(12) ==> same as oneYearAgo
@@ -76,11 +80,13 @@ class IndicatorComputationService {
 
         // monthly reports
         // def sixMonthsAgo = DateTime.now().minusMonths(6) ==> same as sixMonthsAgo
-        def fiveMonthsAgo = DateTime.now().minusMonths(5)
-        def fourMonthsAgo = DateTime.now().minusMonths(4)
+        //def fiveMonthsAgo = DateTime.now().minusMonths(5)
+        //def fourMonthsAgo = DateTime.now().minusMonths(4)
         // def threeMonthsAgo = DateTime.now().minusMonths(3) ==> same as lastQuarter
-        def twoMonthsAgo = DateTime.now().minusMonths(2)
-        def lastMonth = DateTime.now().minusMonths(1)
+
+        //def twoMonthsAgo = DateTime.now().minusMonths(2)
+        //def lastMonth = DateTime.now().minusMonths(1)
+        //reportDates.addAll([fiveMonthsAgo, fourMonthsAgo, twoMonthsAgo, lastMonth])
 
         // today and yesterday reports
         def today = DateTime.now()
@@ -94,17 +100,16 @@ class IndicatorComputationService {
         // reportDates.addAll([oneYearAgo, sixMonthsAgo])
         // reportDates.addAll([threeQuartersAgo, lastQuarter])
         // reportDates.addAll([fiveMonthsAgo, fourMonthsAgo, twoMonthsAgo, lastMonth])
-
         reportDates.add(today)
         if (log.isDebugEnabled()) log.debug("computeCurrentReport reportDates " + reportDates);
 
-        // 1a. GET LOCATIONS WITH EQUIPMENTS
+        // 1. GET LOCATIONS WITH EQUIPMENTS
         def rootLocation = locationService.getRootLocation() 
         if (log.isDebugEnabled()) log.debug("computeCurrentReport rootLocation " + rootLocation);
         def locationsWithEquipment = null
         if(rootLocation != null){
             //TODO optimize this method !
-            locationsWithEquipment = rootLocation.collectTreeWithDataLocations(null,null)
+            locationsWithEquipment = rootLocation.collectTreeWithDataLocations((skippedLevel!=null)?[skippedLevel]:null,null)
             if (log.isDebugEnabled()) log.debug("computeCurrentReport locationsWithEquipment " + locationsWithEquipment);
         }
         def dataLocationsWithEquipment = equipmentService.getDataLocationsWithEquipments()
