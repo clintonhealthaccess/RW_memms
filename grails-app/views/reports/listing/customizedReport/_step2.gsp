@@ -14,7 +14,7 @@
             field="dataLocations" optionKey="id" multiple="true" value="${dataLocations*.id}"
             ajaxLink="${createLink(controller: 'dataLocation', action:'getAjaxData')}"
             values="${dataLocations.collect{it.names+' '+it.id+' ['+it.location.names+']'}}" />
-          <input type="checkbox" name="allDataLocations" class='js-select-all' checked="checked"/>
+          <input type="checkbox" name="allDataLocations" class='js-select-all'/>
           <span><g:message code="reports.selectAll"/></span>
         </li>
         <g:if test="${[ReportType.INVENTORY,ReportType.CORRECTIVE,ReportType.PREVENTIVE].contains(reportType)}">
@@ -46,7 +46,7 @@
                 </g:each>
               </select>
             </div>
-            <input type="checkbox" name="noCost" class='clear-left'/>
+            <input type="checkbox" name="noCost" class='clear-left' checked="checked"/>
             <span class='clear-right'><g:message code="reports.no.cost"/></span>
           </li>
         </g:if>

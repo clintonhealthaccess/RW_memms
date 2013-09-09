@@ -195,28 +195,30 @@ class EquipmentListingReportService {
 				//Mandatory property
 				inList ("type", equipmentTypes)
 				or{	
-				if(lowerLimitCost && lowerLimitCost!=null)
-					gt ("purchaseCost", lowerLimitCost)
-				if(upperLimitCost && upperLimitCost!=null)
-					lt ("purchaseCost", upperLimitCost)
-				if(noCost != null && noCost)
-					isNull ("purchaseCost")
+					if(lowerLimitCost && lowerLimitCost!=null)
+						gt ("purchaseCost", lowerLimitCost)
+					if(upperLimitCost && upperLimitCost!=null)
+						lt ("purchaseCost", upperLimitCost)
+					if(noCost != null && noCost)
+						isNull ("purchaseCost")
+					if(currency && currency !=null && ((lowerLimitCost && lowerLimitCost!=null)||(upperLimitCost && upperLimitCost!=null)))
+						eq ("currency", currency)
 				}
-				if(currency && currency !=null)
-					eq ("currency", currency)
+				
 				if(equipmentStatus!=null && !equipmentStatus.empty)
 					inList ("currentStatus",equipmentStatus)
 				if(obsolete != null && obsolete)
 					eq ("obsolete", (obsolete.equals('true'))?true:false)
 				if(warranty!=null && warranty)
 					lt ("warrantyEndDate",today)
-				/*if(noAcquisitionPeriod != null && noAcquisitionPeriod)
-					eq ("purchaseDate", null)*/
-
-				if(fromAcquisitionPeriod && fromAcquisitionPeriod != null)
-					gt ("purchaseDate", fromAcquisitionPeriod)
-				if(toAcquisitionPeriod && toAcquisitionPeriod != null)
-					lt ("purchaseDate", toAcquisitionPeriod)
+				or{
+					if(fromAcquisitionPeriod && fromAcquisitionPeriod != null)
+						gt ("purchaseDate", fromAcquisitionPeriod)
+					if(toAcquisitionPeriod && toAcquisitionPeriod != null)
+						lt ("purchaseDate", toAcquisitionPeriod)
+					if(noAcquisitionPeriod != null && noAcquisitionPeriod)
+						isNull ("purchaseDate")
+				}
 			}
 		}
 
