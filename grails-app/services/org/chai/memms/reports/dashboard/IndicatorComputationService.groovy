@@ -70,10 +70,7 @@ class IndicatorComputationService {
         // year and half year reports
         def oneYearAgo = DateTime.now().minusYears(1)
         def sixMonthsAgo = DateTime.now().minusMonths(6)
-<<<<<<< Updated upstream
         //reportDates = [oneYearAgo, sixMonthsAgo]
-=======
->>>>>>> Stashed changes
 
         // quarterly reports
         // def fourQuartersAgo = DateTime.now().minusMonths(12) ==> same as oneYearAgo
@@ -86,10 +83,7 @@ class IndicatorComputationService {
         def fiveMonthsAgo = DateTime.now().minusMonths(5)
         def fourMonthsAgo = DateTime.now().minusMonths(4)
         // def threeMonthsAgo = DateTime.now().minusMonths(3) ==> same as lastQuarter
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
         def twoMonthsAgo = DateTime.now().minusMonths(2)
         def lastMonth = DateTime.now().minusMonths(1)
 
@@ -101,16 +95,11 @@ class IndicatorComputationService {
             reportDates.add(yesterday)
         }
 
-<<<<<<< Updated upstream
         // These are only needed for dev historic trend chart
         // reportDates.addAll([oneYearAgo, sixMonthsAgo])
         // reportDates.addAll([threeQuartersAgo, lastQuarter])
         // reportDates.addAll([fiveMonthsAgo, fourMonthsAgo, twoMonthsAgo, lastMonth])
-=======
-        reportDates.addAll([oneYearAgo, sixMonthsAgo])
-        reportDates.addAll([threeQuartersAgo, lastQuarter])
-        reportDates.addAll([fiveMonthsAgo, fourMonthsAgo, twoMonthsAgo, lastMonth])
->>>>>>> Stashed changes
+
         reportDates.add(today)
         if (log.isDebugEnabled()) log.debug("computeCurrentReport reportDates " + reportDates);
 
