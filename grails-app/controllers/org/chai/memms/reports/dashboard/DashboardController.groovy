@@ -57,7 +57,9 @@ class DashboardController extends AbstractController {
     def dashboard = {
         //indicatorComputationService.computeCurrentReport()
 
-        LocationReport report = getUserReport()
+        User user =  User.findByUuid(SecurityUtils.subject.principal, [cache: true])
+
+        LocationReport report = getUserReport(user)
         def reportType = getReportType()
         
         def category = IndicatorCategory.findByCode(reportType.reportType)
@@ -67,7 +69,7 @@ class DashboardController extends AbstractController {
             Set<IndicatorValue> indicatorValues = report.indicatorValues.findAll{ it.indicator.category.equals(category) }
             if(indicatorValues != null && !indicatorValues.empty){
                 indicatorValues.each { indicatorValue ->
-                    def indicatorItem = new IndicatorItem(indicatorValue, null)
+                    def indicatorItem = new IndicatorItem(indicatorValue, null, user)
                     categoryItem.indicatorItems.add(indicatorItem)
                 }
             }
@@ -90,6 +92,8 @@ class DashboardController extends AbstractController {
         if (log.isDebugEnabled())
             log.debug("dashboard.dashboardChart start, params:"+params)
 
+        User user =  User.findByUuid(SecurityUtils.subject.principal, [cache: true])
+
         def reportType = getReportType()
         def reportChartType = getReportChartType()
 
@@ -98,7 +102,7 @@ class DashboardController extends AbstractController {
 
         def indicatorItem = null
         if(indicatorValue != null){
-            indicatorItem = new IndicatorItem(indicatorValue, reportChartType)
+            indicatorItem = new IndicatorItem(indicatorValue, reportChartType, user)
         }
 
         def template = null
@@ -127,11 +131,10 @@ class DashboardController extends AbstractController {
         ])
     }
        
-    def getUserReport() {
+    def getUserReport(def user) {
         MemmsReport memmsReport = dashboardService.getCurrentMemmsReport()
         if(memmsReport == null) return null
 
-        User user =  User.findByUuid(SecurityUtils.subject.principal, [cache: true])
         if(user == null) return null
 
         return LocationReport.findByMemmsReportAndLocation(memmsReport, user.location)

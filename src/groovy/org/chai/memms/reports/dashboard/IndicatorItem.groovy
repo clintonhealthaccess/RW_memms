@@ -64,7 +64,7 @@ class IndicatorItem {
     String color
     String locationNames
 
-    List<HistoricalValueItem> historicalValueItems
+    Set<HistoricalValueItem> historicalValueItems
     List<ComparisonValueItem> highestComparisonValueItems
     List<ComparisonValueItem> higherComparisonValueItems
     List<ComparisonValueItem> lowerComparisonValueItems
@@ -73,7 +73,7 @@ class IndicatorItem {
     Map<String, Double> valuesPerGroup
     Integer totalHistoryItems
 
-    public IndicatorItem(IndicatorValue indicatorValue, ReportChartType reportChartType) {
+    public IndicatorItem(IndicatorValue indicatorValue, ReportChartType reportChartType, User user) {
         this.indicatorValueId = indicatorValue.id
         this.categoryCode = indicatorValue.indicator.category.code
         this.computedAt = indicatorValue.computedAt
@@ -108,19 +108,10 @@ class IndicatorItem {
 
         // add historical value items
         if(reportChartType == null || reportChartType == ReportChartType.HISTORIC){
-            this.historicalValueItems = new ArrayList<HistoricalValueItem>()
+            this.historicalValueItems = new HashSet<HistoricalValueItem>()
             this.historicalValueItems.addAll(getHistoricValueItems(indicatorValue))
             if (log.isDebugEnabled()) {
                 log.debug("IndicatorItem getHistoricalValueItems historical value items=" + historicalValueItems + ", size="+historicalValueItems?.size());
-            }
-        }
-
-        // add geographical value items
-        if(reportChartType == ReportChartType.GEOGRAPHIC){
-            this.geographicalValueItems = new ArrayList<GeographicalValueItem>()
-            this.geographicalValueItems.addAll(getGeographicalValueItems(indicatorValue))
-            if (log.isDebugEnabled()) {
-                log.debug("IndicatorItem getGeographicalValueItems geographical value items=" + geographicalValueItems + ", size="+geographicalValueItems?.size());
             }
         }
 
@@ -130,13 +121,22 @@ class IndicatorItem {
             this.higherComparisonValueItems= new ArrayList<ComparisonValueItem>()
             this.lowerComparisonValueItems= new ArrayList<ComparisonValueItem>()
             this.lowestComparisonValueItems= new ArrayList<ComparisonValueItem>()
-            getComparisonValueItems(indicatorValue)
+            getComparisonValueItems(indicatorValue, user)
             // TODO combine lists
             if (log.isDebugEnabled()) {
                 log.debug("IndicatorItem getComparisonValueItems comparison value items=" + highestComparisonValueItems + ", size="+highestComparisonValueItems?.size());
                 log.debug("IndicatorItem getComparisonValueItems comparison value items=" + higherComparisonValueItems + ", size="+higherComparisonValueItems?.size());
                 log.debug("IndicatorItem getComparisonValueItems comparison value items=" + lowerComparisonValueItems + ", size="+lowerComparisonValueItems?.size());
                 log.debug("IndicatorItem getComparisonValueItems comparison value items=" + lowestComparisonValueItems + ", size="+lowestComparisonValueItems?.size());
+            }
+        }
+
+        // add geographical value items
+        if(reportChartType == ReportChartType.GEOGRAPHIC){
+            this.geographicalValueItems = new ArrayList<GeographicalValueItem>()
+            this.geographicalValueItems.addAll(getGeographicalValueItems(indicatorValue, user))
+            if (log.isDebugEnabled()) {
+                log.debug("IndicatorItem getGeographicalValueItems geographical value items=" + geographicalValueItems + ", size="+geographicalValueItems?.size());
             }
         }
 
@@ -151,11 +151,10 @@ class IndicatorItem {
         }
     }
 
-    /**
-     *Get historical values for this indicators = for different location reports
-     */
+    // historic trend chart
+
     public def getHistoricValueItems(IndicatorValue indicatorValue) {
-        def historicalValueItems = new ArrayList<HistoricalValueItem>();
+        def historicalValueItems = new HashSet<HistoricalValueItem>();
 
         if(indicatorValue != null) {
             if (log.isDebugEnabled()) log.debug("getHistoricalValueItems period " + indicatorValue.indicator.historicalPeriod);
@@ -224,14 +223,33 @@ class IndicatorItem {
         return ', count: -1';
     }
 
-    public void getComparisonValueItems(IndicatorValue currentValue){
+    // comparison chart
+
+    public void getComparisonValueItems(IndicatorValue currentValue, User user){
         List<IndicatorValue> invVs=new ArrayList<IndicatorValue>()
         if(currentValue!=null) {
-            def  similarLocations=getSimilarLocations(currentValue)
+            def  similarLocations=getSimilarLocations(currentValue, user)
             def locationReports=LocationReport.findAllByMemmsReportAndLocationInList(currentValue.locationReport.memmsReport,similarLocations)
             invVs.addAll(IndicatorValue.findAllByLocationReportInListAndIndicator(locationReports,currentValue.indicator))
             sortComparisonValues(currentValue,invVs)
         }
+    }
+
+    public def getSimilarLocations(IndicatorValue indicatorValue, User user){
+        def  similarLocations=[]
+        def locationIds=getLocationsIdWithUsers()
+        if(indicatorValue!=null){
+            def comparisonLocation = indicatorValue.locationReport.location
+            if(comparisonLocation instanceof Location)
+                similarLocations.addAll(comparisonLocation.collectDataLocations(null))
+            else{
+                similarLocations.add(comparisonLocation)
+                similarLocations.addAll(comparisonLocation?.manages)
+                if (log.isDebugEnabled()) log.debug("getGeographicalValueItems similarLocations=" + similarLocations + ", size="+similarLocations.size());
+            }
+        }
+        if (log.isDebugEnabled()) log.debug("getSimilarLocations similarLocations size="+similarLocations?.size());
+        return similarLocations
     }
 
     public void sortComparisonValues(IndicatorValue currentValue,List<IndicatorValue> invVs){
@@ -297,19 +315,27 @@ class IndicatorItem {
         return locations
     }
 
-    /**
-     *Gets geographical values for the current report
-     **/
-    public def getGeographicalValueItems(IndicatorValue indicatorValue){
+    // geographic trend chart
+
+    public def getGeographicalValueItems(IndicatorValue indicatorValue, User user){
         def geographicalValueItems = new ArrayList<GeographicalValueItem>();
 
         if(indicatorValue!=null){
             def geographicalValueItem = new GeographicalValueItem(indicatorValue)
             geographicalValueItems.add(geographicalValueItem)
 
-            def dataLocations = indicatorValue.locationReport.location.collectDataLocations(null)
+            def geographicalLocation = indicatorValue.locationReport.location
+            def geographicalLocations = []
+            if(geographicalLocation instanceof Location)
+                geographicalLocations.addAll(geographicalLocation.collectDataLocations(null))
+            else{
+                geographicalLocations.add(geographicalLocation)
+                geographicalLocations.addAll(geographicalLocation?.manages)
+                if (log.isDebugEnabled()) log.debug("getGeographicalValueItems geographicalLocations=" + geographicalLocations + ", size="+geographicalLocations.size());
+            }
+
             def memmsReport = indicatorValue.locationReport.memmsReport
-            def locationReports=LocationReport.findAllByMemmsReportAndLocationInList(memmsReport,dataLocations)
+            def locationReports=LocationReport.findAllByMemmsReportAndLocationInList(memmsReport,geographicalLocations)
             if (log.isDebugEnabled()) log.debug("getGeographicalValueItems location report items=" + locationReports + ", size="+locationReports.size());
             def indicatorValues = IndicatorValue.findAllByLocationReportInListAndIndicator(locationReports,indicatorValue.indicator)
             indicatorValues.each{ indV ->
@@ -320,27 +346,6 @@ class IndicatorItem {
             return geographicalValueItems
         }
         return null
-    }
-
-    /**
-     *Gets  facilities or locations similar to the curent facility/location from this indicator value
-     */
-    public def getSimilarLocations(IndicatorValue indicatorValue){
-        def  similarLocations=[]
-        def locationIds=getLocationsIdWithUsers()
-        if(indicatorValue!=null){
-            // if(indicatorValue.locationReport.location instanceof DataLocation){
-            //     similarLocations=DataLocation.findAllByTypeAndIdInList(indicatorValue.locationReport.location.type,locationIds)
-            // } else if(indicatorValue.locationReport.location instanceof Location){
-            //     similarLocations=Location.findAllByLevelAndIdInList(indicatorValue.locationReport.location.level,locationIds)
-            // }
-            def location = indicatorValue.locationReport.location
-            if (log.isDebugEnabled()) log.debug("getSimilarLocations location="+location);
-            // similarLocations = location.collectTreeWithDataLocations(null,null)
-            similarLocations.addAll(location.collectDataLocations(null))
-        }
-        if (log.isDebugEnabled()) log.debug("getSimilarLocations similarLocations size="+similarLocations?.size());
-        return similarLocations
     }
 
     public geoData() {
@@ -408,7 +413,7 @@ class IndicatorItem {
         return ret
     }
 
-        @Override
+    @Override
     public String toString() {
         return "IndicatorItem[@" + computedAt?.getTime() + ", code = " + code + "]"
     }
