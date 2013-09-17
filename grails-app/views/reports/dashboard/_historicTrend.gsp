@@ -13,8 +13,17 @@
             legend: 'none',
             pointSize: 12,
             colors: [['${indicatorItem.color}']],
-            vAxis: {format:'${indicatorItem.historicalTrendVAxisFormat()}', title: '${indicatorItem.names}', gridlines:{color: 'lightgray' ${indicatorItem.historicalTrendLineCount()}}, minValue: 0 ${indicatorItem.historicalTrendMaxValue()}},
-            hAxis: {gridlines:{color: 'lightgray', count: ${indicatorItem.totalHistoryItems + 1}}, minValue: 0, maxValue: ${indicatorItem.totalHistoryItems}},
+            vAxis:{
+                    format:'${indicatorItem.historicalTrendVAxisFormat()}', 
+                    title:'${indicatorItem.names}', 
+                    gridlines:{color:'lightgray' ${indicatorItem.historicalTrendLineCount()}}, 
+                    minValue:0 ${indicatorItem.historicalTrendMaxValue()}
+                  },
+            hAxis:{
+                    gridlines:{color: 'lightgray', count:${indicatorItem.totalHistoryItems + 1}}, 
+                    minValue: 0, 
+                    maxValue: ${indicatorItem.totalHistoryItems}
+                  },
             fontSize: 12,
             width: 800,
             height: 300

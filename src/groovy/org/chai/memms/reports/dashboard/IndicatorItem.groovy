@@ -231,7 +231,7 @@ class IndicatorItem {
     public def historicalTrendLineCount() {
         def lineCount = null
         if(unit == '%') lineCount = ', count: 5';
-        lineCount = ', count: -1';
+        else lineCount = ', count: -1';
 
         if (log.isDebugEnabled()) log.debug("historicalTrendLineCount lineCount=" + lineCount);
         return lineCount;

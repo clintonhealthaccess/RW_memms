@@ -190,7 +190,6 @@ class DashboardInitializer {
             )
          }
     }
-  
 
     public static createIndicatorCategories() {
         if(!IndicatorCategory.findByCode(CORRECTIVE_MAINTENANCE))
