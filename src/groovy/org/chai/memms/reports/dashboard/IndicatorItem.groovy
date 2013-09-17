@@ -52,7 +52,7 @@ import org.joda.time.format.DateTimeFormat
 class IndicatorItem {
 
     IndicatorComputationService indicatorComputationService
-    String indicatorValueId
+    String valueId
     String categoryCode
     Date computedAt
     String code
@@ -64,7 +64,7 @@ class IndicatorItem {
     String color
     String locationNames
 
-    Set<HistoricalValueItem> historicalValueItems
+    List<HistoricalValueItem> historicalValueItems
     List<ComparisonValueItem> highestComparisonValueItems
     List<ComparisonValueItem> higherComparisonValueItems
     List<ComparisonValueItem> lowerComparisonValueItems
@@ -73,8 +73,8 @@ class IndicatorItem {
     Map<String, Double> valuesPerGroup
     Integer totalHistoryItems
 
-    public IndicatorItem(IndicatorValue indicatorValue, ReportChartType reportChartType, User user) {
-        this.indicatorValueId = indicatorValue.id
+    public IndicatorItem(IndicatorValue indicatorValue, ReportChartType reportChartType) {
+        this.valueId = indicatorValue.id
         this.categoryCode = indicatorValue.indicator.category.code
         this.computedAt = indicatorValue.computedAt
         this.code = indicatorValue.indicator.code
@@ -108,7 +108,7 @@ class IndicatorItem {
 
         // add historical value items
         if(reportChartType == null || reportChartType == ReportChartType.HISTORIC){
-            this.historicalValueItems = new HashSet<HistoricalValueItem>()
+            this.historicalValueItems = new ArrayList<HistoricalValueItem>()
             this.historicalValueItems.addAll(getHistoricValueItems(indicatorValue))
             if (log.isDebugEnabled()) {
                 log.debug("IndicatorItem getHistoricalValueItems historical value items=" + historicalValueItems + ", size="+historicalValueItems?.size());
@@ -121,7 +121,7 @@ class IndicatorItem {
             this.higherComparisonValueItems= new ArrayList<ComparisonValueItem>()
             this.lowerComparisonValueItems= new ArrayList<ComparisonValueItem>()
             this.lowestComparisonValueItems= new ArrayList<ComparisonValueItem>()
-            getComparisonValueItems(indicatorValue, user)
+            getComparisonValueItems(indicatorValue)
             // TODO combine lists
             if (log.isDebugEnabled()) {
                 log.debug("IndicatorItem getComparisonValueItems comparison value items=" + highestComparisonValueItems + ", size="+highestComparisonValueItems?.size());
@@ -134,7 +134,7 @@ class IndicatorItem {
         // add geographical value items
         if(reportChartType == ReportChartType.GEOGRAPHIC){
             this.geographicalValueItems = new ArrayList<GeographicalValueItem>()
-            this.geographicalValueItems.addAll(getGeographicalValueItems(indicatorValue, user))
+            this.geographicalValueItems.addAll(getGeographicalValueItems(indicatorValue))
             if (log.isDebugEnabled()) {
                 log.debug("IndicatorItem getGeographicalValueItems geographical value items=" + geographicalValueItems + ", size="+geographicalValueItems?.size());
             }
@@ -154,7 +154,7 @@ class IndicatorItem {
     // historic trend chart
 
     public def getHistoricValueItems(IndicatorValue indicatorValue) {
-        def historicalValueItems = new HashSet<HistoricalValueItem>();
+        def historicalValueItems = new ArrayList<HistoricalValueItem>();
 
         if(indicatorValue != null) {
             if (log.isDebugEnabled()) log.debug("getHistoricalValueItems period " + indicatorValue.indicator.historicalPeriod);
@@ -162,7 +162,7 @@ class IndicatorItem {
             def locationReports = null
             if(indicatorValue.indicator.historicalPeriod.equals(Indicator.HistoricalPeriod.MONTHLY)){
                 locationReports = LocationReport.findAll("from LocationReport as locationReport  where locationReport.location.id='"+indicatorValue.locationReport.location.id+"' order by locationReport.eventDate desc limit "+indicatorValue.indicator.historyItems+"")
-            } 
+            }
             else if(indicatorValue.indicator.historicalPeriod.equals(Indicator.HistoricalPeriod.QUARTERLY)){
                 locationReports = LocationReport.findAll("from LocationReport as locationReport where month(locationReport.eventDate) in (3,6,9,12) and locationReport.location.id='"+indicatorValue.locationReport.location.id+"' order by locationReport.eventDate desc limit "+indicatorValue.indicator.historyItems+"")
             } 
@@ -170,14 +170,18 @@ class IndicatorItem {
                 locationReports = LocationReport.findAll("from LocationReport as locationReport where month(locationReport.eventDate) = 12 and locationReport.location.id='"+indicatorValue.locationReport.location.id+"' order by locationReport.eventDate desc limit "+indicatorValue.indicator.historyItems+"")
             }
 
-            // start TODO AR create indicator value service method
+            // start TODO create indicator value service method
             def indicatorValues = IndicatorValue.findAllByLocationReportInListAndIndicator(locationReports,indicatorValue.indicator)
             indicatorValues.sort{ a,b -> (a.computedAt <=> b.computedAt) }
             // end TODO
 
+            def valuesComputedAt = []
             indicatorValues.each{ indV ->
-                def historicalValueItem = new HistoricalValueItem(indV)
-                historicalValueItems.add(historicalValueItem)
+                if(!valuesComputedAt.contains(indV.computedAt.clearTime())){
+                    valuesComputedAt.add(indV.computedAt.clearTime())
+                    def historicalValueItem = new HistoricalValueItem(indV)
+                    historicalValueItems.add(historicalValueItem)
+                }
             }
             if (log.isDebugEnabled()) log.debug("getHistoricalValueItems historical value items =" + historicalValueItems + ", size="+historicalValueItems.size());
             return historicalValueItems
@@ -188,10 +192,14 @@ class IndicatorItem {
     public def historicalTrendData() {
         def ret = []
 
+        if(this.historicalValueItems == null || this.historicalValueItems.empty){
+            this.historicalValueItems.addAll(getHistoricValueItems(indicatorValue))
+        }
+
         def i = 0
         def fmt = DateTimeFormat.forPattern("MMM d, y")
-        for(HistoricalValueItem h: historicalValueItems) {
-            ret[i] = ["\""+fmt.print(h.computedAt.time)+"\"",h.value]
+        for(HistoricalValueItem historicalValueItem: historicalValueItems) {
+            ret[i] = ["\""+fmt.print(historicalValueItem.computedAt.time)+"\"",historicalValueItem.value]
             i++
         }
         if(i == 0) {
@@ -203,41 +211,64 @@ class IndicatorItem {
     }
 
     public def historicalTrendVAxisFormat() {
-        if (log.isDebugEnabled()) log.debug("historicalTrendVAxisFormat unit=" + unit);
+        def vAxisFormat = null
+        if(unit == '%') vAxisFormat =  '0%';
+        else vAxisFormat = '###,##0 ' + unit;
 
-        if(unit == '%') return '0%';
-        return '###,##0 ' + unit;
+        if (log.isDebugEnabled()) log.debug("historicalTrendVAxisFormat vAxisFormat=" + vAxisFormat);
+        return vAxisFormat;
     }
 
     public def historicalTrendMaxValue() {
-        if (log.isDebugEnabled()) log.debug("historicalTrendMaxValue unit=" + unit);
+        def maxValue = null
+        if(unit == '%') maxValue = ', maxValue: 1';
+        else maxValue = ''
 
-        if(unit == '%') return ', maxValue: 1';
-        return '';
+        if (log.isDebugEnabled()) log.debug("historicalTrendMaxValue maxValue=" + maxValue);
+        return maxValue;
     }
 
     public def historicalTrendLineCount() {
-        if (log.isDebugEnabled()) log.debug("historicalTrendLineCount unit=" + unit);
+        def lineCount = null
+        if(unit == '%') lineCount = ', count: 5';
+        lineCount = ', count: -1';
 
-        if(unit == '%') return ', count: 5';
-        return ', count: -1';
+        if (log.isDebugEnabled()) log.debug("historicalTrendLineCount lineCount=" + lineCount);
+        return lineCount;
     }
 
     // comparison chart
 
-    public void getComparisonValueItems(IndicatorValue currentValue, User user){
+    public void getComparisonValueItems(IndicatorValue currentValue){
         List<IndicatorValue> invVs=new ArrayList<IndicatorValue>()
         if(currentValue!=null) {
-            def  similarLocations=getSimilarLocations(currentValue, user)
-            def locationReports=LocationReport.findAllByMemmsReportAndLocationInList(currentValue.locationReport.memmsReport,similarLocations)
-            invVs.addAll(IndicatorValue.findAllByLocationReportInListAndIndicator(locationReports,currentValue.indicator))
+            def  similarLocations=getSimilarLocations(currentValue)
+
+            def memmsReport = currentValue.locationReport.memmsReport
+            if (log.isDebugEnabled()) log.debug("getGeographicalValueItems memms report item=" + memmsReport + ", location report items size="+memmsReport.locationReports.size());
+
+            similarLocations.each { similarLocation ->
+                def locationReport = null
+                locationReport = memmsReport.locationReports.find{ it.location.equals(similarLocation) }
+
+                if(locationReport != null){
+                    def indV = locationReport.indicatorValues.find{ it.indicator.equals(currentValue.indicator) }
+                    if (log.isDebugEnabled()) log.debug("getGeographicalValueItems ind value item=" + indV);
+                    if(indV != null){
+                        invVs.add(indV)
+                    }
+                }
+                // else{
+                //     def geoValueItem = new GeographicalValueItem(currentValue, similarLocation)
+                //     geographicalValueItems.add(geoValueItem)
+                // }
+            }
             sortComparisonValues(currentValue,invVs)
         }
     }
 
-    public def getSimilarLocations(IndicatorValue indicatorValue, User user){
+    public def getSimilarLocations(IndicatorValue indicatorValue){
         def  similarLocations=[]
-        def locationIds=getLocationsIdWithUsers()
         if(indicatorValue!=null){
             def comparisonLocation = indicatorValue.locationReport.location
             if(comparisonLocation instanceof Location)
@@ -245,8 +276,8 @@ class IndicatorItem {
             else{
                 similarLocations.add(comparisonLocation)
                 similarLocations.addAll(comparisonLocation?.manages)
-                if (log.isDebugEnabled()) log.debug("getGeographicalValueItems similarLocations=" + similarLocations + ", size="+similarLocations.size());
             }
+            if (log.isDebugEnabled()) log.debug("getGeographicalValueItems similarLocations=" + similarLocations + ", size="+similarLocations.size());
         }
         if (log.isDebugEnabled()) log.debug("getSimilarLocations similarLocations size="+similarLocations?.size());
         return similarLocations
@@ -292,32 +323,27 @@ class IndicatorItem {
             }
             def lowestCounter=0
             def highestcounter=0
+
             for(IndicatorValue indicatorValue: listOfLowest.reverse()){
                 if(lowestCounter < 3)
                 this.lowestComparisonValueItems.add(new ComparisonValueItem(indicatorValue))
                 lowestCounter++
             }
+            if(green < red) this.lowestComparisonValueItems = this.lowestComparisonValueItems.reverse()
+
             for(IndicatorValue indicatorValue:listOfHighest.reverse()){
                 if(highestcounter < 3)
                 this.highestComparisonValueItems.add(new ComparisonValueItem(indicatorValue))
                 highestcounter++
             }
+            if(green < red) this.highestComparisonValueItems = this.highestComparisonValueItems.reverse()
         }
         this.higherComparisonValueItems.reverse()
     }
 
-    public def getLocationsIdWithUsers(){
-        List<Long> locations=new ArrayList<Long>();
-        for(User user:User.findAll()){
-            if(user.location!=null)
-            locations.add(user.location.id)
-        }
-        return locations
-    }
-
     // geographic trend chart
 
-    public def getGeographicalValueItems(IndicatorValue indicatorValue, User user){
+    public def getGeographicalValueItems(IndicatorValue indicatorValue){
         def geographicalValueItems = new ArrayList<GeographicalValueItem>();
 
         if(indicatorValue!=null){
@@ -329,23 +355,65 @@ class IndicatorItem {
             if(geographicalLocation instanceof Location)
                 geographicalLocations.addAll(geographicalLocation.collectDataLocations(null))
             else{
-                geographicalLocations.add(geographicalLocation)
                 geographicalLocations.addAll(geographicalLocation?.manages)
-                if (log.isDebugEnabled()) log.debug("getGeographicalValueItems geographicalLocations=" + geographicalLocations + ", size="+geographicalLocations.size());
             }
+            if (log.isDebugEnabled()) log.debug("getGeographicalValueItems geographicalLocations=" + geographicalLocations + ", size="+geographicalLocations.size());
 
             def memmsReport = indicatorValue.locationReport.memmsReport
-            def locationReports=LocationReport.findAllByMemmsReportAndLocationInList(memmsReport,geographicalLocations)
-            if (log.isDebugEnabled()) log.debug("getGeographicalValueItems location report items=" + locationReports + ", size="+locationReports.size());
-            def indicatorValues = IndicatorValue.findAllByLocationReportInListAndIndicator(locationReports,indicatorValue.indicator)
-            indicatorValues.each{ indV ->
-                geographicalValueItem = new GeographicalValueItem(indV)
-                geographicalValueItems.add(geographicalValueItem)
+            if (log.isDebugEnabled()) log.debug("getGeographicalValueItems memms report item=" + memmsReport + ", location report items size="+memmsReport.locationReports.size());
+
+            geographicalLocations.each { geoLocation ->
+                def locationReport = null
+                locationReport = memmsReport.locationReports.find{ it.location.equals(geoLocation) }
+
+                if(locationReport != null){
+                    def indV = locationReport.indicatorValues.find{ it.indicator.equals(indicatorValue.indicator) }
+                    if (log.isDebugEnabled()) log.debug("getGeographicalValueItems ind value item=" + indV);
+                    if(indV != null){
+                        def geoValueItem = new GeographicalValueItem(indV)
+                        geographicalValueItems.add(geoValueItem)
+                    }
+                }
+                else{
+                    def geoValueItem = new GeographicalValueItem(indicatorValue, geoLocation)
+                    geographicalValueItems.add(geoValueItem)
+                }
             }
+            
             if (log.isDebugEnabled()) log.debug("getGeographicalValueItems geographical value items=" + geographicalValueItems + ", size="+geographicalValueItems.size());
             return geographicalValueItems
         }
         return null
+    }
+
+    public def geoTrendMinValue() {
+        def minValue = null
+
+        if(this.geographicalValueItems == null || this.geographicalValueItems.empty){
+            this.geographicalValueItems.addAll(getGeographicalValueItems(indicatorValue))
+        }
+
+        if(this.geographicalValueItems != null && !this.geographicalValueItems.empty){
+            geographicalValueItems.sort{ a,b -> (a.value <=> b.value) }
+            minValue = geographicalValueItems[0].value
+        }
+        if (log.isDebugEnabled()) log.debug("geoTrendMinValue minValue=" + minValue);
+        return minValue
+    }
+
+    public def geoTrendMaxValue() {
+        def maxValue = null
+
+        if(this.geographicalValueItems == null || this.geographicalValueItems.empty){
+            this.geographicalValueItems.addAll(getGeographicalValueItems(indicatorValue))
+        }
+
+        if(this.geographicalValueItems != null && !this.geographicalValueItems.empty){
+            geographicalValueItems.sort{ a,b -> (a.value <=> b.value) }
+            maxValue = geographicalValueItems[-1].value
+        }
+        if (log.isDebugEnabled()) log.debug("geoTrendMaxValue maxValue=" + maxValue);
+        return maxValue
     }
 
     public geoData() {
@@ -355,7 +423,7 @@ class IndicatorItem {
             this.geographicalValueItems.addAll(getGeographicalValueItems(indicatorValue))
         }
 
-        ret.add(["\'Lat\'", "\'Long\'", "\'Location\'", "\'"+names+"\'"])
+        ret.add(["\'Lat\'","\'Long\'","\'Location\'","\'"+names+"\'"]) //,"\'{type: \'string\', role: \'tooltip\'}\'"])
         geographicalValueItems.eachWithIndex{ geoValueItem, i ->
             if((geoValueItem.latitude != null) && (geoValueItem.latitude != 0.0) && 
                     (geoValueItem.longitude != null) && (geoValueItem.longitude != 0.0))
@@ -372,14 +440,12 @@ class IndicatorItem {
             this.geographicalValueItems.addAll(getGeographicalValueItems(indicatorValue))
         }
 
-        Map<Double,String> map = new TreeMap<Double,String>()
-        geographicalValueItems.each{ geoValueItem ->
-            map.put(geoValueItem.value,geoValueItem.color)
-        }
-
+        def colors = ["black":0,"red":1,"yellow":2,"#green":3]
+        // sort geo value items by asc value, then by color
+        geographicalValueItems.sort{ a,b -> (a.value <=> b.value) ?: (colors[a.color] <=> colors[b.color]) }
         def ret = []
-        map.keySet().eachWithIndex{ val, i ->
-            ret[i++] = val
+        geographicalValueItems.eachWithIndex{ geoValueItem, i ->
+            ret[i++] = geoValueItem.value
         }
 
         if (log.isDebugEnabled()) log.debug("geoValues ret=" + ret);
@@ -394,19 +460,17 @@ class IndicatorItem {
     }
 
     public geoColors() {
-        Map<Double,String> map = new TreeMap<Double,String>()
 
         if(this.geographicalValueItems == null || this.geographicalValueItems.empty){
             this.geographicalValueItems.addAll(getGeographicalValueItems(indicatorValue))
         }
 
-        geographicalValueItems.each{ geoValueItem ->
-            map.put(geoValueItem.value,geoValueItem.color)
-        }
-
+        def colors = ["black":0,"red":1,"yellow":2,"green":3]
+        // sort geo value items by asc value, then by color
+       geographicalValueItems.sort{ a,b -> (a.value <=> b.value) ?: (colors[a.color] <=> colors[b.color]) }
         def ret = []
-        map.keySet().eachWithIndex{ val, i ->
-            ret[i++] = "\'"+map.get(val)+"\'"
+        geographicalValueItems.eachWithIndex{ geoValueItem, i ->
+            ret[i++] = "\'"+geoValueItem.color+"\'"
         }
 
         if (log.isDebugEnabled()) log.debug("geoColors ret=" + ret);

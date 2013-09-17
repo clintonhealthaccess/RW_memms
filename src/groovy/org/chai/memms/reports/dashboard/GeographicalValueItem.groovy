@@ -55,9 +55,43 @@ class GeographicalValueItem {
         this.value = iv.computedValue
         this.unit = iv.indicator.unit
 
-        def location = iv.locationReport.location
-        this.dataLocation = location.names
+        this.dataLocation = iv.locationReport.location.names
+        geoCoordinates(iv.locationReport.location)
+        geoColor(iv.indicator.redToYellowThreshold, iv.indicator.yellowToGreenThreshold)
+    }
 
+    public GeographicalValueItem(IndicatorValue iv, def location){
+        if(iv.indicator.unit == '%') 
+            this.value = -0.01
+        else this.value = -1
+        this.unit = iv.indicator.unit
+
+        this.dataLocation = location.names
+        geoCoordinates(location)
+        this.color = "black"
+    }
+
+    def geoColor(Double red, Double green){
+        if(red < green) {
+            if(this.value < red) {
+                this.color = "red"
+            } else if(this.value < green) {
+                this.color = "yellow"
+            } else {
+                this.color = "green"
+            }
+        } else {
+            if(this.value > red) {
+                this.color = "red"
+            } else if(this.value > green) {
+                this.color = "yellow"
+            } else {
+                this.color = "green"
+            }
+        }
+    }
+
+    def geoCoordinates(def location){
         def coordinates = location.coordinates
         if (log.isDebugEnabled()) log.debug("GeographicalValueItem coordinates " + coordinates);
 
@@ -119,26 +153,6 @@ class GeographicalValueItem {
                 def lat = coordinate.split(',')[1];
                 this.latitude = lat.toDouble();
                 this.longitude = lng.toDouble();
-            }
-        }
-
-        Double red = iv.indicator.redToYellowThreshold
-        Double green =  iv.indicator.yellowToGreenThreshold
-        if(red < green) {
-            if(this.value < red) {
-                this.color = "red"
-            } else if(this.value < green) {
-                this.color = "yellow"
-            } else {
-                this.color = "green"
-            }
-        } else {
-            if(this.value > red) {
-                this.color = "red"
-            } else if(this.value > green) {
-                this.color = "yellow"
-            } else {
-                this.color = "green"
             }
         }
     }

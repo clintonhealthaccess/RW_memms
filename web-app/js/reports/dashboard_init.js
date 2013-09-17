@@ -3,6 +3,9 @@ $(document).ready(function(){
 	// load dashboard stuff here
 	// ...
 
+	// spinner
+	$('.spinner-container').hide();
+
 	// filters show/hide
 	$('#js-filters-toggle').click(function(e) {
 		e.preventDefault();
@@ -21,12 +24,12 @@ $(document).ready(function(){
 
 		var chartTabs = $(selectedIndicatorRow).children('div').children('ul.v-tabs-nested-nav').children('li');
 		var charts = $(selectedIndicatorRow).children('div.v-tabs-fold-container');
+		$(charts).children('div.v-chart').hide();
 
 		if(selectedIndicatorRow.hasClass('selected')) {
 		  //collapse indicator
 		  selectedIndicatorRow.removeClass('selected');
 		  chartTabs.children('a').removeClass('active');
-		  $(charts).children('div.v-chart').hide();
 		} 
 		else {
 		  //expand indicator
@@ -35,7 +38,6 @@ $(document).ready(function(){
 		  $(chartTabs).children('a').removeClass('active');
 		  $(selectedChartTab).addClass('active');
 		  var selectedChart = $(charts).children('div.v-chart').first();
-		  $(charts).children('div.v-chart').hide();
 		  $(selectedChart).show();
 		}
 		selectedIndicatorRow.children('.v-tabs-fold-container').toggle(500);
@@ -43,19 +45,19 @@ $(document).ready(function(){
 
 	// if indicator chart tab clicked, switch to selected chart
 	$('ul.v-tabs-nested-nav').children('li').children('a').click(function(e) {
+
 		var selectedChartTab = $(this);
 		var indicatorCode = selectedChartTab.data('indicator-code');
 		var selectedIndicatorRow = $('li.v-tabs-row[data-indicator-code="'+indicatorCode+'"]');
+		
+		var charts = $(selectedIndicatorRow).children('div.v-tabs-fold-container');
+		$(charts).children('div.v-chart').hide();
+
+		$('.spinner-container').show();
 
 		var chartTabs = $(selectedIndicatorRow).children('div').children('ul.v-tabs-nested-nav').children('li');
-		var charts = $(selectedIndicatorRow).children('div.v-tabs-fold-container');
-		var chartType = selectedChartTab.data('chart-type');
-
 		$(chartTabs).children('a').removeClass('active');
 		selectedChartTab.addClass('active');
-		var selectedChart = $(charts).children('div.v-chart[data-chart-type="'+chartType+'"]');
-		$(charts).children('div.v-chart').hide();
-		$(selectedChart).show();
 	});
 
 	$('#checkbox-green').change(function() {
@@ -83,3 +85,16 @@ $(document).ready(function(){
 	});
 
 });
+
+// function showSpinner(){
+// 	$('.spinner-container').show();
+// }
+function hideSpinner(indicatorCode, chartType){
+	var selectedIndicatorRow = $('li.v-tabs-row[data-indicator-code="'+indicatorCode+'"]');
+	var charts = $(selectedIndicatorRow).children('div.v-tabs-fold-container');
+	var selectedChart = $(charts).children('div.v-chart[data-chart-type="'+chartType+'"]');
+
+	$('.spinner-container').hide();
+
+	$(selectedChart).show();
+}

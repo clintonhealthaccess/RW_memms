@@ -33,6 +33,8 @@ import org.apache.shiro.SecurityUtils;
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+import java.net.URLEncoder;
+
 class UtilTagLib {
 	
 	def languageService
@@ -40,6 +42,18 @@ class UtilTagLib {
 	def workOrderNotificationService
 	
 	def userService
+
+	def googleWebFontsApi = { attrs, body ->
+		// load Droid Sans from Google Webfonts
+		out << '<link href="http://fonts.googleapis.com/css?family=Droid+Sans:400,700&subset=latin" rel="stylesheet" type="text/css">'
+	}
+
+	def googleAjaxApi = { attrs, body ->
+		// https://developers.google.com/chart/interactive/docs/library_loading_enhancements
+		// autoload={'modules':[{'name':'visualization','version':'1','packages':['corechart','geochart']}]}
+		def autoload = URLEncoder.encode("{'modules':[{'name':'visualization','version':'1','packages':['corechart','geochart']}]}")
+		out << '<script type="text/javascript" src="https://www.google.com/jsapi?autoload='+autoload+'"></script>'
+	}
 	
 	def equipmentRegistration = { attrs, body ->
 		def user = User.findByUuid(SecurityUtils.subject.principal, [cache: true])
@@ -49,13 +63,13 @@ class UtilTagLib {
 			out << '<a href=' + createLinkWithTargetURI(controller: "equipment", action: "create", params:["dataLocation.id": attrs["dataLocation"] ]) + ' class="next medium left push-r">' + message(code:"default.new.label" , args: attrs["entityName"] ) + '</a>'
 		else
 			out << '<a href=' + createLinkWithTargetURI(controller: "equipmentView", action: "selectFacility") + ' class="next medium left push-r">' + message(code:"default.new.label" , args: attrs["entityName"] ) + '</a>'
-
 	}
 	
 	def notificationCount = { attrs, body ->
 		def user = User.findByUuid(SecurityUtils.subject.principal, [cache: true])
 		out << workOrderNotificationService.getUnreadNotifications(user)
 	}
+
 	def createLinkWithTargetURI = {attrs, body ->
 		if (attrs['params'] == null) attrs['params'] = [:]
 		else attrs['params'] = new HashMap(attrs['params'])

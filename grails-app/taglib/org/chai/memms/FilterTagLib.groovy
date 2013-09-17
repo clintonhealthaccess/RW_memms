@@ -81,7 +81,6 @@ class FilterTagLib {
 		}
 	}
 	
-	
 	// attrs['skipLevels'] is only needed for reports with both top-level locationFilter & levelFilter
 	def createLinkByFilter = {attrs, body ->
 		if (attrs['params'] == null) attrs['params'] = [:]

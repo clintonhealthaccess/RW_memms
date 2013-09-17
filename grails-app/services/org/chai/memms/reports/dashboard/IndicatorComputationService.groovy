@@ -89,11 +89,11 @@ class IndicatorComputationService {
 
         // today and yesterday reports
         def today = DateTime.now()
-        def yesterday = null //if "yesterday" is in the same month as "today", it will be computed, but will be removed when "today" is computed
-        if(today.minus(1).getMonthOfYear() == today.getMonthOfYear()){
-            yesterday = today.minus(1)
-            reportDates.add(yesterday)
-        }
+        // def yesterday = null //if "yesterday" is in the same month as "today", it will be computed, but will be removed when "today" is computed
+        // if(today.minus(1).getMonthOfYear() == today.getMonthOfYear()){
+        //     yesterday = today.minus(1)
+        //     reportDates.add(yesterday)
+        // }
 
         // These are only needed for dev historic trend chart
         // reportDates.addAll([oneYearAgo, sixMonthsAgo])

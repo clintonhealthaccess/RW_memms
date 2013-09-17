@@ -54,6 +54,6 @@ class LocationReport {
 
     @Override
     public String toString() {
-        return "LocationReport[ id = " + id + ", eventDate = " + eventDate + " location = " + location + "]"
+        return "LocationReport[ id = " + id + ", eventDate = " + eventDate + " location = " + location.names + "]"
     }
 }
