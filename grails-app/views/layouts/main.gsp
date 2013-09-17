@@ -73,9 +73,7 @@
             <g:message code="header.labels.helpdesk"/></a>
         </li>
       </ul>
-
     </div>
-
   </div>
   <% def user = User.findByUuid(SecurityUtils.subject.principal, [cache: true]) %>
   <div id="navigation">
@@ -160,7 +158,7 @@
               </shiro:hasPermission>
               <shiro:hasPermission permission="menu:equipmentExport">
                 <li>
-                  <a href="${createLink(controller: 'equipmentView', action:'generalExport')}">
+                  <a href="${createLink(controller:'equipmentView', action:'generalExport')}">
                     <g:message code="equipment.export.label"/>
                   </a>
                 </li>
