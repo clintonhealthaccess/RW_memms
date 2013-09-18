@@ -14,13 +14,13 @@
                 sizeAxis: {minValue:${indicatorItem.geoTrendMinValue()}, maxValue:${indicatorItem.geoTrendMaxValue()}},
                 // enableRegionInteractivity: 'true', // If true, also enables region selection and firing of regionClick and select events on mouse click
                 tooltip:{showColorCode: true},
-                width: 800,
-                height: 300
+                width: 1000,
+                height: 500
             }
             var chart = new google.visualization.GeoChart(document.getElementById('geo_chart_${indicatorItem.code}'));
             chart.draw(data, options);
         };
     </script>
-    <div id="geo_chart_${indicatorItem.code}" style="width:800px; height:400px;"></div>
+    <div id="geo_chart_${indicatorItem.code}"></div>
   </g:if>
 </div>

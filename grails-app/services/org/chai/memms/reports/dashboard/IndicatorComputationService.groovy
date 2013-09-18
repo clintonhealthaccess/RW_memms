@@ -156,6 +156,7 @@ class IndicatorComputationService {
                     if(map!=null) {
                         for (Map.Entry<String, Double> entry : (Set)map.entrySet()){
                             if (log.isDebugEnabled()) log.debug("computeLocationReport entry.getKey() " + entry.getKey() + " entry.getValue() " + entry.getValue());
+                            
                             DashboardInitializer.newGroupIndicatorValue(currentDate,['en':entry.getKey(),'fr':entry.getKey()],entry.getValue(),indicatorValue)
                             if (log.isDebugEnabled()) log.debug("groupIndicatorValue " + groupIndicatorValue);
                         }
