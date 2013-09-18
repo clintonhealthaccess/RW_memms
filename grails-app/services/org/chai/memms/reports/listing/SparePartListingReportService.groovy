@@ -134,12 +134,12 @@ class SparePartListingReportService {
 					inList ("status",sparePartStatus)
 				
 				or{
-					if(fromAcquisitionPeriod != null)
+					if(fromAcquisitionPeriod && fromAcquisitionPeriod != null)
 						gt ("purchaseDate", fromAcquisitionPeriod)
-					if(toAcquisitionPeriod != null)
+					if(toAcquisitionPeriod && toAcquisitionPeriod != null)
 						lt ("purchaseDate", toAcquisitionPeriod)	
-					if(noAcquisitionPeriod != null)
-						eq ("purchaseDate", null)
+					if(noAcquisitionPeriod && noAcquisitionPeriod != null)
+						isNull("purchaseDate")
 				}
 			}
 		}
