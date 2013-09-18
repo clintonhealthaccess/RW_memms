@@ -29,16 +29,15 @@
 
       <div>
         <ul class="v-tabs-list">
+          <div class="spinner-container">
+            <img src="${resource(dir:'images',file:'list-spinner.gif')}" class="ajax-big-spinner"/>
+          </div>
           <g:each in="${categoryItem.indicatorItems}" status="indicatorCount" var="indicatorItem">
             <li class="v-tabs-row v-tabs-row-${indicatorItem.color}" data-indicator-code="${indicatorItem.code}">
               <p>
-                %{-- <a class="v-tabs-name v-tabs-fold-toggle" data-indicator-code="${indicatorItem.code}">
-                  <span class="v-tabs-switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
-                  ${indicatorItem.names}
-                </a> --}%
                 <g:remoteLink class="v-tabs-name v-tabs-fold-toggle" data-indicator-code="${indicatorItem.code}"
                     action="dashboardChart" update="historicTrend_${indicatorItem.code}" 
-                    params="[indicatorValueId:indicatorItem.indicatorValueId, reportChartType:ReportChartType.HISTORIC]" onSuccess="drawLineChart()">
+                    params="[valueId:indicatorItem.valueId, reportChartType:ReportChartType.HISTORIC]" onSuccess="drawLineChart()">
                   <span class="v-tabs-switch"><img src="${resource(dir:'images',file:'arrow.png')}"/></span>
                   ${indicatorItem.names}
                 </g:remoteLink>
@@ -55,6 +54,7 @@
               <div class="v-tabs-fold-container" data-indicator-code="${indicatorItem.code}">
                 <!-- chart type tabs template -->
                 <g:render template="/reports/dashboard/dashboardChartTypeTabs" model="[indicatorItem:indicatorItem]" />
+                
                 <!-- historic trend -->
                 <div class="v-chart" data-chart-type="historic_trend">
                   <div id="historicTrend_${indicatorItem.code}">

@@ -57,9 +57,7 @@ class DashboardController extends AbstractController {
     def dashboard = {
         //indicatorComputationService.computeCurrentReport()
 
-        User user =  User.findByUuid(SecurityUtils.subject.principal, [cache: true])
-
-        LocationReport report = getUserReport(user)
+        LocationReport report = getUserReport()
         def reportType = getReportType()
         
         def category = IndicatorCategory.findByCode(reportType.reportType)
@@ -69,7 +67,7 @@ class DashboardController extends AbstractController {
             Set<IndicatorValue> indicatorValues = report.indicatorValues.findAll{ it.indicator.category.equals(category) }
             if(indicatorValues != null && !indicatorValues.empty){
                 indicatorValues.each { indicatorValue ->
-                    def indicatorItem = new IndicatorItem(indicatorValue, null, user)
+                    def indicatorItem = new IndicatorItem(indicatorValue, null)
                     categoryItem.indicatorItems.add(indicatorItem)
                 }
             }
@@ -92,17 +90,15 @@ class DashboardController extends AbstractController {
         if (log.isDebugEnabled())
             log.debug("dashboard.dashboardChart start, params:"+params)
 
-        User user =  User.findByUuid(SecurityUtils.subject.principal, [cache: true])
-
         def reportType = getReportType()
         def reportChartType = getReportChartType()
 
         def category = IndicatorCategory.findByCode(reportType.reportType)
-        def indicatorValue = IndicatorValue.get(params.get('indicatorValueId'))
+        def indicatorValue = IndicatorValue.get(params.get('valueId'))
 
         def indicatorItem = null
         if(indicatorValue != null){
-            indicatorItem = new IndicatorItem(indicatorValue, reportChartType, user)
+            indicatorItem = new IndicatorItem(indicatorValue, reportChartType)
         }
 
         def template = null
@@ -131,10 +127,11 @@ class DashboardController extends AbstractController {
         ])
     }
        
-    def getUserReport(def user) {
+    def getUserReport() {
         MemmsReport memmsReport = dashboardService.getCurrentMemmsReport()
         if(memmsReport == null) return null
 
+        User user =  User.findByUuid(SecurityUtils.subject.principal, [cache: true])
         if(user == null) return null
 
         return LocationReport.findByMemmsReportAndLocation(memmsReport, user.location)
@@ -145,7 +142,7 @@ class DashboardController extends AbstractController {
         if(params.get('reportType') != null && !params.get('reportType').empty)
             reportType = params.get('reportType')
         if(log.isDebugEnabled()) log.debug("abstract.reportType param:"+reportType+")")
-        if(reportType == null) reportType = ReportType.PREVENTIVE
+        if(reportType == null) reportType = ReportType.CORRECTIVE
         return reportType
     }
 

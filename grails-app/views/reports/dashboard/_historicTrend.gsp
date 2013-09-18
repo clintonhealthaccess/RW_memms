@@ -1,8 +1,6 @@
 <div>
   <g:if test="${indicatorItem.historicalValueItems != null && !indicatorItem.historicalValueItems.empty}">
     <script type="text/javascript">
-      // alert('historic trend chart!');
-      // google.setOnLoadCallback(drawLineChart);
       function drawLineChart() {
           data = new google.visualization.DataTable();
           data.addColumn('string', 'Date');
@@ -15,10 +13,19 @@
             legend: 'none',
             pointSize: 12,
             colors: [['${indicatorItem.color}']],
-            vAxis: {format:'${indicatorItem.historicalTrendVAxisFormat()}', title: '${indicatorItem.names}', gridlines:{color: 'lightgray' ${indicatorItem.historicalTrendLineCount()}}, minValue: 0 ${indicatorItem.historicalTrendMaxValue()}},
-            hAxis: {gridlines:{color: 'lightgray', count: ${indicatorItem.totalHistoryItems + 1}}, minValue: 0, maxValue: ${indicatorItem.totalHistoryItems}},
+            vAxis:{
+                    format:'${indicatorItem.historicalTrendVAxisFormat()}', 
+                    title:'${indicatorItem.names}', 
+                    gridlines:{color:'lightgray' ${indicatorItem.historicalTrendLineCount()}}, 
+                    minValue:0 ${indicatorItem.historicalTrendMaxValue()}
+                  },
+            hAxis:{
+                    gridlines:{color: 'lightgray', count:${indicatorItem.totalHistoryItems + 1}}, 
+                    minValue: 0, 
+                    maxValue: ${indicatorItem.totalHistoryItems}
+                  },
             fontSize: 12,
-            width: 900,
+            width: 800,
             height: 300
           }
           var chart = new google.visualization.LineChart(document.getElementById('historic_chart_${indicatorItem.code}'));

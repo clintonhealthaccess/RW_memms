@@ -89,11 +89,11 @@ class IndicatorComputationService {
 
         // today and yesterday reports
         def today = DateTime.now()
-        def yesterday = null //if "yesterday" is in the same month as "today", it will be computed, but will be removed when "today" is computed
-        if(today.minus(1).getMonthOfYear() == today.getMonthOfYear()){
-            yesterday = today.minus(1)
-            reportDates.add(yesterday)
-        }
+        // def yesterday = null //if "yesterday" is in the same month as "today", it will be computed, but will be removed when "today" is computed
+        // if(today.minus(1).getMonthOfYear() == today.getMonthOfYear()){
+        //     yesterday = today.minus(1)
+        //     reportDates.add(yesterday)
+        // }
 
         // These are only needed for dev historic trend chart
         // reportDates.addAll([oneYearAgo, sixMonthsAgo])
@@ -157,7 +157,7 @@ class IndicatorComputationService {
                         for (Map.Entry<String, Double> entry : (Set)map.entrySet()){
                             if (log.isDebugEnabled()) log.debug("computeLocationReport entry.getKey() " + entry.getKey() + " entry.getValue() " + entry.getValue());
                             DashboardInitializer.newGroupIndicatorValue(currentDate,['en':entry.getKey(),'fr':entry.getKey()],entry.getValue(),indicatorValue)
-                            if (log.isDebugEnabled()) log.debug("groupIndicatorValue +++====>" + groupIndicatorValue);
+                            if (log.isDebugEnabled()) log.debug("groupIndicatorValue " + groupIndicatorValue);
                         }
                           
                     }

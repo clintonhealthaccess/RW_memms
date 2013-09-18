@@ -70,6 +70,10 @@ class ComparisonValueItem  implements Comparable<ComparisonValueItem> {
         }
     }
 
+    public ComparisonValueItem(IndicatorValue iv, def location){
+        // TODO
+    }
+
     @Override
     public String toString() {
         return "ComparisonValueItem[facility:" +facility + "value:"+value+"]"
