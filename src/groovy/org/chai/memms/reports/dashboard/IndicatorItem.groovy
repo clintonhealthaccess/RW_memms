@@ -440,7 +440,7 @@ class IndicatorItem {
             this.geographicalValueItems.addAll(getGeographicalValueItems(indicatorValue))
         }
 
-        def colors = ["black":0,"red":1,"yellow":2,"#green":3]
+        def colors = ["gray":0,"red":1,"yellow":2,"#green":3]
         // sort geo value items by asc value, then by color
         geographicalValueItems.sort{ a,b -> (a.value <=> b.value) ?: (colors[a.color] <=> colors[b.color]) }
         def ret = []
@@ -465,7 +465,7 @@ class IndicatorItem {
             this.geographicalValueItems.addAll(getGeographicalValueItems(indicatorValue))
         }
 
-        def colors = ["black":0,"red":1,"yellow":2,"green":3]
+        def colors = ["gray":0,"red":1,"yellow":2,"green":3]
         // sort geo value items by asc value, then by color
        geographicalValueItems.sort{ a,b -> (a.value <=> b.value) ?: (colors[a.color] <=> colors[b.color]) }
         def ret = []

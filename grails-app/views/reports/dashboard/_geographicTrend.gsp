@@ -10,10 +10,11 @@
                 resolution: 'provinces',
                 displayMode: 'markers',
                 colorAxis: {values:${indicatorItem.geoValues()}},
-                colors:${indicatorItem.geoColors()},
+                colors: ${indicatorItem.geoColors()},
                 sizeAxis: {minValue:${indicatorItem.geoTrendMinValue()}, maxValue:${indicatorItem.geoTrendMaxValue()}},
-                // enableRegionInteractivity: 'true', // If true, also enables region selection and firing of regionClick and select events on mouse click
-                tooltip:{showColorCode: true},
+                enableRegionInteractivity: 'true', // If true, also enables region selection and firing of regionClick and select events on mouse click
+                legend: {textStyle: {fontName:'Arial', fontSize:12}, numberFormat:'${indicatorItem.geoValuesFormat()}'},
+                tooltip: {textStyle: {fontName:'Arial', fontSize:12}, showColorCode:true},
                 width: 1000,
                 height: 500
             }

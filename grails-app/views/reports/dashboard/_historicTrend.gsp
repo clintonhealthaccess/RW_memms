@@ -9,7 +9,7 @@
           formatter = new google.visualization.NumberFormat({pattern:'${indicatorItem.historicalTrendVAxisFormat()}'});
           formatter.format(data,1);
           var options = {
-            tooltip: {isHtml: true},
+            tooltip: {textStyle: {fontName:'Arial', fontSize:12}, showColorCode:true},
             legend: 'none',
             pointSize: 12,
             colors: [['${indicatorItem.color}']],
@@ -32,6 +32,6 @@
           chart.draw(data, options);
       }
     </script>
-    <div id="historic_chart_${indicatorItem.code}" style="width:800px; height:400px; overflow: auto;" ></div>
+    <div id="historic_chart_${indicatorItem.code}"></div>
   </g:if>
 </div>

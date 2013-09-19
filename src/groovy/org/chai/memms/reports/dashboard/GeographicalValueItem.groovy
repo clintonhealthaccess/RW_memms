@@ -68,7 +68,7 @@ class GeographicalValueItem {
 
         this.dataLocation = location.names
         geoCoordinates(location)
-        this.color = "black"
+        this.color = "gray"
     }
 
     def geoColor(Double red, Double green){
