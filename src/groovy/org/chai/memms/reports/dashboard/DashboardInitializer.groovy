@@ -46,18 +46,35 @@ class DashboardInitializer {
     public static final String SHARE_OPERATIONAL_SIMPLE_SLD7="select 1.0*count(equ.code)/(select count(equIn.id) as count1 from Equipment as equIn where equIn.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equIn.dataLocation @DATA_LOCATION) from Equipment as equ where equ.currentStatus='OPERATIONAL' and equ.dataLocation @DATA_LOCATION"
     public static final String SHARE_OPERATIONAL_GROUP_SLD7="select equ.type.names_en,1.0*count(equ.code)/(select count(equIn.id) as count1 from Equipment as equIn where equIn.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equIn.dataLocation @DATA_LOCATION) from Equipment as equ where equ.currentStatus='OPERATIONAL' and equ.dataLocation @DATA_LOCATION group by equ.type"
     //public static final String SHARE_OPERATIONAL_GROUP_SLD7="select "+Utils.buildSubQueryLanguages("equ.type.names")+",1.0*count(equ.code)/(select count(equIn.id) as count1 from Equipment as equIn where equIn.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equIn.dataLocation @DATA_LOCATION) from Equipment as equ where equ.currentStatus='OPERATIONAL' and equ.dataLocation @DATA_LOCATION group by equ.type"
+   
     //Slide 12:Share of obsolete equipment
     public static final String SHARE_OBSOLETE_SIMPLE_SLD12="select 1.0*count(equ.code)/(select count(equIn.code) as count1 from Equipment as equIn where equIn.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equIn.dataLocation @DATA_LOCATION) from Equipment as equ where equ.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equ.obsolete=1 and equ.dataLocation @DATA_LOCATION"
     public static final String SHARE_OBSOLETE_GROUP_SLD12="select equ.type.names_en,1.0*count(equ.code)/(select count(equIn.code) as count1 from Equipment as equIn where equIn.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equIn.dataLocation @DATA_LOCATION) from Equipment as equ where equ.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equ.obsolete=1 and equ.dataLocation @DATA_LOCATION group by equ.type"
     //public static final String SHARE_OBSOLETE_GROUP_SLD12="select "+Utils.buildSubQueryLanguages("equ.type.names")+",1.0*count(equ.code)/(select count(equIn.code) as count1 from Equipment as equIn where equIn.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equIn.dataLocation @DATA_LOCATION) from Equipment as equ where equ.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equ.obsolete=1 and equ.dataLocation @DATA_LOCATION group by equ.type"
+    
+    //Slide 14:Share of equipment with lifetime expiring in less than 2 years
+    public static final String SHARE_LIFETIME_LESS_SIMPLE_SLD14="select 1.0*count(equ.code)/(select count(equIn.code) as count1 from Equipment as equIn where equIn.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equIn.dataLocation @DATA_LOCATION) from Equipment as equ where equ.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and ((dateDiff(NOW(),equ.purchaseDate)/12)>(equ.expectedLifeTime-24)) and equ.dataLocation @DATA_LOCATION"
+    public static final String SHARE_LIFETIME_LESS_GROUP_SLD14="select equ.type.names_en, 1.0*count(equ.code)/(select count(equIn.code) as count1 from Equipment as equIn where equIn.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and equIn.dataLocation @DATA_LOCATION) from Equipment as equ where equ.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and ((dateDiff(NOW(),equ.purchaseDate)/12)>(equ.expectedLifeTime-24)) and equ.dataLocation @DATA_LOCATION group by equ.type"
+
+
     //Slie 15:Share of equipments for which a work order was generated=>rev ok
     public static final String SHARE_WORK_ORDER_GEN_SIMPLE_SLD15="select 1.0*count(equ.code)/(select count(eq.code) from Equipment eq where eq.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and eq.dataLocation @DATA_LOCATION)  from WorkOrder wOrder join wOrder.equipment equ where wOrder.equipment.id is not null and equ.dataLocation @DATA_LOCATION"
     public static final String SHARE_WORK_ORDER_GEN_GROUP_SLD15="select wOrder.equipment.type.names_en,1.0*count(wOrder.equipment.id)/(select count(eq.code) from Equipment eq where eq.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and eq.dataLocation @DATA_LOCATION)  from WorkOrder wOrder  where wOrder.equipment.id is not null and wOrder.equipment.dataLocation @DATA_LOCATION group by  wOrder.equipment.type"
     //public static final String SHARE_WORK_ORDER_GEN_GROUP_SLD15="select "+Utils.buildSubQueryLanguages("wOrder.equipment.type.names")+",1.0*count(wOrder.equipment.id)/(select count(eq.code) from Equipment eq where eq.currentStatus in ('OPERATIONAL','PARTIALLYOPERATIONAL', 'UNDERMAINTENANCE') and eq.dataLocation @DATA_LOCATION)  from WorkOrder wOrder  where wOrder.equipment.id is not null and wOrder.equipment.dataLocation @DATA_LOCATION group by  wOrder.equipment.type"
+    
     //Slie 16:Degree of corrective maintenance execution according to benchmark=rev ok
     public static final String DEGREE_CORRECTIVE_EX_SIMPLE_SLD16="select 1.0*count(wo1.id)/(select count(wo.id) from WorkOrderStatus wos join wos.workOrder wo join wo.equipment as equ where equ.dataLocation @DATA_LOCATION) from WorkOrderStatus wos1 join wos1.workOrder wo1 join wo1.equipment as equ1 where wo1.currentStatus='CLOSEDFIXED' and (dateDiff(NOW(),wo1.returnedOn) < #DEGGREE_CORRE_MAINT_EXECUTION or dateDiff(NOW(),wos1.dateCreated) < #DEGGREE_CORRE_MAINT_EXECUTION) and equ1.dataLocation @DATA_LOCATION"
     //time frame to be decided by the user
     public static final String DEGREE_CORRECTIVE_EX_GROUP_SLD16="select equ1.type.names_en as names,1.0*count(wo1.id)/(select count(wo.id) from WorkOrderStatus wos join wos.workOrder wo join wo.equipment as equ where equ.dataLocation @DATA_LOCATION) as final_result from WorkOrderStatus wos1 join wos1.workOrder wo1 join wo1.equipment as equ1 where wo1.currentStatus='CLOSEDFIXED' and (dateDiff(NOW(),wo1.returnedOn) < #DEGGREE_CORRE_MAINT_EXECUTION or dateDiff(NOW(),wos1.dateCreated) < #DEGGREE_CORRE_MAINT_EXECUTION) and equ1.dataLocation @DATA_LOCATION group by equ1.type"
+    
+    //Slide 19:Share of work orders escalated to MMC =>REV OK
+    public static final String SHARE_ESCLATED_MMC_SIMPLE_SLD19="select 1.0*count(wo.id)/(select count(wo.id) from WorkOrder wo join wo.equipment as equ where equ.dataLocation @DATA_LOCATION) from WorkOrder wo join wo.equipment as equ where wo.currentStatus='OPENATMMC' and equ.dataLocation @DATA_LOCATION"
+    public static final String SHARE_ESCLATED_MMC_GROUP_SLD19="select equ.type.names_en,1.0*count(wo.id)/(select count(wo.id) from WorkOrder wo join wo.equipment as equ where equ.dataLocation @DATA_LOCATION) from WorkOrder wo join wo.equipment as equ where wo.currentStatus='OPENATMMC' and equ.dataLocation @DATA_LOCATION group by equ.type"
+
+    //Slide 20:Average time to fix equipments
+    public static final String AVGE_FIX_SIMPLE_SLD20="select avg(temp.fromOpenToClosed) as final_result from (select dateDiff(wo.open_on,wos.date_created) as fromOpenToClosed from memms_work_order wo ,memms_equipment equ,memms_work_order_status wos  where wo.equipment_id=equ.id and wo.id=wos.work_order_id and wo.current_status='CLOSEDFIXED' and wos.status='OPENATFOSA' and equ.data_location_id @DATA_LOCATION) temp"
+    public static final String AVGE_FIX_GROUP_SLD20="select temp.typeName,avg(temp.fromOpenToClosed) as final_result from (select dateDiff(wo.open_on,wos.date_created) as fromOpenToClosed , ty.names_en as typeName,ty.id as typeId from memms_work_order wo ,memms_equipment equ,memms_equipment_type ty,memms_work_order_status wos  where equ.type_id=ty.id and wo.equipment_id=equ.id and wo.id=wos.work_order_id and wo.current_status='CLOSEDFIXED' and wos.status='OPENATFOSA' and equ.data_location_id @DATA_LOCATION) temp group by temp.typeId"
+
     // //Slide 26:Degree of execution of preventive maintenance
     public static final String DEGREE_EXCUTION_PREV_SIMPLE_SLD26="select 1.0*count(prevention.id)/(select count(prwo.id) FROM PreventiveOrder prwo join prwo.equipment as equ1  where equ1.dataLocation @DATA_LOCATION) FROM Prevention prevention join prevention.order as pOrder join pOrder.equipment as equ where equ.dataLocation @DATA_LOCATION"
     public static final String DEGREE_EXCUTION_PREV_GROUP_SLD26="select equ.type.names_en,1.0*count(prevention.id)/(select count(prwo.id) FROM PreventiveOrder prwo join prwo.equipment as equ1  where equ1.dataLocation @DATA_LOCATION) FROM Prevention prevention  join prevention.order as pOrder join pOrder.equipment as equ where equ.dataLocation @DATA_LOCATION group by equ.type"
@@ -66,10 +83,11 @@ class DashboardInitializer {
     //Slie 30:Share of types of spare parts about to stock out in a given time period
     public static final String SHARE_TYPE_SP_PART_STOCK_OUT_SIMPLE_SLD30="select count(temp.spTypeTimount)/(SELECT count(mmm.id)  FROM memms_spare_part mmm where mmm.data_location_id @DATA_LOCATION) as final_result from (SELECT count(mm.type_id)/(SELECT ROUND((count(m.id)/12),0)  FROM memms_spare_part m where m.status='OPERATIONAL' and dateDiff(NOW(),m.delivery_date)<=365 and m.data_location_id @DATA_LOCATION group by mm.type_id) as spTypeTimount   FROM memms_spare_part mm where mm.data_location_id @DATA_LOCATION group by mm.type_id) temp where temp.spTypeTimount<#TRASHHOLD_MIN_STOCT_OUT"
     public static final String SHARE_TYPE_SP_PART_STOCK_OUT_GROUP_SLD30="select temp.descen,temp.spTypeTimount/(SELECT count(mmm.id)  FROM memms_spare_part mmm where mmm.data_location_id @DATA_LOCATION) as final_result from (SELECT count(mm.type_id)/(SELECT ROUND(count(m.id)/12)  FROM memms_spare_part m where m.status='OPERATIONAL' and dateDiff(NOW(),m.delivery_date)<=365 and m.data_location_id @DATA_LOCATION group by mm.type_id) as spTypeTimount,spt.names_en as descen   FROM memms_spare_part mm,memms_spare_part_type spt where mm.type_id=spt.id and mm.data_location_id @DATA_LOCATION group by mm.type_id) temp where temp.spTypeTimount<#TRASHHOLD_MIN_STOCT_OUT"
-    // //Slie 31:Number of types of spare parts with stock more than a given time period
-    // public static final String NUMBER_SP_PAT_STOCK_MORE_SIMPLE_SLD31="select count(temp.spTypeTimount)/(SELECT count(mmm.id)  FROM memms_spare_part mmm where mmm.data_location_id @DATA_LOCATION) as final_result from (SELECT count(mm.type_id)/(SELECT ROUND((count(m.id)/12),0)  FROM memms_spare_part m where m.status='OPERATIONAL' and dateDiff(NOW(),m.delivery_date)<=365 and m.data_location_id @DATA_LOCATION group by mm.type_id) as spTypeTimount   FROM memms_spare_part mm where mm.data_location_id @DATA_LOCATION group by mm.type_id) temp where temp.spTypeTimount>#TRASHHOLD_MAX_STOCT_OUT"
-    // public static final String NUMBER_SP_PAT_STOCK_MORE_GROUP_SLD31="select temp.namesEn,temp.spTypeTimount/(SELECT count(mmm.id)  FROM memms_spare_part mmm where mmm.data_location_id @DATA_LOCATION) as final_result from (SELECT count(mm.type_id)/(SELECT count(m.id)/12  FROM memms_spare_part m where m.status='OPERATIONAL' and dateDiff(NOW(),m.delivery_date)<=365 and m.data_location_id @DATA_LOCATION group by mm.type_id) as spTypeTimount,spt.names_en as namesEn FROM memms_spare_part mm,memms_spare_part_type spt where mm.type_id=spt.id and mm.data_location_id @DATA_LOCATION group by mm.type_id) temp where temp.spTypeTimount>#TRASHHOLD_MAX_STOCT_OUT"
-    
+   
+    //Slide 32:Average stock time
+    public static final String AVG_STOCK_TIME_SIMPLE_SLD32="select sum(temp.usageeach)/(SELECT count(m.id)  FROM memms_spare_part m where m.data_location_id @DATA_LOCATION) as final_result from (SELECT count(mm.id)/(SELECT ROUND((count(m.id)/12),0)  FROM memms_spare_part m where m.status='OPERATIONAL' and dateDiff(NOW(),m.delivery_date)<=365 and m.data_location_id @DATA_LOCATION group by mm.type_id) as usageeach FROM memms_spare_part mm where mm.data_location_id @DATA_LOCATION group by mm.type_id) temp"
+    public static final String AVG_STOCK_TIME_GROUP_SLD32="select temp.namesEn,temp.usageeach/(SELECT count(m.id)  FROM memms_spare_part m where m.data_location_id @DATA_LOCATION) as final_result from (SELECT count(mm.id)/(SELECT count(m.id)/12  FROM memms_spare_part m where m.status='OPERATIONAL' and dateDiff(NOW(),m.delivery_date)<=365 and m.data_location_id @DATA_LOCATION group by mm.type_id) as usageeach,spt.names_en as namesEn FROM memms_spare_part mm,memms_spare_part_type spt where mm.type_id=spt.id and mm.data_location_id @DATA_LOCATION group by mm.type_id) temp"
+
     public static createDashboardStructure() {
         createIndicatorCategories()
         createUserDefinedVariables()
@@ -81,6 +99,7 @@ class DashboardInitializer {
         def equipementManagment = IndicatorCategory.findByCode(MANAGEMENT_EQUIPMENT)
         if(equipementManagment != null) {
             //Slide 7:Share of operational equipment
+            if(!Indicator.findByCode("SHARE_OPE_EQUIPMENT"))
             newIndicator(
                 equipementManagment,
                 "SHARE_OPE_EQUIPMENT", 
@@ -96,7 +115,26 @@ class DashboardInitializer {
                 SHARE_OPERATIONAL_GROUP_SLD7,
                 false,true
             )
+
+            //Slide 14:Share of equipment with lifetime expiring in less than 2 years
+            if(!Indicator.findByCode("SHARE_LIFETIME_EXPIRING_IN2Y_EQUIPEMENT"))
+            newIndicator(
+                equipementManagment, 
+                "SHARE_LIFETIME_EXPIRING_IN2Y_EQUIPEMENT", 
+                ["en":"Share of equipment with lifetime expiring in less than 2 years","fr":"Share of equipment with lifetime expiring in less than 2 years fr"],
+                ["en":"Share of equipment with lifetime expiring in less than 2 years","fr":"Share of equipment with lifetime expiring in less than 2 years fr"], 
+                [
+                    "en":"(total number equipment with STATUS={“Operational”; “Partially operational”, “Under maintenance”} and {Current Date – date of first inventory updationor DATE OF PURCHASE} >{Expected life time – 2years)/", 
+                    "fr":"(total number equipment with STATUS={“Operational”; “Partially operational”, “Under maintenance”} and {Current Date – date of first inventory updationor DATE OF PURCHASE} >{Expected life time – 2years)/ fr"
+                ],
+                "%", 0.30, 0.10, Indicator.HistoricalPeriod.QUARTERLY, 8, 
+                SHARE_LIFETIME_LESS_SIMPLE_SLD14, 
+                ["en":"Type of Equipment", "fr":"Type of Equipment"], 
+                SHARE_LIFETIME_LESS_GROUP_SLD14,
+                false,true
+                )
             //Slide 12:Share of obsolete equipment
+            if(!Indicator.findByCode("SHARE_OBSOLETE_EQUIPMENT"))
             newIndicator(
                 equipementManagment, 
                 "SHARE_OBSOLETE_EQUIPMENT", 
@@ -117,6 +155,7 @@ class DashboardInitializer {
         def correctiveMaintenance = IndicatorCategory.findByCode(CORRECTIVE_MAINTENANCE)
         if(correctiveMaintenance != null) {
            //Slie 15:Share of equipments for which a work order was generated
+           if(!Indicator.findByCode("SHARE_WORK_ORDER_CORR_MAINTENANCE"))
             newIndicator(
                 correctiveMaintenance, 
                 "SHARE_WORK_ORDER_CORR_MAINTENANCE", 
@@ -133,6 +172,7 @@ class DashboardInitializer {
                 false, true
             )
            // Slie 16:Degree of corrective maintenance execution according to benchmark - sql not compatible with in memory db
+            if(!Indicator.findByCode("DEGREE_CORR_EXEC_BENCHNARK_MAINTENANCE"))
             newIndicator(
                 correctiveMaintenance, 
                 "DEGREE_CORR_EXEC_BENCHNARK_MAINTENANCE", 
@@ -148,11 +188,45 @@ class DashboardInitializer {
                 DEGREE_CORRECTIVE_EX_GROUP_SLD16,
                 false, true
             )
+
+            //Slide 19:Share of work orders escalated to MMC
+            if(!Indicator.findByCode("SHARE_ESCLATED_TO_MMC_MAINTENANCE"))
+            newIndicator(
+                correctiveMaintenance, 
+                "SHARE_ESCLATED_TO_MMC_MAINTENANCE", 
+                ["en":"Share of work orders escalated to MMC","fr":"Share of work orders escalated to MMC fr"],
+                ["en":"Share of work orders escalated to MMC","fr":"Share of work orders escalated to MMC fr"], 
+                [
+                    "en":"Total work orders with status change from “open at facility” to :open at MMC” / total work orders", 
+                    "fr":"Total work orders with status change from “open at facility” to :open at MMC” / total work orders fr"
+                ],
+                "%", 0.3, 0.1, Indicator.HistoricalPeriod.QUARTERLY, 8, 
+                SHARE_ESCLATED_MMC_SIMPLE_SLD19, 
+                ["en":"Type of Equipment", "fr":"Type of Equipment fr"], 
+                SHARE_ESCLATED_MMC_GROUP_SLD19,
+                false,true
+            )
+
+            //Slide 20:Average time to fix equipments
+            if(!Indicator.findByCode("AVERAGE_TIME_TO_FIX_EQUI_MAINTENAMCE"))
+            newIndicator(
+                correctiveMaintenance, 
+                "AVERAGE_TIME_TO_FIX_EQUI_MAINTENAMCE", 
+                ["en":"Average time to fix equipments","fr":"Average time to fix equipments fr"],
+                ["en":"Average time to fix equipments","fr":"Average time to fix equipments fr"], 
+                ["en":"Average time to fix equipments","fr":"Average time to fix equipments fr"],
+                "day(s)", 3, 1, Indicator.HistoricalPeriod.QUARTERLY, 8, 
+                AVGE_FIX_SIMPLE_SLD20, 
+                ["en":"Type of Equipment", "fr":"Type of Equipment"], 
+                AVGE_FIX_GROUP_SLD20,
+                true,true
+            )
         }
 
         def preventiveMaintenance = IndicatorCategory.findByCode(PREVENTIVE_MAINTENANCE)
          if(preventiveMaintenance != null) {
             //Slide 26:Degree of execution of preventive maintenance
+            if(!Indicator.findByCode("DEGREE_EXECUTION_PREV_MAINTENANCE"))
             newIndicator(
                 preventiveMaintenance, 
                 "DEGREE_EXECUTION_PREV_MAINTENANCE", 
@@ -173,6 +247,7 @@ class DashboardInitializer {
          def sparePartsManagment = IndicatorCategory.findByCode(MANAGEMENT_SPAREPARTS)
          if(sparePartsManagment != null) {
             //Slie 30:Share of types of spare parts about to stock out in a given time period - sql not compatible with in memory db
+            if(!Indicator.findByCode("SHARE_TYPES_SP_PRT_STOC_OUT_LESS"))
             newIndicator(
                 sparePartsManagment, 
                 "SHARE_TYPES_SP_PRT_STOC_OUT_LESS", 
@@ -188,7 +263,25 @@ class DashboardInitializer {
                 SHARE_TYPE_SP_PART_STOCK_OUT_GROUP_SLD30,
                 true,true
             )
-         }
+
+            //Slide 32:Average stock time
+            if(!Indicator.findByCode("AVERAGE_STOCK_TIME_SPAREPART"))
+            newIndicator(
+                sparePartsManagment, 
+                "AVERAGE_STOCK_TIME_SPAREPART", 
+                ["en":"Average stock time","fr":"Average stock time fr"],
+                ["en":"Average stock time","fr":"Average stock time fr"], 
+                [
+                    "en":"(Number of spare parts of type 1 x use rate of spare part of type 1+number of spare part of type 2 x use rate of spare part of type 2.....)  /  (Total number of spare parts of all types)", 
+                    "fr":"(Number of spare parts of type 1 x use rate of spare part of type 1+number of spare part of type 2 x use rate of spare part of type 2.....)  /  (Total number of spare parts of all types) fr",
+                ],
+                "month(s)",6.0,2.0, Indicator.HistoricalPeriod.QUARTERLY, 8, 
+                AVG_STOCK_TIME_SIMPLE_SLD32, 
+                ["en":"Spare Part Type", "fr":"Spare Part Type fr"], 
+                AVG_STOCK_TIME_GROUP_SLD32,
+                true,true
+            )
+        }
     }
 
     public static createIndicatorCategories() {

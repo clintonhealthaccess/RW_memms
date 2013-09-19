@@ -93,8 +93,12 @@ class Indicator {
         descriptions blank:true, nullable:true, size:0..1000
         formulas blank:true, nullable:true, size:0..1000
         unit blank:false, nullable:false
-        redToYellowThreshold blank:false, nullable:false, validator: {return (it <= 1 && it >= 0)}
-        yellowToGreenThreshold blank:false, nullable:false, validator: {return (it <= 1 && it >= 0)}
+        redToYellowThreshold blank:false, nullable:false, validator: { val, obj ->
+            if(obj.unit.equals("%")) return (val <= 1 && val >= 0)
+        }
+        yellowToGreenThreshold blank:false, nullable:false, validator: { val, obj ->
+            if(obj.unit.equals("%")) return (val <= 1 && val >= 0)
+        }
         queryScript blank:false, nullable:false,size:0..8000
         sqlQuery blank:false, nullable:false
         active blank:false, nullable:false
