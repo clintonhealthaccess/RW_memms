@@ -122,22 +122,23 @@ class SparePartListingReportService {
 			return sparePartCriteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 
 				//Mandatory property
+				inList ("type", sparePartTypes)
+				//Mandatory property
 				or {
 					inList("dataLocation", dataLocations)
 					if(showAtMMC != null)
 						eq("stockLocation",StockLocation.MMC)
 				}
-				//Mandatory property
-				inList ("type", sparePartTypes)
 
 				if(sparePartStatus!=null && !sparePartStatus.empty)
 					inList ("status",sparePartStatus)
-				
 				or{
-					if(fromAcquisitionPeriod && fromAcquisitionPeriod != null)
-						gt ("purchaseDate", fromAcquisitionPeriod)
-					if(toAcquisitionPeriod && toAcquisitionPeriod != null)
-						lt ("purchaseDate", toAcquisitionPeriod)	
+					or{
+						if(fromAcquisitionPeriod && fromAcquisitionPeriod != null)
+							gt ("purchaseDate", fromAcquisitionPeriod)
+						if(toAcquisitionPeriod && toAcquisitionPeriod != null)
+							lt ("purchaseDate", toAcquisitionPeriod)
+					}	
 					if(noAcquisitionPeriod && noAcquisitionPeriod != null)
 						isNull("purchaseDate")
 				}
