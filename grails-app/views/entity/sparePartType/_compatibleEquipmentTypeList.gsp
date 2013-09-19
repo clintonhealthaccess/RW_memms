@@ -9,6 +9,7 @@
 			<th><g:message code="equipmentType.expectedLifeTime.label"/></th>
 			<th><g:message code="equipment.type.added.on.label"/></th>
 			<th><g:message code="equipment.type.last.modified.on.label"/></th>
+			<th/>
 		</tr>
 	</thead>
 	<g:render template="/entity/equipmentType/listBody" model="[entities: entities]"/>
