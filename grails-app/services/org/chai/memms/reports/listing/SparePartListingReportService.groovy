@@ -114,6 +114,21 @@ class SparePartListingReportService {
 		def sparePartCriteria = SparePart.createCriteria()
 
 		if(reportSubType == ReportSubType.INVENTORY){
+			def compatibleEquipmentTypes = customSparePartsParams.get('equipmentTypes')
+			def sparePartTypesWithCompatibleEquipmentTypes = []
+			if(compatibleEquipmentTypes != null && !compatibleEquipmentTypes.empty){
+				compatibleEquipmentTypes.each{ equipmentType ->
+					sparePartTypes.each{ sparePartType ->
+						def compatibleEquipmentTypes = sparePartType.compatibleEquipmentTypes
+						if(compatibleEquipmentTypes != null && !compatibleEquipmentTypes.empty){
+							if(compatibleEquipmentTypes.contains(equipmentType))
+								sparePartTypesWithCompatibleEquipmentTypes.add(sparePartType)
+						}
+					}
+				}
+				sparePartTypes = sparePartTypesWithCompatibleEquipmentTypes
+			}
+			
 			def sparePartStatus = customSparePartsParams.get('sparePartStatus')
 			def fromAcquisitionPeriod = customSparePartsParams.get('fromAcquisitionPeriod')
 			def toAcquisitionPeriod = customSparePartsParams.get('toAcquisitionPeriod')
