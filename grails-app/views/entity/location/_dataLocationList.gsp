@@ -7,6 +7,7 @@
 			<g:sortableColumn property="type" params="[q:q]" title="${message(code: 'datalocation.type.label')}" />
 			<g:sortableColumn property="managedBy" params="[q:q]" title="${message(code: 'dataLocation.managed.by.label')}" />
 			<g:sortableColumn property="location" params="[q:q]" title="${message(code: 'location.label')}" />
+			<g:sortableColumn property="coordinates" params="[q:q]" title="${message(code: 'location.coordinates.label')}" />
 		</tr>
 	</thead>
 	<tbody>
@@ -37,6 +38,9 @@
 				</td>
 				<td>
 					${location.location.names}
+				</td>
+				<td>
+					<g:stripHtml field="${location.coordinates}" chars="30"/>
 				</td>
 			</tr>
 		</g:each>
