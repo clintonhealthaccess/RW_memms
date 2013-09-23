@@ -51,6 +51,7 @@ class IndicatorComputationService {
     def indicatorValueService
     def locationReportService
     def locationService
+	def groupIndicatorValueService
     def grailsApplication = new User().domainClass.grailsApplication
 
     static final String DATA_LOCATION_TOKEN = "@DATA_LOCATION"
@@ -157,8 +158,9 @@ class IndicatorComputationService {
                         for (Map.Entry<String, Double> entry : (Set)map.entrySet()){
                             if (log.isDebugEnabled()) log.debug("computeLocationReport entry.getKey() " + entry.getKey() + " entry.getValue() " + entry.getValue());
                             
-                            DashboardInitializer.newGroupIndicatorValue(currentDate,['en':entry.getKey(),'fr':entry.getKey()],entry.getValue(),indicatorValue)
-                            if (log.isDebugEnabled()) log.debug("groupIndicatorValue " + groupIndicatorValue);
+                            //DashboardInitializer.newGroupIndicatorValue(currentDate,['en':entry.getKey(),'fr':entry.getKey()],entry.getValue(),indicatorValue)
+							def groupIndicatorValue=groupIndicatorValueService.newGroupIndicatorValue(currentDate,['en':entry.getKey(),'fr':entry.getKey()],entry.getValue(),indicatorValue)
+                            if (log.isDebugEnabled()) log.debug("groupIndicatorValue ========================== APHRO: " + groupIndicatorValue);
                         }
                           
                     }
