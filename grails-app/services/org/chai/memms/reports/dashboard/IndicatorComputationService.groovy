@@ -138,6 +138,7 @@ class IndicatorComputationService {
 
         }
 
+
         if (log.isDebugEnabled()) log.debug("computeCurrentReport done memmsReports " + memmsReports);
     }
 

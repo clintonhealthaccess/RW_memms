@@ -68,6 +68,12 @@
             <input type="checkbox" name="allSparePartTypes" class='js-select-all' checked="checked"/>
             <span><g:message code="reports.selectAll"/></span>
           </li>
+          <li>
+            <g:selectFromList name="equipmentTypes" label="${message(code:'listing.report.spare.part.compatible.equipment.types')}"
+              field="type" optionKey="id" multiple="true" value="${equipmentTypes*.id}"
+              ajaxLink="${createLink(controller:'EquipmentType', action:'getAjaxData', params:[observation:'USEDINMEMMS'])}"
+              values="${equipmentTypes.collect{it.names + ' ['+ it.code +']'}}"/>
+          </li>
         </g:if>
       </ul>
       <g:if test="${[ReportSubType.INVENTORY,ReportSubType.WORKORDERS,ReportSubType.STATUSCHANGES,ReportSubType.STOCKOUT].contains(reportSubType)}">

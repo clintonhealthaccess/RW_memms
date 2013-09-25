@@ -17,6 +17,7 @@
 	<g:if test="${reportSubType == ReportSubType.STATUSCHANGES}">
 	  <li><g:checkBox name="reportTypeOptions" value="statusChanges" /><span>${message(code:'listing.report.spare.part.status.changes.label')}</span></li>
 	</g:if>
+	<li><g:checkBox name="reportTypeOptions" value="compatibleEquipmentTypes" /><span>${message(code:'listing.report.spare.part.compatible.equipment.types')}</span></li>
 	<li><g:checkBox name="reportTypeOptions" value="initialQuantity" /><span>${message(code:'listing.report.spare.part.initial.quantity')}</span></li>
 	<li><g:checkBox name="reportTypeOptions" value="quantityInStock" /><span>${message(code:'listing.report.spare.part.in.stock.quantity')}</span></li>
 	<li><g:checkBox name="reportTypeOptions" value="usedQuantity" /><span>${message(code:'listing.report.spare.part.used.quantity')}</span></li>

@@ -1190,11 +1190,13 @@ class ListingController extends AbstractController{
 		]
 
 		if(reportSubType == ReportSubType.INVENTORY){
+			def compatibleEquipmentTypes = getCompatibleEquipmentTypes()
 			def sparePartStatus = getSparePartStatus()
 			def fromAcquisitionPeriod = getPeriod('fromAcquisitionPeriod')
 			def toAcquisitionPeriod = getPeriod('toAcquisitionPeriod')
 			def noAcquisitionPeriod = params.get('noAcquisitionPeriod')
 			customizedListingParams << [
+				equipmentTypes: compatibleEquipmentTypes,
 				sparePartStatus: sparePartStatus,
 				fromAcquisitionPeriod: fromAcquisitionPeriod,
 				toAcquisitionPeriod: toAcquisitionPeriod,
@@ -1237,6 +1239,8 @@ class ListingController extends AbstractController{
 		]
 		if(savedReport.reportSubType == ReportSubType.INVENTORY){
 			customizedListingParams << [
+				// TODO AR - Add this property to saved report
+				// equipmentTypes: savedReport.equipmentTypes
 				sparePartStatus: savedReport.sparePartStatus,
 				fromAcquisitionPeriod: savedReport.fromDate,
 				toAcquisitionPeriod: savedReport.toDate,
@@ -1332,6 +1336,22 @@ class ListingController extends AbstractController{
 		}
 		return equipmentTypes
 	}
+
+	public Set<EquipmentType> getCompatibleEquipmentTypes() {
+		if(log.isDebugEnabled()) log.debug("abstract.equipmentTypes params:"+params)
+		Set<EquipmentType> equipmentTypes = new HashSet<EquipmentType>()
+		if (params.list('equipmentTypes') != null && !params.list('equipmentTypes').empty) {
+			if(log.isDebugEnabled()) log.debug("abstract.equipmentTypes CUSTOM")
+			def types = params.list('equipmentTypes')
+			equipmentTypes.addAll(types.collect{ it ->
+				if(log.isDebugEnabled())
+					log.debug("abstract.equipmentTypes equipmentType:"+it+", isNumber:"+NumberUtils.isNumber(it as String))
+				NumberUtils.isNumber(it as String) ? EquipmentType.get(it) : null
+			} - null)
+		}
+		return equipmentTypes
+	}
+
 	public Set<SparePartType> getSparePartTypes() {
 		if(log.isDebugEnabled()) log.debug("abstract.sparePartTypes params:"+params)
 		Set<SparePartType> sparePartTypes = null

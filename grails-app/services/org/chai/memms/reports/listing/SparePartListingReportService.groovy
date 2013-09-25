@@ -114,6 +114,21 @@ class SparePartListingReportService {
 		def sparePartCriteria = SparePart.createCriteria()
 
 		if(reportSubType == ReportSubType.INVENTORY){
+			def equipmentTypes = customSparePartsParams.get('equipmentTypes')
+			def compatibleEquipmentTypes = []
+			if(equipmentTypes != null && !equipmentTypes.empty){
+				equipmentTypes.each{ equipmentType ->
+					sparePartTypes.each{ sparePartType ->
+						def sparePartTypeCompatibleEquipmentTypes = sparePartType.compatibleEquipmentTypes
+						if(sparePartTypeCompatibleEquipmentTypes != null && !sparePartTypeCompatibleEquipmentTypes.empty){
+							if(sparePartTypeCompatibleEquipmentTypes.contains(equipmentType))
+								compatibleEquipmentTypes.add(sparePartType)
+						}
+					}
+				}
+				sparePartTypes = compatibleEquipmentTypes
+			}
+			
 			def sparePartStatus = customSparePartsParams.get('sparePartStatus')
 			def fromAcquisitionPeriod = customSparePartsParams.get('fromAcquisitionPeriod')
 			def toAcquisitionPeriod = customSparePartsParams.get('toAcquisitionPeriod')
@@ -208,6 +223,7 @@ class SparePartListingReportService {
 				}
 			}
 		}
+
 		if(reportSubType == ReportSubType.USERATE){
 			DateTime todayDateTime = new DateTime(today)
 			def lastYearDateTimeFromNow = todayDateTime.minusDays(365)
