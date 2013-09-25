@@ -42,6 +42,8 @@
           ${sparePartTypes?.size()}</a>,
 
         <g:if test="${reportSubType == ReportSubType.INVENTORY}">
+          <a href="#"><g:message code="listing.report.spare.part.compatible.equipment.types"/> = 
+            ${equipmentTypes?.collect{it.names}.join(',')}</a>,
           <a href="#"><g:message code="reports.spareParts.inventory.sparePartStatus"/> = 
             <g:if test="${sparePartStatus == null || sparePartStatus.empty}">
               ${message(code:'reports.filters.all')},

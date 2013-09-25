@@ -97,6 +97,6 @@ class EquipmentType {
 	}
 	
 	String toString() {
-		return "EquipmentType[Id=" + id + "code="+code+"]";
+		return "EquipmentType[Id=" + id + ", code="+code+"]";
 	}
 }
