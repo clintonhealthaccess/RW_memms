@@ -159,8 +159,7 @@ class IndicatorComputationService {
                             if (log.isDebugEnabled()) log.debug("computeLocationReport entry.getKey() " + entry.getKey() + " entry.getValue() " + entry.getValue());
                             
                             //DashboardInitializer.newGroupIndicatorValue(currentDate,['en':entry.getKey(),'fr':entry.getKey()],entry.getValue(),indicatorValue)
-							def groupIndicatorValue=groupIndicatorValueService.newGroupIndicatorValue(currentDate,['en':entry.getKey(),'fr':entry.getKey()],entry.getValue(),indicatorValue)
-                            if (log.isDebugEnabled()) log.debug("groupIndicatorValue ========================== APHRO: " + groupIndicatorValue);
+							groupIndicatorValueService.newGroupIndicatorValue(currentDate,['en':entry.getKey(),'fr':entry.getKey()],entry.getValue(),indicatorValue)
                         }
                           
                     }
