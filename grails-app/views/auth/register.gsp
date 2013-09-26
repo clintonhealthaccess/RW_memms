@@ -29,7 +29,7 @@
   					  <td>
   						  <label><g:message code="register.organisation.label"/></label>
     						<input type="text" name="organisation" value="${register?.organisation}" />
-    						<div class="error-list"><g:renderErrors bean="${register}" field="organisation" />
+    						<div class="error-list"><g:renderErrors bean="${register}" field="organisation" /></div>
     					</td>
   					  <td>
   						  <label><g:message code="register.email.label"/></label>

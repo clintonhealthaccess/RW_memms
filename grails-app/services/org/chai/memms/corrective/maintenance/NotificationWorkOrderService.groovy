@@ -43,6 +43,7 @@ import org.chai.memms.util.Utils;
 
 class NotificationWorkOrderService {
 	def userService
+	def grailsApplication
 	
     public int sendNotifications(WorkOrder workOrder, String content,User sender,List<User> receivers) {
 		if(log.isDebugEnabled()) log.debug("Notification workOrder receivers group: "+receivers+" , for workorder " +  workOrder)
@@ -61,6 +62,25 @@ class NotificationWorkOrderService {
 		def receivers = userService.getNotificationWorkOrderGroup(workOrder,sender,escalate)
 		return sendNotifications(workOrder,content,sender,receivers)
 	}
+	
+	
+	
+	//TO SEND EMAIL TO THE HD CHIEF OF MAINTENANCE
+	
+	public def sendEmailNotification(def fromEmail,def contactEmail,def content){
+		contactEmail = grailsApplication.config.site.contact.email
+		fromEmail = grailsApplication.config.site.from.email
+		sendMail {
+			to contactEmail
+			from fromEmail
+			subject "Work Order created by ${user.email}."
+			body "Work order created by ${user.email}, please login into MEMMS for review."
+		}
+	}
+	//TO SEND EMAIL TO THE HD CHIEF OF MAINTENANCE
+	
+	
+	
 	
 	public int getUnreadNotifications(User user){
 		def criteria = NotificationWorkOrder.createCriteria()

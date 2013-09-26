@@ -25,8 +25,8 @@
                     maxValue: ${indicatorItem.totalHistoryItems}
                   },
             fontSize: 12,
-            width: 800,
-            height: 300
+            width: 1000,
+            height: 400
           }
           var chart = new google.visualization.LineChart(document.getElementById('historic_chart_${indicatorItem.code}'));
           chart.draw(data, options);
