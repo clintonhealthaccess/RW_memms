@@ -323,46 +323,44 @@ public class Initializer {
 									'[29.9868,-1.921],[29.9811,-1.9094]]]'
 
 			//Add Location
-			def rwanda = newLocation(['en':RWANDA], RWANDA,null,country,rwandaCoordinates)
+			def rwanda = newLocationWithCoordinates(['en':RWANDA], RWANDA,null,country,rwandaCoordinates)
 			
-			def kigali = newLocation(['en':KIGALI_CITY],KIGALI_CITY,rwanda,province,'')
-			def north = newLocation(['en':NORTH], NORTH, rwanda, province,'')
-			def south = newLocation(['en':SOUTH],SOUTH,rwanda,province,'')
-			def west = newLocation(['en':WEST], WEST,rwanda,province,'')
-			def east = newLocation(['en':EAST], EAST,rwanda,province,'')
+			def kigali = newLocation(['en':KIGALI_CITY],KIGALI_CITY,rwanda,province)
+			def north = newLocation(['en':NORTH], NORTH, rwanda, province)
+			def south = newLocation(['en':SOUTH],SOUTH,rwanda,province)
+			def west = newLocation(['en':WEST], WEST,rwanda,province)
+			def east = newLocation(['en':EAST], EAST,rwanda,province)
 			
-			def burera = newLocation(['en':BURERA], BURERA, north, district,'')
-			def huye = newLocation(['en':HUYE], HUYE, south, district,'')
-			def nyaruguru = newLocation(['en':NYARUGURU], NYARUGURU, huye, sector,'')
-			def gitarama = newLocation(['en':GITARAMA], GITARAMA, west, district,'')
-			def kibuye = newLocation(['en':KIBUYE], KIBUYE, west, district,'')
+			def burera = newLocation(['en':BURERA], BURERA, north, district)
+			def huye = newLocation(['en':HUYE], HUYE, south, district)
+			def nyaruguru = newLocation(['en':NYARUGURU], NYARUGURU, huye, sector)
+			def gitarama = newLocation(['en':GITARAMA], GITARAMA, west, district)
+			def kibuye = newLocation(['en':KIBUYE], KIBUYE, west, district)
 			
 			//Add DataLocation
-			def butaro = newDataLocation(['en':BUTARO],BUTARO,burera,dh, '[29.836585,-1.408931]')
-			def ruhindo = newDataLocation(['en':RUHINDO],RUHINDO,burera,hc, '')
+			def butaro = newDataLocationWithCoordinates(['en':BUTARO],BUTARO,burera,dh, '[29.836585,-1.408931]')
+			def ruhindo = newDataLocation(['en':RUHINDO],RUHINDO,burera,hc)
 			butaro.addToManages(ruhindo)
 			butaro.save(failOnError:true)
 			
-			def gahini  = newDataLocation(['en':GAHINI],GAHINI,gitarama,dh, '[30.48322,-1.84073]')
-			def musange = newDataLocation(['en':MUSANGE],MUSANGE,gitarama,hc, '[29.78134,-2.07579]')
+			def gahini  = newDataLocationWithCoordinates(['en':GAHINI],GAHINI,gitarama,dh, '[30.48322,-1.84073]')
+			def musange = newDataLocationWithCoordinates(['en':MUSANGE],MUSANGE,gitarama,hc, '[29.78134,-2.07579]')
 			gahini.addToManages(musange)
 			gahini.save(failOnError:true)
 			
-			def nyanza = newDataLocation(['en':NYANZA],NYANZA,huye,dh, '[29.73036,-2.59908]')
-			def kivuye = newDataLocation(['en':KIVUYE],KIVUYE,nyaruguru,hc, '[29.93128,-1.49218]')
-			def bungwe = newDataLocation(['en':BUNGWE],BUNGWE,huye,hc, '[29.97292,-1.503]')
+			def nyanza = newDataLocationWithCoordinates(['en':NYANZA],NYANZA,huye,dh, '[29.73036,-2.59908]')
+			def kivuye = newDataLocationWithCoordinates(['en':KIVUYE],KIVUYE,nyaruguru,hc, '[29.93128,-1.49218]')
+			def bungwe = newDataLocationWithCoordinates(['en':BUNGWE],BUNGWE,huye,hc, '[29.97292,-1.503]')
 			[kivuye,bungwe].each{it -> nyanza.addToManages(it)}
 			nyanza.save(failOnError:true)
 			
-			def nyange = newDataLocation(['en':NYANGE],NYANGE,kibuye,dh, '')
-			def gitwe = newDataLocation(['en':GITWE],GITWE,kibuye,hc, '[29.68998,-2.24103]')
-			def kirehe = newDataLocation(['en':KIREHE],KIREHE,kibuye,hc, '[30.65359,-2.26663]')
-			def kayonza = newDataLocation(['en':KAYONZA],KAYONZA,kibuye,hc, '')
+			def nyange = newDataLocation(['en':NYANGE],NYANGE,kibuye,dh)
+			def gitwe = newDataLocationWithCoordinates(['en':GITWE],GITWE,kibuye,hc, '[29.68998,-2.24103]')
+			def kirehe = newDataLocationWithCoordinates(['en':KIREHE],KIREHE,kibuye,hc, '[30.65359,-2.26663]')
+			def kayonza = newDataLocation(['en':KAYONZA],KAYONZA,kibuye,hc)
 			[gitwe,kirehe,kayonza].each{it -> nyange.addToManages(it)}
 			nyange.save(failOnError:true)
 		}
-
-       
 	}
 	
 	public static createInventoryStructure(){
@@ -1059,6 +1057,7 @@ public class Initializer {
 		equipment.save(failOnError:true)
 		return order.save(failOnError: true)
 	}
+
 	//Prevention
 	public static newPrevention(def order,def addedBy,def scheduledOn,def eventDate,def timeSpend,def descriptions, def processes){
 		def timeD =  newTimeDate(scheduledOn)
@@ -1069,6 +1068,7 @@ public class Initializer {
 		return order.save(failOnError:true)
 		//return prevention.save(failOnError:true)
 	}
+
 	//PreventiveProcess
 	public static newPreventionProcess(def dateCreated, def name,def addedBy, def prevention){
 		def process = new PreventiveProcess(dateCreated:dateCreated,name:name,addedBy:addedBy)
@@ -1088,6 +1088,7 @@ public class Initializer {
 	public static newTimeSpend(def numberOfMinutes){
 		return new TimeSpend(numberOfMinutes:numberOfMinutes)
 	}
+
 	//Corrective Maintenance
 	public static newWorkOrder(def equipment, def description, def criticality, def addedBy, def openOn,def failureReason,def currentStatus){
 		return new WorkOrder(equipment:equipment,description: description,criticality:criticality,addedBy:addedBy,openOn: openOn,currentStatus:currentStatus,failureReason:failureReason).save(failOnError:true)
@@ -1202,6 +1203,7 @@ public class Initializer {
 		def contact = newContact(addressDescriptions,contactName,email,phone,street,poBox)
 		return newWarranty(contact, startDate,sameAsSupplier,descriptions)
 	}
+	
 	//@Deprecated have to remove the lastModifiedOn params	
 	public static newEquipmentType(def code, def names,def descriptions, def observation, def lastModifiedOn,def expectedLifeTime = 12){
 		def type = new EquipmentType(code:code,observation:observation,expectedLifeTime:newPeriod(expectedLifeTime))
@@ -1243,8 +1245,21 @@ public class Initializer {
 		Utils.setLocaleValueInMap(locationLevel,names,"Names")
 		return locationLevel.save(failOnError: true)
 	}
+
+	public static newLocation(def names, def code, def parent, def level) {
+		def location = new Location(code: code, parent: parent, level: level, coordinates:'')
+		Utils.setLocaleValueInMap(location,names,"Names")
+		location.save(failOnError: true)
+		level.addToLocations(location)
+		level.save(failOnError: true)
+		if (parent != null) {
+			parent.addToChildren(location)
+			parent.save(failOnError: true)
+		}
+		return location
+	}
 	
-	public static newLocation(def names, def code, def parent, def level, def coordinates) {
+	public static newLocationWithCoordinates(def names, def code, def parent, def level, def coordinates) {
 		def location = new Location(code: code, parent: parent, level: level, coordinates: coordinates)
 		Utils.setLocaleValueInMap(location,names,"Names")
 		location.save(failOnError: true)
@@ -1257,7 +1272,22 @@ public class Initializer {
 		return location
 	}
 	
-	public static newDataLocation(def names, def code, def location, def type, def coordinates) {
+	public static newDataLocation(def names, def code, def location, def type) {
+		def dataLocation = new DataLocation(code: code, location: location, type: type, coordinates:'')
+		Utils.setLocaleValueInMap(dataLocation,names,"Names")
+		dataLocation.save(failOnError: true)
+		if (location != null) {
+			location.addToDataLocations(dataLocation)
+			location.save(failOnError: true)
+		}
+		if (type != null) {
+			type.addToDataLocations(dataLocation)
+			type.save(failOnError: true)
+	   }
+		return dataLocation
+	}
+
+	public static newDataLocationWithCoordinates(def names, def code, def location, def type, def coordinates) {
 		def dataLocation = new DataLocation(code: code, location: location, type: type, coordinates: coordinates)
 		Utils.setLocaleValueInMap(dataLocation,names,"Names")
 		dataLocation.save(failOnError: true)
