@@ -173,6 +173,7 @@ class EquipmentViewController extends AbstractController {
 		if(user.location instanceof DataLocation) redirect(controller:"equipmentView",action:"list")
 
 		def location = Location.get(params.long('location'))
+
 		def dataLocationTypesFilter = getLocationTypes()
 		def template = null
 		def inventories = null
@@ -182,6 +183,9 @@ class EquipmentViewController extends AbstractController {
 		def locationSkipLevels = inventoryService.getSkipLocationLevels()
 
 		if(params['q'] != null && !params['q'].empty){
+			if(location == null){
+				location = user.location
+			}
 			List<DataLocation> dataLocations = locationService.searchLocation(DataLocation.class, params['q'], params)
 			inventories = inventoryService.getInventoryByDataLocations(location,dataLocations,dataLocationTypesFilter,params)
 		}
