@@ -91,7 +91,6 @@ grails.project.dependency.resolution = {
 		compile ":shiro:1.1.5"
 		compile ":springcache:1.3.1"
 		compile ":compass-sass:0.7"
-		compile ":mail:1.0"
 		compile ":i18n-fields:0.6.1-CHAI"
 		compile ":yui-minify-resources:0.1.5"
 		compile ":rabbitmq-tasks:0.5.3-SNAPSHOT"
