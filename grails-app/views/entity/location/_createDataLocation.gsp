@@ -26,7 +26,6 @@
   		<g:i18nInput name="names" label="${message(code:'entity.names.label')}" bean="${location}" field="names"/>
   		<g:input name="code" label="${message(code:'entity.code.label')}" bean="${location}" field="code"/>	
 
-      %{-- <g:textarea name="coordinates" width="328" height="80" value="${location.coordinates}" label="${message(code:'location.coordinates.label')}" bean="${location}" field="coordinates"/>  --}%
       <g:input name="coordinates" label="${message(code:'location.coordinates.label')}, ${message(code:'location.coordinate.format.label')}" bean="${location}" field="coordinates" value="${location?.coordinates}"/>
       	
   		<g:if test="${location.id != null}">
