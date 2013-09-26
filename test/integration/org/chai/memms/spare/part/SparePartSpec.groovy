@@ -241,6 +241,7 @@ class SparePartSpec extends IntegrationTests {
 			descriptions:['en':'Spare Part Descriptions'],
 			sparePartPurchasedBy:SparePartPurchasedBy.BYMOH,
 			purchaseDate:Initializer.getDate(22,07,2010),
+			deliveryDate:Initializer.getDate(23,07,2010),
 			purchaseCost:2344,
 			currency:"RWF",	
 			type:sparePartType,
@@ -255,9 +256,9 @@ class SparePartSpec extends IntegrationTests {
 		
 		then:
 		SparePart.count() == 1
-		sparePart.getSparePartStatusChange().equals(SparePartStatusChange.NEWPENDINGORDER)
-		sparePart.getSparePartStatusChange([SparePartStatusChange.NEWPENDINGORDER]).equals(SparePartStatusChange.NEWPENDINGORDER)
-		sparePart.getSparePartStatusChange([SparePartStatusChange.PENDINGORDERARRIVED]).equals(null)
+		sparePart.getSparePartStatusChange().equals(SparePartStatusChange.PENDINGORDERARRIVED)
+		sparePart.getSparePartStatusChange([SparePartStatusChange.PENDINGORDERARRIVED]).equals(SparePartStatusChange.PENDINGORDERARRIVED)
+		sparePart.getSparePartStatusChange([SparePartStatusChange.NEWPENDINGORDER]).equals(null)
 
 		when:
 		sparePart.deliveryDate = Initializer.getDate(22,07,2011)
