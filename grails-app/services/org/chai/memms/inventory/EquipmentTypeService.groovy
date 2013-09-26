@@ -34,6 +34,7 @@ import org.chai.memms.inventory.Provider.Type;
 import org.chai.memms.inventory.EquipmentType;
 import org.chai.memms.util.Utils;
 import org.chai.memms.spare.part.SparePartType
+import org.chai.memms.preventive.maintenance.Prevention
 /**
  * @author Jean Kahigiso M.
  *
@@ -62,6 +63,35 @@ class EquipmentTypeService {
 			}
 		}
 	}
+
+	public def removeProcessFromPrevention(def type){
+		def preventiveActions = type?.preventiveActions
+		def actionIds = []
+		def preventions = [] 
+		//Get ids of all preventiveActions of the current type
+		preventiveActions.each{ action -> actionIds.add(action.id) }
+		//Query the database 
+		if(actionIds.size()>0){
+			def criteria = Prevention.createCriteria()
+			preventions = criteria.list(){
+				if(log.isDebugEnabled()) log.debug("actionIds: "+actionIds)
+				delegate.actions{
+					'in'('id',actionIds)
+				}
+				distinct("id")
+			}
+		}
+		if(log.isDebugEnabled()) log.debug("preventions: "+preventions)
+		//Remove action on prevention
+		if(preventions.size()>0){
+			preventions.each{ prevention ->
+				preventiveActions.each{ action -> 
+					if(prevention.actions.contains(action)) prevention.removeFromActions(action)
+				}
+			}
+		}
+	}
+
 
 	public def getEquipmentTypeUsedInMemms() {
 		def observation = Observation.USEDINMEMMS

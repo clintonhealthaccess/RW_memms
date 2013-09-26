@@ -11,7 +11,6 @@
 			<g:sortableColumn property="contact.city" title="${message(code: 'contact.city.label', default: 'City')}" params="[q:q]" />
 			<g:sortableColumn property="contact.country" title="${message(code: 'contact.country.label', default: 'Country')}" params="[q:q]" />
 			<th><g:message code="contact.address.descriptions.label"/></th>
-			<th/>
 		</tr>
 	</thead>
 	<g:render template="/entity/provider/listBody" model="[entities: entities]"/>

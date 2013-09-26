@@ -39,7 +39,7 @@
 				${provider.contact.country}
 			</td>
 			<td>
-				<g:stripHtml field="${provider.contact.addressDescriptions}" chars="30"/>dd
+				<g:stripHtml field="${provider.contact.addressDescriptions}" chars="30"/>
 			</td>
 		</tr>
 	</g:each>

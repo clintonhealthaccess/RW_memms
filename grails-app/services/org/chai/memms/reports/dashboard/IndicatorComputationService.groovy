@@ -51,6 +51,7 @@ class IndicatorComputationService {
     def indicatorValueService
     def locationReportService
     def locationService
+	def groupIndicatorValueService
     def grailsApplication = new User().domainClass.grailsApplication
 
     static final String DATA_LOCATION_TOKEN = "@DATA_LOCATION"
@@ -158,8 +159,8 @@ class IndicatorComputationService {
                         for (Map.Entry<String, Double> entry : (Set)map.entrySet()){
                             if (log.isDebugEnabled()) log.debug("computeLocationReport entry.getKey() " + entry.getKey() + " entry.getValue() " + entry.getValue());
                             
-                            DashboardInitializer.newGroupIndicatorValue(currentDate,['en':entry.getKey(),'fr':entry.getKey()],entry.getValue(),indicatorValue)
-                            if (log.isDebugEnabled()) log.debug("groupIndicatorValue " + groupIndicatorValue);
+                            //DashboardInitializer.newGroupIndicatorValue(currentDate,['en':entry.getKey(),'fr':entry.getKey()],entry.getValue(),indicatorValue)
+							groupIndicatorValueService.newGroupIndicatorValue(currentDate,['en':entry.getKey(),'fr':entry.getKey()],entry.getValue(),indicatorValue)
                         }
                           
                     }
@@ -368,7 +369,7 @@ class IndicatorComputationService {
     }
 
     def groupExecuteSQL(String sql) {
-        if (log.isDebugEnabled()) log.debug("groupExecuteHQL sql " + sql);
+        if (log.isDebugEnabled()) log.debug("groupExecuteSQL sql " + sql);
          
         Map<String, Double> map = new HashMap<String, Double>()
         if(sql != null) {
@@ -377,7 +378,7 @@ class IndicatorComputationService {
                 for(Object arr : res) {
                     if (log.isDebugEnabled()) log.debug("groupExecuteSQL arr " + arr);
                     if(Double.parseDouble(arr[1] + ""))
-                    map.put(arr[0], (Double)arr[1])
+                        map.put(arr[0], (Double)arr[1])
                 }
             }
         }

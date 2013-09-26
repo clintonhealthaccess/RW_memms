@@ -43,6 +43,7 @@ import org.chai.memms.util.Utils;
 
 class NotificationWorkOrderService {
 	def userService
+	def grailsApplication
 	
     public int sendNotifications(WorkOrder workOrder, String content,User sender,List<User> receivers) {
 		if(log.isDebugEnabled()) log.debug("Notification workOrder receivers group: "+receivers+" , for workorder " +  workOrder)

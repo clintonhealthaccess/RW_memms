@@ -26,6 +26,7 @@
               <div class="row">
                 <input type="hidden" name="order.id" value="${prevention.order.id}" />
               </div>
+              <input type="text" name="" value="${prevention.order.equipment.type.id}" />
             <g:input name="eventDate" dateClass="date-picker" label="${message(code:'equipment.status.date.of.event.label')}" bean="${prevention}" field="eventDate"/>
             <g:inputHourMinute name="timeSpend" field="timeSpend" hours="${prevention.timeSpend?.hours}" minutes="${prevention.timeSpend?.minutes}" label='prevention.work.time.label' bean="${order}"/>
             <g:inputTimeDate name="scheduledOn" field="scheduledOn" date="${(scheduledOn)?scheduledOn.date:prevention.scheduledOn?.date}" time="${(scheduledOn)?scheduledOn.time:prevention.scheduledOn?.time}" label='prevention.scheduled.on.label' bean="${prevention}" dateClass="date-picker" timeClass="time-picker"/>
@@ -47,10 +48,9 @@
                     <fieldset>
                      <ul class="draggable process-list-action">
                        <g:if test="${prevention.actions.size()==0}" >
-                          <li value="_">No process available add some form equipment type</li>
                       </g:if>  
                        <g:each in="${actions}" status="i" var="action">
-                          <li value="${action.id}">
+                          <li data-id="${action.id}">
                             ${action.description}
                           </li>
                        </g:each>
@@ -62,21 +62,18 @@
                     <fieldset>
                       <ul class="droppable process-list-material">
                       <g:if test="${prevention.actions.size()==0}" >
-                          <li value="_">Dragge process here</li>
                       </g:if>                       
                         <g:each in="${prevention.actions}" var="action">
-                          <li value="${action.id}" name="test">
+                          <li data-id="${action.id}" name="test">
                             ${action.description}
                           </li>
                         </g:each>
                       </ul>
-                      <div class="added-processes" >  
-                        <select name="actions[]" multiple="true" style="diplay:none">
+                        <select id="action-list" name="actions" multiple="true" style="display:none;"  >
                           <g:each in="${prevention.actions}" var="action">
-                            <option value="${action.id}"></option>
+                            <option value="${action.id}" selected></option>
                           </g:each>
                         </select>
-                      </div>
                     </fieldset>
                   </div>
               </div>
@@ -100,17 +97,16 @@
     addPreventionProcess("${createLink(controller:'prevention',action: 'addProcess')}","${prevention.id}","");
     removePreventionProcess("${createLink(controller:'prevention',action: 'removeProcess')}");
     getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}");
-    
-    $('.added-processes').hide();
 
-    $(".droppable").droppable({ hoverClass:'dragging',drop: function(event, ui) {
-        $(".droppable").prepend($(ui.draggable[0]).removeAttr("style"));
+    $(".droppable").droppable({ hoverClass:'dragging',drop: function(event, ui) {  
+       $("#action-list option[value="+$(ui.draggable[0]).attr("data-id")+"]").remove();
+       $("#action-list").append('<option value='+$(ui.draggable[0]).attr("data-id")+' selected >'+$(ui.draggable[0]).text()+'</option>');
+       $(".droppable").prepend($(ui.draggable[0]).removeAttr("style"));
     }});
 
     $(".draggable").droppable({ hoverClass:'dragging',drop: function(event, ui) {
-      var currentTag = $(ui.draggable[0])
-      alert("==>: "+ui.attr("value"))
-        $(".draggable").prepend(currentTag.removeAttr("style"));
+      $("#action-list option[value="+$(ui.draggable[0]).attr("data-id")+"]").remove();
+      $(".draggable").prepend($(ui.draggable[0]).removeAttr("style"));
     }});
 
     $(".draggable li").draggable({ addClasses:'.dragging',addClasses:'',containment: 'document',cursor:'pointer',helper: 'clone'});

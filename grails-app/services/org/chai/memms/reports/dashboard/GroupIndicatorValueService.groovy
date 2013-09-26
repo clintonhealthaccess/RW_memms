@@ -1,4 +1,4 @@
-/** 
+/**
  * Copyright (c) 2012, Clinton Health Access Initiative.
  *
  * All rights reserved.
@@ -13,7 +13,7 @@
  *     * Neither the name of the <organization> nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -25,57 +25,21 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.corrective.maintenance
-
-import org.chai.memms.preventive.maintenance.Prevention;
-import org.chai.memms.preventive.maintenance.PreventiveOrder;
+package org.chai.memms.reports.dashboard
+import org.chai.memms.util.Utils;
 
 /**
- * @author Jean Kahigiso M.
+ * @author Aphrodice Rwagaju
  *
  */
-class PreventionService {
+class GroupIndicatorValueService {
 	
-	static transactional = true
-	
-	def languageService;
-	def sessionFactory;
-
-
-	public List<Prevention> getPreventionByOrder(PreventiveOrder order, Map<String,String> params){
-		def criteria =  Prevention.createCriteria()
-		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order:params.'$order' ?:"desc"){
-			eq('order',order)
-		}
-
+	public def newGroupIndicatorValue(def generatedAt, def names, def value, def indicatorValue){
+		def groupIndicatorValue = new GroupIndicatorValue(generatedAt:generatedAt,value:value)
+		 Utils.setLocaleValueInMap(groupIndicatorValue,names,'Names')
+		indicatorValue.addToGroupIndicatorValues(groupIndicatorValue)
+		indicatorValue.save(failOnError: true, flush:true)
+		return groupIndicatorValue
 	}
 
-	public List<Prevention> searchPrevention(String text, PreventiveOrder preventiveOrder, Map<String,String> params){
-		text =  text.trim()
-		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
-		def criteria =  Prevention.createCriteria()
-		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.'$order' ?:"desc"){
-			    if(preventiveOrder!=null)
-					eq('order',preventiveOrder)
-				ilike(dbFieldDescriptions,"%"+text+"%") 
-		}
-
-	}
-
-	public def removeFromPrevention(def action){
-		def criteria = Prevention.createCriteria()
-		def preventions = criteria.list(){
-			delegate.actions{ 'in'('id',action.id) }
-			distinct("id")
-		}
-		if(log.isDebugEnabled()) log.debug("preventions: "+preventions)
-		//Remove action on prevention
-		if(preventions && preventions.size()>0){
-			preventions.each{ prevention ->
-				prevention.removeFromActions(action)
-				prevention.save(failOnError:true)
-			}
-		}
-	}
-	
 }
