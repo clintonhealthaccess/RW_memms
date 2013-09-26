@@ -37,6 +37,8 @@ import org.chai.memms.preventive.maintenance.PreventiveOrder
 import org.chai.memms.preventive.maintenance.PreventiveProcess
 import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStatus
 import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderType
+import org.chai.memms.inventory.PreventiveAction;
+import org.apache.commons.lang.math.NumberUtils;
 
 
 
@@ -70,15 +72,13 @@ class PreventionController extends AbstractEntityController {
 
 	def getModel(def entity) {
 		def scheduledOn = null
-		def actions = entity.order.equipment.type.preventiveActions
+		def actions = entity.order.equipment.type.preventiveActions 
+		if(entity.actions && !entity.actions.isEmpty()) actions = actions - entity.actions 
+		
 		if(entity.id==null && entity.order.type.equals(PreventiveOrderType.DURATIONBASED)){
 			scheduledOn = new TimeDate(entity.order.nextOccurence,new DateTime(entity.order.nextOccurence).toLocalTime().toString("HH:mm:ss"))
-			if(entity.actions && !entity.actions.isEmpty()){
-				actions = actions - entity.actions
-			}
-
 		}
-		
+
 		[
 			prevention:entity,
 			scheduledOn:scheduledOn,
@@ -88,9 +88,19 @@ class PreventionController extends AbstractEntityController {
 
 	def bindParams(def entity) {
 		if(!entity.id) entity.addedBy = user
-		entity.properties = params
+		params.oldActions = entity.actions
+		if(log.isDebugEnabled()) log.debug("oldActions: "+entity.actions+" receivedAction: "+params.list('actions'))
+		Set<PreventiveAction> actions = new HashSet<PreventiveAction>()
+		params.list('actions').each { id ->
+			if (NumberUtils.isDigits(id)) {
+				def action = PreventiveAction.get(id)
+				if (action && !actions.contains(action)) actions.add(action);
+			}
+		}
+		entity.actions =  actions
+		if(log.isDebugEnabled()) log.debug("newActions: "+entity.actions)
+		bindData(entity,params,[exclude:["actions"]])
 	}
-
 	def list = {
 		def order =  PreventiveOrder.get(params.int("order.id"))
 		def preventions =  preventionService.getPreventionByOrder(order,params)

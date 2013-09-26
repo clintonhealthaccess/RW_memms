@@ -39,7 +39,8 @@ import org.chai.memms.inventory.EquipmentStatus.Status;
 import org.chai.memms.inventory.EquipmentType;
 import org.chai.memms.inventory.EquipmentType.Observation;
 import org.chai.memms.spare.part.SparePartType
-import org.chai.memms.inventory.PreventiveAction
+import org.chai.memms.inventory.PreventiveAction 
+import org.chai.memms.corrective.maintenance.PreventionService
 
 /**
  * @author Eugene Munyaneza
@@ -47,6 +48,7 @@ import org.chai.memms.inventory.PreventiveAction
  */
 class EquipmentTypeController extends AbstractEntityController{
 	def equipmentTypeService
+	def preventionService
 
 	def getEntity(def id) {
 		return EquipmentType.get(id);
@@ -70,8 +72,10 @@ class EquipmentTypeController extends AbstractEntityController{
 	def deleteEntity(def entity) {
 		if (entity.equipments.size() != 0 || entity.sparePartTypes.size() != 0)
 			flash.message = message(code: 'equipment.type.hasequipment', args: [message(code: getLabel(), default: 'entity'), params.id], default: '{0} still has associated equipment or spare part type.')
-		else
+		else{
+			equipmentTypeService.removeProcessFromPrevention(entity)
 			super.deleteEntity(entity);
+		}
 	}
 
 	def bindParams(def entity) {
@@ -195,6 +199,8 @@ class EquipmentTypeController extends AbstractEntityController{
 			response.sendError(404)
 		else{
 			EquipmentType type = action.equipmentType
+			//Remove action from prevention action
+			preventionService.removeFromPrevention(action)
 			type.removeFromPreventiveActions(action)
 			action.delete()
 			type.save(failOnError:true)

@@ -370,7 +370,7 @@ class IndicatorComputationService {
     }
 
     def groupExecuteSQL(String sql) {
-        if (log.isDebugEnabled()) log.debug("groupExecuteHQL sql " + sql);
+        if (log.isDebugEnabled()) log.debug("groupExecuteSQL sql " + sql);
          
         Map<String, Double> map = new HashMap<String, Double>()
         if(sql != null) {
@@ -379,7 +379,7 @@ class IndicatorComputationService {
                 for(Object arr : res) {
                     if (log.isDebugEnabled()) log.debug("groupExecuteSQL arr " + arr);
                     if(Double.parseDouble(arr[1] + ""))
-                    map.put(arr[0], (Double)arr[1])
+                        map.put(arr[0], (Double)arr[1])
                 }
             }
         }

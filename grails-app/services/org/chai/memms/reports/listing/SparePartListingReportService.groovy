@@ -114,19 +114,19 @@ class SparePartListingReportService {
 		def sparePartCriteria = SparePart.createCriteria()
 
 		if(reportSubType == ReportSubType.INVENTORY){
-			def equipmentTypes = customSparePartsParams.get('equipmentTypes')
-			def compatibleEquipmentTypes = []
-			if(equipmentTypes != null && !equipmentTypes.empty){
-				equipmentTypes.each{ equipmentType ->
+			def compatibleEquipmentTypes = customSparePartsParams.get('equipmentTypes')
+			def sparePartTypesWithCompatibleEquipmentTypes = []
+			if(compatibleEquipmentTypes != null && !compatibleEquipmentTypes.empty){
+				compatibleEquipmentTypes.each{ compatibleEquipmentType ->
 					sparePartTypes.each{ sparePartType ->
 						def sparePartTypeCompatibleEquipmentTypes = sparePartType.compatibleEquipmentTypes
 						if(sparePartTypeCompatibleEquipmentTypes != null && !sparePartTypeCompatibleEquipmentTypes.empty){
-							if(sparePartTypeCompatibleEquipmentTypes.contains(equipmentType))
-								compatibleEquipmentTypes.add(sparePartType)
+							if(sparePartTypeCompatibleEquipmentTypes.contains(compatibleEquipmentType))
+								sparePartTypesWithCompatibleEquipmentTypes.add(sparePartType)
 						}
 					}
 				}
-				sparePartTypes = compatibleEquipmentTypes
+				sparePartTypes = sparePartTypesWithCompatibleEquipmentTypes
 			}
 			
 			def sparePartStatus = customSparePartsParams.get('sparePartStatus')

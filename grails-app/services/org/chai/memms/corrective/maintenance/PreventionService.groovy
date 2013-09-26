@@ -61,5 +61,21 @@ class PreventionService {
 		}
 
 	}
+
+	public def removeFromPrevention(def action){
+		def criteria = Prevention.createCriteria()
+		def preventions = criteria.list(){
+			delegate.actions{ 'in'('id',action.id) }
+			distinct("id")
+		}
+		if(log.isDebugEnabled()) log.debug("preventions: "+preventions)
+		//Remove action on prevention
+		if(preventions && preventions.size()>0){
+			preventions.each{ prevention ->
+				prevention.removeFromActions(action)
+				prevention.save(failOnError:true)
+			}
+		}
+	}
 	
 }
