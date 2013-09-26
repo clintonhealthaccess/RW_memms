@@ -20,6 +20,7 @@
   		<g:selectFromList name="parent.id" label="${message(code:'location.parent.label')}" bean="${location}" field="parent" optionKey="id" multiple="false"
   			ajaxLink="${createLink(controller:'location', action:'getAjaxData', params: [class: 'Location'])}"
   			from="${locations}" value="${location.parent?.id}" values="${locations.collect{it.names}}" />
+      <g:textarea name="coordinates" label="${message(code:'location.coordinates.label')}, ${message(code:'location.coordinates.format.label')}" bean="${location}" field="coordinates" value="${location?.coordinates}" height="130" />
   		<g:if test="${location.id != null}">
   			<input type="hidden" name="id" value="${location.id}"></input>
   		</g:if>

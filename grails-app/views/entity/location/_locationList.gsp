@@ -4,6 +4,7 @@
 			<th/>
 			<g:sortableColumn property="code" params="[q:q]" title="${message(code: 'entity.code.label')}" />
 			<g:sortableColumn property="${i18nField(field: 'names')}" params="[q:q]" title="${message(code: 'entity.name.label')}" />
+			<g:sortableColumn property="coordinates" params="[q:q]" title="${message(code: 'location.coordinates.label')}" />
 			<g:sortableColumn property="level" params="[q:q]" title="${message(code: 'location.level.label')}" />
 			<g:sortableColumn property="parent" params="[q:q]" title="${message(code: 'location.parent.label')}" />
 		</tr>
@@ -27,6 +28,9 @@
 				<td>${location.code}</td>
 				<td>
 					${location.names}
+				</td>
+				<td>
+					${location.coordinates?'\u2713':''}
 				</td>
 				<td>
 					${location.level.names}

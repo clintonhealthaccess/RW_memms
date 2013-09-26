@@ -5,9 +5,10 @@
 			<g:sortableColumn property="code" params="[q:q]" title="${message(code: 'entity.code.label')}" />
 			<g:sortableColumn property="${i18nField(field: 'names')}" params="[q:q]" title="${message(code: 'entity.name.label')}" />
 			<g:sortableColumn property="type" params="[q:q]" title="${message(code: 'datalocation.type.label')}" />
+			<g:sortableColumn property="coordinates" params="[q:params.q]" title="${message(code: 'location.coordinates.label')}" />
 			<g:sortableColumn property="managedBy" params="[q:q]" title="${message(code: 'dataLocation.managed.by.label')}" />
-			<g:sortableColumn property="location" params="[q:q]" title="${message(code: 'location.label')}" />
-			<g:sortableColumn property="coordinates" params="[q:q]" title="${message(code: 'location.coordinates.label')}" />
+			<g:sortableColumn property="location" params="[q:q]" title="${message(code: 'location.parent.label')}" />
+			<g:sortableColumn property="${i18nField(field: 'location.level.names')}" params="[q:q]" title="${message(code: 'location.parent.level.label')}" />
 		</tr>
 	</thead>
 	<tbody>
@@ -34,13 +35,16 @@
 					${location.type.names}
 				</td>
 				<td>
+					<g:stripHtml field="${location.coordinates}" chars="30"/>
+				</td>
+				<td>
 					${location.managedBy?.names}
 				</td>
 				<td>
 					${location.location.names}
 				</td>
 				<td>
-					<g:stripHtml field="${location.coordinates}" chars="30"/>
+					${location.location.level.names}
 				</td>
 			</tr>
 		</g:each>

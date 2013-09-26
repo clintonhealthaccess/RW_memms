@@ -44,8 +44,13 @@ class CategoryItem {
 
     public CategoryItem(IndicatorCategory cat, List<IndicatorItem> items) {
         this.indicatorItems = new ArrayList<IndicatorItem>()
-        this.code = cat.code
-        this.names = cat.names
+		try {
+			this.code = cat.code
+			this.names = cat.names
+		} catch (Exception e) {
+			e.printStackTrace()
+		}
+        
         Double totalValue = 0.0
         Integer counter = 0
         for(IndicatorItem i : items) {
