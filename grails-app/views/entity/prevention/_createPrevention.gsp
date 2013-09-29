@@ -43,7 +43,7 @@
                 </h4> 
               <div class="row maintenance-process">
                   <div class="process process-action half">
-                    <label>Possible processes</label>
+                    <label><g:message code="prevention.possible.processes.label"/></label>
                     <fieldset>
                      <ul class="draggable process-list-action">
                        <g:if test="${prevention.actions.size()==0}" >
@@ -57,7 +57,7 @@
                     </fieldset>
                   </div>
                   <div class="process process-material half">
-                    <label>Used processes</label>
+                    <label><g:message code="prevention.used.processes.label"/></label>
                     <fieldset>
                       <ul class="droppable process-list-material">
                       <g:if test="${prevention.actions.size()==0}" >
