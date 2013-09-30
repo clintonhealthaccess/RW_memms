@@ -44,6 +44,7 @@ import org.chai.memms.security.User.UserType;
 import org.chai.memms.corrective.maintenance.WorkOrder.Criticality;
 import org.chai.memms.corrective.maintenance.WorkOrder.FailureReason;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
+import org.chai.memms.spare.part.SparePartService;
 
 
 /**
@@ -58,6 +59,7 @@ class WorkOrderController extends AbstractEntityController{
 	def workOrderStatusService
 	def notificationWorkOrderService
 	def userService
+	def sparePartService
 
 	def getEntity(def id) {
 		return WorkOrder.get(id)
@@ -82,18 +84,22 @@ class WorkOrderController extends AbstractEntityController{
 
 	def getModel(entity) {
 		def equipments =  []
+		def compatibleSpareParts = [:]
 		def dataLocation = DataLocation.get(params.long("dataLocation.id"))
 		dataLocation = (dataLocation)?dataLocation:entity.equipment?.dataLocation
 		def usersInCharge = userService.getActiveUserByTypeAndLocation([UserType.HOSPITALDEPARTMENT,UserType.TITULAIREHC,UserType.TECHNICIANDH],dataLocation,['sort':'firstname'])
 		if(entity.equipment) equipments << entity.equipment
+		if(entity.id!=null) compatibleSpareParts = sparePartService.getCompatibleSparePart(entity.equipment.type,user)
+
 		[
 			order:entity,
 			equipments: equipments,
 			dataLocation: dataLocation,
 			currencies: grailsApplication.config.site.possible.currency,
 			orderClosed:(entity.currentStatus == OrderStatus.CLOSEDFIXED || entity.currentStatus == OrderStatus.CLOSEDFORDISPOSAL)? true:false,
-			//entity can be null
-			technicians : usersInCharge
+			//entity can be null?
+			technicians : usersInCharge,
+			compatibleSpareParts:compatibleSpareParts
 		]
 	}
 
@@ -116,7 +122,7 @@ class WorkOrderController extends AbstractEntityController{
 		
 		//Don't bind if a closed workOrder is being edited
 		if(!params.oldStatus.equals(OrderStatus.CLOSEDFIXED) && !params.oldStatus.equals(OrderStatus.CLOSEDFORDISPOSAL))
-			entity.properties = params
+			bindData(entity,params,[exclude:["spareParts"]])
 	}
 	
 	def validateEntity(def entity) {

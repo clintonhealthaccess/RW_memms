@@ -89,12 +89,14 @@ public class WorkOrder extends MaintenanceOrder{
 	OrderStatus currentStatus
 	Criticality criticality
 	FailureReason failureReason
-	Map<SparePart,Integer> usedSpareParts =  [:]
+	//Map<SparePart,Integer> usedSpareParts = [:]
+	//The above fail to persist
+	Map usedSpareParts = new HashMap()
 	
 	
 	static belongsTo = [equipment: Equipment]
 	static i18nFields = ["failureReasonDetails","testResultsDescriptions"]
-	static hasMany = [status: WorkOrderStatus, comments: Comment, notifications: NotificationWorkOrder, processes: CorrectiveProcess]
+	static hasMany = [status: WorkOrderStatus, comments: Comment, notifications: NotificationWorkOrder, processes: CorrectiveProcess,spareParts:UsedSpareParts]
 	static embedded = ["workTime","travelTime"]
 
 	static constraints = {
@@ -243,6 +245,13 @@ public class WorkOrder extends MaintenanceOrder{
 				usedSparePartTypes.put(sparePart.type, sparePart.value)
 		}
 		return usedSparePartTypes
+	}
+	//Verify if map exist and return it
+	@Transient
+	def getSparePartTypesUsed(def sparePart){
+		for(def keyPair: spareParts)
+			if(keyPair.sparePart.equals(sparePart)) return  keyPair
+		return null
 	}
 	
 	//TODO To finalize this Method By Aphrodice

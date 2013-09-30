@@ -26,7 +26,6 @@
               <div class="row">
                 <input type="hidden" name="order.id" value="${prevention.order.id}" />
               </div>
-              <input type="text" name="" value="${prevention.order.equipment.type.id}" />
             <g:input name="eventDate" dateClass="date-picker" label="${message(code:'equipment.status.date.of.event.label')}" bean="${prevention}" field="eventDate"/>
             <g:inputHourMinute name="timeSpend" field="timeSpend" hours="${prevention.timeSpend?.hours}" minutes="${prevention.timeSpend?.minutes}" label='prevention.work.time.label' bean="${order}"/>
             <g:inputTimeDate name="scheduledOn" field="scheduledOn" date="${(scheduledOn)?scheduledOn.date:prevention.scheduledOn?.date}" time="${(scheduledOn)?scheduledOn.time:prevention.scheduledOn?.time}" label='prevention.scheduled.on.label' bean="${prevention}" dateClass="date-picker" timeClass="time-picker"/>
@@ -44,7 +43,7 @@
                 </h4> 
               <div class="row maintenance-process">
                   <div class="process process-action half">
-                    <label>Possible processes</label>
+                    <label><g:message code="prevention.possible.processes.label"/></label>
                     <fieldset>
                      <ul class="draggable process-list-action">
                        <g:if test="${prevention.actions.size()==0}" >
@@ -58,13 +57,13 @@
                     </fieldset>
                   </div>
                   <div class="process process-material half">
-                    <label>Used processes</label>
+                    <label><g:message code="prevention.used.processes.label"/></label>
                     <fieldset>
                       <ul class="droppable process-list-material">
                       <g:if test="${prevention.actions.size()==0}" >
                       </g:if>                       
                         <g:each in="${prevention.actions}" var="action">
-                          <li data-id="${action.id}" name="test">
+                          <li data-id="${action.id}">
                             ${action.description}
                           </li>
                         </g:each>

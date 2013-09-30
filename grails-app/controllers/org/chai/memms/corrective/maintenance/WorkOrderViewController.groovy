@@ -49,6 +49,9 @@ import org.chai.memms.corrective.maintenance.WorkOrder.FailureReason;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
 import org.chai.memms.security.User;
 import org.chai.memms.security.User.UserType;
+import org.chai.memms.spare.part.SparePartType;
+import org.chai.memms.spare.part.SparePart;
+import org.chai.memms.spare.part.SparePartService;
 
 
 /**
@@ -62,6 +65,7 @@ class WorkOrderViewController extends AbstractController{
 	def commentService
 	def maintenanceProcessService
 	def userService
+	def sparePartService
 
 	def getLabel() {
 		return "work.order.label";
@@ -284,6 +288,27 @@ class WorkOrderViewController extends AbstractController{
 			html = g.render(template:"/templates/comments",model:[order:order])
 		}
 		render(contentType:"text/json") { results = [result,html]}
+	}
+	def addSpareParts = {
+		WorkOrder order = WorkOrder.get(params.int("order.id"))
+		SparePartType type = SparePartType.get(params.int("sparePart.type.id"))
+		def quantity = params.int("quantity")
+		if(log.isDebugEnabled()) log.debug("WorkOrder: "+order+" SparePartType: :"+type+" quantity: "+quantity)
+		def html =""
+		def result = false
+		def options = ""
+		if(order == null || type==null || quantity <= 0 || quantity == null)
+			response.sendError(404)
+		else{
+			order = sparePartService.assignSparePartsToWorkOrder(order,type,user,quantity)
+			def compatibleSpareParts = sparePartService.getCompatibleSparePart(order.equipment.type,user)
+			for(def sparePart: compatibleSpareParts)
+				options = options+" <option value='"+sparePart.key.id+"'"+(sparePart.key.id==type.id)?"selected":''+">"+sparePart.key.names+" - "+[sparePart.value]+"</option>";
+			result = true
+			html = g.render(template:"/templates/usedSparePartList",model:[order:order,spareParts:order.spareParts])
+		}
+
+		render(contentType:"text/json") { results = [result,html,options]}
 	}
 }
 
