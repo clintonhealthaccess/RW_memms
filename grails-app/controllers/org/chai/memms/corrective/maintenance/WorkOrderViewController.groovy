@@ -303,8 +303,7 @@ class WorkOrderViewController extends AbstractController{
 			order = sparePartService.assignSparePartsToWorkOrder(order,type,user,quantity)
 			def compatibleSpareParts = sparePartService.getCompatibleSparePart(order.equipment.type,user)
 			for(def sparePart: compatibleSpareParts)
-				options = options+" <option value='"+sparePart.key.id+"'"+(sparePart.key.id==type.id)?"selected":''+">
-									"+sparePart.key.names+" - "+[sparePart.value]+"</option>";
+				options = options+" <option value='"+sparePart.key.id+"'"+(sparePart.key.id==type.id)?"selected":''+">"+sparePart.key.names+" - "+[sparePart.value]+"</option>";
 			result = true
 			html = g.render(template:"/templates/usedSparePartList",model:[order:order,spareParts:order.spareParts])
 		}
