@@ -6,26 +6,33 @@
 		<th></th>
 	</thead>
 	<tbody>
-		<g:each in="${inventories}" var="inventory">
+		<g:if test="${inventories != null && !inventories.empty}">
+			<g:each in="${inventories}" var="inventory">
+				<tr>
+					<td>
+						${inventory.dataLocation.names}
+					</td>
+					<td>
+						${inventory.equipmentCount}
+					</td>
+					<td>
+						<shiro:hasPermission permission="equipment:create">
+							<a href="${createLinkWithTargetURI(controller: 'equipment', action:'create', params:['dataLocation.id': inventory.dataLocation.id])}"><g:message code="inventory.add.equipment.label" /></a>
+						</shiro:hasPermission>
+					</td>
+					<td>
+						<shiro:hasPermission permission="equipment:list">
+							<a href="${createLink(controller: 'equipmentView', action: 'list', params:['dataLocation.id': inventory.dataLocation.id] )}"><g:message code="inventory.manage.equipment.label" /></a>
+						</shiro:hasPermission>
+					</td>
+				</tr>
+			</g:each>
+		</g:if>
+		<g:else>
 			<tr>
-				<td>
-					${inventory.dataLocation.names}
-				</td>
-				<td>
-					${inventory.equipmentCount}
-				</td>
-				<td>
-					<shiro:hasPermission permission="equipment:create">
-						<a href="${createLinkWithTargetURI(controller: 'equipment', action:'create', params:['dataLocation.id': inventory.dataLocation.id])}"><g:message code="inventory.add.equipment.label" /></a>
-					</shiro:hasPermission>
-				</td>
-				<td>
-					<shiro:hasPermission permission="equipment:list">
-						<a href="${createLink(controller: 'equipmentView', action: 'list', params:['dataLocation.id': inventory.dataLocation.id] )}"><g:message code="inventory.manage.equipment.label" /></a>
-					</shiro:hasPermission>
-				</td>
+				<td><g:message code="entity.list.empty.label" args="[message(code:'inventory.label')]"/></td>
 			</tr>
-		</g:each>
+		</g:else>
 	</tbody>
 </table>
 <div class="paginateButtons">

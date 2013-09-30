@@ -114,20 +114,25 @@ class SparePartListingReportService {
 		def sparePartCriteria = SparePart.createCriteria()
 
 		if(reportSubType == ReportSubType.INVENTORY){
+			if (log.isDebugEnabled()) log.debug("getCustomReportOfSpareParts 1 "+sparePartTypes)
 			def compatibleEquipmentTypes = customSparePartsParams.get('equipmentTypes')
 			def sparePartTypesWithCompatibleEquipmentTypes = []
-			if(compatibleEquipmentTypes != null && !compatibleEquipmentTypes.empty){
-				compatibleEquipmentTypes.each{ compatibleEquipmentType ->
-					sparePartTypes.each{ sparePartType ->
-						def sparePartTypeCompatibleEquipmentTypes = sparePartType.compatibleEquipmentTypes
-						if(sparePartTypeCompatibleEquipmentTypes != null && !sparePartTypeCompatibleEquipmentTypes.empty){
-							if(sparePartTypeCompatibleEquipmentTypes.contains(compatibleEquipmentType))
-								sparePartTypesWithCompatibleEquipmentTypes.add(sparePartType)
+			if(sparePartTypes != null && !sparePartTypes.empty){
+				if(compatibleEquipmentTypes != null && !compatibleEquipmentTypes.empty){
+					compatibleEquipmentTypes.each{ compatibleEquipmentType ->
+						sparePartTypes.each{ sparePartType ->
+							def sparePartTypeCompatibleEquipmentTypes = sparePartType.compatibleEquipmentTypes
+							if(sparePartTypeCompatibleEquipmentTypes != null && !sparePartTypeCompatibleEquipmentTypes.empty){
+								if(sparePartTypeCompatibleEquipmentTypes.contains(compatibleEquipmentType))
+									sparePartTypesWithCompatibleEquipmentTypes.add(sparePartType)
+							}
 						}
 					}
+					if(sparePartTypesWithCompatibleEquipmentTypes != null && !sparePartTypesWithCompatibleEquipmentTypes.empty)
+						sparePartTypes = sparePartTypesWithCompatibleEquipmentTypes
 				}
-				sparePartTypes = sparePartTypesWithCompatibleEquipmentTypes
 			}
+			if (log.isDebugEnabled()) log.debug("getCustomReportOfSpareParts 2 "+sparePartTypes)
 			
 			def sparePartStatus = customSparePartsParams.get('sparePartStatus')
 			def fromAcquisitionPeriod = customSparePartsParams.get('fromAcquisitionPeriod')

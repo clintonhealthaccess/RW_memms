@@ -123,15 +123,22 @@ class PreventiveOrderViewController extends AbstractController {
 		adaptParamsForList()
 		def locationSkipLevels = maintenanceService.getSkipLocationLevels()
 
-		if (location != null) {
-			template = '/orderSummaryPage/sectionTable'
-			maintenances = maintenanceService.getMaintenancesByLocation(PreventiveOrder.class,location,dataLocationTypesFilter,params)
+		if(params['q'] != null && !params['q'].empty){
+			if(location == null){
+				location = user.location
+			}
+			List<DataLocation> dataLocations = locationService.searchLocation(DataLocation.class, params['q'], params)
+			maintenances = maintenanceService.getMaintenancesByDataLocation(PreventiveOrder.class,location,dataLocations,dataLocationTypesFilter,params)
 		}
+		else if (location != null) 
+			maintenances = maintenanceService.getMaintenancesByLocation(PreventiveOrder.class,location,dataLocationTypesFilter,params)
+
+		if(log.isDebugEnabled()) log.debug("maintenances: " +maintenances?.maintenanceList)
 		render (view: '/orderSummaryPage/summaryPage', model: [
 					maintenances:maintenances?.maintenanceList,
 					currentLocation: location,
 					currentLocationTypes: dataLocationTypesFilter,
-					template: template,
+					template: "/orderSummaryPage/sectionTable",
 					entityCount: maintenances?.totalCount,
 					locationSkipLevels: locationSkipLevels,
 					controller:'preventiveOrderView',

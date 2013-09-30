@@ -12,7 +12,7 @@
 				<g:locationFilter linkParams="${params << [order:'desc']}" selected="${currentLocation}" selectedTypes="${currentLocationTypes}" skipLevels="${locationSkipLevels}"/>
 				<g:dataLocationTypeFilter linkParams="${params}" selected="${currentLocationTypes}"/>
 				<span class="right">
-					<g:searchBox action="summaryPage" controller="workOrderView" />
+					<g:searchBox action="summaryPage" controller="${controller}" />
 				</span>
 			</div>			
 			<div class="main table">
@@ -22,11 +22,11 @@
 				<g:else>
 				  <br/>
 					<h4 class="section-title alt">
-            <span class="question-default">
-              <img src="${resource(dir:'images/icons',file:'star_small.png')}">
-            </span>
-            <g:message code="location.label"/>: ${currentLocation.names}
-          </h4>
+			            <span class="question-default">
+			              <img src="${resource(dir:'images/icons',file:'star_small.png')}">
+			            </span>
+			            <g:message code="location.label"/>: ${currentLocation.names}
+			        </h4>
 					<g:render template="${template}"/>				
 				</g:else>
 				

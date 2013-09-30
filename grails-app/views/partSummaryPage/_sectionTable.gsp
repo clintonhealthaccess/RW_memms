@@ -6,26 +6,33 @@
 		<th></th>
 	</thead>
 	<tbody>
-		<g:each in="${parts}" var="part">
+		<g:if test="${parts != null && !parts.empty}">
+			<g:each in="${parts}" var="part">
+				<tr>
+					<td>
+						${part.dataLocation.names}
+					</td>
+					<td>
+						${part.sparePartCount}
+					</td>
+					<td>
+						<shiro:hasPermission permission="sparePart:create">
+							<a href="${createLinkWithTargetURI(controller: 'sparePart', action:'create', params:['dataLocation.id': part.dataLocation.id])}"><g:message code="part.add.sparePart.label" /></a>
+						</shiro:hasPermission>
+					</td>
+					<td>
+						<shiro:hasPermission permission="sparePart:list">
+							<a href="${createLink(controller: 'sparePartView', action: 'list', params:['dataLocation.id': part.dataLocation.id] )}"><g:message code="part.manage.sparePart.label" /></a>
+						</shiro:hasPermission>
+					</td>
+				</tr>
+			</g:each>
+		</g:if>
+		<g:else>
 			<tr>
-				<td>
-					${part.dataLocation.names}
-				</td>
-				<td>
-					${part.sparePartCount}
-				</td>
-				<td>
-					<shiro:hasPermission permission="sparePart:create">
-						<a href="${createLinkWithTargetURI(controller: 'sparePart', action:'create', params:['dataLocation.id': part.dataLocation.id])}"><g:message code="part.add.sparePart.label" /></a>
-					</shiro:hasPermission>
-				</td>
-				<td>
-					<shiro:hasPermission permission="sparePart:list">
-						<a href="${createLink(controller: 'sparePartView', action: 'list', params:['dataLocation.id': part.dataLocation.id] )}"><g:message code="part.manage.sparePart.label" /></a>
-					</shiro:hasPermission>
-				</td>
+				<td><g:message code="entity.list.empty.label" args="[message(code:'spare.part.label')]"/></td>
 			</tr>
-		</g:each>
+		</g:else>
 	</tbody>
 </table>
 <div class="paginateButtons">

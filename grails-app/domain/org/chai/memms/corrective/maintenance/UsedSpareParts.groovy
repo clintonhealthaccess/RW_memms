@@ -1,4 +1,4 @@
-/**
+/** 
  * Copyright (c) 2012, Clinton Health Access Initiative.
  *
  * All rights reserved.
@@ -13,7 +13,7 @@
  *     * Neither the name of the <organization> nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -25,21 +25,34 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package memms.reports.dashboard
+package org.chai.memms.corrective.maintenance
+
+import org.chai.memms.spare.part.SparePart
+import org.chai.memms.spare.part.SparePart;
 
 /**
  * @author Jean Kahigiso M.
+ *
  */
+public class UsedSpareParts {
 
-class IndicatorComputationJob {
-
-    static triggers = {
-    	def cronExpression = "0 0 4 1 * ?" // "s m h D M W Y" //
-   		//Every day at 1 AM the cron job will execute
-    	cron name: 'dashboardIndicatorComputation', cronExpression: cronExpression
+	SparePart sparePart
+	Integer quantity
+	
+	static belongsTo = [workOrder: WorkOrder]
+   
+   
+	static constraints ={
+		sparePart nullable: false
+		quantity nullable:false, min:0
 	}
- 	def indicatorComputationService
-    def execute() {
-    	indicatorComputationService.computeCurrentReport()
-    }
+	static mapping ={
+		table "memms_work_order_used_spare_part"
+		version false
+	}
+
+	@Override
+	public String toString() {
+		return "UsedSparePart [id=" + id + ", spartPart=" + spartPart + " quantity:"+quantity+"]";
+	}  
 }
