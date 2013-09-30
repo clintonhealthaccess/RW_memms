@@ -140,6 +140,7 @@ class SparePartListingReportService {
 				inList ("type", sparePartTypes)
 				//Mandatory property
 				or {
+					if (dataLocations && dataLocations!=null)
 					inList("dataLocation", dataLocations)
 					if(showAtMMC != null)
 						eq("stockLocation",StockLocation.MMC)
