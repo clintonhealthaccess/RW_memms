@@ -120,21 +120,17 @@ class SparePartService {
 	}
 	//To be intensively tested
 	public def getInStockSparePartOfTypes(def types, def user){
-		if(log.isDebugEnabled()) log.debug("types: "+types+" user: "+user)
-    	def stockLocationMMC = StockLocation.MMC
-    	def stockLocationFACILITY = StockLocation.FACILITY
-    	def status = SparePartStatus.PENDINGORDER
-    	def criteria = SparePart.createCriteria();
-
+    	def criteria = SparePart.createCriteria()
     	return  criteria.list(){
 			and{
-				'in'("type",types)
-				gt('inStockQuantity',0)
-				ne('status',status)
-				if(user && user.userType.equals(UserType.TECHNICIANMMC))
-					eq('stockLocation',stockLocationMMC)
-				if(user && user.userType.equals(UserType.TECHNICIANDH))
-					eq('stockLocation',stockLocationFACILITY)
+				if(types && types.size()>0)
+					'in'("type",types)
+				gt("inStockQuantity",0)
+				ne("status",SparePartStatus.PENDINGORDER)
+				if(user && user.userType == UserType.TECHNICIANMMC)
+					eq("stockLocation",StockLocation.MMC)
+				if(user && user.userType == UserType.TECHNICIANDH)
+					eq("stockLocation",StockLocation.FACILITY)
 			}
 		}
 
