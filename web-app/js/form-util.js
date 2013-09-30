@@ -521,6 +521,36 @@ function removePreventionProcess(baseUrl){
 		listRefresher(this);
 	});
 }
+
+function addSpareParts(baseUrl,order){
+	hideSpinnerAndErrorMsg()
+	$('.spare-part-quanty').on("click",".add-spare-part",function(e){
+		e.preventDefault();
+		$(this).hide();
+		$(this).nextAll(".ajax-spinner").show();
+		$.ajax({
+			type :'GET',
+			dataType: 'json',
+			data:{
+					"order.id":order,
+					"sparePart.type.id":$(".spare-parts option:selected").attr("value"),
+					"quantity":$(this).prevAll(".idle-field").attr('value')
+				 },
+			url:baseUrl,
+			success: function(data) {
+				spinnerHandler(e)
+				refreshList(data.results[1],'.used-spare-part-list')
+				var firstOption = $(".spare-parts option[value='_']").text();
+				$(".spare-parts").empty().append(data.results[2]);
+				$(".spare-parts").prepend("<option value='_'>"+firstOption+"</option>");
+			}
+		});
+		listRefresher(this);
+	})
+}
+function removeSpareParts(baseUrl){
+
+}
 /**
  * Utility functions
  *

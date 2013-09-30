@@ -63,7 +63,7 @@
                       <g:if test="${prevention.actions.size()==0}" >
                       </g:if>                       
                         <g:each in="${prevention.actions}" var="action">
-                          <li data-id="${action.id}" name="test">
+                          <li data-id="${action.id}">
                             ${action.description}
                           </li>
                         </g:each>
