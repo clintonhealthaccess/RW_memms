@@ -137,6 +137,7 @@ class WorkOrderViewController extends AbstractController{
 			def equipment = order.equipment
 			//TODO define default escalation message
 			def content = "Please review work order on equipment serial number: ${order.equipment.code}"
+			if(log.isDebugEnabled()) log.debug("==================== DEBUGGING ESCALATION BY APHRO ================= : Equip. code" +order.equipment.code+ " Content: "+content + " User: "+user)
 			workOrderService.escalateWorkOrder(order, content, user)
 			result=true
 			def orders= maintenanceService.getMaintenanceOrderByEquipment(WorkOrder.class,equipment,[:])

@@ -167,7 +167,7 @@ class WorkOrderController extends AbstractEntityController{
 		if(log.isDebugEnabled()) log.debug("Created or updated workOrder: "+entity)
 		if(newEntity || escalation){ //TODO define default message
 			notificationWorkOrderService.newNotification(entity,message(code:"workorder.creation.default.message"),user,false)
-			notificationWorkOrderService.sendEmailNotification(user.email, user.email, "FFFFF")
+			notificationWorkOrderService.sendEmailNotification(user.email,"FFFFF")
 		}		
 	}
 

@@ -67,14 +67,15 @@ class NotificationWorkOrderService {
 	
 	//TO SEND EMAIL TO THE HD CHIEF OF MAINTENANCE
 	
-	public def sendEmailNotification(def fromEmail,def contactEmail,def content){
+	public def sendEmailNotification(def contactEmail, def content){
 		contactEmail = grailsApplication.config.site.contact.email
-		fromEmail = grailsApplication.config.site.from.email
+		def fromEmail = grailsApplication.config.site.from.email
 		sendMail {
 			to contactEmail
 			from fromEmail
 			subject "Work Order created by ${user.email}."
 			body "Work order created by ${user.email}, please login into MEMMS for review."
+			if(log.isDebugEnabled()) log.debug("To ============ : "+contactEmail+" , from ======== : " + fromEmail+"Message ============ : "+contactEmail)
 		}
 	}
 	//TO SEND EMAIL TO THE HD CHIEF OF MAINTENANCE
