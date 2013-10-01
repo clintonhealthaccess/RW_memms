@@ -159,15 +159,15 @@ class SparePartControllerSpec extends IntegrationTests{
 		def supplierContact = Initializer.newContact(['en':'Address Descriptions '],"Supplier","jk@yahoo.com","0768-888-787","Street 1654","6353")
 		def supplier = Initializer.newProvider(CODE(124), Type.SUPPLIER,supplierContact)
 		
-		sparePartController = new SparePartController();
-		
+		sparePartController = new SparePartController();		
+
 		when:
-		sparePartController.params.initialQuantity = 43
+		sparePartController.params.initialQuantity = 13
 		sparePartController.params.purchaseCost = "32000"
 		sparePartController.params.currency = "USD"
 		sparePartController.params.sparePartPurchasedBy = SparePartPurchasedBy.BYMOH
-		sparePartController.params.stockLocation = StockLocation.MMC
-		sparePartController.params.dataLocation = DataLocation.findByCode(KIVUYE)
+		sparePartController.params.stockLocation = StockLocation.FACILITY
+		sparePartController.params.dataLocation = null
 		sparePartController.params.room = ''
 		sparePartController.params.shelve = ''
 		sparePartController.params.descriptions_en = "test_english_descriptions"
@@ -179,15 +179,14 @@ class SparePartControllerSpec extends IntegrationTests{
 		
 		then:
 		SparePart.count() == 0;
-		
 
 		when:
-		sparePartController.params.initialQuantity = 13
+		sparePartController.params.initialQuantity = 43
 		sparePartController.params.purchaseCost = "32000"
 		sparePartController.params.currency = "USD"
 		sparePartController.params.sparePartPurchasedBy = SparePartPurchasedBy.BYMOH
-		sparePartController.params.stockLocation = StockLocation.FACILITY
-		sparePartController.params.dataLocation = null
+		sparePartController.params.stockLocation = StockLocation.MMC
+		sparePartController.params.dataLocation = DataLocation.findByCode(KIVUYE)
 		sparePartController.params.room = ''
 		sparePartController.params.shelve = ''
 		sparePartController.params.descriptions_en = "test_english_descriptions"

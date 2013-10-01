@@ -203,14 +203,14 @@ function getHtml(htmls,field){
 /**
  * Escalate WorkOrder
  */
-function escaletWorkOrder(baseUrl){
+function escaletWorkOrder(baseUrl,dataLocation){
 	hideSpinnerAndErrorMsg()
 	$("tr").on("click",".escalate",function(e){
 		e.preventDefault();
 		$(this).nextAll(".ajax-spinner").show();
 		$.ajax({
 			type :'GET',dataType: 'json',
-			data:{"order":event.target.id},
+			data:{"order":event.target.id,"dataLocation":dataLocation},
 			url:baseUrl,
 			success: function(data) {
 				$(".spinner-container").show()
@@ -543,6 +543,7 @@ function addSpareParts(baseUrl,order){
 				var firstOption = $(".spare-parts option[value='_']").text();
 				$(".spare-parts").empty().append(data.results[2]);
 				$(".spare-parts").prepend("<option value='_'>"+firstOption+"</option>");
+				$(".spare-part-quanty").slideUp("slow");
 			}
 		});
 		listRefresher(this);

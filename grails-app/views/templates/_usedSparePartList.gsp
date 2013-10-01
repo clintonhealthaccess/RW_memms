@@ -1,4 +1,4 @@
-<ul class="used-spare-part-list process-list-action ${(!spareParts.isEmpty()?'':'hide-list')}">
+<ul class="used-spare-part-list process-list-prevention ${(!spareParts.isEmpty()?'':'hide-list')}">
 	<g:each in="${spareParts}" status="i" var="sparePart">
 	 	<li>
 	 	  %{-- <a href="#" name="${sparePart.sparePart.id}" data-id="${order.id}" class="delete-process delete-row">X</a> --}%
