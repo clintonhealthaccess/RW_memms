@@ -121,6 +121,11 @@ class WorkOrderListingReportService {
 		def noCost = customWorkOrderParams.get('noCost')
 
 		if(reportSubType == ReportSubType.WORKORDERS){
+			if(dataLocations == null || dataLocations.empty || departments == null || departments.empty || equipmentTypes == null || equipmentTypes.empty){
+				if (log.isDebugEnabled()) log.debug("getCustomReportOfWorkOrders.workOrders Mandatory property criteria not satisfied")
+				return []
+			}
+
 			def workOrderStatus = customWorkOrderParams.get('workOrderStatus')
 			def fromWorkOrderPeriod = customWorkOrderParams.get('fromWorkOrderPeriod')
 			def toWorkOrderPeriod = customWorkOrderParams.get('toWorkOrderPeriod')
@@ -139,6 +144,7 @@ class WorkOrderListingReportService {
 				inList ("equip.department", departments)
 				//Mandatory property
 				inList ("equip.type", equipmentTypes)
+
 				or{
 					if(lowerLimitCost && lowerLimitCost!=null)
 						gt ("equip.purchaseCost", lowerLimitCost)
@@ -162,6 +168,11 @@ class WorkOrderListingReportService {
 		}
 
 		if(reportSubType == ReportSubType.STATUSCHANGES){
+			if(dataLocations == null || dataLocations.empty || departments == null || departments.empty || equipmentTypes == null || equipmentTypes.empty){
+				if (log.isDebugEnabled()) log.debug("getCustomReportOfWorkOrders.statusChanges Mandatory property criteria not satisfied")
+				return []
+			}
+
 			def workOrderStatusChanges = customWorkOrderParams.get('statusChanges')
 			def fromStatusChangesPeriod = customWorkOrderParams.get('fromStatusChangesPeriod')
 			def toStatusChangesPeriod = customWorkOrderParams.get('toStatusChangesPeriod')
@@ -180,6 +191,7 @@ class WorkOrderListingReportService {
 				inList ("equipment.department", departments)
 				//Mandatory property
 				inList ("equipment.type", equipmentTypes)
+
 				or{
 					if(lowerLimitCost && lowerLimitCost!=null)
 						gt ("equipment.purchaseCost", lowerLimitCost)

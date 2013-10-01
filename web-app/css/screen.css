@@ -847,7 +847,7 @@ form.search-form button { height: 23px; margin: 0 0 0 -1px; -moz-border-radius-t
 .checkbox .ajax-error { color: #d30000; display: inline-block; left: -50%; position: absolute; top: 12px; white-space: nowrap; }
 
 /* line 710, /Users/susanmlister/workspace/clintonhealthaccess/memms/src/stylesheets/partials/_forms.sass */
-.process-list-action, .process-list-material, .process-list-prevention { border: 1px solid #47aef7; max-height: 188px; overflow-y: scroll; }
+.process-list-action, .process-list-material, .process-list-prevention, .used-spare-part-list { border: 1px solid #47aef7; max-height: 188px; overflow-y: scroll; }
 
 /* line 714, /Users/susanmlister/workspace/clintonhealthaccess/memms/src/stylesheets/partials/_forms.sass */
 .draggable, .droppable { min-height: 50px !important; }
