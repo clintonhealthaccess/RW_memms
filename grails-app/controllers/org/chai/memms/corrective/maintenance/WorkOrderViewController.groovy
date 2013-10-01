@@ -289,7 +289,7 @@ class WorkOrderViewController extends AbstractController{
 			response.sendError(404)
 		else{
 			order = commentService.deleteComment(comment,user)
-			result = trueart 
+			result = true
 			html = g.render(template:"/templates/comments",model:[order:order])
 		}
 		render(contentType:"text/json") { results = [result,html]}

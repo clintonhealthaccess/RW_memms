@@ -90,17 +90,17 @@ class SparePartController extends AbstractEntityController{
 
 		if(log.isDebugEnabled()) log.debug("SparePart params: before bind "+params)
 
-		if(stockLocation.equals(StockLocation.MMC))
-			params.dataLocation =''
-
 		if(!entity.id){
 			entity.addedBy = user 
 			if(status.equals(SparePartStatus.INSTOCK)) entity.inStockQuantity = params.int("initialQuantity")
 			else entity.inStockQuantity = 0
 		}else{ 
 			entity.lastModified = user
+
 			if(status.equals(SparePartStatus.PENDINGORDER)) entity.inStockQuantity = 0
 			else entity.inStockQuantity = params.int("inStockQuantity")
+			
+			if(stockLocation.equals(StockLocation.MMC)) params.dataLocation =''
 		}
 		bindData(entity,params,[exclude:["inStockQuantity"]])
 

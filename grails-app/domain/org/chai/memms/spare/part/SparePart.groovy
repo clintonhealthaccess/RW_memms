@@ -159,9 +159,9 @@ public class SparePart {
 
 		stockLocation  nullable: false,inList:[StockLocation.MMC, StockLocation.FACILITY]
 		
-		dataLocation nullable: true, validator: {val, obj ->
+		dataLocation nullable: true, validator: { val, obj ->
 			if(obj.stockLocation.equals(StockLocation.FACILITY)) return val != null
-			else return val == null
+			if(obj.stockLocation.equals(StockLocation.MMC)) return val == null
 		}
 		
 		lastModified nullable:true, validator:{ val, obj ->
