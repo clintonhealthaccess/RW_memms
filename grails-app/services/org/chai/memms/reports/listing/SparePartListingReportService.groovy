@@ -121,7 +121,7 @@ class SparePartListingReportService {
 				return []
 			}
 			else if(showAtMmc == null || !showAtMmc){
-				if (log.isDebugEnabled()) log.debug("getCustomReportOfSpareParts Mandatory property criteria not satisfied, admin dataLocations: " + dataLocations +", showAtMmc:" + showAtMMC)
+				if (log.isDebugEnabled()) log.debug("getCustomReportOfSpareParts Mandatory property criteria not satisfied, admin dataLocations: " + dataLocations +", showAtMmc:" + showAtMmc)
 				return []
 			}
 		}
@@ -277,25 +277,26 @@ class SparePartListingReportService {
 			def lastYearDateFromNow = lastYearDateTimeFromNow.toDate()
 			
 			return sparePartCriteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			def sparePartCount=	sparePartCriteria.get{
-				//projections{
-					//property("type")
-					//groupProperty("t.id")
-					//rowCount("inStockQuantity")
-				//}
-				//Mandatory property
-				or {
-					if (dataLocations && dataLocations!=null)
-					inList("dataLocation", dataLocations)
-					if(showAtMmc != null)
-						eq("stockLocation",StockLocation.MMC)
-				}
-				//Mandatory property
-				inList ("type", sparePartTypes)
-					
-				eq ("status",SparePartStatus.INSTOCK)
-				//gt("deliveryDate", lastYearDateFromNow)
-			}
+				// TODO AR throws an exception
+				// def sparePartCount=	sparePartCriteria.get{
+				// 	//projections{
+				// 		//property("type")
+				// 		//groupProperty("t.id")
+				// 		//rowCount("inStockQuantity")
+				// 	//}
+				// 	//Mandatory property
+				// 	or {
+				// 		if (dataLocations && dataLocations!=null)
+				// 		inList("dataLocation", dataLocations)
+				// 		if(showAtMmc != null)
+				// 			eq("stockLocation",StockLocation.MMC)
+				// 	}
+				// 	//Mandatory property
+				// 	inList ("type", sparePartTypes)
+						
+				// 	eq ("status",SparePartStatus.INSTOCK)
+				// 	//gt("deliveryDate", lastYearDateFromNow)
+				// }
 			}
 		}
 	}

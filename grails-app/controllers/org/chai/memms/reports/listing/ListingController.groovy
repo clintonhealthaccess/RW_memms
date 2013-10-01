@@ -668,10 +668,7 @@ class ListingController extends AbstractController{
 					break;
 			}
 
-			def savedReports = null
-			if(reportType != ReportType.SPAREPARTS){
-				savedReports = userService.getSavedReportsByUser(user, reportType)
-			}
+			def savedReports = userService.getSavedReportsByUser(user, reportType)
 
 			customizedListingParams << [
 				// TO BE REVIEWED BY APHRORWA savedReportId
