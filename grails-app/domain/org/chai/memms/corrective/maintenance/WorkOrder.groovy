@@ -89,8 +89,6 @@ public class WorkOrder extends MaintenanceOrder{
 	OrderStatus currentStatus
 	Criticality criticality
 	FailureReason failureReason
-	//Map<SparePart,Integer> usedSpareParts = [:]
-	//The above fail to persist
 	Map usedSpareParts = new HashMap()
 	
 	

@@ -133,6 +133,7 @@ class WorkOrderViewController extends AbstractController{
 	
 	def escalate = {
 		WorkOrder order = WorkOrder.get(params.int("order"))
+		DataLocation dataLocation = DataLocation.get(params.int("dataLocation"))
 		def result = false
 		def html = ""
 		if (!order || order.currentStatus.equals(OrderStatus.CLOSEDFIXED) || order.currentStatus.equals(OrderStatus.CLOSEDFORDISPOSAL))
@@ -141,10 +142,13 @@ class WorkOrderViewController extends AbstractController{
 			def equipment = order.equipment
 			//TODO define default escalation message
 			def content = "Please review work order on equipment serial number: ${order.equipment.code}"
-			if(log.isDebugEnabled()) log.debug("==================== DEBUGGING ESCALATION BY APHRO ================= : Equip. code" +order.equipment.code+ " Content: "+content + " User: "+user)
 			workOrderService.escalateWorkOrder(order, content, user)
 			result=true
-			def orders= maintenanceService.getMaintenanceOrderByEquipment(WorkOrder.class,equipment,[:])
+			def orders
+			if(dataLocation)
+				orders = maintenanceService.getMaintenanceOrderByCalculationLocation(WorkOrder.class,dataLocation,[:])
+			else orders= maintenanceService.getMaintenanceOrderByEquipment(WorkOrder.class,equipment,[:])
+			
 			html = g.render(template:"/entity/workOrder/workOrderList",model:[equipment:equipment,entities:orders])
 			if(!request.xhr)
 				response.sendError(404)
@@ -285,7 +289,7 @@ class WorkOrderViewController extends AbstractController{
 			response.sendError(404)
 		else{
 			order = commentService.deleteComment(comment,user)
-			result = true
+			result = trueart 
 			html = g.render(template:"/templates/comments",model:[order:order])
 		}
 		render(contentType:"text/json") { results = [result,html]}
@@ -304,7 +308,7 @@ class WorkOrderViewController extends AbstractController{
 			order = sparePartService.assignSparePartsToWorkOrder(order,type,user,quantity)
 			def compatibleSpareParts = sparePartService.getCompatibleSparePart(order.equipment.type,user)
 			for(def sparePart: compatibleSpareParts)
-				options = options+" <option value='"+sparePart.key.id+"'"+(sparePart.key.id==type.id)?"selected":''+">"+sparePart.key.names+" - "+[sparePart.value]+"</option>";
+				options = options+" <option value='"+sparePart.key.id+"'>"+sparePart.key.names+" - "+[sparePart.value]+"</option>";
 			result = true
 			html = g.render(template:"/templates/usedSparePartList",model:[order:order,spareParts:order.spareParts])
 		}

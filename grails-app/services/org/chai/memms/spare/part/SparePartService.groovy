@@ -121,10 +121,11 @@ class SparePartService {
 	//To be intensively tested
 	public def getInStockSparePartOfTypes(def types, def user){
     	def criteria = SparePart.createCriteria()
+    	if(!types || types.size()==0)
+    		return []
     	return  criteria.list(){
 			and{
-				if(types && types.size()>0)
-					'in'("type",types)
+				'in'("type",types)
 				gt("inStockQuantity",0)
 				ne("status",SparePartStatus.PENDINGORDER)
 				if(user && user.userType == UserType.TECHNICIANMMC)

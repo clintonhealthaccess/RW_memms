@@ -100,7 +100,8 @@
                  <div class="process process-action half">
                     <label>Used spare parts</label>
                     <fieldset>
-                    <g:render template="/templates/usedSparePartList" model="['order':order,'spareParts':order.spareParts,'label':'work.order.performed.action.label']" /> 
+                    <g:render template="/templates/usedSparePartList" model="['order':order,'spareParts':order.spareParts,'label':'work.order.performed.action.label']" />
+                    <br/> 
 					<label>Spare Parts</label>
 					<select class="spare-parts" name="spareParts" >
 					  <option value="_" class="first-option">Select used compantible</option>

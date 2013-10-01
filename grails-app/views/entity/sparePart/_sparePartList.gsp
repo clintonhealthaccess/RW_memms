@@ -68,10 +68,10 @@
 				</td>	
 				<td>
 					${sparePart.initialQuantity}
-				</td>
+				</td>		
 				<td>
 					${sparePart.inStockQuantity}
-				</td>		
+				</td>
 				<td>
 					${sparePart.usedQuantity}
 				</td>								
