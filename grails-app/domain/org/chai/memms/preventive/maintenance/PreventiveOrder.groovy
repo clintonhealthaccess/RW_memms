@@ -73,7 +73,8 @@ public abstract class PreventiveOrder extends MaintenanceOrder {
 		SERVICEPROVIDER("service.provider"),
 		DEPARTMENTUSER("department.user"),
 		HCTITULAIRE("hc.titulaire"),
-		HCTECHNICIAN("hc.technician")
+		HCTECHNICIAN("hc.technician"),
+		MMCTECHNICIAN("mmc.technician")
 
 		String messageCode = "prevention.in.charge"
 		String name

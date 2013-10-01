@@ -39,7 +39,7 @@
 					${prevention.scheduledOn.formatDate}
 				</td>
 				<td>
-					 ${prevention.timeSpend.hours ?prevention.timeSpend.hours:0}:${prevention.timeSpend.minutes}
+					 ${prevention.timeSpend?.hours ?prevention.timeSpend?.hours:0}:${prevention.timeSpend?.minutes}
 				</td>
 				<td>
 					<g:stripHtml field="${prevention.descriptions}" chars="40"/>
