@@ -179,6 +179,7 @@ class SparePartListingReportService {
 				
 				//Mandatory property
 				or {
+					if (dataLocations && dataLocations!=null)
 					inList("dataLocation", dataLocations)
 					if(showAtMMC != null)
 						eq("stockLocation",StockLocation.MMC)
@@ -239,6 +240,7 @@ class SparePartListingReportService {
 				createAlias("type","t")
 				//Mandatory property
 				or {
+					if (dataLocations && dataLocations!=null)
 					inList("dataLocation", dataLocations)
 					if(showAtMMC != null)
 						eq("stockLocation",StockLocation.MMC)
@@ -271,6 +273,7 @@ class SparePartListingReportService {
 				//}
 				//Mandatory property
 				or {
+					if (dataLocations && dataLocations!=null)
 					inList("dataLocation", dataLocations)
 					if(showAtMMC != null)
 						eq("stockLocation",StockLocation.MMC)
