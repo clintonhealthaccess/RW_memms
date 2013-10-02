@@ -37,10 +37,15 @@ grails.mime.types = [ html: ['text/html','application/xhtml+xml'],
                       atom: 'application/atom+xml',
                       css: 'text/css',
                       csv: 'text/csv',
+					  pdf: 'application/pdf',
+					  rtf: 'application/rtf',
+					  excel: 'application/vnd.ms-excel',
+					  ods: 'application/vnd.oasis.opendocument.spreadsheet',
                       all: '*/*',
                       json: ['application/json','text/json'],
                       form: 'application/x-www-form-urlencoded',
                       multipartForm: 'multipart/form-data'
+					  
                     ]
 
 // URL Mapping Cache Max Size, defaults to 5000

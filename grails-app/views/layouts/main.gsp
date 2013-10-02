@@ -8,6 +8,7 @@
   <g:layoutHead />
   <r:require module="core"/>
   <r:layoutResources/>
+  <r:require module="export"/>
 </head>
 <body>
   <div id="header">
