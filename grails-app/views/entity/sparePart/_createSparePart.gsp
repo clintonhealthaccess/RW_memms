@@ -33,8 +33,8 @@
             <g:input name="initialQuantity" label="${message(code:'spare.part.inititial.quantity')}" bean="${sparePart}" field="initialQuantity"/>
           </g:if>
           <g:else>
-            <g:input name="initialQuantity" label="${message(code:'spare.part.inititial.quantity')}" bean="${sparePart}" field="initialQuantity"/>
-            <g:input name="inStockQuantity" label="${message(code:'spare.part.in.stock.quantity')}" bean="${sparePart}" field="inStockQuantity"/>
+            <g:input name="initialQuantity" label="${message(code:'spare.part.inititial.quantity')}" bean="${sparePart}" field="initialQuantity" dateClass=" numbers-only disabled-on-edit"/>
+            <g:input name="inStockQuantity" label="${message(code:'spare.part.in.stock.quantity')}"  bean="${sparePart}" field="inStockQuantity" dateClass="numbers-only disabled-on-edit"/>
           </g:else>
         </fieldset>
      	  <div id="form-aside-type" class="form-aside">
@@ -111,5 +111,6 @@
 		numberOnlyField();
 		getToHide("${message(code:'spare.part.purchase.cost.label')}","${message(code:'spare.part.estimated.cost.label')}");
 		getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}");
+    sparePartQuantityHandler("${sparePart?.id}","${message(code:'default.edit.label',args:[''])}","${message(code:'spare.part.warn.update.quantity.label')}");
 	});
 </script>

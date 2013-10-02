@@ -139,9 +139,12 @@ public class SparePart {
 		room nullable: true, blank: true
 		shelf nullable: true, blank: true
 
-		initialQuantity nullable: false, min:1
+		initialQuantity nullable: false, min:1, validator:{ val, obj ->
+			if(val < obj.inStockQuantity) return false
+		}
 		inStockQuantity nullable: false, min:0, validator:{ val, obj ->
 			if(obj.status.equals(SparePartStatus.PENDINGORDER)) return val==0
+			if(val > obj.initialQuantity) return false
 		}
 
 		purchaseDate nullable: true, validator:{if(it!=null) return it <= new Date()}
