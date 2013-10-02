@@ -20,13 +20,13 @@
 					<p class="nav-help"> <g:message code="summary.selectlocation.text" args="${[message(code:'inventory.label')]}" /></p>
 				</g:if>
 				<g:else>
-				  <br/>
+				  	<br/>
 					<h4 class="section-title alt">
-            <span class="question-default">
-              <img src="${resource(dir:'images/icons',file:'star_small.png')}">
-            </span>
-            <g:message code="location.label"/>: ${currentLocation.names}
-          </h4>
+			            <span class="question-default">
+			              <img src="${resource(dir:'images/icons',file:'star_small.png')}">
+			            </span>
+			            <g:message code="location.label"/>: ${currentLocation.names}
+		         	</h4>
 					<g:render template="${template}"/>				
 				</g:else>
 				

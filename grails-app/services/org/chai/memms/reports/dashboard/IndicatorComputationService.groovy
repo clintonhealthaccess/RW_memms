@@ -157,9 +157,7 @@ class IndicatorComputationService {
                     if (log.isDebugEnabled()) log.debug(">> built map =" + map );
                     if(map!=null) {
                         for (Map.Entry<String, Double> entry : (Set)map.entrySet()){
-                            if (log.isDebugEnabled()) log.debug("computeLocationReport entry.getKey() " + entry.getKey() + " entry.getValue() " + entry.getValue());
-                            
-                            //DashboardInitializer.newGroupIndicatorValue(currentDate,['en':entry.getKey(),'fr':entry.getKey()],entry.getValue(),indicatorValue)
+                            if (log.isDebugEnabled()) log.debug("computeLocationReport entry.getKey() " + entry.getKey() + " entry.getValue() " + entry.getValue());                            
 							groupIndicatorValueService.newGroupIndicatorValue(currentDate,['en':entry.getKey(),'fr':entry.getKey()],entry.getValue(),indicatorValue)
                         }
                           
@@ -369,7 +367,7 @@ class IndicatorComputationService {
     }
 
     def groupExecuteSQL(String sql) {
-        if (log.isDebugEnabled()) log.debug("groupExecuteHQL sql " + sql);
+        if (log.isDebugEnabled()) log.debug("groupExecuteSQL sql " + sql);
          
         Map<String, Double> map = new HashMap<String, Double>()
         if(sql != null) {
@@ -378,7 +376,7 @@ class IndicatorComputationService {
                 for(Object arr : res) {
                     if (log.isDebugEnabled()) log.debug("groupExecuteSQL arr " + arr);
                     if(Double.parseDouble(arr[1] + ""))
-                    map.put(arr[0], (Double)arr[1])
+                        map.put(arr[0], (Double)arr[1])
                 }
             }
         }

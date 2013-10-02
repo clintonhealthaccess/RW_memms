@@ -114,20 +114,25 @@ class SparePartListingReportService {
 		def sparePartCriteria = SparePart.createCriteria()
 
 		if(reportSubType == ReportSubType.INVENTORY){
-			def equipmentTypes = customSparePartsParams.get('equipmentTypes')
-			def compatibleEquipmentTypes = []
-			if(equipmentTypes != null && !equipmentTypes.empty){
-				equipmentTypes.each{ equipmentType ->
-					sparePartTypes.each{ sparePartType ->
-						def sparePartTypeCompatibleEquipmentTypes = sparePartType.compatibleEquipmentTypes
-						if(sparePartTypeCompatibleEquipmentTypes != null && !sparePartTypeCompatibleEquipmentTypes.empty){
-							if(sparePartTypeCompatibleEquipmentTypes.contains(equipmentType))
-								compatibleEquipmentTypes.add(sparePartType)
+			if (log.isDebugEnabled()) log.debug("getCustomReportOfSpareParts 1 "+sparePartTypes)
+			def compatibleEquipmentTypes = customSparePartsParams.get('equipmentTypes')
+			def sparePartTypesWithCompatibleEquipmentTypes = []
+			if(sparePartTypes != null && !sparePartTypes.empty){
+				if(compatibleEquipmentTypes != null && !compatibleEquipmentTypes.empty){
+					compatibleEquipmentTypes.each{ compatibleEquipmentType ->
+						sparePartTypes.each{ sparePartType ->
+							def sparePartTypeCompatibleEquipmentTypes = sparePartType.compatibleEquipmentTypes
+							if(sparePartTypeCompatibleEquipmentTypes != null && !sparePartTypeCompatibleEquipmentTypes.empty){
+								if(sparePartTypeCompatibleEquipmentTypes.contains(compatibleEquipmentType))
+									sparePartTypesWithCompatibleEquipmentTypes.add(sparePartType)
+							}
 						}
 					}
+					if(sparePartTypesWithCompatibleEquipmentTypes != null && !sparePartTypesWithCompatibleEquipmentTypes.empty)
+						sparePartTypes = sparePartTypesWithCompatibleEquipmentTypes
 				}
-				sparePartTypes = compatibleEquipmentTypes
 			}
+			if (log.isDebugEnabled()) log.debug("getCustomReportOfSpareParts 2 "+sparePartTypes)
 			
 			def sparePartStatus = customSparePartsParams.get('sparePartStatus')
 			def fromAcquisitionPeriod = customSparePartsParams.get('fromAcquisitionPeriod')
@@ -140,6 +145,7 @@ class SparePartListingReportService {
 				inList ("type", sparePartTypes)
 				//Mandatory property
 				or {
+					if (dataLocations && dataLocations!=null)
 					inList("dataLocation", dataLocations)
 					if(showAtMMC != null)
 						eq("stockLocation",StockLocation.MMC)
@@ -173,6 +179,7 @@ class SparePartListingReportService {
 				
 				//Mandatory property
 				or {
+					if (dataLocations && dataLocations!=null)
 					inList("dataLocation", dataLocations)
 					if(showAtMMC != null)
 						eq("stockLocation",StockLocation.MMC)
@@ -233,6 +240,7 @@ class SparePartListingReportService {
 				createAlias("type","t")
 				//Mandatory property
 				or {
+					if (dataLocations && dataLocations!=null)
 					inList("dataLocation", dataLocations)
 					if(showAtMMC != null)
 						eq("stockLocation",StockLocation.MMC)
@@ -265,6 +273,7 @@ class SparePartListingReportService {
 				//}
 				//Mandatory property
 				or {
+					if (dataLocations && dataLocations!=null)
 					inList("dataLocation", dataLocations)
 					if(showAtMMC != null)
 						eq("stockLocation",StockLocation.MMC)

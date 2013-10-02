@@ -63,8 +63,6 @@ class NotificationWorkOrderService {
 		return sendNotifications(workOrder,content,sender,receivers)
 	}
 	
-	
-	
 	//TO SEND EMAIL TO THE HD CHIEF OF MAINTENANCE
 	
 	public def sendEmailNotification(def contactEmail, def content){
@@ -79,9 +77,6 @@ class NotificationWorkOrderService {
 		}
 	}
 	//TO SEND EMAIL TO THE HD CHIEF OF MAINTENANCE
-	
-	
-	
 	
 	public int getUnreadNotifications(User user){
 		def criteria = NotificationWorkOrder.createCriteria()

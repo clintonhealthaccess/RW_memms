@@ -27,55 +27,32 @@
  */
 package org.chai.memms.corrective.maintenance
 
-import org.chai.memms.preventive.maintenance.Prevention;
-import org.chai.memms.preventive.maintenance.PreventiveOrder;
+import org.chai.memms.spare.part.SparePart
+import org.chai.memms.spare.part.SparePart;
 
 /**
  * @author Jean Kahigiso M.
  *
  */
-class PreventionService {
+public class UsedSpareParts {
+
+	SparePart sparePart
+	Integer quantity
 	
-	static transactional = true
-	
-	def languageService;
-	def sessionFactory;
-
-
-	public List<Prevention> getPreventionByOrder(PreventiveOrder order, Map<String,String> params){
-		def criteria =  Prevention.createCriteria()
-		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order:params.'$order' ?:"desc"){
-			eq('order',order)
-		}
-
+	static belongsTo = [workOrder: WorkOrder]
+   
+   
+	static constraints ={
+		sparePart nullable: false
+		quantity nullable:false, min:0
+	}
+	static mapping ={
+		table "memms_work_order_used_spare_part"
+		version false
 	}
 
-	public List<Prevention> searchPrevention(String text, PreventiveOrder preventiveOrder, Map<String,String> params){
-		text =  text.trim()
-		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
-		def criteria =  Prevention.createCriteria()
-		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.'$order' ?:"desc"){
-			    if(preventiveOrder!=null)
-					eq('order',preventiveOrder)
-				ilike(dbFieldDescriptions,"%"+text+"%") 
-		}
-
-	}
-
-	public def removeFromPrevention(def action){
-		def criteria = Prevention.createCriteria()
-		def preventions = criteria.list(){
-			delegate.actions{ 'in'('id',action.id) }
-			distinct("id")
-		}
-		if(log.isDebugEnabled()) log.debug("preventions: "+preventions)
-		//Remove action on prevention
-		if(preventions && preventions.size()>0){
-			preventions.each{ prevention ->
-				prevention.removeFromActions(action)
-				prevention.save(failOnError:true)
-			}
-		}
-	}
-	
+	@Override
+	public String toString() {
+		return "UsedSparePart [id=" + id + ", spartPart=" + spartPart + " quantity:"+quantity+"]";
+	}  
 }

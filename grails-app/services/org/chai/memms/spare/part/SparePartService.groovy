@@ -50,6 +50,7 @@ import org.supercsv.io.CsvListWriter;
 import org.supercsv.io.ICsvListWriter;
 import org.supercsv.prefs.CsvPreference;
 import org.chai.memms.util.ImportExportConstant;
+import org.chai.memms.corrective.maintenance.UsedSpareParts;
 
 /**
  * @author Aphrodice Rwagaju
@@ -70,6 +71,73 @@ class SparePartService {
 			return true
 		}
 	}
+	//To be intensively tested
+	public def assignSparePartsToWorkOrder(def order, def sparePartType, def user, def quantity){
+		def usedSpareParts = order.spareParts
+		def changedSpareParts = [:]
+		def diff = null	
+		def tempSpareParts =   this.getInStockSparePartOfTypes([sparePartType],user)
+		for(def sparePart: tempSpareParts){
+			if(diff==null || diff > 0) diff = sparePart.inStockQuantity-quantity
+			else diff = sparePart.inStockQuantity - (diff*-1)
+			if(diff >= 0){
+				if(order.getSparePartTypesUsed(sparePart))
+					order.getSparePartTypesUsed(sparePart).quantity = order.getSparePartTypesUsed(sparePart).quantity+quantity
+				else order.addToSpareParts(new UsedSpareParts(sparePart:sparePart,quantity:quantity))
+				changedSpareParts.put(sparePart,diff)
+				break;
+			}else{
+				if(order.getSparePartTypesUsed(sparePart))
+					order.getSparePartTypesUsed(sparePart).quantity = order.getSparePartTypesUsed(sparePart).quantity+sparePart.inStockQuantity
+				else  order.addToSpareParts(new UsedSpareParts(sparePart:sparePart,quantity:sparePart.inStockQuantity))
+				changedSpareParts.put(sparePart,0)
+			}
+		}
+		for(def sparePart : changedSpareParts){
+			sparePart.key.inStockQuantity= sparePart.value
+			sparePart.key.save(failOnError:true)
+		}		
+
+		return order.save(failOnError:true, flush:true)
+		//return order
+	}
+
+	//To be intensively tested
+    public def getCompatibleSparePart(def equipmentType, def user){
+    	def tempSpareParts =  this.getInStockSparePartOfTypes(equipmentType.sparePartTypes,user)
+		def spareParts = [:]
+		for(def sparePart : tempSpareParts){
+			if(spareParts.get(sparePart.type)==null){ 
+				spareParts.put(sparePart.type,sparePart.inStockQuantity)
+			}else{
+				//Update the map
+				def value = spareParts.get(sparePart.type)
+				def inStockQuantity = sparePart.inStockQuantity
+				spareParts.put(sparePart.type,value+inStockQuantity)
+			}
+		}
+		return spareParts
+	}
+	//To be intensively tested
+	public def getInStockSparePartOfTypes(def types, def user){
+    	def criteria = SparePart.createCriteria()
+    	if(!types || types.size()==0)
+    		return []
+    	return  criteria.list(){
+			and{
+				'in'("type",types)
+				gt("inStockQuantity",0)
+				ne("status",SparePartStatus.PENDINGORDER)
+				if(user && user.userType == UserType.TECHNICIANMMC)
+					eq("stockLocation",StockLocation.MMC)
+				if(user && user.userType == UserType.TECHNICIANDH)
+					eq("stockLocation",StockLocation.FACILITY)
+			}
+		}
+
+	}
+
+
 	public def searchSparePart(String text,User user, SparePartType type,Map<String,String> params) {
 		//Remove unnecessary blank space
 		text= text.trim()

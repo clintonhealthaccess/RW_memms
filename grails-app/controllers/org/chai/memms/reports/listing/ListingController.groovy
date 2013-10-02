@@ -637,7 +637,7 @@ class ListingController extends AbstractController{
 					adaptParamsForList()
 					if(reportSubType == ReportSubType.WORKORDERS){
 						savedCustomizedListingReport = workOrderListingReportService.getCustomReportOfWorkOrders(user,customizedListingParams,params)
-						if (log.isDebugEnabled()) log.debug("listing.savedCustomizedListing # of workOrders:"+savedCustomizedListingReport.size())
+						if (log.isDebugEnabled()) log.debug("listing.savedCustomizedListing # of workOrders ====================== :"+savedCustomizedListingReport.size())
 					}
 					if(reportSubType == ReportSubType.STATUSCHANGES){
 						// TODO AR get saved WorkOrderStatus status changes custom report
@@ -676,6 +676,7 @@ class ListingController extends AbstractController{
 			}
 
 			customizedListingParams << [
+				// TO BE REVIEWED BY APHRORWA savedReportId
 				savedReportId: savedCustomizedListingReport.id,
 				savedReport: savedReport,
 				savedReports: savedReports,

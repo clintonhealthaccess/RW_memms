@@ -48,7 +48,7 @@
                   <span class="v-tabs-value"><g:formatNumber number="${indicatorItem.value}" format="0.00%"/></span>
                 </g:if>
                 <g:if test="${indicatorItem.unit!='%'}">
-                  <span class="v-tabs-value"><g:formatNumber number="${indicatorItem.value}" format="###,##0"/>${indicatorItem.unit}</span>
+                  <span class="v-tabs-value"><g:formatNumber number="${indicatorItem.value}" format="###,##0"/> ${indicatorItem.unit}</span>
                 </g:if>
               </p>
               <div class="v-tabs-fold-container" data-indicator-code="${indicatorItem.code}">

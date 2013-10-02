@@ -70,7 +70,7 @@
 <g:render template="/templates/pagination" model="[entities:entities, entityCount:entities.totalCount]" />
 <script type="text/javascript">
 	$(document).ready(function() {
-		escaletWorkOrder("${createLink(controller:'workOrderView',action: 'escalate')}")
+		escaletWorkOrder("${createLink(controller:'workOrderView',action: 'escalate')}","${dataLocation?.id}")
 		getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}")
 		showClutips()
 	});

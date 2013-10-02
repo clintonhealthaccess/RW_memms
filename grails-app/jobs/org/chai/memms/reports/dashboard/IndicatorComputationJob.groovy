@@ -28,15 +28,18 @@
 package memms.reports.dashboard
 
 /**
- * @author Antoine Nzeyi, Donatien Masengesho, Pivot Access Ltd
- *
+ * @author Jean Kahigiso M.
  */
-class IndicatorComputationJob {
-/*
-    def indicatorReportService
-    def cronExpression = "0 0 0 1 1 * ? *" // s m H d M DOW yyyy
 
+class IndicatorComputationJob {
+
+    static triggers = {
+    	def cronExpression = "0 0 4 1 * ?" // "s m h D M W Y" //
+   		//Every day at 1 AM the cron job will execute
+    	cron name: 'dashboardIndicatorComputation', cronExpression: cronExpression
+	}
+ 	def indicatorComputationService
     def execute() {
-        indicatorReportService.computeCurrentReport()
-    */
+    	indicatorComputationService.computeCurrentReport()
+    }
 }

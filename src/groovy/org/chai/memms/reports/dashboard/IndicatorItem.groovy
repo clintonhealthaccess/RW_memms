@@ -222,6 +222,8 @@ class IndicatorItem {
     public def historicalTrendMaxValue() {
         def maxValue = null
         if(unit == '%') maxValue = ', maxValue: 1';
+        else if(unit == "day(s)") maxValue = ', maxValue: 30';
+        else if(unit == "month(s)") maxValue = ', maxValue: 12';
         else maxValue = ''
 
         if (log.isDebugEnabled()) log.debug("historicalTrendMaxValue maxValue=" + maxValue);

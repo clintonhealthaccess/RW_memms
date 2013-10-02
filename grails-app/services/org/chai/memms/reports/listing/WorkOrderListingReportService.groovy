@@ -133,6 +133,7 @@ class WorkOrderListingReportService {
 				createAlias("equipment","equip")
 
 				//Mandatory property
+				if (dataLocations && dataLocations!=null)
 				inList("equip.dataLocation", dataLocations)
 				//Mandatory property
 				inList ("equip.department", departments)
@@ -173,6 +174,7 @@ class WorkOrderListingReportService {
 				createAlias("wo.equipment","equipment")
 
 				//Mandatory property
+				if (dataLocations && dataLocations!=null)
 				inList("equipment.dataLocation", dataLocations)
 				//Mandatory property
 				inList ("equipment.department", departments)

@@ -25,9 +25,9 @@
           </span>
           <g:message code="order.section.basic.information.label"/>
         </h4> 
-      	<g:selectFromList name="equipment.id" readonly="${(closed)? true:false}" label="${message(code:'equipment.label')}" bean="${order}" field="equipment" optionKey="id" multiple="false"
-  			ajaxLink="${createLink(controller:'equipmentView', action:'getAjaxData',params: [dataLocation:(dataLocation)?dataLocation.id:order.equipment?.dataLocation?.id])}"
-  			from="${equipments}" value="${order?.equipment?.id}" values="${equipments.collect{it.code}}" />
+      	<g:selectFromList name="equipment.id" readonly="${(closed)? true:false}" label="${message(code:'equipment.label')}" bean="${order}" field="equipment" optionKey="id" multiple="false" 
+      	ajaxLink="${createLink(controller:'equipmentView', action:'getAjaxData',params: [dataLocation:(dataLocation)?dataLocation.id:order.equipment?.dataLocation?.id
+      	])}" from="${equipments}" value="${order?.equipment?.id}" values="${equipments.collect{it.code}}" />
   		<g:if test="${order.id != null}">
 	  		<div class="row">
 		  		 <label class="top"><g:message code="work.order.reported.by.label"/> :</label>
@@ -88,6 +88,38 @@
 			</div>
 	        </fieldset>
 	      </div>
+	      <div class="form-section">
+	    	<fieldset>
+	      	<h4 class="section-title">
+	          <span class="question-default">
+	            <img src="${resource(dir:'images/icons',file:'star_small.png')}">
+	          </span>
+	          <g:message code="work.order.section.spare.part.information.label"/>
+	        </h4>
+	        <div class="row maintenance-process">
+                 <div class="process process-action half">
+                    <label>Used spare parts</label>
+                    <fieldset>
+                    <g:render template="/templates/usedSparePartList" model="['order':order,'spareParts':order.spareParts,'label':'work.order.performed.action.label']" />
+                    <br/> 
+					<label>Spare Parts</label>
+					<select class="spare-parts" name="spareParts" >
+					  <option value="_" class="first-option">Select used compantible</option>
+	                  <g:each in="${compatibleSpareParts}" var="sparePart">
+	                    <option value="${sparePart.key.id}">${sparePart.key.names} - [${sparePart.value}]</option>
+	                  </g:each>
+		            </select>
+		            <div class="spare-part-quanty">
+		                <input type="text" name="spare-part-number"  class="idle-field numbers-only" value="" />
+	    				<a href="#" class="add-spare-part next medium"><g:message code="default.add.label"  args="${['']}"/></a>
+	    				<img src="${resource(dir:'images',file:'spinner.gif')}" class="ajax-spinner"/>
+	    				<span class="ajax-error alt"><g:message code="entity.error.updating.try.again"/></span>
+    				</div>	
+	                 </fieldset>
+                  </div>
+              </div>
+	       </fieldset>
+	       </div>
 	      <div class="form-section">
 	    	<fieldset class="form-content">
 	      	<h4 class="section-title">
@@ -159,6 +191,15 @@
 		addComment("${createLink(controller:'workOrderView',action: 'addComment')}","${order.id}");
 		removeComment("${createLink(controller:'workOrderView',action: 'removeComment')}");
 		getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}");
+
+		addSpareParts("${createLink(controller:'workOrderView',action: 'addSpareParts')}","${order.id}");
+		//removeSpareParts("${createLink(controller:'workOrderView',action: 'removeSpareParts')}");
+		$(".spare-part-quanty").hide();
+		$(".spare-parts").change(function(event){
+			if($(".spare-parts option:selected").attr("value")=="_")
+				$(".spare-part-quanty").slideUp("slow");
+			else $(".spare-part-quanty").slideDown("slow");
+		});
 	});
 </script>
 

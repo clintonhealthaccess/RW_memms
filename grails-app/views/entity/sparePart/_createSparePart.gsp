@@ -29,19 +29,12 @@
         	<g:selectFromList name="type.id" label="${message(code:'spare.part.type.label')}" bean="${sparePart}" field="type" optionKey="id" multiple="false" ajaxLink="${createLink(controller:'sparePartType', action:'getAjaxData', params: [type:'TYPE'])}" from="${types}" value="${sparePart?.type?.id}" values="${types.collect{it.names}}" />
       		<g:i18nTextarea name="descriptions" bean="${sparePart}" label="${message(code:'entity.comments.label')}" field="descriptions" height="150" width="300" maxHeight="150" />
       	  <g:selectFromEnum name="status" bean="${sparePart}" values="${SparePartStatus.values()}" field="status" label="${message(code:'spare.part.status.label')}"/>
-          <g:if test="${sparePart.id != null}">
-          <div class="row ${hasErrors(bean:sparePart,field:initialQuantity,'errors')}">
-            <label><g:message code="spare.part.initial.quantity"/>:</label> ${sparePart.initialQuantity}
-            <div class="error-list"><g:renderErrors bean="${initialQuantity}" field="${initialQuantity}" /></div>
-          </div>
-          <div class="row ${hasErrors(bean:sparePart,field:inStockQuantity,'errors')}">
-            <label><g:message code="spare.part.in.stock.quantity"/>:</label>
-            ${sparePart.inStockQuantity}
-            <div class="error-list"><g:renderErrors bean="${inStockQuantity}" field="${inStockQuantity}" /></div>
-          </div>
+          <g:if test="${sparePart.id == null}">
+            <g:input name="initialQuantity" label="${message(code:'spare.part.inititial.quantity')}" bean="${sparePart}" field="initialQuantity"/>
           </g:if>
           <g:else>
-            <g:input name="initialQuantity" label="${message(code:'spare.part.quantity')}" bean="${sparePart}" field="initialQuantity"/>
+            <g:input name="initialQuantity" label="${message(code:'spare.part.inititial.quantity')}" bean="${sparePart}" field="initialQuantity"/>
+            <g:input name="inStockQuantity" label="${message(code:'spare.part.in.stock.quantity')}" bean="${sparePart}" field="inStockQuantity"/>
           </g:else>
         </fieldset>
      	  <div id="form-aside-type" class="form-aside">
