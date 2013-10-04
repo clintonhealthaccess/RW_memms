@@ -43,7 +43,13 @@
 
         <g:if test="${reportSubType == ReportSubType.INVENTORY}">
           <a href="#"><g:message code="listing.report.spare.part.compatible.equipment.types"/> = 
-            ${equipmentTypes?.collect{it.names}.join(',')}</a>,
+            <g:if test="${equipmentTypes != null && !equipmentTypes.empty}">
+              ${equipmentTypes?.collect{it.names}?.join(',')}
+            </g:if>
+            <g:else>
+              ${message(code:'reports.filters.none')},
+            </g:else>
+            </a>,
           <a href="#"><g:message code="reports.spareParts.inventory.sparePartStatus"/> = 
             <g:if test="${sparePartStatus == null || sparePartStatus.empty}">
               ${message(code:'reports.filters.all')},
