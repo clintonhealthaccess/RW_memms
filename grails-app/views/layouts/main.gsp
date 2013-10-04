@@ -7,8 +7,8 @@
     <link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
   <g:layoutHead />
   <r:require module="core"/>
-  <r:layoutResources/>
   <r:require module="export"/>
+  <r:layoutResources/>
 </head>
 <body>
   <div id="header">
