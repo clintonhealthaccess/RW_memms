@@ -204,7 +204,7 @@ class WorkOrderListingReportService {
 					eq ("equipment.currency",currency)
 
 				//Status changes
-				if(workOrderStatusChanges != null || !workOrderStatusChanges.empty){
+				if(workOrderStatusChanges != null && !workOrderStatusChanges.empty){
 					or {
 						workOrderStatusChanges.each{ workOrderStatusChange ->
 							def previousStatus = workOrderStatusChange.statusChange['previous']

@@ -200,7 +200,7 @@ class SparePartListingReportService {
 				inList ("type", sparePartTypes)
 
 				//Status changes
-				if(sparePartStatusChanges != null || !sparePartStatusChanges.empty){
+				if(sparePartStatusChanges != null && !sparePartStatusChanges.empty){
 					if(sparePartStatusChanges.size() > 1){
 						or {
 							if(sparePartStatusChanges.contains(SparePartStatusChange.NEWPENDINGORDER)){

@@ -259,7 +259,7 @@ class EquipmentListingReportService {
 					isNull ("equip.purchaseCost")
 
 				//Status changes
-				if(equipmentStatusChanges != null || !equipmentStatusChanges.empty){
+				if(equipmentStatusChanges != null && !equipmentStatusChanges.empty){
 					or {
 						equipmentStatusChanges.each{ equipmentStatusChange ->
 							def previousStatus = equipmentStatusChange.statusChange['previous']
