@@ -74,7 +74,7 @@
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('obsolete')}">
 					<td>
-						<g:if test="${(!equipment.obsolete==true)}">&radic;</g:if>
+						<g:if test="${(equipment.obsolete==true)}">&radic;</g:if>
 						<g:else>&nbsp;</g:else>
 					</td>
 				</g:if>
