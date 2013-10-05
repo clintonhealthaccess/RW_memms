@@ -25,12 +25,8 @@
 				<td>${equipment.model}</td>
 				<td>${message(code: equipment.currentStatus?.messageCode+'.'+equipment.currentStatus?.name)}</td>
 				<td>
-					<g:if test="${(!equipment.obsolete==true)}">
-						&radic;
-					</g:if>
-					<g:else>
-						&nbsp;
-					</g:else>
+					<g:if test="${(equipment.obsolete==true)}">&radic;</g:if>
+					<g:else>&nbsp;</g:else>
 				</td>
 				<td>${equipment.manufacturer?.contact?.contactName}</td>
 				<td>${equipment.supplier?.contact?.contactName}</td>
