@@ -18,28 +18,28 @@
 				${provider.code}
 			</td>
 			<td>
-				${provider.contact.contactName}
+				${provider.contact?.contactName}
 			</td>
 			<td>
 				${message(code: provider.type?.messageCode+'.'+provider.type?.name)}
 			</td>
 			<td>
-				${provider.contact.email}
+				${provider.contact?.email}
 			</td>
 			<td>
-				${provider.contact.phone}
+				${provider.contact?.phone}
 			</td>
 			<td>
-				${provider.contact.poBox}
+				${provider.contact?.poBox}
 			</td>
 			<td>
-				${provider.contact.city}
+				${provider.contact?.city}
 			</td>
 			<td>
-				${provider.contact.country}
+				${provider.contact?.country}
 			</td>
 			<td>
-				<g:stripHtml field="${provider.contact.addressDescriptions}" chars="30"/>
+				<g:stripHtml field="${provider.contact?.addressDescriptions}" chars="30"/>
 			</td>
 		</tr>
 	</g:each>

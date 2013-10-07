@@ -75,6 +75,8 @@ class ListingController extends AbstractController{
 	def preventiveOrderListingReportService
 	def sparePartListingReportService
 	def userService
+	def exportService
+	def grailsApplication
 
 	def getEntityClass() {
 		return Object.class;
@@ -93,8 +95,9 @@ class ListingController extends AbstractController{
 			entityClass: getEntityClass(),
 			code: getLabel()
 		]
+		
 	}
-
+	
 	def index ={
 		redirect(action: "view", params: params)
 	}
@@ -161,6 +164,8 @@ class ListingController extends AbstractController{
 
 		adaptParamsForList()
 		def equipments = equipmentListingReportService.getObsoleteEquipments(user,params)
+		
+	
 		if(!request.xhr)
 			render(view:"/reports/reports",
 			model: model(equipments, "") <<
@@ -171,6 +176,10 @@ class ListingController extends AbstractController{
 				savedReports: savedReports,
 				template:"/reports/listing/listing"
 			])
+			if(params?.format && params.format != "html"){
+			response.contentType = grailsApplication.config.grails.mime.types[params.format]
+			exportService.export(params.format, response.outputStream,Equipment.list(params), [:], [:])
+		}
 	}
 
 	def disposedEquipments={
@@ -190,6 +199,11 @@ class ListingController extends AbstractController{
 				savedReports: savedReports,
 				template:"/reports/listing/listing"
 			])
+			if(params?.format && params.format != "html"){
+				response.contentType = grailsApplication.config.grails.mime.types[params.format]
+				exportService.export(params.format, response.outputStream,Equipment.list(params), [:], [:])
+			}
+			
 	}
 
 	def underMaintenanceEquipments={
@@ -228,6 +242,10 @@ class ListingController extends AbstractController{
 				savedReports: savedReports,
 				template:"/reports/listing/listing"
 			])
+			if(params?.format && params.format != "html"){
+				response.contentType = grailsApplication.config.grails.mime.types[params.format]
+				exportService.export(params.format, response.outputStream,Equipment.list(params), [:], [:])
+			}
 	}
 
 	def underWarrantyEquipments={
@@ -249,6 +267,10 @@ class ListingController extends AbstractController{
 				savedReports: savedReports,
 				template:"/reports/listing/listing"
 			])
+			if(params?.format && params.format != "html"){
+				response.contentType = grailsApplication.config.grails.mime.types[params.format]
+				exportService.export(params.format, response.outputStream,Equipment.list(params), [:], [:])
+			}
 	}
 
 	// corrective
@@ -270,6 +292,10 @@ class ListingController extends AbstractController{
 				savedReports: savedReports,
 				template:"/reports/listing/listing"
 			])
+			if(params?.format && params.format != "html"){
+				response.contentType = grailsApplication.config.grails.mime.types[params.format]
+				exportService.export(params.format, response.outputStream,WorkOrder.list(params), [:], [:])
+			}
 	}
 
 	def workOrdersEscalatedToMMC={
@@ -289,6 +315,10 @@ class ListingController extends AbstractController{
 				savedReports: savedReports,
 				template:"/reports/listing/listing"
 			])
+			if(params?.format && params.format != "html"){
+				response.contentType = grailsApplication.config.grails.mime.types[params.format]
+				exportService.export(params.format, response.outputStream,WorkOrder.list(params), [:], [:])
+			}
 	}
 
 	def lastYearClosedWorkOrders={
@@ -308,6 +338,10 @@ class ListingController extends AbstractController{
 				savedReports: savedReports,
 				template:"/reports/listing/listing"
 			])
+			if(params?.format && params.format != "html"){
+				response.contentType = grailsApplication.config.grails.mime.types[params.format]
+				exportService.export(params.format, response.outputStream,WorkOrder.list(params), [:], [:])
+			}
 	}
 
 	// preventive
@@ -351,6 +385,10 @@ class ListingController extends AbstractController{
 				// savedReports: savedReports,
 				template:"/reports/listing/listing"
 			])
+			if(params?.format && params.format != "html"){
+				response.contentType = grailsApplication.config.grails.mime.types[params.format]
+				exportService.export(params.format, response.outputStream,Equipment.list(params), [:], [:])
+			}
 	}
 
 	// predefined reports end
