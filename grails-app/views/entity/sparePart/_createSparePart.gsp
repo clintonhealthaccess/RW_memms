@@ -29,13 +29,9 @@
         	<g:selectFromList name="type.id" label="${message(code:'spare.part.type.label')}" bean="${sparePart}" field="type" optionKey="id" multiple="false" ajaxLink="${createLink(controller:'sparePartType', action:'getAjaxData', params: [type:'TYPE'])}" from="${types}" value="${sparePart?.type?.id}" values="${types.collect{it.names}}" />
       		<g:i18nTextarea name="descriptions" bean="${sparePart}" label="${message(code:'entity.comments.label')}" field="descriptions" height="150" width="300" maxHeight="150" />
       	  <g:selectFromEnum name="status" bean="${sparePart}" values="${SparePartStatus.values()}" field="status" label="${message(code:'spare.part.status.label')}"/>
-          <g:if test="${sparePart.id == null}">
-            <g:input name="receivedQuantity" label="${message(code:'spare.part.inititial.quantity')}" bean="${sparePart}" field="receivedQuantity"/>
-          </g:if>
-          <g:else>
-            <g:input name="receivedQuantity" label="${message(code:'spare.part.inititial.quantity')}" bean="${sparePart}" field="receivedQuantity" dateClass=" numbers-only disabled-on-edit"/>
-            <g:input name="inStockQuantity" label="${message(code:'spare.part.in.stock.quantity')}"  bean="${sparePart}" field="inStockQuantity" dateClass="numbers-only disabled-on-edit"/>
-          </g:else>
+          <g:input name="orderedQuantity" label="${message(code:'spare.part.ordered.quantity')}" bean="${sparePart}" field="orderedQuantity" dateClass="numbers-only disabled-on-edit ordered-quantity"/>
+          <g:input name="receivedQuantity" label="${message(code:'spare.part.received.quantity')}" bean="${sparePart}" field="receivedQuantity" dateClass="numbers-only disabled-on-edit received-quantity"/>
+          <g:input name="inStockQuantity" label="${message(code:'spare.part.in.stock.quantity')}"  bean="${sparePart}" field="inStockQuantity" dateClass="numbers-only disabled-on-edit in-stock-quantity"/>
         </fieldset>
      	  <div id="form-aside-type" class="form-aside">
       	  <g:if test="${sparePart?.type != null}">
@@ -112,5 +108,12 @@
 		getToHide("${message(code:'spare.part.purchase.cost.label')}","${message(code:'spare.part.estimated.cost.label')}");
 		getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}");
     sparePartQuantityHandler("${sparePart?.id}","${message(code:'default.edit.label',args:[''])}","${message(code:'spare.part.warn.update.quantity.label')}");
+    
+    if($("select[name=status]").val()=="PENDINGORDER")  $(".received-quantity, .in-stock-quantity").parents("div.row").hide()
+    $("select[name=status]").on("change",function(e){
+      if($(this).val()=="PENDINGORDER") $(".received-quantity, .in-stock-quantity").parents("div.row").slideUp("slow")
+      else $(".received-quantity, .in-stock-quantity").parents("div.row").slideDown("slow")
+    });
+
 	});
 </script>

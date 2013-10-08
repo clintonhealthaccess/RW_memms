@@ -97,9 +97,12 @@ class SparePartController extends AbstractEntityController{
 				entity.inStockQuantity = params.int("receivedQuantity")
 		}else{ 
 			entity.lastModified = user
-			if(status.equals(SparePartStatus.PENDINGORDER) && previousStatus.equals(SparePartStatus.PENDINGORDER)) {
+			if(status.equals(SparePartStatus.PENDINGORDER) && (previousStatus.equals(SparePartStatus.PENDINGORDER)||previousStatus.equals(SparePartStatus.INSTOCK))) {
 				params["inStockQuantity"] = null
 				params["receivedQuantity"] = null
+			}
+			if(status.equals(SparePartStatus.INSTOCK) && previousStatus.equals(SparePartStatus.PENDINGORDER)) {
+				if(params["receivedQuantity"] && !params["inStockQuantity"]) params["inStockQuantity"] = params["receivedQuantity"]
 			}
 			if(stockLocation.equals(StockLocation.MMC)) params.dataLocation =''
 		}

@@ -863,7 +863,7 @@ public class Initializer {
 				User.findByUsername("admin"),
 				StockLocation.MMC,
 				SparePartStatus.PENDINGORDER,
-				10,9,0
+				10,null,null
 				)
 
 			def sparePartOneT = newSparePart(
@@ -893,7 +893,7 @@ public class Initializer {
 				User.findByUsername("admin"),
 				StockLocation.FACILITY,
 				SparePartStatus.PENDINGORDER,
-				9,8,0
+				9,null,null
 				)
 			
 			def sparePartThree = newSparePart(
@@ -966,7 +966,7 @@ public class Initializer {
 				User.findByUsername("admin"),
 				StockLocation.MMC,
 				SparePartStatus.PENDINGORDER,
-				236,234,0
+				236,null,null
 				)
 			def sparePartEight = newSparePart(
 				SparePartPurchasedBy.BYFACILITY,

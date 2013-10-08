@@ -12,6 +12,7 @@
 			<g:sortableColumn property="sparePartPurchasedBy"  title="${message(code: 'spare.part.purchaser.label')}" params="[q:q,'type.id':type?.id,status:status]" />	
 			<g:sortableColumn property="purchaseCost"  title="${message(code: 'spare.part.purchase.cost.label')}" params="[q:q,'type.id':type?.id,status:status]" />
 			<g:sortableColumn property="supplier"  title="${message(code: 'provider.type.supplier')}" params="[q:q,'type.id':type?.id,status:status]" />
+			<g:sortableColumn property="orderedQuantity"  title="${message(code: 'spare.part.ordered.quantity')}" params="[q:q,'type.id':type?.id,status:status]" />
 			<g:sortableColumn property="receivedQuantity"  title="${message(code: 'spare.part.received.quantity')}" params="[q:q,'type.id':type?.id,status:status]" />
 			<g:sortableColumn property="inStockQuantity"  title="${message(code: 'spare.part.in.stock.quantity')}" params="[q:q,'type.id':type?.id,status:status]" />
 			<th><g:message code="spare.part.used.quantity"/></th>
@@ -66,6 +67,9 @@
 				<td>
 					${sparePart.supplier?.contact?.contactName}
 				</td>	
+				<td>
+					${sparePart.orderedQuantity}
+				</td>
 				<td>
 					${sparePart.receivedQuantity}
 				</td>		
