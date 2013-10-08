@@ -46,8 +46,6 @@
                     <label><g:message code="prevention.possible.processes.label"/></label>
                     <fieldset>
                      <ul class="draggable process-list-action">
-                       <g:if test="${prevention.actions.size()==0}" >
-                      </g:if>  
                        <g:each in="${actions}" status="i" var="action">
                           <li data-id="${action.id}">
                             ${action.description}
@@ -60,13 +58,11 @@
                     <label><g:message code="prevention.used.processes.label"/></label>
                     <fieldset>
                       <ul class="droppable process-list-material">
-                      <g:if test="${prevention.actions.size()==0}" >                      
                         <g:each in="${prevention.actions}" var="action">
                           <li data-id="${action.id}">
                             ${action.description}
                           </li>
                         </g:each>
-                      </g:if>
                       </ul>
                         <select id="action-list" name="actions" multiple="true" style="display:none;"  >
                           <g:each in="${prevention.actions}" var="action">

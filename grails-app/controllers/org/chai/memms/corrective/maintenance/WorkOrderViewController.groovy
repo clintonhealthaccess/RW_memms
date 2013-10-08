@@ -149,7 +149,7 @@ class WorkOrderViewController extends AbstractController{
 				orders = maintenanceService.getMaintenanceOrderByCalculationLocation(WorkOrder.class,dataLocation,[:])
 			else orders= maintenanceService.getMaintenanceOrderByEquipment(WorkOrder.class,equipment,[:])
 			
-			html = g.render(template:"/entity/workOrder/workOrderList",model:[equipment:equipment,entities:orders])
+			html = g.render(template:"/entity/workOrder/workOrderList",model:[equipment:equipment,entities:orders,dataLocation:dataLocation])
 			if(!request.xhr)
 				response.sendError(404)
 			this.ajaxModel(orders,null,equipment,params['q'])

@@ -863,7 +863,7 @@ public class Initializer {
 				User.findByUsername("admin"),
 				StockLocation.MMC,
 				SparePartStatus.PENDINGORDER,
-				9,0
+				10,null,null
 				)
 
 			def sparePartOneT = newSparePart(
@@ -878,7 +878,7 @@ public class Initializer {
 				User.findByUsername("admin"),
 				StockLocation.MMC,
 				SparePartStatus.INSTOCK,
-				89,80
+				null,89,80
 				)
 
 			def sparePartTwo = newSparePart(
@@ -893,7 +893,7 @@ public class Initializer {
 				User.findByUsername("admin"),
 				StockLocation.FACILITY,
 				SparePartStatus.PENDINGORDER,
-				8,0
+				9,null,null
 				)
 			
 			def sparePartThree = newSparePart(
@@ -908,7 +908,7 @@ public class Initializer {
 				User.findByUsername("admin"),
 				StockLocation.FACILITY,
 				SparePartStatus.INSTOCK,
-				92,70
+				94,92,70
 				)
 			
 			def sparePartFour = newSparePart(
@@ -923,7 +923,7 @@ public class Initializer {
 				User.findByUsername("admin"),
 				StockLocation.MMC,
 				SparePartStatus.INSTOCK,
-				100,1
+				100,100,1
 				)	
 			
 			def sparePartFive = newSparePart(
@@ -938,7 +938,7 @@ public class Initializer {
 				User.findByUsername("admin"),
 				StockLocation.MMC,
 				SparePartStatus.INSTOCK,
-				999,882
+				1020,999,882
 				)
 			def sparePartSix = newSparePart(
 				SparePartPurchasedBy.BYMOH,
@@ -952,7 +952,7 @@ public class Initializer {
 				User.findByUsername("admin"),
 				StockLocation.MMC,
 				SparePartStatus.INSTOCK,
-				343,0
+				343,343,0
 				)
 			def sparePartSeve = newSparePart(
 				SparePartPurchasedBy.BYMOH,
@@ -966,7 +966,7 @@ public class Initializer {
 				User.findByUsername("admin"),
 				StockLocation.MMC,
 				SparePartStatus.PENDINGORDER,
-				234,0
+				236,null,null
 				)
 			def sparePartEight = newSparePart(
 				SparePartPurchasedBy.BYFACILITY,
@@ -980,7 +980,7 @@ public class Initializer {
 				User.findByUsername("admin"),
 				StockLocation.FACILITY,
 				SparePartStatus.INSTOCK,
-				122,87
+				122,122,87
 				)
 		}
 	}
@@ -995,7 +995,7 @@ public class Initializer {
 	}
 
 	// Spare part
-	public static newSparePart(def sparePartPurchasedBy,def descriptions,def purchaseDate,def purchaseCost,def currency,def dataLocation,def type,def supplier,def addedBy,def stockLocation,def status,def initialQuantity,def inStockQuantity){
+	public static newSparePart(def sparePartPurchasedBy,def descriptions,def purchaseDate,def purchaseCost,def currency,def dataLocation,def type,def supplier,def addedBy,def stockLocation,def status,def orderedQuantity, def receivedQuantity,def inStockQuantity){
 		def sparePart = new SparePart(
 			sparePartPurchasedBy:sparePartPurchasedBy,
 			purchaseCost:purchaseCost,
@@ -1007,7 +1007,8 @@ public class Initializer {
 			addedBy:addedBy,
 			stockLocation:stockLocation,
 			status:status,
-			initialQuantity:initialQuantity,
+			orderedQuantity:orderedQuantity,
+			receivedQuantity:receivedQuantity,
 			inStockQuantity:inStockQuantity
 			);
 		Utils.setLocaleValueInMap(sparePart,descriptions,"Descriptions")

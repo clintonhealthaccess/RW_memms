@@ -94,6 +94,7 @@ class SparePartService {
 			}
 		}
 		for(def sparePart : changedSpareParts){
+			sparePart.lastModified = user
 			sparePart.key.inStockQuantity= sparePart.value
 			sparePart.key.save(failOnError:true)
 		}		
@@ -267,7 +268,7 @@ class SparePartService {
 					sparePart.purchaseDate,
 					sparePart.purchaseCost?:"n/a",
 					sparePart.currency?:"n/a",
-					sparePart.initialQuantity
+					sparePart.receivedQuantity
 				]
 				writer.write(line)
 			}

@@ -101,7 +101,7 @@ class SparePartType {
 		def pendingSpareParts = []
 		if(spareParts && spareParts.size())
 			for(SparePart sparePart: spareParts)
-				if(sparePart.status.equals(SparePartStatus.PENDINGORDER) && sparePart.initialQuantity>0) 
+				if(sparePart.status.equals(SparePartStatus.PENDINGORDER) && sparePart.receivedQuantity>0) 
 					pendingSpareParts.add(sparePart)
 		return pendingSpareParts
 	}
@@ -133,8 +133,8 @@ class SparePartType {
 		def quantityPendingAtMMC = 0
 		if(spareParts && spareParts.size())
 			for(SparePart sparePart: spareParts)
-				if(sparePart.status.equals(SparePartStatus.PENDINGORDER) && sparePart.stockLocation.equals(StockLocation.MMC) && sparePart.initialQuantity>0) 
-					quantityPendingAtMMC = quantityPendingAtMMC+sparePart.initialQuantity
+				if(sparePart.status.equals(SparePartStatus.PENDINGORDER) && sparePart.stockLocation.equals(StockLocation.MMC) && sparePart.receivedQuantity>0) 
+					quantityPendingAtMMC = quantityPendingAtMMC+sparePart.receivedQuantity
 		return quantityPendingAtMMC
 	}
 
@@ -143,8 +143,8 @@ class SparePartType {
 		def quantityPendingAtFacility =0
 		if(spareParts && spareParts.size())
 			for(SparePart sparePart: spareParts)
-				if(sparePart.status.equals(SparePartStatus.PENDINGORDER) && sparePart.stockLocation.equals(StockLocation.FACILITY) && sparePart.initialQuantity>0) 
-					quantityPendingAtFacility = quantityPendingAtFacility+sparePart.initialQuantity
+				if(sparePart.status.equals(SparePartStatus.PENDINGORDER) && sparePart.stockLocation.equals(StockLocation.FACILITY) && sparePart.receivedQuantity>0) 
+					quantityPendingAtFacility = quantityPendingAtFacility+sparePart.receivedQuantity
 		return quantityPendingAtFacility
 	}
 
