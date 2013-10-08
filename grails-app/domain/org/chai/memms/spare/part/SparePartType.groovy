@@ -47,6 +47,7 @@ import i18nfields.I18nFields;
 @i18nfields.I18nFields
 @EqualsAndHashCode(includes="code")
 class SparePartType {
+	
 	String code
 	String names
 	String partNumber

@@ -522,7 +522,7 @@ function removePreventionProcess(baseUrl){
 	});
 }
 
-function addSpareParts(baseUrl,order){
+function addSparePartsWorkOrder(baseUrl,order){
 	hideSpinnerAndErrorMsg()
 	$('.spare-part-quanty').on("click",".add-spare-part",function(e){
 		e.preventDefault();
@@ -549,7 +549,39 @@ function addSpareParts(baseUrl,order){
 		listRefresher(this);
 	})
 }
-//Prevent edit spare part quantity and warn before edit
+
+function addSparePartsToPrevention(baseUrl,prevention){
+
+}
+
+function search(baseUrl){
+	$('form.search').submit(function(e){
+		var checked = ($("input[type=checkbox]").attr("checked"))?true:false
+		var term = $("input[name=term]").val()
+		var selectedLocations = (checked)?$("select[name=locationIds] option:selected").map(function(){ return this.value }).get().join(", "):[]
+
+		alert("Sent data locations: "+selectedLocations+" checkbox: "+checked+" term: "+term)
+
+		e.preventDefault();
+		$.ajax({
+			type :'GET',
+			dataType: 'json',
+			data:{
+					"term":term,
+					"checkbox":checked,
+					"locationIds":selectedLocations
+				 },
+			url:baseUrl,
+			success: function(data) {
+				spinnerHandler(e)
+				refreshList(data.results[0],'.list-template')
+			}
+		});
+		listRefresher(this);
+	})
+}
+
+//Prevent edit sparePart quantity and warn before edit
 function sparePartQuantityHandler(sparePartId,fieldLabel,warningmsg){
 	if($.isNumeric(sparePartId)){
 		$(".disabled-on-edit").attr("disabled", "disabled").next("label.has-helper").html('<a href="#" >'+fieldLabel+'</a>');
@@ -558,6 +590,7 @@ function sparePartQuantityHandler(sparePartId,fieldLabel,warningmsg){
 		if(confirm(warningmsg)==true) $(this).hide("slow").prev("input.disabled-on-edit").removeAttr("disabled");
 	})
 }
+
 /**
  * Utility functions
  *
@@ -580,5 +613,13 @@ function listRefresher(action){
 function hideSpinnerAndErrorMsg(){
 	$(".ajax-spinner").hide();
 	$(".ajax-error").hide();
+}
+function hideSparePartQuantityField(){
+	$(".spare-part-quanty").hide();
+    $(".spare-parts").change(function(event){
+      if($(".spare-parts option:selected").attr("value")=="_")
+        $(".spare-part-quanty").slideUp("slow");
+      else $(".spare-part-quanty").slideDown("slow");
+    });
 }
 

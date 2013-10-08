@@ -29,10 +29,13 @@ package org.chai.memms.preventive.maintenance
 
 import groovy.transform.EqualsAndHashCode;
 
+import javax.persistence.Transient;
+
 import org.chai.memms.TimeSpend;
 import org.chai.memms.security.User;
 import org.chai.memms.TimeDate;
 import org.chai.memms.inventory.PreventiveAction;
+import org.chai.memms.corrective.maintenance.UsedSpareParts;
 
 
 
@@ -57,12 +60,11 @@ public class Prevention {
 	
 	static i18nFields = ["descriptions"]
 	static belongsTo = [order:  PreventiveOrder]
-	static hasMany = [actions: PreventiveAction]
+	static hasMany = [actions: PreventiveAction, spareParts:UsedSpareParts]
 	static embedded = ["timeSpend","scheduledOn"]
 	
 
 	static mapping = {
-		
 		table "memms_prevention"
 		version false
 	}
@@ -74,6 +76,14 @@ public class Prevention {
 		scheduledOn nullable: false
 		eventDate nullable: false, validator:{it <= new Date()}
 		lastUpdated nullable: true, validator:{if(it != null) return (it <= new Date())}
+	}
+
+	//Verify if sparePart exist in the map and return it
+	@Transient
+	def getSparePartTypesUsed(def sparePart){
+		for(def keyPair: spareParts)
+			if(keyPair.sparePart.equals(sparePart)) return  keyPair
+		return null
 	}
 	
 	

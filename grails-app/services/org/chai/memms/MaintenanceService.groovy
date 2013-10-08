@@ -64,6 +64,19 @@ class MaintenanceService {
 		return levels;
 	}
 
+	//To be tested 
+	public def getDataLocationsOfCalculationLocation(List<CalculationLocation> locations){
+		def dataLocations = []
+		for(def location: locations){
+			if(location instanceof Location)
+				dataLocations.addAll(location.getDataLocations([].toSet(), [].toSet()))
+			else dataLocations.add(location as DataLocation)
+		}
+		//To remove duplicate if any
+		dataLocations = dataLocations as Set
+		return dataLocations as List
+	}
+
 	/**
 	 * Searches for an Order that contains the search term
 	 * Pass a null value for the criteria you want to be ignored in the search other than the search text

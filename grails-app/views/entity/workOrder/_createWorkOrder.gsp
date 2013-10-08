@@ -191,15 +191,8 @@
 		addComment("${createLink(controller:'workOrderView',action: 'addComment')}","${order.id}");
 		removeComment("${createLink(controller:'workOrderView',action: 'removeComment')}");
 		getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}");
-
-		addSpareParts("${createLink(controller:'workOrderView',action: 'addSpareParts')}","${order.id}");
-		//removeSpareParts("${createLink(controller:'workOrderView',action: 'removeSpareParts')}");
-		$(".spare-part-quanty").hide();
-		$(".spare-parts").change(function(event){
-			if($(".spare-parts option:selected").attr("value")=="_")
-				$(".spare-part-quanty").slideUp("slow");
-			else $(".spare-part-quanty").slideDown("slow");
-		});
+		addSparePartsWorkOrder("${createLink(controller:'workOrderView',action: 'addSpareParts')}","${order.id}");
+		hideSparePartQuantityField()
 	});
 </script>
 

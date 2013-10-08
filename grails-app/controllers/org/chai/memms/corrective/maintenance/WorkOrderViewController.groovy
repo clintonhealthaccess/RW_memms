@@ -302,10 +302,10 @@ class WorkOrderViewController extends AbstractController{
 		def html =""
 		def result = false
 		def options = ""
-		if(order == null || type==null || quantity <= 0 || quantity == null)
+		if(order == null || type == null || quantity <= 0 || quantity == null)
 			response.sendError(404)
 		else{
-			order = sparePartService.assignSparePartsToWorkOrder(order,type,user,quantity)
+			order = sparePartService.assignSparePartsToWorkOrder(order,type,null,user,quantity)
 			def compatibleSpareParts = sparePartService.getCompatibleSparePart(order.equipment.type,user)
 			for(def sparePart: compatibleSpareParts)
 				options = options+" <option value='"+sparePart.key.id+"'>"+sparePart.key.names+" - "+[sparePart.value]+"</option>";

@@ -65,7 +65,9 @@ public class Equipment {
 		NONE('none'),
 		BYMOH("by.moh"),
 		BYFACILITY("by.facility"),
-		BYDONOR("by.donor")
+		BYDONOR("by.donor"),
+		BYSPIU("by.spiu"),
+		BYRBC("by.rbc")
 		
 		String messageCode = "equipment.purchased"
 		
@@ -168,7 +170,7 @@ public class Equipment {
 		purchaseCost nullable: true, blank: true, validator:{ if(it!=null) return (it>0) }
 		//TODO nullable has to be false, but it is true for first iteration
 		//The value none have to be removed from valid answer
-		purchaser nullable: false, inList:[PurchasedBy.NONE,PurchasedBy.BYFACILITY,PurchasedBy.BYMOH,PurchasedBy.BYDONOR]
+		purchaser nullable: false, inList:[PurchasedBy.NONE,PurchasedBy.BYFACILITY,PurchasedBy.BYMOH,PurchasedBy.BYDONOR,PurchasedBy.BYSPIU,PurchasedBy.BYRBC]
 		donor nullable:true,inList:[Donor.OTHERNGO,Donor.MOHPARTNER,Donor.OTHERS,Donor.INDIVIDUAL], validator:{ val, obj ->
 			if(obj.purchaser == PurchasedBy.BYDONOR) return (val!=null)
 		}

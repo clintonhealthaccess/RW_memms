@@ -244,7 +244,7 @@ public class WorkOrder extends MaintenanceOrder{
 		}
 		return usedSparePartTypes
 	}
-	//Verify if map exist and return it
+	//Verify if sparePart exist in the map and return it
 	@Transient
 	def getSparePartTypesUsed(def sparePart){
 		for(def keyPair: spareParts)

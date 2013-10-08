@@ -29,6 +29,10 @@ package org.chai.memms.corrective.maintenance
 
 import org.chai.memms.spare.part.SparePart
 import org.chai.memms.spare.part.SparePart;
+import org.chai.memms.maintenance.MaintenanceOrder
+import org.chai.memms.preventive.maintenance.PreventiveOrder
+import org.chai.memms.preventive.maintenance.Prevention
+
 
 /**
  * @author Jean Kahigiso M.
@@ -38,8 +42,9 @@ public class UsedSpareParts {
 
 	SparePart sparePart
 	Integer quantity
+	Prevention prevention
 	
-	static belongsTo = [workOrder: WorkOrder]
+	static belongsTo = [maintenanceOrder: MaintenanceOrder]
    
    
 	static constraints ={
@@ -47,7 +52,10 @@ public class UsedSpareParts {
 		quantity nullable:false, min:0
 	}
 	static mapping ={
-		table "memms_work_order_used_spare_part"
+		table "memms_maintenance_order_used_spare_part"
+		prevention nullable:true, validator:{ val, obj -> 
+			if(obj.maintenanceOrder instanceof PreventiveOrder) return (val!=null)
+		}
 		version false
 	}
 

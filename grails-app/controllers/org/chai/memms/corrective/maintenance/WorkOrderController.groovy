@@ -89,7 +89,7 @@ class WorkOrderController extends AbstractEntityController{
 		dataLocation = (dataLocation)?dataLocation:entity.equipment?.dataLocation
 		def usersInCharge = userService.getActiveUserByTypeAndLocation([UserType.HOSPITALDEPARTMENT,UserType.TECHNICIANMMC,UserType.TITULAIREHC,UserType.TECHNICIANDH],dataLocation,['sort':'firstname'])
 		if(entity.equipment) equipments << entity.equipment
-		if(entity.id!=null) compatibleSpareParts = sparePartService.getCompatibleSparePart(entity.equipment.type,user)
+		if(entity.id!=null) compatibleSpareParts = sparePartService.getCompatibleSparePart(entity.equipment.type,user,dataLocation)
 
 		[
 			order:entity,

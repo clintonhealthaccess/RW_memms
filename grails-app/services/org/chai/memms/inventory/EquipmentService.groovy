@@ -57,6 +57,7 @@ import org.chai.memms.preventive.maintenance.PreventiveOrder;
 import org.chai.memms.security.User;
 import org.chai.memms.util.ImportExportConstant;
 import org.chai.memms.util.Utils;
+import org.chai.memms.MaintenanceService;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -73,6 +74,7 @@ class EquipmentService {
 	static transactional = true
 	def languageService;
 	def userService
+	def maintenanceService
 
 	public def updateWarrantyEndDate(){
 		def criteria = Equipment.createCriteria();
@@ -125,7 +127,7 @@ class EquipmentService {
 
 	public def findEquipments(def text,def calculationLocations,Map<String, String> params){
 		if(text!=null) text = text.trim()
-		def dataLocations = this.getDataLocationsOfCalculationLocation(calculationLocations);
+		def dataLocations = maintenanceService.getDataLocationsOfCalculationLocation(calculationLocations);
 		def dbFieldTypeNames = 'names_'+languageService.getCurrentLanguagePrefix();
 		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
 		def criteria = Equipment.createCriteria();
@@ -144,18 +146,6 @@ class EquipmentService {
 			    }
 		}
 
-	}
-	//To be tested 
-	public def getDataLocationsOfCalculationLocation(List<CalculationLocation> locations){
-		def dataLocations = []
-		for(def location: locations){
-			if(location instanceof Location)
-				dataLocations.addAll(location.getDataLocations([].toSet(), [].toSet()))
-			else dataLocations.add(location as DataLocation)
-		}
-		//To remove duplicate if any
-		dataLocations = dataLocations as Set
-		return dataLocations as List
 	}
 		
 	public def getMyEquipments(User user,Map<String, String> params) {

@@ -51,6 +51,7 @@ import org.supercsv.io.ICsvListWriter;
 import org.supercsv.prefs.CsvPreference;
 import org.chai.memms.util.ImportExportConstant;
 import org.chai.memms.corrective.maintenance.UsedSpareParts;
+import org.chai.memms.MaintenanceService;
 
 /**
  * @author Aphrodice Rwagaju
@@ -60,6 +61,7 @@ class SparePartService {
 	static transactional = true
 	def languageService;
 	def userService
+	def maintenanceService
 	
 	
 	public def getRemoveFromStock(def sparePart, def numberToRemove){
@@ -71,12 +73,44 @@ class SparePartService {
 			return true
 		}
 	}
-	//To be intensively tested
+
+	public def findSpareParts(def text,def calculationLocations,def stockLocation,Map<String, String> params){
+		
+		if(text!=null) text = text.trim()
+		def dataLocations = maintenanceService.getDataLocationsOfCalculationLocation(calculationLocations);
+		def dbFieldTypeNames = 'names_'+languageService.getCurrentLanguagePrefix();
+		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
+
+		def criteria = SparePart.createCriteria();
+		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			    createAlias("type","t")
+
+				if(dataLocations.size()>0)
+					'in'('dataLocation',dataLocations)
+				if(stockLocation)
+					eq("stockLocation",stockLocation)
+				eq("status",SparePartStatus.INSTOCK)
+			    gt("inStockQuantity",0)	
+				or{
+					ilike("room","%"+text+"%")
+					ilike("shelf","%"+text+"%")
+					ilike(dbFieldDescriptions,"%"+text+"%") 
+					ilike("t.code","%"+text+"%")
+					ilike("t.partNumber","%"+text+"%")
+					ilike("t."+dbFieldTypeNames,"%"+text+"%")
+					ilike("t."+dbFieldDescriptions,"%"+text+"%")
+			    }
+		}
+
+	}
+
+	//Assign sparePart to workOrder - need to be intensively tested
 	public def assignSparePartsToWorkOrder(def order, def sparePartType, def user, def quantity){
 		def usedSpareParts = order.spareParts
+		def dataLocation = order.equipment.dataLocation
 		def changedSpareParts = [:]
 		def diff = null	
-		def tempSpareParts =   this.getInStockSparePartOfTypes([sparePartType],user)
+		def tempSpareParts =   this.getInStockSparePartOfTypes([sparePartType],user,[dataLocation])
 		for(def sparePart: tempSpareParts){
 			if(diff==null || diff > 0) diff = sparePart.inStockQuantity-quantity
 			else diff = sparePart.inStockQuantity - (diff*-1)
@@ -99,12 +133,45 @@ class SparePartService {
 		}		
 
 		return order.save(failOnError:true, flush:true)
-		//return order
+	}
+	//Assign sparePart to prevention (PreventiveOrder) - need to be intensively tested 
+	public def assignSparePartsToPrevention(def prevention, def sparePartType, def user, def quantity){
+		def usedSpareParts = prevention.spareParts
+		def order = prevention.order
+		def dataLocation = order.equipment.dataLocation
+		//Get Compatible sparePart based on equipmentType
+		def equipmentType = order.equipment.type
+		def changedSpareParts = [:]
+		def diff = null	
+
+		def tempSpareParts =   this.getInStockSparePartOfTypes(equipmentType.sparePartTypes,user,[dataLocation])
+		for(def sparePart: tempSpareParts){
+			if(diff==null || diff > 0) diff = sparePart.inStockQuantity-quantity
+			else diff = sparePart.inStockQuantity - (diff*-1)
+			if(diff >= 0){
+				if(prevention.getSparePartTypesUsed(sparePart))
+					prevention.getSparePartTypesUsed(sparePart).quantity = prevention.getSparePartTypesUsed(sparePart).quantity+quantity
+				else prevention.addToSpareParts(new UsedSpareParts(maintenanceOrder:order,sparePart:sparePart,quantity:quantity))
+				changedSpareParts.put(sparePart,diff)
+				break;
+			}else{
+				if(prevention.getSparePartTypesUsed(sparePart))
+					prevention.getSparePartTypesUsed(sparePart).quantity = prevention.getSparePartTypesUsed(sparePart).quantity+sparePart.inStockQuantity
+				else  prevention.addToSpareParts(new UsedSpareParts(maintenanceOrder:order,sparePart:sparePart,quantity:sparePart.inStockQuantity))
+				changedSpareParts.put(sparePart,0)
+			}
+		}
+		for(def sparePart : changedSpareParts){
+			sparePart.key.inStockQuantity= sparePart.value
+			sparePart.key.save(failOnError:true)
+		}		
+
+		return prevention.save(failOnError:true, flush:true)
 	}
 
 	//To be intensively tested
-    public def getCompatibleSparePart(def equipmentType, def user){
-    	def tempSpareParts =  this.getInStockSparePartOfTypes(equipmentType.sparePartTypes,user)
+    public def getCompatibleSparePart(def equipmentType, def user, def dataLocations){
+    	def tempSpareParts =  this.getInStockSparePartOfTypes(equipmentType.sparePartTypes,user,dataLocations)
 		def spareParts = [:]
 		for(def sparePart : tempSpareParts){
 			if(spareParts.get(sparePart.type)==null){ 
@@ -119,19 +186,23 @@ class SparePartService {
 		return spareParts
 	}
 	//To be intensively tested
-	public def getInStockSparePartOfTypes(def types, def user){
+	//Make sure location are well considered while loading sparePart
+	public def getInStockSparePartOfTypes(def types, def user, def dataLocations){
     	def criteria = SparePart.createCriteria()
     	if(!types || types.size()==0)
     		return []
     	return  criteria.list(){
+
 			and{
 				'in'("type",types)
 				gt("inStockQuantity",0)
 				ne("status",SparePartStatus.PENDINGORDER)
-				if(user && user.userType == UserType.TECHNICIANMMC)
+				if(user.userType == UserType.TECHNICIANMMC)
 					eq("stockLocation",StockLocation.MMC)
-				if(user && user.userType == UserType.TECHNICIANDH)
+				if(user.userType == UserType.TECHNICIANDH)
 					eq("stockLocation",StockLocation.FACILITY)
+				if(dataLocations && dataLocations.size()>0 && (user.userType != UserType.MMC))
+					'in'("dataLocation",dataLocations)
 			}
 		}
 
