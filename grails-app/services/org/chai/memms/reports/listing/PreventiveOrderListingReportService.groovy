@@ -109,6 +109,12 @@ class PreventiveOrderListingReportService {
 		def dataLocations = customPreventiveOrderParams.get('dataLocations')
 		def departments = customPreventiveOrderParams.get('departments')
 		def equipmentTypes = customPreventiveOrderParams.get('equipmentTypes')
+
+		if(dataLocations == null || dataLocations.empty || departments == null || departments.empty || equipmentTypes == null || equipmentTypes.empty){
+			if (log.isDebugEnabled()) log.debug("getCustomReportOfPreventiveOrders.workOrders Mandatory property criteria not satisfied")
+			return []
+		}
+
 		def lowerLimitCost = customPreventiveOrderParams.('fromCost')
 		def upperLimitCost = customPreventiveOrderParams.('toCost')
 		def currency = customPreventiveOrderParams.get('costCurrency')
@@ -118,7 +124,6 @@ class PreventiveOrderListingReportService {
 		
 		def fromWorkOrderPeriod = customPreventiveOrderParams.get('fromWorkOrderPeriod')
 		def toWorkOrderPeriod = customPreventiveOrderParams.get('toWorkOrderPeriod')
-		
 		
 		def criteria = PreventiveOrder.createCriteria();
 	

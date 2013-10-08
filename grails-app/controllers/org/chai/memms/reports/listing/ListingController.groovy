@@ -541,7 +541,7 @@ class ListingController extends AbstractController{
 					break;
 			}
 			if (log.isDebugEnabled()) log.debug("listing.customEquipmentListing saved/selected report:"+savedReport+", id:"+savedReport.id)
-			redirect(action:"savedCustomizedListing", params:[savedReportId: savedReport.id, reportType: savedReport.reportType])
+			redirect(action:"savedCustomizedListing", params:[savedReportId: savedReport.id, reportType: savedReport.reportType, reportSubType: savedReport.reportSubType])
 		}
 	}
 
@@ -668,12 +668,7 @@ class ListingController extends AbstractController{
 					break;
 			}
 
-			def savedReports = null
-			// TODO get rid of this condition
-			// TODO figure out why this doesn't work for spare parts
-			if(reportType != ReportType.SPAREPARTS){
-				savedReports = userService.getSavedReportsByUser(user, reportType)
-			}
+			def savedReports = userService.getSavedReportsByUser(user, reportType)
 
 			customizedListingParams << [
 				// TO BE REVIEWED BY APHRORWA savedReportId
@@ -1296,10 +1291,10 @@ class ListingController extends AbstractController{
 	}
 	public Set<Department> getDepartments() {
 		if(log.isDebugEnabled()) log.debug("abstract.departments params:"+params)
-		Set<Department> departments = null
+		Set<Department> departments = new HashSet<Department>()
 		if(params.get('allDepartments')){
 			if(log.isDebugEnabled()) log.debug("abstract.departments ALL")
-			departments = new HashSet<Department>()
+			// departments = new HashSet<Department>()
 			departments = Department.list()
 			return departments
 		}
@@ -1318,10 +1313,10 @@ class ListingController extends AbstractController{
 	}
 	public Set<EquipmentType> getEquipmentTypes() {
 		if(log.isDebugEnabled()) log.debug("abstract.equipmentTypes params:"+params)
-		Set<EquipmentType> equipmentTypes = null
+		Set<EquipmentType> equipmentTypes = new HashSet<EquipmentType>()
 		if(params.get('allEquipmentTypes')){
 			if(log.isDebugEnabled()) log.debug("abstract.equipmentTypes ALL")
-			equipmentTypes = new HashSet<EquipmentType>()
+			// equipmentTypes = new HashSet<EquipmentType>()
 			equipmentTypes = equipmentTypeService.getEquipmentTypeUsedInMemms()
 			return equipmentTypes
 		}
@@ -1355,11 +1350,11 @@ class ListingController extends AbstractController{
 
 	public Set<SparePartType> getSparePartTypes() {
 		if(log.isDebugEnabled()) log.debug("abstract.sparePartTypes params:"+params)
-		Set<SparePartType> sparePartTypes = null
+		Set<SparePartType> sparePartTypes = new HashSet<SparePartType>()
 		if(log.isDebugEnabled()) log.debug("abstract.sparePartTypes ALL")
 		if(params.get('allSparePartTypes')){
 			if(log.isDebugEnabled()) log.debug("abstract.sparePartTypes ALL")
-			sparePartTypes = new HashSet<SparePartType>()
+			// sparePartTypes = new HashSet<SparePartType>()
 			sparePartTypes = SparePartType.list()
 			return sparePartTypes
 		}

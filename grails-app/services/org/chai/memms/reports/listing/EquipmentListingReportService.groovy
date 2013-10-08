@@ -104,7 +104,7 @@ class EquipmentListingReportService {
 		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 			if(dataLocations)
 				inList("dataLocation",dataLocations)
-			eq ("obsolete", (obsolete.equals('true'))?true:false)
+			eq ("obsolete", (obsolete.equals('true'))?false:true)
 		}
 	}
 
@@ -176,8 +176,10 @@ class EquipmentListingReportService {
 		def noCost = customEquipmentParams.get('noCost')
 
 		if(reportSubType == ReportSubType.INVENTORY){
-
-			def equipmentCriteria = Equipment.createCriteria()
+			if(dataLocations == null || dataLocations.empty || departments == null || departments.empty || equipmentTypes == null || equipmentTypes.empty){
+				if (log.isDebugEnabled()) log.debug("getCustomReportOfEquipments.inventory Mandatory property criteria not satisfied")
+				return []
+			}
 
 			def fromAcquisitionPeriod = customEquipmentParams.get('fromAcquisitionPeriod')
 			def toAcquisitionPeriod = customEquipmentParams.get('toAcquisitionPeriod')
@@ -185,6 +187,8 @@ class EquipmentListingReportService {
 			def equipmentStatus = customEquipmentParams.get('equipmentStatus')
 			def obsolete = customEquipmentParams.get('obsolete')
 			def warranty = customEquipmentParams.get('warranty')
+
+			def equipmentCriteria = Equipment.createCriteria()
 
 			return equipmentCriteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 
@@ -223,13 +227,16 @@ class EquipmentListingReportService {
 		}
 
 		if(reportSubType == ReportSubType.STATUSCHANGES){
-
-			def equipmentStatusCriteria = EquipmentStatus.createCriteria()
+			if(dataLocations == null || dataLocations.empty || departments == null || departments.empty || equipmentTypes == null || equipmentTypes.empty){
+				if (log.isDebugEnabled()) log.debug("getCustomReportOfEquipments.statusChanges Mandatory property criteria not satisfied")
+				return []
+			}
 
 			def equipmentStatusChanges = customEquipmentParams.get('statusChanges')
-
 			def fromStatusChangesPeriod = customEquipmentParams.get('fromStatusChangesPeriod')
 			def toStatusChangesPeriod = customEquipmentParams.get('toStatusChangesPeriod')
+
+			def equipmentStatusCriteria = EquipmentStatus.createCriteria()
 
 			return equipmentStatusCriteria.list(offset:params.offset,max:params.max, sort:params.sort ?:"id",order: params.order ?:"desc"){
 
@@ -252,7 +259,7 @@ class EquipmentListingReportService {
 					isNull ("equip.purchaseCost")
 
 				//Status changes
-				if(equipmentStatusChanges != null || !equipmentStatusChanges.empty){
+				if(equipmentStatusChanges != null && !equipmentStatusChanges.empty){
 					or {
 						equipmentStatusChanges.each{ equipmentStatusChange ->
 							def previousStatus = equipmentStatusChange.statusChange['previous']

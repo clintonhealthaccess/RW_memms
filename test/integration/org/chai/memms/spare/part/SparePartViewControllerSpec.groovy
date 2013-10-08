@@ -68,15 +68,15 @@ class SparePartViewControllerSpec extends IntegrationTests{
 		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",manufacturer,Initializer.now())
 
 		def sparePartOne = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions one'],Initializer.getDate(22,07,2010),"2900.23","USD",
-			DataLocation.findByCode(KIVUYE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,32,0)
+			DataLocation.findByCode(KIVUYE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,32,32,0)
 
 		def sparePartTwo = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","EUR",
-			DataLocation.findByCode(BUTARO),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,12,0)
+			DataLocation.findByCode(BUTARO),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,null,12,0)
 		
 		Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","RWF",
-			DataLocation.findByCode(MUSANZE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,22,0)
+			DataLocation.findByCode(MUSANZE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,null,22,0)
 		Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","RWF",
-			DataLocation.findByCode(GITWE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,33,3)
+			DataLocation.findByCode(GITWE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,33,27,3)
 	
 		sparePartViewController = new SparePartViewController()
 		setupSecurityManager(techDh)
@@ -88,7 +88,7 @@ class SparePartViewControllerSpec extends IntegrationTests{
 		then:
 		SparePart.list().size()==4
 		sparePartViewController.response.json.results[0].contains("32")
-		sparePartViewController.response.json.results[0].contains("33")
+		sparePartViewController.response.json.results[0].contains("27")
 		sparePartViewController.response.json.results[0].contains("12")
 		sparePartViewController.response.json.results[0].contains("22")
 	}
@@ -110,16 +110,16 @@ class SparePartViewControllerSpec extends IntegrationTests{
 		def sparePartTypeTwo = Initializer.newSparePartType(CODE(15819),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",manufacturer,Initializer.now())
 		
 		def sparePartOne = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions one'],Initializer.getDate(22,07,2010),"2900.23",,"USD",
-			DataLocation.findByCode(KIVUYE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,33,1)
+			DataLocation.findByCode(KIVUYE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,null,33,1)
 
 		def sparePartTwo = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","EUR",
-			DataLocation.findByCode(BUTARO),sparePartTypeTwo,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,323,2)
+			DataLocation.findByCode(BUTARO),sparePartTypeTwo,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,323,323,2)
 		
 		Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","RWF",
-			DataLocation.findByCode(MUSANZE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,34,3)
+			DataLocation.findByCode(MUSANZE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,null,34,3)
 
 		Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","RWF",
-			DataLocation.findByCode(GITWE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,17,0)
+			DataLocation.findByCode(GITWE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,17,17,0)
 	
 		sparePartViewController = new SparePartViewController()
 		setupSecurityManager(admin)
@@ -155,14 +155,14 @@ class SparePartViewControllerSpec extends IntegrationTests{
 		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",manufacturer,Initializer.now())
 
 		def sparePartOne = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions searched item'],Initializer.getDate(22,07,2010),"2900.23","USD",
-			DataLocation.findByCode(KIVUYE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,33,9)
+			DataLocation.findByCode(KIVUYE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,null,33,9)
 		def sparePartTwo = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","EUR",
-			DataLocation.findByCode(BUTARO),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,55,7)
+			DataLocation.findByCode(BUTARO),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,55,55,7)
 		
 		Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","RWF",
-			DataLocation.findByCode(MUSANZE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,67,0)
+			DataLocation.findByCode(MUSANZE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,null,67,0)
 		Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","RWF",
-			DataLocation.findByCode(GITWE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,659,0)
+			DataLocation.findByCode(GITWE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,659,659,0)
 	
 		sparePartViewController = new SparePartViewController()
 		setupSecurityManager(techDh)
@@ -194,14 +194,14 @@ class SparePartViewControllerSpec extends IntegrationTests{
 		def sparePartType = Initializer.newSparePartType(CODE(15810),["en":"testOne names"],["en":"testOne descriptions"],"CODE Spare Part",manufacturer,Initializer.now())
 
 		def sparePartOne = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions one search term'],Initializer.getDate(22,07,2010),"2900.23","USD",
-			DataLocation.findByCode(KIVUYE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,45,0)
+			DataLocation.findByCode(KIVUYE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,null,45,0)
 		def sparePartTwo = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","EUR",
-			DataLocation.findByCode(BUTARO),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,33,3)
+			DataLocation.findByCode(BUTARO),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,35,33,3)
 		
 		def sparePartThree = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","RWF",
-			DataLocation.findByCode(MUSANZE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,2233,0)
+			DataLocation.findByCode(MUSANZE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,2233,2233,0)
 		def sparePartFour = Initializer.newSparePart(SparePartPurchasedBy.BYFACILITY,['en':'SparePart Descriptions two'],Initializer.getDate(22,07,2010),"2900.23","RWF",
-			DataLocation.findByCode(GITWE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,29432,0)
+			DataLocation.findByCode(GITWE),sparePartType,supplier,user,StockLocation.FACILITY,SparePartStatus.INSTOCK,null,29432,0)
 	
 		sparePartViewController = new SparePartViewController()
 		setupSecurityManager(techDh)

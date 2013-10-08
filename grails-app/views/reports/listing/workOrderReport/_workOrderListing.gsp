@@ -13,7 +13,6 @@
 			<g:sortableColumn property="openOn"  title="${message(code: 'order.open.on.label')}" params="[q:q]" />
 			<g:sortableColumn property="closedOn"  title="${message(code: 'order.closed.on.label')}" params="[q:q]" />
 			<th><g:message code="work.order.description.label"/></th>
-			<th><g:message code="entity.messages.label"/></th>
 			<th>Number of Spare Part</th>
 		</tr>
 	</thead>
@@ -28,7 +27,6 @@
 				<td>${Utils.formatDateWithTime(order.openOn)}</td>
 				<td>${Utils.formatDateWithTime(order.closedOn)}</td>
 				<td><g:stripHtml field="${order.description}" chars="30"/></td>
-				<td>${order.getUnReadNotificationsForUser(User.findByUuid(SecurityUtils.subject.principal, [cache: true])).size()}</td>
 				<td>${order.numberOfSpareParts}</td>
 			</tr>
 		</g:each>

@@ -586,7 +586,8 @@ function sparePartQuantityHandler(sparePartId,fieldLabel,warningmsg){
 	if($.isNumeric(sparePartId)){
 		$(".disabled-on-edit").attr("disabled", "disabled").next("label.has-helper").html('<a href="#" >'+fieldLabel+'</a>');
 	}
-	$(".has-helper").click(function(event){
+	$(".has-helper").click(function(e){
+		e.preventDefault();
 		if(confirm(warningmsg)==true) $(this).hide("slow").prev("input.disabled-on-edit").removeAttr("disabled");
 	})
 }

@@ -109,30 +109,42 @@ class SparePartListingReportService {
 
 		def dataLocations = customSparePartsParams.get('dataLocations')
 		def sparePartTypes = customSparePartsParams.get('sparePartTypes')
-		def showAtMMC = customSparePartsParams.get('showAtMmc')
+		def showAtMmc = customSparePartsParams.get('showAtMmc')
+
+		if(sparePartTypes == null || sparePartTypes.empty){
+			if (log.isDebugEnabled()) log.debug("getCustomReportOfSpareParts Mandatory property criteria not satisfied, sparePartTypes: " + sparePartTypes)
+			return []
+		}
+		if(dataLocations == null || dataLocations.empty){
+			if(user?.location?.parent != null){
+				if (log.isDebugEnabled()) log.debug("getCustomReportOfSpareParts Mandatory property criteria not satisfied, non-admin dataLocations: " + dataLocations)
+				return []
+			}
+			else if(showAtMmc == null || !showAtMmc){
+				if (log.isDebugEnabled()) log.debug("getCustomReportOfSpareParts Mandatory property criteria not satisfied, admin dataLocations: " + dataLocations +", showAtMmc:" + showAtMmc)
+				return []
+			}
+		}
 
 		def sparePartCriteria = SparePart.createCriteria()
 
 		if(reportSubType == ReportSubType.INVENTORY){
-			if (log.isDebugEnabled()) log.debug("getCustomReportOfSpareParts 1 "+sparePartTypes)
+
 			def compatibleEquipmentTypes = customSparePartsParams.get('equipmentTypes')
 			def sparePartTypesWithCompatibleEquipmentTypes = []
-			if(sparePartTypes != null && !sparePartTypes.empty){
-				if(compatibleEquipmentTypes != null && !compatibleEquipmentTypes.empty){
-					compatibleEquipmentTypes.each{ compatibleEquipmentType ->
-						sparePartTypes.each{ sparePartType ->
-							def sparePartTypeCompatibleEquipmentTypes = sparePartType.compatibleEquipmentTypes
-							if(sparePartTypeCompatibleEquipmentTypes != null && !sparePartTypeCompatibleEquipmentTypes.empty){
-								if(sparePartTypeCompatibleEquipmentTypes.contains(compatibleEquipmentType))
-									sparePartTypesWithCompatibleEquipmentTypes.add(sparePartType)
-							}
+			if(compatibleEquipmentTypes != null && !compatibleEquipmentTypes.empty){
+				compatibleEquipmentTypes.each{ compatibleEquipmentType ->
+					sparePartTypes.each{ sparePartType ->
+						def sparePartTypeCompatibleEquipmentTypes = sparePartType.compatibleEquipmentTypes
+						if(sparePartTypeCompatibleEquipmentTypes != null && !sparePartTypeCompatibleEquipmentTypes.empty){
+							if(sparePartTypeCompatibleEquipmentTypes.contains(compatibleEquipmentType))
+								sparePartTypesWithCompatibleEquipmentTypes.add(sparePartType)
 						}
 					}
-					if(sparePartTypesWithCompatibleEquipmentTypes != null && !sparePartTypesWithCompatibleEquipmentTypes.empty)
-						sparePartTypes = sparePartTypesWithCompatibleEquipmentTypes
 				}
+				if(sparePartTypesWithCompatibleEquipmentTypes != null && !sparePartTypesWithCompatibleEquipmentTypes.empty)
+					sparePartTypes = sparePartTypesWithCompatibleEquipmentTypes
 			}
-			if (log.isDebugEnabled()) log.debug("getCustomReportOfSpareParts 2 "+sparePartTypes)
 			
 			def sparePartStatus = customSparePartsParams.get('sparePartStatus')
 			def fromAcquisitionPeriod = customSparePartsParams.get('fromAcquisitionPeriod')
@@ -147,7 +159,7 @@ class SparePartListingReportService {
 				or {
 					if (dataLocations && dataLocations!=null)
 					inList("dataLocation", dataLocations)
-					if(showAtMMC != null)
+					if(showAtMmc != null)
 						eq("stockLocation",StockLocation.MMC)
 				}
 
@@ -179,15 +191,16 @@ class SparePartListingReportService {
 				
 				//Mandatory property
 				or {
+					if (dataLocations && dataLocations!=null)
 					inList("dataLocation", dataLocations)
-					if(showAtMMC != null)
+					if(showAtMmc != null)
 						eq("stockLocation",StockLocation.MMC)
 				}
 				//Mandatory property
 				inList ("type", sparePartTypes)
 
 				//Status changes
-				if(sparePartStatusChanges != null || !sparePartStatusChanges.empty){
+				if(sparePartStatusChanges != null && !sparePartStatusChanges.empty){
 					if(sparePartStatusChanges.size() > 1){
 						or {
 							if(sparePartStatusChanges.contains(SparePartStatusChange.NEWPENDINGORDER)){
@@ -234,13 +247,14 @@ class SparePartListingReportService {
 			DateTime todayDateTime = new DateTime(today)
 			def lastYearDateTimeFromNow = todayDateTime.minusDays(365)
 			def lastYearDateFromNow = lastYearDateTimeFromNow.toDate()
-			
+
 			return sparePartCriteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 				createAlias("type","t")
 				//Mandatory property
 				or {
+					if (dataLocations && dataLocations!=null)
 					inList("dataLocation", dataLocations)
-					if(showAtMMC != null)
+					if(showAtMmc != null)
 						eq("stockLocation",StockLocation.MMC)
 				}
 				//Mandatory property
@@ -263,24 +277,26 @@ class SparePartListingReportService {
 			def lastYearDateFromNow = lastYearDateTimeFromNow.toDate()
 			
 			return sparePartCriteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			def sparePartCount=	sparePartCriteria.get{
-				//projections{
-					//property("type")
-					//groupProperty("t.id")
-					//rowCount("inStockQuantity")
-				//}
-				//Mandatory property
-				or {
-					inList("dataLocation", dataLocations)
-					if(showAtMMC != null)
-						eq("stockLocation",StockLocation.MMC)
-				}
-				//Mandatory property
-				inList ("type", sparePartTypes)
-					
-				eq ("status",SparePartStatus.INSTOCK)
-				//gt("deliveryDate", lastYearDateFromNow)
-			}
+				// TODO AR throws an exception
+				// def sparePartCount=	sparePartCriteria.get{
+				// 	//projections{
+				// 		//property("type")
+				// 		//groupProperty("t.id")
+				// 		//rowCount("inStockQuantity")
+				// 	//}
+				// 	//Mandatory property
+				// 	or {
+				// 		if (dataLocations && dataLocations!=null)
+				// 		inList("dataLocation", dataLocations)
+				// 		if(showAtMmc != null)
+				// 			eq("stockLocation",StockLocation.MMC)
+				// 	}
+				// 	//Mandatory property
+				// 	inList ("type", sparePartTypes)
+						
+				// 	eq ("status",SparePartStatus.INSTOCK)
+				// 	//gt("deliveryDate", lastYearDateFromNow)
+				// }
 			}
 		}
 	}
