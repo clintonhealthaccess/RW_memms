@@ -62,7 +62,7 @@ class SparePartControllerSpec extends IntegrationTests{
 
 		when:
 		sparePartController = new SparePartController();
-		sparePartController.params.initialQuantity = 44
+		sparePartController.params.receivedQuantity = 44
 		sparePartController.params.purchaseCost = "32000"
 		sparePartController.params.currency = "USD"
 		sparePartController.params.sparePartPurchasedBy = SparePartPurchasedBy.BYMOH
@@ -77,7 +77,7 @@ class SparePartControllerSpec extends IntegrationTests{
 		then:
 		SparePart.count() == 1;
 		SparePart.findByDescriptions_en("test_english_descriptions").getDescriptions(new Locale("en")).equals("test_english_descriptions")
-		SparePart.findByInitialQuantity(44) != null
+		SparePart.findByReceivedQuantity(44) != null
 	}
 	def "create spare part with correct required data in fields - for english input"(){
 
@@ -92,7 +92,7 @@ class SparePartControllerSpec extends IntegrationTests{
 		
 		when:
 		sparePartController = new SparePartController();
-		sparePartController.params.initialQuantity = 55
+		sparePartController.params.receivedQuantity = 55
 		sparePartController.params.purchaseCost = "327670"
 		sparePartController.params.currency = "USD"
 		sparePartController.params.sparePartPurchasedBy = SparePartPurchasedBy.BYMOH
@@ -108,7 +108,7 @@ class SparePartControllerSpec extends IntegrationTests{
 		then:
 		SparePart.count() == 1;
 		SparePart.findByDescriptions_en("test_english_descriptions 3").getDescriptions(new Locale("en")).equals("test_english_descriptions 3")
-		SparePart.findByInitialQuantity(55) != null
+		SparePart.findByReceivedQuantity(55) != null
 		SparePart.findByPurchaseCost(327670) != null
 
 	}
@@ -129,7 +129,7 @@ class SparePartControllerSpec extends IntegrationTests{
 		when:
 		sparePartController.params.purchaseCost = ""
 		sparePartController.params.currency = ""
-		sparePartController.params.initialQuantity = 44
+		sparePartController.params.receivedQuantity = 44
 		sparePartController.params.sparePartPurchasedBy = SparePartPurchasedBy.BYMOH
 		sparePartController.params.stockLocation = StockLocation.MMC
 		grailsApplication.config.i18nFields.locales.each{
@@ -162,7 +162,7 @@ class SparePartControllerSpec extends IntegrationTests{
 		sparePartController = new SparePartController();		
 
 		when:
-		sparePartController.params.initialQuantity = 13
+		sparePartController.params.receivedQuantity = 13
 		sparePartController.params.purchaseCost = "32000"
 		sparePartController.params.currency = "USD"
 		sparePartController.params.sparePartPurchasedBy = SparePartPurchasedBy.BYMOH
@@ -181,7 +181,7 @@ class SparePartControllerSpec extends IntegrationTests{
 		SparePart.count() == 0;
 
 		when:
-		sparePartController.params.initialQuantity = 43
+		sparePartController.params.receivedQuantity = 43
 		sparePartController.params.purchaseCost = "32000"
 		sparePartController.params.currency = "USD"
 		sparePartController.params.sparePartPurchasedBy = SparePartPurchasedBy.BYMOH

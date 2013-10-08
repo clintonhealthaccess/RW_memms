@@ -85,24 +85,26 @@ class SparePartController extends AbstractEntityController{
 	def bindParams(def entity) {
 		def stockLocation = params['stockLocation']
 		def status = params['status']
+		def previousStatus = entity.status
 		if(status!=null) status = SparePartStatus."$status"
 		if(stockLocation!=null) stockLocation = StockLocation."$stockLocation"
 
 		if(log.isDebugEnabled()) log.debug("SparePart params: before bind "+params)
 
-		if(!entity.id){
+		if(entity.id==null){
 			entity.addedBy = user 
-			if(status.equals(SparePartStatus.INSTOCK)) entity.inStockQuantity = params.int("initialQuantity")
-			else entity.inStockQuantity = 0
+			if(status.equals(SparePartStatus.INSTOCK)) 
+				entity.inStockQuantity = params.int("receivedQuantity")
 		}else{ 
 			entity.lastModified = user
-			if(status.equals(SparePartStatus.PENDINGORDER)) params.inStockQuantity = 0
+			if(status.equals(SparePartStatus.PENDINGORDER) && previousStatus.equals(SparePartStatus.PENDINGORDER)) {
+				params["inStockQuantity"] = null
+				params["receivedQuantity"] = null
+			}
 			if(stockLocation.equals(StockLocation.MMC)) params.dataLocation =''
 		}
-		
-		entity.properties = params
-		//bindData(entity,params,[exclude:["inStockQuantity"]])
 
+		entity.properties = params
 		if(log.isDebugEnabled()) log.debug("SparePart params: after bind "+entity)
 	}
 

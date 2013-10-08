@@ -179,11 +179,6 @@ class DurationBasedOrder extends PreventiveOrder {
 			case OccurencyType.NONE:
 			break
 		}
-		/* 
-		 * This is need for the system to be able to display the 
-	 	 * next occurence time when this entity is created for the first time
-	 	 */
-		this.save(flush:true)
 		
 		//Return the first date as it is next occurence date
 		if(!dates.isEmpty()) nextOccurrence = dates[0]

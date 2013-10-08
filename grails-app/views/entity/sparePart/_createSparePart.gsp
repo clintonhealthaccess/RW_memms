@@ -30,10 +30,10 @@
       		<g:i18nTextarea name="descriptions" bean="${sparePart}" label="${message(code:'entity.comments.label')}" field="descriptions" height="150" width="300" maxHeight="150" />
       	  <g:selectFromEnum name="status" bean="${sparePart}" values="${SparePartStatus.values()}" field="status" label="${message(code:'spare.part.status.label')}"/>
           <g:if test="${sparePart.id == null}">
-            <g:input name="initialQuantity" label="${message(code:'spare.part.inititial.quantity')}" bean="${sparePart}" field="initialQuantity"/>
+            <g:input name="receivedQuantity" label="${message(code:'spare.part.inititial.quantity')}" bean="${sparePart}" field="receivedQuantity"/>
           </g:if>
           <g:else>
-            <g:input name="initialQuantity" label="${message(code:'spare.part.inititial.quantity')}" bean="${sparePart}" field="initialQuantity" dateClass=" numbers-only disabled-on-edit"/>
+            <g:input name="receivedQuantity" label="${message(code:'spare.part.inititial.quantity')}" bean="${sparePart}" field="receivedQuantity" dateClass=" numbers-only disabled-on-edit"/>
             <g:input name="inStockQuantity" label="${message(code:'spare.part.in.stock.quantity')}"  bean="${sparePart}" field="inStockQuantity" dateClass="numbers-only disabled-on-edit"/>
           </g:else>
         </fieldset>
