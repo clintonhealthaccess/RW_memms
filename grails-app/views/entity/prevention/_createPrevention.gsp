@@ -24,7 +24,7 @@
                   <g:message code="prevention.section.basic.information.label"/>
               </h4> 
               <div class="row">
-                <input type="hidden" name="order.id" value="${prevention.order.id}" />
+                <input type="hidden" class="order-id" name="order.id" value="${prevention.order.id}" />
               </div>
             <g:input name="eventDate" dateClass="date-picker" label="${message(code:'equipment.status.date.of.event.label')}" bean="${prevention}" field="eventDate"/>
             <g:inputHourMinute name="timeSpend" field="timeSpend" hours="${prevention.timeSpend?.hours}" minutes="${prevention.timeSpend?.minutes}" label='prevention.work.time.label' bean="${order}"/>
@@ -74,9 +74,41 @@
               </div>
               </fieldset>
             </div>
+              <div class="form-section">
+                <fieldset>
+                  <h4 class="section-title">
+                    <span class="question-default">
+                      <img src="${resource(dir:'images/icons',file:'star_small.png')}">
+                    </span>
+                    <g:message code="work.order.section.spare.part.information.label"/>
+                  </h4>
+                  <div class="row maintenance-process">
+                         <div class="process process-action half">
+                            <label>Used spare parts</label>
+                            <fieldset>
+                            <g:render template="/templates/usedSparePartList" model="['order':prevention.order,'usedSpareParts':prevention.usedSpareParts,'label':'work.order.performed.action.label']" />
+                            <br/> 
+                  <label>Spare Parts</label>
+                  <select class="spare-parts" name="spareParts" >
+                    <option value="_" class="first-option">Select used compantible</option>
+                            <g:each in="${compatibleSpareParts}" var="sparePartType">
+                              <option value="${sparePartType.key.id}">${sparePartType.key.names} - [${sparePartType.value}]</option>
+                            </g:each>
+                        </select>
+                        <div class="spare-part-quanty">
+                            <input type="text" name="spare-part-number"  class="idle-field numbers-only" value="" />
+                      <a href="#" class="add-spare-part next medium"><g:message code="default.add.label"  args="${['']}"/></a>
+                      <img src="${resource(dir:'images',file:'spinner.gif')}" class="ajax-spinner"/>
+                      <span class="ajax-error alt"><g:message code="entity.error.updating.try.again"/></span>
+                    </div>  
+                           </fieldset>
+                          </div>
+                      </div>
+                 </fieldset>
+              </div>
             </g:if>
              <g:if test="${prevention.id != null}">
-              <input type="hidden" name="id" value="${prevention.id}" />
+              <input type="hidden" class="prevention-id" name="id" value="${prevention.id}" />
             </g:if>
             
       		<div class="buttons">
@@ -92,6 +124,14 @@
     addPreventionProcess("${createLink(controller:'prevention',action: 'addProcess')}","${prevention.id}","");
     removePreventionProcess("${createLink(controller:'prevention',action: 'removeProcess')}");
     getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}");
+
+    addSpareParts("${createLink(controller:'prevention',action: 'addSpareParts')}");
+    $(".spare-part-quanty").hide();
+    $(".spare-parts").change(function(event){
+      if($(".spare-parts option:selected").attr("value")=="_")
+        $(".spare-part-quanty").slideUp("slow");
+      else $(".spare-part-quanty").slideDown("slow");
+    });
 
     $(".droppable").droppable({ hoverClass:'dragging',drop: function(event, ui) {  
        $("#action-list option[value="+$(ui.draggable[0]).attr("data-id")+"]").remove();

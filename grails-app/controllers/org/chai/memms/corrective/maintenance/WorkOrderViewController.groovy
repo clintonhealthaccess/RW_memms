@@ -310,7 +310,8 @@ class WorkOrderViewController extends AbstractController{
 			for(def sparePart: compatibleSpareParts)
 				options = options+" <option value='"+sparePart.key.id+"'>"+sparePart.key.names+" - "+[sparePart.value]+"</option>";
 			result = true
-			html = g.render(template:"/templates/usedSparePartList",model:[order:order,spareParts:order.spareParts])
+			html = g.render(template:"/templates/usedSparePartList",model:[order:order,usedSpareParts:order.usedSpareParts])
+			log.debug("All  UsedSpareParts in db workOrder ==>"+UsedSpareParts.list())
 		}
 
 		render(contentType:"text/json") { results = [result,html,options]}
