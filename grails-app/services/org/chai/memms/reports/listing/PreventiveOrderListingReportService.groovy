@@ -157,8 +157,6 @@ class PreventiveOrderListingReportService {
 				eq ("equip.currency",currency)
 			if(responsibles!=null && !responsibles.empty)
 				inList ("preventionResponsible",responsibles)
-				
-			// DONE
 			 if(fromWorkOrderPeriod && fromWorkOrderPeriod != null)
 			 	gt ("dateCreated", fromWorkOrderPeriod)
 			 if(toWorkOrderPeriod && toWorkOrderPeriod != null)
