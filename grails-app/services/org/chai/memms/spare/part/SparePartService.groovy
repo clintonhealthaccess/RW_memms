@@ -106,29 +106,32 @@ class SparePartService {
 
 	//Assign sparePart to workOrder - need to be intensively tested
 	public def assignSparePartsToWorkOrder(def order, def sparePartType, def user, def quantity){
-		def usedSpareParts = order.spareParts
-		def dataLocation = order.equipment.dataLocation
+		def usedSpareParts = order.usedSpareParts
 		def changedSpareParts = [:]
 		def diff = null	
-		def tempSpareParts =   this.getInStockSparePartOfTypes([sparePartType],user,[dataLocation])
+		def remainingToAdd = 0
+		def tempSpareParts =   getInStockSparePartOfTypes([sparePartType],user)
 		for(def sparePart: tempSpareParts){
-			if(diff==null || diff > 0) diff = sparePart.inStockQuantity-quantity
+			if(diff==null || diff > 0) diff = sparePart.inStockQuantity-(quantity - remainingToAdd)
 			else diff = sparePart.inStockQuantity - (diff*-1)
+			def usedSparePart = order.getSparePartTypeUsed(sparePartType);
 			if(diff >= 0){
-				if(order.getSparePartTypesUsed(sparePart))
-					order.getSparePartTypesUsed(sparePart).quantity = order.getSparePartTypesUsed(sparePart).quantity+quantity
-				else order.addToSpareParts(new UsedSpareParts(sparePart:sparePart,quantity:quantity))
+				if(usedSparePart)
+					if(remainingToAdd != 0) usedSparePart.quantity = usedSparePart.quantity+remainingToAdd
+					else usedSparePart.quantity = usedSparePart.quantity+quantity
+				else newUsedSpareParts(order,null,sparePart.type,quantity)
 				changedSpareParts.put(sparePart,diff)
 				break;
 			}else{
-				if(order.getSparePartTypesUsed(sparePart))
-					order.getSparePartTypesUsed(sparePart).quantity = order.getSparePartTypesUsed(sparePart).quantity+sparePart.inStockQuantity
-				else  order.addToSpareParts(new UsedSpareParts(sparePart:sparePart,quantity:sparePart.inStockQuantity))
+				remainingToAdd = (diff*-1)
+				if(usedSparePart)
+					usedSparePart.quantity = usedSparePart.quantity+sparePart.inStockQuantity
+				else  newUsedSpareParts(order,null,sparePart.type,sparePart.inStockQuantity)
 				changedSpareParts.put(sparePart,0)
 			}
 		}
 		for(def sparePart : changedSpareParts){
-			sparePart.lastModified = user
+			sparePart.key.lastModified = user
 			sparePart.key.inStockQuantity= sparePart.value
 			sparePart.key.save(failOnError:true)
 		}		
@@ -137,42 +140,45 @@ class SparePartService {
 	}
 	//Assign sparePart to prevention (PreventiveOrder) - need to be intensively tested 
 	public def assignSparePartsToPrevention(def prevention, def sparePartType, def user, def quantity){
-		def usedSpareParts = prevention.spareParts
+		def usedSpareParts = prevention.usedSpareParts
 		def order = prevention.order
 		def dataLocation = order.equipment.dataLocation
-		//Get Compatible sparePart based on equipmentType
-		def equipmentType = order.equipment.type
 		def changedSpareParts = [:]
 		def diff = null	
+		def remainingToAdd = 0
 
-		def tempSpareParts =   this.getInStockSparePartOfTypes(equipmentType.sparePartTypes,user,[dataLocation])
+		def usedSparePart = prevention.getSparePartTypeUsed(sparePartType);
+		def tempSpareParts =   getInStockSparePartOfTypes([sparePartType],user)
+		
 		for(def sparePart: tempSpareParts){
 			if(diff==null || diff > 0) diff = sparePart.inStockQuantity-quantity
 			else diff = sparePart.inStockQuantity - (diff*-1)
+			
 			if(diff >= 0){
-				if(prevention.getSparePartTypesUsed(sparePart))
-					prevention.getSparePartTypesUsed(sparePart).quantity = prevention.getSparePartTypesUsed(sparePart).quantity+quantity
-				else prevention.addToSpareParts(new UsedSpareParts(maintenanceOrder:order,sparePart:sparePart,quantity:quantity))
+				if(usedSparePart)
+					if(remainingToAdd != 0) usedSparePart.quantity = usedSparePart.quantity+remainingToAdd
+					else usedSparePart.quantity = usedSparePart.quantity+quantity
+				else newUsedSpareParts(order,prevention,sparePart.type,quantity)
 				changedSpareParts.put(sparePart,diff)
 				break;
 			}else{
-				if(prevention.getSparePartTypesUsed(sparePart))
-					prevention.getSparePartTypesUsed(sparePart).quantity = prevention.getSparePartTypesUsed(sparePart).quantity+sparePart.inStockQuantity
-				else  prevention.addToSpareParts(new UsedSpareParts(maintenanceOrder:order,sparePart:sparePart,quantity:sparePart.inStockQuantity))
+				remainingToAdd = (diff*-1)
+				if(usedSparePart) usedSparePart.quantity = usedSparePart.quantity+sparePart.inStockQuantity
+				else  newUsedSpareParts(order,prevention,sparePart.type,sparePart.inStockQuantity)
 				changedSpareParts.put(sparePart,0)
 			}
 		}
 		for(def sparePart : changedSpareParts){
+			sparePart.key.lastModified = user
 			sparePart.key.inStockQuantity= sparePart.value
 			sparePart.key.save(failOnError:true)
 		}		
-
 		return prevention.save(failOnError:true, flush:true)
 	}
 
 	//To be intensively tested
-    public def getCompatibleSparePart(def equipmentType, def user, def dataLocations){
-    	def tempSpareParts =  this.getInStockSparePartOfTypes(equipmentType.sparePartTypes,user,dataLocations)
+    public def getCompatibleSparePart(def equipmentType, def user){
+    	def tempSpareParts =  getInStockSparePartOfTypes(equipmentType.sparePartTypes,user)
 		def spareParts = [:]
 		for(def sparePart : tempSpareParts){
 			if(spareParts.get(sparePart.type)==null){ 
@@ -374,6 +380,15 @@ class SparePartService {
 		headers.add(ImportExportConstant.SPARE_PART_QUANTITY)
 
 		return headers;
+	}
+	public def newUsedSpareParts(def order,def prevention,def sparePartType,def quantity){
+		def usedSpareParts = new UsedSpareParts(
+				maintenanceOrder:order,
+				prevention:prevention,
+				sparePartType:sparePartType,
+				quantity:quantity
+		)
+		return usedSpareParts.save(failOnError:true)
 	}
 
 }

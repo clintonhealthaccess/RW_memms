@@ -28,6 +28,7 @@
 package org.chai.memms.preventive.maintenance
 
 import groovy.transform.EqualsAndHashCode;
+import javax.persistence.Transient;
 
 import javax.persistence.Transient;
 
@@ -35,7 +36,7 @@ import org.chai.memms.TimeSpend;
 import org.chai.memms.security.User;
 import org.chai.memms.TimeDate;
 import org.chai.memms.inventory.PreventiveAction;
-import org.chai.memms.corrective.maintenance.UsedSpareParts;
+import org.chai.memms.corrective.maintenance.UsedSpareParts
 
 
 
@@ -60,7 +61,7 @@ public class Prevention {
 	
 	static i18nFields = ["descriptions"]
 	static belongsTo = [order:  PreventiveOrder]
-	static hasMany = [actions: PreventiveAction, spareParts:UsedSpareParts]
+	static hasMany = [actions: PreventiveAction]
 	static embedded = ["timeSpend","scheduledOn"]
 	
 
@@ -78,12 +79,21 @@ public class Prevention {
 		lastUpdated nullable: true, validator:{if(it != null) return (it <= new Date())}
 	}
 
-	//Verify if sparePart exist in the map and return it
+	def beforeDelete(){
+		UsedSpareParts.executeUpdate("delete from UsedSpareParts as sp where sp.maintenanceOrder = "+this.order.id+"")
+	}
+	
 	@Transient
-	def getSparePartTypesUsed(def sparePart){
-		for(def keyPair: spareParts)
-			if(keyPair.sparePart.equals(sparePart)) return  keyPair
-		return null
+	def getUsedSpareParts(){
+		def usedSpareParts = []
+		if(UsedSpareParts.findAllByPrevention(this)) usedSpareParts = UsedSpareParts.findAllByPrevention(this)
+		//Will send a empty() list in case there is not matching element
+		return usedSpareParts;
+	}
+
+	@Transient
+	def getSparePartTypeUsed(def sparePartType){
+		return UsedSpareParts.findByPreventionAndSparePartType(this,sparePartType);
 	}
 	
 	

@@ -162,4 +162,9 @@ public abstract class PreventiveOrder extends MaintenanceOrder {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return "PreventiveOrder [id="+id+" type=" + type + "]";
+	}
+
 }

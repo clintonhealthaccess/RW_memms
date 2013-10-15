@@ -29,12 +29,14 @@
 package org.chai.memms.maintenance
 
 import groovy.transform.EqualsAndHashCode;
+import javax.persistence.Transient;
 
 import java.util.Date;
 
 import org.chai.memms.corrective.maintenance.CorrectiveProcess;
 import org.chai.memms.inventory.Equipment;
 import org.chai.memms.security.User;
+import org.chai.memms.corrective.maintenance.UsedSpareParts
 
 
 /**
@@ -52,7 +54,6 @@ public abstract class MaintenanceOrder {
 	User addedBy
 	User lastModifiedBy
 	String description
-	
 		
 	static constraints = {
 		
@@ -69,6 +70,20 @@ public abstract class MaintenanceOrder {
 	def beforeUpdate(){
 		lastUpdated = new Date();
 	}
+
+	@Transient
+	def getUsedSpareParts(){
+		def usedSpareParts = []
+		if(UsedSpareParts.findAllByMaintenanceOrder(this)) usedSpareParts = UsedSpareParts.findAllByMaintenanceOrder(this)
+		//Will send a empty() list in case there is not matching element
+		return usedSpareParts
+	}
+
+	@Transient
+	def getSparePartTypeUsed(def sparePartType){
+		return UsedSpareParts.findByMaintenanceOrderAndSparePartType(this,sparePartType);
+	}
+	
 	
 	static mapping = {
 		table "memms_maintenance_order_abstract"

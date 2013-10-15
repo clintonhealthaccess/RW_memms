@@ -41,7 +41,7 @@ import org.chai.memms.security.User;
 import org.chai.memms.spare.part.SparePart
 import org.chai.memms.spare.part.SparePartType
 import org.joda.time.DateTime
-
+import org.chai.memms.corrective.maintenance.UsedSpareParts
 /**
  * @author Jean Kahigiso M.
  *
@@ -89,12 +89,11 @@ public class WorkOrder extends MaintenanceOrder{
 	OrderStatus currentStatus
 	Criticality criticality
 	FailureReason failureReason
-	Map usedSpareParts = new HashMap()
 	
-	
+
 	static belongsTo = [equipment: Equipment]
 	static i18nFields = ["failureReasonDetails","testResultsDescriptions"]
-	static hasMany = [status: WorkOrderStatus, comments: Comment, notifications: NotificationWorkOrder, processes: CorrectiveProcess,spareParts:UsedSpareParts]
+	static hasMany = [status: WorkOrderStatus, comments: Comment, notifications: NotificationWorkOrder, processes: CorrectiveProcess]
 	static embedded = ["workTime","travelTime"]
 
 	static constraints = {
@@ -148,7 +147,11 @@ public class WorkOrder extends MaintenanceOrder{
 		}
 		
 	}
-	
+
+	def beforeDelete(){
+		UsedSpareParts.executeUpdate("delete from UsedSpareParts as sp where sp.maintenanceOrder = "+this.id+"")
+	}
+
 	@Transient
 	def getActions(){
 		List<CorrectiveProcess> actions = []
@@ -206,14 +209,17 @@ public class WorkOrder extends MaintenanceOrder{
 		table "memms_work_order"
 		version false
 	}
+	
 	@Transient
 	def getNotificationsReceivedByUser(def user){
 		return notifications.findAll{it.receiver == user}
 	}
+
 	@Transient
 	def getNotificationsSentByUser(def user){
 		return notifications.findAll{it.sender == user}
 	}
+
 	@Transient
 	def getUnReadNotificationsForUser(def user){
 		return getNotificationsReceivedByUser(user).findAll{!it.read}
@@ -221,61 +227,6 @@ public class WorkOrder extends MaintenanceOrder{
 
 	@Override
 	public String toString() {
-		return "WorkOrder [id= " + id + " currentStatus= "+currentStatus+"]";
+		return "WorkOrder [id="+id+" currentStatus=" + currentStatus + "]";
 	}
-	
-	//TODO To finalize this Method on map that must hold key and another map as value
-	@Transient
-	def getSparePartTypesUsed(){
-		Map<SparePartType,Integer> usedSparePartTypes =  [:]
-		DateTime todayDateTime = new DateTime(new Date())
-		def lastYearDateTimeFromNow = todayDateTime.minusDays(365)
-		def lastYearDateFromNow = lastYearDateTimeFromNow.toDate()
-		
-		if (closedOn?.after(lastYearDateFromNow) && usedSpareParts.size()!=null && OrderStatus.CLOSEDFIXED)
-		//15 stands for the used quantity for any work order I wait from Jean
-		for (def sparePart: usedSpareParts){
-			
-			if (usedSparePartTypes.containsKey(sparePart.type)){
-				int previousNumberOfSparePart = getNumberOfSparePartsOnSparePartType(usedSparePartTypes, sparePart.type)
-				usedSparePartTypes.put(sparePart.type, previousNumberOfSparePart+sparePart.value)
-			}else
-				usedSparePartTypes.put(sparePart.type, sparePart.value)
-		}
-		return usedSparePartTypes
-	}
-	//Verify if sparePart exist in the map and return it
-	@Transient
-	def getSparePartTypesUsed(def sparePart){
-		for(def keyPair: spareParts)
-			if(keyPair.sparePart.equals(sparePart)) return  keyPair
-		return null
-	}
-	
-	//TODO To finalize this Method By Aphrodice
-	@Transient
-	def getNumberOfSparePartsOnSparePartType(Map<SparePartType,Integer> usedSparePartTypes, SparePartType sparePartType){
-		if(usedSparePartTypes.get(sparePartType)!=null){
-			return usedSparePartTypes.get(sparePartType)
-		}else 
-	return 0	
-	}
-	
-	//TODO To finalize this Method By Aphrodice
-	@Transient
-	def getNumberOfSpareParts(){
-		for (def spt: getSparePartTypesUsed())
-		if(usedSpareParts.get(spt)!=null){
-			return usedSpareParts.get(spt)
-		}else
-	return 0
-	}
-	
-	//TODO To finalize this Method By Aphrodice
-	/*@Transient
-	def getNumberOfSparePartType(SparePartType sparePartType, SparePart sparePart, int countSpareParts) {
-		int previousNumberOfSparePart = getNumberOfSparePartOnSparePartType(sparePart)
-		usedSpareParts.put(sparePart, previousNumberOfSparePart + countSpareParts)
-	}
-*/
 }

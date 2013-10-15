@@ -39,6 +39,9 @@ import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderStat
 import org.chai.memms.preventive.maintenance.PreventiveOrder.PreventiveOrderType
 import org.chai.memms.inventory.PreventiveAction;
 import org.apache.commons.lang.math.NumberUtils;
+import org.chai.memms.spare.part.SparePartService;
+import org.chai.memms.spare.part.SparePartType;
+import org.chai.memms.corrective.maintenance.UsedSpareParts
 
 
 
@@ -49,6 +52,7 @@ import org.apache.commons.lang.math.NumberUtils;
 class PreventionController extends AbstractEntityController {
 	def preventionService
 	def maintenanceProcessService
+	def sparePartService
 
 	def getEntity(def id) {
 		return Prevention.get(id);
@@ -72,17 +76,19 @@ class PreventionController extends AbstractEntityController {
 
 	def getModel(def entity) {
 		def scheduledOn = null
+		def compatibleSpareParts = [:]
 		def actions = entity.order.equipment.type.preventiveActions 
+		if(entity.id!=null) compatibleSpareParts = sparePartService.getCompatibleSparePart(entity.order.equipment.type,user)
 		if(entity.actions && !entity.actions.isEmpty()) actions = actions - entity.actions 
 		
 		if(entity.id==null && entity.order.type.equals(PreventiveOrderType.DURATIONBASED)){
 			scheduledOn = new TimeDate(entity.order.nextOccurence,new DateTime(entity.order.nextOccurence).toLocalTime().toString("HH:mm:ss"))
 		}
-
 		[
 			prevention:entity,
 			scheduledOn:scheduledOn,
-			actions: actions
+			actions: actions,
+			compatibleSpareParts:compatibleSpareParts
 		]
 	}
 
@@ -146,5 +152,30 @@ class PreventionController extends AbstractEntityController {
 		def model = model(entities, order) << [q:searchTerm]
 		def listHtml = g.render(template:"/entity/prevention/preventionList",model:model)
 		render(contentType:"text/json") { results = [listHtml] }
+	}
+
+	def addSpareParts = {
+		PreventiveOrder order = PreventiveOrder.get(params.int("order.id"))
+		SparePartType type = SparePartType.get(params.int("sparePart.type.id"))
+		Prevention prevention  = Prevention.get(params.int("prevention.id"))
+		def quantity = params.int("quantity")
+		if(log.isDebugEnabled()) log.debug("PreventiveOrder=>: "+order+" prevention: :"+prevention+" SparePartType: :"+type+" quantity: "+quantity)
+		def html =""
+		def result = false
+		def options = ""
+		if(order == null || type==null || prevention == null || quantity <= 0 || quantity == null)
+			response.sendError(404)
+		else{
+
+			prevention = sparePartService.assignSparePartsToPrevention(prevention,type,user,quantity)
+			if(log.isDebugEnabled()) log.debug("prevention=>==2: "+prevention)
+			def compatibleSpareParts = sparePartService.getCompatibleSparePart(order.equipment.type,user)
+			for(def sparePart: compatibleSpareParts)
+				options = options+" <option value='"+sparePart.key.id+"'>"+sparePart.key.names+" - "+[sparePart.value]+"</option>";
+			result = true
+			html = g.render(template:"/templates/usedSparePartList",model:[order:order,usedSpareParts:prevention.usedSpareParts])
+		}
+
+		render(contentType:"text/json") { results = [result,html,options]}
 	}
 }

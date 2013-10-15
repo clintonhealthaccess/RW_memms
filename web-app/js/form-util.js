@@ -522,7 +522,7 @@ function removePreventionProcess(baseUrl){
 	});
 }
 
-function addSparePartsWorkOrder(baseUrl,order){
+function addSpareParts(baseUrl){
 	hideSpinnerAndErrorMsg()
 	$('.spare-part-quanty').on("click",".add-spare-part",function(e){
 		e.preventDefault();
@@ -532,8 +532,9 @@ function addSparePartsWorkOrder(baseUrl,order){
 			type :'GET',
 			dataType: 'json',
 			data:{
-					"order.id":order,
+					"order.id":$(".order-id").attr('value'),
 					"sparePart.type.id":$(".spare-parts option:selected").attr("value"),
+					"prevention.id":$(".prevention-id").attr('value'),
 					"quantity":$(this).prevAll(".idle-field").attr('value')
 				 },
 			url:baseUrl,
@@ -548,10 +549,6 @@ function addSparePartsWorkOrder(baseUrl,order){
 		});
 		listRefresher(this);
 	})
-}
-
-function addSparePartsToPrevention(baseUrl,prevention){
-
 }
 
 function search(baseUrl){
