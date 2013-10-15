@@ -108,6 +108,23 @@ class WorkOrderViewController extends AbstractController{
 		}
 	}
 	
+	def workOrdersEscalatedAtMMC={
+		if (log.isDebugEnabled()) log.debug("listing.workOrdersEscalatedToMMC start, params:"+params)
+		def equipment = null
+		def  dataLocation = null
+		if(params["dataLocation.id"]) dataLocation = CalculationLocation.get(params.int("dataLocation.id"))
+		if(params["equipment.id"]) equipment = Equipment.get(params.int("equipment.id"))
+
+		adaptParamsForList()
+		def workOrders = workOrderService.getWorkOrdersEscalatedToMMC(user,params)
+		if(!request.xhr)
+			render(view:"/entity/list", model: model(workOrders, dataLocation, equipment) << [
+					template:"workOrder/workOrderList",
+					filterTemplate:"workOrder/workOrderFilter",
+					listTop:"workOrder/listTop",
+				])
+	}
+	
 	def search = {
 		def equipment = null
 		def dataLocation = null

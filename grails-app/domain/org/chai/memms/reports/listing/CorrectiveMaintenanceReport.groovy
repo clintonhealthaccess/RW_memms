@@ -39,7 +39,7 @@ class CorrectiveMaintenanceReport extends EquipmentGeneralReportParameters{
 
 	def workOrderStatus
 	boolean underWarranty
-	def statusChanges
+	String statusChanges
 	Date fromStatusChangesPeriod
 	Date toStatusChangesPeriod
 	

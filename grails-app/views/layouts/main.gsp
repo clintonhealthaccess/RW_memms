@@ -136,6 +136,13 @@
                   </a>
                 </li>
               </shiro:hasPermission>
+              <shiro:hasPermission permission="menu:workorderescalatedtommc">
+                <li>
+                  <a class="${controllerName=='workOrder' || controllerName=='workOrderView' ?'active':''}" href="${createLink(controller:'workOrderView', action:'workOrdersEscalatedAtMMC')}">
+                    <g:message code="header.navigation.corrective.maintenance.escalated.to.mmc"/>
+                  </a>
+                </li>
+              </shiro:hasPermission>
             </ul>
           </li>
         </shiro:hasPermission>

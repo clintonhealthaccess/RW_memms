@@ -167,4 +167,26 @@ class WorkOrderServiceSpec  extends IntegrationTests{
 		workOrder.status.size() == 1
 		workOrder.status.escalation
 	}
+	def "can get WorkOrder escalated at MMC"(){
+		setup:
+		setupLocationTree()
+		setupEquipment()
+		def techKivuye = newUser("clerk", true,true)
+		techKivuye.userType = UserType.TITULAIREHC
+		techKivuye.location = DataLocation.findByCode(KIVUYE)
+		techKivuye.save(failOnError:true)
+		def mmcUser = newUser("TechnicianMMC", true,true)
+		mmcUser.userType = UserType.TECHNICIANMMC
+		mmcUser.location = DataLocation.findByCode(RWANDA)
+		mmcUser.save(failOnError:true)
+		def equipment = Equipment.findBySerialNumber(CODE(123))
+		def workOrder = Initializer.newWorkOrder(equipment, "Nothing yet escalated", Criticality.NORMAL,techKivuye,Initializer.now(),FailureReason.NOTSPECIFIED,OrderStatus.OPENATMMC)
+		if (log.isDebugEnabled()) log.debug("WORK ORDER TO ESCALATE ================ :"+ workOrder.id + " Status =======: "+workOrder.currentStatus)
+		if (log.isDebugEnabled()) log.debug("MMC USER  ================ :"+ mmcUser.id + " Tech User =======: "+techKivuye.id)
+		when:
+		def workOrders=workOrderService.getWorkOrdersEscalatedToMMC(mmcUser,[:])
+		if (log.isDebugEnabled()) log.debug("WORK ORDER SIZE ESCALATED ================== :"+ workOrders.size())
+		then:
+		workOrders.size() == 1
+	}
 }

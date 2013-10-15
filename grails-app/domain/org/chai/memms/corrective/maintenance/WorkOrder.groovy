@@ -75,7 +75,6 @@ public class WorkOrder extends MaintenanceOrder{
 	String testResultsDescriptions
 	String returnedTo
 	
-	
 	User receivedBy
 	User fixedBy
 	
@@ -232,9 +231,9 @@ public class WorkOrder extends MaintenanceOrder{
 		def lastYearDateTimeFromNow = todayDateTime.minusDays(365)
 		def lastYearDateFromNow = lastYearDateTimeFromNow.toDate()
 		
-		if (closedOn?.after(lastYearDateFromNow) && usedSpareParts.size()!=null && OrderStatus.CLOSEDFIXED)
+		if (closedOn?.after(lastYearDateFromNow) && spareParts.size()!=null && OrderStatus.CLOSEDFIXED)
 		//15 stands for the used quantity for any work order I wait from Jean
-		for (def sparePart: usedSpareParts){
+		for (def sparePart: spareParts){
 			
 			if (usedSparePartTypes.containsKey(sparePart.type)){
 				int previousNumberOfSparePart = getNumberOfSparePartsOnSparePartType(usedSparePartTypes, sparePart.type)
@@ -261,21 +260,13 @@ public class WorkOrder extends MaintenanceOrder{
 	return 0	
 	}
 	
-	//TODO To finalize this Method By Aphrodice
 	@Transient
 	def getNumberOfSpareParts(){
-		for (def spt: getSparePartTypesUsed())
-		if(usedSpareParts.get(spt)!=null){
-			return usedSpareParts.get(spt)
-		}else
-	return 0
+		int totalSpareParts=0
+		for (def sparePart: spareParts){
+		 totalSpareParts=totalSpareParts+sparePart.quantity
+		}
+		return totalSpareParts
 	}
-	
-	//TODO To finalize this Method By Aphrodice
-	/*@Transient
-	def getNumberOfSparePartType(SparePartType sparePartType, SparePart sparePart, int countSpareParts) {
-		int previousNumberOfSparePart = getNumberOfSparePartOnSparePartType(sparePart)
-		usedSpareParts.put(sparePart, previousNumberOfSparePart + countSpareParts)
-	}
-*/
+
 }

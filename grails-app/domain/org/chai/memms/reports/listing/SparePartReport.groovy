@@ -47,7 +47,7 @@ class SparePartReport {
 	Date fromDate
 	Date toDate
 	User savedBy
-	def sparePartStatus
+	String sparePartStatus
 	boolean noAcquisitionPeriod
 	String displayOptions
 
