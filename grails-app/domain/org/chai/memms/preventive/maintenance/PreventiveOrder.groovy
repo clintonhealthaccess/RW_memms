@@ -120,7 +120,8 @@ public abstract class PreventiveOrder extends MaintenanceOrder {
 			PreventionResponsible.HCTECHNICIAN,
 			PreventionResponsible.HCTITULAIRE,
 			PreventionResponsible.SERVICEPROVIDER,
-			PreventionResponsible.DEPARTMENTUSER
+			PreventionResponsible.DEPARTMENTUSER,
+			PreventionResponsible.MMCTECHNICIAN
 		]
 		technicianInCharge nullable:true, validator:{ val, obj ->
 			if(obj.preventionResponsible.equals(PreventionResponsible.HCTECHNICIAN)) return (val!=null)
@@ -159,6 +160,11 @@ public abstract class PreventiveOrder extends MaintenanceOrder {
 		}else{
 			return 0
 		}
+	}
+
+	@Override
+	public String toString() {
+		return "PreventiveOrder [id="+id+" type=" + type + "]";
 	}
 
 }

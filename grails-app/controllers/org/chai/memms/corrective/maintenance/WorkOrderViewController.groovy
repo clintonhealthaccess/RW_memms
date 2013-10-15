@@ -166,7 +166,7 @@ class WorkOrderViewController extends AbstractController{
 				orders = maintenanceService.getMaintenanceOrderByCalculationLocation(WorkOrder.class,dataLocation,[:])
 			else orders= maintenanceService.getMaintenanceOrderByEquipment(WorkOrder.class,equipment,[:])
 			
-			html = g.render(template:"/entity/workOrder/workOrderList",model:[equipment:equipment,entities:orders])
+			html = g.render(template:"/entity/workOrder/workOrderList",model:[equipment:equipment,entities:orders,dataLocation:dataLocation])
 			if(!request.xhr)
 				response.sendError(404)
 			this.ajaxModel(orders,null,equipment,params['q'])
@@ -327,7 +327,8 @@ class WorkOrderViewController extends AbstractController{
 			for(def sparePart: compatibleSpareParts)
 				options = options+" <option value='"+sparePart.key.id+"'>"+sparePart.key.names+" - "+[sparePart.value]+"</option>";
 			result = true
-			html = g.render(template:"/templates/usedSparePartList",model:[order:order,spareParts:order.spareParts])
+			html = g.render(template:"/templates/usedSparePartList",model:[order:order,usedSpareParts:order.usedSpareParts])
+			log.debug("All  UsedSpareParts in db workOrder ==>"+UsedSpareParts.list())
 		}
 
 		render(contentType:"text/json") { results = [result,html,options]}

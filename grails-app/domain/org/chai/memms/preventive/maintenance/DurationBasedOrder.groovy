@@ -179,6 +179,7 @@ class DurationBasedOrder extends PreventiveOrder {
 			case OccurencyType.NONE:
 			break
 		}
+		
 		//Return the first date as it is next occurence date
 		if(!dates.isEmpty()) nextOccurrence = dates[0]
 		return nextOccurrence

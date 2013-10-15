@@ -100,13 +100,13 @@
                  <div class="process process-action half">
                     <label>Used spare parts</label>
                     <fieldset>
-                    <g:render template="/templates/usedSparePartList" model="['order':order,'spareParts':order.spareParts,'label':'work.order.performed.action.label']" />
+                    <g:render template="/templates/usedSparePartList" model="['order':order,'usedSpareParts':order.usedSpareParts,'label':'work.order.performed.action.label']" />
                     <br/> 
 					<label>Spare Parts</label>
 					<select class="spare-parts" name="spareParts" >
 					  <option value="_" class="first-option">Select used compantible</option>
-	                  <g:each in="${compatibleSpareParts}" var="sparePart">
-	                    <option value="${sparePart.key.id}">${sparePart.key.names} - [${sparePart.value}]</option>
+	                  <g:each in="${compatibleSpareParts}" var="sparePartType">
+	                    <option value="${sparePartType.key.id}">${sparePartType.key.names} - [${sparePartType.value}]</option>
 	                  </g:each>
 		            </select>
 		            <div class="spare-part-quanty">
@@ -153,7 +153,7 @@
 	      </div>
       	</g:if>
       	<g:if test="${order.id != null}">
-			<input type="hidden" name="id" value="${order.id}"/>
+			<input type="hidden" name="id" class="order-id" value="${order.id}"/>
 	  	</g:if>
   		<div class="buttons">
   			<button type="submit"><g:message code="default.button.save.label"/></button>
@@ -192,8 +192,7 @@
 		removeComment("${createLink(controller:'workOrderView',action: 'removeComment')}");
 		getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}");
 
-		addSpareParts("${createLink(controller:'workOrderView',action: 'addSpareParts')}","${order.id}");
-		//removeSpareParts("${createLink(controller:'workOrderView',action: 'removeSpareParts')}");
+		addSpareParts("${createLink(controller:'workOrderView',action: 'addSpareParts')}");
 		$(".spare-part-quanty").hide();
 		$(".spare-parts").change(function(event){
 			if($(".spare-parts option:selected").attr("value")=="_")

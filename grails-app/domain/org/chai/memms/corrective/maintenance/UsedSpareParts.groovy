@@ -27,8 +27,10 @@
  */
 package org.chai.memms.corrective.maintenance
 
-import org.chai.memms.spare.part.SparePart
-import org.chai.memms.spare.part.SparePart;
+import org.chai.memms.spare.part.SparePartType;
+import org.chai.memms.maintenance.MaintenanceOrder
+import org.chai.memms.preventive.maintenance.Prevention
+import org.chai.memms.preventive.maintenance.PreventiveOrder
 
 /**
  * @author Jean Kahigiso M.
@@ -36,23 +38,27 @@ import org.chai.memms.spare.part.SparePart;
  */
 public class UsedSpareParts {
 
-	SparePart sparePart
+	MaintenanceOrder maintenanceOrder
+	Prevention prevention
+	SparePartType sparePartType
 	Integer quantity
 	
-	static belongsTo = [workOrder: WorkOrder]
-   
-   
 	static constraints ={
-		sparePart nullable: false
-		quantity nullable:false, min:0
+		maintenanceOrder nullable:false
+		prevention nullable:true, validator:{ val, obj ->
+			//prevention should be null if the workorde is preventive
+			if(obj.maintenanceOrder instanceof PreventiveOrder) return (val!=null)
+		}
+		sparePartType nullable: false
+		quantity nullable:false, min:1
 	}
 	static mapping ={
-		table "memms_work_order_used_spare_part"
+		table "memms_maintenance_order_used_spare_part"
 		version false
 	}
 
 	@Override
 	public String toString() {
-		return "UsedSparePart [id=" + id + ", spartPart=" + spartPart + " quantity:"+quantity+"]";
+		return "UsedSparePart [id= " + id + " , prevention= "+prevention+" , sparePartType=" + sparePartType + " , quantity= "+quantity+"]";
 	}  
 }
