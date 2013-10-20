@@ -51,7 +51,7 @@ import org.supercsv.io.ICsvListWriter;
 import org.supercsv.prefs.CsvPreference;
 import org.chai.memms.util.ImportExportConstant;
 import org.chai.memms.corrective.maintenance.UsedSpareParts;
-import org.chai.memms.MaintenanceService;
+import org.chai.memms.inventory.EquipmentService
 
 /**
  * @author Aphrodice Rwagaju
@@ -61,7 +61,7 @@ class SparePartService {
 	static transactional = true
 	def languageService;
 	def userService
-	def maintenanceService
+	def equipmentService
 	
 	
 	public def getRemoveFromStock(def sparePart, def numberToRemove){
@@ -75,31 +75,38 @@ class SparePartService {
 	}
 
 	public def findSpareParts(def text,def calculationLocations,def stockLocation,Map<String, String> params){
-		
-		if(text!=null) text = text.trim()
-		def dataLocations = maintenanceService.getDataLocationsOfCalculationLocation(calculationLocations);
-		def dbFieldTypeNames = 'names_'+languageService.getCurrentLanguagePrefix();
-		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
-
+		//If nothing is specified in the form list all sparepart
 		def criteria = SparePart.createCriteria();
-		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
-			    createAlias("type","t")
-
-				if(dataLocations.size()>0)
-					'in'('dataLocation',dataLocations)
-				if(stockLocation)
-					eq("stockLocation",stockLocation)
+		if(calculationLocations.isEmpty() && stockLocation.equals(StockLocation.NONE) && text==null)
+			return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
 				eq("status",SparePartStatus.INSTOCK)
 			    gt("inStockQuantity",0)	
-				or{
-					ilike("room","%"+text+"%")
-					ilike("shelf","%"+text+"%")
-					ilike(dbFieldDescriptions,"%"+text+"%") 
-					ilike("t.code","%"+text+"%")
-					ilike("t.partNumber","%"+text+"%")
-					ilike("t."+dbFieldTypeNames,"%"+text+"%")
-					ilike("t."+dbFieldDescriptions,"%"+text+"%")
-			    }
+			}
+
+		if(text!=null) text = text.trim()
+		def dataLocations = equipmentService.getDataLocationsOfCalculationLocation(calculationLocations);
+		def dbFieldTypeNames = 'names_'+languageService.getCurrentLanguagePrefix();
+		def dbFieldDescriptions = 'descriptions_'+languageService.getCurrentLanguagePrefix();
+		
+		return  criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){			    
+				if(dataLocations.size()>0)
+					'in'('dataLocation',dataLocations)
+				if(stockLocation && !stockLocation.equals(StockLocation.NONE))
+					eq("stockLocation",stockLocation)
+				eq("status",SparePartStatus.INSTOCK)
+			    gt("inStockQuantity",0)				    
+			    if(text!=null){
+			    	createAlias("type","t")
+					or{
+						ilike("room","%"+text+"%")
+						ilike("shelf","%"+text+"%")
+						ilike(dbFieldDescriptions,"%"+text+"%") 
+						ilike("t.code","%"+text+"%")
+						ilike("t.partNumber","%"+text+"%")
+						ilike("t."+dbFieldTypeNames,"%"+text+"%")
+						ilike("t."+dbFieldDescriptions,"%"+text+"%")
+				   	}
+				}
 		}
 
 	}

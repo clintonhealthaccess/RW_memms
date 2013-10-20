@@ -57,7 +57,7 @@ import org.chai.memms.task.Exporter;
 import org.chai.memms.inventory.Provider;
 
 class EquipmentExport implements Exporter{
-	def equipmentService
+	
 	public File exportData(DataExportTask task) throws IOException{
 		if (log.isDebugEnabled()) log.debug("exporting data");
 		

@@ -44,44 +44,107 @@ class SearchController extends AbstractController {
 	def sparePartService
 	def equipmentService
 
-	def findEquipments = {
+	def findEquipments = { SearchEquipmentCommand searchCmd ->
 		Set<CalculationLocation> locations = new HashSet<CalculationLocation>();
-		params.list('locationIds').each { id ->
+		params.list('calculationLocationIds').each { id ->
 			if (NumberUtils.isDigits(id)) {
 				def location = CalculationLocation.get(id)
 				if(location) locations.add(location);
 			}
 		}
+		searchCmd.calculationLocations = locations
+		
 		adaptParamsForList()
+		if (log.isDebugEnabled()) log.debug("SearchEquipmentCommand, searchCmd= "+searchCmd+", params= "+params)
+
 		if(request.xhr){
-			def equipments = equipmentService.findEquipments(params["term"],locations as List,params);
-			def listHtml = g.render(template:"/templates/foundEquipments",model:[entities:equipments])
+			def equipments = equipmentService.findEquipments(searchCmd.term,searchCmd.calculationLocations as List,params);
+			def listHtml = g.render(template:"/entity/equipment/foundEquipments",model:[entities:equipments])
 			render(contentType:"text/json") { results = [listHtml] }
 		}else {
-			render(view:"/entity/searchList",model:[template:"/templates/searchEquipmentForm",entityName:'equipment',cmd:null])
+			render(view:"/entity/searchList",model: model([],"equipment.label") <<[
+				template:"equipment/foundEquipments",
+				searchTemplate:"equipment/searchEquipmentForm",
+				partialCodeName:'equipment',
+				searchCmd:null
+				]
+			)
 		}
 	}
 
-	def findSpareParts = {
-		def stockLocation = params["stockLocation"]
+	def findSpareParts = { SearchSpareSpartCommand searchCmd ->
+
+		def stockLocation = (params["stockLocation"])?params["stockLocation"]:"NONE"
+		stockLocation = StockLocation."$stockLocation"
+		searchCmd.stockLocation = stockLocation
+
 		Set<CalculationLocation> locations = new HashSet<CalculationLocation>();
-		params.list('locationIds').each { id ->
-			if (NumberUtils.isDigits(id)) {
-				def location = CalculationLocation.get(id)
-				if(location) locations.add(location);
+		if(stockLocation.equals(StockLocation.FACILITY)){
+			params.list('calculationLocationIds').each { id ->
+				if (NumberUtils.isDigits(id)) {
+					def location = CalculationLocation.get(id)
+					if(location) locations.add(location);
+				}
 			}
 		}
-		if(stockLocation) stockLocation = StockLocation."$stockLocation"
+		searchCmd.calculationLocations = locations
+
 		adaptParamsForList()
+		if (log.isDebugEnabled()) log.debug("SearchSpareSpartCommand, searchCmd= "+searchCmd+", params= "+params)
+
 		if(request.xhr){
-			def spareParts = sparePartService.findSpareParts(params["term"],locations as List,stockLocation,params);
-			def listHtml = g.render(template:"/templates/foundSpareParts",model:[entities:spareParts])
+			def spareParts = sparePartService.findSpareParts(searchCmd.term,searchCmd.calculationLocations as List,searchCmd.stockLocation,params);
+			def listHtml = g.render(template:"/entity/sparePart/foundSpareParts",model:[entities:spareParts])
 			render(contentType:"text/json") { results = [listHtml] }
 		}else {
-			render(view:"/entity/searchList",model:[template:"/templates/searchSparePartForm",entityName:'spare.part',cmd:null])
+			render(view:"/entity/searchList",model:model([],"spare.part.label") << [
+				template:"sparePart/foundSpareParts",
+				searchTemplate:"sparePart/searchSparePartForm",
+				partialCodeName:'spare.part',
+				searchCmd:null
+				]
+			)
 		}
 
 	}
 
+	def model(def entities, def code) {
+		return [
+			entities: entities,
+			entityCount: entities.totalCount,
+			code:code
+		]
+	}
+
+}
+
+class SearchEquipmentCommand {
+	Set<CalculationLocation> calculationLocations
+	String term
+
+	static constraints = {
+		term nullable:true
+		calculationLocations nullable:true
+	}
+
+	String toString() {
+		return "SearchEquipmentCommand[ CalculationLocations= "+calculationLocations+" , term= "+term+" ]"
+	}
+}
+
+class SearchSpareSpartCommand {
+	Set<CalculationLocation> calculationLocations
+	StockLocation stockLocation
+	String term
+
+	static constraints = {
+		term nullable:true 
+		stockLocation nullable:true
+		calculationLocations nullable:true
+	}
+
+	String toString() {
+		return "SearchSpareSpartCommand[ CalculationLocations= "+calculationLocations+" , term= "+term+" ,  stockLocation= "+stockLocation+"]"
+	}
 }
 

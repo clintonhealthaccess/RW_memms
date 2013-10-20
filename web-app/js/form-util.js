@@ -551,33 +551,6 @@ function addSpareParts(baseUrl){
 	})
 }
 
-function search(baseUrl){
-	$('form.search').submit(function(e){
-		var checked = ($("input[type=checkbox]").attr("checked"))?true:false
-		var term = $("input[name=term]").val()
-		var selectedLocations = (checked)?$("select[name=locationIds] option:selected").map(function(){ return this.value }).get().join(", "):[]
-
-		alert("Sent data locations: "+selectedLocations+" checkbox: "+checked+" term: "+term)
-
-		e.preventDefault();
-		$.ajax({
-			type :'GET',
-			dataType: 'json',
-			data:{
-					"term":term,
-					"checkbox":checked,
-					"locationIds":selectedLocations
-				 },
-			url:baseUrl,
-			success: function(data) {
-				spinnerHandler(e)
-				refreshList(data.results[0],'.list-template')
-			}
-		});
-		listRefresher(this);
-	})
-}
-
 //Prevent edit sparePart quantity and warn before edit
 function sparePartQuantityHandler(sparePartId,fieldLabel,warningmsg){
 	if($.isNumeric(sparePartId)){
