@@ -35,7 +35,7 @@
             <!-- listing filter summary template -->
             <g:render template ="/reports/listing/equipmentReport/equipmentListingFilterSummary" />
             <!-- equipment report template -->
-            <g:if test="${customizedReportName != null && !customizedReportName.empty}">
+            <g:if test="${(customizedReportName != null && !customizedReportName.empty) || savedReport != null}">
               <g:if test="${reportSubType == ReportSubType.INVENTORY}">
                 <g:render template="/reports/listing/equipmentReport/customEquipmentListing" />
               </g:if>

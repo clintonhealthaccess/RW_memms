@@ -116,8 +116,9 @@ class SparePartService {
 		def usedSpareParts = order.usedSpareParts
 		def changedSpareParts = [:]
 		def diff = null	
+		def dataLocation = order.equipment.dataLocation
 		def remainingToAdd = 0
-		def tempSpareParts =   getInStockSparePartOfTypes([sparePartType],user)
+		def tempSpareParts =   getInStockSparePartOfTypes([sparePartType],user,dataLocation)
 		for(def sparePart: tempSpareParts){
 			if(diff==null || diff > 0) diff = sparePart.inStockQuantity-(quantity - remainingToAdd)
 			else diff = sparePart.inStockQuantity - (diff*-1)
@@ -155,7 +156,7 @@ class SparePartService {
 		def remainingToAdd = 0
 
 		def usedSparePart = prevention.getSparePartTypeUsed(sparePartType);
-		def tempSpareParts =   getInStockSparePartOfTypes([sparePartType],user)
+		def tempSpareParts =   getInStockSparePartOfTypes([sparePartType],user,dataLocation)
 		
 		for(def sparePart: tempSpareParts){
 			if(diff==null || diff > 0) diff = sparePart.inStockQuantity-quantity
@@ -184,8 +185,8 @@ class SparePartService {
 	}
 
 	//To be intensively tested
-    public def getCompatibleSparePart(def equipmentType, def user){
-    	def tempSpareParts =  getInStockSparePartOfTypes(equipmentType.sparePartTypes,user)
+    public def getCompatibleSparePart(def equipmentType, def user,def dataLocation){
+    	def tempSpareParts =  getInStockSparePartOfTypes(equipmentType.sparePartTypes,user,dataLocation)
 		def spareParts = [:]
 		for(def sparePart : tempSpareParts){
 			if(spareParts.get(sparePart.type)==null){ 
@@ -201,7 +202,7 @@ class SparePartService {
 	}
 	//To be intensively tested
 	//Make sure location are well considered while loading sparePart
-	public def getInStockSparePartOfTypes(def types, def user, def dataLocations){
+	public def getInStockSparePartOfTypes(def types, def user,def dataLocation){
     	def criteria = SparePart.createCriteria()
     	if(!types || types.size()==0)
     		return []
@@ -215,13 +216,12 @@ class SparePartService {
 					eq("stockLocation",StockLocation.MMC)
 				if(user.userType == UserType.TECHNICIANDH)
 					eq("stockLocation",StockLocation.FACILITY)
-				if(dataLocations && dataLocations.size()>0 && (user.userType != UserType.MMC))
-					'in'("dataLocation",dataLocations)
+				if(dataLocation && (user.userType != UserType.TECHNICIANMMC))
+					eq("dataLocation",dataLocation)
 			}
 		}
 
 	}
-
 
 	public def searchSparePart(String text,User user, SparePartType type,Map<String,String> params) {
 		//Remove unnecessary blank space

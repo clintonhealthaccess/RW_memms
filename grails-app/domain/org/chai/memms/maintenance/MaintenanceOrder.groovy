@@ -70,7 +70,7 @@ public abstract class MaintenanceOrder {
 	def beforeUpdate(){
 		lastUpdated = new Date();
 	}
-
+	//TODO This always return 0 where I what to use it and when it is in WorkOrder It works fine. To be discussed with Jean 
 	@Transient
 	def getUsedSpareParts(){
 		def usedSpareParts = []

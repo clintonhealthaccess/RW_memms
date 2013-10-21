@@ -29,8 +29,6 @@ package org.chai.memms.reports.listing
 
 import java.util.Date;
 
-import org.chai.memms.inventory.EquipmentStatus.Status;
-
 /**
  * @author Aphrodice Rwagaju
  *
@@ -41,7 +39,7 @@ class EquipmentReport extends EquipmentGeneralReportParameters {
 	def equipmentStatus
 	boolean underWarranty
 	boolean noAcquisitionPeriod
-	def statusChanges
+	String statusChanges
 	Date fromStatusChangesPeriod
 	Date toStatusChangesPeriod
 

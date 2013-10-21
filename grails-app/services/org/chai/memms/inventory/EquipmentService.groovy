@@ -195,7 +195,10 @@ class EquipmentService {
 		for(def location: locations){
 			if(location instanceof Location)
 				dataLocations.addAll(location.collectDataLocations(null))
-			else dataLocations.add(location as DataLocation)
+			else {
+				dataLocations.add(location as DataLocation)
+				dataLocations.addAll((location as DataLocation).manages?.asList())
+			}
 		}
 		//To remove duplicate if any
 		dataLocations = dataLocations as Set

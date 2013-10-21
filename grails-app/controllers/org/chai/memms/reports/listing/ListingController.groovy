@@ -583,7 +583,7 @@ class ListingController extends AbstractController{
 
 			savedReport.delete(flush: true)
 			if (log.isDebugEnabled()) log.debug("listing.deleteCustomizedReport savedReport deleted")
-			redirect(action: customListingAction, params: customizedListingParams)
+			redirect(action: listing, params: reportType)
 		}
 	}
 
@@ -625,7 +625,7 @@ class ListingController extends AbstractController{
 						savedCustomizedListingReport = equipmentListingReportService.getCustomReportOfEquipments(user,customizedListingParams,params)
 						if (log.isDebugEnabled()) log.debug("listing.savedCustomizedListing # of equipments:"+savedCustomizedListingReport.size())
 					}
-						savedCustomizedListingReport = equipmentListingReportService.getCustomReportOfEquipments(user,customizedListingParams,params)
+					
 					if(reportSubType == ReportSubType.STATUSCHANGES){
 						// TODO AR get saved EquipmentStatus status changes custom report
 						savedCustomizedListingReport = equipmentListingReportService.getCustomReportOfEquipments(user,customizedListingParams,params)
@@ -672,7 +672,7 @@ class ListingController extends AbstractController{
 
 			customizedListingParams << [
 				// TO BE REVIEWED BY APHRORWA savedReportId
-				savedReportId: savedCustomizedListingReport.id,
+				savedReportId: savedReport.id,
 				savedReport: savedReport,
 				savedReports: savedReports,
 				template:"/reports/listing/listing"
@@ -1091,6 +1091,7 @@ class ListingController extends AbstractController{
 			]
 		}
 		customizedListingParams << [reportTypeOptions: savedReport.displayOptions]
+		if (log.isDebugEnabled()) log.debug("customizedListingParams ================== ===== : "+savedReport)
 		return customizedListingParams
 	}
 
@@ -1413,7 +1414,7 @@ class ListingController extends AbstractController{
 			inventoryStatusChanges = EquipmentStatusChange.values()
 		}
 		if(log.isDebugEnabled())
-			log.debug("abstract.inventoryStatusChanges end statusChanges:"+inventoryStatusChanges)
+			log.debug("abstract.inventoryStatusChanges end statusChanges:================================= =========== "+inventoryStatusChanges)
 		return inventoryStatusChanges
 	}
 

@@ -32,39 +32,6 @@
             <g:i18nTextarea name="descriptions" bean="${prevention}" label="${message(code:'entity.descriptions.label')}" field="descriptions" height="150" width="300" maxHeight="150" />
             </fieldset>
             </div>
-
-          <div class="form-section">
-            <fieldset>
-              <h4 class="section-title">
-                <span class="question-default">
-                  <img src="${resource(dir:'images/icons',file:'star_small.png')}">
-                </span>
-                <g:message code="work.order.section.spare.part.information.label"/>
-              </h4>
-              <div class="row maintenance-process">
-                     <div class="process process-action half">
-                        <label>Used spare parts</label>
-                        <fieldset>
-                        <g:render template="/templates/usedSparePartList" model="['order':order,'spareParts':order.spareParts,'label':'work.order.performed.action.label']" />
-                        <br/> 
-              <label>Spare Parts</label>
-              <select class="spare-parts" name="spareParts" >
-                <option value="_" class="first-option">Select used compantible</option>
-                        <g:each in="${compatibleSpareParts}" var="sparePart">
-                          <option value="${sparePart.key.id}">${sparePart.key.names} - [${sparePart.value}]</option>
-                        </g:each>
-                    </select>
-                    <div class="spare-part-quanty">
-                        <input type="text" name="spare-part-number"  class="idle-field numbers-only" value="" />
-                  <a href="#" class="add-spare-part next medium"><g:message code="default.add.label"  args="${['']}"/></a>
-                  <img src="${resource(dir:'images',file:'spinner.gif')}" class="ajax-spinner"/>
-                  <span class="ajax-error alt"><g:message code="entity.error.updating.try.again"/></span>
-                </div>  
-                       </fieldset>
-                      </div>
-                  </div>
-            </fieldset>
-          </div>
             <g:if test="${prevention.id != null}">
             <div class="form-content">
               <fieldset>

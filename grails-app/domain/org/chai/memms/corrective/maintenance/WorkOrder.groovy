@@ -75,7 +75,6 @@ public class WorkOrder extends MaintenanceOrder{
 	String testResultsDescriptions
 	String returnedTo
 	
-	
 	User receivedBy
 	User fixedBy
 	
@@ -227,6 +226,15 @@ public class WorkOrder extends MaintenanceOrder{
 
 	@Override
 	public String toString() {
-		return "WorkOrder [id="+id+" currentStatus=" + currentStatus + "]";
+		return "WorkOrder [id= " + id + " currentStatus= "+currentStatus+"]";
+	}
+	
+	@Transient
+	def getNumberOfSpareParts(){
+		int totalSpareParts=0
+		for (def sparePart: usedSpareParts){
+		 totalSpareParts=totalSpareParts+sparePart.quantity
+		}
+		return totalSpareParts
 	}
 }

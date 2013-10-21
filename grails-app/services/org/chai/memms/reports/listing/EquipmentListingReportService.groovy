@@ -302,7 +302,7 @@ class EquipmentListingReportService {
 		def warranty = customEquipmentParams.get('warranty')
 		def noCost = customEquipmentParams.get('noCost')
 		def listingReportDisplayOptions = customEquipmentParams.get('reportTypeOptions')
-		def statusChanges = customEquipmentParams.get('statusChanges')
+		def equipmentStatusChanges = customEquipmentParams.get('statusChanges')
 		def fromStatusChangesPeriod = customEquipmentParams.get('fromStatusChangesPeriod')
 		def toStatusChangesPeriod = customEquipmentParams.get('toStatusChangesPeriod')
 		
@@ -326,7 +326,7 @@ class EquipmentListingReportService {
 		equipmentReport.savedBy=user
 		equipmentReport.noCostSpecified=noCost=="on"?true:false
 		equipmentReport.displayOptions=listingReportDisplayOptions
-		equipmentReport.statusChanges=statusChanges
+		equipmentReport.statusChanges=equipmentStatusChanges
 		equipmentReport.fromStatusChangesPeriod=fromStatusChangesPeriod
 		equipmentReport.toStatusChangesPeriod=toStatusChangesPeriod
 		
