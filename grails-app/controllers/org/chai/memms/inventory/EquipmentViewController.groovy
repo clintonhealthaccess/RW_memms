@@ -58,6 +58,7 @@ class EquipmentViewController extends AbstractController {
 	def inventoryService
 	def grailsApplication
 	def equipmentStatusService
+	def exportService
 
 	def getLabel() {
 		return "equipment.label";

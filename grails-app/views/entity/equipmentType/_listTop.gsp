@@ -12,5 +12,3 @@
 	</a>
 	<g:searchBox action="search"  controller="equipmentType"/>
 </span>
-
-
