@@ -115,7 +115,8 @@ public class SparePart {
 	Date deliveryDate
 
 	Double purchaseCost
-	Integer initialQuantity
+	Integer orderedQuantity
+	Integer receivedQuantity
 	Integer inStockQuantity
 
 	Provider supplier
@@ -139,9 +140,24 @@ public class SparePart {
 		room nullable: true, blank: true
 		shelf nullable: true, blank: true
 
-		initialQuantity nullable: false, min:1
-		inStockQuantity nullable: false, min:0, validator:{ val, obj ->
-			if(obj.status.equals(SparePartStatus.PENDINGORDER)) return val==0
+		orderedQuantity nullable:true, validator:{ val, obj ->
+			if(val!=null){
+				if(obj.receivedQuantity!=null) return (val >= obj.receivedQuantity) 
+				else return (val > 0 )
+			}
+		}
+		receivedQuantity nullable: true, validator:{ val, obj ->
+			if(val!=null){ 
+				if(obj.orderedQuantity!=null)  return (val <= obj.orderedQuantity)  
+				else return (val > 0) 
+			}else
+				return obj.status.equals(SparePartStatus.PENDINGORDER) // Can only be null if it is a pending order
+		}
+		inStockQuantity nullable: true, validator:{ val, obj ->
+			if(val!=null){ 
+				return(val >= 0 && val <= obj.receivedQuantity && obj.status.equals(SparePartStatus.INSTOCK))
+			}else
+				return obj.status.equals(SparePartStatus.PENDINGORDER) // Can only be null if it is a pending order
 		}
 
 		purchaseDate nullable: true, validator:{if(it!=null) return it <= new Date()}
@@ -174,7 +190,7 @@ public class SparePart {
 	@Transient
 	def getUsedQuantity () {
 		if(status.equals(SparePartStatus.INSTOCK))
-			return initialQuantity - inStockQuantity
+			return receivedQuantity - inStockQuantity
 	}
 	//True if this spare part group is no longer inStock
 	@Transient

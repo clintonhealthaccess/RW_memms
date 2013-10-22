@@ -44,8 +44,8 @@
 			<g:if test="${reportTypeOptions.contains('compatibleEquipmentTypes')}">
 				<th><g:message code="listing.report.spare.part.compatible.equipment.types"/></th>
 			</g:if>
-			<g:if test="${reportTypeOptions.contains('initialQuantity')}">
-				<g:sortableColumn property="initialQuantity"  title="${message(code: 'listing.report.spare.part.initial.quantity')}" params="${params}" />
+			<g:if test="${reportTypeOptions.contains('receivedQuantity')}">
+				<g:sortableColumn property="receivedQuantity"  title="${message(code: 'listing.report.spare.part.received.quantity')}" params="${params}" />
 			</g:if>
 			<g:if test="${reportTypeOptions.contains('quantityInStock')}">
 				<g:sortableColumn property="inStockQuantity"  title="${message(code: 'listing.report.spare.part.in.stock.quantity')}" params="${params}" />
@@ -122,8 +122,8 @@
 				<g:if test="${reportTypeOptions.contains('compatibleEquipmentTypes')}">
 					<td>${sparePart.type.compatibleEquipmentTypes?.collect{ it.names }.join(', ')}</td>
 				</g:if>
-				<g:if test="${reportTypeOptions.contains('initialQuantity')}">
-					<td>${sparePart.initialQuantity}</td>
+				<g:if test="${reportTypeOptions.contains('receivedQuantity')}">
+					<td>${sparePart.receivedQuantity}</td>
 				</g:if>
 				<g:if test="${reportTypeOptions.contains('quantityInStock')}">
 					<td>${sparePart.inStockQuantity}</td>

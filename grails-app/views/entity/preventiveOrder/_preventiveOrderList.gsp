@@ -73,7 +73,7 @@
 					<g:stripHtml field="${order.description}" chars="30"/>
 				</td>
 				<td>
-					<a href="${createLinkWithTargetURI(controller:'prevention', action:'list', params:['order.id': order?.id])}" title="${message(code: 'prevention.order.see.list.label')}" class="tooltip">
+					<a href="${createLinkWithTargetURI(controller:'prevention', action:'list', params:['order.id': order?.id])}">
   	    				${order.preventions?.size()}
   	    			</a>
 				</td>

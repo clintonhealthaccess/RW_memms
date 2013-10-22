@@ -87,6 +87,11 @@
             </a>
           </li>
         </shiro:hasPermission>
+%{--         <li>
+            <a href="${createLink(controller: 'equipmentView', action:'findEquipments')}">
+              <g:message code="header.navigation.find.equipment"/>
+            </a>
+        </li> --}%
         <shiro:hasPermission permission="menu:inventory">
           <li>
             <a class="${controllerName=='equipment' || controllerName=='equipmentView' || controllerName=='notificationEquipment' ?'active':''}" href="#">

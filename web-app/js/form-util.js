@@ -522,7 +522,7 @@ function removePreventionProcess(baseUrl){
 	});
 }
 
-function addSpareParts(baseUrl,order){
+function addSpareParts(baseUrl){
 	hideSpinnerAndErrorMsg()
 	$('.spare-part-quanty').on("click",".add-spare-part",function(e){
 		e.preventDefault();
@@ -532,8 +532,9 @@ function addSpareParts(baseUrl,order){
 			type :'GET',
 			dataType: 'json',
 			data:{
-					"order.id":order,
+					"order.id":$(".order-id").attr('value'),
 					"sparePart.type.id":$(".spare-parts option:selected").attr("value"),
+					"prevention.id":$(".prevention-id").attr('value'),
 					"quantity":$(this).prevAll(".idle-field").attr('value')
 				 },
 			url:baseUrl,
@@ -549,8 +550,15 @@ function addSpareParts(baseUrl,order){
 		listRefresher(this);
 	})
 }
-function removeSpareParts(baseUrl){
-
+//Prevent edit spare part quantity and warn before edit
+function sparePartQuantityHandler(sparePartId,fieldLabel,warningmsg){
+	if($.isNumeric(sparePartId)){
+		$(".disabled-on-edit").attr("disabled", "disabled").next("label.has-helper").html('<a href="#" >'+fieldLabel+'</a>');
+	}
+	$(".has-helper").click(function(e){
+		e.preventDefault();
+		if(confirm(warningmsg)==true) $(this).hide("slow").prev("input.disabled-on-edit").removeAttr("disabled");
+	})
 }
 /**
  * Utility functions

@@ -28,11 +28,13 @@
 package org.chai.memms.preventive.maintenance
 
 import groovy.transform.EqualsAndHashCode;
+import javax.persistence.Transient;
 
 import org.chai.memms.TimeSpend;
 import org.chai.memms.security.User;
 import org.chai.memms.TimeDate;
 import org.chai.memms.inventory.PreventiveAction;
+import org.chai.memms.corrective.maintenance.UsedSpareParts
 
 
 
@@ -74,6 +76,23 @@ public class Prevention {
 		scheduledOn nullable: false
 		eventDate nullable: false, validator:{it <= new Date()}
 		lastUpdated nullable: true, validator:{if(it != null) return (it <= new Date())}
+	}
+
+	def beforeDelete(){
+		UsedSpareParts.executeUpdate("delete from UsedSpareParts as sp where sp.maintenanceOrder = "+this.order.id+"")
+	}
+	
+	@Transient
+	def getUsedSpareParts(){
+		def usedSpareParts = []
+		if(UsedSpareParts.findAllByPrevention(this)) usedSpareParts = UsedSpareParts.findAllByPrevention(this)
+		//Will send a empty() list in case there is not matching element
+		return usedSpareParts;
+	}
+
+	@Transient
+	def getSparePartTypeUsed(def sparePartType){
+		return UsedSpareParts.findByPreventionAndSparePartType(this,sparePartType);
 	}
 	
 	

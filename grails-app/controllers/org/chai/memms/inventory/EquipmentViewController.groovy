@@ -134,6 +134,31 @@ class EquipmentViewController extends AbstractController {
 				this.ajaxModel(equipments,dataLocation,params['q'])
 		}
 	}
+
+	def findEquipments = { //FindEquipmentCommand cmd ->
+		Set<CalculationLocation> locations = new HashSet<CalculationLocation>();
+		params.list('locationids').each { id ->
+			if (NumberUtils.isDigits(id)) {
+				def location = CalculationLocation.get(id)
+				if(location) locations.add(location);
+			}
+		}
+		//cmd.locations = locations
+
+		def equipments = equipmentService.findEquipments(params["term"],locations as List,params);
+		if (log.isDebugEnabled()) log.debug("foundEquipments: =>"+equipments)
+
+		def model= [entities: equipments,entityCount: equipments.totalCount,locations:locations]
+		adaptParamsForList()
+		if(request.xhr){
+			log.debug("/templates/foundEquipment==>"+listHtml)
+			def listHtml = g.render(template:"/templates/foundEquipment",model:model)
+			log.debug("/templates/foundEquipment==>"+listHtml)
+			render(contentType:"text/json") { results = [listHtml] }
+		}else {
+			render(view:"/entity/searchList",template:"foundEquipment", model:model << [q:params["term"]])
+		}
+	}
 	
 	def filter = { FilterCommand cmd ->
 		if (log.isDebugEnabled()) log.debug("equipments.filter, command "+cmd)
@@ -210,8 +235,7 @@ class EquipmentViewController extends AbstractController {
 		params.list('dataLocationTypeids').each { id ->
 			if (NumberUtils.isDigits(id)) {
 				def dataLocationType = DataLocationType.get(id)
-				if (dataLocationType != null && !dataLocationTypes.contains(dataLocationType)) 
-				dataLocationTypes.add(dataLocationType);
+				if (dataLocationType != null) dataLocationTypes.add(dataLocationType);
 			}
 		}
 		cmd.dataLocationTypes = dataLocationTypes
@@ -220,8 +244,7 @@ class EquipmentViewController extends AbstractController {
 		params.list('calculationLocationids').each { id ->
 			if (NumberUtils.isDigits(id)) {
 				def calculationLocation = CalculationLocation.get(id)
-				if (CalculationLocation != null && !calculationLocations.contains(calculationLocation))
-				calculationLocations.add(calculationLocation);
+				if(calculationLocation!=null) calculationLocations.add(calculationLocation);
 			}
 		}
 		cmd.calculationLocations = calculationLocations
@@ -230,8 +253,7 @@ class EquipmentViewController extends AbstractController {
 		params.list('equipmentTypeids').each { id ->
 			if (NumberUtils.isDigits(id)) {
 				def equipmentType = EquipmentType.get(id)
-				if (equipmentType != null && !equipmentTypes.contains(equipmentType)) 
-				equipmentTypes.add(equipmentType);
+				if(equipmentType!=null) equipmentTypes.add(equipmentType);
 			}
 		}
 		cmd.equipmentTypes = equipmentTypes
@@ -240,8 +262,7 @@ class EquipmentViewController extends AbstractController {
 		params.list('manufacturerids').each { id ->
 			if (NumberUtils.isDigits(id)) {
 				def manufacturer = Provider.get(id)
-				if (manufacturer != null && !manufacturers.contains(manufacturer)) 
-				manufacturers.add(manufacturer);
+				if(manufacturer!=null) manufacturers.add(manufacturer);
 			}
 		}
 		cmd.manufacturers = manufacturers
@@ -250,8 +271,7 @@ class EquipmentViewController extends AbstractController {
 		params.list('supplierids').each { id ->
 			if (NumberUtils.isDigits(id)) {
 				def supplier = Provider.get(id)
-				if (supplier != null && !suppliers.contains(supplier)) 
-				suppliers.add(supplier);
+				if (supplier != null) suppliers.add(supplier);
 			}
 		}
 		cmd.suppliers = suppliers
@@ -260,7 +280,7 @@ class EquipmentViewController extends AbstractController {
 		params.list('serviceProviderids').each { id ->
 			if (NumberUtils.isDigits(id)) {
 				def serviceProvider = Provider.get(id)
-				if (serviceProvider != null && !serviceProviders.contains(serviceProvider)) serviceProviders.add(serviceProvider);
+				if (serviceProvider != null) serviceProviders.add(serviceProvider);
 			}
 		}
 		cmd.serviceProviders = serviceProviders
@@ -347,6 +367,7 @@ class EquipmentViewController extends AbstractController {
 	}
 
 }
+
 class FilterCommand {
 	DataLocation dataLocation
 	EquipmentType equipmentType
@@ -423,4 +444,18 @@ class ExportFilterCommand {
 		", Manufacturers="+manufacturers+", Suppliers="+suppliers+", ServiceProviders="+serviceProviders+", Status="+equipmentStatus+", purchaser="+purchaser+", obsolete="+obsolete+
 		", donor=" + donor + "]"
 	}
+}
+class FindEquipmentCommand{
+	Set<CalculationLocation> locations = []
+	String term
+	static constraints = {
+		term nullable:false, blank:false, validator:{ val, obj ->
+			//When a location is specified then the term to search can be null
+			if(locations.size()>0) return true
+		}
+	}
+	String toString() {
+		return "FindEquipmentCommand  term= "+term+", locations= "+locations+"]"
+	}
+
 }
