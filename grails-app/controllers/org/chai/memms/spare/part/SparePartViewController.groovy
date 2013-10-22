@@ -62,6 +62,7 @@ class SparePartViewController extends AbstractController{
 	def sparePartStatusService
 	def sparePartService
 	def grailsApplication
+	def exportService
 
 	def getLabel() {
 		return "spare.part.label";
@@ -94,6 +95,12 @@ class SparePartViewController extends AbstractController{
 				entities: spareParts,
 				code: getLabel()
 			])
+			if(params?.format && params.format != "html"){
+				response.contentType = grailsApplication.config.grails.mime.types[params.format]
+				List fields = ["initialQuantity","inStockQuantity","purchaseCost", "currency","descriptions", "room","shelf","purchaseDate","deliveryDate","sparePartPurchasedBy.name","status.name","stockLocation.name","dataLocation.type.names","addedBy.username"]
+				Map labels = [descriptions: "descriptions", currency: "currency", room: "room", addedBy:"AddedBy"]
+				exportService.export(params.format, response.outputStream,spareParts, fields, labels, [:], [:])
+			}
 		}
 	}
 

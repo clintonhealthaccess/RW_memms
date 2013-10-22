@@ -107,4 +107,4 @@
 
 	</tbody>	
 </table>
-<g:render template="/templates/pagination" model="[entities:entities, entityCount:entities.totalCount]" />
+<g:render template="/templates/paginationWithDataExport" model="[entities:entities, entityCount:entities.totalCount]" />

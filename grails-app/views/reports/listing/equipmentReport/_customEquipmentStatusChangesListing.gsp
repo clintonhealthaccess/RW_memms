@@ -119,4 +119,4 @@
 
 	</tbody>	
 </table>
-<g:render template="/templates/pagination" />
+<g:render template="/templates/paginationWithDataExport" />

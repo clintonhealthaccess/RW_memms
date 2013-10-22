@@ -29,6 +29,7 @@ package org.chai.memms.reports.listing
 
 import java.util.Map;
 import java.util.Set;
+import java.util.List;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.chai.location.CalculationLocation;
@@ -122,20 +123,28 @@ class ListingController extends AbstractController{
 		switch(reportType){
 			case ReportType.INVENTORY:
 				reportName = message(code:'default.all.equipments.label')
-				listing = equipmentListingReportService.getGeneralReportOfEquipments(user,params)
+				def equipments = equipmentListingReportService.getGeneralReportOfEquipments(user,params)
+				listing = equipments
+				getEquipmentExportProperties(equipments)
 				break;
 			case ReportType.CORRECTIVE:
 				reportName = message(code:'default.all.work.order.label')
-				listing = workOrderListingReportService.getAllWorkOrders(user,params)
+				def workOrders = workOrderListingReportService.getAllWorkOrders(user,params)
+				listing = workOrders
+				getWorkOrderExportProperties(workOrders)
 				break;
 			case ReportType.PREVENTIVE:
 				reportName = message(code:'default.all.preventive.order.label')
-				listing = preventiveOrderListingReportService.getAllPreventions(user,params)
+				def preventiveOrders = preventiveOrderListingReportService.getAllPreventions(user,params)
+				listing = preventiveOrders
+				getPreventiveOrderExportProperties(preventiveOrders)
 				break;
 			case ReportType.SPAREPARTS:
 				def type = SparePartType.get(params.long('type.id'))
 				reportName = message(code:'default.all.spare.parts.label')
-				listing = sparePartListingReportService.getGeneralReportOfSpareParts(user,type, params)
+				def spareParts = sparePartListingReportService.getGeneralReportOfSpareParts(user,type, params)
+				listing = spareParts
+				getSparePartExportProperties(spareParts)
 				break;
 			default:
 				break;
@@ -151,6 +160,7 @@ class ListingController extends AbstractController{
 				savedReports: savedReports,
 				template:"/reports/listing/listing"
 			])
+
 	}
 
 	// predefined reports start
@@ -176,10 +186,7 @@ class ListingController extends AbstractController{
 				savedReports: savedReports,
 				template:"/reports/listing/listing"
 			])
-			if(params?.format && params.format != "html"){
-			response.contentType = grailsApplication.config.grails.mime.types[params.format]
-			exportService.export(params.format, response.outputStream,Equipment.list(params), [:], [:])
-		}
+		getEquipmentExportProperties(equipments)
 	}
 
 	def disposedEquipments={
@@ -199,10 +206,7 @@ class ListingController extends AbstractController{
 				savedReports: savedReports,
 				template:"/reports/listing/listing"
 			])
-			if(params?.format && params.format != "html"){
-				response.contentType = grailsApplication.config.grails.mime.types[params.format]
-				exportService.export(params.format, response.outputStream,Equipment.list(params), [:], [:])
-			}
+		getEquipmentExportProperties(equipments)
 			
 	}
 
@@ -223,6 +227,7 @@ class ListingController extends AbstractController{
 				savedReports: savedReports,
 				template:"/reports/listing/listing"
 			])
+		getEquipmentExportProperties(equipments)
 	}
 
 	def inStockEquipments={
@@ -242,10 +247,7 @@ class ListingController extends AbstractController{
 				savedReports: savedReports,
 				template:"/reports/listing/listing"
 			])
-			if(params?.format && params.format != "html"){
-				response.contentType = grailsApplication.config.grails.mime.types[params.format]
-				exportService.export(params.format, response.outputStream,Equipment.list(params), [:], [:])
-			}
+			getEquipmentExportProperties(equipments)
 	}
 
 	def underWarrantyEquipments={
@@ -267,10 +269,7 @@ class ListingController extends AbstractController{
 				savedReports: savedReports,
 				template:"/reports/listing/listing"
 			])
-			if(params?.format && params.format != "html"){
-				response.contentType = grailsApplication.config.grails.mime.types[params.format]
-				exportService.export(params.format, response.outputStream,Equipment.list(params), [:], [:])
-			}
+			getEquipmentExportProperties(equipments)
 	}
 
 	// corrective
@@ -292,10 +291,7 @@ class ListingController extends AbstractController{
 				savedReports: savedReports,
 				template:"/reports/listing/listing"
 			])
-			if(params?.format && params.format != "html"){
-				response.contentType = grailsApplication.config.grails.mime.types[params.format]
-				exportService.export(params.format, response.outputStream,WorkOrder.list(params), [:], [:])
-			}
+			getWorkOrderExportProperties(workOrders)
 	}
 
 	def workOrdersEscalatedToMMC={
@@ -315,10 +311,7 @@ class ListingController extends AbstractController{
 				savedReports: savedReports,
 				template:"/reports/listing/listing"
 			])
-			if(params?.format && params.format != "html"){
-				response.contentType = grailsApplication.config.grails.mime.types[params.format]
-				exportService.export(params.format, response.outputStream,WorkOrder.list(params), [:], [:])
-			}
+			getWorkOrderExportProperties(workOrders)
 	}
 
 	def lastYearClosedWorkOrders={
@@ -338,10 +331,7 @@ class ListingController extends AbstractController{
 				savedReports: savedReports,
 				template:"/reports/listing/listing"
 			])
-			if(params?.format && params.format != "html"){
-				response.contentType = grailsApplication.config.grails.mime.types[params.format]
-				exportService.export(params.format, response.outputStream,WorkOrder.list(params), [:], [:])
-			}
+			getWorkOrderExportProperties(workOrders)
 	}
 
 	// preventive
@@ -363,6 +353,7 @@ class ListingController extends AbstractController{
 				savedReports: savedReports,
 				template:"/reports/listing/listing"
 			])
+			getPreventiveOrderExportProperties(preventiveOrders)
 	}
 
 	// spare parts
@@ -385,10 +376,7 @@ class ListingController extends AbstractController{
 				// savedReports: savedReports,
 				template:"/reports/listing/listing"
 			])
-			if(params?.format && params.format != "html"){
-				response.contentType = grailsApplication.config.grails.mime.types[params.format]
-				exportService.export(params.format, response.outputStream,Equipment.list(params), [:], [:])
-			}
+			getSparePartExportProperties(spareParts)
 	}
 
 	// predefined reports end
@@ -654,7 +642,6 @@ class ListingController extends AbstractController{
 		else{
 			def customizedListingParams = [:]
 			def savedCustomizedListingReport = null
-			
 			switch(reportType){
 				case ReportType.INVENTORY:
 					customizedListingParams = getSavedEquipmentParams(savedReport)
@@ -669,6 +656,7 @@ class ListingController extends AbstractController{
 						savedCustomizedListingReport = equipmentListingReportService.getCustomReportOfEquipments(user,customizedListingParams,params)
 						if (log.isDebugEnabled()) log.debug("listing.savedCustomizedListing # of equipments statuses:"+savedCustomizedListingReport.size())
 					}
+					getEquipmentExportProperties(savedCustomizedListingReport)
 					break;
 				case ReportType.CORRECTIVE:
 					customizedListingParams = getSavedWorkOrderParams(savedReport)
@@ -682,12 +670,14 @@ class ListingController extends AbstractController{
 						savedCustomizedListingReport = workOrderListingReportService.getCustomReportOfWorkOrders(user,customizedListingParams,params)
 						if (log.isDebugEnabled()) log.debug("listing.savedCustomizedListing # of workOrder statuses:"+savedCustomizedListingReport.size())
 					}
+					getWorkOrderExportProperties(savedCustomizedListingReport)
 					break;
 				case ReportType.PREVENTIVE:
 					customizedListingParams = getSavedPreventiveOrderParams(savedReport)
 					adaptParamsForList()
 					savedCustomizedListingReport = preventiveOrderListingReportService.getCustomReportOfPreventiveOrders(user,customizedListingParams,params)
 					if (log.isDebugEnabled()) log.debug("listing.savedCustomizedListing # of preventiveOrders:"+savedCustomizedListingReport.size())
+					getPreventiveOrderExportProperties(savedCustomizedListingReport)
 					break;
 				case ReportType.SPAREPARTS:
 					customizedListingParams = getSavedSparePartsParams(savedReport)
@@ -701,6 +691,7 @@ class ListingController extends AbstractController{
 						savedCustomizedListingReport = sparePartListingReportService.getCustomReportOfSpareParts(user,customizedListingParams,params)
 						if (log.isDebugEnabled()) log.debug("listing.savedCustomizedListing # of spareParts:"+savedCustomizedListingReport.size())
 					}
+					getSparePartExportProperties(savedCustomizedListingReport)
 					break;
 				default:
 					break;
@@ -1566,6 +1557,43 @@ class ListingController extends AbstractController{
 		}
 		return reportTypeOptions
 	}
-	
 	// customized report wizard params end
+	
+	def getEquipmentExportProperties(def equipments){
+		if(!params.max) params.max = equipments.size()
+		if(params?.format && params.format != "html"){
+			response.contentType = grailsApplication.config.grails.mime.types[params.format]
+			List fields = ["dataLocation.location.names","serialNumber","model","code","type.code","type.names","purchaseCost","currency","purchaseDate","warranty.startDate","warrantyPeriod.numberOfMonths","obsolete","descriptions","department.names","room","donorName","currentStatus","manufacturer.contact.contactName","manufactureDate","supplier.contact.contactName","addedBy.username"]
+			Map labels = [descriptions: "descriptions", currency: "currency", room: "room", addedBy:"AddedBy"]
+			exportService.export(params.format, response.outputStream,equipments, fields, labels, [:], [:])
+		}	
+	}
+	
+	def getSparePartExportProperties(def spareParts){
+		if(params?.format && params.format != "html"){
+				response.contentType = grailsApplication.config.grails.mime.types[params.format]
+				List fields = ["initialQuantity","inStockQuantity","purchaseCost", "currency","descriptions", "room","shelf","purchaseDate","deliveryDate","sparePartPurchasedBy.name","status.name","stockLocation.name","dataLocation.type.names","addedBy.username"]
+				Map labels = [descriptions: "descriptions", currency: "currency", room: "room", addedBy:"AddedBy"]
+				exportService.export(params.format, response.outputStream,spareParts, fields, labels, [:], [:])
+			}
+	}
+	
+	def getWorkOrderExportProperties(def workOrders){
+		if(params?.format && params.format != "html"){
+			response.contentType = grailsApplication.config.grails.mime.types[params.format]
+			List fields = ["equipment.dataLocation.location.names","equipment.serialNumber","equipment.model","equipment.code","equipment.type.code","equipment.type.names","equipment.department.names","equipment.room","description","failureReasonDetails","testResultsDescriptions","estimatedCost","openOn","returnedOn","workTime.numberOfMinutes","travelTime.numberOfMinutes","currentStatus","criticality.name","failureReason.name","dateCreated","addedBy.username"]
+			Map labels = [description: "description", estimatedCost: "estimatedCost", currency: "currency", addedBy:"AddedBy"]
+			exportService.export(params.format, response.outputStream,workOrders, fields, labels, [:], [:])
+		}
+	}
+	
+	def getPreventiveOrderExportProperties(def preventiveOrders){
+		if(params?.format && params.format != "html"){
+			response.contentType = grailsApplication.config.grails.mime.types[params.format]
+			List fields = ["equipment.dataLocation.location.names","equipment.serialNumber","equipment.model","equipment.code","equipment.type.code","equipment.type.names","equipment.department.names","equipment.room","names","preventionResponsible.name","type.name","status.name","firstOccurenceOn.timeDate","description","technicianInCharge","addedBy.username"]
+			Map labels = [description: "description", technicianInCharge: "technicianInCharge", addedBy:"AddedBy"]
+			exportService.export(params.format, response.outputStream,preventiveOrders, fields, labels, [:], [:])
+		}
+	}
+	
 }

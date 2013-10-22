@@ -6,4 +6,3 @@
 		<g:paginate total="${entityCount}" params="${params}" action="${actionName}" />
 	</g:if>
 </div>
-<export:formats formats="['csv', 'excel','pdf']" />
