@@ -11,6 +11,9 @@ class SecurityFilters {
 				log.debug("filtering params: "+params+", controller: "+controllerName+", action: "+actionName)
                 // Ignore direct views (e.g. the default main index page).
                 if (!controllerName) return false
+
+                // Ignore dash board generation
+                if (controllerName == 'generateReport' && actionName == 'generate') return true;
 				
                 // Access control by convention.
                 accessControl()
