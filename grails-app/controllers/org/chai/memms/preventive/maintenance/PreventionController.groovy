@@ -77,8 +77,9 @@ class PreventionController extends AbstractEntityController {
 	def getModel(def entity) {
 		def scheduledOn = null
 		def compatibleSpareParts = [:]
-		def actions = entity.order.equipment.type.preventiveActions 
-		if(entity.id!=null) compatibleSpareParts = sparePartService.getCompatibleSparePart(entity.order.equipment.type,user)
+		def actions = entity.order.equipment.type.preventiveActions
+		def dataLocation =  entity.order.equipment.dataLocation
+		if(entity.id!=null) compatibleSpareParts = sparePartService.getCompatibleSparePart(entity.order.equipment.type,user,dataLocation)
 		if(entity.actions && !entity.actions.isEmpty()) actions = actions - entity.actions 
 		
 		if(entity.id==null && entity.order.type.equals(PreventiveOrderType.DURATIONBASED)){
@@ -166,15 +167,13 @@ class PreventionController extends AbstractEntityController {
 		if(order == null || type==null || prevention == null || quantity <= 0 || quantity == null)
 			response.sendError(404)
 		else{
-
+			def dataLocation = order.equipment.dataLocation
 			prevention = sparePartService.assignSparePartsToPrevention(prevention,type,user,quantity)
-			if(log.isDebugEnabled()) log.debug("prevention=>==2: "+prevention)
-			def compatibleSpareParts = sparePartService.getCompatibleSparePart(order.equipment.type,user)
+			def compatibleSpareParts = sparePartService.getCompatibleSparePart(order.equipment.type,user,dataLocation)
 			for(def sparePart: compatibleSpareParts)
 				options = options+" <option value='"+sparePart.key.id+"'>"+sparePart.key.names+" - "+[sparePart.value]+"</option>";
 			result = true
 			html = g.render(template:"/templates/usedSparePartList",model:[order:order,usedSpareParts:prevention.usedSpareParts])
-			log.debug("All  UsedSpareParts in db ==>"+UsedSpareParts.list())
 		}
 
 		render(contentType:"text/json") { results = [result,html,options]}

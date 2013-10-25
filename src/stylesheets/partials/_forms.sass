@@ -1,4 +1,4 @@
-used-spare-part-list.form-section
+.form-section
   border-bottom: 1px solid #eee
   +pie-clearfix
   .form-content
@@ -313,28 +313,6 @@ ul.element-map
   display: block
   color: $primary
   float: left
-
-form.search-form
-  color: $primary
-  display: inline-block
-  font-size: 12px
-  input, button
-    float: left
-  input
-    background: #f9f9f9
-    border: 1px solid $filler - #333
-    color: #444
-    font: normal 12px Arial, sans-serif
-    margin: 0
-    padding: 3px 5px 4px
-    +box-shadow($filler - #111 1px 1px 3px 0 inset)
-    &:hover, &:focus
-      background: $filler + #030303
-      border-color: $primary
-  button
-    height: 23px
-    margin: 0 0 0 -1px
-    +border-left-radius(0)
 
 .form-box
   border: 1px solid #ddd
@@ -659,9 +637,39 @@ form.search-form
       padding: 12px 45px
       position: relative
 
+.general-search-form
+  border-top: 1px solid #eee
+  display: block
+
 .filters-box
   border-top: 1px solid #eee
   display: none
+
+form.search-form
+  color: $primary
+  display: inline-block
+  font-size: 12px
+  input, button
+    float: left
+  input
+    background: #f9f9f9
+    border: 1px solid $filler - #333
+    color: #444
+    font: normal 12px Arial, sans-serif
+    margin: 0
+    padding: 3px 5px 4px
+    +box-shadow($filler - #111 1px 1px 3px 0 inset)
+    &:hover, &:focus
+      background: $filler + #030303
+      border-color: $primary
+  button
+    height: 23px
+    margin: 0 0 0 -1px
+    +border-left-radius(0)
+
+.search-term
+  width: 305px !important
+  height: 20px !important
 
 .filter-results
   color: #aaa

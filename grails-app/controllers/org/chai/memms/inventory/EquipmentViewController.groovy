@@ -133,31 +133,6 @@ class EquipmentViewController extends AbstractController {
 				this.ajaxModel(equipments,dataLocation,params['q'])
 		}
 	}
-
-	def findEquipments = { //FindEquipmentCommand cmd ->
-		Set<CalculationLocation> locations = new HashSet<CalculationLocation>();
-		params.list('locationids').each { id ->
-			if (NumberUtils.isDigits(id)) {
-				def location = CalculationLocation.get(id)
-				if(location) locations.add(location);
-			}
-		}
-		//cmd.locations = locations
-
-		def equipments = equipmentService.findEquipments(params["term"],locations as List,params);
-		if (log.isDebugEnabled()) log.debug("foundEquipments: =>"+equipments)
-
-		def model= [entities: equipments,entityCount: equipments.totalCount,locations:locations]
-		adaptParamsForList()
-		if(request.xhr){
-			log.debug("/templates/foundEquipment==>"+listHtml)
-			def listHtml = g.render(template:"/templates/foundEquipment",model:model)
-			log.debug("/templates/foundEquipment==>"+listHtml)
-			render(contentType:"text/json") { results = [listHtml] }
-		}else {
-			render(view:"/entity/searchList",template:"foundEquipment", model:model << [q:params["term"]])
-		}
-	}
 	
 	def filter = { FilterCommand cmd ->
 		if (log.isDebugEnabled()) log.debug("equipments.filter, command "+cmd)
@@ -364,7 +339,6 @@ class EquipmentViewController extends AbstractController {
 		}
 
 	}
-
 }
 
 class FilterCommand {
@@ -443,18 +417,4 @@ class ExportFilterCommand {
 		", Manufacturers="+manufacturers+", Suppliers="+suppliers+", ServiceProviders="+serviceProviders+", Status="+equipmentStatus+", purchaser="+purchaser+", obsolete="+obsolete+
 		", donor=" + donor + "]"
 	}
-}
-class FindEquipmentCommand{
-	Set<CalculationLocation> locations = []
-	String term
-	static constraints = {
-		term nullable:false, blank:false, validator:{ val, obj ->
-			//When a location is specified then the term to search can be null
-			if(locations.size()>0) return true
-		}
-	}
-	String toString() {
-		return "FindEquipmentCommand  term= "+term+", locations= "+locations+"]"
-	}
-
 }

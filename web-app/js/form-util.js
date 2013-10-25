@@ -550,7 +550,8 @@ function addSpareParts(baseUrl){
 		listRefresher(this);
 	})
 }
-//Prevent edit spare part quantity and warn before edit
+
+//Prevent edit sparePart quantity and warn before edit
 function sparePartQuantityHandler(sparePartId,fieldLabel,warningmsg){
 	if($.isNumeric(sparePartId)){
 		$(".disabled-on-edit").attr("disabled", "disabled").next("label.has-helper").html('<a href="#" >'+fieldLabel+'</a>');
@@ -560,6 +561,7 @@ function sparePartQuantityHandler(sparePartId,fieldLabel,warningmsg){
 		if(confirm(warningmsg)==true) $(this).hide("slow").prev("input.disabled-on-edit").removeAttr("disabled");
 	})
 }
+
 /**
  * Utility functions
  *
@@ -582,5 +584,13 @@ function listRefresher(action){
 function hideSpinnerAndErrorMsg(){
 	$(".ajax-spinner").hide();
 	$(".ajax-error").hide();
+}
+function hideSparePartQuantityField(){
+	$(".spare-part-quanty").hide();
+    $(".spare-parts").change(function(event){
+      if($(".spare-parts option:selected").attr("value")=="_")
+        $(".spare-part-quanty").slideUp("slow");
+      else $(".spare-part-quanty").slideDown("slow");
+    });
 }
 

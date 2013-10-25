@@ -42,7 +42,7 @@ public class UsedSpareParts {
 	Prevention prevention
 	SparePartType sparePartType
 	Integer quantity
-	
+
 	static constraints ={
 		maintenanceOrder nullable:false
 		prevention nullable:true, validator:{ val, obj ->

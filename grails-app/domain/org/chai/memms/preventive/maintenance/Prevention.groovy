@@ -30,6 +30,8 @@ package org.chai.memms.preventive.maintenance
 import groovy.transform.EqualsAndHashCode;
 import javax.persistence.Transient;
 
+import javax.persistence.Transient;
+
 import org.chai.memms.TimeSpend;
 import org.chai.memms.security.User;
 import org.chai.memms.TimeDate;
@@ -64,7 +66,6 @@ public class Prevention {
 	
 
 	static mapping = {
-		
 		table "memms_prevention"
 		version false
 	}

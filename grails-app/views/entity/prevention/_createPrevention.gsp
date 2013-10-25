@@ -45,7 +45,7 @@
                   <div class="process process-action half">
                     <label><g:message code="prevention.possible.processes.label"/></label>
                     <fieldset>
-                     <ul class="draggable process-list-action">
+                     <ul class="draggable process-list-action"> 
                        <g:each in="${actions}" status="i" var="action">
                           <li data-id="${action.id}">
                             ${action.description}
@@ -124,15 +124,9 @@
     addPreventionProcess("${createLink(controller:'prevention',action: 'addProcess')}","${prevention.id}","");
     removePreventionProcess("${createLink(controller:'prevention',action: 'removeProcess')}");
     getDatePicker("${resource(dir:'images',file:'icon_calendar.png')}");
-
     addSpareParts("${createLink(controller:'prevention',action: 'addSpareParts')}");
-    $(".spare-part-quanty").hide();
-    $(".spare-parts").change(function(event){
-      if($(".spare-parts option:selected").attr("value")=="_")
-        $(".spare-part-quanty").slideUp("slow");
-      else $(".spare-part-quanty").slideDown("slow");
-    });
-
+    hideSparePartQuantityField();
+    
     $(".droppable").droppable({ hoverClass:'dragging',drop: function(event, ui) {  
        $("#action-list option[value="+$(ui.draggable[0]).attr("data-id")+"]").remove();
        $("#action-list").append('<option value='+$(ui.draggable[0]).attr("data-id")+' selected >'+$(ui.draggable[0]).text()+'</option>');

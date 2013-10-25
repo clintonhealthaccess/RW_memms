@@ -335,16 +335,16 @@ class WorkOrderViewController extends AbstractController{
 		def html =""
 		def result = false
 		def options = ""
-		if(order == null || type==null || quantity <= 0 || quantity == null)
+		if(order == null || type == null || quantity <= 0 || quantity == null)
 			response.sendError(404)
 		else{
+			def dataLocation = order.equipment.dataLocation
 			order = sparePartService.assignSparePartsToWorkOrder(order,type,user,quantity)
-			def compatibleSpareParts = sparePartService.getCompatibleSparePart(order.equipment.type,user)
+			def compatibleSpareParts = sparePartService.getCompatibleSparePart(order.equipment.type,user,dataLocation)
 			for(def sparePart: compatibleSpareParts)
 				options = options+" <option value='"+sparePart.key.id+"'>"+sparePart.key.names+" - "+[sparePart.value]+"</option>";
 			result = true
 			html = g.render(template:"/templates/usedSparePartList",model:[order:order,usedSpareParts:order.usedSpareParts])
-			log.debug("All  UsedSpareParts in db workOrder ==>"+UsedSpareParts.list())
 		}
 
 		render(contentType:"text/json") { results = [result,html,options]}

@@ -86,11 +86,25 @@
             </a>
           </li>
         </shiro:hasPermission>
-%{--         <li>
-            <a href="${createLink(controller: 'equipmentView', action:'findEquipments')}">
-              <g:message code="header.navigation.find.equipment"/>
+        <shiro:hasPermission permission="menu:search">
+          <li>
+            <a class="${controllerName=='search' ?'active':''}" href="#">
+              <g:message code="default.button.search.label"/>
             </a>
-        </li> --}%
+            <ul class="submenu">
+              <li>
+                <a href="${createLink(controller:'search', action:'findEquipments')}">
+                  <g:message code="header.navigation.equipments"/>
+                </a>
+              </li>
+              <li>
+                <a  href="${createLink(controller:'search', action:'findSpareParts')}">
+                  <g:message code="header.navigation.spare.parts"/>
+                </a>
+              </li>
+            </ul>
+          </li>
+        </shiro:hasPermission>
         <shiro:hasPermission permission="menu:inventory">
           <li>
             <a class="${controllerName=='equipment' || controllerName=='equipmentView' || controllerName=='notificationEquipment' ?'active':''}" href="#">

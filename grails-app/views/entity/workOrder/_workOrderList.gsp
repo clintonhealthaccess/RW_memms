@@ -1,4 +1,3 @@
-<%@page import="java.nio.file.attribute.UserDefinedFileAttributeView"%>
 <%@ page import="org.chai.memms.util.Utils" %>
 <%@ page import="org.apache.shiro.SecurityUtils" %>
 <%@ page import="org.chai.memms.security.User" %>
