@@ -125,6 +125,22 @@ class WorkOrderViewController extends AbstractController{
 				])
 	}
 	
+	def workOrderOnHomePage={
+		def equipment = null
+		def  dataLocation = null
+		if(params["dataLocation.id"]) dataLocation = CalculationLocation.get(params.int("dataLocation.id"))
+		if(params["equipment.id"]) equipment = Equipment.get(params.int("equipment.id"))
+
+		adaptParamsForList()
+		def workOrders = workOrderService.getWorkOrderOnHomePage(user,params)
+		if(!request.xhr)
+			render(view:"/entity/list", model: model(workOrders, dataLocation, equipment) << [
+					template:"workOrder/workOrderList",
+					filterTemplate:"workOrder/workOrderFilter",
+					listTop:"workOrder/listTop",
+				])
+	}
+	
 	def search = {
 		def equipment = null
 		def dataLocation = null

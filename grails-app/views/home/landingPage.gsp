@@ -19,9 +19,35 @@
   		<shiro:hasPermission permission="menu:preventivemaintenance">
   		<li><a href="${createLink(controller: 'preventiveOrderView', action:'summaryPage')}"><g:message code="header.navigation.preventive.maintenance"/></a></li>
   		</shiro:hasPermission>
-  		<shiro:hasPermission permission="menu:reports">
-  		<li><a href="#"><g:message code="header.navigation.reports"/></a></li>
-  		</shiro:hasPermission>
+  		
+  		<shiro:hasPermission permission="menu:dashboard">
+             <li>
+              <a href="${createLink(controller:'dashboard', action:'view')}">
+                  <g:message code="header.navigation.reports.dashboard"/>
+              </a>
+            </li>
+        </shiro:hasPermission>
+        <shiro:hasPermission permission="menu:listing">
+            <li>
+               <a href="${createLink(controller:'listing', action:'view') }">
+                  <g:message code="header.navigation.reports.listing"/>
+               </a>
+             </li>
+        </shiro:hasPermission>
+        <shiro:hasPermission permission="menu:workorderescalatedtommc">
+           <li>
+               <a href="${createLink(controller:'workOrderView', action:'workOrdersEscalatedAtMMC') }">
+                  <g:message code="header.navigation.corrective.maintenance.escalated.to.mmc"/>
+               </a>
+            </li>
+        </shiro:hasPermission>
+        <shiro:hasPermission permission="menu:homeworkorders">
+           <li>
+               <a href="${createLink(controller:'workOrderView', action:'workOrderOnHomePage') }">
+                  <g:message code="header.navigation.corrective.maintenance.opened.at.fosa"/>
+               </a>
+            </li>
+        </shiro:hasPermission>
   	</ul>
   </div>
 </body>
