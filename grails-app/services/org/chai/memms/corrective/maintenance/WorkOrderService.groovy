@@ -42,6 +42,7 @@ import org.chai.memms.corrective.maintenance.WorkOrderStatus;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.OrderStatus;
 import org.chai.memms.corrective.maintenance.WorkOrderStatus.WorkOrderStatusChange;
 import org.chai.memms.security.User;
+import org.chai.memms.security.User.UserType;
 import org.chai.memms.util.Utils;
 import org.chai.memms.corrective.maintenance.NotificationWorkOrderService;
 
@@ -103,19 +104,22 @@ class WorkOrderService {
 			}
 		}
 	
-	def getWorkOrderOnHomePage (def user,Map<String, String> params){
+	def getWorkOrderOnHomePage (def user){
 		def criteria = WorkOrder.createCriteria();
 		def dataLocations = []
 		if(user.location instanceof Location) dataLocations.addAll(user.location.collectDataLocations(null))
 		else{
 			dataLocations = []
 			dataLocations.add(user.location as DataLocation)
+			dataLocations.addAll((user.location as DataLocation)?.manages)
 		}
-		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+		return criteria.list(max:20,sort:"lastUpdated",order:"desc"){
 			createAlias("equipment","equip")
 			if(dataLocations)
 				inList('equip.dataLocation',dataLocations)
-			eq ("currentStatus",OrderStatus.OPENATFOSA)
+			if(user.userType.equals(UserType.TECHNICIANMMC))
+				eq ("currentStatus",OrderStatus.OPENATMMC) 
+			else eq ("currentStatus",OrderStatus.OPENATFOSA)
 		}
 	}
 
