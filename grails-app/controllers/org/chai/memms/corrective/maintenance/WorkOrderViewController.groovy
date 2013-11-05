@@ -124,7 +124,7 @@ class WorkOrderViewController extends AbstractController{
 					listTop:"workOrder/listTop",
 				])
 	}
-	
+		
 	def search = {
 		def equipment = null
 		def dataLocation = null

@@ -32,18 +32,29 @@ import org.apache.commons.lang.NotImplementedException;
 import org.apache.shiro.SecurityUtils
 import org.chai.memms.security.User
 import org.chai.memms.security.User.UserType;
+import org.chai.memms.inventory.Equipment;
+import org.chai.memms.inventory.EquipmentStatus;
+import org.chai.memms.corrective.maintenance.WorkOrderService;
 
 class HomeController {
 	
 	def languageService
-	
+	def workOrderService
+
+	def getUser() {
+		return User.findByUuid(SecurityUtils.subject.principal, [cache: true])
+	}
+
 	def index = {
 		if (log.isDebugEnabled()) log.debug("home.index, params:"+params)
 		redirect (controller: "home", action: "landingPage")
 	}
 	
 	def landingPage = {
-		
+		def workOrders = []
+		if(user?.userType.equals(UserType.TECHNICIANMMC) || user?.userType.equals(UserType.TECHNICIANDH))
+			workOrders = workOrderService.getWorkOrderOnHomePage(user)
+		render(view:"/home/landingPage",model:[workOrders:workOrders,user:user])
 	}
 	
 	def upgrade = {render (view:'upgrade_'+languageService.currentLanguage)}
