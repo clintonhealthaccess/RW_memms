@@ -5,6 +5,7 @@
 	<thead>
 		<tr>
 			<th/>
+			<th><g:message code="location.label"/></th>
 			<th><g:message code="equipment.label"/></th>
 			<th><g:message code="entity.status.label"/></th>
 			<th><g:message code="work.order.criticality.label"/></th>
@@ -25,10 +26,12 @@
 					</ul>
 				</td>
 				<td>
-					<a rel="${createLinkWithTargetURI(controller:'equipmentView', action:'getEquipmentClueTipsAjaxData', params:['equipment.id': order.equipment.id])}" class="clueTip">
-						${order.equipment.code}
-					</a>
-					
+					<g:message code="datalocation.label"/>: ${order.equipment.dataLocation.names}<br/>
+					<g:message code="department.label"/>: ${order.equipment.department.names}<br/>
+					<g:message code="equipment.room.label"/>: ${order.equipment.room}<br/> 
+				</td>
+				<td>
+					${order.equipment.code}
 				</td>
 				<td>
 					${message(code: order.currentStatus?.messageCode+'.'+order.currentStatus?.name)}
