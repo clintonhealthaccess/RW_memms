@@ -25,50 +25,28 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.reports.hmis
+package org.chai.memms.hmis
+import java.util.List;
+import java.util.Map;
 
-import groovy.transform.EqualsAndHashCode
-import i18nfields.I18nFields
-import org.chai.memms.inventory.EquipmentType
+import org.chai.memms.reports.hmis.HmisEquipmentType;
+import org.chai.memms.util.Utils;
 /**
- * @author @author Eric Dusabe, Jean Kahigiso M.
+ * @author Eric Dusabe, Jean Kahigiso M.
  *
  */
+class HmisEquipmentTypeService {
 
- @I18nFields
-@EqualsAndHashCode(includes="code")
-class HmisEquipmentType {
+	static transactional = true
+	def languageService;
 
-	String code
-	String names
-	Date dateCreated
-	Date lastUpdated
-
-	static hasMany = [equipmentTypes:EquipmentType]
-
-	static i18nFields = ["names"]
-
-	static constraints = {
-		code nullable:false, blank:false, unique:true
-		names nullable:true, blank:true
-		lastUpdated nullable:true, validator: {
-			if(it != null) return (it <= new Date())
+	public def searchHmisEquipmentType(String text,Map<String, String> params) {
+		text = text.trim()
+		def dbFieldName = 'names_'+languageService.getCurrentLanguagePrefix();
+		def criteria = HmisEquipmentType.createCriteria()
+		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+				ilike("code","%"+text+"%")
+				ilike(dbFieldName,"%"+text+"%")
 		}
 	}
-
-	static mapping = {
-		table "memms_hmis_equipment_type"
-		version false
-		equipmentTypes joinTable: [
-		name: "memms_hmis_memms_equipment_type",
-		key: "hmis_equipment_type_id",
-		column: "memms_equipment_type_id"
-		]
-	}
-
-	@Override
-	public String toString() {
-		return "HmisEquipmentType [Id = " + id + "Code = " + code + "]";
-	}
-
 }

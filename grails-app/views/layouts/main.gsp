@@ -213,6 +213,13 @@
                   </a>
                 </li>
               </shiro:hasPermission>
+               <shiro:hasPermission permission="menu:hmisEquipmentType">
+                <li>
+                  <a href="${createLink(controller: 'hmisEquipmentType', action:'list')}">
+                    <g:message code="hmis.equipment.type.label"/>
+                  </a>
+                </li>
+              </shiro:hasPermission>
               <shiro:hasPermission permission="menu:sparePartType">
                 <li>
                   <a href="${createLink(controller: 'sparePartType', action:'list')}">

@@ -28,47 +28,38 @@
 package org.chai.memms.reports.hmis
 
 import groovy.transform.EqualsAndHashCode
-import i18nfields.I18nFields
-import org.chai.memms.inventory.EquipmentType
+import org.chai.location.DataLocation
 /**
- * @author @author Eric Dusabe, Jean Kahigiso M.
+ * @author Eric Dusabe, Jean Kahigiso M.
  *
  */
 
- @I18nFields
-@EqualsAndHashCode(includes="code")
-class HmisEquipmentType {
+@EqualsAndHashCode(includes="code, dataLocation, period")
+class HmisReport {
 
 	String code
-	String names
+	DataLocation dataLocation
+	String period
+	Number numberOfOpEquipment
 	Date dateCreated
-	Date lastUpdated
+	Date lastUpdate
 
-	static hasMany = [equipmentTypes:EquipmentType]
-
-	static i18nFields = ["names"]
 
 	static constraints = {
-		code nullable:false, blank:false, unique:true
-		names nullable:true, blank:true
-		lastUpdated nullable:true, validator: {
+
+		code nullable: false, blank: false
+		period nullable: false, blank: false
+		dataLocation nullable: false
+		numberOfOpEquipment nullable: false, minSize: 0
+		lastUpdate nullable: true, validator: {
 			if(it != null) return (it <= new Date())
 		}
 	}
 
 	static mapping = {
-		table "memms_hmis_equipment_type"
+		table "memms_hmis_report"
 		version false
-		equipmentTypes joinTable: [
-		name: "memms_hmis_memms_equipment_type",
-		key: "hmis_equipment_type_id",
-		column: "memms_equipment_type_id"
-		]
-	}
-
-	@Override
-	public String toString() {
-		return "HmisEquipmentType [Id = " + id + "Code = " + code + "]";
+		//id composite: ["hmisEquipmentTypeCode", "dataLocation", "period"]  
 	}
 
 }
