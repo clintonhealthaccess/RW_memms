@@ -26,11 +26,16 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package org.chai.memms.hmis
+
 import java.util.List;
 import java.util.Map;
+import org.chai.location.Location
+import org.chai.location.DataLocationType;
+import org.chai.location.DataLocation
 
 import org.chai.memms.reports.hmis.HmisEquipmentType;
 import org.chai.memms.util.Utils;
+import org.chai.memms.inventory.EquipmentService;
 /**
  * @author Eric Dusabe, Jean Kahigiso M.
  *
@@ -39,6 +44,9 @@ class HmisEquipmentTypeService {
 
 	static transactional = true
 	def languageService;
+	def locationService
+	def grailsApplication
+	def equipmentService
 
 	public def searchHmisEquipmentType(String text,Map<String, String> params) {
 		text = text.trim()
@@ -49,4 +57,46 @@ class HmisEquipmentTypeService {
 				ilike(dbFieldName,"%"+text+"%")
 		}
 	}
+
+
+	public def getAllEquipmentOfTypeAndCurrentStatus(def equipmentOfType, def status){
+
+	}
+
+	public def generateHmisReport(def dataLocations, boolean quartly){
+		def hmisEquipmentTypes = HmisEquipmentType.list()
+		for (def dataLocation : dataLocations){
+			for (def hmisEquipmentType : hmisEquipmentTypes){
+				def numberOfOpEquipment = 0;
+				for (def equipmentType: hmisEquipmentType.equipmentTypes){
+					def criteria = Equipment.createCriteria()
+					println"=> equipmentType: "+equipmentType.id+" numberOfOpEquipment before: "+numberOfOpEquipment
+					numberOfOpEquipment =+ criteria.get{
+							projections{
+					    		rowCount()
+							}
+							and{
+								 eq("dataLocation",dataLocation)
+								 eq("type",equipmentType)
+							 	//inList("currentStatus",[Status.OPERATIONAL,Status.INSTOCK])
+							} 
+					}
+					println"=> equipmentType: "+equipmentType.id+" numberOfOpEquipment after: "+numberOfOpEquipment
+				}
+				println"=> dataLocation:"+dataLocation.id+" hmisEquipmentType: "+hmisEquipmentType.id+" numberOfOpEquipment:"+numberOfOpEquipment
+				//newHmisFacilityReport(dataLocation,numberOfOpEquipment,quartly)
+			}	
+		}
+		
+	}
+
+
+	private def newHmisFacilityReport(def dataLocation,def hmisEquipmentType,def numberOfOpEquipment, boolean quartly){
+		//if(){}
+
+	}
+	private def getQuartPeriod(){
+		def toDay = new Date();
+	}
+
 }

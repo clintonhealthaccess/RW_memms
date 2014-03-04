@@ -26,14 +26,38 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package org.chai.memms.reports.hmis
-import org.chai.memms.IntegrationTests
-import org.chai.memms.Initializer
+
+import groovy.transform.EqualsAndHashCode
+import org.chai.location.DataLocation
+
 /**
+ * @author Eric Dusabe, Jean Kahigiso M.
  *
- * @author Dusabe Eric, Kahigiso M. Jean
  */
 
-class HmisEquipmentTypeSpec extends IntegrationTests{
-	
+class HmisFacilityReport {
+
+	DataLocation dataLocation
+	HmisEquipmentType hmisEquipmentType
+	Integer numberOfOpEquipment
+	Date dateCreated
+	Date lastUpdated
+
+	static belongsTo = [hmisReport: HmisReport]
+
+	static constraints = {
+
+		hmisEquipmentType nullable: false
+		dataLocation nullable: false
+		numberOfOpEquipment nullable: false, min: 0
+		lastUpdated nullable: true, validator: {
+			if(it != null) return (it <= new Date())
+		}
+	}
+
+	static mapping = {
+		table "memms_hmis_facility_report"
+		version false 
+	}
 
 }

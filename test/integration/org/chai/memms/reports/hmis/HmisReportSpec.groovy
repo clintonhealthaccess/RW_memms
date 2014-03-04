@@ -28,12 +28,52 @@
 package org.chai.memms.reports.hmis
 import org.chai.memms.IntegrationTests
 import org.chai.memms.Initializer
+import org.chai.location.DataLocation;
 /**
  *
  * @author Dusabe Eric, Kahigiso M. Jean
  */
 
-class HmisEquipmentTypeSpec extends IntegrationTests{
-	
 
+class HmisReportSpec extends IntegrationTests{
+
+	def "can create and save a HmisReport"() {
+		when:
+		def hmisReport = new HmisReport(periodCode:CODE(123),names:["en":"HmisReport test"]).save()
+		then:
+		HmisReport.count() == 1
+		HmisReport.list()[0].periodCode == CODE(123)
+
+	}
+
+	def "can't create and save a HmisReport without periodCode"() {
+		when:
+		def hmisReport = new HmisReport(periodCode:CODE(123),names:["en":"HmisReport test"]).save(failOnError:true)
+		def hmisReportTwo = new HmisReport(names:["en":"HmisReport test"])
+		hmisReportTwo.save()
+		then:
+		HmisReport.count() == 1
+		HmisReport.list()[0].periodCode == CODE(123)
+		hmisReportTwo.errors.hasFieldErrors('periodCode') == true
+	}
+
+	def "can't create and save a duplicated HmisReport periodCode"() {
+		when:
+		def hmisReport = new HmisReport(periodCode:CODE(123),names:["en":"HmisReport test"]).save(failOnError:true)
+		def hmisReportTwo = new HmisReport(periodCode:CODE(123),names:["en":"HmisReport test two"])
+		hmisReportTwo.save()
+		then:
+		HmisReport.count() == 1
+		hmisReportTwo.errors.hasFieldErrors('periodCode') == true
+	}
+	def "can't create and save a  HmisReport lastUpdated in the future"() {
+		when:
+		def today = new Date()
+		def hmisReport = new HmisReport(periodCode:CODE(123),names:["en":"HmisReport test"]).save(failOnError:true)
+		def hmisReportTwo = new HmisReport(periodCode:CODE(123),names:["en":"HmisReport test two"],lastUpdated:today+1)
+		hmisReportTwo.save()
+		then:
+		HmisReport.count() == 1
+		hmisReportTwo.errors.hasFieldErrors('lastUpdated') == true
+	}
 }

@@ -82,7 +82,7 @@ import org.chai.memms.TimeDate;
 import org.chai.memms.TimeSpend
 
 import org.chai.memms.reports.hmis.HmisEquipmentType
-import org.chai.memms.reports.hmis.HmisReport
+import org.chai.memms.reports.hmis.HmisFacilityReport
 
 public class Initializer {
 		

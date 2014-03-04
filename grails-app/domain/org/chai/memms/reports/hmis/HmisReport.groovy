@@ -29,37 +29,36 @@ package org.chai.memms.reports.hmis
 
 import groovy.transform.EqualsAndHashCode
 import org.chai.location.DataLocation
+import i18nfields.I18nFields
 /**
  * @author Eric Dusabe, Jean Kahigiso M.
  *
  */
 
-@EqualsAndHashCode(includes="code, dataLocation, period")
+@EqualsAndHashCode(includes="periodCode")
 class HmisReport {
 
-	String code
-	DataLocation dataLocation
-	String period
-	Number numberOfOpEquipment
+	String periodCode
+	String names
 	Date dateCreated
-	Date lastUpdate
+	Date lastUpdated
 
+	static hasMany = [hmisFacilityReports: HmisFacilityReport]
+	static i18nFields = ["names"]
 
 	static constraints = {
 
-		code nullable: false, blank: false
-		period nullable: false, blank: false
-		dataLocation nullable: false
-		numberOfOpEquipment nullable: false, minSize: 0
-		lastUpdate nullable: true, validator: {
+		periodCode nullable: false, blank: false,  unique: true
+		names nullable: true, blank: true
+		lastUpdated nullable: true, validator: {
 			if(it != null) return (it <= new Date())
 		}
 	}
 
 	static mapping = {
 		table "memms_hmis_report"
-		version false
-		//id composite: ["hmisEquipmentTypeCode", "dataLocation", "period"]  
+		version false 
 	}
+
 
 }
