@@ -68,7 +68,7 @@ class HmisEquipmentType {
 
 	@Override
 	public String toString() {
-		return "HmisEquipmentType [Id = " + id + "Code = " + code + "]";
+		return "HmisEquipmentType [Id = " + id + " Code = " + code + "]";
 	}
 
 }

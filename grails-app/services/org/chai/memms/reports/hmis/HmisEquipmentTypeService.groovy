@@ -25,14 +25,13 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.chai.memms.hmis
+package org.chai.memms.reports.hmis
 
 import java.util.List;
 import java.util.Map;
-import org.chai.location.Location
+import org.chai.location.Location;
 import org.chai.location.DataLocationType;
-import org.chai.location.DataLocation
-
+import org.chai.location.DataLocation;
 import org.chai.memms.reports.hmis.HmisEquipmentType;
 import org.chai.memms.util.Utils;
 import org.chai.memms.inventory.EquipmentService;
@@ -53,9 +52,13 @@ class HmisEquipmentTypeService {
 		def dbFieldName = 'names_'+languageService.getCurrentLanguagePrefix();
 		def criteria = HmisEquipmentType.createCriteria()
 		return criteria.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc"){
+			or{
 				ilike("code","%"+text+"%")
 				ilike(dbFieldName,"%"+text+"%")
+			}
 		}
+
+
 	}
 
 

@@ -26,14 +26,63 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package org.chai.memms.reports.hmis
+
 import org.chai.memms.IntegrationTests
 import org.chai.memms.Initializer
+import org.chai.memms.util.Utils
+
 /**
  *
  * @author Dusabe Eric, Kahigiso M. Jean
  */
 
 class HmisEquipmentTypeSpec extends IntegrationTests{
-	
 
+	def "can create and save a hmisEquipmentType"() {
+		when:
+		def hmisEquipmentType = new HmisEquipmentType(code:CODE(123))
+		Utils.setLocaleValueInMap(hmisEquipmentType,['en':"testName"], "Names")
+		hmisEquipmentType.save(failOnError: true)
+		def hmisEquipmentTypeOne = Initializer.newHmisEquipmentType(CODE(1234),['en':"testName", 'fr':"NameTest"])
+		then:
+		HmisEquipmentType.count() == 2
+	}
+
+	def "can't create and save hmisEquipmentType when code is null"() {
+		when:
+		def hmisEquipmentType = new HmisEquipmentType()
+		Utils.setLocaleValueInMap(hmisEquipmentType,['en':"testName"], "Names")
+		hmisEquipmentType.save()
+		then:
+		HmisEquipmentType.count() == 0
+		hmisEquipmentType.errors.hasFieldErrors('code') == true
+	}
+	
+	def "can't create and save a hmisEquipmentType when code is duplicated"() {
+		when:
+		def hmisEquipmentTypeOne = Initializer.newHmisEquipmentType(CODE(143),['en':"testName", 'fr':"NameTest"])
+		def hmisEquipmentType = new HmisEquipmentType(code:CODE(143))
+		Utils.setLocaleValueInMap(hmisEquipmentType,['en':"testName"],"Names")
+		hmisEquipmentType.save()
+		then:
+		HmisEquipmentType.count() == 1		
+		hmisEquipmentType.errors.hasFieldErrors('code') == true
+	}
+
+	def "can't create and save a hmisEquipmentType when lastUpdated is in future"() {
+		when:
+		def today = new Date()
+		def hmisEquipmentType = new HmisEquipmentType(code:CODE(123))
+		Utils.setLocaleValueInMap(hmisEquipmentType,['en':"testName"], "Names")
+		hmisEquipmentType.lastUpdated = today + 1
+		hmisEquipmentType.save()
+
+		def hmisEquipmentTypetwo = new HmisEquipmentType(code:CODE(124))
+		Utils.setLocaleValueInMap(hmisEquipmentTypetwo,['en':"testName"],"Names")
+		hmisEquipmentTypetwo.lastUpdated = today
+		hmisEquipmentTypetwo.save(failOnError:true)
+		then:
+		HmisEquipmentType.count() == 1
+		hmisEquipmentType.errors.hasFieldErrors('lastUpdated') == true
+	}
 }

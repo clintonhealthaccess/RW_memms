@@ -42,31 +42,6 @@ class HmisEquipmentTypeController extends AbstractEntityController {
 
 	def hmisEquipmentTypeService
 
-	def bindParams(def entity) {
-
-		def equipmentTypes = new HashSet<EquipmentType>()
-		params.oldEquipmentTypes = entity.equipmentTypes
-
-		params.list('equipmentTypes').each { id ->
-			if (NumberUtils.isDigits(id)) {
-				def equipmentType = EquipmentType.get(id)
-				(!equipmentType)?:equipmentTypes.add(equipmentType);
-			}
-		}
-		entity.equipmentTypes = equipmentTypes
-
-		bindData(entity,params,[exclude:["equipmentTypes"]])
-	}
-	
-	def getModel(def entity) {
-		def equipmentTypes = []
-		if(entity.equipmentTypes != null) equipmentTypes = new ArrayList(entity.equipmentTypes)
-		[
-			type:entity,
-			equipmentTypes:equipmentTypes
-		]
-	}
-		
 	def getEntity(def id) {
 		return HmisEquipmentType.get(id);
 	}
@@ -79,15 +54,6 @@ class HmisEquipmentTypeController extends AbstractEntityController {
 		return "/entity/hmis/createHmisEquipmentType";
 	}
 
-	def deleteEntity(def entity) {
-		// if (entity.equipments.size() != 0) {
-		// 	flash.message = message(code: 'department.hasequipments', args: [message(code: getLabel(), default: 'entity'), params.id], default: '{0} still has associated equipments.')
-		// }
-		// else {
-		// 	super.deleteEntity(entity)
-		// }
-	}
-	
 	def getLabel() {
 		return "hmis.equipment.type.label";
 	}	
@@ -96,6 +62,37 @@ class HmisEquipmentTypeController extends AbstractEntityController {
 		return HmisEquipmentType.class;
 	}
 
+
+	def bindParams(def entity) {
+		def equipmentTypes = new HashSet<EquipmentType>()
+		params.list('equipmentTypes').each { id ->
+			if (NumberUtils.isDigits(id)) {
+				def equipmentType = EquipmentType.get(id)
+				(!equipmentType)?:equipmentTypes.add(equipmentType);
+			}
+		}
+		entity.equipmentTypes = equipmentTypes
+		bindData(entity,params,[exclude:["equipmentTypes"]])
+		log.debug("HelloooooooooooooooooooooooooooooooooO!!!!!!!!!!!!!!!!!!!\n")
+	}
+
+	
+	def getModel(def entity) {
+		def equipmentTypes = []
+		if(entity.equipmentTypes != null) equipmentTypes = new ArrayList(entity.equipmentTypes)
+		[
+			type:entity,
+			equipmentTypes:equipmentTypes
+		]
+	}
+
+		
+	
+
+	def deleteEntity(def entity) {
+	}
+	
+	
 
 	def list = {
 		adaptParamsForList()
@@ -127,15 +124,29 @@ class HmisEquipmentTypeController extends AbstractEntityController {
 
 	def search = {
 		adaptParamsForList()
-		def types  = hmisEquipmentTypeService.searchHmisEquipmentType(params['q'],null,params)
-
+		List<HmisEquipmentType> types = hmisEquipmentTypeService.searchHmisEquipmentType(params['q'],params)
 		if(request.xhr)
-			this.ajaxModel(types,params['q'])	
+			this.ajaxModel(types,params['q'])
 		else {
 			render(view:"/entity/list",model:model(types) << [
-				template:"hmis/hmisEquipmentTypeList",
-				listTop:"hmis/listTop"
+				template:"hmisEquipmentType/hmisEquipmentTypeList",
+				listTop:"hmisEquipmentType/listTop"
+			
 			])
+		}
+	}
+
+	def getAjaxData = {
+		List<HmisEquipmentType> types = hmisEquipmentTypeService.searchHmisEquipmentType(params['term'],[:])
+		render(contentType:"text/json") {
+			elements = array {
+				types.each { type ->
+					elem (
+							key: type.id,
+							value: type.names + ' - ['+type.code+']' + ' - ['+type.equipmentTypes+']'
+							)
+				}
+			}
 		}
 	}	
 }

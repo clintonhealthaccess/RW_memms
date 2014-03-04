@@ -11,7 +11,6 @@
 		</h1>
 		
 	</div>
-              ${myname}
 	<div class="main">
   	<g:form url="[controller:'hmisEquipmentType', action:'save', params:[targetURI: targetURI]]" useToken="true" class="simple-list">
   	   <fieldset class="form-content">
@@ -24,10 +23,13 @@
       		<g:input name="code" label="${message(code:'entity.code.label')}" bean="${type}" field="code"/>
       		<g:i18nInput name="names" label="${message(code:'entity.names.label')}" bean="${type}" field="names"/>
       		<g:selectFromList 
-      		name="equipmentTypes" label="${message(code:'equipment.type.label')}" bean="${equipmentType}" field="equipmentType" optionKey="id" multiple="true"
+      		name="equipmentTypes" label="${message(code:'equipment.type.label')}" bean="${type}" field="equipmentType" optionKey="id" multiple="true"
   			ajaxLink="${createLink(controller:'equipmentType', action:'getAjaxData', params: [observation: 'USEDINMEMMS'])}"
   			from="${equipmentTypes}" value="${type.equipmentTypes?.id}" values="${equipmentTypes.collect{it.names}}" />	
        	</fieldset>
+        <g:if test="${type.id != null}">
+        <input type="hidden" name="id" value="${type.id}"></input>
+      </g:if>
         <br />
   		<div class="buttons">
   			<button type="submit"><g:message code="default.button.save.label"/></button>
