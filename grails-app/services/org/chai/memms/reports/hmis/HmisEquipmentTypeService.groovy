@@ -61,45 +61,4 @@ class HmisEquipmentTypeService {
 
 	}
 
-
-	public def getAllEquipmentOfTypeAndCurrentStatus(def equipmentOfType, def status){
-
-	}
-
-	public def generateHmisReport(def dataLocations, boolean quartly){
-		def hmisEquipmentTypes = HmisEquipmentType.list()
-		for (def dataLocation : dataLocations){
-			for (def hmisEquipmentType : hmisEquipmentTypes){
-				def numberOfOpEquipment = 0;
-				for (def equipmentType: hmisEquipmentType.equipmentTypes){
-					def criteria = Equipment.createCriteria()
-					println"=> equipmentType: "+equipmentType.id+" numberOfOpEquipment before: "+numberOfOpEquipment
-					numberOfOpEquipment =+ criteria.get{
-							projections{
-					    		rowCount()
-							}
-							and{
-								 eq("dataLocation",dataLocation)
-								 eq("type",equipmentType)
-							 	//inList("currentStatus",[Status.OPERATIONAL,Status.INSTOCK])
-							} 
-					}
-					println"=> equipmentType: "+equipmentType.id+" numberOfOpEquipment after: "+numberOfOpEquipment
-				}
-				println"=> dataLocation:"+dataLocation.id+" hmisEquipmentType: "+hmisEquipmentType.id+" numberOfOpEquipment:"+numberOfOpEquipment
-				//newHmisFacilityReport(dataLocation,numberOfOpEquipment,quartly)
-			}	
-		}
-		
-	}
-
-
-	private def newHmisFacilityReport(def dataLocation,def hmisEquipmentType,def numberOfOpEquipment, boolean quartly){
-		//if(){}
-
-	}
-	private def getQuartPeriod(){
-		def toDay = new Date();
-	}
-
 }

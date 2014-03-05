@@ -34,7 +34,7 @@ import i18nfields.I18nFields
  * @author Eric Dusabe, Jean Kahigiso M.
  *
  */
-
+@i18nfields.I18nFields
 @EqualsAndHashCode(includes="periodCode")
 class HmisReport {
 

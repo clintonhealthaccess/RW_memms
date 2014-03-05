@@ -35,6 +35,7 @@ import org.chai.location.DataLocation;
 import org.chai.memms.util.Utils;
 import org.chai.memms.inventory.EquipmentService;
 import org.chai.location.DataLocation
+
 /**
  * @author Eric Dusabe, Jean Kahigiso M.
  *
@@ -51,23 +52,28 @@ class HmisReportService {
 		def hmisReport = newHmisReport("Q1-2014", ["en":"First Quarter", "fr":"Premier Trimestre"])
 		def dataLocations = equipmentService.getAllDataLocationsWithEquipment()
 		def hmisEquipmentTypes = HmisEquipmentType.list()
-
+		
 		if(hmisReport) {
-			for(dataLocation:dataLocations) {
-				for(hmisEquipmentType:hmisEquipmentTypes) {
-					def types = hmisEquipmentType.equipmentTypes
+			for(def dataLocation: dataLocations) {
+				for(def hmisEquipmentType: hmisEquipmentTypes) {
 					def criteria = Equipment.createCriteria()
-					def numberOfOpEquipment = criteria.get{
-						projections {
-							rowCount
+					def numberOfOpEquipment = 0
+					//Even if the equipment exist a give site, if it type is not associate to any hmis type, 
+					//the equipment will never be counted in the report
+					if(hmisEquipmentType.equipmentTypes.size()>0){
+						numberOfOpEquipment = criteria.get{
+							projections {
+								rowCount()
+							}
+							and{
+								'in'("currentStatus", [Status.OPERATIONAL,Status.INSTOCK])
+								'in'("type", hmisEquipmentType.equipmentTypes)
+								eq("dataLocation",dataLocation)
+							}
 						}
-						eq("dataLocation",dataLocation)
-						'in'("type", types)
-						'in'("currentStatus", [Status.OPERATIONAL,Status.INSTOCK])
 					}
-
-				}
-				newHmisFacilityReport(hmisReport, dataLocation, hmisEquipmentType, numberOfOpEquipment)
+					newHmisFacilityReport(hmisReport, dataLocation, hmisEquipmentType, numberOfOpEquipment)
+				}	
 			}
 		}
 	}
@@ -78,13 +84,14 @@ class HmisReportService {
 	}
 	
 	private def newHmisReport(def code, def names) {
-		def hmisReport = new HmisReport(code:code, names:names)
-		return hmisReport.save(failOnError:true)
+		def hmisReport = new HmisReport(periodCode:code)
+		Utils.setLocaleValueInMap(hmisReport,names,"Names")
+		return hmisReport.save(failOnError:true,flush:true)
 	}
 
 	private def newHmisFacilityReport(def hmisReport, def dataLocation, def hmisEquipmentType, def numberOfOpEquipment) {
-		def newHmisFacilityReport = new HmisFacilitReport(dataLocation:dataLocation, hmisEquipmentType:hmisEquipmentType, numberOfOpEquipment:numberOfOpEquipment)
-		hmisReport.addToHmisFacilityReports(newHmisFacilityReport)
+		def hmisFacilityReport = new HmisFacilityReport(dataLocation:dataLocation, hmisEquipmentType:hmisEquipmentType, numberOfOpEquipment:numberOfOpEquipment)
+		hmisReport.addToHmisFacilityReports(hmisFacilityReport)
 		return hmisReport.save(failOnError:true,flush:true)
 	}
 
