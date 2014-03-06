@@ -28,7 +28,7 @@
 package org.chai.memms.reports.hmis
 
 import org.chai.location.Location
-import org.chai.memms.AbstractEntityController
+import org.chai.memms.AbstractController
 import org.chai.memms.inventory.EquipmentType
 import org.chai.memms.security.User
 import org.apache.shiro.SecurityUtils
@@ -38,70 +38,55 @@ import org.apache.commons.lang.math.NumberUtils
  * @author Eric Dusabe, Jean Kahigiso M.
  *
  */
-class HmisEquipmentTypeController extends AbstractEntityController {
+class HmisReportController extends AbstractController {
 
-	def hmisEquipmentTypeService
+	def hmisReportService
 
-	def getEntity(def id) {
-		return HmisEquipmentType.get(id);
-	}
-	
-	def createEntity() {
-		return new HmisEquipmentType();
-	}
-	
-	def getTemplate() {
-		return "/entity/hmis/createHmisEquipmentType";
+	def getEntityClass() {
+		return HmisReport.class;
 	}
 
 	def getLabel() {
-		return "hmis.equipment.type.label";
+		return "hmis.report.label";
 	}	
-		
-	def getEntityClass() {
-		return HmisEquipmentType.class;
+
+	def generateReport = {
+		hmisReportService.generateHmisReport()
 	}
 
-
-	def bindParams(def entity) {
-		def equipmentTypes = new HashSet<EquipmentType>()
-		params.list('equipmentTypes').each { id ->
-			if (NumberUtils.isDigits(id)) {
-				def equipmentType = EquipmentType.get(id)
-				(!equipmentType)?:equipmentTypes.add(equipmentType);
-			}
-		}
-		entity.equipmentTypes = equipmentTypes
-		bindData(entity,params,[exclude:["equipmentTypes"]])
+	if(params.exported != null){
+			def hmisReportExportTask = new HmisFacilityReport(dataLocationTypes:cmd.hmisEquipmentType,hmisEquipmentType:cmd.hmisEquipmentType,
+					numberOfOpEquipment:cmd.numberOfOpEquipment,hmisReports:cmd.hmisReports).save(failOnError: true,flush: true)
+			params.exportFilterId = equipmentExportTask.id
+			params.class = "EquipmentExportTask"
+			params.targetURI = "/hmisReport/generateReport"
+			redirect(controller: "task", action: "create", params: params)
 	}
-
-	
-	def getModel(def entity) {
-		def equipmentTypes = []
-		if(entity.equipmentTypes != null) equipmentTypes = new ArrayList(entity.equipmentTypes)
-		[
-			type:entity,
-			equipmentTypes:equipmentTypes
-		]
-	}
-
-		
-	
-
-	def deleteEntity(def entity) {
-	}
-	
 	
 
 	def list = {
 		adaptParamsForList()
-		def types = HmisEquipmentType.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc");
+		def types = HmisReport.list(offset:params.offset,max:params.max,sort:params.sort ?:"id",order: params.order ?:"desc");
 		if(request.xhr)
 			this.ajaxModel(types,"")
 		else{
 			render(view:"/entity/list",model:model(types) << [
-				template:"hmis/hmisEquipmentTypeList",
+				template:"hmis/hmisReportList",
 				listTop:"hmis/listTop"
+			])
+		}
+	}
+
+	def search = {
+		adaptParamsForList()
+		List<HmisReport> types = hmisReportService.searchHmisReport(params['q'],params)
+		if(request.xhr)
+			this.ajaxModel(types,params['q'])
+		else {
+			render(view:"/entity/list",model:model(types) << [
+				template:"hmisReport/hmisReportList",
+				listTop:"hmisReport/listTop"
+			
 			])
 		}
 	}
@@ -117,35 +102,9 @@ class HmisEquipmentTypeController extends AbstractEntityController {
 	
 	def ajaxModel(def entities,def searchTerm) {
 		def model = model(entities) << [q:searchTerm]
-		def listHtml = g.render(template:"/entity/hmis/hmisEquipmentTypeList",model:model)
+		def listHtml = g.render(template:"/entity/hmis/hmisReportList",model:model)
 		render(contentType:"text/json") { results = [listHtml] }
 	}
 
-	def search = {
-		adaptParamsForList()
-		List<HmisEquipmentType> types = hmisEquipmentTypeService.searchHmisEquipmentType(params['q'],params)
-		if(request.xhr)
-			this.ajaxModel(types,params['q'])
-		else {
-			render(view:"/entity/list",model:model(types) << [
-				template:"hmisEquipmentType/hmisEquipmentTypeList",
-				listTop:"hmisEquipmentType/listTop"
-			
-			])
-		}
-	}
-
-	def getAjaxData = {
-		List<HmisEquipmentType> types = hmisEquipmentTypeService.searchHmisEquipmentType(params['term'],[:])
-		render(contentType:"text/json") {
-			elements = array {
-				types.each { type ->
-					elem (
-							key: type.id,
-							value: type.names + ' - ['+type.code+']' + ' - ['+type.equipmentTypes+']'
-							)
-				}
-			}
-		}
-	}	
+	
 }

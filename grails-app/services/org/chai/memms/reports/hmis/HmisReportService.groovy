@@ -34,7 +34,9 @@ import org.chai.location.DataLocationType;
 import org.chai.location.DataLocation;
 import org.chai.memms.util.Utils;
 import org.chai.memms.inventory.EquipmentService;
-import org.chai.location.DataLocation
+import org.chai.location.DataLocation;
+import org.chai.memms.inventory.Equipment;
+import org.chai.memms.inventory.EquipmentStatus.Status;
 
 /**
  * @author Eric Dusabe, Jean Kahigiso M.
@@ -48,8 +50,26 @@ class HmisReportService {
 	def grailsApplication
 	def equipmentService
 
+	private def generateHmisReportName() {
+		def today = new Date()
+		def map
+		if(today.month == 4 && today.day == 1 ) 
+			map = ["periodCode":"Q1-"+today.year, "names":["en":"First Quarter", "fr":"Premier Trimestre"]]
+		else if(today.month == 7 && today.day == 1 ) 
+			map = ["periodCode":"Q2-"+today.year, "names":["en":"Second Quarter", "fr":"Deuxieme Trimestre"]]
+		else if(today.month == 10 && today.day == 1 ) 
+			map = ["periodCode":"Q3-"+today.year, "names":["en":"Third Quarter", "fr":"Troisieme Trimestre"]]
+		else if(today.month == 1 && today.day == 1 )
+			map = ["periodCode":"Q4-"+today.year,"names":[ "en":"Fourth Quarter", "fr":"Quatrieme Trimestre"]]
+		else
+			map = ["periodCode":today.toString(), "names":["en":"Report from " + today.toString(),"fr":"Rapport du " + today.toString()]]
+		
+		return map
+	}
+
 	public def generateHmisReport() {
-		def hmisReport = newHmisReport("Q1-2014", ["en":"First Quarter", "fr":"Premier Trimestre"])
+		def reportMap = generateHmisReportName()
+		def hmisReport = newHmisReport(reportMap.get("periodCode"), reportMap.get("names"))
 		def dataLocations = equipmentService.getAllDataLocationsWithEquipment()
 		def hmisEquipmentTypes = HmisEquipmentType.list()
 
