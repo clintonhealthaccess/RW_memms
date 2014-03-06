@@ -259,8 +259,8 @@
                   </div>
                 </li>
               </shiro:hasPermission>
-              <shiro:hasPermission permission="menu:managehelp">
-                <li><a href="#"><g:message code="header.manage.help.label"/></a></li>
+              <shiro:hasPermission permission="menu:task">
+                <li><a href="${createLink(controller: 'task', action:'list')}"><g:message code="task.label"/></a></li>
               </shiro:hasPermission>
             </ul>
           </li>

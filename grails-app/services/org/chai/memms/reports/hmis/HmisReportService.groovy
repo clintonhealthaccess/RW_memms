@@ -52,7 +52,7 @@ class HmisReportService {
 		def hmisReport = newHmisReport("Q1-2014", ["en":"First Quarter", "fr":"Premier Trimestre"])
 		def dataLocations = equipmentService.getAllDataLocationsWithEquipment()
 		def hmisEquipmentTypes = HmisEquipmentType.list()
-		
+
 		if(hmisReport) {
 			for(def dataLocation: dataLocations) {
 				for(def hmisEquipmentType: hmisEquipmentTypes) {
@@ -76,11 +76,6 @@ class HmisReportService {
 				}	
 			}
 		}
-	}
-
-
-	private def getQuartPeriod(){
-		def toDay = new Date();
 	}
 	
 	private def newHmisReport(def code, def names) {

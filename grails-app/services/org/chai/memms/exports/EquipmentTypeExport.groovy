@@ -70,10 +70,15 @@ public class EquipmentTypeExport implements Exporter {
 			}
 			progress.setMaximum(EquipmentType.count())
 			for(EquipmentType equipmentType: EquipmentType.list()){
-				if (log.isDebugEnabled()) log.debug(" exportEquipmentType values code:"+equipmentType.code+", names:([en: "+equipmentType.getNames(new Locale("en"))+"], [fr: "+equipmentType.getNames(new Locale("fr"))+"]), "
-					+", descriptions:([en: "+equipmentType.getDescriptions(new Locale("en"))+"], [fr: "+equipmentType.getDescriptions(new Locale("fr"))+"]), Observation: "+equipmentType.observation);
-				List<String> line = [equipmentType.code,equipmentType.getNames(new Locale("en")),equipmentType.getNames(new Locale("fr")),
-					equipmentType.getDescriptions(new Locale("en")),equipmentType.getDescriptions(new Locale("fr")),equipmentType.observation]
+				List<String> line = 
+				[
+					equipmentType.code,
+					(equipmentType.getNames(new Locale("en")))?equipmentType.getNames(new Locale("en")):"",
+					(equipmentType.getNames(new Locale("fr")))?equipmentType.getNames(new Locale("fr")):"",
+					(equipmentType.getDescriptions(new Locale("en")))?equipmentType.getDescriptions(new Locale("en")):"",
+					(equipmentType.getDescriptions(new Locale("fr")))?equipmentType.getDescriptions(new Locale("fr")):"",
+					equipmentType.observation
+				]
 				writer.write(line)
 				progress.incrementProgress()
 			}
