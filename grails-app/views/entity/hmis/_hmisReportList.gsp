@@ -7,11 +7,7 @@
 			<g:sortableColumn property="${i18nField(field: 'names')}" params="[q:q]" title="${message(code: 'entity.name.label')}" />
 			<g:sortableColumn property="dateCreated" params="[q:q]" title="${message(code: 'entity.dateCreated.label')}" />
 			<th><g:message code="number.of.hmis.facility.reports.label"/></th>
-			<th>
-				<a href="${createLinkWithTargetURI(controller:'hmisReport', action:'generateReport', params:['exported': 'true'])}" class="next gray medium"> 
-					<g:message code="generate.report" />
-				</a>
-			</th>
+			<th/>
 		</tr>
 	</thead>
 	<tbody>
@@ -41,10 +37,9 @@
 					${type.hmisFacilityReports.size()}
 				</td>
 				<td>
-
-			<!-- <input type="hidden" name="exported" value="true" />
-			<button type="submit">Export</button> -->
-					
+					<a href="${createLinkWithTargetURI(controller:'hmisReport', action:'export', params:['id': type.id])}" class="next gray medium"> 
+						<g:message code="generate.report" />
+					</a>
 				</td>
 			</tr>
 		</g:each>

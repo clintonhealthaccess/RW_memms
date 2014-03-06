@@ -1,0 +1,709 @@
+Facility code,Facility name_en,Facility name_fr,hmis equipment type name_en,hmis equipment type name_fr,hmis equipment type code,hmis equipment type generated date,number of operational equipment
+49,Nyanza HD,Nyanza HD,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:02.0,1
+49,Nyanza HD,Nyanza HD,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:02.0,1
+49,Nyanza HD,Nyanza HD,Glucometer,Glucometer,AR1981,2014-03-06 17:45:02.0,0
+49,Nyanza HD,Nyanza HD,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:02.0,1
+49,Nyanza HD,Nyanza HD,HemoCue,HemoCue,AR1983,2014-03-06 17:45:02.0,0
+49,Nyanza HD,Nyanza HD,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:02.0,3
+49,Nyanza HD,Nyanza HD,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:02.0,1
+49,Nyanza HD,Nyanza HD,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:02.0,0
+49,Nyanza HD,Nyanza HD,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:03.0,3
+49,Nyanza HD,Nyanza HD,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:03.0,0
+49,Nyanza HD,Nyanza HD,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:03.0,0
+49,Nyanza HD,Nyanza HD,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:03.0,5
+253,Bushenge HD,Bushenge HD,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:03.0,2
+253,Bushenge HD,Bushenge HD,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:03.0,1
+253,Bushenge HD,Bushenge HD,Glucometer,Glucometer,AR1981,2014-03-06 17:45:03.0,1
+253,Bushenge HD,Bushenge HD,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:03.0,2
+253,Bushenge HD,Bushenge HD,HemoCue,HemoCue,AR1983,2014-03-06 17:45:03.0,0
+253,Bushenge HD,Bushenge HD,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:03.0,3
+253,Bushenge HD,Bushenge HD,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:03.0,0
+253,Bushenge HD,Bushenge HD,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:03.0,0
+253,Bushenge HD,Bushenge HD,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:03.0,0
+253,Bushenge HD,Bushenge HD,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:03.0,0
+253,Bushenge HD,Bushenge HD,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:03.0,0
+253,Bushenge HD,Bushenge HD,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:03.0,6
+322,Butaro HD,Butaro HD,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:03.0,0
+322,Butaro HD,Butaro HD,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:03.0,1
+322,Butaro HD,Butaro HD,Glucometer,Glucometer,AR1981,2014-03-06 17:45:03.0,0
+322,Butaro HD,Butaro HD,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:03.0,0
+322,Butaro HD,Butaro HD,HemoCue,HemoCue,AR1983,2014-03-06 17:45:03.0,0
+322,Butaro HD,Butaro HD,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:03.0,0
+322,Butaro HD,Butaro HD,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:03.0,0
+322,Butaro HD,Butaro HD,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:03.0,0
+322,Butaro HD,Butaro HD,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:03.0,2
+322,Butaro HD,Butaro HD,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:03.0,0
+322,Butaro HD,Butaro HD,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:03.0,0
+322,Butaro HD,Butaro HD,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:03.0,6
+116,Gitwe HD,Gitwe HD,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:03.0,0
+116,Gitwe HD,Gitwe HD,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:03.0,0
+116,Gitwe HD,Gitwe HD,Glucometer,Glucometer,AR1981,2014-03-06 17:45:03.0,2
+116,Gitwe HD,Gitwe HD,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:03.0,1
+116,Gitwe HD,Gitwe HD,HemoCue,HemoCue,AR1983,2014-03-06 17:45:03.0,0
+116,Gitwe HD,Gitwe HD,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:03.0,1
+116,Gitwe HD,Gitwe HD,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:03.0,1
+116,Gitwe HD,Gitwe HD,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:03.0,0
+116,Gitwe HD,Gitwe HD,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:03.0,0
+116,Gitwe HD,Gitwe HD,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:04.0,0
+116,Gitwe HD,Gitwe HD,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:04.0,0
+116,Gitwe HD,Gitwe HD,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:04.0,10
+161,Kibuye HC,Kibuye HC,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:04.0,0
+161,Kibuye HC,Kibuye HC,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:04.0,0
+161,Kibuye HC,Kibuye HC,Glucometer,Glucometer,AR1981,2014-03-06 17:45:04.0,0
+161,Kibuye HC,Kibuye HC,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:04.0,0
+161,Kibuye HC,Kibuye HC,HemoCue,HemoCue,AR1983,2014-03-06 17:45:04.0,0
+161,Kibuye HC,Kibuye HC,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:04.0,0
+161,Kibuye HC,Kibuye HC,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:04.0,0
+161,Kibuye HC,Kibuye HC,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:04.0,0
+161,Kibuye HC,Kibuye HC,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:04.0,1
+161,Kibuye HC,Kibuye HC,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:04.0,0
+161,Kibuye HC,Kibuye HC,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:04.0,0
+161,Kibuye HC,Kibuye HC,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:04.0,1
+162,Kibuye HD,Kibuye HD,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:04.0,0
+162,Kibuye HD,Kibuye HD,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:04.0,2
+162,Kibuye HD,Kibuye HD,Glucometer,Glucometer,AR1981,2014-03-06 17:45:04.0,0
+162,Kibuye HD,Kibuye HD,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:04.0,0
+162,Kibuye HD,Kibuye HD,HemoCue,HemoCue,AR1983,2014-03-06 17:45:04.0,0
+162,Kibuye HD,Kibuye HD,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:04.0,2
+162,Kibuye HD,Kibuye HD,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:04.0,1
+162,Kibuye HD,Kibuye HD,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:04.0,0
+162,Kibuye HD,Kibuye HD,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:04.0,2
+162,Kibuye HD,Kibuye HD,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:04.0,0
+162,Kibuye HD,Kibuye HD,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:04.0,2
+162,Kibuye HD,Kibuye HD,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:04.0,2
+336,Byumba HD,Byumba HD,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:04.0,1
+336,Byumba HD,Byumba HD,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:04.0,0
+336,Byumba HD,Byumba HD,Glucometer,Glucometer,AR1981,2014-03-06 17:45:04.0,0
+336,Byumba HD,Byumba HD,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:04.0,0
+336,Byumba HD,Byumba HD,HemoCue,HemoCue,AR1983,2014-03-06 17:45:04.0,0
+336,Byumba HD,Byumba HD,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:04.0,2
+336,Byumba HD,Byumba HD,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:04.0,0
+336,Byumba HD,Byumba HD,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:04.0,0
+336,Byumba HD,Byumba HD,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:04.0,2
+336,Byumba HD,Byumba HD,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:04.0,0
+336,Byumba HD,Byumba HD,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:05.0,0
+336,Byumba HD,Byumba HD,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:05.0,3
+406,Gahini HD,Gahini HD,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:05.0,1
+406,Gahini HD,Gahini HD,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:05.0,0
+406,Gahini HD,Gahini HD,Glucometer,Glucometer,AR1981,2014-03-06 17:45:05.0,0
+406,Gahini HD,Gahini HD,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:05.0,1
+406,Gahini HD,Gahini HD,HemoCue,HemoCue,AR1983,2014-03-06 17:45:05.0,0
+406,Gahini HD,Gahini HD,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:05.0,3
+406,Gahini HD,Gahini HD,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:05.0,0
+406,Gahini HD,Gahini HD,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:05.0,0
+406,Gahini HD,Gahini HD,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:05.0,4
+406,Gahini HD,Gahini HD,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:05.0,0
+406,Gahini HD,Gahini HD,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:05.0,0
+406,Gahini HD,Gahini HD,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:05.0,9
+103,Kigeme HD,Kigeme HD,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:05.0,0
+103,Kigeme HD,Kigeme HD,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:06.0,1
+103,Kigeme HD,Kigeme HD,Glucometer,Glucometer,AR1981,2014-03-06 17:45:06.0,0
+103,Kigeme HD,Kigeme HD,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:06.0,1
+103,Kigeme HD,Kigeme HD,HemoCue,HemoCue,AR1983,2014-03-06 17:45:06.0,0
+103,Kigeme HD,Kigeme HD,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:06.0,0
+103,Kigeme HD,Kigeme HD,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:06.0,0
+103,Kigeme HD,Kigeme HD,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:06.0,0
+103,Kigeme HD,Kigeme HD,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:06.0,1
+103,Kigeme HD,Kigeme HD,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:06.0,0
+103,Kigeme HD,Kigeme HD,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:06.0,0
+103,Kigeme HD,Kigeme HD,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:06.0,6
+245,Mibilizi HD,Mibilizi HD,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:06.0,1
+245,Mibilizi HD,Mibilizi HD,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:06.0,0
+245,Mibilizi HD,Mibilizi HD,Glucometer,Glucometer,AR1981,2014-03-06 17:45:06.0,0
+245,Mibilizi HD,Mibilizi HD,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:06.0,1
+245,Mibilizi HD,Mibilizi HD,HemoCue,HemoCue,AR1983,2014-03-06 17:45:06.0,0
+245,Mibilizi HD,Mibilizi HD,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:06.0,1
+245,Mibilizi HD,Mibilizi HD,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:06.0,0
+245,Mibilizi HD,Mibilizi HD,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:06.0,0
+245,Mibilizi HD,Mibilizi HD,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:06.0,2
+245,Mibilizi HD,Mibilizi HD,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:06.0,0
+245,Mibilizi HD,Mibilizi HD,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:06.0,0
+245,Mibilizi HD,Mibilizi HD,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:06.0,0
+227,Muhororo HD,Muhororo HD,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:06.0,3
+227,Muhororo HD,Muhororo HD,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:06.0,1
+227,Muhororo HD,Muhororo HD,Glucometer,Glucometer,AR1981,2014-03-06 17:45:06.0,0
+227,Muhororo HD,Muhororo HD,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:06.0,0
+227,Muhororo HD,Muhororo HD,HemoCue,HemoCue,AR1983,2014-03-06 17:45:06.0,0
+227,Muhororo HD,Muhororo HD,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:06.0,4
+227,Muhororo HD,Muhororo HD,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:06.0,1
+227,Muhororo HD,Muhororo HD,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:06.0,0
+227,Muhororo HD,Muhororo HD,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:06.0,3
+227,Muhororo HD,Muhororo HD,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:06.0,0
+227,Muhororo HD,Muhororo HD,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:07.0,0
+227,Muhororo HD,Muhororo HD,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:07.0,5
+199,Gisenyi HD,Gisenyi HD,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:07.0,4
+199,Gisenyi HD,Gisenyi HD,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:07.0,1
+199,Gisenyi HD,Gisenyi HD,Glucometer,Glucometer,AR1981,2014-03-06 17:45:07.0,0
+199,Gisenyi HD,Gisenyi HD,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:07.0,0
+199,Gisenyi HD,Gisenyi HD,HemoCue,HemoCue,AR1983,2014-03-06 17:45:07.0,0
+199,Gisenyi HD,Gisenyi HD,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:07.0,4
+199,Gisenyi HD,Gisenyi HD,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:07.0,0
+199,Gisenyi HD,Gisenyi HD,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:07.0,2
+199,Gisenyi HD,Gisenyi HD,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:07.0,4
+199,Gisenyi HD,Gisenyi HD,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:07.0,0
+199,Gisenyi HD,Gisenyi HD,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:07.0,0
+199,Gisenyi HD,Gisenyi HD,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:07.0,5
+169,Mugonero HD,Mugonero HD,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:07.0,1
+169,Mugonero HD,Mugonero HD,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:07.0,0
+169,Mugonero HD,Mugonero HD,Glucometer,Glucometer,AR1981,2014-03-06 17:45:07.0,0
+169,Mugonero HD,Mugonero HD,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:07.0,0
+169,Mugonero HD,Mugonero HD,HemoCue,HemoCue,AR1983,2014-03-06 17:45:07.0,0
+169,Mugonero HD,Mugonero HD,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:07.0,1
+169,Mugonero HD,Mugonero HD,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:07.0,0
+169,Mugonero HD,Mugonero HD,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:07.0,0
+169,Mugonero HD,Mugonero HD,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:07.0,1
+169,Mugonero HD,Mugonero HD,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:07.0,0
+169,Mugonero HD,Mugonero HD,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:07.0,1
+169,Mugonero HD,Mugonero HD,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:07.0,2
+163,Kirambo CS,Kirambo CS,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:07.0,1
+163,Kirambo CS,Kirambo CS,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:07.0,0
+163,Kirambo CS,Kirambo CS,Glucometer,Glucometer,AR1981,2014-03-06 17:45:07.0,0
+163,Kirambo CS,Kirambo CS,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:07.0,0
+163,Kirambo CS,Kirambo CS,HemoCue,HemoCue,AR1983,2014-03-06 17:45:08.0,0
+163,Kirambo CS,Kirambo CS,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:08.0,0
+163,Kirambo CS,Kirambo CS,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:08.0,0
+163,Kirambo CS,Kirambo CS,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:08.0,0
+163,Kirambo CS,Kirambo CS,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:08.0,3
+163,Kirambo CS,Kirambo CS,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:08.0,0
+163,Kirambo CS,Kirambo CS,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:08.0,0
+163,Kirambo CS,Kirambo CS,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:08.0,0
+225,Kabaya HD,Kabaya HD,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:08.0,5
+225,Kabaya HD,Kabaya HD,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:08.0,2
+225,Kabaya HD,Kabaya HD,Glucometer,Glucometer,AR1981,2014-03-06 17:45:08.0,1
+225,Kabaya HD,Kabaya HD,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:08.0,0
+225,Kabaya HD,Kabaya HD,HemoCue,HemoCue,AR1983,2014-03-06 17:45:08.0,0
+225,Kabaya HD,Kabaya HD,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:08.0,2
+225,Kabaya HD,Kabaya HD,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:08.0,0
+225,Kabaya HD,Kabaya HD,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:08.0,0
+225,Kabaya HD,Kabaya HD,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:08.0,5
+225,Kabaya HD,Kabaya HD,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:08.0,0
+225,Kabaya HD,Kabaya HD,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:08.0,0
+225,Kabaya HD,Kabaya HD,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:08.0,11
+101,Kaduha HD,Kaduha HD,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:08.0,3
+101,Kaduha HD,Kaduha HD,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:08.0,4
+101,Kaduha HD,Kaduha HD,Glucometer,Glucometer,AR1981,2014-03-06 17:45:08.0,3
+101,Kaduha HD,Kaduha HD,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:08.0,0
+101,Kaduha HD,Kaduha HD,HemoCue,HemoCue,AR1983,2014-03-06 17:45:08.0,0
+101,Kaduha HD,Kaduha HD,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:08.0,2
+101,Kaduha HD,Kaduha HD,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:08.0,1
+101,Kaduha HD,Kaduha HD,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:08.0,0
+101,Kaduha HD,Kaduha HD,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:08.0,6
+101,Kaduha HD,Kaduha HD,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:08.0,0
+101,Kaduha HD,Kaduha HD,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:09.0,0
+101,Kaduha HD,Kaduha HD,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:09.0,12
+240,Gihundwe CS,Gihundwe CS,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:09.0,0
+240,Gihundwe CS,Gihundwe CS,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:09.0,0
+240,Gihundwe CS,Gihundwe CS,Glucometer,Glucometer,AR1981,2014-03-06 17:45:09.0,0
+240,Gihundwe CS,Gihundwe CS,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:09.0,0
+240,Gihundwe CS,Gihundwe CS,HemoCue,HemoCue,AR1983,2014-03-06 17:45:09.0,0
+240,Gihundwe CS,Gihundwe CS,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:09.0,0
+240,Gihundwe CS,Gihundwe CS,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:09.0,0
+240,Gihundwe CS,Gihundwe CS,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:09.0,0
+240,Gihundwe CS,Gihundwe CS,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:09.0,0
+240,Gihundwe CS,Gihundwe CS,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:09.0,0
+240,Gihundwe CS,Gihundwe CS,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:09.0,0
+240,Gihundwe CS,Gihundwe CS,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:09.0,0
+241,Gihundwe HD,Gihundwe HD,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:09.0,0
+241,Gihundwe HD,Gihundwe HD,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:09.0,0
+241,Gihundwe HD,Gihundwe HD,Glucometer,Glucometer,AR1981,2014-03-06 17:45:09.0,0
+241,Gihundwe HD,Gihundwe HD,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:09.0,0
+241,Gihundwe HD,Gihundwe HD,HemoCue,HemoCue,AR1983,2014-03-06 17:45:09.0,0
+241,Gihundwe HD,Gihundwe HD,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:09.0,1
+241,Gihundwe HD,Gihundwe HD,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:09.0,0
+241,Gihundwe HD,Gihundwe HD,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:09.0,0
+241,Gihundwe HD,Gihundwe HD,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:09.0,3
+241,Gihundwe HD,Gihundwe HD,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:09.0,0
+241,Gihundwe HD,Gihundwe HD,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:09.0,0
+241,Gihundwe HD,Gihundwe HD,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:10.0,7
+262,Kibogora HD,Kibogora HD,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:10.0,0
+262,Kibogora HD,Kibogora HD,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:10.0,0
+262,Kibogora HD,Kibogora HD,Glucometer,Glucometer,AR1981,2014-03-06 17:45:10.0,0
+262,Kibogora HD,Kibogora HD,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:10.0,0
+262,Kibogora HD,Kibogora HD,HemoCue,HemoCue,AR1983,2014-03-06 17:45:10.0,0
+262,Kibogora HD,Kibogora HD,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:10.0,0
+262,Kibogora HD,Kibogora HD,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:10.0,0
+262,Kibogora HD,Kibogora HD,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:10.0,0
+262,Kibogora HD,Kibogora HD,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:10.0,0
+262,Kibogora HD,Kibogora HD,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:10.0,0
+262,Kibogora HD,Kibogora HD,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:10.0,0
+262,Kibogora HD,Kibogora HD,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:10.0,0
+61,Kibilizi HD,Kibilizi HD,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:10.0,1
+61,Kibilizi HD,Kibilizi HD,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:10.0,0
+61,Kibilizi HD,Kibilizi HD,Glucometer,Glucometer,AR1981,2014-03-06 17:45:10.0,0
+61,Kibilizi HD,Kibilizi HD,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:10.0,0
+61,Kibilizi HD,Kibilizi HD,HemoCue,HemoCue,AR1983,2014-03-06 17:45:10.0,0
+61,Kibilizi HD,Kibilizi HD,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:10.0,1
+61,Kibilizi HD,Kibilizi HD,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:10.0,0
+61,Kibilizi HD,Kibilizi HD,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:10.0,0
+61,Kibilizi HD,Kibilizi HD,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:10.0,2
+61,Kibilizi HD,Kibilizi HD,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:11.0,0
+61,Kibilizi HD,Kibilizi HD,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:11.0,0
+61,Kibilizi HD,Kibilizi HD,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:11.0,4
+436,Kibungo HD,Kibungo HD,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:11.0,0
+436,Kibungo HD,Kibungo HD,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:11.0,0
+436,Kibungo HD,Kibungo HD,Glucometer,Glucometer,AR1981,2014-03-06 17:45:11.0,0
+436,Kibungo HD,Kibungo HD,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:11.0,0
+436,Kibungo HD,Kibungo HD,HemoCue,HemoCue,AR1983,2014-03-06 17:45:11.0,0
+436,Kibungo HD,Kibungo HD,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:11.0,1
+436,Kibungo HD,Kibungo HD,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:11.0,0
+436,Kibungo HD,Kibungo HD,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:11.0,0
+436,Kibungo HD,Kibungo HD,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:11.0,2
+436,Kibungo HD,Kibungo HD,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:11.0,0
+436,Kibungo HD,Kibungo HD,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:11.0,2
+436,Kibungo HD,Kibungo HD,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:11.0,6
+365,Rwamagana HD,Rwamagana HD,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:11.0,2
+365,Rwamagana HD,Rwamagana HD,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:11.0,1
+365,Rwamagana HD,Rwamagana HD,Glucometer,Glucometer,AR1981,2014-03-06 17:45:11.0,0
+365,Rwamagana HD,Rwamagana HD,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:11.0,0
+365,Rwamagana HD,Rwamagana HD,HemoCue,HemoCue,AR1983,2014-03-06 17:45:11.0,0
+365,Rwamagana HD,Rwamagana HD,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:11.0,2
+365,Rwamagana HD,Rwamagana HD,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:11.0,1
+365,Rwamagana HD,Rwamagana HD,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:12.0,0
+365,Rwamagana HD,Rwamagana HD,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:12.0,3
+365,Rwamagana HD,Rwamagana HD,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:12.0,0
+365,Rwamagana HD,Rwamagana HD,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:12.0,0
+365,Rwamagana HD,Rwamagana HD,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:12.0,11
+3,CHK/CHUK HNR,CHK/CHUK HNR,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:12.0,0
+3,CHK/CHUK HNR,CHK/CHUK HNR,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:12.0,0
+3,CHK/CHUK HNR,CHK/CHUK HNR,Glucometer,Glucometer,AR1981,2014-03-06 17:45:12.0,0
+3,CHK/CHUK HNR,CHK/CHUK HNR,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:12.0,0
+3,CHK/CHUK HNR,CHK/CHUK HNR,HemoCue,HemoCue,AR1983,2014-03-06 17:45:12.0,0
+3,CHK/CHUK HNR,CHK/CHUK HNR,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:12.0,0
+3,CHK/CHUK HNR,CHK/CHUK HNR,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:13.0,0
+3,CHK/CHUK HNR,CHK/CHUK HNR,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:13.0,0
+3,CHK/CHUK HNR,CHK/CHUK HNR,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:13.0,0
+3,CHK/CHUK HNR,CHK/CHUK HNR,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:13.0,0
+3,CHK/CHUK HNR,CHK/CHUK HNR,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:13.0,0
+3,CHK/CHUK HNR,CHK/CHUK HNR,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:13.0,0
+22,Kibagabaga HD,Kibagabaga HD,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:13.0,2
+22,Kibagabaga HD,Kibagabaga HD,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:13.0,0
+22,Kibagabaga HD,Kibagabaga HD,Glucometer,Glucometer,AR1981,2014-03-06 17:45:13.0,0
+22,Kibagabaga HD,Kibagabaga HD,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:13.0,0
+22,Kibagabaga HD,Kibagabaga HD,HemoCue,HemoCue,AR1983,2014-03-06 17:45:13.0,0
+22,Kibagabaga HD,Kibagabaga HD,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:13.0,3
+22,Kibagabaga HD,Kibagabaga HD,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:13.0,1
+22,Kibagabaga HD,Kibagabaga HD,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:13.0,0
+22,Kibagabaga HD,Kibagabaga HD,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:13.0,1
+22,Kibagabaga HD,Kibagabaga HD,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:13.0,0
+22,Kibagabaga HD,Kibagabaga HD,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:13.0,0
+22,Kibagabaga HD,Kibagabaga HD,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:13.0,6
+424,Kirehe HD,Kirehe HD,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:14.0,3
+424,Kirehe HD,Kirehe HD,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:14.0,3
+424,Kirehe HD,Kirehe HD,Glucometer,Glucometer,AR1981,2014-03-06 17:45:14.0,1
+424,Kirehe HD,Kirehe HD,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:14.0,1
+424,Kirehe HD,Kirehe HD,HemoCue,HemoCue,AR1983,2014-03-06 17:45:14.0,0
+424,Kirehe HD,Kirehe HD,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:14.0,3
+424,Kirehe HD,Kirehe HD,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:14.0,0
+424,Kirehe HD,Kirehe HD,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:14.0,0
+424,Kirehe HD,Kirehe HD,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:14.0,3
+424,Kirehe HD,Kirehe HD,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:14.0,0
+424,Kirehe HD,Kirehe HD,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:14.0,0
+424,Kirehe HD,Kirehe HD,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:14.0,7
+395,Kiziguro HD,Kiziguro HD,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:14.0,2
+395,Kiziguro HD,Kiziguro HD,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:14.0,0
+395,Kiziguro HD,Kiziguro HD,Glucometer,Glucometer,AR1981,2014-03-06 17:45:14.0,0
+395,Kiziguro HD,Kiziguro HD,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:14.0,0
+395,Kiziguro HD,Kiziguro HD,HemoCue,HemoCue,AR1983,2014-03-06 17:45:14.0,0
+395,Kiziguro HD,Kiziguro HD,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:14.0,3
+395,Kiziguro HD,Kiziguro HD,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:14.0,0
+395,Kiziguro HD,Kiziguro HD,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:14.0,0
+395,Kiziguro HD,Kiziguro HD,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:14.0,2
+395,Kiziguro HD,Kiziguro HD,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:15.0,0
+395,Kiziguro HD,Kiziguro HD,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:15.0,0
+395,Kiziguro HD,Kiziguro HD,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:15.0,4
+54,Gakoma HD,Gakoma HD,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:15.0,3
+54,Gakoma HD,Gakoma HD,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:15.0,0
+54,Gakoma HD,Gakoma HD,Glucometer,Glucometer,AR1981,2014-03-06 17:45:15.0,0
+54,Gakoma HD,Gakoma HD,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:15.0,3
+54,Gakoma HD,Gakoma HD,HemoCue,HemoCue,AR1983,2014-03-06 17:45:15.0,0
+54,Gakoma HD,Gakoma HD,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:15.0,3
+54,Gakoma HD,Gakoma HD,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:15.0,0
+54,Gakoma HD,Gakoma HD,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:15.0,0
+54,Gakoma HD,Gakoma HD,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:15.0,1
+54,Gakoma HD,Gakoma HD,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:15.0,0
+54,Gakoma HD,Gakoma HD,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:15.0,0
+54,Gakoma HD,Gakoma HD,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:15.0,0
+194,Rutsiro HC,Rutsiro HC,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:15.0,0
+194,Rutsiro HC,Rutsiro HC,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:15.0,0
+194,Rutsiro HC,Rutsiro HC,Glucometer,Glucometer,AR1981,2014-03-06 17:45:15.0,0
+194,Rutsiro HC,Rutsiro HC,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:15.0,0
+194,Rutsiro HC,Rutsiro HC,HemoCue,HemoCue,AR1983,2014-03-06 17:45:15.0,0
+194,Rutsiro HC,Rutsiro HC,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:16.0,1
+194,Rutsiro HC,Rutsiro HC,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:16.0,0
+194,Rutsiro HC,Rutsiro HC,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:16.0,0
+194,Rutsiro HC,Rutsiro HC,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:16.0,0
+194,Rutsiro HC,Rutsiro HC,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:16.0,0
+194,Rutsiro HC,Rutsiro HC,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:16.0,0
+194,Rutsiro HC,Rutsiro HC,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:16.0,0
+282,Rutongo HD,Rutongo HD,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:16.0,0
+282,Rutongo HD,Rutongo HD,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:16.0,1
+282,Rutongo HD,Rutongo HD,Glucometer,Glucometer,AR1981,2014-03-06 17:45:16.0,0
+282,Rutongo HD,Rutongo HD,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:16.0,0
+282,Rutongo HD,Rutongo HD,HemoCue,HemoCue,AR1983,2014-03-06 17:45:16.0,0
+282,Rutongo HD,Rutongo HD,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:16.0,1
+282,Rutongo HD,Rutongo HD,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:16.0,1
+282,Rutongo HD,Rutongo HD,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:16.0,0
+282,Rutongo HD,Rutongo HD,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:16.0,0
+282,Rutongo HD,Rutongo HD,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:16.0,0
+282,Rutongo HD,Rutongo HD,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:16.0,0
+282,Rutongo HD,Rutongo HD,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:16.0,1
+8,Muhima HD,Muhima HD,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:16.0,0
+8,Muhima HD,Muhima HD,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:16.0,0
+8,Muhima HD,Muhima HD,Glucometer,Glucometer,AR1981,2014-03-06 17:45:17.0,0
+8,Muhima HD,Muhima HD,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:17.0,0
+8,Muhima HD,Muhima HD,HemoCue,HemoCue,AR1983,2014-03-06 17:45:17.0,0
+8,Muhima HD,Muhima HD,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:17.0,0
+8,Muhima HD,Muhima HD,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:17.0,0
+8,Muhima HD,Muhima HD,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:17.0,0
+8,Muhima HD,Muhima HD,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:17.0,0
+8,Muhima HD,Muhima HD,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:17.0,0
+8,Muhima HD,Muhima HD,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:17.0,0
+8,Muhima HD,Muhima HD,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:17.0,0
+317,Ruhengeri HD,Ruhengeri HD,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:17.0,0
+317,Ruhengeri HD,Ruhengeri HD,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:17.0,5
+317,Ruhengeri HD,Ruhengeri HD,Glucometer,Glucometer,AR1981,2014-03-06 17:45:17.0,0
+317,Ruhengeri HD,Ruhengeri HD,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:17.0,0
+317,Ruhengeri HD,Ruhengeri HD,HemoCue,HemoCue,AR1983,2014-03-06 17:45:17.0,0
+317,Ruhengeri HD,Ruhengeri HD,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:17.0,1
+317,Ruhengeri HD,Ruhengeri HD,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:17.0,2
+317,Ruhengeri HD,Ruhengeri HD,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:17.0,0
+317,Ruhengeri HD,Ruhengeri HD,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:18.0,10
+317,Ruhengeri HD,Ruhengeri HD,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:18.0,0
+317,Ruhengeri HD,Ruhengeri HD,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:18.0,0
+317,Ruhengeri HD,Ruhengeri HD,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:18.0,0
+74,Munini HD,Munini HD,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:18.0,2
+74,Munini HD,Munini HD,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:18.0,1
+74,Munini HD,Munini HD,Glucometer,Glucometer,AR1981,2014-03-06 17:45:18.0,0
+74,Munini HD,Munini HD,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:18.0,0
+74,Munini HD,Munini HD,HemoCue,HemoCue,AR1983,2014-03-06 17:45:18.0,0
+74,Munini HD,Munini HD,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:18.0,0
+74,Munini HD,Munini HD,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:18.0,0
+74,Munini HD,Munini HD,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:18.0,0
+74,Munini HD,Munini HD,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:18.0,1
+74,Munini HD,Munini HD,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:18.0,0
+74,Munini HD,Munini HD,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:18.0,0
+74,Munini HD,Munini HD,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:18.0,9
+165,Kirinda HD,Kirinda HD,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:18.0,4
+165,Kirinda HD,Kirinda HD,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:18.0,3
+165,Kirinda HD,Kirinda HD,Glucometer,Glucometer,AR1981,2014-03-06 17:45:18.0,0
+165,Kirinda HD,Kirinda HD,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:19.0,1
+165,Kirinda HD,Kirinda HD,HemoCue,HemoCue,AR1983,2014-03-06 17:45:19.0,0
+165,Kirinda HD,Kirinda HD,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:19.0,6
+165,Kirinda HD,Kirinda HD,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:19.0,1
+165,Kirinda HD,Kirinda HD,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:19.0,0
+165,Kirinda HD,Kirinda HD,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:19.0,5
+165,Kirinda HD,Kirinda HD,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:19.0,0
+165,Kirinda HD,Kirinda HD,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:19.0,0
+165,Kirinda HD,Kirinda HD,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:19.0,9
+190,Murunda HD,Murunda HD,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:19.0,0
+190,Murunda HD,Murunda HD,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:19.0,1
+190,Murunda HD,Murunda HD,Glucometer,Glucometer,AR1981,2014-03-06 17:45:19.0,0
+190,Murunda HD,Murunda HD,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:19.0,1
+190,Murunda HD,Murunda HD,HemoCue,HemoCue,AR1983,2014-03-06 17:45:19.0,0
+190,Murunda HD,Murunda HD,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:19.0,2
+190,Murunda HD,Murunda HD,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:19.0,0
+190,Murunda HD,Murunda HD,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:19.0,0
+190,Murunda HD,Murunda HD,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:19.0,4
+190,Murunda HD,Murunda HD,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:20.0,0
+190,Murunda HD,Murunda HD,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:20.0,0
+190,Murunda HD,Murunda HD,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:20.0,2
+170,Mukungu CS,Mukungu CS,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:20.0,1
+170,Mukungu CS,Mukungu CS,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:20.0,0
+170,Mukungu CS,Mukungu CS,Glucometer,Glucometer,AR1981,2014-03-06 17:45:20.0,0
+170,Mukungu CS,Mukungu CS,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:20.0,1
+170,Mukungu CS,Mukungu CS,HemoCue,HemoCue,AR1983,2014-03-06 17:45:20.0,0
+170,Mukungu CS,Mukungu CS,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:20.0,1
+170,Mukungu CS,Mukungu CS,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:20.0,0
+170,Mukungu CS,Mukungu CS,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:20.0,0
+170,Mukungu CS,Mukungu CS,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:20.0,3
+170,Mukungu CS,Mukungu CS,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:20.0,0
+170,Mukungu CS,Mukungu CS,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:20.0,0
+170,Mukungu CS,Mukungu CS,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:20.0,2
+297,Nemba HD,Nemba HD,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:21.0,2
+297,Nemba HD,Nemba HD,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:21.0,2
+297,Nemba HD,Nemba HD,Glucometer,Glucometer,AR1981,2014-03-06 17:45:21.0,0
+297,Nemba HD,Nemba HD,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:21.0,1
+297,Nemba HD,Nemba HD,HemoCue,HemoCue,AR1983,2014-03-06 17:45:21.0,0
+297,Nemba HD,Nemba HD,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:21.0,2
+297,Nemba HD,Nemba HD,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:21.0,1
+297,Nemba HD,Nemba HD,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:21.0,0
+297,Nemba HD,Nemba HD,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:21.0,6
+297,Nemba HD,Nemba HD,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:21.0,0
+297,Nemba HD,Nemba HD,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:21.0,0
+297,Nemba HD,Nemba HD,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:21.0,2
+398,Ngarama HD,Ngarama HD,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:21.0,4
+398,Ngarama HD,Ngarama HD,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:22.0,1
+398,Ngarama HD,Ngarama HD,Glucometer,Glucometer,AR1981,2014-03-06 17:45:22.0,0
+398,Ngarama HD,Ngarama HD,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:22.0,2
+398,Ngarama HD,Ngarama HD,HemoCue,HemoCue,AR1983,2014-03-06 17:45:22.0,0
+398,Ngarama HD,Ngarama HD,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:22.0,4
+398,Ngarama HD,Ngarama HD,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:22.0,1
+398,Ngarama HD,Ngarama HD,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:22.0,0
+398,Ngarama HD,Ngarama HD,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:22.0,2
+398,Ngarama HD,Ngarama HD,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:22.0,0
+398,Ngarama HD,Ngarama HD,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:22.0,0
+398,Ngarama HD,Ngarama HD,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:22.0,1
+85,Kabutare HD,Kabutare HD,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:23.0,4
+85,Kabutare HD,Kabutare HD,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:23.0,1
+85,Kabutare HD,Kabutare HD,Glucometer,Glucometer,AR1981,2014-03-06 17:45:23.0,0
+85,Kabutare HD,Kabutare HD,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:23.0,0
+85,Kabutare HD,Kabutare HD,HemoCue,HemoCue,AR1983,2014-03-06 17:45:23.0,0
+85,Kabutare HD,Kabutare HD,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:23.0,0
+85,Kabutare HD,Kabutare HD,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:23.0,1
+85,Kabutare HD,Kabutare HD,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:23.0,0
+85,Kabutare HD,Kabutare HD,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:23.0,7
+85,Kabutare HD,Kabutare HD,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:24.0,0
+85,Kabutare HD,Kabutare HD,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:24.0,0
+85,Kabutare HD,Kabutare HD,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:24.0,8
+380,Nyagatare HD,Nyagatare HD,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:24.0,0
+380,Nyagatare HD,Nyagatare HD,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:24.0,4
+380,Nyagatare HD,Nyagatare HD,Glucometer,Glucometer,AR1981,2014-03-06 17:45:24.0,0
+380,Nyagatare HD,Nyagatare HD,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:24.0,0
+380,Nyagatare HD,Nyagatare HD,HemoCue,HemoCue,AR1983,2014-03-06 17:45:24.0,0
+380,Nyagatare HD,Nyagatare HD,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:24.0,0
+380,Nyagatare HD,Nyagatare HD,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:24.0,1
+380,Nyagatare HD,Nyagatare HD,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:25.0,0
+380,Nyagatare HD,Nyagatare HD,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:25.0,2
+380,Nyagatare HD,Nyagatare HD,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:25.0,0
+380,Nyagatare HD,Nyagatare HD,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:25.0,0
+380,Nyagatare HD,Nyagatare HD,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:25.0,4
+133,Kabgayi HD,Kabgayi HD,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:25.0,2
+133,Kabgayi HD,Kabgayi HD,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:25.0,0
+133,Kabgayi HD,Kabgayi HD,Glucometer,Glucometer,AR1981,2014-03-06 17:45:25.0,1
+133,Kabgayi HD,Kabgayi HD,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:25.0,0
+133,Kabgayi HD,Kabgayi HD,HemoCue,HemoCue,AR1983,2014-03-06 17:45:25.0,0
+133,Kabgayi HD,Kabgayi HD,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:25.0,3
+133,Kabgayi HD,Kabgayi HD,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:25.0,3
+133,Kabgayi HD,Kabgayi HD,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:25.0,0
+133,Kabgayi HD,Kabgayi HD,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:25.0,3
+133,Kabgayi HD,Kabgayi HD,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:25.0,0
+133,Kabgayi HD,Kabgayi HD,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:25.0,0
+133,Kabgayi HD,Kabgayi HD,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:26.0,19
+454,Nyamata HD,Nyamata HD,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:26.0,3
+454,Nyamata HD,Nyamata HD,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:26.0,1
+454,Nyamata HD,Nyamata HD,Glucometer,Glucometer,AR1981,2014-03-06 17:45:26.0,1
+454,Nyamata HD,Nyamata HD,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:26.0,1
+454,Nyamata HD,Nyamata HD,HemoCue,HemoCue,AR1983,2014-03-06 17:45:26.0,0
+454,Nyamata HD,Nyamata HD,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:26.0,5
+454,Nyamata HD,Nyamata HD,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:26.0,0
+454,Nyamata HD,Nyamata HD,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:26.0,0
+454,Nyamata HD,Nyamata HD,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:26.0,4
+454,Nyamata HD,Nyamata HD,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:26.0,0
+454,Nyamata HD,Nyamata HD,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:27.0,0
+454,Nyamata HD,Nyamata HD,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:27.0,6
+156,Bubazi CS,Bubazi CS,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:27.0,0
+156,Bubazi CS,Bubazi CS,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:27.0,1
+156,Bubazi CS,Bubazi CS,Glucometer,Glucometer,AR1981,2014-03-06 17:45:27.0,0
+156,Bubazi CS,Bubazi CS,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:27.0,0
+156,Bubazi CS,Bubazi CS,HemoCue,HemoCue,AR1983,2014-03-06 17:45:27.0,0
+156,Bubazi CS,Bubazi CS,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:27.0,1
+156,Bubazi CS,Bubazi CS,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:27.0,0
+156,Bubazi CS,Bubazi CS,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:27.0,0
+156,Bubazi CS,Bubazi CS,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:27.0,1
+156,Bubazi CS,Bubazi CS,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:27.0,0
+156,Bubazi CS,Bubazi CS,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:27.0,0
+156,Bubazi CS,Bubazi CS,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:27.0,3
+174,Rubengera CS,Rubengera CS,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:27.0,1
+174,Rubengera CS,Rubengera CS,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:28.0,0
+174,Rubengera CS,Rubengera CS,Glucometer,Glucometer,AR1981,2014-03-06 17:45:28.0,0
+174,Rubengera CS,Rubengera CS,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:28.0,0
+174,Rubengera CS,Rubengera CS,HemoCue,HemoCue,AR1983,2014-03-06 17:45:28.0,0
+174,Rubengera CS,Rubengera CS,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:28.0,1
+174,Rubengera CS,Rubengera CS,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:28.0,1
+174,Rubengera CS,Rubengera CS,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:28.0,0
+174,Rubengera CS,Rubengera CS,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:28.0,4
+174,Rubengera CS,Rubengera CS,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:28.0,0
+174,Rubengera CS,Rubengera CS,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:28.0,0
+174,Rubengera CS,Rubengera CS,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:28.0,4
+175,Rufungo CS,Rufungo CS,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:28.0,1
+175,Rufungo CS,Rufungo CS,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:28.0,0
+175,Rufungo CS,Rufungo CS,Glucometer,Glucometer,AR1981,2014-03-06 17:45:28.0,0
+175,Rufungo CS,Rufungo CS,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:28.0,0
+175,Rufungo CS,Rufungo CS,HemoCue,HemoCue,AR1983,2014-03-06 17:45:29.0,0
+175,Rufungo CS,Rufungo CS,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:29.0,1
+175,Rufungo CS,Rufungo CS,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:29.0,0
+175,Rufungo CS,Rufungo CS,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:29.0,0
+175,Rufungo CS,Rufungo CS,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:29.0,1
+175,Rufungo CS,Rufungo CS,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:29.0,0
+175,Rufungo CS,Rufungo CS,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:29.0,0
+175,Rufungo CS,Rufungo CS,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:29.0,2
+126,Ruhango CS,Ruhango CS,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:29.0,0
+126,Ruhango CS,Ruhango CS,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:29.0,0
+126,Ruhango CS,Ruhango CS,Glucometer,Glucometer,AR1981,2014-03-06 17:45:29.0,0
+126,Ruhango CS,Ruhango CS,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:29.0,0
+126,Ruhango CS,Ruhango CS,HemoCue,HemoCue,AR1983,2014-03-06 17:45:29.0,0
+126,Ruhango CS,Ruhango CS,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:29.0,0
+126,Ruhango CS,Ruhango CS,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:29.0,0
+126,Ruhango CS,Ruhango CS,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:30.0,0
+126,Ruhango CS,Ruhango CS,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:30.0,0
+126,Ruhango CS,Ruhango CS,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:30.0,0
+126,Ruhango CS,Ruhango CS,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:30.0,0
+126,Ruhango CS,Ruhango CS,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:30.0,0
+153,Remera Rukoma HD,Remera Rukoma HD,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:30.0,2
+153,Remera Rukoma HD,Remera Rukoma HD,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:30.0,0
+153,Remera Rukoma HD,Remera Rukoma HD,Glucometer,Glucometer,AR1981,2014-03-06 17:45:30.0,0
+153,Remera Rukoma HD,Remera Rukoma HD,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:30.0,0
+153,Remera Rukoma HD,Remera Rukoma HD,HemoCue,HemoCue,AR1983,2014-03-06 17:45:30.0,0
+153,Remera Rukoma HD,Remera Rukoma HD,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:30.0,1
+153,Remera Rukoma HD,Remera Rukoma HD,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:30.0,0
+153,Remera Rukoma HD,Remera Rukoma HD,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:30.0,0
+153,Remera Rukoma HD,Remera Rukoma HD,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:30.0,1
+153,Remera Rukoma HD,Remera Rukoma HD,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:30.0,0
+153,Remera Rukoma HD,Remera Rukoma HD,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:30.0,0
+153,Remera Rukoma HD,Remera Rukoma HD,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:31.0,2
+302,Ruli HD,Ruli HD,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:31.0,4
+302,Ruli HD,Ruli HD,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:31.0,1
+302,Ruli HD,Ruli HD,Glucometer,Glucometer,AR1981,2014-03-06 17:45:31.0,3
+302,Ruli HD,Ruli HD,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:31.0,2
+302,Ruli HD,Ruli HD,HemoCue,HemoCue,AR1983,2014-03-06 17:45:31.0,0
+302,Ruli HD,Ruli HD,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:31.0,5
+302,Ruli HD,Ruli HD,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:31.0,0
+302,Ruli HD,Ruli HD,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:31.0,0
+302,Ruli HD,Ruli HD,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:31.0,4
+302,Ruli HD,Ruli HD,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:31.0,0
+302,Ruli HD,Ruli HD,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:31.0,0
+302,Ruli HD,Ruli HD,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:31.0,5
+350,Rushaki CS,Rushaki CS,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:31.0,0
+350,Rushaki CS,Rushaki CS,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:31.0,0
+350,Rushaki CS,Rushaki CS,Glucometer,Glucometer,AR1981,2014-03-06 17:45:31.0,0
+350,Rushaki CS,Rushaki CS,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:31.0,0
+350,Rushaki CS,Rushaki CS,HemoCue,HemoCue,AR1983,2014-03-06 17:45:32.0,0
+350,Rushaki CS,Rushaki CS,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:32.0,0
+350,Rushaki CS,Rushaki CS,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:32.0,0
+350,Rushaki CS,Rushaki CS,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:32.0,0
+350,Rushaki CS,Rushaki CS,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:32.0,0
+350,Rushaki CS,Rushaki CS,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:32.0,0
+350,Rushaki CS,Rushaki CS,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:32.0,0
+350,Rushaki CS,Rushaki CS,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:32.0,0
+462,Kiziba Camp CS,Kiziba Camp CS,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:32.0,0
+462,Kiziba Camp CS,Kiziba Camp CS,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:32.0,0
+462,Kiziba Camp CS,Kiziba Camp CS,Glucometer,Glucometer,AR1981,2014-03-06 17:45:32.0,0
+462,Kiziba Camp CS,Kiziba Camp CS,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:32.0,0
+462,Kiziba Camp CS,Kiziba Camp CS,HemoCue,HemoCue,AR1983,2014-03-06 17:45:32.0,0
+462,Kiziba Camp CS,Kiziba Camp CS,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:32.0,1
+462,Kiziba Camp CS,Kiziba Camp CS,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:32.0,0
+462,Kiziba Camp CS,Kiziba Camp CS,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:32.0,0
+462,Kiziba Camp CS,Kiziba Camp CS,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:32.0,2
+462,Kiziba Camp CS,Kiziba Camp CS,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:33.0,0
+462,Kiziba Camp CS,Kiziba Camp CS,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:33.0,0
+462,Kiziba Camp CS,Kiziba Camp CS,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:33.0,2
+172,Musango CS,Musango CS,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:33.0,0
+172,Musango CS,Musango CS,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:33.0,1
+172,Musango CS,Musango CS,Glucometer,Glucometer,AR1981,2014-03-06 17:45:33.0,0
+172,Musango CS,Musango CS,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:33.0,2
+172,Musango CS,Musango CS,HemoCue,HemoCue,AR1983,2014-03-06 17:45:33.0,0
+172,Musango CS,Musango CS,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:33.0,3
+172,Musango CS,Musango CS,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:33.0,0
+172,Musango CS,Musango CS,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:33.0,0
+172,Musango CS,Musango CS,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:33.0,1
+172,Musango CS,Musango CS,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:33.0,0
+172,Musango CS,Musango CS,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:33.0,0
+172,Musango CS,Musango CS,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:33.0,3
+417,Rwinkwavu HD,Rwinkwavu HD,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:33.0,0
+417,Rwinkwavu HD,Rwinkwavu HD,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:34.0,1
+417,Rwinkwavu HD,Rwinkwavu HD,Glucometer,Glucometer,AR1981,2014-03-06 17:45:34.0,0
+417,Rwinkwavu HD,Rwinkwavu HD,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:34.0,0
+417,Rwinkwavu HD,Rwinkwavu HD,HemoCue,HemoCue,AR1983,2014-03-06 17:45:34.0,0
+417,Rwinkwavu HD,Rwinkwavu HD,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:34.0,0
+417,Rwinkwavu HD,Rwinkwavu HD,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:34.0,0
+417,Rwinkwavu HD,Rwinkwavu HD,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:34.0,0
+417,Rwinkwavu HD,Rwinkwavu HD,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:34.0,0
+417,Rwinkwavu HD,Rwinkwavu HD,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:34.0,0
+417,Rwinkwavu HD,Rwinkwavu HD,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:34.0,0
+417,Rwinkwavu HD,Rwinkwavu HD,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:34.0,0
+319,Shingiro CS,Shingiro CS,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:34.0,0
+319,Shingiro CS,Shingiro CS,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:34.0,0
+319,Shingiro CS,Shingiro CS,Glucometer,Glucometer,AR1981,2014-03-06 17:45:34.0,0
+319,Shingiro CS,Shingiro CS,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:35.0,0
+319,Shingiro CS,Shingiro CS,HemoCue,HemoCue,AR1983,2014-03-06 17:45:35.0,0
+319,Shingiro CS,Shingiro CS,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:35.0,0
+319,Shingiro CS,Shingiro CS,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:35.0,0
+319,Shingiro CS,Shingiro CS,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:35.0,0
+319,Shingiro CS,Shingiro CS,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:35.0,0
+319,Shingiro CS,Shingiro CS,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:35.0,0
+319,Shingiro CS,Shingiro CS,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:35.0,0
+319,Shingiro CS,Shingiro CS,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:35.0,0
+222,Shyira HD,Shyira HD,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:35.0,1
+222,Shyira HD,Shyira HD,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:36.0,1
+222,Shyira HD,Shyira HD,Glucometer,Glucometer,AR1981,2014-03-06 17:45:36.0,0
+222,Shyira HD,Shyira HD,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:36.0,0
+222,Shyira HD,Shyira HD,HemoCue,HemoCue,AR1983,2014-03-06 17:45:36.0,0
+222,Shyira HD,Shyira HD,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:36.0,0
+222,Shyira HD,Shyira HD,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:36.0,0
+222,Shyira HD,Shyira HD,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:36.0,0
+222,Shyira HD,Shyira HD,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:36.0,4
+222,Shyira HD,Shyira HD,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:36.0,0
+222,Shyira HD,Shyira HD,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:36.0,0
+222,Shyira HD,Shyira HD,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:36.0,3
+159,Karongi Police CS,Karongi Police CS,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:36.0,0
+159,Karongi Police CS,Karongi Police CS,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:36.0,0
+159,Karongi Police CS,Karongi Police CS,Glucometer,Glucometer,AR1981,2014-03-06 17:45:36.0,0
+159,Karongi Police CS,Karongi Police CS,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:37.0,0
+159,Karongi Police CS,Karongi Police CS,HemoCue,HemoCue,AR1983,2014-03-06 17:45:37.0,0
+159,Karongi Police CS,Karongi Police CS,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:37.0,0
+159,Karongi Police CS,Karongi Police CS,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:37.0,0
+159,Karongi Police CS,Karongi Police CS,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:37.0,0
+159,Karongi Police CS,Karongi Police CS,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:37.0,1
+159,Karongi Police CS,Karongi Police CS,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:37.0,0
+159,Karongi Police CS,Karongi Police CS,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:37.0,0
+159,Karongi Police CS,Karongi Police CS,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:37.0,2
+82,Butare CHU HNR,Butare CHU HNR,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:37.0,0
+82,Butare CHU HNR,Butare CHU HNR,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:37.0,0
+82,Butare CHU HNR,Butare CHU HNR,Glucometer,Glucometer,AR1981,2014-03-06 17:45:37.0,0
+82,Butare CHU HNR,Butare CHU HNR,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:37.0,0
+82,Butare CHU HNR,Butare CHU HNR,HemoCue,HemoCue,AR1983,2014-03-06 17:45:37.0,0
+82,Butare CHU HNR,Butare CHU HNR,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:37.0,0
+82,Butare CHU HNR,Butare CHU HNR,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:38.0,0
+82,Butare CHU HNR,Butare CHU HNR,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:38.0,0
+82,Butare CHU HNR,Butare CHU HNR,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:38.0,0
+82,Butare CHU HNR,Butare CHU HNR,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:38.0,0
+82,Butare CHU HNR,Butare CHU HNR,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:38.0,0
+82,Butare CHU HNR,Butare CHU HNR,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:38.0,0
+14,CARAES Ndera HNR,CARAES Ndera HNR,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:38.0,0
+14,CARAES Ndera HNR,CARAES Ndera HNR,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:38.0,0
+14,CARAES Ndera HNR,CARAES Ndera HNR,Glucometer,Glucometer,AR1981,2014-03-06 17:45:38.0,0
+14,CARAES Ndera HNR,CARAES Ndera HNR,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:38.0,0
+14,CARAES Ndera HNR,CARAES Ndera HNR,HemoCue,HemoCue,AR1983,2014-03-06 17:45:38.0,0
+14,CARAES Ndera HNR,CARAES Ndera HNR,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:38.0,0
+14,CARAES Ndera HNR,CARAES Ndera HNR,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:38.0,0
+14,CARAES Ndera HNR,CARAES Ndera HNR,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:38.0,0
+14,CARAES Ndera HNR,CARAES Ndera HNR,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:39.0,0
+14,CARAES Ndera HNR,CARAES Ndera HNR,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:39.0,0
+14,CARAES Ndera HNR,CARAES Ndera HNR,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:39.0,0
+14,CARAES Ndera HNR,CARAES Ndera HNR,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:39.0,0
+Masaka DH,Masaka DH,Kisaro HC,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:39.0,2
+Masaka DH,Masaka DH,Kisaro HC,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:39.0,2
+Masaka DH,Masaka DH,Kisaro HC,Glucometer,Glucometer,AR1981,2014-03-06 17:45:39.0,0
+Masaka DH,Masaka DH,Kisaro HC,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:39.0,1
+Masaka DH,Masaka DH,Kisaro HC,HemoCue,HemoCue,AR1983,2014-03-06 17:45:39.0,0
+Masaka DH,Masaka DH,Kisaro HC,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:39.0,1
+Masaka DH,Masaka DH,Kisaro HC,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:39.0,0
+Masaka DH,Masaka DH,Kisaro HC,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:39.0,0
+Masaka DH,Masaka DH,Kisaro HC,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:39.0,2
+Masaka DH,Masaka DH,Kisaro HC,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:39.0,0
+Masaka DH,Masaka DH,Kisaro HC,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:39.0,0
+Masaka DH,Masaka DH,Kisaro HC,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:40.0,9
+596,Ruhango DH,Prison Kibungo PRIS,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:40.0,1
+596,Ruhango DH,Prison Kibungo PRIS,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:40.0,1
+596,Ruhango DH,Prison Kibungo PRIS,Glucometer,Glucometer,AR1981,2014-03-06 17:45:40.0,1
+596,Ruhango DH,Prison Kibungo PRIS,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:40.0,1
+596,Ruhango DH,Prison Kibungo PRIS,HemoCue,HemoCue,AR1983,2014-03-06 17:45:40.0,0
+596,Ruhango DH,Prison Kibungo PRIS,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:40.0,3
+596,Ruhango DH,Prison Kibungo PRIS,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:40.0,0
+596,Ruhango DH,Prison Kibungo PRIS,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:40.0,1
+596,Ruhango DH,Prison Kibungo PRIS,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:40.0,9
+596,Ruhango DH,Prison Kibungo PRIS,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:40.0,0
+596,Ruhango DH,Prison Kibungo PRIS,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:40.0,0
+596,Ruhango DH,Prison Kibungo PRIS,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:40.0,3
+659,Kinihira DH,Kageyo CS,Blood chemistry analyzer,Blood chemistry analyzer,AR1888,2014-03-06 17:45:40.0,0
+659,Kinihira DH,Kageyo CS,Vortex mixer,Vortex mixer,AR1889,2014-03-06 17:45:41.0,1
+659,Kinihira DH,Kageyo CS,Glucometer,Glucometer,AR1981,2014-03-06 17:45:41.0,0
+659,Kinihira DH,Kageyo CS,Colorimeter or haemoglobinometer,Colorimeter or haemoglobinometer,AR1982,2014-03-06 17:45:41.0,0
+659,Kinihira DH,Kageyo CS,HemoCue,HemoCue,AR1983,2014-03-06 17:45:41.0,0
+659,Kinihira DH,Kageyo CS,Haematology analyzer,Haematology analyzer,AR1984,2014-03-06 17:45:41.0,0
+659,Kinihira DH,Kageyo CS,CD4 counter,CD4 counter,AR1985,2014-03-06 17:45:41.0,1
+659,Kinihira DH,Kageyo CS,HIV antibody testing kit by ELISA,HIV antibody testing kit by ELISA,AR1986,2014-03-06 17:45:41.0,1
+659,Kinihira DH,Kageyo CS,Centrifuge,Centrifuge,AR1987,2014-03-06 17:45:41.0,6
+659,Kinihira DH,Kageyo CS,Peak flow meters,Peak flow meters,AR1988,2014-03-06 17:45:41.0,0
+659,Kinihira DH,Kageyo CS,Blood pressure apparatus_Tensiometer,Blood pressure apparatus_Tensiometer,AR2010,2014-03-06 17:45:41.0,0
+659,Kinihira DH,Kageyo CS,Refrigerator,Refrigerator,AR1989,2014-03-06 17:45:41.0,8

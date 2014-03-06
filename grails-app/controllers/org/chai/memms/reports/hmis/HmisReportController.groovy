@@ -33,6 +33,7 @@ import org.chai.memms.inventory.EquipmentType
 import org.chai.memms.security.User
 import org.apache.shiro.SecurityUtils
 import org.apache.commons.lang.math.NumberUtils
+import org.chai.task.HmisEquipmentTypeExportFilter
 
 /**
  * @author Eric Dusabe, Jean Kahigiso M.
@@ -54,13 +55,15 @@ class HmisReportController extends AbstractController {
 		hmisReportService.generateHmisReport()
 	}
 
-	if(params.exported != null){
-			def hmisReportExportTask = new HmisFacilityReport(dataLocationTypes:cmd.hmisEquipmentType,hmisEquipmentType:cmd.hmisEquipmentType,
-					numberOfOpEquipment:cmd.numberOfOpEquipment,hmisReports:cmd.hmisReports).save(failOnError: true,flush: true)
-			params.exportFilterId = equipmentExportTask.id
-			params.class = "EquipmentExportTask"
-			params.targetURI = "/hmisReport/generateReport"
+	def export = {
+		if(params.int('id')) {
+			def hmisReport = HmisReport.get(params.int('id'))
+			def hmisReportExportTask = new HmisEquipmentTypeExportFilter(hmisReport:hmisReport).save(failOnError: true,flush: true)
+			params.exportFilterId = hmisReportExportTask.id
+			params.class = "HmisEquipmentTypeTask"
+			params.targetURI = "/hmisReport/list"
 			redirect(controller: "task", action: "create", params: params)
+		}
 	}
 	
 
