@@ -60,5 +60,11 @@ class HmisReport {
 		version false 
 	}
 
+	@Override
+	public String toString() {
+		return "HmisReport [Id: " + id + " periodCode: " + periodCode +"]";
+	}
+
+
 
 }

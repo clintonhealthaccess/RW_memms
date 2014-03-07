@@ -60,4 +60,9 @@ class HmisFacilityReport {
 		version false 
 	}
 
+	@Override
+	public String toString() {
+		return "HmisFacilityReport [Id: " + id + " dataLocation: " + dataLocation + " hmisEquipmentType: "+hmisEquipmentType+"]";
+	}
+
 }

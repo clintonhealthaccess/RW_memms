@@ -34,6 +34,9 @@ import org.chai.memms.security.User
 import org.apache.shiro.SecurityUtils
 import org.apache.commons.lang.math.NumberUtils
 import org.chai.task.HmisEquipmentTypeExportFilter
+import org.joda.time.DateTime
+import org.joda.time.Instant
+
 
 /**
  * @author Eric Dusabe, Jean Kahigiso M.
@@ -52,8 +55,9 @@ class HmisReportController extends AbstractController {
 	}	
 
 	def generateReport = {
-		hmisReportService.generateHmisReport()
+		hmisReportService.generateHmisReport(new DateTime(now))
 	}
+
 
 	def export = {
 		if(params.int('id')) {
@@ -65,7 +69,6 @@ class HmisReportController extends AbstractController {
 			redirect(controller: "task", action: "create", params: params)
 		}
 	}
-	
 
 	def list = {
 		adaptParamsForList()

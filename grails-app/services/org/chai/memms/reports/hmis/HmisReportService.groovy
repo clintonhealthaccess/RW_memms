@@ -37,6 +37,8 @@ import org.chai.memms.inventory.EquipmentService;
 import org.chai.location.DataLocation;
 import org.chai.memms.inventory.Equipment;
 import org.chai.memms.inventory.EquipmentStatus.Status;
+import org.joda.time.DateTime
+import org.joda.time.Instant
 
 /**
  * @author Eric Dusabe, Jean Kahigiso M.
@@ -50,25 +52,26 @@ class HmisReportService {
 	def grailsApplication
 	def equipmentService
 
-	private def generateHmisReportName() {
-		def today = new Date()
-		def map
-		if(today.month == 4 && today.day == 1 ) 
-			map = ["periodCode":"Q1-"+today.year, "names":["en":"First Quarter", "fr":"Premier Trimestre"]]
-		else if(today.month == 7 && today.day == 1 ) 
-			map = ["periodCode":"Q2-"+today.year, "names":["en":"Second Quarter", "fr":"Deuxieme Trimestre"]]
-		else if(today.month == 10 && today.day == 1 ) 
-			map = ["periodCode":"Q3-"+today.year, "names":["en":"Third Quarter", "fr":"Troisieme Trimestre"]]
-		else if(today.month == 1 && today.day == 1 )
-			map = ["periodCode":"Q4-"+today.year,"names":[ "en":"Fourth Quarter", "fr":"Quatrieme Trimestre"]]
-		else
-			map = ["periodCode":today.toString(), "names":["en":"Report from " + today.toString(),"fr":"Rapport du " + today.toString()]]
+	public def generateHmisReportName(def jodaDate) {
 		
-		return map
+		if(log.isDebugEnabled()) log.debug("today.day: "+jodaDate.getDayOfMonth()+"  today.month: "+jodaDate.getMonthOfYear()+" today.year "+jodaDate.getYear())
+
+		if(jodaDate.getDayOfMonth() == 1){
+			if(jodaDate.getMonthOfYear() == 4) 
+				return ["periodCode":"Q1-"+jodaDate.getYear().toString(), "names":["en":"First Quarter", "fr":"Premier Trimestre"]]
+			if(jodaDate.getMonthOfYear() == 7) 
+				return ["periodCode":"Q2-"+jodaDate.getYear().toString(), "names":["en":"Second Quarter", "fr":"Deuxieme Trimestre"]]
+			if(jodaDate.getMonthOfYear() == 10) 
+				return ["periodCode":"Q3-"+jodaDate.getYear().toString(), "names":["en":"Third Quarter", "fr":"Troisieme Trimestre"]]
+			if(jodaDate.getMonthOfYear() == 1)
+				return  ["periodCode":"Q4-"+jodaDate.getYear().toString(),"names":[ "en":"Fourth Quarter", "fr":"Quatrieme Trimestre"]]
+		}
+		return ["periodCode":jodaDate.toString(), "names":["en":"Report from " + jodaDate.toString(),"fr":"Rapport du " + jodaDate.toString()]]
+
 	}
 
-	public def generateHmisReport() {
-		def reportMap = generateHmisReportName()
+	public def generateHmisReport(def dateTime) {
+		def reportMap = generateHmisReportName(dateTime)
 		def hmisReport = newHmisReport(reportMap.get("periodCode"), reportMap.get("names"))
 		def dataLocations = equipmentService.getAllDataLocationsWithEquipment()
 		def hmisEquipmentTypes = HmisEquipmentType.list()

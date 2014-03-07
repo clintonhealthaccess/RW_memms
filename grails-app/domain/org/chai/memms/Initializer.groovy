@@ -1324,7 +1324,7 @@ public class Initializer {
 		return dataLocation
 	}
 	
-	public static newHmisEquipmentType( def code, def names) {
+	public static newHmisEquipmentType(def code, def names) {
 		def hmisEqType = new HmisEquipmentType(code:code)
 		Utils.setLocaleValueInMap(hmisEqType,names,"Names")
 		return hmisEqType.save(failOnError:true)
