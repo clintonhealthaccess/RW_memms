@@ -5,8 +5,8 @@
 			<th/>
 			<g:sortableColumn property="code" params="[q:q]" title="${message(code: 'entity.code.label')}" />
 			<g:sortableColumn property="${i18nField(field: 'names')}" params="[q:q]" title="${message(code: 'entity.name.label')}" />
-			<g:sortableColumn property="dateCreated" params="[q:q]" title="${message(code: 'entity.dateCreated.label')}" />
-			<g:sortableColumn property="lastUpdated" params="[q:q]" title="${message(code: 'entity.lastUpdated.label')}" />
+			<g:sortableColumn property="dateCreated" params="[q:q]" title="${message(code: 'hmis.equipment.type.dateCreated.label')}" />
+			<g:sortableColumn property="lastUpdated" params="[q:q]" title="${message(code: 'hmis.equipment.type.lastUpdated.label')}" />
 			<th><g:message code="number.of.equipment.type.label"/></th>
 		</tr>
 	</thead>

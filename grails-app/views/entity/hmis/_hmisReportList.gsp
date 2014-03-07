@@ -5,7 +5,7 @@
 			<th/>
 			<g:sortableColumn property="code" params="[q:q]" title="${message(code: 'entity.code.label')}" />
 			<g:sortableColumn property="${i18nField(field: 'names')}" params="[q:q]" title="${message(code: 'entity.name.label')}" />
-			<g:sortableColumn property="dateCreated" params="[q:q]" title="${message(code: 'entity.dateCreated.label')}" />
+			<g:sortableColumn property="dateCreated" params="[q:q]" title="${message(code: 'hmis.report.dateCreated.label')}" />
 			<th><g:message code="number.of.hmis.facility.reports.label"/></th>
 			<th/>
 		</tr>
