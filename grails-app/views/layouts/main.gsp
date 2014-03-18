@@ -213,7 +213,7 @@
                   </a>
                 </li>
               </shiro:hasPermission>
-               <shiro:hasPermission permission="menu:hmisEquipmentType">
+               <shiro:hasPermission permission="menu:hmis">
                 <li><a href="#"><g:message code="hmis.label"/></a>
                   <div class="sub-submenu">
                     <ul class="submenu">
