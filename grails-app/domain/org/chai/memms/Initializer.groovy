@@ -993,13 +993,24 @@ public class Initializer {
 		if(!HmisEquipmentType.count()) {
 		
 			def hmisEqTypeOne = newHmisEquipmentType(123,["en":"HmisEquipmentType one en","fr":"HmisEquipmentType one en"])
-			hmisEqTypeOne.addToEquipmentTypes(EquipmentType.findByCode("15810"))
-			hmisEqTypeOne.addToEquipmentTypes(EquipmentType.findByCode("15819"))
+			def eqTypeOne = EquipmentType.findByCode("15810")
+			hmisEqTypeOne.addToEquipmentTypes(eqTypeOne)
+			def eqTypeTwo = EquipmentType.findByCode("15819")
+			hmisEqTypeOne.addToEquipmentTypes(eqTypeTwo)
 			hmisEqTypeOne.save(failOnError:true)
+			eqTypeOne.save(failOnError:true)
+			eqTypeTwo.save(failOnError:true)
+			
+
 			def hmisEqTypeTwo = newHmisEquipmentType(124,["en":"HmisEquipmentType Two en","fr":"HmisEquipmentType Two en"])
-			hmisEqTypeTwo.addToEquipmentTypes(EquipmentType.findByCode("15966"))
-			hmisEqTypeTwo.addToEquipmentTypes(EquipmentType.findByCode("10035"))
+			def eqTypeThree = EquipmentType.findByCode("15966")
+			def eqTypeFour = EquipmentType.findByCode("10035")
+			hmisEqTypeTwo.addToEquipmentTypes(eqTypeThree)
+			hmisEqTypeTwo.addToEquipmentTypes(eqTypeFour)
 			hmisEqTypeTwo.save(failOnError:true)
+			eqTypeThree.save(failOnError:true)			
+			eqTypeFour.save(failOnError:true)
+			
 			def hmisEqTypeThree= newHmisEquipmentType(125,["en":"HmisEquipmentType Three en","fr":"HmisEquipmentType Three en"])
 			def hmisEqTypeFour = newHmisEquipmentType(126,["en":"HmisEquipmentType Four en","fr":"HmisEquipmentType Four en"])
 			def hmisEqTypeFive = newHmisEquipmentType(127,["en":"HmisEquipmentType Five en","fr":"HmisEquipmentType Five en"])

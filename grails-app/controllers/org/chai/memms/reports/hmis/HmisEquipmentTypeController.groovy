@@ -64,6 +64,7 @@ class HmisEquipmentTypeController extends AbstractEntityController {
 
 
 	def bindParams(def entity) {
+		params.oldEquipmentTypes = entity.equipmentTypes
 		def equipmentTypes = new HashSet<EquipmentType>()
 		params.list('equipmentTypes').each { id ->
 			if (NumberUtils.isDigits(id)) {
@@ -73,6 +74,25 @@ class HmisEquipmentTypeController extends AbstractEntityController {
 		}
 		entity.equipmentTypes = equipmentTypes
 		bindData(entity,params,[exclude:["equipmentTypes"]])
+	}
+
+	def saveEntity(def entity) {
+		entity.save(failOnError:true)
+
+		if(entity.id==null) entity.params.oldEquipmentTypes = []
+
+		entity.equipmentTypes.each{ equipmentType ->
+			equipmentType.hmisType = entity
+			equipmentType.save(failOnError:true)
+		}
+
+		params.oldEquipmentTypes.each{ equipmentType ->
+			if(!entity.equipmentTypes.contains(equipmentType)){
+				equipmentType.hmisType = null
+				equipmentType.save(failOnError:true)
+			}
+		}
+		
 	}
 
 	

@@ -24,7 +24,7 @@
       		<g:i18nInput name="names" label="${message(code:'entity.names.label')}" bean="${type}" field="names"/>
       		<g:selectFromList 
       		name="equipmentTypes" label="${message(code:'equipment.type.label')}" bean="${type}" field="equipmentType" optionKey="id" multiple="true"
-  			ajaxLink="${createLink(controller:'equipmentType', action:'getAjaxData', params: [observation: 'USEDINMEMMS'])}"
+  			ajaxLink="${createLink(controller:'equipmentType', action:'getAjaxData', params: [observation: 'USEDINMEMMS',hmis:'true'])}"
   			from="${equipmentTypes}" value="${type.equipmentTypes?.id}" values="${equipmentTypes.collect{it.names}}" />	
        	</fieldset>
         <g:if test="${type.id != null}">

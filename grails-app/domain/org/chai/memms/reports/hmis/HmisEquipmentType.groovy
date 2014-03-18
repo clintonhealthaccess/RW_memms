@@ -48,6 +48,7 @@ class HmisEquipmentType {
 
 	static i18nFields = ["names"]
 
+
 	static constraints = {
 		code nullable:false, blank:false, unique:true
 		names nullable:true, blank:true
@@ -59,11 +60,6 @@ class HmisEquipmentType {
 	static mapping = {
 		table "memms_hmis_equipment_type"
 		version false
-		equipmentTypes joinTable: [
-		name: "memms_hmis_memms_equipment_type",
-		key: "hmis_equipment_type_id",
-		column: "memms_equipment_type_id"
-		]
 	}
 
 	@Override
