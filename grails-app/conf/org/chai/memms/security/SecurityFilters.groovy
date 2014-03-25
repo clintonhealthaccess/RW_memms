@@ -14,7 +14,10 @@ class SecurityFilters {
 
                 // Ignore dash board generation
                 if (controllerName == 'generateReport' && actionName == 'generate') return true;
-				
+
+                // Ignore hmis generationReport
+                if(controllerName == 'hmisReport' && actionName == 'generateReport') return true;
+                
                 // Access control by convention.
                 accessControl()
             }
